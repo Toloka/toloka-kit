@@ -9,11 +9,19 @@ PREFIX = 'toloka'
 
 setup_py_dir = os.path.dirname(__file__)
 version_module_path = os.path.join(setup_py_dir, 'src', 'client', '__version__.py')
+requirements_path = os.path.join(setup_py_dir, 'requirements.txt')
+requirements_dev_path = os.path.join(setup_py_dir, 'requirements-dev.txt')
 
 about = {}
 
 with open(version_module_path) as f:
     exec(f.read(), about)
+
+with open(requirements_path) as f:
+    install_requires = f.read()
+
+with open(requirements_dev_path) as f:
+    install_requires_dev = f.read()
 
 setup(
     name=about['__title__'],
@@ -25,16 +33,7 @@ setup(
     author='Vladimir Losev',
     author_email='losev@yandex-team.ru',
     python_requires='>=3.6.0',
-    install_requires=[
-        'attrs',
-        'cattrs == 1.0.0 ; python_version < "3.7.0"',
-        'cattrs >= 1.1.1; python_version >= "3.7.0"',
-        'backports-datetime-fromisoformat; python_version < "3.7.0"',
-        'requests',
-        'urllib3',
-        'numpy',
-        'pandas',
-    ],
-    extras_require={'dev': ['requests-mock']},
+    install_requires=install_requires,
+    extras_require={'dev': install_requires_dev},
     include_package_data=True,
 )
