@@ -1,0 +1,8 @@
+attrs
+cattrs == 1.0.0 ; python_version < "3.7.0"
+cattrs >= 1.1.1; python_version >= "3.7.0"
+backports-datetime-fromisoformat; python_version < "3.7.0"
+requests
+urllib3
+numpy
+pandas
