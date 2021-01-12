@@ -9,8 +9,6 @@ PREFIX = 'toloka'
 
 setup_py_dir = os.path.dirname(__file__)
 version_module_path = os.path.join(setup_py_dir, 'src', 'client', '__version__.py')
-requirements_path = os.path.join(setup_py_dir, 'requirements.txt')
-requirements_dev_path = os.path.join(setup_py_dir, 'requirements-dev.txt')
 
 about = {}
 
