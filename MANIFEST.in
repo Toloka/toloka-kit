@@ -1,9 +1,6 @@
 # Legal
 include LICENSE AUTHORS CONTRIBUTING.md
 
-# Dependencies
-include requirements.txt requirements-dev.txt
-
 # Stubs
 recursive-include src py.typed
 recursive-include src *.pyi
