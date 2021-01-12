@@ -1,5 +1,10 @@
 # Toloka Client
 
+[![GitHub Tests][github_tests_badge]][github_tests_link]
+
+[github_tests_badge]: https://github.com/TolokaAI/toloka-kit/workflows/Tests/badge.svg?branch=main
+[github_tests_link]: https://github.com/TolokaAI/toloka-kit/actions?query=workflow:Tests
+
 [Website](https://toloka.ai) |
 [Documentation](https://yandex.ru/dev/toloka/doc/concepts/about.html?lang=en)|
 [Platform](http://toloka.yandex.com)
