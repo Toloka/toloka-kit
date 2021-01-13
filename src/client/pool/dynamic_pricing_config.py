@@ -13,7 +13,7 @@ class DynamicPricingConfig(BaseTolokaObject, kw_only=False):
     class Interval(BaseTolokaObject):
         from_: int = attribute(origin='from')
         to: int
-        reward_per_assignment: float = attribute(origin='rewardPerAssignment')
+        reward_per_assignment: float
 
     type: Type
     skill_id: str

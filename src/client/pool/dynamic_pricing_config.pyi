@@ -26,7 +26,7 @@ class DynamicPricingConfig(BaseTolokaObject):
         Attributes:
             from_: Lower bound of the interval.
             to: dynamic_pricing_config.intervals.to
-            rewardPerAssignment: The price per task page for a performer with the specified skill level.
+            reward_per_assignment: The price per task page for a performer with the specified skill level.
         """
 
         def __repr__(self): ...
