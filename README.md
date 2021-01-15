@@ -21,12 +21,12 @@ Main advantages of TolokaAI:
 
 Get Started and Documentation
 --------------
-All Toloka documentation is available [here](https://yandex.ru/dev/toloka/doc/concepts/about.html?lang=en).
+All Toloka documentation is available [here](https://yandex.com/dev/toloka/doc/concepts/about.html?lang=en).
 
 
 Questions and bug reports
 --------------
-* For reporting bugs please use the [TolokaAI/bugreport](https://github.com/TolokaAI/toloka-kit/issues) page.
+* For reporting bugs please use the [Toloka/bugreport](https://github.com/Toloka/toloka-kit/issues) page.
 * Seek prompt advice at Russian-speaking [Telegram chat](https://t.me/tolokacommunity) (Eng-speaking are comming soon)
 
 
