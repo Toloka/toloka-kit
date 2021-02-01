@@ -27,6 +27,7 @@ from .exceptions import raise_on_api_error
 from .message_thread import (
     Folder, MessageThread, MessageThreadReply, MessageThreadFolders, MessageThreadCompose
 )
+from .operation_log import OperationLogItem
 from .pool import Pool, PoolPatchRequest
 from .project import Project
 from .requester import Requester
@@ -455,6 +456,10 @@ class TolokaClient:
             time.sleep(default_time_to_wait.total_seconds())
             if datetime.datetime.utcnow() > timeout:
                 raise TimeoutError
+
+    def get_operation_log(self, operation_id: str) -> List[OperationLogItem]:
+        response = self._request('get', f'/operations/{operation_id}/log')
+        return structure(response, List[OperationLogItem])
 
     # User bonus
 

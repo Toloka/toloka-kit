@@ -35,6 +35,7 @@ from .message_thread import (
     MessageThreadReply,
     RecipientsSelectType
 )
+from .operation_log import OperationLogItem
 from .operations import (
     AggregatedSolutionOperation,
     Operation,
@@ -1287,6 +1288,8 @@ class TolokaClient(object):
 
         """
         ...
+
+    def get_operation_log(self, operation_id: str) -> List[OperationLogItem]: ...
 
     def create_user_bonus(
         self,
