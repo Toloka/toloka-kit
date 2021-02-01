@@ -4,7 +4,8 @@ from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union
 
 import attr
 
-from toloka.client._converter import converter
+from .._converter import converter
+from ..exceptions import SpecClassIdentificationError
 
 REQUIRED_KEY = 'toloka_field_required'
 ORIGIN_KEY = 'toloka_field_origin'
@@ -200,8 +201,13 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
             # TODO: Optimize copying
             data = dict(data)  # Do not modify input data
             spec_field = cls._variant_registry.field
-            spec_value = cls._variant_registry.enum(data.pop(spec_field))
-            spec_class = cls._variant_registry.registered_classes[spec_value]
+            data_field = data.pop(spec_field)
+            try:
+                spec_value = cls._variant_registry.enum(data_field)
+                spec_class = cls._variant_registry.registered_classes[spec_value]
+            except Exception:
+                raise SpecClassIdentificationError(spec_field=spec_field,
+                                                   spec_enum=cls._variant_registry.enum.__name__)
             return spec_class.structure(data)
 
         data = copy(data)

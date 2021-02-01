@@ -1,14 +1,10 @@
 from requests.models import Response
-from typing import Any, Dict, List, Optional
-
-from .primitives.base import BaseTolokaObject
+from typing import Any, List, Optional
 
 
-class ApiError(BaseTolokaObject, Exception):
+class SpecClassIdentificationError(Exception):
 
     def __repr__(self): ...
-
-    def __str__(self): ...
 
     def __eq__(self, other): ...
 
@@ -22,16 +18,29 @@ class ApiError(BaseTolokaObject, Exception):
 
     def __ge__(self, other): ...
 
-    def __init__(
-        self,*,
-        status_code: Optional[int] = ...,
-        request_id: Optional[str] = ...,
-        code: Optional[str] = ...,
-        message: Optional[str] = ...,
-        payload: Optional[Any] = ...
-    ) -> None: ...
+    def __init__(self) -> None: ...
 
-    _unexpected: Optional[Dict[str, Any]]
+    spec_field: Optional[str]
+    spec_enum: Optional[str]
+
+class ApiError(Exception):
+
+    def __repr__(self): ...
+
+    def __eq__(self, other): ...
+
+    def __ne__(self, other): ...
+
+    def __lt__(self, other): ...
+
+    def __le__(self, other): ...
+
+    def __gt__(self, other): ...
+
+    def __ge__(self, other): ...
+
+    def __init__(self) -> None: ...
+
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
@@ -40,68 +49,10 @@ class ApiError(BaseTolokaObject, Exception):
 
 class ValidationApiError(ApiError):
 
-    def __repr__(self): ...
-
-    def __str__(self): ...
-
-    def __eq__(self, other): ...
-
-    def __ne__(self, other): ...
-
-    def __lt__(self, other): ...
-
-    def __le__(self, other): ...
-
-    def __gt__(self, other): ...
-
-    def __ge__(self, other): ...
-
-    def __init__(
-        self,*,
-        status_code: Optional[int] = ...,
-        request_id: Optional[str] = ...,
-        code: Optional[str] = ...,
-        message: Optional[str] = ...,
-        payload: Optional[Any] = ...,
-        invalid_fields: Optional[List[str]] = ...
-    ) -> None: ...
-
-    _unexpected: Optional[Dict[str, Any]]
-    status_code: Optional[int]
-    request_id: Optional[str]
-    code: Optional[str]
-    message: Optional[str]
-    payload: Optional[Any]
     _invalid_fields: Optional[List[str]]
 
 class InternalApiError(ApiError):
 
-    def __repr__(self): ...
-
-    def __str__(self): ...
-
-    def __eq__(self, other): ...
-
-    def __ne__(self, other): ...
-
-    def __lt__(self, other): ...
-
-    def __le__(self, other): ...
-
-    def __gt__(self, other): ...
-
-    def __ge__(self, other): ...
-
-    def __init__(
-        self,*,
-        status_code: Optional[int] = ...,
-        request_id: Optional[str] = ...,
-        code: Optional[str] = ...,
-        message: Optional[str] = ...,
-        payload: Optional[Any] = ...
-    ) -> None: ...
-
-    _unexpected: Optional[Dict[str, Any]]
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
@@ -110,32 +61,6 @@ class InternalApiError(ApiError):
 
 class AuthenticationApiError(ApiError):
 
-    def __repr__(self): ...
-
-    def __str__(self): ...
-
-    def __eq__(self, other): ...
-
-    def __ne__(self, other): ...
-
-    def __lt__(self, other): ...
-
-    def __le__(self, other): ...
-
-    def __gt__(self, other): ...
-
-    def __ge__(self, other): ...
-
-    def __init__(
-        self,*,
-        status_code: Optional[int] = ...,
-        request_id: Optional[str] = ...,
-        code: Optional[str] = ...,
-        message: Optional[str] = ...,
-        payload: Optional[Any] = ...
-    ) -> None: ...
-
-    _unexpected: Optional[Dict[str, Any]]
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
@@ -144,32 +69,6 @@ class AuthenticationApiError(ApiError):
 
 class AccessDeniedApiError(ApiError):
 
-    def __repr__(self): ...
-
-    def __str__(self): ...
-
-    def __eq__(self, other): ...
-
-    def __ne__(self, other): ...
-
-    def __lt__(self, other): ...
-
-    def __le__(self, other): ...
-
-    def __gt__(self, other): ...
-
-    def __ge__(self, other): ...
-
-    def __init__(
-        self,*,
-        status_code: Optional[int] = ...,
-        request_id: Optional[str] = ...,
-        code: Optional[str] = ...,
-        message: Optional[str] = ...,
-        payload: Optional[Any] = ...
-    ) -> None: ...
-
-    _unexpected: Optional[Dict[str, Any]]
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
@@ -178,32 +77,6 @@ class AccessDeniedApiError(ApiError):
 
 class RemoteServiceUnavailableApiError(ApiError):
 
-    def __repr__(self): ...
-
-    def __str__(self): ...
-
-    def __eq__(self, other): ...
-
-    def __ne__(self, other): ...
-
-    def __lt__(self, other): ...
-
-    def __le__(self, other): ...
-
-    def __gt__(self, other): ...
-
-    def __ge__(self, other): ...
-
-    def __init__(
-        self,*,
-        status_code: Optional[int] = ...,
-        request_id: Optional[str] = ...,
-        code: Optional[str] = ...,
-        message: Optional[str] = ...,
-        payload: Optional[Any] = ...
-    ) -> None: ...
-
-    _unexpected: Optional[Dict[str, Any]]
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
@@ -212,32 +85,6 @@ class RemoteServiceUnavailableApiError(ApiError):
 
 class DoesNotExistApiError(ApiError):
 
-    def __repr__(self): ...
-
-    def __str__(self): ...
-
-    def __eq__(self, other): ...
-
-    def __ne__(self, other): ...
-
-    def __lt__(self, other): ...
-
-    def __le__(self, other): ...
-
-    def __gt__(self, other): ...
-
-    def __ge__(self, other): ...
-
-    def __init__(
-        self,*,
-        status_code: Optional[int] = ...,
-        request_id: Optional[str] = ...,
-        code: Optional[str] = ...,
-        message: Optional[str] = ...,
-        payload: Optional[Any] = ...
-    ) -> None: ...
-
-    _unexpected: Optional[Dict[str, Any]]
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
@@ -246,32 +93,6 @@ class DoesNotExistApiError(ApiError):
 
 class ConflictStateApiError(ApiError):
 
-    def __repr__(self): ...
-
-    def __str__(self): ...
-
-    def __eq__(self, other): ...
-
-    def __ne__(self, other): ...
-
-    def __lt__(self, other): ...
-
-    def __le__(self, other): ...
-
-    def __gt__(self, other): ...
-
-    def __ge__(self, other): ...
-
-    def __init__(
-        self,*,
-        status_code: Optional[int] = ...,
-        request_id: Optional[str] = ...,
-        code: Optional[str] = ...,
-        message: Optional[str] = ...,
-        payload: Optional[Any] = ...
-    ) -> None: ...
-
-    _unexpected: Optional[Dict[str, Any]]
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
@@ -280,32 +101,6 @@ class ConflictStateApiError(ApiError):
 
 class TooManyRequestsApiError(ApiError):
 
-    def __repr__(self): ...
-
-    def __str__(self): ...
-
-    def __eq__(self, other): ...
-
-    def __ne__(self, other): ...
-
-    def __lt__(self, other): ...
-
-    def __le__(self, other): ...
-
-    def __gt__(self, other): ...
-
-    def __ge__(self, other): ...
-
-    def __init__(
-        self,*,
-        status_code: Optional[int] = ...,
-        request_id: Optional[str] = ...,
-        code: Optional[str] = ...,
-        message: Optional[str] = ...,
-        payload: Optional[Any] = ...
-    ) -> None: ...
-
-    _unexpected: Optional[Dict[str, Any]]
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
@@ -314,32 +109,6 @@ class TooManyRequestsApiError(ApiError):
 
 class IncorrectActionsApiError(ApiError):
 
-    def __repr__(self): ...
-
-    def __str__(self): ...
-
-    def __eq__(self, other): ...
-
-    def __ne__(self, other): ...
-
-    def __lt__(self, other): ...
-
-    def __le__(self, other): ...
-
-    def __gt__(self, other): ...
-
-    def __ge__(self, other): ...
-
-    def __init__(
-        self,*,
-        status_code: Optional[int] = ...,
-        request_id: Optional[str] = ...,
-        code: Optional[str] = ...,
-        message: Optional[str] = ...,
-        payload: Optional[Any] = ...
-    ) -> None: ...
-
-    _unexpected: Optional[Dict[str, Any]]
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]

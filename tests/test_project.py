@@ -3,9 +3,11 @@ from operator import itemgetter
 from textwrap import dedent
 from urllib.parse import urlparse, parse_qs
 
+import json
 import pytest
 import toloka.client as client
 from toloka.client.exceptions import InternalApiError, ValidationApiError, IncorrectActionsApiError
+from .template_builder.test_template_builder import view_spec_map as tb_view_spec_map  # noqa: F401
 
 
 @pytest.fixture
@@ -67,6 +69,12 @@ def project_map():
         'status': 'ACTIVE',
         'created': '2015-12-09T12:10:00',
     }
+
+
+@pytest.fixture
+def tb_project_map(project_map, tb_view_spec_map):  # noqa F811
+    project_map['task_spec']['view_spec'] = tb_view_spec_map
+    return project_map
 
 
 def test_find_project(requests_mock, toloka_client, toloka_url, project_map):
@@ -445,3 +453,15 @@ def test_archive_project(requests_mock, toloka_client, toloka_url):
     requests_mock.post(f'{toloka_url}/projects/10/archive', json=operation_map, status_code=202)
     result = toloka_client.archive_project('10')
     assert operation_map == client.unstructure(result)
+
+
+def test_get_template_builder_project(requests_mock, toloka_client, toloka_url, tb_project_map):
+
+    requests_mock.get(f'{toloka_url}/projects/10', headers={'Authorization': 'OAuth abc'}, json=tb_project_map, status_code=200)
+    result = toloka_client.get_project('10')
+    unstructured_result = client.unstructure(result)
+    expected_template_config = tb_project_map['task_spec']['view_spec'].pop('config')
+    real_template_config = unstructured_result.get('task_spec', {}).get('view_spec', {'config': None}).pop('config')
+    assert real_template_config
+    assert json.loads(expected_template_config) == json.loads(real_template_config)
+    assert tb_project_map == unstructured_result

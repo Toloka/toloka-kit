@@ -1,16 +1,25 @@
 from typing import Optional, Any, List
 
 import requests
+import attr
 
 from .error_codes import CommonErrorCodes, InternalErrorCodes
-from .primitives.base import BaseTolokaObject
 
 
-class ApiError(BaseTolokaObject, Exception):
-    status_code: int
-    request_id: str
-    code: str
-    message: str
+# Client errors
+@attr.attrs(auto_attribs=True, str=True, kw_only=True)
+class SpecClassIdentificationError(Exception):
+    spec_field: Optional[str] = None
+    spec_enum: Optional[str] = None
+
+
+# API errors
+@attr.attrs(auto_attribs=True, str=True, kw_only=True)
+class ApiError(Exception):
+    status_code: Optional[int] = None
+    request_id: Optional[str] = None
+    code: Optional[str] = None
+    message: Optional[str] = None
     payload: Optional[Any] = None
 
 

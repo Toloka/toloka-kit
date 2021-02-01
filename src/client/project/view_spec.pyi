@@ -2,6 +2,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from ..primitives.base import BaseTolokaObject
+from .template_builder import TemplateBuilder
 
 
 class ViewSpec(BaseTolokaObject):
@@ -149,6 +150,8 @@ class ClassicViewSpec(ViewSpec):
 
 class TemplateBuilderViewSpec(ViewSpec):
 
+    def unstructure(self): ...
+
     def __repr__(self): ...
 
     def __str__(self): ...
@@ -165,7 +168,14 @@ class TemplateBuilderViewSpec(ViewSpec):
 
     def __ge__(self, other): ...
 
-    def __init__(self, *, settings: Optional[ViewSpec.Settings] = ...) -> None: ...
+    def __init__(
+        self,*,
+        settings: Optional[ViewSpec.Settings] = ...,
+        config: Optional[TemplateBuilder] = ...,
+        core_version: Optional[str] = ...
+    ) -> None: ...
 
     _unexpected: Optional[Dict[str, Any]]
     settings: Optional[ViewSpec.Settings]
+    config: Optional[TemplateBuilder]
+    core_version: Optional[str]
