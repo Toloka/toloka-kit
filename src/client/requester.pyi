@@ -1,3 +1,4 @@
+from decimal import Decimal
 from typing import Any, Dict, Optional
 
 from .primitives.base import BaseTolokaObject
@@ -60,13 +61,13 @@ class Requester(BaseTolokaObject):
     def __init__(
         self,*,
         id: Optional[str] = ...,
-        balance: Optional[float] = ...,
+        balance: Optional[Decimal] = ...,
         public_name: Optional[Dict[str, str]] = ...,
         company: Optional[Company] = ...
     ) -> None: ...
 
     _unexpected: Optional[Dict[str, Any]]
     id: Optional[str]
-    balance: Optional[float]
+    balance: Optional[Decimal]
     public_name: Optional[Dict[str, str]]
     company: Optional[Company]

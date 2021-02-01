@@ -1,8 +1,10 @@
+from attr.validators import optional, instance_of
 import datetime
+from decimal import Decimal
 from enum import Enum, unique
 from typing import List
 
-from .primitives.base import BaseTolokaObject
+from .primitives.base import attribute, BaseTolokaObject
 from .solution import Solution
 from .task import Task
 
@@ -30,7 +32,7 @@ class Assignment(BaseTolokaObject):
     pool_id: str
     user_id: str
     status: Status
-    reward: float
+    reward: Decimal = attribute(validator=optional(instance_of(Decimal)))
     tasks: List[Task]
     automerged: bool
 

@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 from typing import Any, Dict, Optional
 
 from .primitives.base import BaseTolokaObject
@@ -33,13 +34,13 @@ class SetUserSkillRequest(BaseTolokaObject):
         self,*,
         skill_id: Optional[str] = ...,
         user_id: Optional[str] = ...,
-        value: Optional[float] = ...
+        value: Optional[Decimal] = ...
     ) -> None: ...
 
     _unexpected: Optional[Dict[str, Any]]
     skill_id: Optional[str]
     user_id: Optional[str]
-    value: Optional[float]
+    value: Optional[Decimal]
 
 class UserSkill(BaseTolokaObject):
 
@@ -65,7 +66,7 @@ class UserSkill(BaseTolokaObject):
         skill_id: Optional[str] = ...,
         user_id: Optional[str] = ...,
         value: Optional[int] = ...,
-        exact_value: Optional[float] = ...,
+        exact_value: Optional[Decimal] = ...,
         created: Optional[datetime] = ...,
         modified: Optional[datetime] = ...
     ) -> None: ...
@@ -75,6 +76,6 @@ class UserSkill(BaseTolokaObject):
     skill_id: Optional[str]
     user_id: Optional[str]
     value: Optional[int]
-    exact_value: Optional[float]
+    exact_value: Optional[Decimal]
     created: Optional[datetime]
     modified: Optional[datetime]

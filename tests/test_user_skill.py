@@ -1,8 +1,10 @@
 import datetime
+from decimal import Decimal
 from operator import itemgetter
 from urllib.parse import urlparse, parse_qs
 
 import pytest
+import simplejson
 import toloka.client as client
 
 
@@ -11,7 +13,7 @@ def set_user_skill_map():
     return {
         'skill_id': 'skill-i1d',
         'user_id': 'user-i1d',
-        'value': 85.42,
+        'value': Decimal('85.42'),
     }
 
 
@@ -21,7 +23,7 @@ def user_skill_map():
         'skill_id': 'skill-i1d',
         'user_id': 'user-i1d',
         'value': 85,
-        'exact_value': 85.42,
+        'exact_value': Decimal('85.42'),
     }
 
 
@@ -46,9 +48,9 @@ def test_find_user_skills(requests_mock, toloka_client, toloka_url, user_skill_m
             'sort': ['id'],
             'limit': ['100'],
         } == parse_qs(urlparse(request.url).query)
-        return raw_result
+        return simplejson.dumps(raw_result)
 
-    requests_mock.get(f'{toloka_url}/user-skills', json=user_skills, status_code=200)
+    requests_mock.get(f'{toloka_url}/user-skills', text=user_skills, status_code=200)
 
     # Request object syntax
     request = client.search_requests.UserSkillSearchRequest(
@@ -86,9 +88,9 @@ def test_get_user_skills(requests_mock, toloka_client, toloka_url, user_skill_ma
         } == params
 
         items = [user_skill for user_skill in user_skills if id_gt is None or user_skill['id'] > id_gt][:3]
-        return {'items': items, 'has_more': items[-1]['id'] != user_skills[-1]['id']}
+        return simplejson.dumps({'items': items, 'has_more': items[-1]['id'] != user_skills[-1]['id']})
 
-    requests_mock.get(f'{toloka_url}/user-skills', json=get_user_skills, status_code=200)
+    requests_mock.get(f'{toloka_url}/user-skills', text=get_user_skills, status_code=200)
 
     # Request object syntax
     request = client.search_requests.UserSkillSearchRequest(
@@ -112,7 +114,7 @@ def test_get_user_skill(requests_mock, toloka_client, toloka_url, user_skill_map
 
     requests_mock.get(
         f'{toloka_url}/user-skills/user-skill-i1d',
-        json=user_skill_map_with_readonly,
+        text=simplejson.dumps(user_skill_map_with_readonly),
         status_code=200
     )
 
@@ -121,29 +123,57 @@ def test_get_user_skill(requests_mock, toloka_client, toloka_url, user_skill_map
 
 def test_set_user_skill(requests_mock, toloka_client, toloka_url, set_user_skill_map, user_skill_map_with_readonly):
 
-    def user_skills(request, context):
-        assert set_user_skill_map == request.json()
-        return user_skill_map_with_readonly
+    user_skill_request_map = {
+        'skill_id': 'skill-i1d',
+        'user_id': 'user-i1d',
+        'value': Decimal('85.42'),
+    }
 
-    requests_mock.put(f'{toloka_url}/user-skills', json=user_skills, status_code=201)
+    def user_skills(request, context):
+        assert request.text == simplejson.dumps(user_skill_request_map)
+        assert set_user_skill_map == request.json(parse_float=Decimal)
+        return simplejson.dumps(user_skill_map_with_readonly)
+
+    requests_mock.put(f'{toloka_url}/user-skills', text=user_skills, status_code=201)
 
     # Request object syntax
-    request = client.structure(
-        {
-            'skill_id': 'skill-i1d',
-            'user_id': 'user-i1d',
-            'value': 85.42,
-        },
-        client.user_skill.SetUserSkillRequest
-    )
+    request = client.structure(user_skill_request_map, client.user_skill.SetUserSkillRequest)
+    assert request.value == Decimal('85.42')
     response = toloka_client.set_user_skill(request)
     assert user_skill_map_with_readonly == client.unstructure(response)
 
     # Expanded syntax
-    response = toloka_client.set_user_skill(skill_id='skill-i1d', user_id='user-i1d', value=85.42)
+    response = toloka_client.set_user_skill(skill_id='skill-i1d', user_id='user-i1d', value=Decimal('85.42'))
     assert user_skill_map_with_readonly == client.unstructure(response)
 
 
 def test_delete_user_skill(requests_mock, toloka_client, toloka_url):
     requests_mock.delete(f'{toloka_url}/user-skills/user-skill-i1d', status_code=204)
     toloka_client.delete_user_skill('user-skill-i1d')
+
+
+@pytest.mark.parametrize('value_from', [0.05, '0.05', 5])
+def test_create_set_user_skill_from_different_value(value_from):
+    with pytest.raises(TypeError):
+        client.user_skill.SetUserSkillRequest(value=value_from)
+
+
+def test_create_set_user_skill_with_none_value():
+    set_user_skill = client.user_skill.SetUserSkillRequest(value=None)
+    assert set_user_skill.value is None
+
+
+@pytest.mark.parametrize('value_to_check', [Decimal('0.05'), Decimal('0.0005')])
+def test_exact_value_in_user_skill(
+    requests_mock, toloka_client, toloka_url, user_skill_map_with_readonly,
+    value_to_check
+):
+    new_map = dict(user_skill_map_with_readonly, exact_value=value_to_check)
+
+    requests_mock.get(
+        f'{toloka_url}/user-skills/user-skill-i1d',
+        text=simplejson.dumps(new_map),
+        status_code=200
+    )
+    user_skill = toloka_client.get_user_skill('user-skill-i1d')
+    assert user_skill.exact_value == value_to_check

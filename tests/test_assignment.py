@@ -1,8 +1,10 @@
 from datetime import datetime
 from operator import itemgetter
 from urllib.parse import urlparse, parse_qs
+from decimal import Decimal
 
 import pytest
+import simplejson
 import toloka.client as client
 
 
@@ -14,7 +16,7 @@ def assignment_map():
         'pool_id': '21',
         'user_id': 'user-i1d',
         'status': 'ACCEPTED',
-        'reward': 0.05,
+        'reward': Decimal('0.05'),
         'mixed': True,
         'automerged': True,
         'created': '2015-12-15T14:52:00',
@@ -27,11 +29,7 @@ def assignment_map():
 
 
 def test_get_assignment(requests_mock, toloka_client, toloka_url, assignment_map):
-    requests_mock.get(
-        f'{toloka_url}/assignments/assignment-i1d',
-        json=assignment_map
-    )
-
+    requests_mock.get(f'{toloka_url}/assignments/assignment-i1d', text=simplejson.dumps(assignment_map))
     result = toloka_client.get_assignment('assignment-i1d')
     assert assignment_map == client.unstructure(result)
 
@@ -51,9 +49,9 @@ def test_find_assignments(requests_mock, toloka_client, toloka_url, assignment_m
             'created_lt': ['2016-06-01T00:00:00'],
             'sort': ['-submitted'],
         } == parse_qs(urlparse(request.url).query)
-        return raw_result
+        return simplejson.dumps(raw_result)
 
-    requests_mock.get(f'{toloka_url}/assignments', json=find_assignments)
+    requests_mock.get(f'{toloka_url}/assignments', text=find_assignments)
 
     # Request object syntax
     request = client.search_requests.AssignmentSearchRequest(
@@ -96,9 +94,9 @@ def test_get_assignments(requests_mock, toloka_client, toloka_url, assignment_ma
         } == params
 
         items = [assignment for assignment in assignments if id_gt is None or assignment['id'] > id_gt][:3]
-        return {'items': items, 'has_more': items[-1]['id'] != assignments[-1]['id']}
+        return simplejson.dumps({'items': items, 'has_more': items[-1]['id'] != assignments[-1]['id']})
 
-    requests_mock.get(f'{toloka_url}/assignments', json=get_assignments)
+    requests_mock.get(f'{toloka_url}/assignments', text=get_assignments)
 
     # Request object syntax
     request = client.search_requests.AssignmentSearchRequest(
@@ -132,11 +130,28 @@ def test_patch_assignment(requests_mock, toloka_client, toloka_url, assignment_m
 
     def patch_assignment(request, context):
         assert raw_request == request.json()
-        return raw_result
+        return simplejson.dumps(raw_result)
 
-    requests_mock.patch(f'{toloka_url}/assignments/assignment-i1d', json=patch_assignment)
+    requests_mock.patch(f'{toloka_url}/assignments/assignment-i1d', text=patch_assignment)
 
     assignment_patch = client.assignment.AssignmentPatch(status=client.assignment.Assignment.ACCEPTED, public_comment='Well done')
 
     result = toloka_client.patch_assignment('assignment-i1d', assignment_patch)
     assert raw_result == client.unstructure(result)
+
+
+@pytest.mark.parametrize(
+    'value_to_check',
+    [
+        Decimal('0.05'),
+        Decimal('0.0005'),
+    ],
+)
+def test_reward_in_get_assignment(requests_mock, toloka_client, toloka_url, assignment_map, value_to_check):
+    new_assignment_map = dict(assignment_map, reward=value_to_check)
+    requests_mock.get(
+        f'{toloka_url}/assignments/assignment-i1d',
+        text=simplejson.dumps(new_assignment_map)
+    )
+    result = toloka_client.get_assignment('assignment-i1d')
+    assert result.reward == value_to_check

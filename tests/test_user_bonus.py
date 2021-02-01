@@ -1,9 +1,11 @@
 import datetime
+from decimal import Decimal
 from operator import itemgetter
 from typing import List
 from urllib.parse import urlparse, parse_qs
 
 import pytest
+import simplejson
 import toloka.client as client
 
 
@@ -11,7 +13,7 @@ import toloka.client as client
 def user_bonus_map():
     return {
         'user_id': 'user-1',
-        'amount': 1.5,
+        'amount': Decimal('1.50'),
         'private_comment': 'pool_23214',
         'assignment_id': 'assignment-1',
         'public_title': {
@@ -56,10 +58,11 @@ def test_create_user_bonus(requests_mock, toloka_client, toloka_url, user_bonus_
 
     def user_bonuses(request, context):
         assert user_bonus_map == request.json()
-        return user_bonus_map_with_readonly
+        return simplejson.dumps(user_bonus_map_with_readonly)
 
-    requests_mock.post(f'{toloka_url}/user-bonuses', json=user_bonuses, status_code=201)
+    requests_mock.post(f'{toloka_url}/user-bonuses', text=user_bonuses, status_code=201)
     user_bonus = client.structure(user_bonus_map, client.user_bonus.UserBonus)
+    assert user_bonus.amount == Decimal('1.50')
     result = toloka_client.create_user_bonus(user_bonus)
     assert user_bonus_map_with_readonly == client.unstructure(result)
 
@@ -72,7 +75,7 @@ def test_create_user_bonuses(requests_mock, toloka_client, toloka_url, user_bonu
                 'amount': {
                     'code': 'VALUE_LESS_THAN_MIN',
                     'message': 'Value must be greater or equal to 0.01',
-                    'params': [0.01],
+                    'params': [Decimal('0.01')],
                 }
             }
         }
@@ -81,14 +84,14 @@ def test_create_user_bonuses(requests_mock, toloka_client, toloka_url, user_bonu
     def user_bonuses(request, context):
         assert {'skip_invalid_items': ['true']} == parse_qs(urlparse(request.url).query)
         assert [{'user_id': 'user-2', 'amount': -5}, user_bonus_map] == request.json()
-        return raw_result
+        return simplejson.dumps(raw_result)
 
-    requests_mock.post(f'{toloka_url}/user-bonuses', json=user_bonuses, status_code=201)
+    requests_mock.post(f'{toloka_url}/user-bonuses', text=user_bonuses, status_code=201)
 
     # Request object syntax
     result = toloka_client.create_user_bonuses(
         [
-            client.user_bonus.UserBonus(user_id='user-2', amount=-5.),
+            client.user_bonus.UserBonus(user_id='user-2', amount=Decimal('-5.')),
             client.structure(user_bonus_map, client.user_bonus.UserBonus),
         ],
         client.user_bonus.UserBonusCreateRequestParameters(skip_invalid_items=True),
@@ -98,7 +101,7 @@ def test_create_user_bonuses(requests_mock, toloka_client, toloka_url, user_bonu
     # Expanded syntax
     result = toloka_client.create_user_bonuses(
         [
-            client.user_bonus.UserBonus(user_id='user-2', amount=-5.),
+            client.user_bonus.UserBonus(user_id='user-2', amount=Decimal('-5.')),
             client.structure(user_bonus_map, client.user_bonus.UserBonus),
         ],
         skip_invalid_items=True,
@@ -115,9 +118,9 @@ def test_create_user_bonuses_without_message(
     def user_bonuses(request, context):
         assert {'skip_invalid_items': ['true']} == parse_qs(urlparse(request.url).query)
         assert [user_bonus_map_without_message] == request.json()
-        return raw_result
+        return simplejson.dumps(raw_result)
 
-    requests_mock.post(f'{toloka_url}/user-bonuses', json=user_bonuses, status_code=201)
+    requests_mock.post(f'{toloka_url}/user-bonuses', text=user_bonuses, status_code=201)
 
     # Request object syntax
     result = toloka_client.create_user_bonuses(
@@ -137,8 +140,8 @@ def test_create_user_bonuses_without_message(
 def test_create_user_bonuses_async(requests_mock, toloka_client, toloka_url):
 
     user_bonuses_map = [
-        {'user_id': 'user-1', 'amount': 10},
-        {'user_id': 'user-2', 'amount': 12},
+        {'user_id': 'user-1', 'amount': Decimal('10.00')},
+        {'user_id': 'user-2', 'amount': Decimal('12.00')},
     ]
 
     operation_id = '09ee3f76-5cdc-4388-adcc-c580a3ab4c53'
@@ -157,10 +160,10 @@ def test_create_user_bonuses_async(requests_mock, toloka_client, toloka_url):
             'async_mode': ['true'],
             'operation_id': [operation_id],
         } == parse_qs(urlparse(request.url).query)
-        assert user_bonuses_map == request.json()
-        return raw_result
+        assert simplejson.dumps(user_bonuses_map) == request.text
+        return simplejson.dumps(raw_result)
 
-    requests_mock.post(f'{toloka_url}/user-bonuses', json=user_bonuses, status_code=202)
+    requests_mock.post(f'{toloka_url}/user-bonuses', text=user_bonuses, status_code=202)
 
     # Request object syntax
     result = toloka_client.create_user_bonuses_async(
@@ -187,9 +190,9 @@ def test_find_user_bonuses(requests_mock, toloka_client, toloka_url, user_bonus_
             'sort': ['created,-id'],
             'limit': ['20'],
         } == parse_qs(urlparse(request.url).query)
-        return raw_result
+        return simplejson.dumps(raw_result)
 
-    requests_mock.get(f'{toloka_url}/user-bonuses', json=user_bonuses)
+    requests_mock.get(f'{toloka_url}/user-bonuses', text=user_bonuses)
 
     # Request object syntax
     request = client.search_requests.UserBonusSearchRequest(
@@ -224,9 +227,9 @@ def test_get_user_bonuses(requests_mock, toloka_client, toloka_url, user_bonus_m
         } == params
 
         items = [user_bonus for user_bonus in user_bonuses if id_gt is None or user_bonus['id'] > id_gt][:3]
-        return {'items': items, 'has_more': items[-1]['id'] != user_bonuses[-1]['id']}
+        return simplejson.dumps({'items': items, 'has_more': items[-1]['id'] != user_bonuses[-1]['id']})
 
-    requests_mock.get(f'{toloka_url}/user-bonuses', json=get_user_bonuses)
+    requests_mock.get(f'{toloka_url}/user-bonuses', text=get_user_bonuses)
 
     # Request object syntax
     request = client.search_requests.UserBonusSearchRequest(
@@ -245,5 +248,16 @@ def test_get_user_bonuses(requests_mock, toloka_client, toloka_url, user_bonus_m
 
 
 def test_get_user_bonus(requests_mock, toloka_client, toloka_url, user_bonus_map_with_readonly):
-    requests_mock.get(f'{toloka_url}/user-bonuses/user-bonus-1', json=user_bonus_map_with_readonly)
+    requests_mock.get(f'{toloka_url}/user-bonuses/user-bonus-1', text=simplejson.dumps(user_bonus_map_with_readonly))
     assert user_bonus_map_with_readonly == client.unstructure(toloka_client.get_user_bonus('user-bonus-1'))
+
+
+@pytest.mark.parametrize('value_from', [0.05, '0.05', 5])
+def test_create_user_bonus_from_different_amoun(value_from):
+    with pytest.raises(TypeError):
+        client.user_bonus.UserBonus(amount=value_from)
+
+
+def test_create_user_bonus_with_none_amoun():
+    user_bonus = client.user_bonus.UserBonus(amount=None)
+    assert user_bonus.amount is None

@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 from typing import Any, Dict, Optional
 
 from .primitives.base import BaseTolokaObject
@@ -42,7 +43,7 @@ class UserBonus(BaseTolokaObject):
     def __init__(
         self,*,
         user_id: Optional[str] = ...,
-        amount: Optional[float] = ...,
+        amount: Optional[Decimal] = ...,
         private_comment: Optional[str] = ...,
         public_title: Optional[Any] = ...,
         public_message: Optional[Any] = ...,
@@ -54,7 +55,7 @@ class UserBonus(BaseTolokaObject):
 
     _unexpected: Optional[Dict[str, Any]]
     user_id: Optional[str]
-    amount: Optional[float]
+    amount: Optional[Decimal]
     private_comment: Optional[str]
     public_title: Optional[Any]
     public_message: Optional[Any]

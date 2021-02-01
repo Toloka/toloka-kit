@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 from enum import Enum
 from typing import (
     BinaryIO,
@@ -1593,7 +1594,7 @@ class TolokaClient(object):
         self,*,
         skill_id: Optional[str] = ...,
         user_id: Optional[str] = ...,
-        value: Optional[float] = ...
+        value: Optional[Decimal] = ...
     ) -> UserSkill:
         """Sets the skill value for a user
 

@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 import sys
 import uuid
 from typing import List, Union
@@ -38,6 +39,13 @@ converter.register_structure_hook(
     lambda data, type_: data if isinstance(data, datetime.datetime) else type_.fromisoformat(data)  # type: ignore
 )
 converter.register_unstructure_hook(datetime.datetime, lambda data: data.isoformat())
+
+
+converter.register_structure_hook(
+    Decimal,
+    lambda data, type_: Decimal(data)  # type: ignore
+)
+
 
 structure = converter.structure
 unstructure = converter.unstructure

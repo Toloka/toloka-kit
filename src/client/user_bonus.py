@@ -1,13 +1,15 @@
+from attr.validators import optional, instance_of
 import datetime
+from decimal import Decimal
 from typing import Any
 
-from .primitives.base import BaseTolokaObject
+from .primitives.base import attribute, BaseTolokaObject
 from .primitives.parameter import Parameters
 
 
 class UserBonus(BaseTolokaObject):
     user_id: str
-    amount: float
+    amount: Decimal = attribute(validator=optional(instance_of(Decimal)))
 
     private_comment: str
     public_title: Any

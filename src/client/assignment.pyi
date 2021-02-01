@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
@@ -73,7 +74,7 @@ class Assignment(BaseTolokaObject):
         pool_id: Optional[str] = ...,
         user_id: Optional[str] = ...,
         status: Optional[Status] = ...,
-        reward: Optional[float] = ...,
+        reward: Optional[Decimal] = ...,
         tasks: Optional[List[Task]] = ...,
         automerged: Optional[bool] = ...,
         created: Optional[datetime] = ...,
@@ -94,7 +95,7 @@ class Assignment(BaseTolokaObject):
     pool_id: Optional[str]
     user_id: Optional[str]
     status: Optional[Status]
-    reward: Optional[float]
+    reward: Optional[Decimal]
     tasks: Optional[List[Task]]
     automerged: Optional[bool]
     created: Optional[datetime]

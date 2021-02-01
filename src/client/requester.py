@@ -1,6 +1,8 @@
+from attr.validators import optional, instance_of
+from decimal import Decimal
 from typing import Dict
 
-from .primitives.base import BaseTolokaObject
+from .primitives.base import attribute, BaseTolokaObject
 
 
 class Requester(BaseTolokaObject):
@@ -10,6 +12,6 @@ class Requester(BaseTolokaObject):
         superintendent_id: str
 
     id: str
-    balance: float
+    balance: Decimal = attribute(validator=optional(instance_of(Decimal)))
     public_name: Dict[str, str]
     company: Company

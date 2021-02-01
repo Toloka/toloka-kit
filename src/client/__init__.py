@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 import time
 from enum import Enum, unique
 from typing import List, Optional, Union, BinaryIO, Tuple, Generator
@@ -93,11 +94,10 @@ class TolokaClient:
             kwargs['timeout'] = self.default_timeout
         response = self.session.request(method, f'{self.url}{path}', **kwargs)
         raise_on_api_error(response)
-
         return response
 
     def _request(self, method, path, **kwargs):
-        return self._raw_request(method, path, **kwargs).json()
+        return self._raw_request(method, path, **kwargs).json(parse_float=Decimal)
 
     def _search_request(self, method, path, request, sort, limit):
         params = unstructure(request) or {}
