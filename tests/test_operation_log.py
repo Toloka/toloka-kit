@@ -1,3 +1,6 @@
+from decimal import Decimal
+import simplejson
+
 import pytest
 import toloka.client as client
 
@@ -63,7 +66,7 @@ def bonus_operation_log_list():
     return [
         {
             "input": {
-                "amount": 0.01,
+                "amount": Decimal('0.01'),
                 "public_title": {
                     "RU": "Молодец!",
                 },
@@ -77,7 +80,7 @@ def bonus_operation_log_list():
         },
         {
             "input": {
-                "amount": 0.01,
+                "amount": Decimal('0.01'),
                 "public_title": {
                     "RU": "Молодец!",
                 },
@@ -176,6 +179,6 @@ def tasks_suite_operation_log_list():
 def test_get_operagiton_log(request, requests_mock, toloka_client, toloka_url, object):
     log_list = request.getfixturevalue(f'{object}_operation_log_list')
     operation_id = 'ee60ef13-37a3-666a-9220-266daa4b71a7'
-    requests_mock.get(f'{toloka_url}/operations/{operation_id}/log', json=log_list, status_code=201)
+    requests_mock.get(f'{toloka_url}/operations/{operation_id}/log', text=simplejson.dumps(log_list), status_code=201)
     result = toloka_client.get_operation_log(operation_id)
     assert log_list == client.unstructure(result)
