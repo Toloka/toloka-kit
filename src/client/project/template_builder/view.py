@@ -36,7 +36,6 @@ class AudioViewV1(BaseViewV1, spec_value=ComponentType.VIEW_AUDIO):
 
 class CollapseViewV1(BaseViewV1, spec_value=ComponentType.VIEW_COLLAPSE):
     content: BaseComponent
-    label: base_component_or(Any)
     default_opened: base_component_or(bool) = attribute(origin='defaultOpened')
 
 

@@ -5,7 +5,7 @@ from .primitives.base import BaseTolokaObject
 
 class OperationLogItem(BaseTolokaObject):
     """Objects of which the operation log consists. 
-    
+
     Contains information about the validation errors and what sets of objects were created.
     Attributes:
         type: Type of action in the operation step.
@@ -13,7 +13,7 @@ class OperationLogItem(BaseTolokaObject):
         input: Input data at the operation step.
         output: Operation step output. Depends on the type.
     """
-    
+
     def __repr__(self): ...
 
     def __str__(self): ...

@@ -1,5 +1,5 @@
 from enum import Enum, unique
-from typing import ClassVar, Type, Optional
+from typing import ClassVar, Type, Optional, Any
 
 from ..._converter import converter
 from ...primitives.base import attribute, BaseTolokaObject, BaseTolokaObjectMetaclass
@@ -38,8 +38,11 @@ class ComponentType(Enum):
     FIELD_CHECKBOX = 'field.checkbox'
     FIELD_CHECKBOX_GROUP = 'field.checkbox-group'
     FIELD_DATE = 'field.date'
+    FIELD_FILE = 'field.file'
     FIELD_LIST = 'field.list'
+    FIELD_MEDIA_FILE = 'field.media-file'
     FIELD_NUMBER = 'field.number'
+    FIELD_PHONE_NUMBER = 'field.phone-number'
     FIELD_RADIO_GROUP = 'field.radio-group'
     FIELD_SELECT = 'field.select'
     FIELD_TEXT = 'field.text'
@@ -115,7 +118,7 @@ def base_component_or(type_: Type, class_name_suffix: Optional[str] = None):
         base_component_or._cache = {}
 
     if type_ not in base_component_or._cache:
-        name = f'BaseComponentOr{class_name_suffix or (type_.__name__ if hasattr(type_, "__name__") else type_._name)}'
+        name = f'BaseComponentOr{class_name_suffix or ("Any" if type_ == Any else type_.__name__)}'
         cls = BaseTolokaObjectMetaclass(name, (BaseComponentOr,), {})
         cls.__module__ = __name__
         cls.type_ = type_

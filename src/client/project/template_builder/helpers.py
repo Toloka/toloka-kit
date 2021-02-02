@@ -38,6 +38,12 @@ class Object2EntriesHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_OBJEC
     data: base_component_or(Any)
 
 
+class ReplaceHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_REPLACE):
+    data: base_component_or(Any)
+    find: base_component_or(str)
+    replace: base_component_or(str)
+
+
 class SearchQueryHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_SEARCH_QUERY):
 
     @unique
