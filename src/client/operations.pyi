@@ -99,6 +99,46 @@ class Operation(BaseTolokaObject):
     progress: Optional[int]
     details: Optional[Any]
 
+class AnalyticsOperation(Operation):
+
+    def __repr__(self): ...
+
+    def __str__(self): ...
+
+    def __eq__(self, other): ...
+
+    def __ne__(self, other): ...
+
+    def __lt__(self, other): ...
+
+    def __le__(self, other): ...
+
+    def __gt__(self, other): ...
+
+    def __ge__(self, other): ...
+
+    def __init__(
+        self,*,
+        id: Optional[str] = ...,
+        status: Optional[Operation.Status] = ...,
+        submitted: Optional[datetime] = ...,
+        parameters: Optional[Operation.Parameters] = ...,
+        started: Optional[datetime] = ...,
+        finished: Optional[datetime] = ...,
+        progress: Optional[int] = ...,
+        details: Optional[Any] = ...
+    ) -> None: ...
+
+    _unexpected: Optional[Dict[str, Any]]
+    id: Optional[str]
+    status: Optional[Operation.Status]
+    submitted: Optional[datetime]
+    parameters: Optional[Operation.Parameters]
+    started: Optional[datetime]
+    finished: Optional[datetime]
+    progress: Optional[int]
+    details: Optional[Any]
+
 class PoolOperation(Operation):
 
     class Parameters(Operation.Parameters):
