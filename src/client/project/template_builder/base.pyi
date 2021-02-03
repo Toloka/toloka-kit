@@ -74,7 +74,7 @@ class BaseComponentOr(BaseTolokaObject):
     _unexpected: Optional[Dict[str, Any]]
 
 def base_component_or(
-    type_: Type[+CT_co],
+    type_: Type,
     class_name_suffix: Optional[str] = ...
 ): ...
 
