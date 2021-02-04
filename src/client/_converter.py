@@ -38,7 +38,7 @@ converter.register_structure_hook(
     datetime.datetime,
     lambda data, type_: data if isinstance(data, datetime.datetime) else type_.fromisoformat(data)  # type: ignore
 )
-converter.register_unstructure_hook(datetime.datetime, lambda data: data.isoformat())
+converter.register_unstructure_hook(datetime.datetime, lambda data: data.isoformat())  # type: ignore
 
 
 converter.register_structure_hook(
