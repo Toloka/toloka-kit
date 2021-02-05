@@ -46,6 +46,11 @@ class DateFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_DATE):
     placeholder: base_component_or(Any)
 
 
+class FileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_FILE):
+    accept: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrstr')
+    multiple: base_component_or(bool)
+
+
 class ListFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_LIST):
     render: BaseComponent
     button_label: base_component_or(Any)
@@ -55,10 +60,26 @@ class ListFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_LIST):
     size: base_component_or(ListSize)
 
 
+class MediaFileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_MEDIA_FILE):
+
+    class Accept(BaseTemplate):
+        file_system: base_component_or(bool) = attribute(origin='fileSystem')
+        gallery: base_component_or(bool)
+        photo: base_component_or(bool)
+        video: base_component_or(bool)
+
+    accept: base_component_or(Accept)
+    multiple: base_component_or(bool)
+
+
 class NumberFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_NUMBER):
     maximum: base_component_or(int)
     minimum: base_component_or(int)
     placeholder: base_component_or(Any)
+
+
+class PhoneNumberFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_PHONE_NUMBER):
+    placeholder: base_component_or(str)
 
 
 class RadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_RADIO_GROUP):

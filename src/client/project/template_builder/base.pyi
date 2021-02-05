@@ -74,7 +74,7 @@ class BaseComponentOr(BaseTolokaObject):
     _unexpected: Optional[Dict[str, Any]]
 
 def base_component_or(
-    type_: Type[+CT_co],
+    type_: Type,
     class_name_suffix: Optional[str] = ...
 ): ...
 
@@ -126,6 +126,14 @@ class UnknownComponent(BaseTemplate):
     _unexpected: Optional[Dict[str, Any]]
 
 class RefComponent(BaseTemplate):
+    """
+    If you need to insert the same or similar code snippets many times, reuse them. This helps make your configuration
+    shorter and makes it easier for you to edit duplicate chunks of code.
+    You can insert a code snippet from another part of the configuration anywhere inside the configuration. To do this,
+    use the structure RefComponent(ref="path.to.element").
+    This is useful when you need to insert the same snippet at multiple places in your code. For example, if you need
+    to run the same action using multiple buttons, put this action in a variable and call it using RefComponent.
+    """
 
     def __repr__(self): ...
 

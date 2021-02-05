@@ -20,6 +20,7 @@ from .aggregation import (
     PoolAggregatedSolutionRequest,
     WeightedDynamicOverlapTaskAggregatedSolutionRequest
 )
+from .analytics_request import AnalyticsRequest
 from .assignment import Assignment, AssignmentPatch
 from .attachment import Attachment
 from .batch_create_results import (
@@ -858,6 +859,8 @@ class TolokaClient(object):
 
         """
         ...
+
+    def get_analytics(self, stats: List[AnalyticsRequest]) -> Operation: ...
 
     @overload
     def create_task(

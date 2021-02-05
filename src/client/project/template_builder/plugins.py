@@ -61,6 +61,7 @@ class TriggerPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TRIGGER):
 class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
 
     class TolokaPluginLayout(BaseTemplate):
+
         @unique
         class Kind(Enum):
             PAGER = 'pager'

@@ -53,6 +53,13 @@ class Operation(BaseTolokaObject, spec_enum=OperationType, spec_field='type'):
         return self.status in [Operation.Status.SUCCESS, Operation.Status.FAIL]
 
 
+# Analytics operations
+
+
+class AnalyticsOperation(Operation, spec_value=OperationType.ANALYTICS):
+    pass
+
+
 # Pool operations
 
 
