@@ -3,7 +3,9 @@ from operator import itemgetter
 from textwrap import dedent
 from urllib.parse import urlparse, parse_qs
 
+import io
 import json
+import pandas as pd
 import pytest
 import toloka.client as client
 from toloka.client.exceptions import InternalApiError, ValidationApiError, IncorrectActionsApiError
@@ -465,3 +467,44 @@ def test_get_template_builder_project(requests_mock, toloka_client, toloka_url, 
     assert real_template_config
     assert json.loads(expected_template_config) == json.loads(real_template_config)
     assert tb_project_map == unstructured_result
+
+
+def test_get_assignments_df(requests_mock, toloka_client, toloka_api_url):
+    # urllib.parse.parse_qs format
+    expected_params = {
+        'status': [','.join([str.lower(s.value) for s in client.assignment.GetAssignmentsTsvParameters.Status])],
+        'starttimefrom': ['2020-01-01t00:00:00'],
+        'excludebanned': ['true'],
+        'addrowdelimiter': ['false'],
+        'field': [','.join([str.lower(f.value) for f in client.assignment.GetAssignmentsTsvParameters._default_fields])],
+    }
+    expected_df = pd.DataFrame(data={
+        'a': [1, 2, 3],
+        'b': [4, 5, 6]
+    })
+    buf = io.StringIO()
+    expected_df.to_csv(buf, sep='\t', index=False, columns=['a', 'b'])
+    requests_mock.get(f'{toloka_api_url}/new/requester/pools/123/assignments.tsv',
+                      content=buf.getvalue().encode('utf-8'),
+                      headers={'Authorization': 'OAuth abc'},
+                      status_code=200)
+    result = toloka_client.get_assignments_df(pool_id=123,
+                                              parameters=client.assignment.GetAssignmentsTsvParameters(
+                                                  start_time_from=datetime(2020, 1, 1),
+                                                  exclude_banned=True,
+                                                  status=[s for s in
+                                                          client.assignment.GetAssignmentsTsvParameters.Status]
+                                              ))
+
+    assert result.equals(expected_df)
+    assert requests_mock.last_request.qs == expected_params
+
+    result = toloka_client.get_assignments_df(pool_id=123,
+                                              start_time_from=datetime(2020, 1, 1),
+                                              exclude_banned=True,
+                                              status=[s for s in
+                                                      client.assignment.GetAssignmentsTsvParameters.Status]
+                                              )
+
+    assert result.equals(expected_df)
+    assert requests_mock.last_request.qs == expected_params

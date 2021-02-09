@@ -4,6 +4,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from .primitives.base import BaseTolokaObject
+from .primitives.parameter import Parameters
 from .solution import Solution
 from .task import Task
 
@@ -136,3 +137,45 @@ class AssignmentPatch(BaseTolokaObject):
     _unexpected: Optional[Dict[str, Any]]
     public_comment: Optional[str]
     status: Optional[Assignment.Status]
+
+class GetAssignmentsTsvParameters(Parameters):
+
+    class Status(Enum):
+        ...
+
+    class Field(Enum):
+        ...
+
+    def unstructure(self) -> Optional[dict]: ...
+
+    def __repr__(self): ...
+
+    def __str__(self): ...
+
+    def __eq__(self, other): ...
+
+    def __ne__(self, other): ...
+
+    def __lt__(self, other): ...
+
+    def __le__(self, other): ...
+
+    def __gt__(self, other): ...
+
+    def __ge__(self, other): ...
+
+    def __init__(
+        self,*,
+        status: Optional[List[Status]] = ...,
+        start_time_from: Optional[datetime] = ...,
+        start_time_to: Optional[datetime] = ...,
+        exclude_banned: Optional[bool] = ...,
+        field: Optional[List[Field]] = ...
+    ) -> None: ...
+
+    _unexpected: Optional[Dict[str, Any]]
+    status: Optional[List[Status]]
+    start_time_from: Optional[datetime]
+    start_time_to: Optional[datetime]
+    exclude_banned: Optional[bool]
+    field: Optional[List[Field]]

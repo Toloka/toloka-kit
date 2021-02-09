@@ -1,6 +1,7 @@
 from datetime import datetime
 from decimal import Decimal
 from enum import Enum
+from pandas.core.frame import DataFrame
 from typing import (
     BinaryIO,
     Dict,
@@ -21,7 +22,11 @@ from .aggregation import (
     WeightedDynamicOverlapTaskAggregatedSolutionRequest
 )
 from .analytics_request import AnalyticsRequest
-from .assignment import Assignment, AssignmentPatch
+from .assignment import (
+    Assignment,
+    AssignmentPatch,
+    GetAssignmentsTsvParameters
+)
 from .attachment import Attachment
 from .batch_create_results import (
     TaskBatchCreateResult,
@@ -1613,6 +1618,32 @@ class TolokaClient(object):
 
     def delete_user_skill(self, user_skill_id: str) -> None:
         """Removes a skill for a user
+
+        """
+        ...
+
+    @overload
+    def get_assignments_df(
+        self,
+        pool_id: str,*,
+        status: Optional[List[GetAssignmentsTsvParameters.Status]] = ...,
+        start_time_from: Optional[datetime] = ...,
+        start_time_to: Optional[datetime] = ...,
+        exclude_banned: Optional[bool] = ...,
+        field: Optional[List[GetAssignmentsTsvParameters.Field]] = ...
+    ) -> DataFrame:
+        """Download assignments as pandas.DataFrame
+
+        """
+        ...
+
+    @overload
+    def get_assignments_df(
+        self,
+        pool_id: str,
+        parameters: GetAssignmentsTsvParameters
+    ) -> DataFrame:
+        """Download assignments as pandas.DataFrame
 
         """
         ...

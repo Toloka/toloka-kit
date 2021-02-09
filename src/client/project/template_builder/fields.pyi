@@ -10,8 +10,8 @@ from .base import (
 
 
 class BaseFieldV1(VersionedBaseComponent):
-    """
-    Fields for entering data, such as a text field or drop-down list.
+    """Fields for entering data, such as a text field or drop-down list.
+
     """
 
     def __repr__(self): ...
@@ -49,11 +49,11 @@ class BaseFieldV1(VersionedBaseComponent):
     validation: Optional[BaseComponent]
 
 class ButtonRadioFieldV1(BaseFieldV1):
-    """
-    A component in the form of a button.
-    The user makes a choice by clicking on it.
-    The size of the button depends on the size of the label.
+    """A component in the form of a button.
 
+    The user makes a choice by clicking on it.
+
+    The size of the button depends on the size of the label.
     Attributes:
         data: Data with values that will be processed or changed.
         label: Label above the component.
@@ -99,7 +99,8 @@ class ButtonRadioFieldV1(BaseFieldV1):
     value_to_set: Optional[Any]
 
 class GroupFieldOption(BaseTemplate):
-    """
+    """Option.
+
     Attributes:
         hint: Additional information.
         label: The text on the object.
@@ -135,11 +136,11 @@ class GroupFieldOption(BaseTemplate):
     hint: Optional[Any]
 
 class ButtonRadioGroupFieldV1(BaseFieldV1):
-    """
-    A component with buttons that allow the user to choose between the specified values.
-    The minimum number of elements is one. Any type of data can be returned.
-    The size of the button is determined by the length of the text on it.
+    """A component with buttons that allow the user to choose between the specified values.
 
+    The minimum number of elements is one. Any type of data can be returned.
+
+    The size of the button is determined by the length of the text on it.
     Attributes:
         data: Data with values that will be processed or changed.
         label: Label above the component.
@@ -185,8 +186,7 @@ class ButtonRadioGroupFieldV1(BaseFieldV1):
     options: Optional[Union[BaseComponent, List[Union[BaseComponent, GroupFieldOption]]]]
 
 class CheckboxFieldV1(BaseFieldV1):
-    """
-    Checkbox.
+    """Checkbox.
 
     Attributes:
         data: Data with values that will be processed or changed.
@@ -238,8 +238,7 @@ class CheckboxFieldV1(BaseFieldV1):
     preserve_false: Optional[Union[BaseComponent, bool]]
 
 class CheckboxGroupFieldV1(BaseFieldV1):
-    """
-    A group of options for selecting one or more responses.
+    """A group of options for selecting one or more responses.
 
     Attributes:
         data: Data with values that will be processed or changed.
@@ -294,10 +293,9 @@ class CheckboxGroupFieldV1(BaseFieldV1):
     preserve_false: Optional[Union[BaseComponent, bool]]
 
 class DateFieldV1(BaseFieldV1):
-    """
-    A component for entering the date and time in the desired format and range.
-    You can set a list of dates that the user cannot select.
+    """A component for entering the date and time in the desired format and range.
 
+    You can set a list of dates that the user cannot select.
     Attributes:
         data: Data with values that will be processed or changed.
         label: Label above the component.
@@ -368,13 +366,13 @@ class DateFieldV1(BaseFieldV1):
     placeholder: Optional[Any]
 
 class FileFieldV1(BaseFieldV1):
-    """
-    This component can be used for uploading files. It's displayed in the interface as an upload button.
+    """This component can be used for uploading files. It's displayed in the interface as an upload button.
+
     You can restrict the file types to upload in the "accept" property. By default, only one file can be uploaded,
     but you can allow multiple files in the "multiple" property.
+
     If a user logs in from a mobile device, it's more convenient to use field.media-file — it's adapted for mobile
     devices and makes it easier to upload photos and videos.
-
     Attributes:
         data: Data with values that will be processed or changed.
         label: Label above the component.
@@ -427,17 +425,18 @@ class FileFieldV1(BaseFieldV1):
     multiple: Optional[Union[BaseComponent, bool]]
 
 class ListFieldV1(BaseFieldV1):
-    """
-    A component that allows the user to add and remove list items, such as text fields to fill in.
+    """A component that allows the user to add and remove list items, such as text fields to fill in.
+
     This way you can allow the user to give multiple answers to a question.
+
     The list items can contain any component, including a list of other components. For example, this allows you to
     create a table where you can add and delete rows.
 
     To add a new list item, the user clicks the button. To remove an item, they click on the x on the right (it appears
     when hovering over a list item).
+
     To prevent the user from adding too many list items, set the maximum list length. You can also use the editable
     property to block users from changing a component, like when a certain event occurs.
-
     Attributes:
         data: Data with values that will be processed or changed.
         label: Label above the component.
@@ -501,13 +500,12 @@ class ListFieldV1(BaseFieldV1):
     size: Optional[Union[BaseComponent, ListSize]]
 
 class MediaFileFieldV1(BaseFieldV1):
-    """
-    Adds buttons for different types of uploads: uploading photos or videos, selecting files from the file manager or
-    choosing from the gallery. In the accept property, select which buttons you need.
+    """Adds buttons for different types of uploads: uploading photos or videos, selecting files from the file manager or choosing from the gallery. In the accept property, select which buttons you need.
+
     By default, only one file can be uploaded, but you can allow multiple files in the multiple property.
+
     This component is convenient when using mobile devices. To upload files from a computer, it's better to use
     field.file for a more flexible configuration of the file types.
-
     Attributes:
         data: Data with values that will be processed or changed.
         label: Label above the component.
@@ -519,7 +517,8 @@ class MediaFileFieldV1(BaseFieldV1):
     """
 
     class Accept(BaseTemplate):
-        """
+        """Adds different buttons for four types of uploads.
+
         Attributes:
             file_system: Adds a button for uploading files from the file manager.
             gallery: Adds a button for uploading files from the gallery.
@@ -596,15 +595,16 @@ class MediaFileFieldV1(BaseFieldV1):
     multiple: Optional[Union[BaseComponent, bool]]
 
 class NumberFieldV1(BaseFieldV1):
-    """
-    A component that allows you to enter a number.
+    """A component that allows you to enter a number.
+
     The box already has validation: by default, users can enter only numbers and decimal separators. They can use either
     a dot or a comma as a separator, but there will always be a dot in the output.
+
     When the user is entering a number, the separator automatically changes to the one specified in the regional
     settings. For Russia, the separator is a comma.
+
     Negative numbers are allowed by default. To disable them, use the validation property. Pressing the up or down arrow
     keys will increase or decrease the number by one.
-
     Attributes:
         data: Data with values that will be processed or changed.
         label: Label above the component.
@@ -656,11 +656,10 @@ class NumberFieldV1(BaseFieldV1):
     placeholder: Optional[Any]
 
 class PhoneNumberFieldV1(BaseFieldV1):
-    """
-    Creates a field for entering a phone number.
+    """Creates a field for entering a phone number.
+
     Allows entering numbers, spaces, and the +, ( ), - characters. Only numbers and the + character at the beginning
     will remain in the data. For example, if you enter +7 (012) 345-67-89, the data gets the +70123456789 value.
-
     Attributes:
         data: Data with values that will be processed or changed.
         label: Label above the component.
@@ -706,11 +705,11 @@ class PhoneNumberFieldV1(BaseFieldV1):
     placeholder: Optional[Union[BaseComponent, str]]
 
 class RadioGroupFieldV1(BaseFieldV1):
-    """
-    A component for selecting one value out of several options. It is designed as a group of circles arranged vertically.
-    If you want it to look like normal buttons, use field.button-radio-group.
-    The minimum number of buttons is one. Any type of data can be returned.
+    """A component for selecting one value out of several options. It is designed as a group of circles arranged vertically.
 
+    If you want it to look like normal buttons, use field.button-radio-group.
+
+    The minimum number of buttons is one. Any type of data can be returned.
     Attributes:
         data: Data with values that will be processed or changed.
         label: Label above the component.
@@ -760,13 +759,14 @@ class RadioGroupFieldV1(BaseFieldV1):
     disabled: Optional[Union[BaseComponent, bool]]
 
 class SelectFieldV1(BaseFieldV1):
-    """
-    Button for selecting from a drop-down list. Use this component when the list is long and only one option can be
-    chosen.
+    """Button for selecting from a drop-down list.
+
+    Use this component when the list is long and only one option can be chosen.
+
     For short lists (2-4 items), it's better to use field.radio-group or field.button-radio-group, where all the
     options are visible at once.
-    To allow selecting multiple options, use the field.checkbox-group component.
 
+    To allow selecting multiple options, use the field.checkbox-group component.
     Attributes:
         data: Data with values that will be processed or changed.
         label: Label above the component.
@@ -777,7 +777,8 @@ class SelectFieldV1(BaseFieldV1):
     """
 
     class Option(BaseTemplate):
-        """
+        """Options to choose from.
+
         Attributes:
             label: The name of the option to display in the list.
             value: The value to write to the data in the data property.
@@ -848,8 +849,7 @@ class SelectFieldV1(BaseFieldV1):
     placeholder: Optional[Any]
 
 class TextFieldV1(BaseFieldV1):
-    """
-    A component that allows entering a single line of text.
+    """A component that allows entering a single line of text.
 
     Attributes:
         data: Data with values that will be processed or changed.
@@ -899,13 +899,14 @@ class TextFieldV1(BaseFieldV1):
     placeholder: Optional[Any]
 
 class TextareaFieldV1(BaseFieldV1):
-    """
-    Box for entering multi-line text. Use in tasks that require an extended response. For single-line responses, use
-    the field.text component.
+    """Box for entering multi-line text.
+
+    Use in tasks that require an extended response. For single-line responses, use the field.text component.
+
     The size of the box does not automatically adjust to the length of the text. Users can change the height by
     dragging the lower-right corner. To change the default size of the box, use the rows property.
-    Note that formatting is not available in the text box.
 
+    Note that formatting is not available in the text box.
     Attributes:
         data: Data with values that will be processed or changed.
         label: Label above the component.

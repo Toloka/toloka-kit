@@ -5,8 +5,8 @@ from .base import BaseComponent, BaseTemplate, VersionedBaseComponent
 
 
 class BasePluginV1(VersionedBaseComponent):
-    """
-    Plugins that provide expanded functionality. For example, you can use plugin.hotkeys to set up shortcuts.
+    """Plugins that provide expanded functionality. For example, you can use plugin.hotkeys to set up shortcuts.
+
     """
 
     def __repr__(self): ...
@@ -33,8 +33,7 @@ class BasePluginV1(VersionedBaseComponent):
     version: Optional[str]
 
 class HotkeysPluginV1(BasePluginV1):
-    """
-    Lets you set keyboard shortcuts for actions.
+    """Lets you set keyboard shortcuts for actions.
 
     Attributes:
         key_ + [a-z|0-9|up|down]: An action that is triggered when you press the specified keyboard key. The keyboard
@@ -144,13 +143,14 @@ class HotkeysPluginV1(BasePluginV1):
     key_down: Optional[Any]
 
 class TriggerPluginV1(BasePluginV1):
-    """
-    Use this to configure triggers that trigger a specific action when an event occurs.
+    """Use this to configure triggers that trigger a specific action when an event occurs.
+
     The action is set in the action property, and the event is described in the other fields.
+
     The event can be triggered immediately when the task is loaded ("fireImmediately": true) or when data changes in
     the property specified in onChangeOf.
-    You can also set conditions in the conditions property that must be met in order for the trigger to fire.
 
+    You can also set conditions in the conditions property that must be met in order for the trigger to fire.
     Attributes:
         action: The action to perform when the trigger fires.
         condition: The condition that must be met in order to fire the trigger.
@@ -193,8 +193,7 @@ class TriggerPluginV1(BasePluginV1):
     on_change_of: Optional[BaseComponent]
 
 class TolokaPluginV1(BasePluginV1):
-    """
-    A plugin with extra settings for tasks in Toloka.
+    """A plugin with extra settings for tasks in Toloka.
 
     Attributes:
         layout: Settings for the task appearance in Toloka.
@@ -202,16 +201,15 @@ class TolokaPluginV1(BasePluginV1):
     """
 
     class TolokaPluginLayout(BaseTemplate):
-        """
-        How to display task.
+        """How to display task.
+
         """
 
         class Kind(Enum):
-            """
-            scroll (default) — display multiple tasks on the page at the same time.
+            """scroll (default) — display multiple tasks on the page at the same time.
+
             pager — display only one task on the page, with a button to switch between tasks at the bottom.
             """
-
             ...
 
         def __repr__(self): ...

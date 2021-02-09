@@ -86,4 +86,10 @@ def raise_on_api_error(response: requests.Response):
 
     response_json = response.json()
     error_class = _ERROR_MAP.get(response_json['code'], ApiError)
+
+    class_fields = [field.name for field in attr.fields(error_class)]
+    for key in response_json.copy().keys():
+        if key not in class_fields:
+            response_json.pop(key)
+
     raise error_class(status_code=response.status_code, **response_json)

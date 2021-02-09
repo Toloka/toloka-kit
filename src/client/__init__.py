@@ -3,8 +3,11 @@ from decimal import Decimal
 import time
 from enum import Enum, unique
 from typing import List, Optional, Union, BinaryIO, Tuple, Generator
+import pandas as pd
 
 import attr
+import io
+import logging
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -23,7 +26,7 @@ from .__version__ import __version__
 from ._converter import structure, unstructure
 from .aggregation import AggregatedSolution
 from .analytics_request import AnalyticsRequest
-from .assignment import Assignment, AssignmentPatch
+from .assignment import Assignment, AssignmentPatch, GetAssignmentsTsvParameters
 from .attachment import Attachment
 from .exceptions import raise_on_api_error
 from .message_thread import (
@@ -40,6 +43,8 @@ from .user_bonus import UserBonus, UserBonusCreateRequestParameters
 from .user_restriction import UserRestriction
 from .user_skill import SetUserSkillRequest, UserSkill
 from .util._codegen import expand
+
+logger = logging.getLogger(__name__)
 
 
 class TolokaClient:
@@ -563,3 +568,10 @@ class TolokaClient:
 
     def delete_user_skill(self, user_skill_id: str) -> None:
         self._raw_request('delete', f'/v1/user-skills/{user_skill_id}')
+
+    @expand('parameters')
+    def get_assignments_df(self, pool_id: str, parameters: GetAssignmentsTsvParameters) -> pd.DataFrame:
+        logger.warning('Experimental method')
+        response = self._raw_request('get', f'/new/requester/pools/{pool_id}/assignments.tsv',
+                                     params=unstructure(parameters))
+        return pd.read_csv(io.StringIO(response.text), delimiter='\t')

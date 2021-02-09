@@ -5,8 +5,8 @@ from .base import BaseComponent, BaseTemplate, VersionedBaseComponent
 
 
 class BaseHelperV1(VersionedBaseComponent):
-    """
-    Perform various operations, such as if-then-else or switch-case.
+    """Perform various operations, such as if-then-else or switch-case.
+
     """
 
     def __repr__(self): ...
@@ -33,13 +33,12 @@ class BaseHelperV1(VersionedBaseComponent):
     version: Optional[str]
 
 class ConcatArraysHelperV1(BaseHelperV1):
-    """
-    Merging multiple arrays into a single array.
+    """Merging multiple arrays into a single array.
+
     For example, let's say you have multiple arrays:
     ([1, 2, 3], [4, 5, 6], [7, 8, 9])
     Their elements can be combined into a single array to show simultaneously:
     [1, 2, 3, 4, 5, 6, 7, 8, 9]
-
     Attributes:
         items: Arrays to combine.
     """
@@ -73,8 +72,8 @@ class ConcatArraysHelperV1(BaseHelperV1):
     items: Optional[Union[BaseComponent, List[Any]]]
 
 class Entries2ObjectHelperV1(BaseHelperV1):
-    """
-    Creating an object from a specified array of key-value pairs.
+    """Creating an object from a specified array of key-value pairs.
+
     For example, let's say you have an array like this:
     [
         {
@@ -88,7 +87,6 @@ class Entries2ObjectHelperV1(BaseHelperV1):
     ]
     It is converted to an object whose elements consist of the values of the original array:
     { "foo": "hello", "bar": "world" }
-
     Attributes:
         entries: Source array of key-value pairs.
     """
@@ -150,16 +148,17 @@ class Entries2ObjectHelperV1(BaseHelperV1):
     entries: Optional[Union[BaseComponent, List[Union[BaseComponent, Entry]]]]
 
 class IfHelperV1(BaseHelperV1):
-    """
-    The If...Then...Else operator. Allows you to execute either one block of code or another, depending on the
-    condition. If you need more options, use helper.switch.
+    """The If...Then...Else operator.
+
+    Allows you to execute either one block of code or another, depending on the condition. If you need more options,
+    use helper.switch.
+
     For example, if you want to conduct a survey, you can use the helper.if component to ask the gender of the
     respondent and add different sets of questions, depending on whether the respondent is male or female.
     How it works: If the condition in if is true (returns true), the code specified in the then property will be
     executed. Otherwise (the condition is false and returns false) the code specified in else will be executed.
     The else property is optional. For example, let's say you ask the user " did you Like the image". You can make a
     comment field appear when a negative response is received, but nothing happens when a positive response is received.
-
     Attributes:
         condition: Condition to check.
         else_: The element that is returned if the condition from the condition property is false (returns false).
@@ -199,10 +198,9 @@ class IfHelperV1(BaseHelperV1):
     else_: Optional[Any]
 
 class JoinHelperV1(BaseHelperV1):
-    """
-    The component combines two or more strings into one. You can add a delimiter to separate the strings, such as a
-    space or comma.
+    """The component combines two or more strings into one.
 
+    You can add a delimiter to separate the strings, such as a space or comma.
     Attributes:
         by: Delimiter for joining strings. You can use any number of characters in the delimiter.
         items: Array of strings to join.
@@ -239,8 +237,8 @@ class JoinHelperV1(BaseHelperV1):
     by: Optional[Any]
 
 class Object2EntriesHelperV1(BaseHelperV1):
-    """
-    Creating an array of key-value pairs from the specified object.
+    """Creating an array of key-value pairs from the specified object.
+
     For example, let's say you have an object that looks like this:
     {
         "foo": "hello",
@@ -257,7 +255,6 @@ class Object2EntriesHelperV1(BaseHelperV1):
             "value": "world"
         }
     ]
-
     Attributes:
         data: The object to convert.
     """
@@ -291,11 +288,10 @@ class Object2EntriesHelperV1(BaseHelperV1):
     data: Optional[Any]
 
 class ReplaceHelperV1(BaseHelperV1):
-    """
-    Allows you to replace some parts of the string with others.
+    """Allows you to replace some parts of the string with others.
+
     This helper function returns a string in which all occurrences of 'findindataare replaced withreplace`.
     Because the helper.replace helper returns a string, it can be used in properties that accept string values.
-
     Attributes:
         data: Data to perform the replacement on.
         find: The value to search for — the string whose occurrences must be found in data and replaced with the string
@@ -336,10 +332,9 @@ class ReplaceHelperV1(BaseHelperV1):
     replace: Optional[Union[BaseComponent, str]]
 
 class SearchQueryHelperV1(BaseHelperV1):
-    """
-    Component for creating a string with a search query reference.
-    The list of available search engines is specified in the engine enum.
+    """Component for creating a string with a search query reference.
 
+    The list of available search engines is specified in the engine enum.
     Attributes:
         engine: Search engine.
         query: Search query.
@@ -379,11 +374,14 @@ class SearchQueryHelperV1(BaseHelperV1):
     engine: Optional[Union[BaseComponent, Engine]]
 
 class SwitchHelperV1(BaseHelperV1):
-    """
-    A switch-case construction. Checks various conditions sequentially and executes the code from the result property
-    when the corresponding condition is true.
+    """A switch-case construction.
+
+    Checks various conditions sequentially and executes the code from the result property when the corresponding
+    condition is true.
+
     You can use it to perform an action or display an additional interface element only when a certain condition is met.
     View example in the sandbox.
+
     This helper is similar to a series of If...Then...Else logical expressions, so it is useful if there are more than
     two conditions for sequential verification. If you need to check one or two conditions, use the helper.if component.
     How the helper works:
@@ -394,14 +392,14 @@ class SwitchHelperV1(BaseHelperV1):
         * If the condition is false (returns false), the helper checks the subsequent condition.
         * If all conditions are false as a result of all checks, the helper returns the value specified in the default
           property (if it is not defined, the helper returns nothing).
-
     Attributes:
         cases: An array of objects consisting of condition and result property pairs.
         default: Element that is returned if none of the checked conditions returned true.
     """
 
     class Case(BaseTemplate):
-        """
+        """Case.
+
         Attributes:
             condition: Condition to check.
             result: The element that is returned if the condition from the condition property is true (returns true).
@@ -464,12 +462,12 @@ class SwitchHelperV1(BaseHelperV1):
     default: Optional[Any]
 
 class TextTransformHelperV1(BaseHelperV1):
-    """
-    Allows you to change the case of the text, like make all letters uppercase.
+    """Allows you to change the case of the text, like make all letters uppercase.
+
     For example, you can use this component to automatically process input data.
+
     This component is available in property values with the string type, for example in the content property in the
     view.text component.
-
     Attributes:
         data: The text string in which you want to change the case.
         transformation: Conversion mode.
@@ -509,11 +507,10 @@ class TextTransformHelperV1(BaseHelperV1):
     transformation: Optional[Union[BaseComponent, Transformation]]
 
 class TransformHelperV1(BaseHelperV1):
-    """
-    Creates a new array by transforming each of the elements in the original array.
+    """Creates a new array by transforming each of the elements in the original array.
+
     For example, you can convert an array of image links to view.image components to display these images. This may be
     useful if the number of images in the array is unknown in advance
-
     Attributes:
         into: Template to transform elements in the array. The array value can be substituted using the data.local
             component. To do this, use the construction { "type": "data.local", "path": "item"}

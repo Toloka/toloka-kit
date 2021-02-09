@@ -5,9 +5,9 @@ from .base import BaseComponent, VersionedBaseComponent
 
 
 class BaseLayoutV1(VersionedBaseComponent):
-    """
-    Options for positioning elements in the interface, such as in columns or side-by-side. If you have more than one
-    element in the interface, these components will help you arrange them the way you want.
+    """Options for positioning elements in the interface, such as in columns or side-by-side.
+
+    If you have more than one element in the interface, these components will help you arrange them the way you want.
     """
 
     def __repr__(self): ...
@@ -39,12 +39,12 @@ class BaseLayoutV1(VersionedBaseComponent):
     validation: Optional[BaseComponent]
 
 class BarsLayoutV1(BaseLayoutV1):
-    """
-    A component that adds top and bottom bars to the content.
+    """A component that adds top and bottom bars to the content.
+
     You can use other components inside each part of this component, such as images, text, or options.
+
     The top bar is located at the top edge of the component, and the bottom one is at the bottom edge. The content is
     placed between the bars and takes up all available space.
-
     Attributes:
         bar_after: The bar displayed at the bottom edge of the component.
         bar_before: The bar displayed at the top edge of the component.
@@ -87,10 +87,9 @@ class BarsLayoutV1(BaseLayoutV1):
     bar_before: Optional[BaseComponent]
 
 class ColumnsLayoutV1(BaseLayoutV1):
-    """
-    A component for placing content in columns.
-    Use it to customize the display of content: set the column width and adjust the vertical alignment of content.
+    """A component for placing content in columns.
 
+    Use it to customize the display of content: set the column width and adjust the vertical alignment of content.
     Attributes:
         full_height: Switches the component to column mode at full height and with individual scrolling. Otherwise, the
             height is determined by the height of the column that is filled in the most.
@@ -108,12 +107,12 @@ class ColumnsLayoutV1(BaseLayoutV1):
     """
 
     class VerticalAlign(Enum):
-        """
+        """Vertical alignment of column content.
+
         top — Aligned to the top of a column.
         middle — Aligned to the middle of the column that is filled in the most.
         bottom — Aligned to the bottom of a column.
         """
-
         ...
 
     def __repr__(self): ...
@@ -155,11 +154,11 @@ class ColumnsLayoutV1(BaseLayoutV1):
     vertical_align: Optional[Union[BaseComponent, VerticalAlign]]
 
 class SideBySideLayoutV1(BaseLayoutV1):
-    """
-    The component displays several data blocks of the same width on a single horizontal panel. For example, you can use
-    this to compare several photos.
-    You can set the minimum width for data blocks.
+    """The component displays several data blocks of the same width on a single horizontal panel.
 
+    For example, you can use this to compare several photos.
+
+    You can set the minimum width for data blocks.
     Attributes:
         controls: Components that let users perform the required actions.
             For example: field.checkbox-group or field.button-radio-group.
@@ -203,16 +202,19 @@ class SideBySideLayoutV1(BaseLayoutV1):
     min_item_width: Optional[Union[BaseComponent, float]]
 
 class SidebarLayoutV1(BaseLayoutV1):
-    """
-    An option for placing (layout) items, which lets you arrange on a page:
-    The main content block.
-    An adjacent panel with controls.
+    """An option for placing (layout) items, which lets you arrange on a page:
+
+    * The main content block.
+    * An adjacent panel with controls.
+
     The minWidth property sets the threshold for switching between widescreen and compact modes: when the width of the
     layout.sidebar component itself becomes less than the value set by the minWidth property, compact mode is enabled.
-    In widescreen mode, the control panel is located to the right of the main block.
-    In compact mode, controls stretch to the entire width and are located under each other.
-    To add an extra panel with controls, use the extraControls property.
 
+    In widescreen mode, the control panel is located to the right of the main block.
+
+    In compact mode, controls stretch to the entire width and are located under each other.
+
+    To add an extra panel with controls, use the extraControls property.
     Attributes:
         content: Content placed in the main area.
         controls: Content of the control panel.
