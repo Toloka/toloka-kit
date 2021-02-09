@@ -1,0 +1,14 @@
+/* hide the button for rectangle selection */
+.image-annotation-editor__shape-rectangle {
+  display: none;
+}
+
+/* hide the button for polygon selection */
+.image-annotation-editor__shape-polygon {
+  display: none;
+}
+
+/* adjust the interface height */
+.image-annotation-editor__annotation-layer {
+  height: max-content;
+}
