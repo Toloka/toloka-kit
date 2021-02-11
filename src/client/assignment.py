@@ -97,7 +97,7 @@ class GetAssignmentsTsvParameters(Parameters):
     def structure(cls, data):
         raise NotImplementedError
 
-    def unstructure(self) -> Optional[dict]:
+    def unstructure(self) -> dict:
         data = super().unstructure()
         data['status'] = ','.join(data['status'])
         data['field'] = ','.join(data['field'])
