@@ -262,7 +262,7 @@ class DeviceFrameViewV1(BaseViewV1):
         hint: Hint text.
         max_width: Maximum width of the element in pixels, must be greater than min_width.
         min_width: Minimum width of the element in pixels. Takes priority over max_width.
-        ration: An array of two numbers that sets the relative dimensions of the sides: width (first number) to
+        ratio: An array of two numbers that sets the relative dimensions of the sides: width (first number) to
             height (second number). Not valid if full_height=true.
         validation: Validation based on condition.
     """
@@ -406,7 +406,7 @@ class IframeViewV1(BaseViewV1):
         hint: Hint text.
         max_width: Maximum width of the element in pixels, must be greater than min_width.
         min_width: Minimum width of the element in pixels. Takes priority over max_width.
-        ration: An array of two numbers that sets the relative dimensions of the sides: width (first number) to
+        ratio: An array of two numbers that sets the relative dimensions of the sides: width (first number) to
             height (second number). Not valid if full_height=true.
         validation: Validation based on condition.
     """
@@ -469,7 +469,7 @@ class ImageViewV1(BaseViewV1):
             viewport. Useful for icons. By default, false (lazy loading is enabled). In this mode, images start loading
             only when they get in the user's field of view.
         popup: Specifies whether opening a full-size image with a click is allowed. By default, it is true (allowed).
-        ration: An array of two numbers that sets the relative dimensions of the sides: width (first number) to
+        ratio: An array of two numbers that sets the relative dimensions of the sides: width (first number) to
             height (second number). Not valid if full_height=true.
         scrollable: When set to true, an image has scroll bars if it doesn't fit in the parent element.
             If false, the image fits in the parent element and, when clicked, opens in its original size in the module
@@ -730,7 +730,7 @@ class ListViewV1(BaseViewV1):
 class MarkdownViewV1(BaseViewV1):
     """Block for displaying text in Markdown.
 
-    The contents of the block are written to the content property in a single line. To insert line breaks, use 
+    The contents of the block are written to the content property in a single line. To insert line breaks, use
     .
         Straight quotation marks (") must be escaped like this: ".
 
@@ -786,7 +786,7 @@ class TextViewV1(BaseViewV1):
     If you need formatted text, use view.markdown.
     Attributes:
         label: Label above the component.
-        content: The text displayed in the block. To insert a new line, use 
+        content: The text displayed in the block. To insert a new line, use
         hint: Hint text.
         validation: Validation based on condition.
     """
@@ -840,7 +840,7 @@ class VideoViewV1(BaseViewV1):
         hint: Hint text.
         max_width: Maximum width of the element in pixels, must be greater than min_width.
         min_width: Minimum width of the element in pixels. Takes priority over max_width.
-        ration: The aspect ratio of the video block. An array of two numbers: the first sets the width of the block and
+        ratio: The aspect ratio of the video block. An array of two numbers: the first sets the width of the block and
             the second sets the height.
         url: Link to the video file.
         validation: Validation based on condition.

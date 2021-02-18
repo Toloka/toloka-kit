@@ -1,4 +1,5 @@
-from typing import List, Any
+from enum import Enum, unique
+from typing import List, Any, Dict
 
 from ...primitives.base import attribute
 
@@ -46,9 +47,35 @@ class DateFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_DATE):
     placeholder: base_component_or(Any)
 
 
+class EmailFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_EMAIL):
+    placeholder: Any
+
+
 class FileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_FILE):
-    accept: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrstr')
+    accept: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrStr')
     multiple: base_component_or(bool)
+
+
+class ImageAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_IMAGE_ANNOTATION):
+
+    class Label(BaseTemplate):
+        label: base_component_or(str)
+        value: base_component_or(str)
+
+    @unique
+    class Shape(Enum):
+        POINT = 'point'
+        POLYGON = 'polygon'
+        RECTANGLE = 'rectangle'
+
+    disabled: base_component_or(bool)
+    full_height: base_component_or(bool) = attribute(origin='fullHeight')
+    image: base_component_or(str)
+    labels: base_component_or(List[base_component_or(Label)], 'ListBaseComponentOrLabel')
+    min_width: base_component_or(float) = attribute(origin='minWidth')
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat')
+    shapes: base_component_or(Dict[base_component_or(Shape), base_component_or(bool)],
+                              'DictBaseComponentOrShapeBaseComponentOrBool')
 
 
 class ListFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_LIST):

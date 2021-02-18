@@ -27,7 +27,7 @@ class ColumnsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COLUMNS):
     items: base_component_or(List[BaseComponent], 'ListBaseComponent')
     full_height: base_component_or(bool) = attribute(origin='fullHeight')
     min_width: base_component_or(float) = attribute(origin='minWidth')
-    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrfloat')
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat')
     vertical_align: base_component_or(VerticalAlign) = attribute(origin='verticalAlign')
 
 

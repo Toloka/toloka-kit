@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
 from .base import (
@@ -365,6 +366,54 @@ class DateFieldV1(BaseFieldV1):
     min: Optional[Any]
     placeholder: Optional[Any]
 
+class EmailFieldV1(BaseFieldV1):
+    """Creates a field for entering an email address.
+
+    Checks that the text contains the @ character. You can set other conditions yourself.
+    Attributes:
+        data: Data with values that will be processed or changed.
+        label: Label above the component.
+        hint: Hint text.
+        placeholder: A semi-transparent label that is shown in an empty field.
+        validation: Validation based on condition.
+    """
+
+    def __repr__(self): ...
+
+    def __str__(self): ...
+
+    def __eq__(self, other): ...
+
+    def __ne__(self, other): ...
+
+    def __lt__(self, other): ...
+
+    def __le__(self, other): ...
+
+    def __gt__(self, other): ...
+
+    def __ge__(self, other): ...
+
+    def __setattr__(self, name, val): ...
+
+    def __init__(
+        self,*,
+        version: Optional[str] = ...,
+        data: Optional[BaseComponent] = ...,
+        hint: Optional[Any] = ...,
+        label: Optional[Any] = ...,
+        validation: Optional[BaseComponent] = ...,
+        placeholder: Optional[Any] = ...
+    ) -> None: ...
+
+    _unexpected: Optional[Dict[str, Any]]
+    version: Optional[str]
+    data: Optional[BaseComponent]
+    hint: Optional[Any]
+    label: Optional[Any]
+    validation: Optional[BaseComponent]
+    placeholder: Optional[Any]
+
 class FileFieldV1(BaseFieldV1):
     """This component can be used for uploading files. It's displayed in the interface as an upload button.
 
@@ -423,6 +472,125 @@ class FileFieldV1(BaseFieldV1):
     validation: Optional[BaseComponent]
     accept: Optional[Union[BaseComponent, List[Union[BaseComponent, str]]]]
     multiple: Optional[Union[BaseComponent, bool]]
+
+class ImageAnnotationFieldV1(BaseFieldV1):
+    """Adds an interface for selecting areas in images.
+
+    If you need to select different types of objects, classify the areas using the labels property.
+
+    You can select areas using points, polygons, and rectangles. In the shapes property, you can keep some of the
+    selection modes and hide the rest.
+    Attributes:
+        data: Data with values that will be processed or changed.
+        label: Label above the component.
+        disabled: Determines whether adding and deleting areas is allowed:
+            * false (default) — Allowed.
+            * true — Not allowed.
+            You can use this feature when creating an interface to check whether the selection is correct,
+             or if you need to allow selection only when a certain condition is met.
+        full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
+            of 400 pixels.
+        hint: Hint text.
+        image: The image you want to select areas in.
+        labels: Used to classify areas.
+            You can add several area types. When adding an area type, a button to select it appears in the interface,
+            and when setting a new value, a new area selection color is added.
+            This feature is instrumental if you need to select different types of objects: you can use one color to
+            select cars and a different one for pedestrians.
+        min_width: Minimum width of the element in pixels. Takes priority over max_width.
+        ratio: An array of two numbers that sets the relative dimensions of the sides: width (first number) to height
+            (second number). Not valid if full_height=true.
+        shapes: Used to add and hide selection modes: points, polygons, and rectangles. All three modes are available
+            by default.
+            Use this property if you only need to keep certain modes. Modes with the true value are available.
+        validation: Validation based on condition.
+    """
+
+    class Label(BaseTemplate):
+        """At least two objects must be added to the array.
+
+        Attributes:
+            label: Text on the button for selecting a selection color.
+            value: The value to be written to the labels property data. Displayed to users as color options when
+                selecting areas.
+        """
+
+        def __repr__(self): ...
+
+        def __str__(self): ...
+
+        def __eq__(self, other): ...
+
+        def __ne__(self, other): ...
+
+        def __lt__(self, other): ...
+
+        def __le__(self, other): ...
+
+        def __gt__(self, other): ...
+
+        def __ge__(self, other): ...
+
+        def __init__(
+            self,*,
+            label: Optional[Union[BaseComponent, str]] = ...,
+            value: Optional[Union[BaseComponent, str]] = ...
+        ) -> None: ...
+
+        _unexpected: Optional[Dict[str, Any]]
+        label: Optional[Union[BaseComponent, str]]
+        value: Optional[Union[BaseComponent, str]]
+
+    class Shape(Enum):
+        ...
+
+    def __repr__(self): ...
+
+    def __str__(self): ...
+
+    def __eq__(self, other): ...
+
+    def __ne__(self, other): ...
+
+    def __lt__(self, other): ...
+
+    def __le__(self, other): ...
+
+    def __gt__(self, other): ...
+
+    def __ge__(self, other): ...
+
+    def __setattr__(self, name, val): ...
+
+    def __init__(
+        self,*,
+        version: Optional[str] = ...,
+        data: Optional[BaseComponent] = ...,
+        hint: Optional[Any] = ...,
+        label: Optional[Any] = ...,
+        validation: Optional[BaseComponent] = ...,
+        disabled: Optional[Union[BaseComponent, bool]] = ...,
+        full_height: Optional[Union[BaseComponent, bool]] = ...,
+        image: Optional[Union[BaseComponent, str]] = ...,
+        labels: Optional[Union[BaseComponent, List[Union[BaseComponent, Label]]]] = ...,
+        min_width: Optional[Union[BaseComponent, float]] = ...,
+        ratio: Optional[Union[BaseComponent, List[Union[BaseComponent, float]]]] = ...,
+        shapes: Optional[Union[BaseComponent, Dict[Union[BaseComponent, Shape], Union[BaseComponent, bool]]]] = ...
+    ) -> None: ...
+
+    _unexpected: Optional[Dict[str, Any]]
+    version: Optional[str]
+    data: Optional[BaseComponent]
+    hint: Optional[Any]
+    label: Optional[Any]
+    validation: Optional[BaseComponent]
+    disabled: Optional[Union[BaseComponent, bool]]
+    full_height: Optional[Union[BaseComponent, bool]]
+    image: Optional[Union[BaseComponent, str]]
+    labels: Optional[Union[BaseComponent, List[Union[BaseComponent, Label]]]]
+    min_width: Optional[Union[BaseComponent, float]]
+    ratio: Optional[Union[BaseComponent, List[Union[BaseComponent, float]]]]
+    shapes: Optional[Union[BaseComponent, Dict[Union[BaseComponent, Shape], Union[BaseComponent, bool]]]]
 
 class ListFieldV1(BaseFieldV1):
     """A component that allows the user to add and remove list items, such as text fields to fill in.

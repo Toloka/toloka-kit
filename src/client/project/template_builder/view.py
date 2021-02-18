@@ -44,7 +44,7 @@ class DeviceFrameViewV1(BaseViewV1, spec_value=ComponentType.VIEW_DEVICE_FRAME):
     full_height: base_component_or(bool) = attribute(origin='fullHeight')
     max_width: base_component_or(float) = attribute(origin='maxWidth')
     min_width: base_component_or(float) = attribute(origin='minWidth')
-    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrfloat')
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat')
 
 
 class DividerViewV1(BaseViewV1, spec_value=ComponentType.VIEW_DIVIDER):
@@ -60,7 +60,7 @@ class IframeViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IFRAME):
     full_height: base_component_or(bool) = attribute(origin='fullHeight')
     max_width: base_component_or(float) = attribute(origin='maxWidth')
     min_width: base_component_or(float) = attribute(origin='minWidth')
-    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrfloat')
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat')
 
 
 class ImageViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IMAGE):
@@ -71,7 +71,7 @@ class ImageViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IMAGE):
     no_border: base_component_or(bool) = attribute(origin='noBorder')
     no_lazy_load: base_component_or(bool) = attribute(origin='noLazyLoad')
     popup: base_component_or(bool)
-    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrfloat')
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat')
     rotatable: base_component_or(bool)
     scrollable: base_component_or(bool)
 

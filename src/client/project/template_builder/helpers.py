@@ -30,7 +30,7 @@ class IfHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_IF):
 
 
 class JoinHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_JOIN):
-    items: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrstr')
+    items: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrStr')
     by: base_component_or(Any)
 
 

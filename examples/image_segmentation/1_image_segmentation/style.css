@@ -1,8 +1,0 @@
-/* hide the button for polygon selection */
-.image-annotation-editor__shape-polygon {
-  display: none;
-}
-
-.image-annotation-editor__annotation-layer {
-  height: max-content;
-}
