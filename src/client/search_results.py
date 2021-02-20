@@ -7,6 +7,7 @@ from .message_thread import MessageThread
 from .pool import Pool
 from .primitives.base import BaseTolokaObject, BaseTolokaObjectMetaclass
 from .project import Project
+from .training import Training
 from .skill import Skill
 from .task import Task
 from .task_suite import TaskSuite
@@ -34,6 +35,7 @@ PoolSearchResult = _create_search_result_class_for(Pool)
 SkillSearchResult = _create_search_result_class_for(Skill)
 TaskSearchResult = _create_search_result_class_for(Task)
 TaskSuiteSearchResult = _create_search_result_class_for(TaskSuite)
+TrainingSearchResult = _create_search_result_class_for(Training)
 UserBonusSearchResult = _create_search_result_class_for(UserBonus)
 UserRestrictionSearchResult = _create_search_result_class_for(UserRestriction)
 UserSkillSearchResult = _create_search_result_class_for(UserSkill)

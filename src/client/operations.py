@@ -13,6 +13,10 @@ class OperationType(Enum):
     POOL_CLOSE = 'POOL.CLOSE'
     POOL_ARCHIVE = 'POOL.ARCHIVE'
     POOL_CLONE = 'POOL.CLONE'
+    TRAINING_OPEN = 'TRAINING.OPEN'
+    TRAINING_CLOSE = 'TRAINING.CLOSE'
+    TRAINING_ARCHIVE = 'TRAINING.ARCHIVE'
+    TRAINING_CLONE = 'TRAINING.CLONE'
     TASK_BATCH_CREATE = 'TASK.BATCH_CREATE'
     TASK_SUITE_BATCH_CREATE = 'TASK_SUITE.BATCH_CREATE'
     USER_BONUS_BATCH_CREATE = 'USER_BONUS.BATCH_CREATE'
@@ -88,6 +92,37 @@ class PoolCloseOperation(PoolOperation, spec_value=OperationType.POOL_CLOSE):
 
 
 class PoolOpenOperation(PoolOperation, spec_value=OperationType.POOL_OPEN):
+    pass
+
+
+# Training operations
+
+
+class TrainingOperation(Operation):
+
+    class Parameters(Operation.Parameters):
+        training_id: str
+
+    parameters: Parameters
+
+
+class TrainingArchiveOperation(TrainingOperation, spec_value=OperationType.TRAINING_ARCHIVE):
+    pass
+
+
+class TrainingCloneOperation(TrainingOperation, spec_value=OperationType.TRAINING_CLONE):
+
+    class Details(TrainingOperation.Parameters):
+        training_id: str
+
+    details: Details
+
+
+class TrainingCloseOperation(TrainingOperation, spec_value=OperationType.TRAINING_CLOSE):
+    pass
+
+
+class TrainingOpenOperation(TrainingOperation, spec_value=OperationType.TRAINING_OPEN):
     pass
 
 

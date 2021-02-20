@@ -385,6 +385,252 @@ class PoolOpenOperation(PoolOperation):
     details: Optional[Any]
     parameters: Optional[PoolOperation.Parameters]
 
+class TrainingOperation(Operation):
+
+    class Parameters(Operation.Parameters):
+
+        def __repr__(self): ...
+
+        def __str__(self): ...
+
+        def __eq__(self, other): ...
+
+        def __ne__(self, other): ...
+
+        def __lt__(self, other): ...
+
+        def __le__(self, other): ...
+
+        def __gt__(self, other): ...
+
+        def __ge__(self, other): ...
+
+        def __init__(self, *, training_id: Optional[str] = ...) -> None: ...
+
+        _unexpected: Optional[Dict[str, Any]]
+        training_id: Optional[str]
+
+    def __repr__(self): ...
+
+    def __str__(self): ...
+
+    def __eq__(self, other): ...
+
+    def __ne__(self, other): ...
+
+    def __lt__(self, other): ...
+
+    def __le__(self, other): ...
+
+    def __gt__(self, other): ...
+
+    def __ge__(self, other): ...
+
+    def __init__(
+        self,*,
+        id: Optional[str] = ...,
+        status: Optional[Operation.Status] = ...,
+        submitted: Optional[datetime] = ...,
+        started: Optional[datetime] = ...,
+        finished: Optional[datetime] = ...,
+        progress: Optional[int] = ...,
+        details: Optional[Any] = ...,
+        parameters: Optional[Parameters] = ...
+    ) -> None: ...
+
+    _unexpected: Optional[Dict[str, Any]]
+    id: Optional[str]
+    status: Optional[Operation.Status]
+    submitted: Optional[datetime]
+    started: Optional[datetime]
+    finished: Optional[datetime]
+    progress: Optional[int]
+    details: Optional[Any]
+    parameters: Optional[Parameters]
+
+class TrainingArchiveOperation(TrainingOperation):
+
+    def __repr__(self): ...
+
+    def __str__(self): ...
+
+    def __eq__(self, other): ...
+
+    def __ne__(self, other): ...
+
+    def __lt__(self, other): ...
+
+    def __le__(self, other): ...
+
+    def __gt__(self, other): ...
+
+    def __ge__(self, other): ...
+
+    def __init__(
+        self,*,
+        id: Optional[str] = ...,
+        status: Optional[Operation.Status] = ...,
+        submitted: Optional[datetime] = ...,
+        started: Optional[datetime] = ...,
+        finished: Optional[datetime] = ...,
+        progress: Optional[int] = ...,
+        details: Optional[Any] = ...,
+        parameters: Optional[TrainingOperation.Parameters] = ...
+    ) -> None: ...
+
+    _unexpected: Optional[Dict[str, Any]]
+    id: Optional[str]
+    status: Optional[Operation.Status]
+    submitted: Optional[datetime]
+    started: Optional[datetime]
+    finished: Optional[datetime]
+    progress: Optional[int]
+    details: Optional[Any]
+    parameters: Optional[TrainingOperation.Parameters]
+
+class TrainingCloneOperation(TrainingOperation):
+
+    class Details(TrainingOperation.Parameters):
+
+        def __repr__(self): ...
+
+        def __str__(self): ...
+
+        def __eq__(self, other): ...
+
+        def __ne__(self, other): ...
+
+        def __lt__(self, other): ...
+
+        def __le__(self, other): ...
+
+        def __gt__(self, other): ...
+
+        def __ge__(self, other): ...
+
+        def __init__(self, *, training_id: Optional[str] = ...) -> None: ...
+
+        _unexpected: Optional[Dict[str, Any]]
+        training_id: Optional[str]
+
+    def __repr__(self): ...
+
+    def __str__(self): ...
+
+    def __eq__(self, other): ...
+
+    def __ne__(self, other): ...
+
+    def __lt__(self, other): ...
+
+    def __le__(self, other): ...
+
+    def __gt__(self, other): ...
+
+    def __ge__(self, other): ...
+
+    def __init__(
+        self,*,
+        id: Optional[str] = ...,
+        status: Optional[Operation.Status] = ...,
+        submitted: Optional[datetime] = ...,
+        started: Optional[datetime] = ...,
+        finished: Optional[datetime] = ...,
+        progress: Optional[int] = ...,
+        parameters: Optional[TrainingOperation.Parameters] = ...,
+        details: Optional[Details] = ...
+    ) -> None: ...
+
+    _unexpected: Optional[Dict[str, Any]]
+    id: Optional[str]
+    status: Optional[Operation.Status]
+    submitted: Optional[datetime]
+    started: Optional[datetime]
+    finished: Optional[datetime]
+    progress: Optional[int]
+    parameters: Optional[TrainingOperation.Parameters]
+    details: Optional[Details]
+
+class TrainingCloseOperation(TrainingOperation):
+
+    def __repr__(self): ...
+
+    def __str__(self): ...
+
+    def __eq__(self, other): ...
+
+    def __ne__(self, other): ...
+
+    def __lt__(self, other): ...
+
+    def __le__(self, other): ...
+
+    def __gt__(self, other): ...
+
+    def __ge__(self, other): ...
+
+    def __init__(
+        self,*,
+        id: Optional[str] = ...,
+        status: Optional[Operation.Status] = ...,
+        submitted: Optional[datetime] = ...,
+        started: Optional[datetime] = ...,
+        finished: Optional[datetime] = ...,
+        progress: Optional[int] = ...,
+        details: Optional[Any] = ...,
+        parameters: Optional[TrainingOperation.Parameters] = ...
+    ) -> None: ...
+
+    _unexpected: Optional[Dict[str, Any]]
+    id: Optional[str]
+    status: Optional[Operation.Status]
+    submitted: Optional[datetime]
+    started: Optional[datetime]
+    finished: Optional[datetime]
+    progress: Optional[int]
+    details: Optional[Any]
+    parameters: Optional[TrainingOperation.Parameters]
+
+class TrainingOpenOperation(TrainingOperation):
+
+    def __repr__(self): ...
+
+    def __str__(self): ...
+
+    def __eq__(self, other): ...
+
+    def __ne__(self, other): ...
+
+    def __lt__(self, other): ...
+
+    def __le__(self, other): ...
+
+    def __gt__(self, other): ...
+
+    def __ge__(self, other): ...
+
+    def __init__(
+        self,*,
+        id: Optional[str] = ...,
+        status: Optional[Operation.Status] = ...,
+        submitted: Optional[datetime] = ...,
+        started: Optional[datetime] = ...,
+        finished: Optional[datetime] = ...,
+        progress: Optional[int] = ...,
+        details: Optional[Any] = ...,
+        parameters: Optional[TrainingOperation.Parameters] = ...
+    ) -> None: ...
+
+    _unexpected: Optional[Dict[str, Any]]
+    id: Optional[str]
+    status: Optional[Operation.Status]
+    submitted: Optional[datetime]
+    started: Optional[datetime]
+    finished: Optional[datetime]
+    progress: Optional[int]
+    details: Optional[Any]
+    parameters: Optional[TrainingOperation.Parameters]
+
 class ProjectArchiveOperation(Operation):
 
     class Parameters(Operation.Parameters):

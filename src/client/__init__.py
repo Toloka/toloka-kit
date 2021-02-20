@@ -35,6 +35,7 @@ from .message_thread import (
 from .operation_log import OperationLogItem
 from .pool import Pool, PoolPatchRequest
 from .project import Project
+from .training import Training
 from .requester import Requester
 from .skill import Skill
 from .task import Task
@@ -316,7 +317,50 @@ class TolokaClient:
         response = self._request('put', f'/v1/pools/{pool_id}', json=unstructure(pool))
         return structure(response, Pool)
 
+    # Training section
+
+    def archive_training(self, training_id: str) -> operations.TrainingArchiveOperation:
+        response = self._request('post', f'/v1/trainings/{training_id}/archive')
+        return structure(response, operations.TrainingArchiveOperation)
+
+    def close_training(self, training_id: str) -> operations.TrainingCloseOperation:
+        response = self._request('post', f'/v1/trainings/{training_id}/close')
+        return structure(response, operations.TrainingCloseOperation)
+
+    def clone_training(self, training_id: str) -> operations.TrainingCloneOperation:
+        response = self._request('post', f'/v1/trainings/{training_id}/clone')
+        return structure(response, operations.TrainingCloneOperation)
+
+    def create_training(self, training: Training) -> Training:
+        response = self._request('post', '/v1/trainings', json=unstructure(training))
+        return structure(response, Training)
+
+    @expand('request')
+    def find_trainings(self, request: search_requests.TrainingSearchRequest,
+                       sort: Union[List[str], search_requests.TrainingSortItems, None] = None,
+                       limit: Optional[int] = None) -> search_results.TrainingSearchResult:
+        sort = None if sort is None else structure(sort, search_requests.TrainingSortItems)
+        response = self._search_request('get', '/v1/trainings', request, sort, limit)
+        return structure(response, search_results.TrainingSearchResult)
+
+    def get_training(self, training_id: str) -> Training:
+        response = self._request('get', f'/v1/trainings/{training_id}')
+        return structure(response, Training)
+
+    @expand('request')
+    def get_trainings(self, request: search_requests.TrainingSearchRequest) -> Generator[Training, None, None]:
+        return self._find_all(self.find_trainings, request)
+
+    def open_training(self, training_id: str) -> operations.TrainingOpenOperation:
+        response = self._request('post', f'/v1/trainings/{training_id}/open')
+        return structure(response, operations.TrainingOpenOperation)
+
+    def update_training(self, training_id: str, training: Training) -> Training:
+        response = self._request('put', f'/v1/trainings/{training_id}', json=unstructure(training))
+        return structure(response, Training)
+
     # Skills section
+
     @expand('skill')
     def create_skill(self, skill: Skill) -> Skill:
         response = self._request('post', '/v1/skills', json=unstructure(skill))

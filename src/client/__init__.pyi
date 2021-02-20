@@ -53,6 +53,10 @@ from .operations import (
     ProjectArchiveOperation,
     TaskSuiteCreateBatchOperation,
     TasksCreateOperation,
+    TrainingArchiveOperation,
+    TrainingCloneOperation,
+    TrainingCloseOperation,
+    TrainingOpenOperation,
     UserBonusCreateBatchOperation
 )
 from .pool import Pool, PoolPatchRequest
@@ -77,6 +81,8 @@ from .search_requests import (
     TaskSortItems,
     TaskSuiteSearchRequest,
     TaskSuiteSortItems,
+    TrainingSearchRequest,
+    TrainingSortItems,
     UserBonusSearchRequest,
     UserBonusSortItems,
     UserRestrictionSearchRequest,
@@ -94,6 +100,7 @@ from .search_results import (
     SkillSearchResult,
     TaskSearchResult,
     TaskSuiteSearchResult,
+    TrainingSearchResult,
     UserBonusSearchResult,
     UserRestrictionSearchResult,
     UserSkillSearchResult
@@ -113,6 +120,7 @@ from .task_suite import (
     TaskSuiteOverlapPatch,
     TaskSuitePatch
 )
+from .training import Training
 from .user_bonus import UserBonus, UserBonusCreateRequestParameters
 from .user_restriction import UserRestriction
 from .user_skill import SetUserSkillRequest, UserSkill
@@ -663,7 +671,7 @@ class TolokaClient(object):
     @overload
     def find_pools(
         self,
-        status: Optional[Project.ProjectStatus] = ...,
+        status: Optional[Pool.Status] = ...,
         project_id: Optional[str] = ...,
         id_lt: Optional[str] = ...,
         id_lte: Optional[str] = ...,
@@ -707,7 +715,7 @@ class TolokaClient(object):
     @overload
     def get_pools(
         self,
-        status: Optional[Project.ProjectStatus] = ...,
+        status: Optional[Pool.Status] = ...,
         project_id: Optional[str] = ...,
         id_lt: Optional[str] = ...,
         id_lte: Optional[str] = ...,
@@ -765,6 +773,74 @@ class TolokaClient(object):
         You can only edit a training pool via the web interface.
         """
         ...
+
+    def archive_training(self, training_id: str) -> TrainingArchiveOperation: ...
+
+    def close_training(self, training_id: str) -> TrainingCloseOperation: ...
+
+    def clone_training(self, training_id: str) -> TrainingCloneOperation: ...
+
+    def create_training(self, training: Training) -> Training: ...
+
+    @overload
+    def find_trainings(
+        self,
+        status: Optional[Training.Status] = ...,
+        project_id: Optional[str] = ...,
+        id_lt: Optional[str] = ...,
+        id_lte: Optional[str] = ...,
+        id_gt: Optional[str] = ...,
+        id_gte: Optional[str] = ...,
+        created_lt: Optional[datetime] = ...,
+        created_lte: Optional[datetime] = ...,
+        created_gt: Optional[datetime] = ...,
+        created_gte: Optional[datetime] = ...,
+        last_started_lt: Optional[datetime] = ...,
+        last_started_lte: Optional[datetime] = ...,
+        last_started_gt: Optional[datetime] = ...,
+        last_started_gte: Optional[datetime] = ...,
+        sort: Union[List[str], TrainingSortItems, None] = ...,
+        limit: Optional[int] = ...
+    ) -> TrainingSearchResult: ...
+
+    @overload
+    def find_trainings(
+        self,
+        request: TrainingSearchRequest,
+        sort: Union[List[str], TrainingSortItems, None] = ...,
+        limit: Optional[int] = ...
+    ) -> TrainingSearchResult: ...
+
+    def get_training(self, training_id: str) -> Training: ...
+
+    @overload
+    def get_trainings(
+        self,
+        status: Optional[Training.Status] = ...,
+        project_id: Optional[str] = ...,
+        id_lt: Optional[str] = ...,
+        id_lte: Optional[str] = ...,
+        id_gt: Optional[str] = ...,
+        id_gte: Optional[str] = ...,
+        created_lt: Optional[datetime] = ...,
+        created_lte: Optional[datetime] = ...,
+        created_gt: Optional[datetime] = ...,
+        created_gte: Optional[datetime] = ...,
+        last_started_lt: Optional[datetime] = ...,
+        last_started_lte: Optional[datetime] = ...,
+        last_started_gt: Optional[datetime] = ...,
+        last_started_gte: Optional[datetime] = ...
+    ) -> Generator[Training, None, None]: ...
+
+    @overload
+    def get_trainings(
+        self,
+        request: TrainingSearchRequest
+    ) -> Generator[Training, None, None]: ...
+
+    def open_training(self, training_id: str) -> TrainingOpenOperation: ...
+
+    def update_training(self, training_id: str, training: Training) -> Training: ...
 
     @overload
     def create_skill(

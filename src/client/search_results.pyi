@@ -10,6 +10,7 @@ from .project import Project
 from .skill import Skill
 from .task import Task
 from .task_suite import TaskSuite
+from .training import Training
 from .user_bonus import UserBonus
 from .user_restriction import UserRestriction
 from .user_skill import UserSkill
@@ -75,6 +76,12 @@ class TaskSuiteSearchResult(BaseTolokaObject):
 
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[TaskSuite]]
+    has_more: Optional[bool]
+
+class TrainingSearchResult(BaseTolokaObject):
+
+    _unexpected: Optional[Dict[str, Any]]
+    items: Optional[List[Training]]
     has_more: Optional[bool]
 
 class UserBonusSearchResult(BaseTolokaObject):

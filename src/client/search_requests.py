@@ -8,7 +8,9 @@ from ._converter import structure, unstructure
 from .assignment import Assignment
 from .attachment import Attachment
 from .message_thread import Folder
+from .pool import Pool
 from .project import Project
+from .training import Training
 from .user_restriction import UserRestriction
 from .primitives.base import BaseTolokaObject, BaseTolokaObjectMetaclass
 
@@ -131,11 +133,25 @@ class PoolSearchRequest(metaclass=SearchRequestMetaclass):
         created: datetime.datetime
         last_started: datetime.datetime
 
-    status: Project.ProjectStatus
+    status: Pool.Status
     project_id: str
 
 
 PoolSortItems = BaseSortItems.for_fields('PoolSortItems', ['id', 'created', 'last_started'])
+
+
+class TrainingSearchRequest(metaclass=SearchRequestMetaclass):
+
+    class CompareFields:
+        id: str
+        created: datetime.datetime
+        last_started: datetime.datetime
+
+    status: Training.Status
+    project_id: str
+
+
+TrainingSortItems = BaseSortItems.for_fields('TrainingSortItems', ['id', 'created', 'last_started'])
 
 
 class SkillSearchRequest(metaclass=SearchRequestMetaclass):

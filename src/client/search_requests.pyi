@@ -5,8 +5,10 @@ from typing import Any, Dict, List, Optional, TypeVar
 from .assignment import Assignment
 from .attachment import Attachment
 from .message_thread import Folder
+from .pool import Pool
 from .primitives.base import BaseTolokaObject, BaseTolokaObjectMetaclass
 from .project import Project
+from .training import Training
 from .user_restriction import UserRestriction
 
 
@@ -188,7 +190,7 @@ class PoolSearchRequest(object):
 
     def __init__(
         self,
-        status: Optional[Project.ProjectStatus] = ...,
+        status: Optional[Pool.Status] = ...,
         project_id: Optional[str] = ...,
         id_lt: Optional[str] = ...,
         id_lte: Optional[str] = ...,
@@ -204,7 +206,7 @@ class PoolSearchRequest(object):
         last_started_gte: Optional[datetime] = ...
     ) -> None: ...
 
-    status: Optional[Project.ProjectStatus]
+    status: Optional[Pool.Status]
     project_id: Optional[str]
     id_lt: Optional[str]
     id_lte: Optional[str]
@@ -220,6 +222,79 @@ class PoolSearchRequest(object):
     last_started_gte: Optional[datetime]
 
 class PoolSortItems(BaseSortItems):
+
+    class SortItem(BaseSortItem):
+
+        class SortField(Enum):
+            ...
+
+
+        _unexpected: Optional[Dict[str, Any]]
+        field: Optional[SortField]
+        order: Optional[SortOrder]
+
+
+    _unexpected: Optional[Dict[str, Any]]
+    items: Optional[List[SortItem]]
+
+class TrainingSearchRequest(object):
+
+    class CompareFields(object):
+
+        id: str
+        created: datetime
+        last_started: datetime
+
+    def __repr__(self): ...
+
+    def __str__(self): ...
+
+    def __eq__(self, other): ...
+
+    def __ne__(self, other): ...
+
+    def __lt__(self, other): ...
+
+    def __le__(self, other): ...
+
+    def __gt__(self, other): ...
+
+    def __ge__(self, other): ...
+
+    def __init__(
+        self,
+        status: Optional[Training.Status] = ...,
+        project_id: Optional[str] = ...,
+        id_lt: Optional[str] = ...,
+        id_lte: Optional[str] = ...,
+        id_gt: Optional[str] = ...,
+        id_gte: Optional[str] = ...,
+        created_lt: Optional[datetime] = ...,
+        created_lte: Optional[datetime] = ...,
+        created_gt: Optional[datetime] = ...,
+        created_gte: Optional[datetime] = ...,
+        last_started_lt: Optional[datetime] = ...,
+        last_started_lte: Optional[datetime] = ...,
+        last_started_gt: Optional[datetime] = ...,
+        last_started_gte: Optional[datetime] = ...
+    ) -> None: ...
+
+    status: Optional[Training.Status]
+    project_id: Optional[str]
+    id_lt: Optional[str]
+    id_lte: Optional[str]
+    id_gt: Optional[str]
+    id_gte: Optional[str]
+    created_lt: Optional[datetime]
+    created_lte: Optional[datetime]
+    created_gt: Optional[datetime]
+    created_gte: Optional[datetime]
+    last_started_lt: Optional[datetime]
+    last_started_lte: Optional[datetime]
+    last_started_gt: Optional[datetime]
+    last_started_gte: Optional[datetime]
+
+class TrainingSortItems(BaseSortItems):
 
     class SortItem(BaseSortItem):
 
