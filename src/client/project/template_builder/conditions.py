@@ -1,4 +1,4 @@
-from typing import List, Any, Dict
+from typing import List, Any
 
 from .base import BaseComponent, ComponentType, VersionedBaseComponent, base_component_or
 
@@ -46,7 +46,7 @@ class RequiredConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_RE
 
 class SchemaConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_SCHEMA):
     data: base_component_or(Any)
-    schema: Dict  # TODO: support base_component_or(Dict)
+    schema: dict  # TODO: support base_component_or(Dict)
 
 
 class SubArrayConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_SUB_ARRAY):
