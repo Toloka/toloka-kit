@@ -40,6 +40,12 @@ class FilterOr(FilterCondition, kw_only=False):
         self.or_.append(other)
         return self
 
+    def __iter__(self):
+        return iter(self.or_)
+
+    def __getitem__(self, item):
+        return self.or_.__getitem__(item)
+
     @classmethod
     def structure(cls, data):
         return super(FilterCondition, cls).structure(data)
@@ -51,6 +57,12 @@ class FilterAnd(FilterCondition, kw_only=False):
     def __and__(self, other):
         self.and_.append(other)
         return self
+
+    def __iter__(self):
+        return iter(self.and_)
+
+    def __getitem__(self, item):
+        return self.and_.__getitem__(item)
 
     @classmethod
     def structure(cls, data):
