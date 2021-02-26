@@ -7,6 +7,7 @@ from .primitives.base import BaseTolokaObject
 @unique
 class AggregatedSolutionType(Enum):
     WEIGHTED_DYNAMIC_OVERLAP = 'WEIGHTED_DYNAMIC_OVERLAP'
+    DAWID_SKENE = 'DAWID_SKENE'
 
 
 class PoolAggregatedSolutionRequest(BaseTolokaObject):

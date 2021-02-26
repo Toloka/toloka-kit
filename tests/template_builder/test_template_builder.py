@@ -1,8 +1,9 @@
 import pytest
 import json
 
+from toloka.client.project.field_spec import JsonSpec
 from toloka.client.project.view_spec import ViewSpec
-from toloka.client.project.template_builder import TemplateBuilder
+from toloka.client.project.template_builder import TemplateBuilder, get_input_and_output
 from toloka.client.project.template_builder.actions import SetActionV1
 from toloka.client.project.template_builder.base import RefComponent
 from toloka.client.project.template_builder.conditions import RequiredConditionV1
@@ -256,3 +257,106 @@ def test_inconsistent_versions(view_spec_map, new_version):
         with pytest.raises(ValueError) as excinfo:
             result.config.view.items[0].version = new_version
         assert excinfo.value.args[0] == 'only v1 components are supported'
+
+
+def test_get_input_and_output():
+    tb_config = TemplateBuilder(
+        view=SideBySideLayoutV1(
+            version='1.0.0',
+            controls=ListViewV1(
+                version='1.0.0',
+                items=[
+                    RadioGroupFieldV1(
+                        version='1.0.0',
+                        data=RefComponent(
+                            ref='vars.0'
+                        ),
+                        label='Какое фото вам больше нравится?',
+                        options=[
+                            GroupFieldOption(
+                                label='A',
+                                value='a'
+                            ),
+                            GroupFieldOption(
+                                label='B',
+                                value='b',
+                                hint=TextareaFieldV1(
+                                    data=InputData(
+                                        path='text'
+                                    ),
+                                    version='1.0.0'
+                                )
+                            ),
+                            GroupFieldOption(
+                                label='Картинки не загрузились',
+                                value='failure'
+                            )
+                        ],
+                    ),
+                    TextareaFieldV1(
+                        version='1.0.0',
+                        data=OutputData(
+                            path='why'
+                        ),
+                        label=InputData(
+                            path='text'
+                        ),
+                        validation=RequiredConditionV1(
+                            version='1.0.0'
+                        )
+                    )
+                ]
+            ),
+            items=[
+                ImageViewV1(
+                    version='1.2.3',
+                    url=InputData(
+                        path='image_a',
+                    ),
+                    full_height=True
+                ),
+                ImageViewV1(
+                    version='1.2.3',
+                    url=InputData(
+                        path='image_b'
+                    ),
+                    full_height=True
+                )
+            ]
+        ),
+        plugins=[
+            HotkeysPluginV1(
+                version='1.0.0',
+                key_0=SetActionV1(
+                    version='1.0.0',
+                    data=RefComponent(ref='vars.0'),
+                    payload='failure'
+                ),
+                key_1=SetActionV1(
+                    version='1.0.0',
+                    data=RefComponent(ref='vars.0'),
+                    payload='a'
+                ),
+                key_2=SetActionV1(
+                    version='1.0.0',
+                    data=RefComponent(ref='vars.0'),
+                    payload='b'
+                )
+            )
+        ],
+        vars={'0': OutputData(path='result')}
+    )
+
+    expected_input = {
+        'image_a': JsonSpec(),
+        'image_b': JsonSpec(),
+        'text': JsonSpec(),
+    }
+
+    expected_output = {
+        'result': JsonSpec(),
+        'why': JsonSpec
+    }
+
+    assert expected_input, expected_output == get_input_and_output(tb_config)
+    assert expected_input, expected_output == get_input_and_output(tb_config.unstructure())
