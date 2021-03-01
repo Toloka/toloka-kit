@@ -422,7 +422,6 @@ class FileFieldV1(BaseFieldV1):
 
     If a user logs in from a mobile device, it's more convenient to use field.media-file — it's adapted for mobile
     devices and makes it easier to upload photos and videos.
-
     Attributes:
         data: Data with values that will be processed or changed.
         label: Label above the component.

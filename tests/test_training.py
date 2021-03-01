@@ -17,7 +17,7 @@ def training_map():
         'training_tasks_in_task_suite_count': 3,
         'task_suites_required_to_pass': 5,
         'retry_training_after_days': 1,
-        'inherited_instructions': 'text',
+        'inherited_instructions': True,
         'metadata': {'testKey': ['testValue']},
         'assignment_max_duration_seconds': 600,
         'public_instructions': 'text'

@@ -49,7 +49,7 @@ class Training(BaseTolokaObject):
         training_tasks_in_task_suite_count: Optional[int] = ...,
         task_suites_required_to_pass: Optional[int] = ...,
         retry_training_after_days: Optional[int] = ...,
-        inherited_instructions: Optional[str] = ...,
+        inherited_instructions: Optional[bool] = ...,
         public_instructions: Optional[str] = ...,
         metadata: Optional[Dict[str, List[str]]] = ...,
         owner: Optional[Owner] = ...,
@@ -71,7 +71,7 @@ class Training(BaseTolokaObject):
     training_tasks_in_task_suite_count: Optional[int]
     task_suites_required_to_pass: Optional[int]
     retry_training_after_days: Optional[int]
-    inherited_instructions: Optional[str]
+    inherited_instructions: Optional[bool]
     public_instructions: Optional[str]
     metadata: Optional[Dict[str, List[str]]]
     owner: Optional[Owner]

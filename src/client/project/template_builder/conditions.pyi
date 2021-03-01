@@ -453,14 +453,14 @@ class SchemaConditionV1(BaseConditionV1):
         version: Optional[str] = ...,
         hint: Optional[Any] = ...,
         data: Optional[Any] = ...,
-        schema: Optional[dict] = ...
+        schema: Optional[Dict] = ...
     ) -> None: ...
 
     _unexpected: Optional[Dict[str, Any]]
     version: Optional[str]
     hint: Optional[Any]
     data: Optional[Any]
-    schema: Optional[dict]
+    schema: Optional[Dict]
 
 class SubArrayConditionV1(BaseConditionV1):
     """Checks that the array in data is a subarray for parent.

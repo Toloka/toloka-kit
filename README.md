@@ -21,6 +21,10 @@ Main advantages of Toloka:
 
 Get Started and Documentation
 --------------
+Installing toloka-kit is as easy as `pip install toloka-kit`
+
+Usage examples are available [here](https://github.com/Toloka/toloka-kit/tree/main/examples)
+
 All Toloka documentation is available [here](https://yandex.com/dev/toloka/doc/concepts/about.html?lang=en).
 
 
