@@ -233,7 +233,12 @@ class TolokaClient:
 
     # Project section
 
-    def archive_project(self, project_id: str) -> operations.ProjectArchiveOperation:
+    def archive_project(self, project_id: str) -> Project:
+        operation = self.archive_project_async(project_id)
+        operation = self.wait_operation(operation)
+        return self.get_project(operation.parameters.project_id)
+
+    def archive_project_async(self, project_id: str) -> operations.ProjectArchiveOperation:
         response = self._request('post', f'/v1/projects/{project_id}/archive')
         return structure(response, operations.ProjectArchiveOperation)
 
@@ -263,19 +268,39 @@ class TolokaClient:
 
     # Pool section
 
-    def archive_pool(self, pool_id: str) -> operations.PoolArchiveOperation:
+    def archive_pool(self, pool_id: str) -> Pool:
+        operation = self.archive_pool_async(pool_id)
+        operation = self.wait_operation(operation)
+        return self.get_pool(operation.parameters.pool_id)
+
+    def archive_pool_async(self, pool_id: str) -> operations.PoolArchiveOperation:
         response = self._request('post', f'/v1/pools/{pool_id}/archive')
         return structure(response, operations.PoolArchiveOperation)
 
-    def close_pool(self, pool_id: str) -> operations.PoolCloseOperation:
+    def close_pool(self, pool_id: str) -> Pool:
+        operation = self.close_pool_async(pool_id)
+        operation = self.wait_operation(operation)
+        return self.get_pool(operation.parameters.pool_id)
+
+    def close_pool_async(self, pool_id: str) -> operations.PoolCloseOperation:
         response = self._request('post', f'/v1/pools/{pool_id}/close')
         return structure(response, operations.PoolCloseOperation)
 
-    def close_pool_for_update(self, pool_id: str) -> operations.PoolCloseOperation:
+    def close_pool_for_update(self, pool_id: str) -> Pool:
+        operation = self.close_pool_for_update_async(pool_id)
+        operation = self.wait_operation(operation)
+        return self.get_pool(operation.parameters.pool_id)
+
+    def close_pool_for_update_async(self, pool_id: str) -> operations.PoolCloseOperation:
         response = self._request('post', f'/v1/pools/{pool_id}/close-for-update')
         return structure(response, operations.PoolCloseOperation)
 
-    def clone_pool(self, pool_id: str) -> operations.PoolCloneOperation:
+    def clone_pool(self, pool_id: str) -> Pool:
+        operation = self.clone_pool_async(pool_id)
+        operation = self.wait_operation(operation)
+        return self.get_pool(operation.details.pool_id)
+
+    def clone_pool_async(self, pool_id: str) -> operations.PoolCloneOperation:
         response = self._request('post', f'/v1/pools/{pool_id}/clone')
         return structure(response, operations.PoolCloneOperation)
 
@@ -302,7 +327,12 @@ class TolokaClient:
     def get_pools(self, request: search_requests.PoolSearchRequest) -> Generator[Pool, None, None]:
         return self._find_all(self.find_pools, request)
 
-    def open_pool(self, pool_id: str) -> operations.PoolOpenOperation:
+    def open_pool(self, pool_id: str) -> Pool:
+        operation = self.open_pool_async(pool_id)
+        operation = self.wait_operation(operation)
+        return self.get_pool(operation.parameters.pool_id)
+
+    def open_pool_async(self, pool_id: str) -> operations.PoolOpenOperation:
         response = self._request('post', f'/v1/pools/{pool_id}/open')
         return structure(response, operations.PoolOpenOperation)
 
@@ -319,15 +349,30 @@ class TolokaClient:
 
     # Training section
 
-    def archive_training(self, training_id: str) -> operations.TrainingArchiveOperation:
+    def archive_training(self, training_id: str) -> Training:
+        operation = self.archive_training_async(training_id)
+        operation = self.wait_operation(operation)
+        return self.get_training(operation.parameters.training_id)
+
+    def archive_training_async(self, training_id: str) -> operations.TrainingArchiveOperation:
         response = self._request('post', f'/v1/trainings/{training_id}/archive')
         return structure(response, operations.TrainingArchiveOperation)
 
-    def close_training(self, training_id: str) -> operations.TrainingCloseOperation:
+    def close_training(self, training_id: str) -> Training:
+        operation = self.close_training_async(training_id)
+        operation = self.wait_operation(operation)
+        return self.get_training(operation.parameters.training_id)
+
+    def close_training_async(self, training_id: str) -> operations.TrainingCloseOperation:
         response = self._request('post', f'/v1/trainings/{training_id}/close')
         return structure(response, operations.TrainingCloseOperation)
 
-    def clone_training(self, training_id: str) -> operations.TrainingCloneOperation:
+    def clone_training(self, training_id: str) -> Training:
+        operation = self.clone_training_async(training_id)
+        operation = self.wait_operation(operation)
+        return self.get_training(operation.details.training_id)
+
+    def clone_training_async(self, training_id: str) -> operations.TrainingCloneOperation:
         response = self._request('post', f'/v1/trainings/{training_id}/clone')
         return structure(response, operations.TrainingCloneOperation)
 
@@ -351,7 +396,12 @@ class TolokaClient:
     def get_trainings(self, request: search_requests.TrainingSearchRequest) -> Generator[Training, None, None]:
         return self._find_all(self.find_trainings, request)
 
-    def open_training(self, training_id: str) -> operations.TrainingOpenOperation:
+    def open_training(self, training_id: str) -> Training:
+        operation = self.open_training_async(training_id)
+        operation = self.wait_operation(operation)
+        return self.get_training(operation.parameters.training_id)
+
+    def open_training_async(self, training_id: str) -> operations.TrainingOpenOperation:
         response = self._request('post', f'/v1/trainings/{training_id}/open')
         return structure(response, operations.TrainingOpenOperation)
 

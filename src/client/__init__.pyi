@@ -544,12 +544,14 @@ class TolokaClient(object):
         """
         ...
 
-    def archive_project(self, project_id: str) -> ProjectArchiveOperation:
+    def archive_project(self, project_id: str) -> Project:
         """Archive a project
 
         If a project isn't being used, you can send it to the archive.
         """
         ...
+
+    def archive_project_async(self, project_id: str) -> ProjectArchiveOperation: ...
 
     def create_project(self, project: Project) -> Project:
         """Create a project
@@ -631,7 +633,7 @@ class TolokaClient(object):
         """
         ...
 
-    def archive_pool(self, pool_id: str) -> PoolArchiveOperation:
+    def archive_pool(self, pool_id: str) -> Pool:
         """Moves a pool to the archive.
 
         If a pool isn't in use, it can be moved to the archive. The pool must have the “closed” status.
@@ -639,26 +641,34 @@ class TolokaClient(object):
         """
         ...
 
-    def close_pool(self, pool_id: str) -> PoolCloseOperation:
+    def archive_pool_async(self, pool_id: str) -> PoolArchiveOperation: ...
+
+    def close_pool(self, pool_id: str) -> Pool:
         """Closes a pool.
 
         Using this method on TRAINING pools is deprecated.
         """
         ...
 
-    def close_pool_for_update(self, pool_id: str) -> PoolCloseOperation:
+    def close_pool_async(self, pool_id: str) -> PoolCloseOperation: ...
+
+    def close_pool_for_update(self, pool_id: str) -> Pool:
         """Using this method on TRAINING pools is deprecated.
 
         """
         ...
 
-    def clone_pool(self, pool_id: str) -> PoolCloneOperation:
+    def close_pool_for_update_async(self, pool_id: str) -> PoolCloseOperation: ...
+
+    def clone_pool(self, pool_id: str) -> Pool:
         """Clones a pool.
 
         To create a duplicate pool, clone it. An empty pool will be created with the same parameters.
         Using this method on TRAINING pools is deprecated.
         """
         ...
+
+    def clone_pool_async(self, pool_id: str) -> PoolCloneOperation: ...
 
     def create_pool(self, pool: Pool) -> Pool:
         """Creates a REGULAR pool
@@ -745,13 +755,15 @@ class TolokaClient(object):
         """
         ...
 
-    def open_pool(self, pool_id: str) -> PoolOpenOperation:
+    def open_pool(self, pool_id: str) -> Pool:
         """Opens a pool.
 
         To make tasks available to users, you need to open the pool.
         Using this method on TRAINING pools is deprecated.
         """
         ...
+
+    def open_pool_async(self, pool_id: str) -> PoolOpenOperation: ...
 
     @overload
     def patch_pool(self, pool_id: str, priority: Optional[int] = ...) -> Pool:
@@ -774,11 +786,17 @@ class TolokaClient(object):
         """
         ...
 
-    def archive_training(self, training_id: str) -> TrainingArchiveOperation: ...
+    def archive_training(self, training_id: str) -> Training: ...
 
-    def close_training(self, training_id: str) -> TrainingCloseOperation: ...
+    def archive_training_async(self, training_id: str) -> TrainingArchiveOperation: ...
 
-    def clone_training(self, training_id: str) -> TrainingCloneOperation: ...
+    def close_training(self, training_id: str) -> Training: ...
+
+    def close_training_async(self, training_id: str) -> TrainingCloseOperation: ...
+
+    def clone_training(self, training_id: str) -> Training: ...
+
+    def clone_training_async(self, training_id: str) -> TrainingCloneOperation: ...
 
     def create_training(self, training: Training) -> Training: ...
 
@@ -838,7 +856,9 @@ class TolokaClient(object):
         request: TrainingSearchRequest
     ) -> Generator[Training, None, None]: ...
 
-    def open_training(self, training_id: str) -> TrainingOpenOperation: ...
+    def open_training(self, training_id: str) -> Training: ...
+
+    def open_training_async(self, training_id: str) -> TrainingOpenOperation: ...
 
     def update_training(self, training_id: str, training: Training) -> Training: ...
 

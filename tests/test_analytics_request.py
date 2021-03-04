@@ -103,11 +103,13 @@ def simple_answer_map():
     }
 
 
-def test_send_analytics_request(requests_mock, toloka_client, toloka_api_url, full_tasks_request_map, simple_answer_map):
+def test_send_analytics_request(requests_mock, toloka_client, toloka_api_url,
+                                      full_tasks_request_map, simple_answer_map):
 
     def task_suites(request, context):
         assert full_tasks_request_map == request.json()
         return simple_answer_map
+
     requests_mock.post(f'{toloka_api_url}/staging/analytics-2', json=task_suites)
 
     stat_requests = [
