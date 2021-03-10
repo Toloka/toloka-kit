@@ -60,7 +60,7 @@ class FileSpec(FieldSpec, spec_value=FieldType.FILE):
 
 
 class CoordinatesSpec(FieldSpec, spec_value=FieldType.COORDINATES):
-    currentLocation: bool
+    current_location: bool
 
 
 class JsonSpec(FieldSpec, spec_value=FieldType.JSON):
