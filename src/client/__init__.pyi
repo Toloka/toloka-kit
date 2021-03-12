@@ -33,6 +33,7 @@ from .batch_create_results import (
     TaskSuiteBatchCreateResult,
     UserBonusBatchCreateResult
 )
+from .clone_results import CloneResults
 from .filter import FilterCondition
 from .message_thread import (
     Folder,
@@ -630,6 +631,39 @@ class TolokaClient(object):
         """Makes changes to a project.
 
         Using this method on TRAINING pools is deprecated.
+        """
+        ...
+
+    def clone_project(
+        self,
+        project_id: str,
+        reuse_controllers: bool = ...
+    ) -> CloneResults:
+        """Synchronously clones the project, all pools and trainings
+
+        Emulates cloning behaviour via Toloka interface:
+        - the same skills will be used
+        - the same quality control collectors will be used (could be changed by reuse_controllers=False)
+        - the expiration date will not be changed in the new project
+        - etc.        
+
+        Doesn't have transaction - can clone project, and then raise on cloning pool.
+        Doesn't copy tasks/golden tasks/training tasks.
+
+        Args:
+            project_id: ID of the project to be cloned.
+            reuse_quality_controllers: Use same quality controllers in cloned and created projects. Defaults to True.
+                This means that all quality control rules will be applied to both projects.
+                For example, if you have rule "fast_submitted_count", fast responses counts across both projects.
+
+        Returns:
+            Tuple[Project, List[Pool], List[Training]]: All created objects project, pools and trainings.
+
+        Example:
+
+            >>> project, pools, trainings = toloka_client.clone_project('123')
+            >>> # add tasks in pools and trainings
+            ...
         """
         ...
 

@@ -6,6 +6,7 @@ from typing import List, Optional, Union, BinaryIO, Tuple, Generator
 import pandas as pd
 
 import attr
+
 import io
 import logging
 import requests
@@ -28,6 +29,7 @@ from .aggregation import AggregatedSolution
 from .analytics_request import AnalyticsRequest
 from .assignment import Assignment, AssignmentPatch, GetAssignmentsTsvParameters
 from .attachment import Attachment
+from .clone_results import CloneResults
 from .exceptions import raise_on_api_error
 from .message_thread import (
     Folder, MessageThread, MessageThreadReply, MessageThreadFolders, MessageThreadCompose
@@ -265,6 +267,53 @@ class TolokaClient:
     def update_project(self, project_id: str, project: Project) -> Project:
         response = self._request('put', f'/v1/projects/{project_id}', json=unstructure(project))
         return structure(response, Project)
+
+    def clone_project(self, project_id: str, reuse_controllers: bool = True) -> CloneResults:
+
+        def reset_quality_control(quality_control, old_to_new_train_ids):
+            if quality_control is None:
+                return
+            if not reuse_controllers:
+                for quality_control_config in quality_control.configs:
+                    quality_control_config.collector_config.uuid = None
+            if (
+                hasattr(quality_control, 'training_requirement') and
+                hasattr(quality_control.training_requirement, 'training_pool_id') and
+                quality_control.training_requirement.training_pool_id is not None
+            ):
+                new_id = old_to_new_train_ids[quality_control.training_requirement.training_pool_id]
+                quality_control.training_requirement.training_pool_id = new_id
+
+        # clone project
+        project_for_clone = self.get_project(project_id)
+        project_quality_control = project_for_clone.quality_control
+        project_for_clone.quality_control = None
+        new_project = self.create_project(project_for_clone)
+
+        # create trainings
+        new_trainings = []
+        old_to_new_train_ids = {}
+        for training in self.get_trainings(project_id=project_id):
+            old_id = training.id
+            training.project_id = new_project.id
+            new_training = self.create_training(training)
+            new_trainings.append(new_training)
+            old_to_new_train_ids[old_id] = new_training.id
+
+        # save quality control on project
+        reset_quality_control(project_quality_control, old_to_new_train_ids)
+        if project_quality_control is not None:
+            new_project.quality_control = project_quality_control
+            new_project = self.update_project(new_project.id, new_project)
+
+        # create new pools
+        new_pools = []
+        for pool in self.get_pools(project_id=project_id):
+            pool.project_id = new_project.id
+            reset_quality_control(pool.quality_control, old_to_new_train_ids)
+            new_pools.append(self.create_pool(pool))
+
+        return CloneResults(project=new_project, pools=new_pools, trainings=new_trainings)
 
     # Pool section
 
