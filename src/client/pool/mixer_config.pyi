@@ -5,7 +5,7 @@ from ..task_distribution_function import TaskDistributionFunction
 
 
 class MixerConfig(BaseTolokaObject):
-    """Parameters for automatically creating a task suite (“smart mixing”).
+    """Parameters for automatically creating a task suite ("smart mixing").
 
     For more information about creating task see Yandex.Toloka Requester's guide.
     Attributes:

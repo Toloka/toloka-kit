@@ -9,10 +9,13 @@ from .task import BaseTask
 
 
 class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
-    """A task suite is a set of tasks placed on the same webpage. 
+    """A set of tasks issued to the performer at a time 
+
+    TaskSuite can contain one or more tasks. The execution price is charged for one TaskSuite.
+    Performers receive exactly one TaskSuite when they take on your task.
 
     Attributes:
-        pool_id: The ID of the pool that tasks are uploaded to.
+        pool_id: The ID of the pool that task suite are uploaded to.
         tasks: Data for the tasks.
         reserved_for: IDs of users who will have access to the task suite.
         unavailable_for: IDs of users who shouldn't have access to the task suite.
@@ -21,19 +24,19 @@ class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
             This parameter can be used if the pool has issue_task_suites_in_creation_order: true.
             Allowed values: from -99999.99999 to 99999.99999.
         mixed: Type of operation for creating a task suite:
-            * True — Automatically with the “smart mixing” option (for details, see Yandex.Toloka requester's guide).
-            * False — Manually.
-        traits_all_of: Optional[List[str]]
-        traits_any_of: Optional[List[str]]
-        traits_none_of_any: Optional[List[str]]
+            * True - Automatically with the "smart mixing" option (for details, see Yandex.Toloka requester's guide).
+            * False - Manually.
+        traits_all_of:
+        traits_any_of:
+        traits_none_of_any:
         longitude: The longitude of the point on the map for the task suite.
         latitude: The latitude of the point on the map for the task suite.
-        id: ID of a task suite.
-        remaining_overlap: Optional[int]
-        automerged: The task suite flag is created after task merging. Value:
-            * True — The task suite is generated as a result of merging identical tasks.
-            * False — A standard task suite created by “smart mixing” or by the requester.
-        created: The UTC date and time when the task suite was created.
+        id: ID of a task suite. Read only field.
+        remaining_overlap: How many times will this Task Suite be issued to performers. Read only field.
+        automerged: The task suite flag is created after task merging. Read Only field. Value:
+            * True - The task suite is generated as a result of merging identical tasks.
+            * False - A standard task suite created by "smart mixing" or by the requester.
+        created: The UTC date and time when the task suite was created. Read Only field.
     """
 
     @overload
@@ -104,17 +107,17 @@ class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
     created: Optional[datetime]
 
 class TaskSuiteCreateRequestParameters(Parameters):
-    """TaskSuiteCreateRequestParameters
+    """Parameters for TaskSuite creation controlling
 
     Attributes:
-        operation_id: Operation ID for asynchronous loading of task suites
+        operation_id: Operation ID for asynchronous loading of task suites.
         skip_invalid_items: Validation parameters:
-            * True — Create the task suites that passed validation. Skip the rest of the task suites.
-            * False — If at least one of the task suites didn't pass validation, stop the operation and
+            * True - Create the task suites that passed validation. Skip the rest of the task suites.
+            * False - If at least one of the task suites didn't pass validation, stop the operation and
                 don't create the task suites.
         allow_defaults: Overlap settings:
             * True - Use the overlap that is set in the pool parameters.
-            * False — Use the overlap that is set in the task suite parameters (in the overlap field).
+            * False - Use the overlap that is set in the task suite parameters (in the overlap field).
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
     """
 
@@ -149,6 +152,8 @@ class TaskSuiteCreateRequestParameters(Parameters):
     open_pool: Optional[bool]
 
 class TaskSuiteOverlapPatch(BaseTolokaObject):
+    """Parameters to stop issuing a specific TaskSuite 
+    """
 
     def __repr__(self): ...
 
@@ -172,6 +177,15 @@ class TaskSuiteOverlapPatch(BaseTolokaObject):
     overlap: Optional[int]
 
 class TaskSuitePatch(InfiniteOverlapParametersMixin, BaseTolokaObject):
+    """Parameters for changing specific TaskSuite
+
+    Attributes:
+        issuing_order_override: The priority of a task suite among other sets in the pool. Defines the order in which
+            task suites are assigned to performers. The larger the parameter value, the higher the priority.
+            This parameter can be used if the pool has issue_task_suites_in_creation_order: true.
+            Allowed values: from -99999.99999 to 99999.99999.
+        open_pool: Open the pool immediately after changing a task suite, if the pool is closed.
+    """
 
     def __repr__(self): ...
 

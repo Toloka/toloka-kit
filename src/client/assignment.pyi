@@ -35,7 +35,7 @@ class Assignment(BaseTolokaObject):
             Arrays with the responses (output_values) are arranged in the same order as the task data in the tasks array.
         solutions: User responses. Arranged in the same order as the data for tasks in the tasks array.
         mixed: Type of operation for creating a task suite:
-            * True — Automatic (“smart mixing”).
+            * True — Automatic ("smart mixing").
             * False — Manually.
         public_comment: Optional[str]
     """

@@ -636,7 +636,7 @@ class TolokaClient(object):
     def archive_pool(self, pool_id: str) -> Pool:
         """Moves a pool to the archive.
 
-        If a pool isn't in use, it can be moved to the archive. The pool must have the “closed” status.
+        If a pool isn't in use, it can be moved to the archive. The pool must have the "closed" status.
         Using this method on TRAINING pools is deprecated.
         """
         ...
