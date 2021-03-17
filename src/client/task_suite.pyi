@@ -119,6 +119,11 @@ class TaskSuiteCreateRequestParameters(Parameters):
             * True - Use the overlap that is set in the pool parameters.
             * False - Use the overlap that is set in the task suite parameters (in the overlap field).
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
+        async_mode: How the request is processed:
+            * True — deferred. The query results in an asynchronous operation running in the background.
+                Answer contains information about the operation (start and end time, status, number of sets).
+            * False — synchronous. Answer contains information about the generated sets of tasks.
+                You can send a maximum of 5000 task sets in a single request.
     """
 
     def __repr__(self): ...
@@ -142,7 +147,8 @@ class TaskSuiteCreateRequestParameters(Parameters):
         operation_id: Optional[UUID] = ...,
         skip_invalid_items: Optional[bool] = ...,
         allow_defaults: Optional[bool] = ...,
-        open_pool: Optional[bool] = ...
+        open_pool: Optional[bool] = ...,
+        async_mode: Optional[bool] = ...
     ) -> None: ...
 
     _unexpected: Optional[Dict[str, Any]]
@@ -150,6 +156,7 @@ class TaskSuiteCreateRequestParameters(Parameters):
     skip_invalid_items: Optional[bool]
     allow_defaults: Optional[bool]
     open_pool: Optional[bool]
+    async_mode: Optional[bool]
 
 class TaskSuiteOverlapPatch(BaseTolokaObject):
     """Parameters to stop issuing a specific TaskSuite 

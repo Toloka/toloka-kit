@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal
 from enum import Enum
 from pandas.core.frame import DataFrame
@@ -109,7 +109,6 @@ from .search_results import (
 from .skill import Skill
 from .task import (
     CreateTaskParameters,
-    CreateTasksAsyncParameters,
     CreateTasksParameters,
     Task,
     TaskOverlapPatch,
@@ -1028,12 +1027,16 @@ class TolokaClient(object):
         tasks: List[Task],*,
         allow_defaults: Optional[bool] = ...,
         open_pool: Optional[bool] = ...,
-        skip_invalid_items: Optional[bool] = ...
+        skip_invalid_items: Optional[bool] = ...,
+        operation_id: Optional[UUID] = ...,
+        async_mode: Optional[bool] = ...
     ) -> TaskBatchCreateResult:
         """Creates multiple tasks
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
-        The response contains information about the created tasks. Maximum of 5000 tasks per request.
+        The response contains information about the created tasks.
+        Maximum of 5000 task per request if async_mode is False.
+        Recomended maximum of 10,000 task per request if async_mode is True.
         """
         ...
 
@@ -1046,7 +1049,9 @@ class TolokaClient(object):
         """Creates multiple tasks
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
-        The response contains information about the created tasks. Maximum of 5000 tasks per request.
+        The response contains information about the created tasks.
+        Maximum of 5000 task per request if async_mode is False.
+        Recomended maximum of 10,000 task per request if async_mode is True.
         """
         ...
 
@@ -1057,7 +1062,8 @@ class TolokaClient(object):
         allow_defaults: Optional[bool] = ...,
         open_pool: Optional[bool] = ...,
         skip_invalid_items: Optional[bool] = ...,
-        operation_id: Optional[UUID] = ...
+        operation_id: Optional[UUID] = ...,
+        async_mode: Optional[bool] = ...
     ) -> TasksCreateOperation:
         """Creates multiple tasks
 
@@ -1065,6 +1071,8 @@ class TolokaClient(object):
 
         Creates an asynchronous operation that runs in the background. The response contains information about the
         operation (start and completion time, status, number of task suites).
+        Recomended maximum of 10,000 task per request if async_mode is True.
+        It's recomended to use 'create_tasks' method with async_mode is True.
         """
         ...
 
@@ -1072,7 +1080,7 @@ class TolokaClient(object):
     def create_tasks_async(
         self,
         tasks: List[Task],
-        parameters: Optional[CreateTasksAsyncParameters] = ...
+        parameters: Optional[CreateTasksParameters] = ...
     ) -> TasksCreateOperation:
         """Creates multiple tasks
 
@@ -1080,6 +1088,8 @@ class TolokaClient(object):
 
         Creates an asynchronous operation that runs in the background. The response contains information about the
         operation (start and completion time, status, number of task suites).
+        Recomended maximum of 10,000 task per request if async_mode is True.
+        It's recomended to use 'create_tasks' method with async_mode is True.
         """
         ...
 
@@ -1211,7 +1221,8 @@ class TolokaClient(object):
         operation_id: Optional[UUID] = ...,
         skip_invalid_items: Optional[bool] = ...,
         allow_defaults: Optional[bool] = ...,
-        open_pool: Optional[bool] = ...
+        open_pool: Optional[bool] = ...,
+        async_mode: Optional[bool] = ...
     ) -> TaskSuite:
         """Creates a task suite
 
@@ -1238,12 +1249,14 @@ class TolokaClient(object):
         operation_id: Optional[UUID] = ...,
         skip_invalid_items: Optional[bool] = ...,
         allow_defaults: Optional[bool] = ...,
-        open_pool: Optional[bool] = ...
+        open_pool: Optional[bool] = ...,
+        async_mode: Optional[bool] = ...
     ) -> TaskSuiteBatchCreateResult:
         """Creates multiple task suites
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        Maximum of 5000 task suites per request.
+        Maximum of 5000 task suites per request if async_mode is False.
+        Recomended maximum of 10,000 task suites per request if async_mode is True.
         """
         ...
 
@@ -1256,7 +1269,8 @@ class TolokaClient(object):
         """Creates multiple task suites
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        Maximum of 5000 task suites per request.
+        Maximum of 5000 task suites per request if async_mode is False.
+        Recomended maximum of 10,000 task suites per request if async_mode is True.
         """
         ...
 
@@ -1267,12 +1281,13 @@ class TolokaClient(object):
         operation_id: Optional[UUID] = ...,
         skip_invalid_items: Optional[bool] = ...,
         allow_defaults: Optional[bool] = ...,
-        open_pool: Optional[bool] = ...
+        open_pool: Optional[bool] = ...,
+        async_mode: Optional[bool] = ...
     ) -> TaskSuiteCreateBatchOperation:
         """Creates multiple task suites
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        Maximum of 5000 task suites per request.
+        Recomended maximum of 10,000 task suites per request if async_mode is True.
         """
         ...
 
@@ -1285,7 +1300,7 @@ class TolokaClient(object):
         """Creates multiple task suites
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        Maximum of 5000 task suites per request.
+        Recomended maximum of 10,000 task suites per request if async_mode is True.
         """
         ...
 
@@ -1422,7 +1437,11 @@ class TolokaClient(object):
         """
         ...
 
-    def wait_operation(self, op: Operation) -> Operation:
+    def wait_operation(
+        self,
+        op: Operation,
+        timeout: timedelta = ...
+    ) -> Operation:
         """Waits for the operation to complete
 
         """

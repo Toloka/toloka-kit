@@ -282,44 +282,14 @@ class CreateTasksParameters(CreateTaskParameters):
 
     Attributes:
         skip_invalid_items: Validation parameters:
-            * True - Create the tasks that passed validation. Skip the rest of the tasks
-                (errors will be listed in the response to the request).
-            * False - If at least one of the tasks didn't pass validation, stop the operation and don't create any tasks.
-    """
-
-    def __repr__(self): ...
-
-    def __str__(self): ...
-
-    def __eq__(self, other): ...
-
-    def __ne__(self, other): ...
-
-    def __lt__(self, other): ...
-
-    def __le__(self, other): ...
-
-    def __gt__(self, other): ...
-
-    def __ge__(self, other): ...
-
-    def __init__(
-        self,*,
-        allow_defaults: Optional[bool] = ...,
-        open_pool: Optional[bool] = ...,
-        skip_invalid_items: Optional[bool] = ...
-    ) -> None: ...
-
-    _unexpected: Optional[Dict[str, Any]]
-    allow_defaults: Optional[bool]
-    open_pool: Optional[bool]
-    skip_invalid_items: Optional[bool]
-
-class CreateTasksAsyncParameters(CreateTasksParameters):
-    """CreateTasksAsyncParameters
-
-    Attributes:
-        operation_id: Operation ID for asynchronous loading of tasks.
+            * True — Create the tasks that passed validation. Skip the rest of the tasks (errors will
+                be listed in the response to the request).
+            * False — If at least one of the tasks didn't pass validation, stop the operation and don't create any tasks.
+        async_mode: How the request is processed:
+            * True — deferred. The query results in an asynchronous operation running in the background.
+                The response contains information about the operation (start and end time, status, number of sets).
+            * False — synchronous. The response contains information about the created tasks.
+                A maximum of 5000 tasks can be sent in a single request.
     """
 
     def __repr__(self): ...
@@ -343,7 +313,8 @@ class CreateTasksAsyncParameters(CreateTasksParameters):
         allow_defaults: Optional[bool] = ...,
         open_pool: Optional[bool] = ...,
         skip_invalid_items: Optional[bool] = ...,
-        operation_id: Optional[UUID] = ...
+        operation_id: Optional[UUID] = ...,
+        async_mode: Optional[bool] = ...
     ) -> None: ...
 
     _unexpected: Optional[Dict[str, Any]]
@@ -351,6 +322,7 @@ class CreateTasksAsyncParameters(CreateTasksParameters):
     open_pool: Optional[bool]
     skip_invalid_items: Optional[bool]
     operation_id: Optional[UUID]
+    async_mode: Optional[bool]
 
 class TaskOverlapPatch(BaseTolokaObject):
     """Parameters for changing the overlap of a specific Task

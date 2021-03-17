@@ -107,8 +107,154 @@ def test_create_task_suites(requests_mock, toloka_client, toloka_url):
     requests_mock.post(f'{toloka_url}/task-suites', json=task_suites, status_code=201)
 
     request = client.structure(raw_request, List[client.task_suite.TaskSuite])
-    result = toloka_client.create_task_suites(request)
+    result = toloka_client.create_task_suites(request, async_mode=False, skip_invalid_items=True)
     assert raw_result == client.unstructure(result)
+
+
+@pytest.fixture
+def task_suites_map():
+    return [
+        {
+            'pool_id': '21',
+            'tasks': [{'input_values': {'image': 'http://images.com/1.png'}}],
+        },
+        {
+            'pool_id': '21',
+            'tasks': [{'input_values': {'image': 'http://images.com/2.png'}}],
+        }
+    ]
+
+
+@pytest.fixture
+def operation_running_map():
+    return {
+        'id': 'operation-i1d',
+        'type': 'TASK_SUITE.BATCH_CREATE',
+        'status': 'RUNNING',
+        'submitted': '2015-12-13T23:32:01',
+        'started': '2015-12-13T23:33:00',
+        'parameters': {
+            'skip_invalid_items': True,
+            'allow_defaults': True,
+            'open_pool': True,
+        },
+        'details': {'items_count': 2},
+    }
+
+
+@pytest.fixture
+def operation_success_map(operation_running_map):
+    return dict(operation_running_map, status='SUCCESS')
+
+
+@pytest.fixture
+def create_log():
+    return [
+        {
+            'input': {
+                'pool_id': '21',
+                'tasks': [{'input_values': {'image': 'http://images.com/1.png'}}],
+                 '__client_uuid': "e3e70682c2094cac629f6fbed82c07cd",
+            },
+            'output': {
+                'task_suite_id': '00013b0abd--60094b06c680984b001e0071',
+            },
+            'success': True,
+            'type': 'TASK_SUITE_CREATE',
+        },
+        {
+            'input': {
+                'pool_id': '21',
+                'tasks': [{'input_values': {'image': 'http://images.com/2.png'}}],
+                '__client_uuid': 'f728b4fa42485e3a0a5d2f346baa9455',
+            },
+            'output': {
+                'task_suite_id': '00013b0abd--60094b06c680984b001e0072',
+            },
+            'success': True,
+            'type': 'TASK_SUITE_CREATE',
+        },
+    ]
+
+
+@pytest.fixture
+def get_task_suites_map():
+    return [
+        {
+            'id': '00013b0abd--60094b06c680984b001e0071',
+            'pool_id': '21',
+            'tasks': [{'input_values': {'image': 'http://images.com/1.png'}}],
+            'mixed': False,
+           'created': '2016-07-09T14:39:00',
+        },
+        {
+            'id': '00013b0abd--60094b06c680984b001e0072',
+            'pool_id': '21',
+            'tasks': [{'input_values': {'image': 'http://images.com/2.png'}}],
+            'mixed': False,
+            'created': '2016-07-09T14:40:00',
+        },
+    ]
+
+
+@pytest.fixture
+def task_suites_result_map():
+    return {
+        'items': {
+            '0': {
+                'id': '00013b0abd--60094b06c680984b001e0071',
+                'pool_id': '21',
+                'tasks': [{'input_values': {'image': 'http://images.com/1.png'}}],
+                'mixed': False,
+                'created': '2016-07-09T14:39:00',
+            },
+            '1': {
+                'id': '00013b0abd--60094b06c680984b001e0072',
+                'pool_id': '21',
+                'tasks': [{'input_values': {'image': 'http://images.com/2.png'}}],
+                'mixed': False,
+                'created': '2016-07-09T14:40:00',
+            },
+        },
+    }
+
+
+def test_create_task_suites_sync_through_async(
+        requests_mock, toloka_client, toloka_url, no_uuid_random,
+        task_suites_map, operation_running_map, operation_success_map,
+        create_log, get_task_suites_map, task_suites_result_map
+):
+
+    def check_task_suites(request, context):
+        assert {
+            'operation_id': ['operation-i1d'],
+            'skip_invalid_items': ['true'],
+            'allow_defaults': ['true'],
+            'open_pool': ['true'],
+            'async_mode': ['true']
+        } == parse_qs(urlparse(request.url).query)
+        imcoming_task_suites = []
+        for t in request.json():
+            t.pop('__client_uuid', '')
+            imcoming_task_suites.append(t)
+        assert task_suites_map == imcoming_task_suites
+        return operation_running_map
+
+    # mocks
+    requests_mock.post(f'{toloka_url}/task-suites', json=check_task_suites, status_code=201)
+    requests_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}', json=operation_success_map, status_code=201)
+    requests_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}/log', json=create_log, status_code=201)
+    requests_mock.get(f'{toloka_url}/task-suites', json={'items': get_task_suites_map, 'has_more': False}, status_code=201)
+
+    # Expanded syntax
+    result = toloka_client.create_task_suites(
+        [client.structure(t, client.task_suite.TaskSuite) for t in task_suites_map],
+        operation_id='operation-i1d',
+        skip_invalid_items=True,
+        allow_defaults=True,
+        open_pool=True,
+    )
+    assert task_suites_result_map == client.unstructure(result)
 
 
 def test_create_task_suites_async(requests_mock, toloka_client, toloka_url):

@@ -12,6 +12,7 @@ import logging
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+import uuid
 
 from . import actions  # noqa: F401
 from . import aggregation
@@ -30,7 +31,7 @@ from .analytics_request import AnalyticsRequest
 from .assignment import Assignment, AssignmentPatch, GetAssignmentsTsvParameters
 from .attachment import Attachment
 from .clone_results import CloneResults
-from .exceptions import raise_on_api_error
+from .exceptions import raise_on_api_error, ValidationApiError
 from .message_thread import (
     Folder, MessageThread, MessageThreadReply, MessageThreadFolders, MessageThreadCompose
 )
@@ -124,6 +125,60 @@ class TolokaClient:
             result = find_function(request, sort=['id'])
 
         yield from result.items
+
+    def _synch_via_asynch(self, objects, parameters, url, result_type, operation_type, output_id_field, get_method):
+        if not parameters.async_mode:
+            response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
+            return structure(response, result_type)
+
+        # Emulates synchronous operation, through asynchronous calls and reading operation logs.
+        client_uuid_to_index = {}
+        for i, obj in enumerate(objects):
+            obj.__client_uuid = uuid.uuid4().hex
+            client_uuid_to_index[obj.__client_uuid] = str(i)
+
+        response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
+        insert_operation = structure(response, operation_type)
+        insert_operation = self.wait_operation(insert_operation, datetime.timedelta(minutes=60))
+        assert insert_operation.status == operations.Operation.Status.SUCCESS
+
+        pools = {}
+        validation_errors = {}
+
+        for log_item in self.get_operation_log(insert_operation.id):
+            index = client_uuid_to_index[log_item.input['__client_uuid']]
+            if log_item.success:
+                numerated_ids = pools.setdefault(log_item.input['pool_id'], {})
+                numerated_ids[log_item.output[output_id_field]] = index
+            else:
+                validation_errors[index] = {
+                    name: structure(error, batch_create_results.FieldValidationError)
+                    for name, error in log_item.output.items()
+                }
+
+        # Emulates the response as in a synchronous method:
+        # it will throw an exception even if the skip_invalid_items parameter is passed
+        # but no objects are created
+        if not pools:
+            raise ValidationApiError(
+                code='VALIDATION_ERROR',
+                message='Validation failed',
+                payload=validation_errors
+            )
+
+        # get object from all pools
+        items = {}
+        for pool_id, numerated_ids in pools.items():
+            obj_it = get_method(
+                pool_id=pool_id,
+                id_gte=min(numerated_ids.keys()),
+                id_lte=max(numerated_ids.keys()),
+            )
+            for obj in obj_it:
+                if obj.id in numerated_ids:
+                    items[numerated_ids[obj.id]] = obj
+
+        return result_type(items=items, validation_errors=validation_errors or None)
 
     # Aggregation section
 
@@ -500,12 +555,21 @@ class TolokaClient:
 
     @expand('parameters')
     def create_tasks(self, tasks: List[Task], parameters: Optional[task.CreateTasksParameters] = None) -> batch_create_results.TaskBatchCreateResult:
-        response = self._request('post', '/v1/tasks', json=unstructure(tasks), params=unstructure(parameters))
-        return structure(response, batch_create_results.TaskBatchCreateResult)
+        if not parameters:
+            parameters = task.CreateTasksParameters()
+        return self._synch_via_asynch(
+            objects=tasks,
+            parameters=parameters,
+            url='/v1/tasks',
+            result_type=batch_create_results.TaskBatchCreateResult,
+            operation_type=operations.TasksCreateOperation,
+            output_id_field='task_id',
+            get_method=self.get_tasks
+        )
 
     @expand('parameters')
-    def create_tasks_async(self, tasks: List[Task], parameters: Optional[task.CreateTasksAsyncParameters] = None) -> operations.TasksCreateOperation:
-        params = {'async_mode': True, **(unstructure(parameters) or {})}
+    def create_tasks_async(self, tasks: List[Task], parameters: Optional[task.CreateTasksParameters] = None) -> operations.TasksCreateOperation:
+        params = {**(unstructure(parameters) or {}), 'async_mode': True}
         response = self._request('post', '/v1/tasks', json=unstructure(tasks), params=params)
         return structure(response, operations.TasksCreateOperation)
 
@@ -539,17 +603,27 @@ class TolokaClient:
 
     @expand('parameters')
     def create_task_suite(self, task_suite: TaskSuite, parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None) -> TaskSuite:
-        response = self._request('post', '/v1/task-suites', json=unstructure(task_suite), params=unstructure(parameters))
+        params = {**(unstructure(parameters) or {}), 'async_mode': False}
+        response = self._request('post', '/v1/task-suites', json=unstructure(task_suite), params=unstructure(params))
         return structure(response, TaskSuite)
 
     @expand('parameters')
     def create_task_suites(self, task_suites: List[TaskSuite], parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None) -> batch_create_results.TaskSuiteBatchCreateResult:
-        response = self._request('post', '/v1/task-suites', json=unstructure(task_suites), params=unstructure(parameters))
-        return structure(response, batch_create_results.TaskSuiteBatchCreateResult)
+        if not parameters:
+            parameters = task_suite.TaskSuiteCreateRequestParameters()
+        return self._synch_via_asynch(
+            objects=task_suites,
+            parameters=parameters,
+            url='/v1/task-suites',
+            result_type=batch_create_results.TaskBatchCreateResult,
+            operation_type=operations.TaskSuiteCreateBatchOperation,
+            output_id_field='task_suite_id',
+            get_method=self.get_task_suites
+        )
 
     @expand('parameters')
     def create_task_suites_async(self, task_suites: List[TaskSuite], parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None) -> operations.TaskSuiteCreateBatchOperation:
-        params = {'async_mode': True, **(unstructure(parameters) or {})}
+        params = {**(unstructure(parameters) or {}), 'async_mode': True}
         response = self._request('post', '/v1/task-suites', json=unstructure(task_suites), params=params)
         return structure(response, operations.TaskSuiteCreateBatchOperation)
 
@@ -589,17 +663,16 @@ class TolokaClient:
         response = self._request('get', f'/v1/operations/{operation_id}')
         return structure(response, operations.Operation)
 
-    def wait_operation(self, op: operations.Operation) -> operations.Operation:
+    def wait_operation(self, op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10)) -> operations.Operation:
 
         default_time_to_wait = datetime.timedelta(seconds=1)
-        default_timeout = datetime.timedelta(minutes=10)
         default_initial_delay = datetime.timedelta(milliseconds=500)
 
         if op.is_completed():
             return op
 
         utcnow = datetime.datetime.utcnow()
-        timeout = utcnow + default_timeout
+        wait_until_time = utcnow + timeout
 
         if not op.started or utcnow - op.started < default_initial_delay:
             time.sleep(default_initial_delay.total_seconds())
@@ -609,7 +682,7 @@ class TolokaClient:
             if op.is_completed():
                 return op
             time.sleep(default_time_to_wait.total_seconds())
-            if datetime.datetime.utcnow() > timeout:
+            if datetime.datetime.utcnow() > wait_until_time:
                 raise TimeoutError
 
     def get_operation_log(self, operation_id: str) -> List[OperationLogItem]:
