@@ -439,11 +439,12 @@ def test_project_update(requests_mock, toloka_client, toloka_url):
     assert result == project
 
 
-def test_archive_project(requests_mock, toloka_client, toloka_url):
-    operation_map = {
+@pytest.fixture
+def archive_operation_map():
+    return {
         'id': 'archive-project-op-1',
         'type': 'PROJECT.ARCHIVE',
-        'status': 'SUCCESS',
+        'status': 'RUNNING',
         'submitted': '2016-10-21T15:37:00',
         'started': '2016-10-21T15:37:01',
         'finished': '2016-10-21T15:37:02',
@@ -452,9 +453,34 @@ def test_archive_project(requests_mock, toloka_client, toloka_url):
         },
     }
 
-    requests_mock.post(f'{toloka_url}/projects/10/archive', json=operation_map, status_code=202)
+
+@pytest.fixture
+def complete_archive_operation_map(archive_operation_map):
+    return {
+        **archive_operation_map,
+        'status': 'SUCCESS',
+        'finished': '2016-03-07T15:48:03',
+    }
+
+
+def test_archive_project_async(requests_mock, toloka_client, toloka_url, complete_archive_operation_map):
+    requests_mock.post(f'{toloka_url}/projects/10/archive', json=complete_archive_operation_map, status_code=202)
+    result = toloka_client.archive_project_async('10')
+    assert complete_archive_operation_map == client.unstructure(result)
+
+
+def test_archive_project(requests_mock, toloka_client, toloka_url,
+                         archive_operation_map, complete_archive_operation_map, project_map):
+    requests_mock.post(f'{toloka_url}/projects/10/archive', json=archive_operation_map, status_code=202)
+    requests_mock.get(
+        f'{toloka_url}/operations/{archive_operation_map["id"]}',
+        json=complete_archive_operation_map,
+        status_code=200
+    )
+    requests_mock.get(f'{toloka_url}/projects/10', json=project_map, status_code=200)
+
     result = toloka_client.archive_project('10')
-    assert operation_map == client.unstructure(result)
+    assert project_map == client.unstructure(result)
 
 
 def test_get_template_builder_project(requests_mock, toloka_client, toloka_url, tb_project_map):

@@ -98,6 +98,13 @@ class IdentityRuleCondition(RuleCondition, IdentityConditionMixin):
     operator: IdentityOperator
 
 class AcceptedAssignmentsCount(ComparableRuleCondition):
+    """How many times this assignment was accepted
+
+    Don't be confused!!!
+    This condition used only with 'AssignmentsAssessment' controller.
+    And exist very similar condition 'AssignmentsAcceptedCount', that used only with 'AnswerCount' controller.
+    Sorry about that.
+    """
 
     def __repr__(self): ...
 
@@ -126,6 +133,8 @@ class AcceptedAssignmentsCount(ComparableRuleCondition):
     value: Optional[int]
 
 class AcceptedAssignmentsRate(ComparableRuleCondition):
+    """Percentage of how many assignments were accepted from this performer out of all checked assignment
+    """
 
     def __repr__(self): ...
 
@@ -154,6 +163,26 @@ class AcceptedAssignmentsRate(ComparableRuleCondition):
     value: Optional[float]
 
 class AssessmentEvent(IdentityRuleCondition):
+    """Assessment of the assignment changes its status to the specified one
+
+    This condition can work only with compare operator '=='.
+
+    Attributes:
+        value: Possible values:
+            * conditions.AssessmentEvent.ACCEPT
+            * conditions.AssessmentEvent.REJECT
+    
+    Example:
+        How to increase task overlap when you reject assignment in delayed mode.
+
+        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool.quality_control.add_action(
+        >>>     collector=toloka.collectors.AssignmentsAssessment(),
+        >>>     conditions=[toloka.conditions.AssessmentEvent == toloka.conditions.AssessmentEvent.REJECT],
+        >>>     action=toloka.actions.ChangeOverlap(delta=1, open_pool=True),
+        >>> )
+        ...
+    """
 
     class Type(Enum):
         ...
@@ -185,6 +214,13 @@ class AssessmentEvent(IdentityRuleCondition):
     value: Optional[Type]
 
 class AssignmentsAcceptedCount(ComparableRuleCondition):
+    """How many assignment was accepted from performer
+
+    Don't be confused!!!
+    This condition used only with 'AnswerCount' controller.
+    And exist very similar condition 'AcceptedAssignmentsCount', that used only with 'AssignmentsAssessment' controller.
+    Sorry about that.
+    """
 
     def __repr__(self): ...
 
@@ -213,6 +249,10 @@ class AssignmentsAcceptedCount(ComparableRuleCondition):
     value: Optional[int]
 
 class CorrectAnswersRate(ComparableRuleCondition):
+    """The percentage of correct responses
+
+    Be careful, it may have different meanings in different collectors.
+    """
 
     def __repr__(self): ...
 
@@ -241,6 +281,8 @@ class CorrectAnswersRate(ComparableRuleCondition):
     value: Optional[float]
 
 class FailRate(ComparableRuleCondition):
+    """Percentage of wrong answers of the performer to the captcha
+    """
 
     def __repr__(self): ...
 
@@ -269,6 +311,8 @@ class FailRate(ComparableRuleCondition):
     value: Optional[float]
 
 class FastSubmittedCount(ComparableRuleCondition):
+    """The number of assignments a specific performer completed too fast
+    """
 
     def __repr__(self): ...
 
@@ -297,6 +341,8 @@ class FastSubmittedCount(ComparableRuleCondition):
     value: Optional[int]
 
 class GoldenSetAnswersCount(ComparableRuleCondition):
+    """The number of completed control tasks
+    """
 
     def __repr__(self): ...
 
@@ -325,6 +371,8 @@ class GoldenSetAnswersCount(ComparableRuleCondition):
     value: Optional[int]
 
 class GoldenSetCorrectAnswersRate(ComparableRuleCondition):
+    """The percentage of correct responses in control tasks
+    """
 
     def __repr__(self): ...
 
@@ -353,6 +401,8 @@ class GoldenSetCorrectAnswersRate(ComparableRuleCondition):
     value: Optional[float]
 
 class GoldenSetIncorrectAnswersRate(ComparableRuleCondition):
+    """The percentage of incorrect responses in control tasks
+    """
 
     def __repr__(self): ...
 
@@ -381,6 +431,8 @@ class GoldenSetIncorrectAnswersRate(ComparableRuleCondition):
     value: Optional[float]
 
 class IncomeSumForLast24Hours(ComparableRuleCondition):
+    """The performer earnings for completed tasks in the pool over the last 24 hours
+    """
 
     def __repr__(self): ...
 
@@ -409,6 +461,10 @@ class IncomeSumForLast24Hours(ComparableRuleCondition):
     value: Optional[float]
 
 class IncorrectAnswersRate(ComparableRuleCondition):
+    """The percentage of incorrect responses
+
+    Be careful, it may have different meanings in different collectors.
+    """
 
     def __repr__(self): ...
 
@@ -465,6 +521,8 @@ class NextAssignmentAvailable(ComparableRuleCondition):
     value: Optional[bool]
 
 class PendingAssignmentsCount(ComparableRuleCondition):
+    """Number of Assignments pending checking 
+    """
 
     def __repr__(self): ...
 
@@ -493,6 +551,14 @@ class PendingAssignmentsCount(ComparableRuleCondition):
     value: Optional[int]
 
 class PoolAccessRevokedReason(IdentityRuleCondition):
+    """Reason for loss of access of the performer to the current pool
+
+    Attributes:
+        value: exact reason
+            * SKILL_CHANGE - The performer no longer meets one or more filters.
+            * RESTRICTION - The performer's access to tasks is blocked by a quality control rule (such as control tasks,
+                majority vote, fast answers, skipped assignments, or captcha).
+    """
 
     class Type(Enum):
         ...
@@ -524,6 +590,8 @@ class PoolAccessRevokedReason(IdentityRuleCondition):
     value: Optional[Type]
 
 class RejectedAssignmentsCount(ComparableRuleCondition):
+    """How many times this assignment was rejected
+    """
 
     def __repr__(self): ...
 
@@ -552,6 +620,8 @@ class RejectedAssignmentsCount(ComparableRuleCondition):
     value: Optional[int]
 
 class RejectedAssignmentsRate(ComparableRuleCondition):
+    """Percentage of how many assignments were rejected from this performer out of all checked assignment
+    """
 
     def __repr__(self): ...
 
@@ -580,6 +650,8 @@ class RejectedAssignmentsRate(ComparableRuleCondition):
     value: Optional[float]
 
 class SkillId(IdentityRuleCondition):
+    """The performer no longer meets the specific skill filter
+    """
 
     def __repr__(self): ...
 
@@ -608,6 +680,8 @@ class SkillId(IdentityRuleCondition):
     value: Optional[str]
 
 class SkippedInRowCount(ComparableRuleCondition):
+    """How many tasks in a row the performer skipped
+    """
 
     def __repr__(self): ...
 
@@ -636,6 +710,8 @@ class SkippedInRowCount(ComparableRuleCondition):
     value: Optional[int]
 
 class StoredResultsCount(ComparableRuleCondition):
+    """How many times the performer entered captcha
+    """
 
     def __repr__(self): ...
 
@@ -692,6 +768,8 @@ class SubmittedAssignmentsCount(ComparableRuleCondition):
     value: Optional[int]
 
 class SuccessRate(ComparableRuleCondition):
+    """Percentage of correct answers of the performer to the captcha
+    """
 
     def __repr__(self): ...
 
@@ -720,6 +798,10 @@ class SuccessRate(ComparableRuleCondition):
     value: Optional[float]
 
 class TotalAnswersCount(ComparableRuleCondition):
+    """The number of completed tasks by the performer
+
+    Be careful, it may have different meanings in different collectors.
+    """
 
     def __repr__(self): ...
 
@@ -748,6 +830,8 @@ class TotalAnswersCount(ComparableRuleCondition):
     value: Optional[int]
 
 class TotalAssignmentsCount(ComparableRuleCondition):
+    """How many assignments from this performer were checked
+    """
 
     def __repr__(self): ...
 
@@ -776,6 +860,8 @@ class TotalAssignmentsCount(ComparableRuleCondition):
     value: Optional[int]
 
 class TotalSubmittedCount(ComparableRuleCondition):
+    """The number of assignments a specific performer completed
+    """
 
     def __repr__(self): ...
 

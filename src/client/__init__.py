@@ -6,11 +6,13 @@ from typing import List, Optional, Union, BinaryIO, Tuple, Generator
 import pandas as pd
 
 import attr
+
 import io
 import logging
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+import uuid
 
 from . import actions  # noqa: F401
 from . import aggregation
@@ -28,7 +30,8 @@ from .aggregation import AggregatedSolution
 from .analytics_request import AnalyticsRequest
 from .assignment import Assignment, AssignmentPatch, GetAssignmentsTsvParameters
 from .attachment import Attachment
-from .exceptions import raise_on_api_error
+from .clone_results import CloneResults
+from .exceptions import raise_on_api_error, ValidationApiError
 from .message_thread import (
     Folder, MessageThread, MessageThreadReply, MessageThreadFolders, MessageThreadCompose
 )
@@ -122,6 +125,60 @@ class TolokaClient:
             result = find_function(request, sort=['id'])
 
         yield from result.items
+
+    def _synch_via_asynch(self, objects, parameters, url, result_type, operation_type, output_id_field, get_method):
+        if not parameters.async_mode:
+            response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
+            return structure(response, result_type)
+
+        # Emulates synchronous operation, through asynchronous calls and reading operation logs.
+        client_uuid_to_index = {}
+        for i, obj in enumerate(objects):
+            obj.__client_uuid = uuid.uuid4().hex
+            client_uuid_to_index[obj.__client_uuid] = str(i)
+
+        response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
+        insert_operation = structure(response, operation_type)
+        insert_operation = self.wait_operation(insert_operation, datetime.timedelta(minutes=60))
+        assert insert_operation.status == operations.Operation.Status.SUCCESS
+
+        pools = {}
+        validation_errors = {}
+
+        for log_item in self.get_operation_log(insert_operation.id):
+            index = client_uuid_to_index[log_item.input['__client_uuid']]
+            if log_item.success:
+                numerated_ids = pools.setdefault(log_item.input['pool_id'], {})
+                numerated_ids[log_item.output[output_id_field]] = index
+            else:
+                validation_errors[index] = {
+                    name: structure(error, batch_create_results.FieldValidationError)
+                    for name, error in log_item.output.items()
+                }
+
+        # Emulates the response as in a synchronous method:
+        # it will throw an exception even if the skip_invalid_items parameter is passed
+        # but no objects are created
+        if not pools:
+            raise ValidationApiError(
+                code='VALIDATION_ERROR',
+                message='Validation failed',
+                payload=validation_errors
+            )
+
+        # get object from all pools
+        items = {}
+        for pool_id, numerated_ids in pools.items():
+            obj_it = get_method(
+                pool_id=pool_id,
+                id_gte=min(numerated_ids.keys()),
+                id_lte=max(numerated_ids.keys()),
+            )
+            for obj in obj_it:
+                if obj.id in numerated_ids:
+                    items[numerated_ids[obj.id]] = obj
+
+        return result_type(items=items, validation_errors=validation_errors or None)
 
     # Aggregation section
 
@@ -233,7 +290,12 @@ class TolokaClient:
 
     # Project section
 
-    def archive_project(self, project_id: str) -> operations.ProjectArchiveOperation:
+    def archive_project(self, project_id: str) -> Project:
+        operation = self.archive_project_async(project_id)
+        operation = self.wait_operation(operation)
+        return self.get_project(operation.parameters.project_id)
+
+    def archive_project_async(self, project_id: str) -> operations.ProjectArchiveOperation:
         response = self._request('post', f'/v1/projects/{project_id}/archive')
         return structure(response, operations.ProjectArchiveOperation)
 
@@ -261,21 +323,88 @@ class TolokaClient:
         response = self._request('put', f'/v1/projects/{project_id}', json=unstructure(project))
         return structure(response, Project)
 
+    def clone_project(self, project_id: str, reuse_controllers: bool = True) -> CloneResults:
+
+        def reset_quality_control(quality_control, old_to_new_train_ids):
+            if quality_control is None:
+                return
+            if not reuse_controllers:
+                for quality_control_config in quality_control.configs:
+                    quality_control_config.collector_config.uuid = None
+            if (
+                hasattr(quality_control, 'training_requirement') and
+                hasattr(quality_control.training_requirement, 'training_pool_id') and
+                quality_control.training_requirement.training_pool_id is not None
+            ):
+                new_id = old_to_new_train_ids[quality_control.training_requirement.training_pool_id]
+                quality_control.training_requirement.training_pool_id = new_id
+
+        # clone project
+        project_for_clone = self.get_project(project_id)
+        project_quality_control = project_for_clone.quality_control
+        project_for_clone.quality_control = None
+        new_project = self.create_project(project_for_clone)
+
+        # create trainings
+        new_trainings = []
+        old_to_new_train_ids = {}
+        for training in self.get_trainings(project_id=project_id):
+            old_id = training.id
+            training.project_id = new_project.id
+            new_training = self.create_training(training)
+            new_trainings.append(new_training)
+            old_to_new_train_ids[old_id] = new_training.id
+
+        # save quality control on project
+        reset_quality_control(project_quality_control, old_to_new_train_ids)
+        if project_quality_control is not None:
+            new_project.quality_control = project_quality_control
+            new_project = self.update_project(new_project.id, new_project)
+
+        # create new pools
+        new_pools = []
+        for pool in self.get_pools(project_id=project_id):
+            pool.project_id = new_project.id
+            reset_quality_control(pool.quality_control, old_to_new_train_ids)
+            new_pools.append(self.create_pool(pool))
+
+        return CloneResults(project=new_project, pools=new_pools, trainings=new_trainings)
+
     # Pool section
 
-    def archive_pool(self, pool_id: str) -> operations.PoolArchiveOperation:
+    def archive_pool(self, pool_id: str) -> Pool:
+        operation = self.archive_pool_async(pool_id)
+        operation = self.wait_operation(operation)
+        return self.get_pool(operation.parameters.pool_id)
+
+    def archive_pool_async(self, pool_id: str) -> operations.PoolArchiveOperation:
         response = self._request('post', f'/v1/pools/{pool_id}/archive')
         return structure(response, operations.PoolArchiveOperation)
 
-    def close_pool(self, pool_id: str) -> operations.PoolCloseOperation:
+    def close_pool(self, pool_id: str) -> Pool:
+        operation = self.close_pool_async(pool_id)
+        operation = self.wait_operation(operation)
+        return self.get_pool(operation.parameters.pool_id)
+
+    def close_pool_async(self, pool_id: str) -> operations.PoolCloseOperation:
         response = self._request('post', f'/v1/pools/{pool_id}/close')
         return structure(response, operations.PoolCloseOperation)
 
-    def close_pool_for_update(self, pool_id: str) -> operations.PoolCloseOperation:
+    def close_pool_for_update(self, pool_id: str) -> Pool:
+        operation = self.close_pool_for_update_async(pool_id)
+        operation = self.wait_operation(operation)
+        return self.get_pool(operation.parameters.pool_id)
+
+    def close_pool_for_update_async(self, pool_id: str) -> operations.PoolCloseOperation:
         response = self._request('post', f'/v1/pools/{pool_id}/close-for-update')
         return structure(response, operations.PoolCloseOperation)
 
-    def clone_pool(self, pool_id: str) -> operations.PoolCloneOperation:
+    def clone_pool(self, pool_id: str) -> Pool:
+        operation = self.clone_pool_async(pool_id)
+        operation = self.wait_operation(operation)
+        return self.get_pool(operation.details.pool_id)
+
+    def clone_pool_async(self, pool_id: str) -> operations.PoolCloneOperation:
         response = self._request('post', f'/v1/pools/{pool_id}/clone')
         return structure(response, operations.PoolCloneOperation)
 
@@ -302,7 +431,12 @@ class TolokaClient:
     def get_pools(self, request: search_requests.PoolSearchRequest) -> Generator[Pool, None, None]:
         return self._find_all(self.find_pools, request)
 
-    def open_pool(self, pool_id: str) -> operations.PoolOpenOperation:
+    def open_pool(self, pool_id: str) -> Pool:
+        operation = self.open_pool_async(pool_id)
+        operation = self.wait_operation(operation)
+        return self.get_pool(operation.parameters.pool_id)
+
+    def open_pool_async(self, pool_id: str) -> operations.PoolOpenOperation:
         response = self._request('post', f'/v1/pools/{pool_id}/open')
         return structure(response, operations.PoolOpenOperation)
 
@@ -319,15 +453,30 @@ class TolokaClient:
 
     # Training section
 
-    def archive_training(self, training_id: str) -> operations.TrainingArchiveOperation:
+    def archive_training(self, training_id: str) -> Training:
+        operation = self.archive_training_async(training_id)
+        operation = self.wait_operation(operation)
+        return self.get_training(operation.parameters.training_id)
+
+    def archive_training_async(self, training_id: str) -> operations.TrainingArchiveOperation:
         response = self._request('post', f'/v1/trainings/{training_id}/archive')
         return structure(response, operations.TrainingArchiveOperation)
 
-    def close_training(self, training_id: str) -> operations.TrainingCloseOperation:
+    def close_training(self, training_id: str) -> Training:
+        operation = self.close_training_async(training_id)
+        operation = self.wait_operation(operation)
+        return self.get_training(operation.parameters.training_id)
+
+    def close_training_async(self, training_id: str) -> operations.TrainingCloseOperation:
         response = self._request('post', f'/v1/trainings/{training_id}/close')
         return structure(response, operations.TrainingCloseOperation)
 
-    def clone_training(self, training_id: str) -> operations.TrainingCloneOperation:
+    def clone_training(self, training_id: str) -> Training:
+        operation = self.clone_training_async(training_id)
+        operation = self.wait_operation(operation)
+        return self.get_training(operation.details.training_id)
+
+    def clone_training_async(self, training_id: str) -> operations.TrainingCloneOperation:
         response = self._request('post', f'/v1/trainings/{training_id}/clone')
         return structure(response, operations.TrainingCloneOperation)
 
@@ -351,7 +500,12 @@ class TolokaClient:
     def get_trainings(self, request: search_requests.TrainingSearchRequest) -> Generator[Training, None, None]:
         return self._find_all(self.find_trainings, request)
 
-    def open_training(self, training_id: str) -> operations.TrainingOpenOperation:
+    def open_training(self, training_id: str) -> Training:
+        operation = self.open_training_async(training_id)
+        operation = self.wait_operation(operation)
+        return self.get_training(operation.parameters.training_id)
+
+    def open_training_async(self, training_id: str) -> operations.TrainingOpenOperation:
         response = self._request('post', f'/v1/trainings/{training_id}/open')
         return structure(response, operations.TrainingOpenOperation)
 
@@ -401,12 +555,21 @@ class TolokaClient:
 
     @expand('parameters')
     def create_tasks(self, tasks: List[Task], parameters: Optional[task.CreateTasksParameters] = None) -> batch_create_results.TaskBatchCreateResult:
-        response = self._request('post', '/v1/tasks', json=unstructure(tasks), params=unstructure(parameters))
-        return structure(response, batch_create_results.TaskBatchCreateResult)
+        if not parameters:
+            parameters = task.CreateTasksParameters()
+        return self._synch_via_asynch(
+            objects=tasks,
+            parameters=parameters,
+            url='/v1/tasks',
+            result_type=batch_create_results.TaskBatchCreateResult,
+            operation_type=operations.TasksCreateOperation,
+            output_id_field='task_id',
+            get_method=self.get_tasks
+        )
 
     @expand('parameters')
-    def create_tasks_async(self, tasks: List[Task], parameters: Optional[task.CreateTasksAsyncParameters] = None) -> operations.TasksCreateOperation:
-        params = {'async_mode': True, **(unstructure(parameters) or {})}
+    def create_tasks_async(self, tasks: List[Task], parameters: Optional[task.CreateTasksParameters] = None) -> operations.TasksCreateOperation:
+        params = {**(unstructure(parameters) or {}), 'async_mode': True}
         response = self._request('post', '/v1/tasks', json=unstructure(tasks), params=params)
         return structure(response, operations.TasksCreateOperation)
 
@@ -440,17 +603,27 @@ class TolokaClient:
 
     @expand('parameters')
     def create_task_suite(self, task_suite: TaskSuite, parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None) -> TaskSuite:
-        response = self._request('post', '/v1/task-suites', json=unstructure(task_suite), params=unstructure(parameters))
+        params = {**(unstructure(parameters) or {}), 'async_mode': False}
+        response = self._request('post', '/v1/task-suites', json=unstructure(task_suite), params=unstructure(params))
         return structure(response, TaskSuite)
 
     @expand('parameters')
     def create_task_suites(self, task_suites: List[TaskSuite], parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None) -> batch_create_results.TaskSuiteBatchCreateResult:
-        response = self._request('post', '/v1/task-suites', json=unstructure(task_suites), params=unstructure(parameters))
-        return structure(response, batch_create_results.TaskSuiteBatchCreateResult)
+        if not parameters:
+            parameters = task_suite.TaskSuiteCreateRequestParameters()
+        return self._synch_via_asynch(
+            objects=task_suites,
+            parameters=parameters,
+            url='/v1/task-suites',
+            result_type=batch_create_results.TaskBatchCreateResult,
+            operation_type=operations.TaskSuiteCreateBatchOperation,
+            output_id_field='task_suite_id',
+            get_method=self.get_task_suites
+        )
 
     @expand('parameters')
     def create_task_suites_async(self, task_suites: List[TaskSuite], parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None) -> operations.TaskSuiteCreateBatchOperation:
-        params = {'async_mode': True, **(unstructure(parameters) or {})}
+        params = {**(unstructure(parameters) or {}), 'async_mode': True}
         response = self._request('post', '/v1/task-suites', json=unstructure(task_suites), params=params)
         return structure(response, operations.TaskSuiteCreateBatchOperation)
 
@@ -490,17 +663,16 @@ class TolokaClient:
         response = self._request('get', f'/v1/operations/{operation_id}')
         return structure(response, operations.Operation)
 
-    def wait_operation(self, op: operations.Operation) -> operations.Operation:
+    def wait_operation(self, op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10)) -> operations.Operation:
 
         default_time_to_wait = datetime.timedelta(seconds=1)
-        default_timeout = datetime.timedelta(minutes=10)
         default_initial_delay = datetime.timedelta(milliseconds=500)
 
         if op.is_completed():
             return op
 
         utcnow = datetime.datetime.utcnow()
-        timeout = utcnow + default_timeout
+        wait_until_time = utcnow + timeout
 
         if not op.started or utcnow - op.started < default_initial_delay:
             time.sleep(default_initial_delay.total_seconds())
@@ -510,7 +682,7 @@ class TolokaClient:
             if op.is_completed():
                 return op
             time.sleep(default_time_to_wait.total_seconds())
-            if datetime.datetime.utcnow() > timeout:
+            if datetime.datetime.utcnow() > wait_until_time:
                 raise TimeoutError
 
     def get_operation_log(self, operation_id: str) -> List[OperationLogItem]:

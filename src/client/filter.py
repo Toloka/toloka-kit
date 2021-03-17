@@ -196,10 +196,12 @@ class DeviceCategory(Computed, IdentityConditionMixin, spec_value=Computed.Key.D
         PERSONAL_COMPUTER = 'PERSONAL_COMPUTER'
         SMARTPHONE = 'SMARTPHONE'
         TABLET = 'TABLET'
+        WEARABLE_COMPUTER = 'WEARABLE_COMPUTER'
 
     PERSONAL_COMPUTER = DeviceCategory.PERSONAL_COMPUTER
     SMARTPHONE = DeviceCategory.SMARTPHONE
     TABLET = DeviceCategory.TABLET
+    WEARABLE_COMPUTER = DeviceCategory.WEARABLE_COMPUTER
 
     value: DeviceCategory = attribute(required=True)
 

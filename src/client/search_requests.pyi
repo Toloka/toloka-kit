@@ -70,10 +70,10 @@ class SearchRequestMetaclass(BaseTolokaObjectMetaclass):
     ...
 
 class ProjectSearchRequest(object):
-    """ProjectSearchRequest
+    """Parameters for searching projects
 
     Attributes:
-        status: Status of the project:
+        status: Status of the project, from Project.ProjectStatus:
             * ACTIVE
             * ARCHIVED
         id_lt: Projects with an ID less than the specified value.
@@ -131,6 +131,25 @@ class ProjectSearchRequest(object):
     created_gte: Optional[datetime]
 
 class ProjectSortItems(BaseSortItems):
+    """Parameters for sorting project search results
+
+    You can specify multiple parameters.
+    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: Fields by which to sort. Possible values:
+            * id - Project ID in ascending order.
+            * created - Project creation date in UTC in yyyy-MM-DD format (ascending).
+            * public_name - Project name (in alphabetical order).
+            * private_comment - Comment on the project (in alphabetical order).
+
+    Example:
+        How to specify and use SortItems.
+
+        >>> sort = toloka.client.search_requests.ProjectSortItems(['-public_name', 'id'])
+        >>> result = toloka_client.find_projects(status='ACTIVE', sort=sort, limit=50)
+        ...
+    """
 
     class SortItem(BaseSortItem):
 
@@ -147,10 +166,14 @@ class ProjectSortItems(BaseSortItems):
     items: Optional[List[SortItem]]
 
 class PoolSearchRequest(object):
-    """PoolSearchRequest
+    """Parameters for searching pools
 
     Attributes:
-        status: Status of the pool
+        status: Pool status
+            * OPEN
+            * CLOSED
+            * ARCHIVED
+            * LOCKED
         project_id: ID of the project to which the pool is attached.
         id_lt: Pools with an ID less than the specified value.
         id_lte: Pools with an ID less than or equal to the specified value.
@@ -222,6 +245,24 @@ class PoolSearchRequest(object):
     last_started_gte: Optional[datetime]
 
 class PoolSortItems(BaseSortItems):
+    """Parameters for sorting pool search results
+
+    You can specify multiple parameters.
+    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: Fields by which to sort. Possible values:
+            * id - Pool ID in ascending order.
+            * created - Pool creation date in UTC in yyyy-MM-DD format (ascending).
+            * last_started - The date the pool was last started (ascending).
+
+    Example:
+        How to specify and use SortItems.
+
+        >>> sort = toloka.client.search_requests.PoolSortItems(['-last_started', 'id'])
+        >>> result = toloka_client.find_pools(status='OPEN', sort=sort, limit=50)
+        ...
+    """
 
     class SortItem(BaseSortItem):
 
@@ -238,6 +279,28 @@ class PoolSortItems(BaseSortItems):
     items: Optional[List[SortItem]]
 
 class TrainingSearchRequest(object):
+    """Parameters for searching training pools
+
+    Attributes:
+        status: Training pool status:
+            * OPEN
+            * CLOSED
+            * ARCHIVED
+            * LOCKED
+        project_id: ID of the project to which the training pool is attached.
+        id_lt: Training pools with an ID less than the specified value.
+        id_lte: Training pools with an ID less than or equal to the specified value.
+        id_gt: Training pools with an ID greater than the specified value.
+        id_gte: Training pools with an ID greater than or equal to the specified value.
+        created_lt: Training pools created before the specified date.
+        created_lte: Training pools created before or on the specified date.
+        created_gt: Training pools created after the specified date.
+        created_gte: Training pools created after or on the specified date.
+        last_started_lt: Training pools that were last opened before the specified date.
+        last_started_lte: Training pools that were last opened on or before the specified date.
+        last_started_gt: Training pools that were last opened after the specified date.
+        last_started_gte: Training pools that were last opened on or after the specified date.
+    """
 
     class CompareFields(object):
 
@@ -295,6 +358,24 @@ class TrainingSearchRequest(object):
     last_started_gte: Optional[datetime]
 
 class TrainingSortItems(BaseSortItems):
+    """Parameters for sorting training pool search results
+
+    You can specify multiple parameters.
+    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: Fields by which to sort. Possible values:
+            * id - Training pool ID in ascending order.
+            * created - Training pool creation date in UTC in yyyy-MM-DD format (ascending).
+            * last_started - The date the pool was last started (ascending).
+
+    Example:
+        How to specify and use SortItems.
+
+        >>> sort = toloka.client.search_requests.TrainingSortItems(['-last_started', 'id'])
+        >>> result = toloka_client.find_trainings(status='OPEN', sort=sort, limit=50)
+        ...
+    """
 
     class SortItem(BaseSortItem):
 
@@ -311,7 +392,7 @@ class TrainingSortItems(BaseSortItems):
     items: Optional[List[SortItem]]
 
 class SkillSearchRequest(object):
-    """SkillSearchRequest
+    """Parameters for searching skill
 
     Attributes:
         name: Skill name.
@@ -370,6 +451,23 @@ class SkillSearchRequest(object):
     created_gte: Optional[datetime]
 
 class SkillSortItems(BaseSortItems):
+    """Parameters for sorting skill search results
+
+    You can specify multiple parameters.
+    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: Fields by which to sort. Possible values:
+            * id - Skill ID in ascending order.
+            * created - Skill creation date in UTC in yyyy-MM-DD format (ascending).
+
+    Example:
+        How to specify and use SortItems.
+
+        >>> sort = toloka.client.search_requests.SkillSortItems(['-created', 'id'])
+        >>> result = toloka_client.find_skills(name='Image annotation', sort=sort, limit=10)
+        ...
+    """
 
     class SortItem(BaseSortItem):
 
@@ -386,15 +484,21 @@ class SkillSortItems(BaseSortItems):
     items: Optional[List[SortItem]]
 
 class AssignmentSearchRequest(object):
-    """AssignmentSearchRequest
+    """Parameters for searching assignment
 
     Attributes:
-        status: Status of an assigned task suite.
-        task_id: The task ID in suites generated automatically using “smart mixing”.
+        status: Status of an assigned task suite (Detailed status description in Assignment.Status):
+            * ACTIVE
+            * SUBMITTED
+            * ACCEPTED
+            * REJECTED
+            * SKIPPED
+            * EXPIRED
+        task_id: The task ID in suites generated automatically using "smart mixing".
             You will get responses for task suites that contain the specified task.
         task_suite_id: ID of a task suite.
         pool_id: Pool ID.
-        user_id: User ID.
+        user_id: Performer ID.
         id_lt: Task suites with an assignment ID less than the specified value.
         id_lte: Task suites with an assignment ID less than or equal to the specified value.
         id_gt: Task suites with an assignment ID greater than the specified value.
@@ -471,6 +575,24 @@ class AssignmentSearchRequest(object):
     submitted_gte: Optional[datetime]
 
 class AssignmentSortItems(BaseSortItems):
+    """Parameters for sorting assignment search results
+
+    You can specify multiple parameters.
+    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: Fields by which to sort. Possible values:
+            * id - ID for issuing a set of tasks (in ascending order).
+            * created - Date of issue of the set of tasks in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
+            * submitted - Date of completion of the set of tasks in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
+
+    Example:
+        How to specify and use SortItems.
+
+        >>> sort = toloka.client.search_requests.AssignmentSortItems(['-submitted', 'id'])
+        >>> result = toloka_client.find_assignments(status='SUBMITTED', sort=sort, limit=10)
+        ...
+    """
 
     class SortItem(BaseSortItem):
 
@@ -487,13 +609,13 @@ class AssignmentSortItems(BaseSortItems):
     items: Optional[List[SortItem]]
 
 class AggregatedSolutionSearchRequest(object):
-    """AggregatedSolutionSearchRequest
+    """Parameters for searching aggregated solution
 
     Attributes:
-        task_id_lt: Tasks with an ID greater than the specified value.
-        task_id_lte: Tasks with an ID greater than or equal to the specified value.
-        task_id_gt: Tasks with an ID less than the specified value.
-        task_id_gte: Tasks with an ID less than or equal to the specified value.
+        task_id_lt: Jobs with an ID greater than the specified value.
+        task_id_lte: Jobs with an ID greater than or equal to the specified value.
+        task_id_gt: Jobs with an ID less than the specified value.
+        task_id_gte: Jobs with an ID less than or equal to the specified value.
     """
 
     class CompareFields(object):
@@ -530,6 +652,14 @@ class AggregatedSolutionSearchRequest(object):
     task_id_gte: Optional[str]
 
 class AggregatedSolutionSortItems(BaseSortItems):
+    """Parameters for sorting aggregated solution search results
+
+    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: Fields by which to sort. Possible values:
+            * task_id - In ascending order.
+    """
 
     class SortItem(BaseSortItem):
 
@@ -546,7 +676,7 @@ class AggregatedSolutionSortItems(BaseSortItems):
     items: Optional[List[SortItem]]
 
 class TaskSearchRequest(object):
-    """TaskSearchRequest
+    """Parameters for searching tasks
 
     Attributes:
         pool_id: ID of the pool to get tasks from.
@@ -621,6 +751,23 @@ class TaskSearchRequest(object):
     overlap_gte: Optional[int]
 
 class TaskSortItems(BaseSortItems):
+    """Parameters for sorting task search results
+
+    You can specify multiple parameters.
+    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: Fields by which to sort. Possible values:
+            * id - Job ID (in ascending order).
+            * created - Date of creation of the task in UTC in the format YYYY-MM-DD (ascending).
+
+    Example:
+        How to specify and use SortItems.
+
+        >>> sort = toloka.client.search_requests.TaskSortItems(['-created', 'id'])
+        >>> result = toloka_client.find_tasks(pool_id=my_pretty_pool_id, sort=sort, limit=10)
+        ...
+    """
 
     class SortItem(BaseSortItem):
 
@@ -637,10 +784,10 @@ class TaskSortItems(BaseSortItems):
     items: Optional[List[SortItem]]
 
 class TaskSuiteSearchRequest(object):
-    """TaskSuiteSearchRequest
+    """Parameters for searching task suites
 
     Attributes:
-        task_id: The task ID in suites generated automatically using “smart mixing”.
+        task_id: The task ID in suites generated automatically using "smart mixing".
             You will get task suites that contain the specified task.
         pool_id: ID of the pool to get task suites from.
         overlap: Suites with an overlap equal to the specified value.
@@ -716,6 +863,23 @@ class TaskSuiteSearchRequest(object):
     overlap_gte: Optional[int]
 
 class TaskSuiteSortItems(BaseSortItems):
+    """Parameters for sorting task suite search results
+
+    You can specify multiple parameters.
+    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: Fields by which to sort. Possible values:
+            * id - Task set ID (in ascending order).
+            * created - Date of creation of the set of tasks in UTC in the format YYYY-MM-DD (ascending).
+
+    Example:
+        How to specify and use SortItems.
+
+        >>> sort = toloka.client.search_requests.TaskSuiteSortItems(['-created', 'id'])
+        >>> result = toloka_client.find_task_suites(pool_id=my_pretty_pool_id, sort=sort, limit=10)
+        ...
+    """
 
     class SortItem(BaseSortItem):
 
@@ -732,11 +896,11 @@ class TaskSuiteSortItems(BaseSortItems):
     items: Optional[List[SortItem]]
 
 class AttachmentSearchRequest(object):
-    """AttachmentSearchRequest
+    """Parameters for searching attachment
 
     Attributes:
         name: File name.
-        type: Attachment type. Currently the key can have only one value — ASSIGNMENT_ATTACHMENT.
+        type: Attachment type. Currently the key can have only one value - ASSIGNMENT_ATTACHMENT.
         user_id: ID of the user who uploaded the file(s).
         assignment_id: Assignment ID.
         pool_id: Pool ID.
@@ -809,6 +973,23 @@ class AttachmentSearchRequest(object):
     created_gte: Optional[datetime]
 
 class AttachmentSortItems(BaseSortItems):
+    """Parameters for sorting attachment search results
+
+    You can specify multiple parameters.
+    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: Fields by which to sort. Possible values:
+            * id - File ID in ascending order.
+            * created - Date of sending the file in UTC in the yyyy-MM-DD format (ascending).
+
+    Example:
+        How to specify and use SortItems.
+
+        >>> sort = toloka.client.search_requests.AttachmentSortItems(['-created', 'id'])
+        >>> result = toloka_client.find_attachments(pool_id=my_pretty_pool_id, sort=sort, limit=10)
+        ...
+    """
 
     class SortItem(BaseSortItem):
 
@@ -825,11 +1006,11 @@ class AttachmentSortItems(BaseSortItems):
     items: Optional[List[SortItem]]
 
 class UserSkillSearchRequest(object):
-    """UserSkillSearchRequest
+    """Parameters for searching user skill
 
     Attributes:
         name: Skill name.
-        user_id: User ID.
+        user_id: Performer ID.
         skill_id: Skill ID.
         id_lt: Skills with an ID less than the specified value.
         id_lte: Skills with an ID less than or equal to the specified value.
@@ -903,6 +1084,23 @@ class UserSkillSearchRequest(object):
     modified_gte: Optional[datetime]
 
 class UserSkillSortItems(BaseSortItems):
+    """Parameters for sorting user skill search results
+
+    You can specify multiple parameters.
+    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: Fields by which to sort. Possible values:
+            * id - Skill ID in ascending order.
+            * created - Date the skill was created in UTC in the yyyy-MM-DD format (ascending).
+
+    Example:
+        How to specify and use SortItems.
+
+        >>> sort = toloka.client.search_requests.UserSkillSortItems(['-created', 'id'])
+        >>> result = toloka_client.find_user_skills(skill_id=my_useful_skill_id, sort=sort, limit=10)
+        ...
+    """
 
     class SortItem(BaseSortItem):
 
@@ -919,11 +1117,14 @@ class UserSkillSortItems(BaseSortItems):
     items: Optional[List[SortItem]]
 
 class UserRestrictionSearchRequest(object):
-    """UserRestrictionSearchRequest
+    """Parameters for searching user restriction
 
     Attributes:
         scope: The scope of the ban
-        user_id: User ID.
+            * ALL_PROJECTS
+            * PROJECT
+            * POOL
+        user_id: Performer ID.
         project_id: The ID of the project that is blocked.
         pool_id: The ID of the pool that is blocked.
         id_lt: Bans with an ID less than the specified value.
@@ -987,6 +1188,23 @@ class UserRestrictionSearchRequest(object):
     created_gte: Optional[datetime]
 
 class UserRestrictionSortItems(BaseSortItems):
+    """Parameters for sorting user restriction search results
+
+    You can specify multiple parameters.
+    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: Fields by which to sort. Possible values:
+            * id - User restriction ID in ascending order.
+            * created - Creation date in UTC format yyyy-MM-DD (ascending).
+
+    Example:
+        How to specify and use SortItems.
+
+        >>> sort = toloka.client.search_requests.UserRestrictionSortItems(['-created', 'id'])
+        >>> result = toloka_client.find_user_restrictions(pool_id=my_pretty_pool_id, sort=sort, limit=10)
+        ...
+    """
 
     class SortItem(BaseSortItem):
 
@@ -1003,10 +1221,10 @@ class UserRestrictionSortItems(BaseSortItems):
     items: Optional[List[SortItem]]
 
 class UserBonusSearchRequest(object):
-    """UserBonusSearchRequest
+    """Parameters for searching user bonus
 
     Attributes:
-        user_id: User ID.
+        user_id: Performer ID.
         private_comment: Comments for the requester.
         id_lt: Bonuses with an ID less than the specified value.
         id_lte: Bonuses with an ID less than or equal to the specified value.
@@ -1065,6 +1283,23 @@ class UserBonusSearchRequest(object):
     created_gte: Optional[datetime]
 
 class UserBonusSortItems(BaseSortItems):
+    """Parameters for sorting user bonus search results
+
+    You can specify multiple parameters.
+    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: Fields by which to sort. Possible values:
+            * id - Bonus ID in ascending order.
+            * created - Creation date in UTC format yyyy-MM-DD (ascending).
+
+    Example:
+        How to specify and use SortItems.
+
+        >>> sort = toloka.client.search_requests.UserBonusSortItems(['-created', 'id'])
+        >>> result = toloka_client.find_user_bonuses(user_id=best_performer_id, sort=sort, limit=10)
+        ...
+    """
 
     class SortItem(BaseSortItem):
 
@@ -1081,7 +1316,7 @@ class UserBonusSortItems(BaseSortItems):
     items: Optional[List[SortItem]]
 
 class MessageThreadSearchRequest(object):
-    """MessageThreadSearchRequest
+    """Parameters for searching message threads
 
     Attributes:
         folder: Folders to search for the thread
@@ -1143,6 +1378,16 @@ class MessageThreadSearchRequest(object):
     created_gte: Optional[datetime]
 
 class MessageThreadSortItems(BaseSortItems):
+    """Parameters for sorting message thread search results
+
+    You can specify multiple parameters.
+    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: Fields by which to sort. Possible values:
+            * id - Thread ID in ascending order.
+            * created - Creation date in UTC format yyyy-MM-DD (ascending).
+    """
 
     class SortItem(BaseSortItem):
 

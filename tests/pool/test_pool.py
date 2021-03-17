@@ -275,8 +275,9 @@ def test_patch_pool(requests_mock, toloka_client, toloka_url, pool_map_with_read
     assert raw_result == client.unstructure(result)
 
 
-def test_open_pool(requests_mock, toloka_client, toloka_url):
-    operation_map = {
+@pytest.fixture
+def open_pool_operation_map():
+    return {
         'id': 'open-pool-op1id',
         'type': 'POOL.OPEN',
         'status': 'RUNNING',
@@ -285,91 +286,219 @@ def test_open_pool(requests_mock, toloka_client, toloka_url):
         'parameters': {'pool_id': '21'},
     }
 
-    complete_operation_map = {
-        **operation_map,
+
+@pytest.fixture
+def complete_open_pool_operation_map(open_pool_operation_map):
+    return {
+        **open_pool_operation_map,
         'status': 'SUCCESS',
         'finished': '2016-03-07T15:48:03',
     }
 
-    requests_mock.post(
-        f'{toloka_url}/pools/21/open',
-        [{'json': operation_map, 'status_code': 202}]
-    )
-    requests_mock.get(
-        f'{toloka_url}/operations/open-pool-op1id',
-        [{'json': complete_operation_map, 'status_code': 200}]
-    )
 
-    operation = toloka_client.open_pool('21')
-    assert operation_map == client.unstructure(operation)
+def test_open_pool_async(requests_mock, toloka_client, toloka_url, open_pool_operation_map, complete_open_pool_operation_map):
+    requests_mock.post(f'{toloka_url}/pools/21/open', json=open_pool_operation_map, status_code=202)
+    requests_mock.get(f'{toloka_url}/operations/{open_pool_operation_map["id"]}', json=complete_open_pool_operation_map, status_code=200)
+
+    operation = toloka_client.open_pool_async('21')
+    assert open_pool_operation_map == client.unstructure(operation)
 
     complete_operation = toloka_client.wait_operation(operation)
-    assert complete_operation_map == client.unstructure(complete_operation)
+    assert complete_open_pool_operation_map == client.unstructure(complete_operation)
+
+
+def test_open_pool(requests_mock, toloka_client, toloka_url,
+                   open_pool_operation_map, complete_open_pool_operation_map, pool_map_with_readonly):
+    requests_mock.post(f'{toloka_url}/pools/21/open', json=open_pool_operation_map, status_code=202)
+    requests_mock.get(f'{toloka_url}/operations/{open_pool_operation_map["id"]}', json=complete_open_pool_operation_map, status_code=200)
+    requests_mock.get(f'{toloka_url}/pools/21', json=pool_map_with_readonly, status_code=200)
+
+    result = toloka_client.open_pool('21')
+    assert pool_map_with_readonly == client.unstructure(result)
 
 
 @pytest.mark.xfail(reason='Pseudo operations are not supported yet')
 def test_open_pool_already_open(requests_mock, toloka_client, toloka_url):
     requests_mock.post(f'{toloka_url}/pools/21/open', [{'status_code': 204}])
-    result = toloka_client.wait_operation(toloka_client.open_pool('21'))
+    result = toloka_client.wait_operation(toloka_client.open_pool_async('21'))
     result.is_completed()
     result.is_pseudo()
 
 
-def test_close_pool(requests_mock, toloka_client, toloka_url):
-    raw_result = {
+@pytest.fixture
+def close_pool_operation_map():
+    return {
         'id': 'close-pool-op1id',
         'type': 'POOL.CLOSE',
-        'status': 'SUCCESS',
+        'status': 'RUNNING',
         'submitted': '2016-07-22T13:04:00',
         'started': '2016-07-22T13:04:01',
         'finished': '2016-07-22T13:04:02',
         'parameters': {'pool_id': '21'},
     }
-    requests_mock.post(f'{toloka_url}/pools/21/close', [{'json': raw_result, 'status_code': 202}])
-    result = toloka_client.wait_operation(toloka_client.close_pool('21'))
-    assert raw_result == client.unstructure(result)
 
 
-def test_close_pool_for_update(requests_mock, toloka_client, toloka_url):
-    raw_result = {
+@pytest.fixture
+def complete_close_pool_operation_map(close_pool_operation_map):
+    return {
+        **close_pool_operation_map,
+        'status': 'SUCCESS',
+    }
+
+
+def test_close_pool_async(requests_mock, toloka_client, toloka_url, complete_close_pool_operation_map):
+    requests_mock.post(f'{toloka_url}/pools/21/close', json=complete_close_pool_operation_map, status_code=202)
+    result = toloka_client.wait_operation(toloka_client.close_pool_async('21'))
+    assert complete_close_pool_operation_map == client.unstructure(result)
+
+
+def test_close_pool(requests_mock, toloka_client, toloka_url,
+                    close_pool_operation_map, complete_close_pool_operation_map, pool_map_with_readonly):
+    requests_mock.post(f'{toloka_url}/pools/21/close', json=close_pool_operation_map, status_code=202)
+    requests_mock.get(f'{toloka_url}/operations/{close_pool_operation_map["id"]}', json=complete_close_pool_operation_map, status_code=200)
+    requests_mock.get(f'{toloka_url}/pools/21', json=pool_map_with_readonly, status_code=200)
+
+    result = toloka_client.close_pool('21')
+    assert pool_map_with_readonly == client.unstructure(result)
+
+
+@pytest.fixture
+def close_for_update_pool_operation_map():
+    return {
         'id': 'close-pool-for-update-op1id',
         'type': 'POOL.CLOSE',
-        'status': 'SUCCESS',
+        'status': 'RUNNING',
         'submitted': '2016-07-22T13:04:00',
         'started': '2016-07-22T13:04:01',
         'finished': '2016-07-22T13:04:02',
         'parameters': {'pool_id': '21'},
     }
-    requests_mock.post(f'{toloka_url}/pools/21/close-for-update', [{'json': raw_result, 'status_code': 202}])
-    result = toloka_client.wait_operation(toloka_client.close_pool_for_update('21'))
-    assert raw_result == client.unstructure(result)
 
 
-def test_archive_pool(requests_mock, toloka_client, toloka_url):
-    raw_result = {
+@pytest.fixture
+def complete_close_for_update_pool_operation_map(close_for_update_pool_operation_map):
+    return {
+        **close_for_update_pool_operation_map,
+        'status': 'SUCCESS',
+    }
+
+
+def test_close_pool_for_update_async(requests_mock, toloka_client, toloka_url,
+                                     complete_close_for_update_pool_operation_map):
+    requests_mock.post(
+        f'{toloka_url}/pools/21/close-for-update',
+        json=complete_close_for_update_pool_operation_map,
+        status_code=202
+    )
+    result = toloka_client.wait_operation(toloka_client.close_pool_for_update_async('21'))
+    assert complete_close_for_update_pool_operation_map == client.unstructure(result)
+
+
+def test_close_pool_for_update(requests_mock, toloka_client, toloka_url,
+                               close_for_update_pool_operation_map, complete_close_for_update_pool_operation_map,
+                               pool_map_with_readonly):
+    requests_mock.post(
+        f'{toloka_url}/pools/21/close-for-update',
+        json=close_for_update_pool_operation_map,
+        status_code=202
+    )
+    requests_mock.get(
+        f'{toloka_url}/operations/{close_for_update_pool_operation_map["id"]}',
+        json=complete_close_for_update_pool_operation_map,
+        status_code=200
+    )
+    requests_mock.get(f'{toloka_url}/pools/21', json=pool_map_with_readonly, status_code=200)
+
+    result = toloka_client.close_pool_for_update('21')
+    assert pool_map_with_readonly == client.unstructure(result)
+
+
+@pytest.fixture
+def archive_pool_operation_map():
+    return {
         'id': 'archive-pool-op1id',
         'type': 'POOL.ARCHIVE',
-        'status': 'SUCCESS',
+        'status': 'RUNNING',
         'submitted': '2016-07-22T13:04:00',
         'started': '2016-07-22T13:04:01',
         'finished': '2016-07-22T13:04:02',
         'parameters': {'pool_id': '21'},
     }
-    requests_mock.post(f'{toloka_url}/pools/21/archive', [{'json': raw_result, 'status_code': 202}])
-    result = toloka_client.wait_operation(toloka_client.archive_pool('21'))
-    assert raw_result == client.unstructure(result)
 
 
-def test_clone_pool(requests_mock, toloka_client, toloka_url):
-    raw_result = {
+@pytest.fixture
+def complete_archive_pool_operation_map(archive_pool_operation_map):
+    return {
+        **archive_pool_operation_map,
+        'status': 'SUCCESS',
+    }
+
+
+def test_archive_pool_async(requests_mock, toloka_client, toloka_url, complete_archive_pool_operation_map):
+    requests_mock.post(f'{toloka_url}/pools/21/archive', json=complete_archive_pool_operation_map, status_code=202)
+    result = toloka_client.wait_operation(toloka_client.archive_pool_async('21'))
+    assert complete_archive_pool_operation_map == client.unstructure(result)
+
+
+def test_archive_pool(requests_mock, toloka_client, toloka_url,
+                      archive_pool_operation_map, complete_archive_pool_operation_map, pool_map_with_readonly):
+    requests_mock.post(f'{toloka_url}/pools/21/archive', json=archive_pool_operation_map, status_code=202)
+    requests_mock.get(
+        f'{toloka_url}/operations/{archive_pool_operation_map["id"]}',
+        json=complete_archive_pool_operation_map,
+        status_code=200
+    )
+    requests_mock.get(f'{toloka_url}/pools/21', json=pool_map_with_readonly, status_code=200)
+
+    result = toloka_client.archive_pool('21')
+    assert pool_map_with_readonly == client.unstructure(result)
+
+
+@pytest.fixture
+def clone_pool_operation_map():
+    return {
         'id': 'archive-pool-op1id',
         'type': 'POOL.CLONE',
-        'status': 'SUCCESS',
+        'status': 'RUNNING',
         'submitted': '2016-07-22T13:04:00',
         'started': '2016-07-22T13:04:01',
         'finished': '2016-07-22T13:04:02',
         'parameters': {'pool_id': '21'},
     }
-    requests_mock.post(f'{toloka_url}/pools/21/clone', [{'json': raw_result, 'status_code': 202}])
-    result = toloka_client.wait_operation(toloka_client.clone_pool('21'))
-    assert raw_result == client.unstructure(result)
+
+
+@pytest.fixture
+def complete_clone_pool_operation_map(clone_pool_operation_map):
+    return {
+        **clone_pool_operation_map,
+        'status': 'SUCCESS',
+        'details': {'pool_id': '22'},
+    }
+
+
+@pytest.fixture
+def cloned_pool_map(pool_map_with_readonly):
+    return {
+        **pool_map_with_readonly,
+        'id': '22',
+    }
+
+
+def test_clone_pool_async(requests_mock, toloka_client, toloka_url, complete_clone_pool_operation_map):
+    requests_mock.post(f'{toloka_url}/pools/21/clone', json=complete_clone_pool_operation_map, status_code=202)
+    result = toloka_client.wait_operation(toloka_client.clone_pool_async('21'))
+    assert complete_clone_pool_operation_map == client.unstructure(result)
+
+
+def test_clone_pool(requests_mock, toloka_client, toloka_url,
+                    clone_pool_operation_map, complete_clone_pool_operation_map, cloned_pool_map):
+    requests_mock.post(f'{toloka_url}/pools/21/clone', json=clone_pool_operation_map, status_code=202)
+    requests_mock.get(
+        f'{toloka_url}/operations/{clone_pool_operation_map["id"]}',
+        json=complete_clone_pool_operation_map,
+        status_code=200
+    )
+    requests_mock.get(f'{toloka_url}/pools/22', json=cloned_pool_map, status_code=200)
+
+    result = toloka_client.clone_pool('21')
+    assert cloned_pool_map == client.unstructure(result)

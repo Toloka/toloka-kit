@@ -2,7 +2,7 @@ import datetime
 from typing import Any, Dict, List
 from uuid import UUID
 
-from .primitives.base import BaseTolokaObject
+from .primitives.base import attribute, BaseTolokaObject
 from .primitives.infinite_overlap import InfiniteOverlapParametersMixin
 from .primitives.parameter import Parameters
 
@@ -52,10 +52,8 @@ class CreateTaskAsyncParameters(CreateTaskParameters):
 
 class CreateTasksParameters(CreateTaskParameters):
     skip_invalid_items: bool
-
-
-class CreateTasksAsyncParameters(CreateTasksParameters):
     operation_id: UUID
+    async_mode: bool = attribute(default=True)
 
 
 class TaskOverlapPatch(BaseTolokaObject):

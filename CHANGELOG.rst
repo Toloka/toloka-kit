@@ -1,9 +1,29 @@
-1.1.3
+0.1.4
+-------------------
+* Implemented a `clone_project` method
+* Deserialization should not fail on unknown enum values or unexpected value types anymore
+* Some functions that used to return an Operation object now wait for operations to end and return a more usefull output. For example, `clone_pool` now returns an instance of Pool representing a newly created pool. If you want the old behaviour please use `*_async` versions of the methods. The list of affected methods:
+  * archive_pool
+  * archive_project
+  * archive_training
+  * clone_pool
+  * clone_training
+  * close_pool
+  * close_pool_for_update
+  * close_training
+  * open_pool
+  * open_training
+* `create_tasks` and `create_task_suites` methods now use their async versions under the hood. This significantly reduces cases when TimeoutError is raised but the data is actually uploaded
+* Added minimal attrs version
+* Added WEARABLE_COMPUTER to DeviceCategory enum
+* Fixed current_location naming in CoordinatesSpec
+
+0.1.3
 -------------------
 * Added support for trainings
 * Introduced `get_assignments_df` method
 
-1.1.2
+0.1.2
 -------------------
 * Introduced template builder support
 * Introduced `get_analytics` method

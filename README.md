@@ -19,14 +19,39 @@ Main advantages of Toloka:
   - **Free, powerful API** - Build scalable and fully automated human-in-the-loop machine learning pipelines with a powerful open API.
 
 
-Get Started and Documentation
+Requirements
 --------------
-Installing toloka-kit is as easy as `pip install toloka-kit`
+- Python 3.6+
+- Register in [Toloka.ai](https://toloka.ai/) as requester. Registration process described [here.](https://yandex.ru/support/toloka-requester/concepts/access.html?lang=en)
+- [Topping up your account.](https://yandex.ru/support/toloka-requester/concepts/refill.html?lang=en)
+- Getting an OAuth. Learn more in [help](https://doc.yandex-team.ru/toloka/doc/concepts/access.html?lang=en) and in the image below.
 
-Usage examples are available [here](https://github.com/Toloka/toloka-kit/tree/main/examples)
+![How to get OAuth token](./examples/image_segmentation/img/OAuth.png "How to get OAuth token")
 
-All Toloka documentation is available [here](https://yandex.com/dev/toloka/doc/concepts/about.html?lang=en).
+Get Started
+--------------
+Installing toloka-kit is as easy as:
+```
+$ pip install toloka-kit
+```
+Note: this project is still under heavy development and interfaces may change slightly. For production environments please specify exact package version such as `toloka-kit==0.1.3`
 
+**Try your first program and checks the validity of the OAuth token:**
+```python
+import toloka.client as toloka
+
+token = input("Enter your token:")
+toloka_client = toloka.TolokaClient(token, 'PRODUCTION')  # or switch to SANDBOX
+print(toloka_client.get_requester())
+```
+
+Useful Links
+--------------
+- [Toloka homepage.](https://toloka.ai/)
+- [Toloka requester's guide.](https://yandex.ru/support/toloka-requester/index.html?lang=en) 
+- We recommend that you first get acquainted with Toloka through the web interface and implement [one of the tutorials.](https://yandex.ru/support/toloka-requester/concepts/usecases.html)
+- [Toloka API documentation.](https://yandex.com/dev/toloka/doc/concepts/about.html?lang=en)
+- [Toloka-kit usage examples.](https://github.com/Toloka/toloka-kit/tree/main/examples)
 
 Questions and bug reports
 --------------

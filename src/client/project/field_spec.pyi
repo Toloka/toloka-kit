@@ -243,13 +243,13 @@ class CoordinatesSpec(FieldSpec):
         self,*,
         required: Optional[bool] = ...,
         hidden: Optional[bool] = ...,
-        currentLocation: Optional[bool] = ...
+        current_location: Optional[bool] = ...
     ) -> None: ...
 
     _unexpected: Optional[Dict[str, Any]]
     required: Optional[bool]
     hidden: Optional[bool]
-    currentLocation: Optional[bool]
+    current_location: Optional[bool]
 
 class JsonSpec(FieldSpec):
 
@@ -511,7 +511,7 @@ class ArrayCoordinatesSpec(CoordinatesSpec):
         self,*,
         required: Optional[bool] = ...,
         hidden: Optional[bool] = ...,
-        currentLocation: Optional[bool] = ...,
+        current_location: Optional[bool] = ...,
         min_size: Optional[int] = ...,
         max_size: Optional[int] = ...
     ) -> None: ...
@@ -519,6 +519,6 @@ class ArrayCoordinatesSpec(CoordinatesSpec):
     _unexpected: Optional[Dict[str, Any]]
     required: Optional[bool]
     hidden: Optional[bool]
-    currentLocation: Optional[bool]
+    current_location: Optional[bool]
     min_size: Optional[int]
     max_size: Optional[int]

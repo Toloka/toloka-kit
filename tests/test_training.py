@@ -141,8 +141,9 @@ def test_update_training(requests_mock, toloka_client, toloka_url, training_map_
     assert updated_training == client.unstructure(result)
 
 
-def test_open_training(requests_mock, toloka_client, toloka_url):
-    operation_map = {
+@pytest.fixture
+def open_operation_map():
+    return {
         'id': 'open-training-op1id',
         'type': 'TRAINING.OPEN',
         'status': 'RUNNING',
@@ -151,68 +152,175 @@ def test_open_training(requests_mock, toloka_client, toloka_url):
         'parameters': {'training_id': '21'},
     }
 
-    complete_operation_map = {
-        **operation_map,
+
+@pytest.fixture
+def complete_open_operation_map(open_operation_map):
+    return {
+        **open_operation_map,
         'status': 'SUCCESS',
         'finished': '2016-03-07T15:48:03',
     }
 
-    requests_mock.post(
-        f'{toloka_url}/trainings/21/open',
-        [{'json': operation_map, 'status_code': 202}]
-    )
+
+def test_open_training_async(requests_mock, toloka_client, toloka_url, open_operation_map, complete_open_operation_map):
+    requests_mock.post(f'{toloka_url}/trainings/21/open', json=open_operation_map, status_code=202)
     requests_mock.get(
-        f'{toloka_url}/operations/open-training-op1id',
-        [{'json': complete_operation_map, 'status_code': 200}]
+        f'{toloka_url}/operations/{open_operation_map["id"]}',
+        json=complete_open_operation_map,
+        status_code=200
     )
 
-    operation = toloka_client.open_training('21')
-    assert operation_map == client.unstructure(operation)
+    operation = toloka_client.open_training_async('21')
+    assert open_operation_map == client.unstructure(operation)
 
     complete_operation = toloka_client.wait_operation(operation)
-    assert complete_operation_map == client.unstructure(complete_operation)
+    assert complete_open_operation_map == client.unstructure(complete_operation)
 
 
-def test_close_training(requests_mock, toloka_client, toloka_url):
-    raw_result = {
+def test_open_training(requests_mock, toloka_client, toloka_url,
+                       open_operation_map, complete_open_operation_map, training_map_with_readonly):
+    requests_mock.post(f'{toloka_url}/trainings/21/open', json=open_operation_map, status_code=202)
+    requests_mock.get(
+        f'{toloka_url}/operations/{open_operation_map["id"]}',
+        json=complete_open_operation_map,
+        status_code=200
+    )
+    requests_mock.get(f'{toloka_url}/trainings/21', json=training_map_with_readonly, status_code=200)
+
+    result = toloka_client.open_training('21')
+    assert training_map_with_readonly == client.unstructure(result)
+
+
+@pytest.fixture
+def close_operation_map():
+    return {
         'id': 'close-training-op1id',
         'type': 'TRAINING.CLOSE',
-        'status': 'SUCCESS',
+        'status': 'RUNNING',
         'submitted': '2016-07-22T13:04:00',
         'started': '2016-07-22T13:04:01',
         'finished': '2016-07-22T13:04:02',
         'parameters': {'training_id': '21'},
     }
-    requests_mock.post(f'{toloka_url}/trainings/21/close', [{'json': raw_result, 'status_code': 202}])
-    result = toloka_client.wait_operation(toloka_client.close_training('21'))
-    assert raw_result == client.unstructure(result)
 
 
-def test_archive_training(requests_mock, toloka_client, toloka_url):
-    raw_result = {
+@pytest.fixture
+def complete_close_operation_map(close_operation_map):
+    return {
+        **close_operation_map,
+        'status': 'SUCCESS',
+        'finished': '2016-03-07T15:48:03',
+    }
+
+
+def test_close_training_async(requests_mock, toloka_client, toloka_url, complete_close_operation_map):
+    requests_mock.post(f'{toloka_url}/trainings/21/close', json=complete_close_operation_map, status_code=202)
+    result = toloka_client.wait_operation(toloka_client.close_training_async('21'))
+    assert complete_close_operation_map == client.unstructure(result)
+
+
+def test_close_training(requests_mock, toloka_client, toloka_url,
+                        close_operation_map, complete_close_operation_map, training_map_with_readonly):
+    requests_mock.post(f'{toloka_url}/trainings/21/close', json=close_operation_map, status_code=202)
+    requests_mock.get(
+        f'{toloka_url}/operations/{close_operation_map["id"]}',
+        json=complete_close_operation_map,
+        status_code=200
+    )
+    requests_mock.get(f'{toloka_url}/trainings/21', json=training_map_with_readonly, status_code=200)
+
+    result = toloka_client.close_training('21')
+    assert training_map_with_readonly == client.unstructure(result)
+
+
+@pytest.fixture
+def archive_operation_map():
+    return {
         'id': 'archive-training-op1id',
         'type': 'TRAINING.ARCHIVE',
-        'status': 'SUCCESS',
+        'status': 'RUNNING',
         'submitted': '2016-07-22T13:04:00',
         'started': '2016-07-22T13:04:01',
         'finished': '2016-07-22T13:04:02',
         'parameters': {'training_id': '21'},
     }
-    requests_mock.post(f'{toloka_url}/trainings/21/archive', [{'json': raw_result, 'status_code': 202}])
-    result = toloka_client.wait_operation(toloka_client.archive_training('21'))
-    assert raw_result == client.unstructure(result)
 
 
-def test_clone_training(requests_mock, toloka_client, toloka_url):
-    raw_result = {
+@pytest.fixture
+def complete_archive_operation_map(archive_operation_map):
+    return {
+        **archive_operation_map,
+        'status': 'SUCCESS',
+        'finished': '2016-03-07T15:48:03',
+    }
+
+
+def test_archive_training_async(requests_mock, toloka_client, toloka_url, complete_archive_operation_map):
+    requests_mock.post(f'{toloka_url}/trainings/21/archive', json=complete_archive_operation_map, status_code=202)
+    result = toloka_client.wait_operation(toloka_client.archive_training_async('21'))
+    assert complete_archive_operation_map == client.unstructure(result)
+
+
+def test_archive_training(requests_mock, toloka_client, toloka_url,
+                          archive_operation_map, complete_archive_operation_map, training_map_with_readonly):
+    requests_mock.post(f'{toloka_url}/trainings/21/archive', json=archive_operation_map, status_code=202)
+    requests_mock.get(
+        f'{toloka_url}/operations/{archive_operation_map["id"]}',
+        json=complete_archive_operation_map,
+        status_code=200
+    )
+    requests_mock.get(f'{toloka_url}/trainings/21', json=training_map_with_readonly, status_code=200)
+
+    result = toloka_client.archive_training('21')
+    assert training_map_with_readonly == client.unstructure(result)
+
+
+@pytest.fixture
+def clone_operation_map():
+    return {
         'id': 'archive-training-op1id',
         'type': 'TRAINING.CLONE',
-        'status': 'SUCCESS',
+        'status': 'RUNNING',
         'submitted': '2016-07-22T13:04:00',
         'started': '2016-07-22T13:04:01',
         'finished': '2016-07-22T13:04:02',
         'parameters': {'training_id': '21'},
     }
-    requests_mock.post(f'{toloka_url}/trainings/21/clone', [{'json': raw_result, 'status_code': 202}])
-    result = toloka_client.wait_operation(toloka_client.clone_training('21'))
-    assert raw_result == client.unstructure(result)
+
+
+@pytest.fixture
+def complete_clone_operation_map(clone_operation_map):
+    return {
+        **clone_operation_map,
+        'status': 'SUCCESS',
+        'finished': '2016-03-07T15:48:03',
+        'details': {'training_id': '22'},
+    }
+
+
+@pytest.fixture
+def cloned_training_map_with_readonly(training_map_with_readonly):
+    return {
+        **training_map_with_readonly,
+        'id': '22'
+    }
+
+
+def test_clone_training_async(requests_mock, toloka_client, toloka_url, complete_clone_operation_map):
+    requests_mock.post(f'{toloka_url}/trainings/21/clone', json=complete_clone_operation_map, status_code=202)
+    result = toloka_client.wait_operation(toloka_client.clone_training_async('21'))
+    assert complete_clone_operation_map == client.unstructure(result)
+
+
+def test_clone_training(requests_mock, toloka_client, toloka_url,
+                        clone_operation_map, complete_clone_operation_map, cloned_training_map_with_readonly):
+    requests_mock.post(f'{toloka_url}/trainings/21/clone', json=clone_operation_map, status_code=202)
+    requests_mock.get(
+        f'{toloka_url}/operations/{clone_operation_map["id"]}',
+        json=complete_clone_operation_map,
+        status_code=200
+    )
+    requests_mock.get(f'{toloka_url}/trainings/22', json=cloned_training_map_with_readonly, status_code=200)
+
+    result = toloka_client.clone_training('21')
+    assert cloned_training_map_with_readonly == client.unstructure(result)

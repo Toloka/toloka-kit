@@ -4,7 +4,7 @@ from uuid import UUID
 
 import attr
 
-from .primitives.base import BaseTolokaObject
+from .primitives.base import attribute, BaseTolokaObject
 from .primitives.infinite_overlap import InfiniteOverlapParametersMixin
 from .primitives.parameter import Parameters
 from .task import BaseTask
@@ -44,6 +44,7 @@ class TaskSuiteCreateRequestParameters(Parameters):
     skip_invalid_items: bool
     allow_defaults: bool
     open_pool: bool
+    async_mode: bool = attribute(default=True)
 
 
 class TaskSuiteOverlapPatch(BaseTolokaObject):

@@ -17,8 +17,8 @@ from ...util import traverse_dicts_recursively
 
 class TemplateBuilder(BaseTolokaObject):
 
-    view: BaseComponent
-    plugins: List[BaseComponent]
+    view: BaseComponent  # noqa: F811
+    plugins: List[BaseComponent]  # noqa: F811
     vars: Dict[str, base_component_or(Any)]
 
 

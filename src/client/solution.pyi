@@ -2,6 +2,11 @@ from typing import Any, Dict
 
 
 class Solution(object):
+    """Performer response for one task
+
+    Attributes:
+        output_values: Dictionary "field name" - "response value", by the number of fields that should be in the response.
+    """
 
     def __repr__(self): ...
 

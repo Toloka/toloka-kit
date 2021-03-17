@@ -17,37 +17,77 @@ from .user_skill import UserSkill
 
 
 class AggregatedSolutionSearchResult(BaseTolokaObject):
+    """The list of found AggregatedSolutions and whether there is something else on the original request
+
+    Attributes:
+        items: List of found AggregatedSolution
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
 
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[AggregatedSolution]]
     has_more: Optional[bool]
 
 class AssignmentSearchResult(BaseTolokaObject):
+    """The list of found assignments and whether there is something else on the original request
+
+    It's better to use TolokaClient.get_assignments(), which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found assignments
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
 
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[Assignment]]
     has_more: Optional[bool]
 
 class AttachmentSearchResult(BaseTolokaObject):
+    """The list of found attachments and whether there is something else on the original request
+
+    It's better to use TolokaClient.get_attachments(), which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found Attachment
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
 
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[Attachment]]
     has_more: Optional[bool]
 
 class MessageThreadSearchResult(BaseTolokaObject):
+    """The list of found message chains and whether there is something else on the original request
+
+    It's better to use TolokaClient.get_message_threads(), which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found MessageThread
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
 
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[MessageThread]]
     has_more: Optional[bool]
 
 class ProjectSearchResult(BaseTolokaObject):
-    """ProjectSearchResult
+    """The list of found projects and whether there is something else on the original request
+
+    It's better to use TolokaClient.get_projects(), which already implements the correct handling of the search result.
 
     Attributes:
         items: List of found projects
         has_more: Whether the list is complete:
-            * true — Not all elements are included in the output due to restrictions in the limit parameter.
-            * false — The output lists all the items.
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
     """
 
     _unexpected: Optional[Dict[str, Any]]
@@ -55,48 +95,128 @@ class ProjectSearchResult(BaseTolokaObject):
     has_more: Optional[bool]
 
 class PoolSearchResult(BaseTolokaObject):
+    """The list of found pools and whether there is something else on the original request
+
+    It's better to use TolokaClient.get_pools(), which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found pools
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
 
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[Pool]]
     has_more: Optional[bool]
 
 class SkillSearchResult(BaseTolokaObject):
+    """The list of found skills and whether there is something else on the original request
+
+    It's better to use TolokaClient.get_skill(), which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found skills
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
 
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[Skill]]
     has_more: Optional[bool]
 
 class TaskSearchResult(BaseTolokaObject):
+    """The list of found tasks and whether there is something else on the original request
+
+    It's better to use TolokaClient.get_tasks(), which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found tasks
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
 
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[Task]]
     has_more: Optional[bool]
 
 class TaskSuiteSearchResult(BaseTolokaObject):
+    """The list of found sets of tasks and whether there is something else on the original request
+
+    It's better to use TolokaClient.get_task_suites(), which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found sets of tasks
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
 
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[TaskSuite]]
     has_more: Optional[bool]
 
 class TrainingSearchResult(BaseTolokaObject):
+    """The list of found training pools and whether there is something else on the original request
+
+    It's better to use TolokaClient.get_trainings(), which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found training pools
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
 
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[Training]]
     has_more: Optional[bool]
 
 class UserBonusSearchResult(BaseTolokaObject):
+    """The list of found user bonuses and whether there is something else on the original request
+
+    It's better to use TolokaClient.get_user_bonuses(), which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found user bonuses
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
 
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[UserBonus]]
     has_more: Optional[bool]
 
 class UserRestrictionSearchResult(BaseTolokaObject):
+    """The list of found user restrictions and whether there is something else on the original request
+
+    It's better to use TolokaClient.get_user_restrictions(), which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found user restrictions
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
 
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[UserRestriction]]
     has_more: Optional[bool]
 
 class UserSkillSearchResult(BaseTolokaObject):
+    """The list of found user skills and whether there is something else on the original request
+
+    It's better to use TolokaClient.get_user_skills(), which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found user skills
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
 
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[UserSkill]]

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal
 from enum import Enum
 from pandas.core.frame import DataFrame
@@ -33,6 +33,7 @@ from .batch_create_results import (
     TaskSuiteBatchCreateResult,
     UserBonusBatchCreateResult
 )
+from .clone_results import CloneResults
 from .filter import FilterCondition
 from .message_thread import (
     Folder,
@@ -108,7 +109,6 @@ from .search_results import (
 from .skill import Skill
 from .task import (
     CreateTaskParameters,
-    CreateTasksAsyncParameters,
     CreateTasksParameters,
     Task,
     TaskOverlapPatch,
@@ -544,12 +544,14 @@ class TolokaClient(object):
         """
         ...
 
-    def archive_project(self, project_id: str) -> ProjectArchiveOperation:
+    def archive_project(self, project_id: str) -> Project:
         """Archive a project
 
         If a project isn't being used, you can send it to the archive.
         """
         ...
+
+    def archive_project_async(self, project_id: str) -> ProjectArchiveOperation: ...
 
     def create_project(self, project: Project) -> Project:
         """Create a project
@@ -631,34 +633,75 @@ class TolokaClient(object):
         """
         ...
 
-    def archive_pool(self, pool_id: str) -> PoolArchiveOperation:
+    def clone_project(
+        self,
+        project_id: str,
+        reuse_controllers: bool = ...
+    ) -> CloneResults:
+        """Synchronously clones the project, all pools and trainings
+
+        Emulates cloning behaviour via Toloka interface:
+        - the same skills will be used
+        - the same quality control collectors will be used (could be changed by reuse_controllers=False)
+        - the expiration date will not be changed in the new project
+        - etc.        
+
+        Doesn't have transaction - can clone project, and then raise on cloning pool.
+        Doesn't copy tasks/golden tasks/training tasks.
+
+        Args:
+            project_id: ID of the project to be cloned.
+            reuse_quality_controllers: Use same quality controllers in cloned and created projects. Defaults to True.
+                This means that all quality control rules will be applied to both projects.
+                For example, if you have rule "fast_submitted_count", fast responses counts across both projects.
+
+        Returns:
+            Tuple[Project, List[Pool], List[Training]]: All created objects project, pools and trainings.
+
+        Example:
+
+            >>> project, pools, trainings = toloka_client.clone_project('123')
+            >>> # add tasks in pools and trainings
+            ...
+        """
+        ...
+
+    def archive_pool(self, pool_id: str) -> Pool:
         """Moves a pool to the archive.
 
-        If a pool isn't in use, it can be moved to the archive. The pool must have the “closed” status.
+        If a pool isn't in use, it can be moved to the archive. The pool must have the "closed" status.
         Using this method on TRAINING pools is deprecated.
         """
         ...
 
-    def close_pool(self, pool_id: str) -> PoolCloseOperation:
+    def archive_pool_async(self, pool_id: str) -> PoolArchiveOperation: ...
+
+    def close_pool(self, pool_id: str) -> Pool:
         """Closes a pool.
 
         Using this method on TRAINING pools is deprecated.
         """
         ...
 
-    def close_pool_for_update(self, pool_id: str) -> PoolCloseOperation:
+    def close_pool_async(self, pool_id: str) -> PoolCloseOperation: ...
+
+    def close_pool_for_update(self, pool_id: str) -> Pool:
         """Using this method on TRAINING pools is deprecated.
 
         """
         ...
 
-    def clone_pool(self, pool_id: str) -> PoolCloneOperation:
+    def close_pool_for_update_async(self, pool_id: str) -> PoolCloseOperation: ...
+
+    def clone_pool(self, pool_id: str) -> Pool:
         """Clones a pool.
 
         To create a duplicate pool, clone it. An empty pool will be created with the same parameters.
         Using this method on TRAINING pools is deprecated.
         """
         ...
+
+    def clone_pool_async(self, pool_id: str) -> PoolCloneOperation: ...
 
     def create_pool(self, pool: Pool) -> Pool:
         """Creates a REGULAR pool
@@ -745,13 +788,15 @@ class TolokaClient(object):
         """
         ...
 
-    def open_pool(self, pool_id: str) -> PoolOpenOperation:
+    def open_pool(self, pool_id: str) -> Pool:
         """Opens a pool.
 
         To make tasks available to users, you need to open the pool.
         Using this method on TRAINING pools is deprecated.
         """
         ...
+
+    def open_pool_async(self, pool_id: str) -> PoolOpenOperation: ...
 
     @overload
     def patch_pool(self, pool_id: str, priority: Optional[int] = ...) -> Pool:
@@ -774,11 +819,17 @@ class TolokaClient(object):
         """
         ...
 
-    def archive_training(self, training_id: str) -> TrainingArchiveOperation: ...
+    def archive_training(self, training_id: str) -> Training: ...
 
-    def close_training(self, training_id: str) -> TrainingCloseOperation: ...
+    def archive_training_async(self, training_id: str) -> TrainingArchiveOperation: ...
 
-    def clone_training(self, training_id: str) -> TrainingCloneOperation: ...
+    def close_training(self, training_id: str) -> Training: ...
+
+    def close_training_async(self, training_id: str) -> TrainingCloseOperation: ...
+
+    def clone_training(self, training_id: str) -> Training: ...
+
+    def clone_training_async(self, training_id: str) -> TrainingCloneOperation: ...
 
     def create_training(self, training: Training) -> Training: ...
 
@@ -838,7 +889,9 @@ class TolokaClient(object):
         request: TrainingSearchRequest
     ) -> Generator[Training, None, None]: ...
 
-    def open_training(self, training_id: str) -> TrainingOpenOperation: ...
+    def open_training(self, training_id: str) -> Training: ...
+
+    def open_training_async(self, training_id: str) -> TrainingOpenOperation: ...
 
     def update_training(self, training_id: str, training: Training) -> Training: ...
 
@@ -974,12 +1027,16 @@ class TolokaClient(object):
         tasks: List[Task],*,
         allow_defaults: Optional[bool] = ...,
         open_pool: Optional[bool] = ...,
-        skip_invalid_items: Optional[bool] = ...
+        skip_invalid_items: Optional[bool] = ...,
+        operation_id: Optional[UUID] = ...,
+        async_mode: Optional[bool] = ...
     ) -> TaskBatchCreateResult:
         """Creates multiple tasks
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
-        The response contains information about the created tasks. Maximum of 5000 tasks per request.
+        The response contains information about the created tasks.
+        Maximum of 5000 task per request if async_mode is False.
+        Recomended maximum of 10,000 task per request if async_mode is True.
         """
         ...
 
@@ -992,7 +1049,9 @@ class TolokaClient(object):
         """Creates multiple tasks
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
-        The response contains information about the created tasks. Maximum of 5000 tasks per request.
+        The response contains information about the created tasks.
+        Maximum of 5000 task per request if async_mode is False.
+        Recomended maximum of 10,000 task per request if async_mode is True.
         """
         ...
 
@@ -1003,7 +1062,8 @@ class TolokaClient(object):
         allow_defaults: Optional[bool] = ...,
         open_pool: Optional[bool] = ...,
         skip_invalid_items: Optional[bool] = ...,
-        operation_id: Optional[UUID] = ...
+        operation_id: Optional[UUID] = ...,
+        async_mode: Optional[bool] = ...
     ) -> TasksCreateOperation:
         """Creates multiple tasks
 
@@ -1011,6 +1071,8 @@ class TolokaClient(object):
 
         Creates an asynchronous operation that runs in the background. The response contains information about the
         operation (start and completion time, status, number of task suites).
+        Recomended maximum of 10,000 task per request if async_mode is True.
+        It's recomended to use 'create_tasks' method with async_mode is True.
         """
         ...
 
@@ -1018,7 +1080,7 @@ class TolokaClient(object):
     def create_tasks_async(
         self,
         tasks: List[Task],
-        parameters: Optional[CreateTasksAsyncParameters] = ...
+        parameters: Optional[CreateTasksParameters] = ...
     ) -> TasksCreateOperation:
         """Creates multiple tasks
 
@@ -1026,6 +1088,8 @@ class TolokaClient(object):
 
         Creates an asynchronous operation that runs in the background. The response contains information about the
         operation (start and completion time, status, number of task suites).
+        Recomended maximum of 10,000 task per request if async_mode is True.
+        It's recomended to use 'create_tasks' method with async_mode is True.
         """
         ...
 
@@ -1157,7 +1221,8 @@ class TolokaClient(object):
         operation_id: Optional[UUID] = ...,
         skip_invalid_items: Optional[bool] = ...,
         allow_defaults: Optional[bool] = ...,
-        open_pool: Optional[bool] = ...
+        open_pool: Optional[bool] = ...,
+        async_mode: Optional[bool] = ...
     ) -> TaskSuite:
         """Creates a task suite
 
@@ -1184,12 +1249,14 @@ class TolokaClient(object):
         operation_id: Optional[UUID] = ...,
         skip_invalid_items: Optional[bool] = ...,
         allow_defaults: Optional[bool] = ...,
-        open_pool: Optional[bool] = ...
+        open_pool: Optional[bool] = ...,
+        async_mode: Optional[bool] = ...
     ) -> TaskSuiteBatchCreateResult:
         """Creates multiple task suites
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        Maximum of 5000 task suites per request.
+        Maximum of 5000 task suites per request if async_mode is False.
+        Recomended maximum of 10,000 task suites per request if async_mode is True.
         """
         ...
 
@@ -1202,7 +1269,8 @@ class TolokaClient(object):
         """Creates multiple task suites
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        Maximum of 5000 task suites per request.
+        Maximum of 5000 task suites per request if async_mode is False.
+        Recomended maximum of 10,000 task suites per request if async_mode is True.
         """
         ...
 
@@ -1213,12 +1281,13 @@ class TolokaClient(object):
         operation_id: Optional[UUID] = ...,
         skip_invalid_items: Optional[bool] = ...,
         allow_defaults: Optional[bool] = ...,
-        open_pool: Optional[bool] = ...
+        open_pool: Optional[bool] = ...,
+        async_mode: Optional[bool] = ...
     ) -> TaskSuiteCreateBatchOperation:
         """Creates multiple task suites
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        Maximum of 5000 task suites per request.
+        Recomended maximum of 10,000 task suites per request if async_mode is True.
         """
         ...
 
@@ -1231,7 +1300,7 @@ class TolokaClient(object):
         """Creates multiple task suites
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        Maximum of 5000 task suites per request.
+        Recomended maximum of 10,000 task suites per request if async_mode is True.
         """
         ...
 
@@ -1368,7 +1437,11 @@ class TolokaClient(object):
         """
         ...
 
-    def wait_operation(self, op: Operation) -> Operation:
+    def wait_operation(
+        self,
+        op: Operation,
+        timeout: timedelta = ...
+    ) -> Operation:
         """Waits for the operation to complete
 
         """

@@ -60,7 +60,7 @@ def test_create_task(requests_mock, toloka_client, toloka_url, task_map, task_ma
     assert task_map_with_readonly == client.unstructure(result)
 
 
-def test_create_tasks(requests_mock, toloka_client, toloka_url, task_map, task_map_with_readonly):
+def test_create_tasks_with_error(requests_mock, toloka_client, toloka_url, task_map, task_map_with_readonly):
     tasks_map = [task_map, {'pool_id': '21', 'input_values': {'image': None}}]
     raw_result = {
         'items': {'0': task_map_with_readonly},
@@ -70,7 +70,7 @@ def test_create_tasks(requests_mock, toloka_client, toloka_url, task_map, task_m
     }
 
     def tasks(request, context):
-        assert {'allow_defaults': ['true']} == parse_qs(urlparse(request.url).query)
+        assert {'allow_defaults': ['true'], 'async_mode': ['false']} == parse_qs(urlparse(request.url).query)
         assert tasks_map == request.json()
         return raw_result
 
@@ -81,16 +81,227 @@ def test_create_tasks(requests_mock, toloka_client, toloka_url, task_map, task_m
     # Request object syntax
     result = toloka_client.create_tasks(
         [client.structure(task, client.task.Task) for task in tasks_map],
-        client.task.CreateTasksParameters(allow_defaults=True)
+        client.task.CreateTasksParameters(allow_defaults=True, async_mode=False)
     )
     assert raw_result == client.unstructure(result)
 
     # Expanded syntax
     result = toloka_client.create_tasks(
         [client.structure(task, client.task.Task) for task in tasks_map],
-        allow_defaults=True
+        allow_defaults=True,
+        async_mode=False,
     )
     assert raw_result == client.unstructure(result)
+
+
+@pytest.fixture
+def tasks_map():
+    return [
+        {'pool_id': '21', 'input_values': {'image': 'http://images.com/1.png'}},
+        {'pool_id': '22', 'input_values': {'image': 'http://images.com/2.png'}},
+        {'pool_id': '22', 'input_values': {'imagis': 'http://images.com/3.png'}}
+    ]
+
+
+@pytest.fixture
+def operation_running_map():
+    return {
+        'id': '281073ea-ab34-416e-a028-47421ff1b166',
+        'type': 'TASK.BATCH_CREATE',
+        'status': 'RUNNING',
+        'submitted': '2016-10-10T20:33:01',
+        'started': '2016-10-10T23:33:00',
+        'parameters': {'skip_invalid_items': True, 'allow_defaults': True, 'open_pool': True},
+        'details': {'items_count': 2},
+    }
+
+
+@pytest.fixture
+def operation_success_map(operation_running_map):
+    return dict(operation_running_map, status='SUCCESS')
+
+
+@pytest.fixture
+def create_tasks_log():
+    return [
+        {
+            'input': {
+                'input_values': {
+                    'image': 'http://images.com/1.png'
+                },
+                'pool_id': '21',
+                '__client_uuid': 'e3e70682c2094cac629f6fbed82c07cd',
+            },
+            'output': {
+                'task_id': '00014495f0--60213f7c25a8b84e2ffb7a2c'
+            },
+            'success': True,
+            'type': 'TASK_CREATE'
+        },
+        {
+            'input': {
+                'input_values': {
+                    'image': 'http://images.com/2.png'
+                },
+                'pool_id': '22',
+                '__client_uuid': 'f728b4fa42485e3a0a5d2f346baa9455',
+            },
+            'output': {
+                'task_id': '00014495f0--60213f7c25a8b84e2ffb7a3b'
+            },
+            'success': True,
+            'type': 'TASK_CREATE'
+        },
+        {
+            'input': {
+                'input_values': {
+                    'image': 'http://images.com/2.png'
+                },
+                'pool_id': '22',
+                '__client_uuid': 'eb1167b367a9c3787c65c1e582e2e662',
+            },
+            'output': {
+                'input_values.image': {
+                    'code': 'VALUE_REQUIRED',
+                    'message': 'Value must be present and not equal to null'
+                },
+                'input_values.imagis': {
+                    'code': 'VALUE_NOT_ALLOWED',
+                    'message': 'Unknown field name'
+                }
+            },
+            'success': False,
+            'type': 'TASK_VALIDATE'
+        },
+    ]
+
+
+@pytest.fixture
+def created_tasks_21_map():
+    return [
+        {
+            'id': '00014495f0--60213f7c25a8b84e2ffb7a2c',
+            'pool_id': '21',
+            'input_values': {'image': 'http://images.com/1.png'},
+            'overlap': 1,
+            'infinite_overlap': False,
+            'remaining_overlap': 1,
+        }
+    ]
+
+
+@pytest.fixture
+def created_tasks_22_map():
+    return [
+        {
+            'id': '00014495f0--60213f7c25a8b84e2ffb7a3b',
+            'pool_id': '22',
+            'input_values': {'image': 'http://images.com/2.png'},
+            'overlap': 1,
+            'infinite_overlap': False,
+            'remaining_overlap': 1,
+        }
+    ]
+
+
+@pytest.fixture
+def task_create_result_map():
+    return {
+        'items': {
+            '0': {
+                'input_values': {'image': 'http://images.com/1.png'},
+                'id': '00014495f0--60213f7c25a8b84e2ffb7a2c',
+                'infinite_overlap': False,
+                'overlap': 1,
+                'pool_id': '21',
+                'remaining_overlap': 1
+            },
+            '1': {
+                'input_values': {'image': 'http://images.com/2.png'},
+                'id': '00014495f0--60213f7c25a8b84e2ffb7a3b',
+                'infinite_overlap': False,
+                'overlap': 1,
+                'pool_id': '22',
+                'remaining_overlap': 1
+            },
+        },
+        'validation_errors':
+        {
+            '2': {
+                'input_values.image': {
+                    'code': 'VALUE_REQUIRED',
+                    'message': 'Value must be present and not equal to null'
+                },
+                'input_values.imagis': {
+                    'code': 'VALUE_NOT_ALLOWED',
+                    'message': 'Unknown field name'
+                },
+            },
+        }
+    }
+
+
+def test_create_tasks_sync_through_async(
+        requests_mock, toloka_client, toloka_url, no_uuid_random,
+        tasks_map, operation_running_map, operation_success_map,
+        create_tasks_log, created_tasks_21_map, created_tasks_22_map,
+        task_create_result_map
+):
+
+    def check_tasks(request, context):
+        assert {
+            'operation_id': ['281073ea-ab34-416e-a028-47421ff1b166'],
+            'skip_invalid_items': ['true'],
+            'allow_defaults': ['true'],
+            'open_pool': ['true'],
+            'async_mode': ['true'],
+        } == parse_qs(urlparse(request.url).query)
+        imcoming_tasks = []
+        for t in request.json():
+            t.pop('__client_uuid', '')
+            imcoming_tasks.append(t)
+        assert tasks_map == imcoming_tasks
+        return operation_running_map
+
+    def return_tasks_by_pool(request, context):
+        params = parse_qs(urlparse(request.url).query)
+        res_map = created_tasks_21_map if params['pool_id'][0] == '21' else created_tasks_22_map
+        return {'items': res_map, 'has_more': False}
+
+    # mocks
+    # create_task -> operation
+    requests_mock.post(f'{toloka_url}/tasks', json=check_tasks, status_code=201)
+    # wait_operation -> operation Success
+    requests_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}', json=operation_success_map, status_code=201)
+    # get_log -> log_res
+    requests_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}/log', json=create_tasks_log, status_code=201)
+    # get tasks from pools (2 calls - for each pool)
+    requests_mock.get(f'{toloka_url}/tasks', json=return_tasks_by_pool, status_code=201)
+
+    # Expanded syntax
+    result = toloka_client.create_tasks(
+        [client.structure(task, client.task.Task) for task in tasks_map],
+        operation_id='281073ea-ab34-416e-a028-47421ff1b166',
+        skip_invalid_items=True,
+        allow_defaults=True,
+        open_pool=True,
+    )
+    assert task_create_result_map == client.unstructure(result)
+
+
+def test_create_tasks_sync(requests_mock, toloka_client, toloka_url, tasks_map, task_create_result_map):
+    requests_mock.post(f'{toloka_url}/tasks', json=task_create_result_map, status_code=201)
+
+    # Expanded syntax
+    result = toloka_client.create_tasks(
+        [client.structure(task, client.task.Task) for task in tasks_map],
+        operation_id='281073ea-ab34-416e-a028-47421ff1b166',
+        skip_invalid_items=True,
+        allow_defaults=True,
+        open_pool=True,
+        async_mode=False,
+    )
+    assert task_create_result_map == client.unstructure(result)
 
 
 def test_create_tasks_async(requests_mock, toloka_client, toloka_url):
@@ -125,7 +336,7 @@ def test_create_tasks_async(requests_mock, toloka_client, toloka_url):
     # Request object syntax
     result = toloka_client.create_tasks_async(
         [client.structure(task, client.task.Task) for task in tasks_map],
-        client.task.CreateTasksAsyncParameters(
+        client.task.CreateTasksParameters(
             operation_id='281073ea-ab34-416e-a028-47421ff1b166',
             skip_invalid_items=True,
             allow_defaults=True,
