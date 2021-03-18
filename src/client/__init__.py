@@ -134,8 +134,8 @@ class TolokaClient:
         # Emulates synchronous operation, through asynchronous calls and reading operation logs.
         client_uuid_to_index = {}
         for i, obj in enumerate(objects):
-            obj.__client_uuid = uuid.uuid4().hex
-            client_uuid_to_index[obj.__client_uuid] = str(i)
+            obj._unexpected['__client_uuid'] = uuid.uuid4().hex
+            client_uuid_to_index[obj._unexpected['__client_uuid']] = str(i)
 
         response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
         insert_operation = structure(response, operation_type)
