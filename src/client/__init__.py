@@ -146,6 +146,8 @@ class TolokaClient:
         validation_errors = {}
 
         for log_item in self.get_operation_log(insert_operation.id):
+            if log_item.type not in ['TASK_CREATE', 'TASK_VALIDATE', 'TASK_SUITE_VALIDATE', 'TASK_SUITE_CREATE']:
+                continue
             index = client_uuid_to_index[log_item.input['__client_uuid']]
             if log_item.success:
                 numerated_ids = pools.setdefault(log_item.input['pool_id'], {})
