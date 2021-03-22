@@ -134,8 +134,8 @@ class TolokaClient:
         # Emulates synchronous operation, through asynchronous calls and reading operation logs.
         client_uuid_to_index = {}
         for i, obj in enumerate(objects):
-            obj.__client_uuid = uuid.uuid4().hex
-            client_uuid_to_index[obj.__client_uuid] = str(i)
+            obj._unexpected['__client_uuid'] = uuid.uuid4().hex
+            client_uuid_to_index[obj._unexpected['__client_uuid']] = str(i)
 
         response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
         insert_operation = structure(response, operation_type)
@@ -146,6 +146,8 @@ class TolokaClient:
         validation_errors = {}
 
         for log_item in self.get_operation_log(insert_operation.id):
+            if log_item.type not in ['TASK_CREATE', 'TASK_VALIDATE', 'TASK_SUITE_VALIDATE', 'TASK_SUITE_CREATE']:
+                continue
             index = client_uuid_to_index[log_item.input['__client_uuid']]
             if log_item.success:
                 numerated_ids = pools.setdefault(log_item.input['pool_id'], {})

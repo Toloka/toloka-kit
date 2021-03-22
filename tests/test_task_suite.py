@@ -235,7 +235,8 @@ def test_create_task_suites_sync_through_async(
         } == parse_qs(urlparse(request.url).query)
         imcoming_task_suites = []
         for t in request.json():
-            t.pop('__client_uuid', '')
+            assert '__client_uuid' in t
+            t.pop('__client_uuid')
             imcoming_task_suites.append(t)
         assert task_suites_map == imcoming_task_suites
         return operation_running_map
