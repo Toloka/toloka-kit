@@ -18,6 +18,16 @@ class BaseTolokaObjectMetaclass(type):
     ...
 
 class BaseTolokaObject(object):
+    """
+    A base class for classes representing Toloka objects.
+
+
+
+    Subclasses of BaseTolokaObject will:
+    * Automatically convert annotated attributes attributes via attrs making them optional
+      if not explicitly configured otherwise
+    * Skip missing optional fields during unstructuring with client's cattr converter
+    """
 
     def __getattr__(self, item): ...
 

@@ -19,6 +19,20 @@ class ViewSpec(BaseTolokaObject, spec_enum='Type', spec_field='type'):
     TEMPLATE_BUILDER = Type.TEMPLATE_BUILDER
 
     class Settings(BaseTolokaObject):
+        """ViewSpec Settings
+
+        Attributes:
+            show_finish: Show the Back to main page button.
+            show_fullscreen: Show the Expand to fullscreen button.
+            show_instructions: Show the Instructions button.
+            show_message: Show the Message for the requester button.
+            show_reward: Show the price per task page.
+            show_skip: Show the Skip button.
+            show_submit: Show the Next button.
+            show_timer: Show the timer.
+            show_title: Show the project name in task titles.
+        """
+
         show_finish: bool = attribute(origin='showFinish')
         show_fullscreen: bool = attribute(origin='showFullscreen')
         show_instructions: bool = attribute(origin='showInstructions')

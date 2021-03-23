@@ -6,6 +6,14 @@ from .primitives.base import attribute, BaseTolokaObject
 
 
 class Requester(BaseTolokaObject):
+    """Contains information about the customer and the account balance
+
+    Attributes:
+        id: Requester ID.
+        balance: Account balance in dollars.
+        public_name: The requester's name in Toloka.
+        company:
+    """
 
     class Company(BaseTolokaObject):
         id: str
