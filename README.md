@@ -24,7 +24,8 @@ Requirements
 - Python 3.6+
 - Register in [Toloka.ai](https://toloka.ai/) as requester. Registration process described [here.](https://yandex.ru/support/toloka-requester/concepts/access.html?lang=en)
 - [Topping up your account.](https://yandex.ru/support/toloka-requester/concepts/refill.html?lang=en)
-- Getting an OAuth. Learn more in [help](https://doc.yandex-team.ru/toloka/doc/concepts/access.html?lang=en) and in the image below.
+- Getting an OAuth. Learn more in [help](https://yandex.ru/dev/toloka/doc/concepts/access.html?lang=en) and in the image below.
+                                         
 
 ![How to get OAuth token](./examples/image_segmentation/img/OAuth.png "How to get OAuth token")
 

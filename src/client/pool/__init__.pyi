@@ -12,16 +12,12 @@ from ..quality_control import QualityControl
 
 
 class Pool(BaseTolokaObject):
-    """A pool is a set of tasks that are sent out for completion at the same time.
+    """A set of tasks that are issued and checked according to the same rules within the project
 
-    In the pool properties, you set the task price, overlap, user selection filters, quality control rules, and so on.
+    Groups tasks by the following criteria: one-time start-up, which performers can perform tasks, quality control,
+    price for TaskSuite's, overlap.
+    Tasks, golden tasks and assignments are related to a pool.
 
-    If the project has multiple pools, the order for completing them depends on the parameters:
-    * Pools with identical filter settings and price per task are assigned to users in the order
-        in which they were started. The pool that was started earlier will be completed sooner.
-        You can change the order for completing the pools.
-    * Pools with different filter settings and/or a different price per task are sent out for completion
-        when the pool opens.
     Attributes:
         project_id: ID of the project that the pool was created for.
         private_name: Name of the pool (only visible to the requester).
@@ -55,6 +51,12 @@ class Pool(BaseTolokaObject):
         priority: The priority of the pool in relation to other pools in the project with the same task
             price and set of filters. Users are assigned tasks with a higher priority first.
             Possible values: from -100 to 100.
+            If the project has multiple pools, the order for completing them depends on the parameters:
+            * Pools with identical filter settings and price per task are assigned to users in the order
+                in which they were started. The pool that was started earlier will be completed sooner.
+                You can change the order for completing the pools.
+            * Pools with different filter settings and/or a different price per task are sent out for completion
+                when the pool opens.
         filter: Settings for user selection filters.
         quality_control: Settings for quality control rules and the ID of the pool with training tasks.
         dynamic_overlap_config: Dynamic overlap setting. Allows you to change the overlap depending on
@@ -63,13 +65,33 @@ class Pool(BaseTolokaObject):
         training_config: Optional[TrainingConfig]
         metadata: Optional[Dict[str, List[str]]]
         owner: Optional[Owner]
-        id: Pool ID.
-        status: Status of the pool.
-        last_close_reason: The reason for closing the pool the last time.
-        created: Optional[datetime]
-        last_started: The date and time when the pool was last started.
-        last_stopped: The date and time when the pool was last stopped.
-        type: Types of pool.
+        id: Pool ID.  Read only field.
+        status: Status of the pool. Read only field.
+        last_close_reason: The reason for closing the pool the last time. Read only field.
+        created: When this pool was created. Read only field.
+        last_started: The date and time when the pool was last started. Read only field.
+        last_stopped: The date and time when the pool was last stopped. Read only field.
+        type: Types of pool. Read only field.
+
+    Example:
+        How to create a new pool in a project.
+
+        >>> toloka_client = toloka.TolokaClient(your_token, 'PRODUCTION')
+        >>> new_pool = toloka.pool.Pool(
+        >>>     project_id=existing_project_id,
+        >>>     private_name='Pool 1',
+        >>>     may_contain_adult_content=False,
+        >>>     will_expire=datetime.datetime.utcnow() + datetime.timedelta(days=365),
+        >>>     reward_per_assignment=0.01,
+        >>>     assignment_max_duration_seconds=60*20,
+        >>>     defaults=toloka.pool.Pool.Defaults(default_overlap_for_new_task_suites=3),
+        >>>     filter=toloka.filter.Languages.in_('EN'),
+        >>> )
+        >>> new_pool.set_mixer_config(real_tasks_count=10, golden_tasks_count=0, training_tasks_count=0)
+        >>> new_pool.quality_control.add_action(...)
+        >>> new_pool = toloka_client.create_pool(new_pool)
+        >>> print(new_pool.id)
+        ...
     """
 
     class AssignmentsIssuingConfig(BaseTolokaObject):
@@ -188,11 +210,6 @@ class Pool(BaseTolokaObject):
         training_skill_ttl_days: Optional[int]
 
     class Type(Enum):
-        """Types of pool:
-
-        * REGULAR - normal pool;
-        * TRAINING - training pool.
-        """
         ...
 
     def unstructure(self) -> Optional[dict]: ...
@@ -288,6 +305,23 @@ class Pool(BaseTolokaObject):
     type: Optional[Type]
 
 class PoolPatchRequest(BaseTolokaObject):
+    """Class for changing the priority of the pool issue
+
+    To do this use TolokaClient.patch_pool(). You can use expanded version, then pass "priority" directly to "patch_pool".
+
+    Attributes:
+        priority: The priority of the pool in relation to other pools in the project with the same task
+            price and set of filters. Users are assigned tasks with a higher priority first.
+            Possible values: from -100 to 100.
+
+    Example:
+        How to set highest priority to some pool.
+
+        >>> toloka_client = toloka.TolokaClient(your_token, 'PRODUCTION')
+        >>> patched_pool = toloka_client.patch_pool(existing_pool_id, 100)
+        >>> print(patched_pool.priority)
+        ...
+    """
 
     def __repr__(self): ...
 
