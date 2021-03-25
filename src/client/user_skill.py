@@ -1,3 +1,7 @@
+__all__ = [
+    'SetUserSkillRequest',
+    'UserSkill'
+]
 from attr.validators import optional, instance_of
 import datetime
 from decimal import Decimal

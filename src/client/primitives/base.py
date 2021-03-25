@@ -1,3 +1,9 @@
+__all__ = [
+    'VariantRegistry',
+    'attribute',
+    'BaseTolokaObjectMetaclass',
+    'BaseTolokaObject'
+]
 from copy import copy
 from enum import Enum
 from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union

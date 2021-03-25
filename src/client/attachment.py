@@ -1,3 +1,8 @@
+__all__ = [
+    'Attachment',
+    'AssignmentAttachment'
+]
+
 import datetime
 from enum import Enum, unique
 

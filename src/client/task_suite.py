@@ -1,3 +1,9 @@
+__all__ = [
+    'TaskSuite',
+    'TaskSuiteCreateRequestParameters',
+    'TaskSuiteOverlapPatch',
+    'TaskSuitePatch'
+]
 import datetime
 from typing import List
 from uuid import UUID

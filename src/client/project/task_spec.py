@@ -1,3 +1,4 @@
+__all__ = ['TaskSpec']
 from typing import Dict
 
 from .field_spec import FieldSpec

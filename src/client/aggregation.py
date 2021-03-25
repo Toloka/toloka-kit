@@ -1,3 +1,10 @@
+__all__ = [
+    'AggregatedSolutionType',
+    'PoolAggregatedSolutionRequest',
+    'TaskAggregatedSolutionRequest',
+    'WeightedDynamicOverlapTaskAggregatedSolutionRequest',
+    'AggregatedSolution'
+]
 from enum import Enum, unique
 from typing import Any, Dict, List
 

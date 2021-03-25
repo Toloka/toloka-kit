@@ -1,3 +1,17 @@
+__all__ = [
+    'CollectorConfig',
+    'AcceptanceRate',
+    'AnswerCount',
+    'AssignmentsAssessment',
+    'AssignmentSubmitTime',
+    'Captcha',
+    'GoldenSet',
+    'Income',
+    'MajorityVote',
+    'SkippedInRowAssignments',
+    'Training',
+    'UsersAssessment'
+]
 """
 https://yandex.ru/dev/toloka/doc/concepts/quality_control-docpage/
 """

@@ -1,3 +1,19 @@
+__all__ = [
+    'AnalyticsRequest',
+    'PoolAnalyticsRequest',
+    'RealTasksCountPoolAnalytics',
+    'SubmitedAssignmentsCountPoolAnalytics',
+    'SkippedAssignmentsCountPoolAnalytics',
+    'RejectedAssignmentsCountPoolAnalytics',
+    'ApprovedAssignmentsCountPoolAnalytics',
+    'CompletionPercentagePoolAnalytics',
+    'AvgSubmitAssignmentMillisPoolAnalytics',
+    'SpentBudgetPoolAnalytics',
+    'UniqueWorkersCountPoolAnalytics',
+    'UniqueSubmittersCountPoolAnalytics',
+    'ActiveWorkersByFilterCountPoolAnalytics',
+    'EstimatedAssignmentsCountPoolAnalytics'
+]
 from enum import Enum, unique
 
 from .primitives.base import attribute, BaseTolokaObject

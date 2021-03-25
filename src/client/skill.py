@@ -1,3 +1,4 @@
+__all__ = ['Skill']
 import datetime
 from typing import Dict
 

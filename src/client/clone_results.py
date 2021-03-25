@@ -1,3 +1,4 @@
+__all__=['CloneResults']
 from typing import NamedTuple, List
 
 from .pool import Pool

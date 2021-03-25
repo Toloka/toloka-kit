@@ -1,5 +1,19 @@
+__all__ = [
+    'AggregatedSolutionSearchResult',
+    'AssignmentSearchResult',
+    'AttachmentSearchResult',
+    'MessageThreadSearchResult',
+    'ProjectSearchResult',
+    'PoolSearchResult',
+    'SkillSearchResult',
+    'TaskSearchResult',
+    'TaskSuiteSearchResult',
+    'TrainingSearchResult',
+    'UserBonusSearchResult',
+    'UserRestrictionSearchResult',
+    'UserSkillSearchResult'
+]
 from typing import Type, List, Optional
-
 from .aggregation import AggregatedSolution
 from .assignment import Assignment
 from .attachment import Attachment

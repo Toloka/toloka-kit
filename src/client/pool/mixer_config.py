@@ -1,3 +1,4 @@
+__all__ = ['MixerConfig']
 from ..primitives.base import BaseTolokaObject
 from ..task_distribution_function import TaskDistributionFunction
 

@@ -1,3 +1,4 @@
+__all__ = ['DynamicOverlapConfig']
 from enum import Enum, unique
 from typing import List
 

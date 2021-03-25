@@ -1,3 +1,4 @@
+__all__ = ['Project']
 import datetime
 from enum import Enum, unique
 

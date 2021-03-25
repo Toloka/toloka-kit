@@ -1,3 +1,7 @@
+__all__ = [
+    'Pool',
+    'PoolPatchRequest'
+]
 import datetime
 from enum import Enum, unique
 from typing import Dict, List, Optional

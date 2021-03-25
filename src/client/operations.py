@@ -1,3 +1,23 @@
+__all__ = [
+    'OperationType',
+    'Operation',
+    'AnalyticsOperation',
+    'PoolOperation',
+    'PoolArchiveOperation',
+    'PoolCloneOperation',
+    'PoolCloseOperation',
+    'PoolOpenOperation',
+    'TrainingOperation',
+    'TrainingArchiveOperation',
+    'TrainingCloneOperation',
+    'TrainingCloseOperation',
+    'TrainingOpenOperation',
+    'ProjectArchiveOperation',
+    'TasksCreateOperation',
+    'TaskSuiteCreateBatchOperation',
+    'AggregatedSolutionOperation',
+    'UserBonusCreateBatchOperation'
+]
 import datetime
 from enum import Enum, unique
 from typing import Any, ClassVar

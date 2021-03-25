@@ -1,3 +1,7 @@
+__all__ = [
+    'UserBonus',
+    'UserBonusCreateRequestParameters'
+]
 from attr.validators import optional, instance_of
 import datetime
 from decimal import Decimal

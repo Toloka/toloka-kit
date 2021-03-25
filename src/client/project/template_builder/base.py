@@ -1,5 +1,17 @@
+__all__ = [
+    'ComponentType',
+    'BaseTemplate',
+    'BaseComponent',
+    'BaseComponentOr',
+    'base_component_or',
+    'VersionedBaseComponent',
+    'UnknownComponent',
+    'RefComponent',
+    'ListDirection',
+    'ListSize'
+]
 from enum import Enum, unique
-from typing import ClassVar, Type, Optional, Any
+from typing import ClassVar, Type, Optional, Any, Union
 
 from ..._converter import converter
 from ...primitives.base import attribute, BaseTolokaObject, BaseTolokaObjectMetaclass
@@ -123,7 +135,7 @@ def base_component_or(type_: Type, class_name_suffix: Optional[str] = None):
         name = f'BaseComponentOr{class_name_suffix or ("Any" if type_ == Any else type_.__name__)}'
         cls = BaseTolokaObjectMetaclass(name, (BaseComponentOr,), {})
         cls.__module__ = __name__
-        cls.type_ = type_
+        cls.type_ = type_ if type_ is Any else Union[BaseComponent, type_]
         base_component_or._cache[type_] = cls
 
     return base_component_or._cache[type_]

@@ -1,3 +1,4 @@
+__all__ = ['Solution']
 from typing import Dict, Any
 
 import attr

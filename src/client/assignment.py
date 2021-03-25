@@ -1,3 +1,8 @@
+__all__ = [
+    'Assignment',
+    'AssignmentPatch',
+    'GetAssignmentsTsvParameters'
+]
 from attr.validators import optional, instance_of
 import datetime
 from decimal import Decimal

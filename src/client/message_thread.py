@@ -1,3 +1,12 @@
+__all__ = [
+    'RecipientsSelectType',
+    'Folder',
+    'Interlocutor',
+    'MessageThread',
+    'MessageThreadReply',
+    'MessageThreadFolders',
+    'MessageThreadCompose'
+]
 import datetime
 from enum import Enum, unique
 from typing import Dict, List

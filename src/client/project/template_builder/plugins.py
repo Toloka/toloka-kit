@@ -1,3 +1,9 @@
+__all__ = [
+    'BasePluginV1',
+    'HotkeysPluginV1',
+    'TriggerPluginV1',
+    'TolokaPluginV1'
+]
 from enum import Enum, unique
 from typing import List, Any
 

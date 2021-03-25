@@ -1,3 +1,8 @@
+__all__ = [
+    'ViewSpec',
+    'ClassicViewSpec',
+    'TemplateBuilderViewSpec'
+]
 import json
 from copy import deepcopy
 from enum import Enum, unique

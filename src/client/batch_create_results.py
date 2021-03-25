@@ -1,3 +1,9 @@
+__all__ = [
+    'FieldValidationError',
+    'TaskBatchCreateResult',
+    'TaskSuiteBatchCreateResult',
+    'UserBonusBatchCreateResult'
+]
 from typing import Any, Dict, List, Optional, Type
 
 from .primitives.base import BaseTolokaObject, BaseTolokaObjectMetaclass
