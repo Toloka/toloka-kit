@@ -160,7 +160,7 @@ class TolokaClient:
 
         yield from result.items
 
-    def _synch_via_asynch(self, objects, parameters, url, result_type, operation_type, output_id_field, get_method):
+    def _sync_via_async(self, objects, parameters, url, result_type, operation_type, output_id_field, get_method):
         if not parameters.async_mode:
             response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
             return structure(response, result_type)
@@ -174,7 +174,6 @@ class TolokaClient:
         response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
         insert_operation = structure(response, operation_type)
         insert_operation = self.wait_operation(insert_operation, datetime.timedelta(minutes=60))
-        assert insert_operation.status == operations.Operation.Status.SUCCESS
 
         pools = {}
         validation_errors = {}
@@ -182,7 +181,10 @@ class TolokaClient:
         for log_item in self.get_operation_log(insert_operation.id):
             if log_item.type not in ['TASK_CREATE', 'TASK_VALIDATE', 'TASK_SUITE_VALIDATE', 'TASK_SUITE_CREATE']:
                 continue
-            index = client_uuid_to_index[log_item.input['__client_uuid']]
+            if '__client_uuid' in log_item.input and log_item.input['__client_uuid'] in client_uuid_to_index:
+                index = client_uuid_to_index[log_item.input['__client_uuid']]
+            else:
+                continue
             if log_item.success:
                 numerated_ids = pools.setdefault(log_item.input['pool_id'], {})
                 numerated_ids[log_item.output[output_id_field]] = index
@@ -214,7 +216,7 @@ class TolokaClient:
                 if obj.id in numerated_ids:
                     items[numerated_ids[obj.id]] = obj
 
-        return result_type(items=items, validation_errors=validation_errors or None)
+        return result_type(items=items, validation_errors=validation_errors or {})
 
     # Aggregation section
 
@@ -1478,7 +1480,7 @@ class TolokaClient:
         """
         if not parameters:
             parameters = task.CreateTasksParameters()
-        return self._synch_via_asynch(
+        return self._sync_via_async(
             objects=tasks,
             parameters=parameters,
             url='/v1/tasks',
@@ -1636,7 +1638,7 @@ class TolokaClient:
         """
         if not parameters:
             parameters = task_suite.TaskSuiteCreateRequestParameters()
-        return self._synch_via_asynch(
+        return self._sync_via_async(
             objects=task_suites,
             parameters=parameters,
             url='/v1/task-suites',
