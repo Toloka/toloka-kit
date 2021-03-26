@@ -48,6 +48,17 @@ class Training(BaseTolokaObject):
 
     @unique
     class CloseReason(Enum):
+        """The reason for closing the pool the last time:
+
+        Attributes:
+            MANUAL: Closed by the requester.
+            EXPIRED: Reached the date and time set in will_expire.
+            COMPLETED: Closed automatically because all the pool tasks were completed.
+            NOT_ENOUGH_BALANCE: Closed automatically because the Toloka account ran out of funds.
+            ASSIGNMENTS_LIMIT_EXCEEDED: Closed automatically because it exceeded the limit on assigned task suites
+                (maximum of 2 million).
+            BLOCKED: Closed automatically because the requester's account was blocked by a Toloka administrator.
+        """
         MANUAL = 'MANUAL'
         EXPIRED = 'EXPIRED'
         COMPLETED = 'COMPLETED'
@@ -58,6 +69,14 @@ class Training(BaseTolokaObject):
 
     @unique
     class Status(Enum):
+        """Status of the training pool
+
+        Attributes:
+            OPEN: Training pool is open
+            CLOSED: Training pool is closed
+            ARCHIVED: Training pool is archived
+            LOCKED: Training pool is locked
+        """
         OPEN = 'OPEN'
         CLOSED = 'CLOSED'
         ARCHIVED = 'ARCHIVED'

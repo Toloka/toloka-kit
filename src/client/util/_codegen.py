@@ -117,7 +117,10 @@ def create_setter(attr_path: str, attr_type=Parameter.empty):
             Parameter(name='self', kind=Parameter.POSITIONAL_OR_KEYWORD),
             Parameter(name=attr_name, kind=Parameter.POSITIONAL_OR_KEYWORD, annotation=attr_type),
         ]),
-        f'self.{attr_path} = {attr_name}',
+        (
+            f'"""A shortcut setter for {attr_path}"""\n'
+            f'self.{attr_path} = {attr_name}'
+        )
     )
 
 

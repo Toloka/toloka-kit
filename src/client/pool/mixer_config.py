@@ -7,6 +7,7 @@ class MixerConfig(BaseTolokaObject):
     """Parameters for automatically creating a task suite ("smart mixing").
 
     For more information about creating task see Yandex.Toloka Requester's guide.
+
     Attributes:
         real_tasks_count: The number of main tasks to put in a task suite.
             The maximum number of tasks in a task suite if training_task_distribution_function or

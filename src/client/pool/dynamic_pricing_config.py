@@ -18,19 +18,18 @@ class DynamicPricingConfig(BaseTolokaObject, kw_only=False):
 
     @unique
     class Type(Enum):
-        """Skill level intervals. Must not overlap.
+        """Dynamic pricing type"""
+        SKILL = 'SKILL'
 
-        A performer with a skill level that is not included in any interval will receive the basic
-            price for a task suite.
+    class Interval(BaseTolokaObject):
+        """Skill level interval
+
         Attributes:
             from_: Lower bound of the interval.
             to: dynamic_pricing_config.intervals.to
             reward_per_assignment: The price per task page for a performer with the specified skill level.
         """
 
-        SKILL = 'SKILL'
-
-    class Interval(BaseTolokaObject):
         from_: int = attribute(origin='from')
         to: int
         reward_per_assignment: float

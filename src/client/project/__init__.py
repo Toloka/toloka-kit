@@ -63,9 +63,10 @@ class Project(BaseTolokaObject):
     class AssignmentsIssuingType(Enum):
         """How to assign tasks:
 
-        * AUTOMATED — The user is assigned a task suite from the pool. You can configure the order
+        Attributes:
+            AUTOMATED: The user is assigned a task suite from the pool. You can configure the order
                 for assigning task suites.
-        * MAP_SELECTOR — The user chooses a task suite on the map. If you are using MAP_SELECTOR,
+            MAP_SELECTOR: The user chooses a task suite on the map. If you are using MAP_SELECTOR,
             specify the text to display in the map by setting assignments_issuing_view_config.
         """
 
@@ -76,8 +77,9 @@ class Project(BaseTolokaObject):
     class ProjectStatus(Enum):
         """Project status:
 
-        * ACTIVE
-        * ARCHIVED
+        Attributes:
+            ACTIVE: A project is active
+            ARCHIVED: A project is archived
         """
 
         ACTIVE = 'ACTIVE'

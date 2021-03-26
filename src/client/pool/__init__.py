@@ -119,13 +119,14 @@ class Pool(BaseTolokaObject):
     class CloseReason(Enum):
         """The reason for closing the pool the last time:
 
-        * MANUAL — Closed by the requester.
-        * EXPIRED — Reached the date and time set in will_expire.
-        * COMPLETED — Closed automatically because all the pool tasks were completed.
-        * NOT_ENOUGH_BALANCE — Closed automatically because the Toloka account ran out of funds.
-        * ASSIGNMENTS_LIMIT_EXCEEDED — Closed automatically because it exceeded the limit on assigned task suites
-            (maximum of 2 million).
-        * BLOCKED — Closed automatically because the requester's account was blocked by a Toloka administrator.
+        Attributes:
+            MANUAL: Closed by the requester.
+            EXPIRED: Reached the date and time set in will_expire.
+            COMPLETED: Closed automatically because all the pool tasks were completed.
+            NOT_ENOUGH_BALANCE: Closed automatically because the Toloka account ran out of funds.
+            ASSIGNMENTS_LIMIT_EXCEEDED: Closed automatically because it exceeded the limit on assigned task suites
+                (maximum of 2 million).
+            BLOCKED: Closed automatically because the requester's account was blocked by a Toloka administrator.
         """
 
         MANUAL = 'MANUAL'
@@ -151,11 +152,13 @@ class Pool(BaseTolokaObject):
 
     @unique
     class Status(Enum):
-        """Status of the pool:
+        """Status of the pool
 
-        * OPEN
-        * CLOSED
-        * ARCHIVED
+        Attributes:
+            OPEN: Pool is open
+            CLOSED: Pool is closed
+            ARCHIVED: Pool is archived
+            LOCKED: Pool is locked
         """
 
         OPEN = 'OPEN'
@@ -247,6 +250,7 @@ class Pool(BaseTolokaObject):
     ))
 
     set_quality_control_configs = create_setter('quality_control.configs')
+    set_quality_control_configs.__doc__ = """A shortcut method for setting """
 
 
 class PoolPatchRequest(BaseTolokaObject, kw_only=False):
