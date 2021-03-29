@@ -116,6 +116,7 @@ class BaseComponent(BaseTemplate, spec_enum=ComponentType, spec_field='type'):
 
 class BaseComponentOr(BaseTolokaObject):
     type_: ClassVar[Type]
+    union_type: ClassVar[Type]
 
     @classmethod
     def structure(cls, data):
@@ -135,7 +136,8 @@ def base_component_or(type_: Type, class_name_suffix: Optional[str] = None):
         name = f'BaseComponentOr{class_name_suffix or ("Any" if type_ == Any else type_.__name__)}'
         cls = BaseTolokaObjectMetaclass(name, (BaseComponentOr,), {})
         cls.__module__ = __name__
-        cls.type_ = type_ if type_ is Any else Union[BaseComponent, type_]
+        cls.type_ = type_
+        cls.union_type = cls.type_ if cls.type_ is Any else Union[BaseComponent, cls.type_]
         base_component_or._cache[type_] = cls
 
     return base_component_or._cache[type_]

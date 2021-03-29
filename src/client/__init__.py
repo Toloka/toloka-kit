@@ -2115,7 +2115,13 @@ class TolokaClient:
             parameters: Filters for the results and the set of fields that will be in the dataframe.
 
         Returns:
-            pd.DataFrame: DataFrame with all results.
+            pd.DataFrame: DataFrame with all results. Contains groups of fields with prefixes:
+                * "INPUT" - Fields that were at the input in the task.
+                * "OUTPUT" - Fields that were received as a result of execution.
+                * "GOLDEN" - Fields with correct answers. Filled in only for golden tasks and training tasks.
+                * "HINT" - Hints for completing tasks. Filled in for training tasks.
+                * "ACCEPT" - Fields describing the deferred acceptance of tasks.
+                * "ASSIGNMENT" - fields describing additional information about the Assignment.
         """
         logger.warning('Experimental method')
         response = self._raw_request('get', f'/new/requester/pools/{pool_id}/assignments.tsv',
