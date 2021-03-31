@@ -179,6 +179,9 @@ def expand(arg_name):
                 return func(*bound.args, **bound.kwargs)
             except TypeError:
                 return expanded_func(*args, **kwargs)
+
+        wrapped._func = func
+        wrapped._expanded_func = expanded_func
         wrapped._func_sig = func_sig
         wrapped._expanded_func_sig = _get_signature(expanded_func)
         wrapped._expanded_by = arg_name
