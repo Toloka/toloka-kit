@@ -1,0 +1,45 @@
+toloka.client.project package
+=============================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   toloka.client.project.template_builder
+
+Submodules
+----------
+
+toloka.client.project.field\_spec module
+----------------------------------------
+
+.. automodule:: toloka.client.project.field_spec
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+toloka.client.project.task\_spec module
+---------------------------------------
+
+.. automodule:: toloka.client.project.task_spec
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+toloka.client.project.view\_spec module
+---------------------------------------
+
+.. automodule:: toloka.client.project.view_spec
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: toloka.client.project
+   :members:
+   :undoc-members:
+   :show-inheritance:

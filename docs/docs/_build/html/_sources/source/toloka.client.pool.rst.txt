@@ -1,0 +1,37 @@
+toloka.client.pool package
+==========================
+
+Submodules
+----------
+
+toloka.client.pool.dynamic\_overlap\_config module
+--------------------------------------------------
+
+.. automodule:: toloka.client.pool.dynamic_overlap_config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+toloka.client.pool.dynamic\_pricing\_config module
+--------------------------------------------------
+
+.. automodule:: toloka.client.pool.dynamic_pricing_config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+toloka.client.pool.mixer\_config module
+---------------------------------------
+
+.. automodule:: toloka.client.pool.mixer_config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: toloka.client.pool
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,423 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>toloka.client.project.template_builder.actions &mdash; toloka-kit 0.1.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> toloka-kit
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/toloka.client.pool.html">toloka.client.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/toloka.client.primitives.html">toloka.client.primitives package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/toloka.client.project.html">toloka.client.project package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/toloka.client.project.template_builder.html">toloka.client.project.template_builder package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/toloka.client.html">toloka.client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/toloka.client.util.html">toloka.client.util package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/toloka.html">toloka package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">toloka-kit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../../client.html">toloka.client</a> &raquo;</li>
+        
+          <li><a href="../../project.html">toloka.client.project</a> &raquo;</li>
+        
+          <li><a href="../template_builder.html">toloka.client.project.template_builder</a> &raquo;</li>
+        
+      <li>toloka.client.project.template_builder.actions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for toloka.client.project.template_builder.actions</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">toloka.client.project.template_builder.base</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BaseTemplate</span><span class="p">,</span>
+    <span class="n">VersionedBaseComponent</span><span class="p">,</span>
+    <span class="n">BaseComponent</span><span class="p">,</span>
+    <span class="n">RefComponent</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Union</span><span class="p">,</span>
+    <span class="n">Dict</span>
+<span class="p">)</span>
+<div class="viewcode-block" id="BaseActionV1"><a class="viewcode-back" href="../../../../../source/toloka.client.project.template_builder.html#toloka.client.project.template_builder.actions.BaseActionV1">[docs]</a><span class="k">class</span> <span class="nc">BaseActionV1</span><span class="p">(</span><span class="n">VersionedBaseComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Perform various actions, such as showing notifications.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class BaseActionV1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="BulkActionV1"><a class="viewcode-back" href="../../../../../source/toloka.client.project.template_builder.html#toloka.client.project.template_builder.actions.BulkActionV1">[docs]</a><span class="k">class</span> <span class="nc">BulkActionV1</span><span class="p">(</span><span class="n">BaseActionV1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Use this component to call multiple actions at the same time, like to show more than one notification when a button is clicked.</span>
+
+<span class="sd">    Actions are invoked in the order in which they are listed. This means that if two actions write a value to the same</span>
+<span class="sd">    variable, the variable will always have the second value.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        payload ( Optional[Union[BaseComponent, List[BaseComponent]]]): An array of actions that you want to call.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BaseComponent</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">BaseComponent</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class BulkActionV1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="NotifyActionV1"><a class="viewcode-back" href="../../../../../source/toloka.client.project.template_builder.html#toloka.client.project.template_builder.actions.NotifyActionV1">[docs]</a><span class="k">class</span> <span class="nc">NotifyActionV1</span><span class="p">(</span><span class="n">BaseActionV1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The component creates a message in the lower-left corner of the screen.</span>
+
+<span class="sd">    You can set the how long the message will be active, the delay before displaying it, and the background color.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        payload ( Optional[Union[BaseComponent, Payload]]): Parameters for the message.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NotifyActionV1.Payload"><a class="viewcode-back" href="../../../../../source/toloka.client.project.template_builder.html#toloka.client.project.template_builder.actions.NotifyActionV1.Payload">[docs]</a>    <span class="k">class</span> <span class="nc">Payload</span><span class="p">(</span><span class="n">BaseTemplate</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parameters for the message.</span>
+
+<span class="sd">        Attributes:</span>
+<span class="sd">            content ( Optional[Any]): Message text</span>
+<span class="sd">            delay ( Optional[Union[BaseComponent, float]]): The duration of the delay (in milliseconds) before the message appears.</span>
+<span class="sd">            duration ( Optional[Union[BaseComponent, float]]): The duration of the message activity (in milliseconds), which includes the duration of the delay</span>
+<span class="sd">        		before displaying it.</span>
+<span class="sd">        		For example, if duration is 1000 and delay is 400, the message will be displayed for</span>
+<span class="sd">        		600 milliseconds.</span>
+<span class="sd">            theme ( Optional[Union[BaseComponent, Theme]]): The background color of the message.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NotifyActionV1.Payload.Theme"><a class="viewcode-back" href="../../../../../source/toloka.client.project.template_builder.html#toloka.client.project.template_builder.actions.NotifyActionV1.Payload.Theme">[docs]</a>        <span class="k">class</span> <span class="nc">Theme</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;The background color of the message.</span>
+
+<span class="sd">            info — blue</span>
+<span class="sd">            success — green</span>
+<span class="sd">            warning — yellow</span>
+<span class="sd">            danger — red&quot;&quot;&quot;</span>
+
+            <span class="n">DANGER</span> <span class="o">=</span> <span class="s1">&#39;danger&#39;</span>
+            <span class="n">INFO</span> <span class="o">=</span> <span class="s1">&#39;info&#39;</span>
+            <span class="n">SUCCESS</span> <span class="o">=</span> <span class="s1">&#39;success&#39;</span>
+            <span class="n">WARNING</span> <span class="o">=</span> <span class="s1">&#39;warning&#39;</span></div>
+
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">theme</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BaseComponent</span><span class="p">,</span> <span class="n">Theme</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">delay</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BaseComponent</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BaseComponent</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;Method generated by attrs for class NotifyActionV1.Payload.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="o">...</span></div>
+
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BaseComponent</span><span class="p">,</span> <span class="n">Payload</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class NotifyActionV1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="OpenCloseActionV1"><a class="viewcode-back" href="../../../../../source/toloka.client.project.template_builder.html#toloka.client.project.template_builder.actions.OpenCloseActionV1">[docs]</a><span class="k">class</span> <span class="nc">OpenCloseActionV1</span><span class="p">(</span><span class="n">BaseActionV1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This component changes the display mode of another component by opening or closing it.</span>
+
+<span class="sd">    What happens to the component depends on the type of component:</span>
+<span class="sd">        view.image — expands the image to full screen.</span>
+<span class="sd">        view.collapse — expands or collapses a collapsible section of content.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        view ( Optional[Union[BaseComponent, RefComponent]]): Points to the component to perform the action with.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">,</span> <span class="n">view</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BaseComponent</span><span class="p">,</span> <span class="n">RefComponent</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class OpenCloseActionV1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="OpenLinkActionV1"><a class="viewcode-back" href="../../../../../source/toloka.client.project.template_builder.html#toloka.client.project.template_builder.actions.OpenLinkActionV1">[docs]</a><span class="k">class</span> <span class="nc">OpenLinkActionV1</span><span class="p">(</span><span class="n">BaseActionV1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Opens a new tab in the browser with the specified web page.</span>
+
+<span class="sd">    For example, you can open a link when a button is clicked.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        payload ( Optional[Any]): URL of the web page.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class OpenLinkActionV1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="PlayPauseActionV1"><a class="viewcode-back" href="../../../../../source/toloka.client.project.template_builder.html#toloka.client.project.template_builder.actions.PlayPauseActionV1">[docs]</a><span class="k">class</span> <span class="nc">PlayPauseActionV1</span><span class="p">(</span><span class="n">BaseActionV1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This component controls audio or video playback. It stops playback in progress or starts if it is stopped.</span>
+
+<span class="sd">    For example, this component will allow you to play two videos simultaneously.</span>
+
+<span class="sd">    You can also stop or start playback for some event (plugin. trigger) or by pressing the hotkey (plugin.hotkeys).</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        view ( Optional[Union[BaseComponent, RefComponent]]): Points to the component that plays audio or video.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">,</span> <span class="n">view</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BaseComponent</span><span class="p">,</span> <span class="n">RefComponent</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class PlayPauseActionV1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="RotateActionV1"><a class="viewcode-back" href="../../../../../source/toloka.client.project.template_builder.html#toloka.client.project.template_builder.actions.RotateActionV1">[docs]</a><span class="k">class</span> <span class="nc">RotateActionV1</span><span class="p">(</span><span class="n">BaseActionV1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Rotates the specified component by 90 degrees.</span>
+
+<span class="sd">    By default it rotates to the right, but you can specify the direction in the payload property.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        payload ( Optional[Union[BaseComponent, Payload]]): Sets the direction of rotation.</span>
+<span class="sd">        view ( Optional[Union[BaseComponent, RefComponent]]): Points to the component to perform the action with.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RotateActionV1.Payload"><a class="viewcode-back" href="../../../../../source/toloka.client.project.template_builder.html#toloka.client.project.template_builder.actions.RotateActionV1.Payload">[docs]</a>    <span class="k">class</span> <span class="nc">Payload</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+        <span class="n">LEFT</span> <span class="o">=</span> <span class="s1">&#39;left&#39;</span>
+        <span class="n">RIGHT</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BaseComponent</span><span class="p">,</span> <span class="n">Payload</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">view</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BaseComponent</span><span class="p">,</span> <span class="n">RefComponent</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class RotateActionV1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="SetActionV1"><a class="viewcode-back" href="../../../../../source/toloka.client.project.template_builder.html#toloka.client.project.template_builder.actions.SetActionV1">[docs]</a><span class="k">class</span> <span class="nc">SetActionV1</span><span class="p">(</span><span class="n">BaseActionV1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sets the value from payload in the data in the data property.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        data ( Optional[BaseComponent]): Data with values that will be processed or changed.</span>
+<span class="sd">        payload ( Optional[Any]): The value to write to the data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseComponent</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class SetActionV1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="ToggleActionV1"><a class="viewcode-back" href="../../../../../source/toloka.client.project.template_builder.html#toloka.client.project.template_builder.actions.ToggleActionV1">[docs]</a><span class="k">class</span> <span class="nc">ToggleActionV1</span><span class="p">(</span><span class="n">BaseActionV1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The component changes the value in the data from true to false and vice versa.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        data ( Optional[BaseComponent]): Data in which the value will be changed. The data type must be boolean.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseComponent</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ToggleActionV1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, username.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,364 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>toloka.client.message_thread &mdash; toloka-kit 0.1.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> toloka-kit
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.pool.html">toloka.client.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.primitives.html">toloka.client.primitives package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.html">toloka.client.project package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.template_builder.html">toloka.client.project.template_builder package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.html">toloka.client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.util.html">toloka.client.util package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.html">toloka package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">toloka-kit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../client.html">toloka.client</a> &raquo;</li>
+        
+      <li>toloka.client.message_thread</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for toloka.client.message_thread</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">toloka.client.filter</span> <span class="kn">import</span> <span class="n">FilterCondition</span>
+<span class="kn">from</span> <span class="nn">toloka.client.primitives.base</span> <span class="kn">import</span> <span class="n">BaseTolokaObject</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Dict</span>
+<span class="p">)</span>
+<div class="viewcode-block" id="RecipientsSelectType"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.message_thread.RecipientsSelectType">[docs]</a><span class="k">class</span> <span class="nc">RecipientsSelectType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+    <span class="n">DIRECT</span> <span class="o">=</span> <span class="s1">&#39;DIRECT&#39;</span>
+    <span class="n">FILTER</span> <span class="o">=</span> <span class="s1">&#39;FILTER&#39;</span>
+    <span class="n">ALL</span> <span class="o">=</span> <span class="s1">&#39;ALL&#39;</span></div>
+
+
+<div class="viewcode-block" id="Folder"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.message_thread.Folder">[docs]</a><span class="k">class</span> <span class="nc">Folder</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+    <span class="n">INBOX</span> <span class="o">=</span> <span class="s1">&#39;INBOX&#39;</span>
+    <span class="n">OUTBOX</span> <span class="o">=</span> <span class="s1">&#39;OUTBOX&#39;</span>
+    <span class="n">AUTOMATIC_NOTIFICATION</span> <span class="o">=</span> <span class="s1">&#39;AUTOMATIC_NOTIFICATION&#39;</span>
+    <span class="n">IMPORTANT</span> <span class="o">=</span> <span class="s1">&#39;IMPORTANT&#39;</span>
+    <span class="n">UNREAD</span> <span class="o">=</span> <span class="s1">&#39;UNREAD&#39;</span></div>
+
+
+<div class="viewcode-block" id="Interlocutor"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.message_thread.Interlocutor">[docs]</a><span class="k">class</span> <span class="nc">Interlocutor</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Interlocutor</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        id ( Optional[str]): ID of the sender or recipient.</span>
+<span class="sd">        role ( Optional[InterlocutorRole]): Role of the sender or recipient in Toloka:</span>
+<span class="sd">    		* USER — Performer.</span>
+<span class="sd">    		* REQUESTER</span>
+<span class="sd">    		* ADMINISTRATOR</span>
+<span class="sd">    		* SYSTEM — For messages sent automatically.</span>
+<span class="sd">        myself ( Optional[bool]): Marks a sender or recipient with your ID. If this is your ID, it is set to true.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Interlocutor.InterlocutorRole"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.message_thread.Interlocutor.InterlocutorRole">[docs]</a>    <span class="k">class</span> <span class="nc">InterlocutorRole</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+        <span class="n">USER</span> <span class="o">=</span> <span class="s1">&#39;USER&#39;</span>
+        <span class="n">REQUESTER</span> <span class="o">=</span> <span class="s1">&#39;REQUESTER&#39;</span>
+        <span class="n">ADMINISTRATOR</span> <span class="o">=</span> <span class="s1">&#39;ADMINISTRATOR&#39;</span>
+        <span class="n">SYSTEM</span> <span class="o">=</span> <span class="s1">&#39;SYSTEM&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">role</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">InterlocutorRole</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">myself</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Interlocutor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="MessageThread"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.message_thread.MessageThread">[docs]</a><span class="k">class</span> <span class="nc">MessageThread</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;MessageThread</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        id ( Optional[str]): Message thread ID.</span>
+<span class="sd">        topic ( Optional[Dict[str, str]]): Message thread title.</span>
+<span class="sd">        interlocutors_inlined ( Optional[bool]): bool</span>
+<span class="sd">        interlocutors ( Optional[List[Interlocutor]]): List[Interlocutor]</span>
+<span class="sd">        messages_inlined ( Optional[bool]): Access to message threads:</span>
+<span class="sd">    		* True — The message is available in the messages field.</span>
+<span class="sd">    		* False — The message is available in a separate request.</span>
+<span class="sd">        messages ( Optional[List[Message]]): List[Message]</span>
+<span class="sd">        meta ( Optional[Meta]): Meta</span>
+<span class="sd">        answerable ( Optional[bool]): Whether the message can be responded to:</span>
+<span class="sd">    		* True — The performer can respond to the message.</span>
+<span class="sd">    		* False — The performer cannot respond to the message.</span>
+<span class="sd">        folders ( Optional[List[Folder]]): Folders where the thread is located.</span>
+<span class="sd">        compose_details ( Optional[ComposeDetails]): For messages that you sent: details of the POST request for creating the message.</span>
+<span class="sd">        created ( Optional[datetime]): Date the first message in the thread was created.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MessageThread.ComposeDetails"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.message_thread.MessageThread.ComposeDetails">[docs]</a>    <span class="k">class</span> <span class="nc">ComposeDetails</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;For messages that you sent: details of the POST request for creating the message.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">recipients_select_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RecipientsSelectType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">recipients_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">recipients_filter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FilterCondition</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;Method generated by attrs for class MessageThread.ComposeDetails.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="MessageThread.Message"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.message_thread.MessageThread.Message">[docs]</a>    <span class="k">class</span> <span class="nc">Message</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Message in the thread.</span>
+
+<span class="sd">        Attributes:</span>
+<span class="sd">            text ( Optional[Dict[str, str]]): Message text.</span>
+<span class="sd">            from_ ( Optional[Interlocutor]): Information about the sender.</span>
+<span class="sd">            created ( Optional[datetime]): Date the message was created.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">from_</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Interlocutor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">created</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;Method generated by attrs for class MessageThread.Message.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="MessageThread.Meta"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.message_thread.MessageThread.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">pool_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">assignment_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;Method generated by attrs for class MessageThread.Meta.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="o">...</span></div>
+
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">interlocutors_inlined</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">interlocutors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Interlocutor</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">messages_inlined</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Message</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">meta</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Meta</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">answerable</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">folders</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Folder</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">compose_details</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ComposeDetails</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">created</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class MessageThread.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="MessageThreadReply"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.message_thread.MessageThreadReply">[docs]</a><span class="k">class</span> <span class="nc">MessageThreadReply</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class MessageThreadReply.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="MessageThreadFolders"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.message_thread.MessageThreadFolders">[docs]</a><span class="k">class</span> <span class="nc">MessageThreadFolders</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">folders</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Folder</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class MessageThreadFolders.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="MessageThreadCompose"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.message_thread.MessageThreadCompose">[docs]</a><span class="k">class</span> <span class="nc">MessageThreadCompose</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;MessageThreadCompose</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        recipients_select_type ( Optional[RecipientsSelectType]): Method for selecting recipients</span>
+<span class="sd">        topic ( Optional[Dict[str, str]]): Subject of the message. You can enter the subject in multiple</span>
+<span class="sd">    		languages (the message is sent in the user&#39;s language).</span>
+<span class="sd">        text ( Optional[Dict[str, str]]): Message text. You can enter the text in multiple languages (the message is sent in the user&#39;s language)</span>
+<span class="sd">        answerable ( Optional[bool]): Whether the message can be responded to:</span>
+<span class="sd">    		* True — Users can respond to the message.</span>
+<span class="sd">    		* False — Users can&#39;t respond to the message.</span>
+<span class="sd">        recipients_ids ( Optional[List[str]]): The list of IDs of users who will receive the message.</span>
+<span class="sd">        recipients_filter ( Optional[FilterCondition]): Filter for selecting recipients.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">recipients_select_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RecipientsSelectType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">answerable</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">recipients_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">recipients_filter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FilterCondition</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class MessageThreadCompose.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, username.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

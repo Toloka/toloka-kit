@@ -1,0 +1,440 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>toloka.client.analytics_request &mdash; toloka-kit 0.1.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> toloka-kit
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.pool.html">toloka.client.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.primitives.html">toloka.client.primitives package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.html">toloka.client.project package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.template_builder.html">toloka.client.project.template_builder package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.html">toloka.client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.util.html">toloka.client.util package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.html">toloka package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">toloka-kit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../client.html">toloka.client</a> &raquo;</li>
+        
+      <li>toloka.client.analytics_request</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for toloka.client.analytics_request</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">toloka.client.primitives.base</span> <span class="kn">import</span> <span class="n">BaseTolokaObject</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Dict</span>
+<span class="p">)</span>
+<div class="viewcode-block" id="AnalyticsRequest"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.AnalyticsRequest">[docs]</a><span class="k">class</span> <span class="nc">AnalyticsRequest</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for all analytics requests in Toloka</span>
+
+<span class="sd">    How to use this requests and get some useful information see in example in &quot;TolokaClient.get_analytics&quot;.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        subject_id ( str): ID of the object you want to get analytics about.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AnalyticsRequest.Subject"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.AnalyticsRequest.Subject">[docs]</a>    <span class="k">class</span> <span class="nc">Subject</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+        <span class="n">POOL</span> <span class="o">=</span> <span class="s1">&#39;POOL&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class AnalyticsRequest.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_variant_registry</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="PoolAnalyticsRequest"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.PoolAnalyticsRequest">[docs]</a><span class="k">class</span> <span class="nc">PoolAnalyticsRequest</span><span class="p">(</span><span class="n">AnalyticsRequest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for all analytics requests about pools</span>
+
+<span class="sd">    Right now you can get analytics only about pool.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PoolAnalyticsRequest.Subject"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.PoolAnalyticsRequest.Subject">[docs]</a>    <span class="k">class</span> <span class="nc">Subject</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+        <span class="n">REAL_TASKS_COUNT</span> <span class="o">=</span> <span class="s1">&#39;real_tasks_count&#39;</span>
+        <span class="n">SUBMITTED_ASSIGNMENTS_COUNT</span> <span class="o">=</span> <span class="s1">&#39;submitted_assignments_count&#39;</span>
+        <span class="n">SKIPPED_ASSIGNMENTS_COUNT</span> <span class="o">=</span> <span class="s1">&#39;skipped_assignments_count&#39;</span>
+        <span class="n">REJECTED_ASSIGNMENTS_COUNT</span> <span class="o">=</span> <span class="s1">&#39;rejected_assignments_count&#39;</span>
+        <span class="n">APPROVED_ASSIGNMENTS_COUNT</span> <span class="o">=</span> <span class="s1">&#39;approved_assignments_count&#39;</span>
+        <span class="n">COMPLETION_PERCENTAGE</span> <span class="o">=</span> <span class="s1">&#39;completion_percentage&#39;</span>
+        <span class="n">AVG_SUBMIT_ASSIGNMENT_MILLIS</span> <span class="o">=</span> <span class="s1">&#39;avg_submit_assignment_millis&#39;</span>
+        <span class="n">SPENT_BUDGET</span> <span class="o">=</span> <span class="s1">&#39;spent_budget&#39;</span>
+        <span class="n">UNIQUE_WORKERS_COUNT</span> <span class="o">=</span> <span class="s1">&#39;unique_workers_count&#39;</span>
+        <span class="n">UNIQUE_SUBMITTERS_COUNT</span> <span class="o">=</span> <span class="s1">&#39;unique_submitters_count&#39;</span>
+        <span class="n">ACTIVE_WORKERS_BY_FILTER_COUNT</span> <span class="o">=</span> <span class="s1">&#39;active_workers_by_filter_count&#39;</span>
+        <span class="n">ESTIMATED_ASSIGNMENTS_COUNT</span> <span class="o">=</span> <span class="s1">&#39;estimated_assignments_count&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class PoolAnalyticsRequest.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_variant_registry</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">subject</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="RealTasksCountPoolAnalytics"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.RealTasksCountPoolAnalytics">[docs]</a><span class="k">class</span> <span class="nc">RealTasksCountPoolAnalytics</span><span class="p">(</span><span class="n">PoolAnalyticsRequest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The number of tasks in the pool</span>
+
+<span class="sd">    It does not take into account the overlap, how many tasks will be on one page, or the presence of golden tasks.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class RealTasksCountPoolAnalytics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="SubmitedAssignmentsCountPoolAnalytics"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.SubmitedAssignmentsCountPoolAnalytics">[docs]</a><span class="k">class</span> <span class="nc">SubmitedAssignmentsCountPoolAnalytics</span><span class="p">(</span><span class="n">PoolAnalyticsRequest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Number of assignments in the &quot;submited&quot; status in the pool</span>
+
+<span class="sd">    Do not confuse it with the approved status.</span>
+<span class="sd">    &quot;Submited&quot; status means that the task was completed by the performer and send for review.</span>
+<span class="sd">    &quot;Approved&quot; status means that the task has passed review and money has been paid for it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class SubmitedAssignmentsCountPoolAnalytics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="SkippedAssignmentsCountPoolAnalytics"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.SkippedAssignmentsCountPoolAnalytics">[docs]</a><span class="k">class</span> <span class="nc">SkippedAssignmentsCountPoolAnalytics</span><span class="p">(</span><span class="n">PoolAnalyticsRequest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Number of assignments in the &quot;skipped&quot; status in the pool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class SkippedAssignmentsCountPoolAnalytics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="RejectedAssignmentsCountPoolAnalytics"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.RejectedAssignmentsCountPoolAnalytics">[docs]</a><span class="k">class</span> <span class="nc">RejectedAssignmentsCountPoolAnalytics</span><span class="p">(</span><span class="n">PoolAnalyticsRequest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Number of assignments in the &quot;rejected&quot; status in the pool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class RejectedAssignmentsCountPoolAnalytics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="ApprovedAssignmentsCountPoolAnalytics"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.ApprovedAssignmentsCountPoolAnalytics">[docs]</a><span class="k">class</span> <span class="nc">ApprovedAssignmentsCountPoolAnalytics</span><span class="p">(</span><span class="n">PoolAnalyticsRequest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Number of assignments in the &quot;approved&quot; status in the pool</span>
+
+<span class="sd">    Do not confuse it with the submited status.</span>
+<span class="sd">    &quot;Submited&quot; status means that the task was completed by the performer and send for review.</span>
+<span class="sd">    &quot;Approved&quot; status means that the task has passed review and money has been paid for it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ApprovedAssignmentsCountPoolAnalytics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="CompletionPercentagePoolAnalytics"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.CompletionPercentagePoolAnalytics">[docs]</a><span class="k">class</span> <span class="nc">CompletionPercentagePoolAnalytics</span><span class="p">(</span><span class="n">PoolAnalyticsRequest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Approximate percentage of completed tasks in the pool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class CompletionPercentagePoolAnalytics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="AvgSubmitAssignmentMillisPoolAnalytics"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.AvgSubmitAssignmentMillisPoolAnalytics">[docs]</a><span class="k">class</span> <span class="nc">AvgSubmitAssignmentMillisPoolAnalytics</span><span class="p">(</span><span class="n">PoolAnalyticsRequest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Average time to complete one task page in milliseconds</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class AvgSubmitAssignmentMillisPoolAnalytics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="SpentBudgetPoolAnalytics"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.SpentBudgetPoolAnalytics">[docs]</a><span class="k">class</span> <span class="nc">SpentBudgetPoolAnalytics</span><span class="p">(</span><span class="n">PoolAnalyticsRequest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;How much money has already been spent on this pool, excluding fee</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class SpentBudgetPoolAnalytics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="UniqueWorkersCountPoolAnalytics"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.UniqueWorkersCountPoolAnalytics">[docs]</a><span class="k">class</span> <span class="nc">UniqueWorkersCountPoolAnalytics</span><span class="p">(</span><span class="n">PoolAnalyticsRequest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The number of unique performers who took tasks from the pool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class UniqueWorkersCountPoolAnalytics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="UniqueSubmittersCountPoolAnalytics"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.UniqueSubmittersCountPoolAnalytics">[docs]</a><span class="k">class</span> <span class="nc">UniqueSubmittersCountPoolAnalytics</span><span class="p">(</span><span class="n">PoolAnalyticsRequest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The number of unique performers who have submitted to the pool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class UniqueSubmittersCountPoolAnalytics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="ActiveWorkersByFilterCountPoolAnalytics"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.ActiveWorkersByFilterCountPoolAnalytics">[docs]</a><span class="k">class</span> <span class="nc">ActiveWorkersByFilterCountPoolAnalytics</span><span class="p">(</span><span class="n">PoolAnalyticsRequest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The number of active performers matching the pool filters for the last hours</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        interval_hours ( int): The number of hours to take into account when collecting statistics.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">interval_hours</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ActiveWorkersByFilterCountPoolAnalytics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="EstimatedAssignmentsCountPoolAnalytics"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.analytics_request.EstimatedAssignmentsCountPoolAnalytics">[docs]</a><span class="k">class</span> <span class="nc">EstimatedAssignmentsCountPoolAnalytics</span><span class="p">(</span><span class="n">PoolAnalyticsRequest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The approximate number of responses to task pages.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class EstimatedAssignmentsCountPoolAnalytics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, username.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

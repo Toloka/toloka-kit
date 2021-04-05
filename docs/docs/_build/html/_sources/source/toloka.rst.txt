@@ -1,0 +1,18 @@
+toloka package
+==============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   toloka.client
+
+Module contents
+---------------
+
+.. automodule:: toloka
+   :members:
+   :undoc-members:
+   :show-inheritance:

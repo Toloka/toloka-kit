@@ -1,0 +1,713 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>toloka.client.filter &mdash; toloka-kit 0.1.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> toloka-kit
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.pool.html">toloka.client.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.primitives.html">toloka.client.primitives package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.html">toloka.client.project package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.template_builder.html">toloka.client.project.template_builder package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.html">toloka.client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.util.html">toloka.client.util package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.html">toloka package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">toloka-kit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../client.html">toloka.client</a> &raquo;</li>
+        
+      <li>toloka.client.filter</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for toloka.client.filter</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">toloka.client.primitives.base</span> <span class="kn">import</span> <span class="n">BaseTolokaObject</span>
+<span class="kn">from</span> <span class="nn">toloka.client.primitives.operators</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">StatefulComparableConditionMixin</span><span class="p">,</span>
+    <span class="n">IdentityOperator</span><span class="p">,</span>
+    <span class="n">InclusionConditionMixin</span><span class="p">,</span>
+    <span class="n">CompareOperator</span><span class="p">,</span>
+    <span class="n">InclusionOperator</span><span class="p">,</span>
+    <span class="n">IdentityConditionMixin</span><span class="p">,</span>
+    <span class="n">ComparableConditionMixin</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Union</span><span class="p">,</span>
+    <span class="n">Dict</span>
+<span class="p">)</span>
+<div class="viewcode-block" id="FilterCondition"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.FilterCondition">[docs]</a><span class="k">class</span> <span class="nc">FilterCondition</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class FilterCondition.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+<div class="viewcode-block" id="FilterCondition.structure"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.FilterCondition.structure">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">structure</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span> <span class="o">...</span></div></div>
+
+
+
+<div class="viewcode-block" id="FilterOr"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.FilterOr">[docs]</a><span class="k">class</span> <span class="nc">FilterOr</span><span class="p">(</span><span class="n">FilterCondition</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">or_</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FilterCondition</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class FilterOr.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+<div class="viewcode-block" id="FilterOr.structure"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.FilterOr.structure">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">structure</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span> <span class="o">...</span></div></div>
+
+
+
+<div class="viewcode-block" id="FilterAnd"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.FilterAnd">[docs]</a><span class="k">class</span> <span class="nc">FilterAnd</span><span class="p">(</span><span class="n">FilterCondition</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">and_</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FilterCondition</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class FilterAnd.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+<div class="viewcode-block" id="FilterAnd.structure"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.FilterAnd.structure">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">structure</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span> <span class="o">...</span></div></div>
+
+
+
+<div class="viewcode-block" id="Condition"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Condition">[docs]</a><span class="k">class</span> <span class="nc">Condition</span><span class="p">(</span><span class="n">FilterCondition</span><span class="p">):</span>
+<div class="viewcode-block" id="Condition.Category"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Condition.Category">[docs]</a>    <span class="k">class</span> <span class="nc">Category</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+        <span class="n">PROFILE</span> <span class="o">=</span> <span class="s1">&#39;profile&#39;</span>
+        <span class="n">COMPUTED</span> <span class="o">=</span> <span class="s1">&#39;computed&#39;</span>
+        <span class="n">SKILL</span> <span class="o">=</span> <span class="s1">&#39;skill&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Condition.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_variant_registry</span> <span class="o">=</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="Condition.structure"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Condition.structure">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">structure</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span> <span class="o">...</span></div></div>
+
+
+
+<div class="viewcode-block" id="Profile"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Profile">[docs]</a><span class="k">class</span> <span class="nc">Profile</span><span class="p">(</span><span class="n">Condition</span><span class="p">):</span>
+<div class="viewcode-block" id="Profile.Key"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Profile.Key">[docs]</a>    <span class="k">class</span> <span class="nc">Key</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+        <span class="n">GENDER</span> <span class="o">=</span> <span class="s1">&#39;gender&#39;</span>
+        <span class="n">COUNTRY</span> <span class="o">=</span> <span class="s1">&#39;country&#39;</span>
+        <span class="n">CITIZENSHIP</span> <span class="o">=</span> <span class="s1">&#39;citizenship&#39;</span>
+        <span class="n">EDUCATION</span> <span class="o">=</span> <span class="s1">&#39;education&#39;</span>
+        <span class="n">ADULT_ALLOWED</span> <span class="o">=</span> <span class="s1">&#39;adult_allowed&#39;</span>
+        <span class="n">DATE_OF_BIRTH</span> <span class="o">=</span> <span class="s1">&#39;date_of_birth&#39;</span>
+        <span class="n">CITY</span> <span class="o">=</span> <span class="s1">&#39;city&#39;</span>
+        <span class="n">LANGUAGES</span> <span class="o">=</span> <span class="s1">&#39;languages&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Profile.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_variant_registry</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">category</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Computed"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Computed">[docs]</a><span class="k">class</span> <span class="nc">Computed</span><span class="p">(</span><span class="n">Condition</span><span class="p">):</span>
+<div class="viewcode-block" id="Computed.Key"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Computed.Key">[docs]</a>    <span class="k">class</span> <span class="nc">Key</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+        <span class="n">CLIENT_TYPE</span> <span class="o">=</span> <span class="s1">&#39;client_type&#39;</span>
+        <span class="n">REGION_BY_PHONE</span> <span class="o">=</span> <span class="s1">&#39;region_by_phone&#39;</span>
+        <span class="n">REGION_BY_IP</span> <span class="o">=</span> <span class="s1">&#39;region_by_ip&#39;</span>
+        <span class="n">RATING</span> <span class="o">=</span> <span class="s1">&#39;rating&#39;</span>
+        <span class="n">DEVICE_CATEGORY</span> <span class="o">=</span> <span class="s1">&#39;device_category&#39;</span>
+        <span class="n">OS_FAMILY</span> <span class="o">=</span> <span class="s1">&#39;os_family&#39;</span>
+        <span class="n">OS_VERSION</span> <span class="o">=</span> <span class="s1">&#39;os_version&#39;</span>
+        <span class="n">USER_AGENT_TYPE</span> <span class="o">=</span> <span class="s1">&#39;user_agent_type&#39;</span>
+        <span class="n">USER_AGENT_FAMILY</span> <span class="o">=</span> <span class="s1">&#39;user_agent_family&#39;</span>
+        <span class="n">USER_AGENT_VERSION</span> <span class="o">=</span> <span class="s1">&#39;user_agent_version&#39;</span>
+        <span class="n">OS_VERSION_MAJOR</span> <span class="o">=</span> <span class="s1">&#39;os_version_major&#39;</span>
+        <span class="n">OS_VERSION_MINOR</span> <span class="o">=</span> <span class="s1">&#39;os_version_minor&#39;</span>
+        <span class="n">OS_VERSION_BUGFIX</span> <span class="o">=</span> <span class="s1">&#39;os_version_bugfix&#39;</span>
+        <span class="n">USER_AGENT_VERSION_MAJOR</span> <span class="o">=</span> <span class="s1">&#39;user_agent_version_major&#39;</span>
+        <span class="n">USER_AGENT_VERSION_MINOR</span> <span class="o">=</span> <span class="s1">&#39;user_agent_version_minor&#39;</span>
+        <span class="n">USER_AGENT_VERSION_BUGFIX</span> <span class="o">=</span> <span class="s1">&#39;user_agent_version_bugfix&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Computed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_variant_registry</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">category</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Skill"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Skill">[docs]</a><span class="k">class</span> <span class="nc">Skill</span><span class="p">(</span><span class="n">StatefulComparableConditionMixin</span><span class="p">,</span> <span class="n">Condition</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">CompareOperator</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Skill.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">category</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Gender"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Gender">[docs]</a><span class="k">class</span> <span class="nc">Gender</span><span class="p">(</span><span class="n">Profile</span><span class="p">,</span> <span class="n">IdentityConditionMixin</span><span class="p">):</span>
+    <span class="n">FEMALE</span> <span class="o">=</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="Gender.Gender"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Gender.Gender">[docs]</a>    <span class="k">class</span> <span class="nc">Gender</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+        <span class="n">MALE</span> <span class="o">=</span> <span class="s1">&#39;MALE&#39;</span>
+        <span class="n">FEMALE</span> <span class="o">=</span> <span class="s1">&#39;FEMALE&#39;</span></div>
+
+
+    <span class="n">MALE</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">IdentityOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Gender</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Gender.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Country"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Country">[docs]</a><span class="k">class</span> <span class="nc">Country</span><span class="p">(</span><span class="n">Profile</span><span class="p">,</span> <span class="n">IdentityConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">IdentityOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Country.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Citizenship"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Citizenship">[docs]</a><span class="k">class</span> <span class="nc">Citizenship</span><span class="p">(</span><span class="n">Profile</span><span class="p">,</span> <span class="n">IdentityConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">IdentityOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Citizenship.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Education"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Education">[docs]</a><span class="k">class</span> <span class="nc">Education</span><span class="p">(</span><span class="n">Profile</span><span class="p">,</span> <span class="n">IdentityConditionMixin</span><span class="p">):</span>
+    <span class="n">BASIC</span> <span class="o">=</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="Education.Education"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Education.Education">[docs]</a>    <span class="k">class</span> <span class="nc">Education</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+        <span class="n">BASIC</span> <span class="o">=</span> <span class="s1">&#39;BASIC&#39;</span>
+        <span class="n">MIDDLE</span> <span class="o">=</span> <span class="s1">&#39;MIDDLE&#39;</span>
+        <span class="n">HIGH</span> <span class="o">=</span> <span class="s1">&#39;HIGH&#39;</span></div>
+
+
+    <span class="n">HIGH</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">MIDDLE</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">IdentityOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Education</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Education.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="AdultAllowed"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.AdultAllowed">[docs]</a><span class="k">class</span> <span class="nc">AdultAllowed</span><span class="p">(</span><span class="n">Profile</span><span class="p">,</span> <span class="n">IdentityConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">IdentityOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class AdultAllowed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="DateOfBirth"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.DateOfBirth">[docs]</a><span class="k">class</span> <span class="nc">DateOfBirth</span><span class="p">(</span><span class="n">Profile</span><span class="p">,</span> <span class="n">ComparableConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">CompareOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class DateOfBirth.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="City"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.City">[docs]</a><span class="k">class</span> <span class="nc">City</span><span class="p">(</span><span class="n">Profile</span><span class="p">,</span> <span class="n">InclusionConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">InclusionOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class City.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Languages"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Languages">[docs]</a><span class="k">class</span> <span class="nc">Languages</span><span class="p">(</span><span class="n">Profile</span><span class="p">,</span> <span class="n">InclusionConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">InclusionOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Languages.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="RegionByPhone"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.RegionByPhone">[docs]</a><span class="k">class</span> <span class="nc">RegionByPhone</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">InclusionConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">InclusionOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class RegionByPhone.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="RegionByIp"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.RegionByIp">[docs]</a><span class="k">class</span> <span class="nc">RegionByIp</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">InclusionConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">InclusionOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class RegionByIp.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="DeviceCategory"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.DeviceCategory">[docs]</a><span class="k">class</span> <span class="nc">DeviceCategory</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">IdentityConditionMixin</span><span class="p">):</span>
+<div class="viewcode-block" id="DeviceCategory.DeviceCategory"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.DeviceCategory.DeviceCategory">[docs]</a>    <span class="k">class</span> <span class="nc">DeviceCategory</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+        <span class="n">PERSONAL_COMPUTER</span> <span class="o">=</span> <span class="s1">&#39;PERSONAL_COMPUTER&#39;</span>
+        <span class="n">SMARTPHONE</span> <span class="o">=</span> <span class="s1">&#39;SMARTPHONE&#39;</span>
+        <span class="n">TABLET</span> <span class="o">=</span> <span class="s1">&#39;TABLET&#39;</span>
+        <span class="n">WEARABLE_COMPUTER</span> <span class="o">=</span> <span class="s1">&#39;WEARABLE_COMPUTER&#39;</span></div>
+
+
+    <span class="n">PERSONAL_COMPUTER</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">SMARTPHONE</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">TABLET</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">WEARABLE_COMPUTER</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">IdentityOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">DeviceCategory</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class DeviceCategory.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="ClientType"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.ClientType">[docs]</a><span class="k">class</span> <span class="nc">ClientType</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">IdentityConditionMixin</span><span class="p">):</span>
+<div class="viewcode-block" id="ClientType.ClientType"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.ClientType.ClientType">[docs]</a>    <span class="k">class</span> <span class="nc">ClientType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+        <span class="n">BROWSER</span> <span class="o">=</span> <span class="s1">&#39;BROWSER&#39;</span>
+        <span class="n">TOLOKA_APP</span> <span class="o">=</span> <span class="s1">&#39;TOLOKA_APP&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">IdentityOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">ClientType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ClientType.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="OSFamily"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.OSFamily">[docs]</a><span class="k">class</span> <span class="nc">OSFamily</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">IdentityConditionMixin</span><span class="p">):</span>
+    <span class="n">ANDROID</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">BLACKBERRY</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">BSD</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">IOS</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">LINUX</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">MAC_OS</span> <span class="o">=</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="OSFamily.OSFamily"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.OSFamily.OSFamily">[docs]</a>    <span class="k">class</span> <span class="nc">OSFamily</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+        <span class="n">WINDOWS</span> <span class="o">=</span> <span class="s1">&#39;WINDOWS&#39;</span>
+        <span class="n">OS_X</span> <span class="o">=</span> <span class="s1">&#39;OS_X&#39;</span>
+        <span class="n">MAC_OS</span> <span class="o">=</span> <span class="s1">&#39;MAC_OS&#39;</span>
+        <span class="n">LINUX</span> <span class="o">=</span> <span class="s1">&#39;LINUX&#39;</span>
+        <span class="n">BSD</span> <span class="o">=</span> <span class="s1">&#39;BSD&#39;</span>
+        <span class="n">ANDROID</span> <span class="o">=</span> <span class="s1">&#39;ANDROID&#39;</span>
+        <span class="n">IOS</span> <span class="o">=</span> <span class="s1">&#39;IOS&#39;</span>
+        <span class="n">BLACKBERRY</span> <span class="o">=</span> <span class="s1">&#39;BLACKBERRY&#39;</span></div>
+
+
+    <span class="n">OS_X</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">WINDOWS</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">IdentityOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">OSFamily</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class OSFamily.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="OSVersion"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.OSVersion">[docs]</a><span class="k">class</span> <span class="nc">OSVersion</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">ComparableConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">CompareOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class OSVersion.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="OSVersionMajor"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.OSVersionMajor">[docs]</a><span class="k">class</span> <span class="nc">OSVersionMajor</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">ComparableConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">CompareOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class OSVersionMajor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="OSVersionMinor"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.OSVersionMinor">[docs]</a><span class="k">class</span> <span class="nc">OSVersionMinor</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">ComparableConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">CompareOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class OSVersionMinor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="OSVersionBugfix"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.OSVersionBugfix">[docs]</a><span class="k">class</span> <span class="nc">OSVersionBugfix</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">ComparableConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">CompareOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class OSVersionBugfix.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="UserAgentType"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.UserAgentType">[docs]</a><span class="k">class</span> <span class="nc">UserAgentType</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">IdentityConditionMixin</span><span class="p">):</span>
+    <span class="n">BROWSER</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">MOBILE_BROWSER</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">OTHER</span> <span class="o">=</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="UserAgentType.UserAgentType"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.UserAgentType.UserAgentType">[docs]</a>    <span class="k">class</span> <span class="nc">UserAgentType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+        <span class="n">BROWSER</span> <span class="o">=</span> <span class="s1">&#39;BROWSER&#39;</span>
+        <span class="n">MOBILE_BROWSER</span> <span class="o">=</span> <span class="s1">&#39;MOBILE_BROWSER&#39;</span>
+        <span class="n">OTHER</span> <span class="o">=</span> <span class="s1">&#39;OTHER&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">IdentityOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">UserAgentType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class UserAgentType.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="UserAgentFamily"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.UserAgentFamily">[docs]</a><span class="k">class</span> <span class="nc">UserAgentFamily</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">IdentityConditionMixin</span><span class="p">):</span>
+    <span class="n">CHROME</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">CHROME_MOBILE</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">CHROMIUM</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">FIREFOX</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">IE</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">IE_MOBILE</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">MOBILE_FIREFOX</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">MOBILE_SAFARI</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">SAFARI</span> <span class="o">=</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="UserAgentFamily.UserAgentFamily"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.UserAgentFamily.UserAgentFamily">[docs]</a>    <span class="k">class</span> <span class="nc">UserAgentFamily</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+        <span class="n">IE</span> <span class="o">=</span> <span class="s1">&#39;IE&#39;</span>
+        <span class="n">CHROMIUM</span> <span class="o">=</span> <span class="s1">&#39;CHROMIUM&#39;</span>
+        <span class="n">CHROME</span> <span class="o">=</span> <span class="s1">&#39;CHROME&#39;</span>
+        <span class="n">FIREFOX</span> <span class="o">=</span> <span class="s1">&#39;FIREFOX&#39;</span>
+        <span class="n">SAFARI</span> <span class="o">=</span> <span class="s1">&#39;SAFARI&#39;</span>
+        <span class="n">YANDEX_BROWSER</span> <span class="o">=</span> <span class="s1">&#39;YANDEX_BROWSER&#39;</span>
+        <span class="n">IE_MOBILE</span> <span class="o">=</span> <span class="s1">&#39;IE_MOBILE&#39;</span>
+        <span class="n">CHROME_MOBILE</span> <span class="o">=</span> <span class="s1">&#39;CHROME_MOBILE&#39;</span>
+        <span class="n">MOBILE_FIREFOX</span> <span class="o">=</span> <span class="s1">&#39;MOBILE_FIREFOX&#39;</span>
+        <span class="n">MOBILE_SAFARI</span> <span class="o">=</span> <span class="s1">&#39;MOBILE_SAFARI&#39;</span></div>
+
+
+    <span class="n">YANDEX_BROWSER</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">IdentityOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">UserAgentFamily</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class UserAgentFamily.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="UserAgentVersion"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.UserAgentVersion">[docs]</a><span class="k">class</span> <span class="nc">UserAgentVersion</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">ComparableConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">CompareOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class UserAgentVersion.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="UserAgentVersionMajor"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.UserAgentVersionMajor">[docs]</a><span class="k">class</span> <span class="nc">UserAgentVersionMajor</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">ComparableConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">CompareOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class UserAgentVersionMajor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="UserAgentVersionMinor"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.UserAgentVersionMinor">[docs]</a><span class="k">class</span> <span class="nc">UserAgentVersionMinor</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">ComparableConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">CompareOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class UserAgentVersionMinor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="UserAgentVersionBugfix"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.UserAgentVersionBugfix">[docs]</a><span class="k">class</span> <span class="nc">UserAgentVersionBugfix</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">ComparableConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">CompareOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class UserAgentVersionBugfix.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Rating"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.filter.Rating">[docs]</a><span class="k">class</span> <span class="nc">Rating</span><span class="p">(</span><span class="n">Computed</span><span class="p">,</span> <span class="n">ComparableConditionMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">:</span> <span class="n">CompareOperator</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Rating.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, username.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

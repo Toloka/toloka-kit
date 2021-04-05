@@ -1,0 +1,26 @@
+.. toloka-kit documentation master file, created by
+   sphinx-quickstart on Fri Apr  2 12:50:20 2021.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to toloka-kit's documentation!
+======================================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+  source/toloka.client.pool.rst
+  source/toloka.client.primitives.rst
+  source/toloka.client.project.rst
+  source/toloka.client.project.template_builder.rst
+  source/toloka.client.rst
+  source/toloka.client.util.rst
+  source/toloka.rst
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

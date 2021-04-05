@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>toloka.client.user_restriction &mdash; toloka-kit 0.1.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> toloka-kit
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.pool.html">toloka.client.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.primitives.html">toloka.client.primitives package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.html">toloka.client.project package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.template_builder.html">toloka.client.project.template_builder package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.html">toloka.client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.util.html">toloka.client.util package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.html">toloka package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">toloka-kit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../client.html">toloka.client</a> &raquo;</li>
+        
+      <li>toloka.client.user_restriction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for toloka.client.user_restriction</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">toloka.client.primitives.base</span> <span class="kn">import</span> <span class="n">BaseTolokaObject</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Dict</span>
+<span class="p">)</span>
+<div class="viewcode-block" id="DurationUnit"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.user_restriction.DurationUnit">[docs]</a><span class="k">class</span> <span class="nc">DurationUnit</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+    <span class="n">MINUTES</span> <span class="o">=</span> <span class="s1">&#39;MINUTES&#39;</span>
+    <span class="n">HOURS</span> <span class="o">=</span> <span class="s1">&#39;HOURS&#39;</span>
+    <span class="n">DAYS</span> <span class="o">=</span> <span class="s1">&#39;DAYS&#39;</span>
+    <span class="n">PERMANENT</span> <span class="o">=</span> <span class="s1">&#39;PERMANENT&#39;</span></div>
+
+
+<div class="viewcode-block" id="UserRestriction"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.user_restriction.UserRestriction">[docs]</a><span class="k">class</span> <span class="nc">UserRestriction</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Allows you to control the performer&#39;s access to your projects and pools</span>
+
+<span class="sd">    You can close user access to one or more projects. This allows you to control which users will perform tasks.</span>
+<span class="sd">    For example, you can select users with a skill value below N and block them from accessing tasks.</span>
+<span class="sd">    You can also unlock access.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        user_id ( Optional[str]): Which performer is denied access.</span>
+<span class="sd">        private_comment ( Optional[str]): A comment for you why access to this performer was restricted.</span>
+<span class="sd">        will_expire ( Optional[datetime]): When access is restored. If you do not set the parameter, then the access restriction is permanent.</span>
+<span class="sd">        id ( Optional[str]): The identifier of a specific fact of access restriction. Read only.</span>
+<span class="sd">        created ( Optional[datetime]): Date and time when the fact of access restriction was created. Read only.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    How you can lock access for one user on one project.</span>
+
+<span class="sd">    &gt;&gt;&gt; new_restrict = toloka_client.set_user_restriction(</span>
+<span class="sd">    &gt;&gt;&gt;     ProjectUserRestriction(</span>
+<span class="sd">    &gt;&gt;&gt;         user_id=&#39;1&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;         private_comment=&#39;I dont like you&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;         project_id=&#39;5&#39;</span>
+<span class="sd">    &gt;&gt;&gt;     )</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    ...</span>
+
+<span class="sd">    And how you can unlock it.</span>
+
+<span class="sd">    &gt;&gt;&gt; toloka_client.delete_user_restriction(new_restrict.id)</span>
+<span class="sd">    ...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ALL_PROJECTS</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">POOL</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">PROJECT</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="n">SYSTEM</span> <span class="o">=</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="UserRestriction.Scope"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.user_restriction.UserRestriction.Scope">[docs]</a>    <span class="k">class</span> <span class="nc">Scope</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Restriction scope</span>
+
+<span class="sd">        * ALL_PROJECTS - All the requester&#39;s projects.</span>
+<span class="sd">        * PROJECT - A single project (specify the project_id).</span>
+<span class="sd">        * POOL - A pool (specify the pool_id).&quot;&quot;&quot;</span>
+
+        <span class="n">SYSTEM</span> <span class="o">=</span> <span class="s1">&#39;SYSTEM&#39;</span>
+        <span class="n">ALL_PROJECTS</span> <span class="o">=</span> <span class="s1">&#39;ALL_PROJECTS&#39;</span>
+        <span class="n">PROJECT</span> <span class="o">=</span> <span class="s1">&#39;PROJECT&#39;</span>
+        <span class="n">POOL</span> <span class="o">=</span> <span class="s1">&#39;POOL&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">private_comment</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">will_expire</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">created</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class UserRestriction.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_variant_registry</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="AllProjectsUserRestriction"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.user_restriction.AllProjectsUserRestriction">[docs]</a><span class="k">class</span> <span class="nc">AllProjectsUserRestriction</span><span class="p">(</span><span class="n">UserRestriction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Forbid the performer from doing tasks from all your projects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">private_comment</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">will_expire</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">created</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class AllProjectsUserRestriction.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">scope</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="PoolUserRestriction"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.user_restriction.PoolUserRestriction">[docs]</a><span class="k">class</span> <span class="nc">PoolUserRestriction</span><span class="p">(</span><span class="n">UserRestriction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Forbid the performer from doing tasks from a specific pool</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        pool_id ( Optional[str]): Pool identifier to which access will be denied.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">private_comment</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">will_expire</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">created</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">pool_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class PoolUserRestriction.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">scope</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="ProjectUserRestriction"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.user_restriction.ProjectUserRestriction">[docs]</a><span class="k">class</span> <span class="nc">ProjectUserRestriction</span><span class="p">(</span><span class="n">UserRestriction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Forbid the performer from doing tasks from a specific project</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        project_id ( Optional[str]): Project identifier to which access will be denied.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">private_comment</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">will_expire</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">created</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ProjectUserRestriction.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">scope</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="SystemUserRestriction"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.user_restriction.SystemUserRestriction">[docs]</a><span class="k">class</span> <span class="nc">SystemUserRestriction</span><span class="p">(</span><span class="n">UserRestriction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;DEPRECATED</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">private_comment</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">will_expire</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">created</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class SystemUserRestriction.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">scope</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, username.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

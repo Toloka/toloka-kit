@@ -1,0 +1,591 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>toloka.client.primitives package &mdash; toloka-kit 0.1.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="toloka.client.project package" href="toloka.client.project.html" />
+    <link rel="prev" title="toloka.client.pool package" href="toloka.client.pool.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> toloka-kit
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="toloka.client.pool.html">toloka.client.pool package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">toloka.client.primitives package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-toloka.client.primitives.base">toloka.client.primitives.base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-toloka.client.primitives.infinite_overlap">toloka.client.primitives.infinite_overlap module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-toloka.client.primitives.operators">toloka.client.primitives.operators module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-toloka.client.primitives.parameter">toloka.client.primitives.parameter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-toloka.client.primitives">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="toloka.client.project.html">toloka.client.project package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toloka.client.project.template_builder.html">toloka.client.project.template_builder package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="toloka.client.html">toloka.client package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="toloka.client.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="toloka.client.pool.html">toloka.client.pool package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">toloka.client.primitives package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-toloka.client.primitives.base">toloka.client.primitives.base module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-toloka.client.primitives.infinite_overlap">toloka.client.primitives.infinite_overlap module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-toloka.client.primitives.operators">toloka.client.primitives.operators module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-toloka.client.primitives.parameter">toloka.client.primitives.parameter module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-toloka.client.primitives">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="toloka.client.project.html">toloka.client.project package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="toloka.client.util.html">toloka.client.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.actions">toloka.client.actions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.aggregation">toloka.client.aggregation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.analytics_request">toloka.client.analytics_request module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.assignment">toloka.client.assignment module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.attachment">toloka.client.attachment module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.batch_create_results">toloka.client.batch_create_results module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.clone_results">toloka.client.clone_results module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.collectors">toloka.client.collectors module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.conditions">toloka.client.conditions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.error_codes">toloka.client.error_codes module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.exceptions">toloka.client.exceptions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.filter">toloka.client.filter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.message_thread">toloka.client.message_thread module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.operation_log">toloka.client.operation_log module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.operations">toloka.client.operations module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.owner">toloka.client.owner module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.quality_control">toloka.client.quality_control module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.requester">toloka.client.requester module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.search_requests">toloka.client.search_requests module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.search_results">toloka.client.search_results module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.skill">toloka.client.skill module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.solution">toloka.client.solution module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.task">toloka.client.task module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.task_distribution_function">toloka.client.task_distribution_function module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.task_suite">toloka.client.task_suite module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.training">toloka.client.training module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.user_bonus">toloka.client.user_bonus module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.user_restriction">toloka.client.user_restriction module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client.user_skill">toloka.client.user_skill module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.client.html#module-toloka.client">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="toloka.client.util.html">toloka.client.util package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="toloka.html">toloka package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="toloka.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="toloka.client.html">toloka.client package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="toloka.client.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.actions">toloka.client.actions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.aggregation">toloka.client.aggregation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.analytics_request">toloka.client.analytics_request module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.assignment">toloka.client.assignment module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.attachment">toloka.client.attachment module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.batch_create_results">toloka.client.batch_create_results module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.clone_results">toloka.client.clone_results module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.collectors">toloka.client.collectors module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.conditions">toloka.client.conditions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.error_codes">toloka.client.error_codes module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.exceptions">toloka.client.exceptions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.filter">toloka.client.filter module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.message_thread">toloka.client.message_thread module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.operation_log">toloka.client.operation_log module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.operations">toloka.client.operations module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.owner">toloka.client.owner module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.quality_control">toloka.client.quality_control module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.requester">toloka.client.requester module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.search_requests">toloka.client.search_requests module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.search_results">toloka.client.search_results module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.skill">toloka.client.skill module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.solution">toloka.client.solution module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.task">toloka.client.task module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.task_distribution_function">toloka.client.task_distribution_function module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.task_suite">toloka.client.task_suite module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.training">toloka.client.training module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.user_bonus">toloka.client.user_bonus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.user_restriction">toloka.client.user_restriction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client.user_skill">toloka.client.user_skill module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toloka.client.html#module-toloka.client">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toloka.html#module-toloka">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">toloka-kit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>toloka.client.primitives package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/source/toloka.client.primitives.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="toloka-client-primitives-package">
+<h1>toloka.client.primitives package<a class="headerlink" href="#toloka-client-primitives-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-toloka.client.primitives.base">
+<span id="toloka-client-primitives-base-module"></span><h2>toloka.client.primitives.base module<a class="headerlink" href="#module-toloka.client.primitives.base" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="toloka.client.primitives.base.BaseTolokaObject">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">toloka.client.primitives.base.</span></code><code class="sig-name descname"><span class="pre">BaseTolokaObject</span></code><a class="reference internal" href="../_modules/toloka/client/primitives/base.html#BaseTolokaObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.base.BaseTolokaObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A base class for classes representing Toloka objects.</p>
+<p>Subclasses of BaseTolokaObject will:
+* Automatically convert annotated attributes attributes via attrs making them optional</p>
+<blockquote>
+<div><p>if not explicitly configured otherwise</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Skip missing optional fields during unstructuring with client’s cattr converter</p></li>
+</ul>
+<dl class="py method">
+<dt id="toloka.client.primitives.base.BaseTolokaObject.get_spec_subclass_for_value">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">get_spec_subclass_for_value</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">E</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">type</span><a class="reference internal" href="../_modules/toloka/client/primitives/base.html#BaseTolokaObject.get_spec_subclass_for_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.base.BaseTolokaObject.get_spec_subclass_for_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="toloka.client.primitives.base.BaseTolokaObject.get_variant_specs">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">get_variant_specs</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/toloka/client/primitives/base.html#BaseTolokaObject.get_variant_specs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.base.BaseTolokaObject.get_variant_specs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="toloka.client.primitives.base.BaseTolokaObject.is_variant_base">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">is_variant_base</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/toloka/client/primitives/base.html#BaseTolokaObject.is_variant_base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.base.BaseTolokaObject.is_variant_base" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="toloka.client.primitives.base.BaseTolokaObject.is_variant_incomplete">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">is_variant_incomplete</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/toloka/client/primitives/base.html#BaseTolokaObject.is_variant_incomplete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.base.BaseTolokaObject.is_variant_incomplete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="toloka.client.primitives.base.BaseTolokaObject.is_variant_spec">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">is_variant_spec</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/toloka/client/primitives/base.html#BaseTolokaObject.is_variant_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.base.BaseTolokaObject.is_variant_spec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="toloka.client.primitives.base.BaseTolokaObject.structure">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">structure</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/base.html#BaseTolokaObject.structure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.base.BaseTolokaObject.structure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="toloka.client.primitives.base.BaseTolokaObject.unstructure">
+<code class="sig-name descname"><span class="pre">unstructure</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/toloka/client/primitives/base.html#BaseTolokaObject.unstructure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.base.BaseTolokaObject.unstructure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="toloka.client.primitives.base.BaseTolokaObjectMetaclass">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">toloka.client.primitives.base.</span></code><code class="sig-name descname"><span class="pre">BaseTolokaObjectMetaclass</span></code><a class="reference internal" href="../_modules/toloka/client/primitives/base.html#BaseTolokaObjectMetaclass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.base.BaseTolokaObjectMetaclass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
+<dl class="py method">
+<dt id="toloka.client.primitives.base.BaseTolokaObjectMetaclass.transformer">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">transformer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">attr._make.Attribute</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">attr._make.Attribute</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/toloka/client/primitives/base.html#BaseTolokaObjectMetaclass.transformer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.base.BaseTolokaObjectMetaclass.transformer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="toloka.client.primitives.base.VariantRegistry">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">toloka.client.primitives.base.</span></code><code class="sig-name descname"><span class="pre">VariantRegistry</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enum</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">E</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/base.html#VariantRegistry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.base.VariantRegistry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="toloka.client.primitives.base.VariantRegistry.register">
+<code class="sig-name descname"><span class="pre">register</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">E</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">type</span><a class="reference internal" href="../_modules/toloka/client/primitives/base.html#VariantRegistry.register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.base.VariantRegistry.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="toloka.client.primitives.base.attribute">
+<code class="sig-prename descclassname"><span class="pre">toloka.client.primitives.base.</span></code><code class="sig-name descname"><span class="pre">attribute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/base.html#attribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.base.attribute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-toloka.client.primitives.infinite_overlap">
+<span id="toloka-client-primitives-infinite-overlap-module"></span><h2>toloka.client.primitives.infinite_overlap module<a class="headerlink" href="#module-toloka.client.primitives.infinite_overlap" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">toloka.client.primitives.infinite_overlap.</span></code><code class="sig-name descname"><span class="pre">InfiniteOverlapParametersMixin</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">infinite_overlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/infinite_overlap.html#InfiniteOverlapParametersMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This mixin provides <cite>overlap</cite> and <cite>infinite_overlap</cite> attributes</p>
+<p>and is responsible for maintaining their consistency.</p>
+<p>Possible states:
+* <cite>overlap</cite> is None and <cite>infinite_overlap</cite> is None:</p>
+<blockquote>
+<div><p>Interpreted as “overlap was not provided”</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt><cite>overlap</cite> is None and <cite>infinite_overlap</cite> is True:</dt><dd><p>Interpreted as “infinite overlap”</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><cite>overlap</cite> is not None and <cite>infinite_overlap</cite> is False:</dt><dd><p>Interpreted as “finite overlap of <cite>overlap</cite>”</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>All other states are considered invalid</p>
+<dl class="py attribute">
+<dt id="toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin.infinite_overlap">
+<code class="sig-name descname"><span class="pre">infinite_overlap</span></code><em class="property"> <span class="pre">=</span> <span class="pre">Ellipsis</span></em><a class="headerlink" href="#toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin.infinite_overlap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin.overlap">
+<code class="sig-name descname"><span class="pre">overlap</span></code><em class="property"> <span class="pre">=</span> <span class="pre">Ellipsis</span></em><a class="headerlink" href="#toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin.overlap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin.unset_overlap">
+<code class="sig-name descname"><span class="pre">unset_overlap</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/infinite_overlap.html#InfiniteOverlapParametersMixin.unset_overlap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin.unset_overlap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unsets overlap</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin.unstructure">
+<code class="sig-name descname"><span class="pre">unstructure</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/toloka/client/primitives/infinite_overlap.html#InfiniteOverlapParametersMixin.unstructure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin.unstructure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensures that if either overlap or infinite_overlap is not None, then</p>
+<p>both of them are present in unstructured value.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-toloka.client.primitives.operators">
+<span id="toloka-client-primitives-operators-module"></span><h2>toloka.client.primitives.operators module<a class="headerlink" href="#module-toloka.client.primitives.operators" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="toloka.client.primitives.operators.ComparableConditionMixin">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">toloka.client.primitives.operators.</span></code><code class="sig-name descname"><span class="pre">ComparableConditionMixin</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operator</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#toloka.client.primitives.operators.CompareOperator" title="toloka.client.primitives.operators.CompareOperator"><span class="pre">toloka.client.primitives.operators.CompareOperator</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/operators.html#ComparableConditionMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.operators.ComparableConditionMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="toloka.client.primitives.operators.CompareOperator">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">toloka.client.primitives.operators.</span></code><code class="sig-name descname"><span class="pre">CompareOperator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/operators.html#CompareOperator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.operators.CompareOperator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt id="toloka.client.primitives.operators.CompareOperator.EQ">
+<code class="sig-name descname"><span class="pre">EQ</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'EQ'</span></em><a class="headerlink" href="#toloka.client.primitives.operators.CompareOperator.EQ" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="toloka.client.primitives.operators.CompareOperator.GT">
+<code class="sig-name descname"><span class="pre">GT</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'GT'</span></em><a class="headerlink" href="#toloka.client.primitives.operators.CompareOperator.GT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="toloka.client.primitives.operators.CompareOperator.GTE">
+<code class="sig-name descname"><span class="pre">GTE</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'GTE'</span></em><a class="headerlink" href="#toloka.client.primitives.operators.CompareOperator.GTE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="toloka.client.primitives.operators.CompareOperator.LT">
+<code class="sig-name descname"><span class="pre">LT</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'LT'</span></em><a class="headerlink" href="#toloka.client.primitives.operators.CompareOperator.LT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="toloka.client.primitives.operators.CompareOperator.LTE">
+<code class="sig-name descname"><span class="pre">LTE</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'LTE'</span></em><a class="headerlink" href="#toloka.client.primitives.operators.CompareOperator.LTE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="toloka.client.primitives.operators.CompareOperator.NE">
+<code class="sig-name descname"><span class="pre">NE</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'NE'</span></em><a class="headerlink" href="#toloka.client.primitives.operators.CompareOperator.NE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="toloka.client.primitives.operators.IdentityConditionMixin">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">toloka.client.primitives.operators.</span></code><code class="sig-name descname"><span class="pre">IdentityConditionMixin</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operator</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#toloka.client.primitives.operators.IdentityOperator" title="toloka.client.primitives.operators.IdentityOperator"><span class="pre">toloka.client.primitives.operators.IdentityOperator</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/operators.html#IdentityConditionMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.operators.IdentityConditionMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="toloka.client.primitives.operators.IdentityOperator">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">toloka.client.primitives.operators.</span></code><code class="sig-name descname"><span class="pre">IdentityOperator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/operators.html#IdentityOperator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.operators.IdentityOperator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt id="toloka.client.primitives.operators.IdentityOperator.EQ">
+<code class="sig-name descname"><span class="pre">EQ</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'EQ'</span></em><a class="headerlink" href="#toloka.client.primitives.operators.IdentityOperator.EQ" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="toloka.client.primitives.operators.IdentityOperator.NE">
+<code class="sig-name descname"><span class="pre">NE</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'NE'</span></em><a class="headerlink" href="#toloka.client.primitives.operators.IdentityOperator.NE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="toloka.client.primitives.operators.InclusionConditionMixin">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">toloka.client.primitives.operators.</span></code><code class="sig-name descname"><span class="pre">InclusionConditionMixin</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operator</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#toloka.client.primitives.operators.InclusionOperator" title="toloka.client.primitives.operators.InclusionOperator"><span class="pre">toloka.client.primitives.operators.InclusionOperator</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/operators.html#InclusionConditionMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.operators.InclusionConditionMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="toloka.client.primitives.operators.InclusionOperator">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">toloka.client.primitives.operators.</span></code><code class="sig-name descname"><span class="pre">InclusionOperator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/operators.html#InclusionOperator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.operators.InclusionOperator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt id="toloka.client.primitives.operators.InclusionOperator.IN">
+<code class="sig-name descname"><span class="pre">IN</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'IN'</span></em><a class="headerlink" href="#toloka.client.primitives.operators.InclusionOperator.IN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="toloka.client.primitives.operators.InclusionOperator.NOT_IN">
+<code class="sig-name descname"><span class="pre">NOT_IN</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'NOT_IN'</span></em><a class="headerlink" href="#toloka.client.primitives.operators.InclusionOperator.NOT_IN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="toloka.client.primitives.operators.StatefulComparableConditionMixin">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">toloka.client.primitives.operators.</span></code><code class="sig-name descname"><span class="pre">StatefulComparableConditionMixin</span></code><a class="reference internal" href="../_modules/toloka/client/primitives/operators.html#StatefulComparableConditionMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.operators.StatefulComparableConditionMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="toloka.client.primitives.operators.StatefulComparableConditionMixin.eq">
+<code class="sig-name descname"><span class="pre">eq</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/operators.html#StatefulComparableConditionMixin.eq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.operators.StatefulComparableConditionMixin.eq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="toloka.client.primitives.operators.StatefulComparableConditionMixin.gt">
+<code class="sig-name descname"><span class="pre">gt</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/operators.html#StatefulComparableConditionMixin.gt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.operators.StatefulComparableConditionMixin.gt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="toloka.client.primitives.operators.StatefulComparableConditionMixin.gte">
+<code class="sig-name descname"><span class="pre">gte</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/operators.html#StatefulComparableConditionMixin.gte"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.operators.StatefulComparableConditionMixin.gte" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="toloka.client.primitives.operators.StatefulComparableConditionMixin.lt">
+<code class="sig-name descname"><span class="pre">lt</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/operators.html#StatefulComparableConditionMixin.lt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.operators.StatefulComparableConditionMixin.lt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="toloka.client.primitives.operators.StatefulComparableConditionMixin.lte">
+<code class="sig-name descname"><span class="pre">lte</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/operators.html#StatefulComparableConditionMixin.lte"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.operators.StatefulComparableConditionMixin.lte" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="toloka.client.primitives.operators.StatefulComparableConditionMixin.ne">
+<code class="sig-name descname"><span class="pre">ne</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toloka/client/primitives/operators.html#StatefulComparableConditionMixin.ne"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.operators.StatefulComparableConditionMixin.ne" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-toloka.client.primitives.parameter">
+<span id="toloka-client-primitives-parameter-module"></span><h2>toloka.client.primitives.parameter module<a class="headerlink" href="#module-toloka.client.primitives.parameter" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="toloka.client.primitives.parameter.Parameters">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">toloka.client.primitives.parameter.</span></code><code class="sig-name descname"><span class="pre">Parameters</span></code><a class="reference internal" href="../_modules/toloka/client/primitives/parameter.html#Parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.parameter.Parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#toloka.client.primitives.base.BaseTolokaObject" title="toloka.client.primitives.base.BaseTolokaObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">toloka.client.primitives.base.BaseTolokaObject</span></code></a></p>
+<dl class="py method">
+<dt id="toloka.client.primitives.parameter.Parameters.unstructure">
+<code class="sig-name descname"><span class="pre">unstructure</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/toloka/client/primitives/parameter.html#Parameters.unstructure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toloka.client.primitives.parameter.Parameters.unstructure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-toloka.client.primitives">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-toloka.client.primitives" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="toloka.client.project.html" class="btn btn-neutral float-right" title="toloka.client.project package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="toloka.client.pool.html" class="btn btn-neutral float-left" title="toloka.client.pool package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, username.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

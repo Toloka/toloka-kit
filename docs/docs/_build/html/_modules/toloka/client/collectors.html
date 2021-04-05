@@ -1,0 +1,760 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>toloka.client.collectors &mdash; toloka-kit 0.1.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> toloka-kit
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.pool.html">toloka.client.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.primitives.html">toloka.client.primitives package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.html">toloka.client.project package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.template_builder.html">toloka.client.project.template_builder package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.html">toloka.client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.util.html">toloka.client.util package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.html">toloka package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">toloka-kit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../client.html">toloka.client</a> &raquo;</li>
+        
+      <li>toloka.client.collectors</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for toloka.client.collectors</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">toloka.client.conditions</span> <span class="kn">import</span> <span class="n">RuleCondition</span>
+<span class="kn">from</span> <span class="nn">toloka.client.util._codegen</span> <span class="kn">import</span> <span class="n">BaseParameters</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">overload</span><span class="p">,</span>
+    <span class="n">Dict</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
+<div class="viewcode-block" id="CollectorConfig"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.CollectorConfig">[docs]</a><span class="k">class</span> <span class="nc">CollectorConfig</span><span class="p">(</span><span class="n">BaseParameters</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for all collectors</span>
+
+<span class="sd">    Attriutes:</span>
+<span class="sd">        uuid: Id for this collector. Pay attention! If you clone the pool, you will have same collector in old and new pools.</span>
+<span class="sd">            So collectors can behave a little unexpectedly. For example they start gather &quot;history_size&quot; patameter</span>
+<span class="sd">            from both pools.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CollectorConfig.Type"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.CollectorConfig.Type">[docs]</a>    <span class="k">class</span> <span class="nc">Type</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+        <span class="n">GOLDEN_SET</span> <span class="o">=</span> <span class="s1">&#39;GOLDEN_SET&#39;</span>
+        <span class="n">MAJORITY_VOTE</span> <span class="o">=</span> <span class="s1">&#39;MAJORITY_VOTE&#39;</span>
+        <span class="n">CAPTCHA</span> <span class="o">=</span> <span class="s1">&#39;CAPTCHA&#39;</span>
+        <span class="n">INCOME</span> <span class="o">=</span> <span class="s1">&#39;INCOME&#39;</span>
+        <span class="n">SKIPPED_IN_ROW_ASSIGNMENTS</span> <span class="o">=</span> <span class="s1">&#39;SKIPPED_IN_ROW_ASSIGNMENTS&#39;</span>
+        <span class="n">ANSWER_COUNT</span> <span class="o">=</span> <span class="s1">&#39;ANSWER_COUNT&#39;</span>
+        <span class="n">ASSIGNMENT_SUBMIT_TIME</span> <span class="o">=</span> <span class="s1">&#39;ASSIGNMENT_SUBMIT_TIME&#39;</span>
+        <span class="n">ACCEPTANCE_RATE</span> <span class="o">=</span> <span class="s1">&#39;ACCEPTANCE_RATE&#39;</span>
+        <span class="n">ASSIGNMENTS_ASSESSMENT</span> <span class="o">=</span> <span class="s1">&#39;ASSIGNMENTS_ASSESSMENT&#39;</span>
+        <span class="n">USERS_ASSESSMENT</span> <span class="o">=</span> <span class="s1">&#39;USERS_ASSESSMENT&#39;</span>
+        <span class="n">TRAINING</span> <span class="o">=</span> <span class="s1">&#39;TRAINING&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class CollectorConfig.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_variant_registry</span> <span class="o">=</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="CollectorConfig.validate_condition"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.CollectorConfig.validate_condition">[docs]</a>    <span class="k">def</span> <span class="nf">validate_condition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conditions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RuleCondition</span><span class="p">]):</span> <span class="o">...</span></div></div>
+
+
+
+<div class="viewcode-block" id="AcceptanceRate"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.AcceptanceRate">[docs]</a><span class="k">class</span> <span class="nc">AcceptanceRate</span><span class="p">(</span><span class="n">CollectorConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Results of checking the answers of the performer</span>
+
+<span class="sd">    If non-automatic acceptance (assignment review) is set in the pool, add a rule to:</span>
+<span class="sd">    - Set the performer&#39;s skill based on their responses.</span>
+<span class="sd">    - Block access for performers who give incorrect responses.</span>
+
+<span class="sd">    Used with conditions:</span>
+<span class="sd">        * TotalAssignmentsCount - How many assignments from this performer were checked.</span>
+<span class="sd">        * AcceptedAssignmentsRate - Percentage of how many assignments were accepted from this performer out of all checked assignment.</span>
+<span class="sd">        * RejectedAssignmentsRate - Percentage of how many assignments were rejected from this performer out of all checked assignment.</span>
+
+<span class="sd">    Used with actions:</span>
+<span class="sd">        * RestrictionV2 - Block access to projects or pools.</span>
+<span class="sd">        * ApproveAllAssignments - Approve all replies from the performer.</span>
+<span class="sd">        * RejectAllAssignments - Reject all replies from the performer.</span>
+<span class="sd">        * SetSkill - Set perfmer skill value.</span>
+<span class="sd">        * SetSkillFromOutputField - Set performer skill value from source.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    How to ban a performer in this project if he makes mistakes.</span>
+
+<span class="sd">    &gt;&gt;&gt; new_pool = toloka.pool.Pool(....)</span>
+<span class="sd">    &gt;&gt;&gt; new_pool.quality_control.add_action(</span>
+<span class="sd">    &gt;&gt;&gt; collector=toloka.collectors.AcceptanceRate(),</span>
+<span class="sd">    &gt;&gt;&gt;     conditions=[</span>
+<span class="sd">    &gt;&gt;&gt;         toloka.conditions.TotalAssignmentsCount &gt; 2,</span>
+<span class="sd">    &gt;&gt;&gt;         toloka.conditions.RejectedAssignmentsRate &gt; 35,</span>
+<span class="sd">    &gt;&gt;&gt;     ],</span>
+<span class="sd">    &gt;&gt;&gt;     action=toloka.actions.RestrictionV2(</span>
+<span class="sd">    &gt;&gt;&gt;         scope=toloka.user_restriction.UserRestriction.PROJECT,</span>
+<span class="sd">    &gt;&gt;&gt;         duration=15,</span>
+<span class="sd">    &gt;&gt;&gt;         duration_unit=&#39;DAYS&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;         private_comment=&#39;Performer often make mistakes&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;     )</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    ...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class AcceptanceRate.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_compatible_conditions</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="AnswerCount"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.AnswerCount">[docs]</a><span class="k">class</span> <span class="nc">AnswerCount</span><span class="p">(</span><span class="n">CollectorConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;How many assignment was accepted from performer</span>
+
+<span class="sd">    Use this rule if you want to:</span>
+<span class="sd">    - Get responses from as many performers as possible (for this purpose, set a low threshold, such as one task suite).</span>
+<span class="sd">    - Protect yourself from robots (for this purpose, the threshold should be higher, such as 10% of the pool&#39;s tasks).</span>
+<span class="sd">    - Mark performers completing a task so that you can filter them later in the checking project.</span>
+
+<span class="sd">    Used with conditions:</span>
+<span class="sd">        * AssignmentsAcceptedCount - How many assignment was accepted from performer</span>
+
+<span class="sd">    Used with actions:</span>
+<span class="sd">        * RestrictionV2 - Block access to projects or pools.</span>
+<span class="sd">        * ApproveAllAssignments - Approve all replies from the performer.</span>
+<span class="sd">        * RejectAllAssignments - Reject all replies from the performer.</span>
+<span class="sd">        * SetSkill - Set perfmer skill value.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    How to mark performers completing a task so that you can filter them later in the checking project.</span>
+
+<span class="sd">    &gt;&gt;&gt; new_pool = toloka.pool.Pool(....)</span>
+<span class="sd">    &gt;&gt;&gt; new_pool.quality_control.add_action(</span>
+<span class="sd">    &gt;&gt;&gt;     collector=toloka.collectors.AnswerCount(),</span>
+<span class="sd">    &gt;&gt;&gt;     conditions=[toloka.conditions.AssignmentsAcceptedCount &gt; 0],</span>
+<span class="sd">    &gt;&gt;&gt;     action=toloka.actions.SetSkill(skill_id=some_skill_id, skill_value=1),</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    ...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class AnswerCount.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_compatible_conditions</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="AssignmentsAssessment"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.AssignmentsAssessment">[docs]</a><span class="k">class</span> <span class="nc">AssignmentsAssessment</span><span class="p">(</span><span class="n">CollectorConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Processing rejected and accepted assignments</span>
+
+<span class="sd">    This rule is helpful when you need to:</span>
+<span class="sd">    - Resend rejected assignments for re-completion to other performers. If you rejected an assignment, you may want it</span>
+<span class="sd">    to be completed by another performer instead of the one whose response you rejected. To do this, you can increase</span>
+<span class="sd">    the overlap for this assignment only. This is especially helpful if you have the overlap value set to 1.</span>
+<span class="sd">    - Save money on re-completing assignments that you have already accepted. If you reviewed and accepted an assignment,</span>
+<span class="sd">    it may not make sense for other users to complete the same assignment. To avoid this, you can reduce the overlap for</span>
+<span class="sd">    accepted assignments only.</span>
+
+<span class="sd">    Used with conditions:</span>
+<span class="sd">        * PendingAssignmentsCount - Number of Assignments pending checking.</span>
+<span class="sd">        * AcceptedAssignmentsCount - How many times this assignment was accepted.</span>
+<span class="sd">        * RejectedAssignmentsCount - How many times this assignment was rejected.</span>
+<span class="sd">        * AssessmentEvent - Assessment of the assignment changes its status to the specified one.</span>
+
+<span class="sd">    Used with actions:</span>
+<span class="sd">        * ChangeOverlap - Increase the overlap of the set of tasks.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    How to resend rejected assignments for re-completion to other performers.</span>
+
+<span class="sd">    &gt;&gt;&gt; new_pool = toloka.pool.Pool(....)</span>
+<span class="sd">    &gt;&gt;&gt; new_pool.quality_control.add_action(</span>
+<span class="sd">    &gt;&gt;&gt;     collector=toloka.collectors.AssignmentsAssessment(),</span>
+<span class="sd">    &gt;&gt;&gt;     conditions=[toloka.conditions.AssessmentEvent == toloka.conditions.AssessmentEvent.REJECT],</span>
+<span class="sd">    &gt;&gt;&gt;     action=toloka.actions.ChangeOverlap(delta=1, open_pool=True),</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    ...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class AssignmentsAssessment.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_compatible_conditions</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="AssignmentSubmitTime"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.AssignmentSubmitTime">[docs]</a><span class="k">class</span> <span class="nc">AssignmentSubmitTime</span><span class="p">(</span><span class="n">CollectorConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Filtering cheating performers who respond too quickly</span>
+
+<span class="sd">    Helpful when you need to:</span>
+<span class="sd">    - Use this Restrict the pool access for performers who respond too quickly.</span>
+<span class="sd">    - Provide protection from robots.</span>
+
+<span class="sd">    Used with conditions:</span>
+<span class="sd">        * TotalSubmittedCount - The number of assignments a specific performer completed.</span>
+<span class="sd">        * FastSubmittedCount - The number of assignments a specific performer completed too fast.</span>
+
+<span class="sd">    Used with actions:</span>
+<span class="sd">        * RestrictionV2 - Block access to projects or pools.</span>
+<span class="sd">        * ApproveAllAssignments - Approve all replies from the performer.</span>
+<span class="sd">        * RejectAllAssignments - Reject all replies from the performer.</span>
+<span class="sd">        * SetSkill - Set perfmer skill value.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        parameters.fast_submit_threshold_seconds: The task suite completion time (in seconds).</span>
+<span class="sd">    		Everything that is completed faster is considered a fast response.</span>
+<span class="sd">        parameters.history_size: The number of the recent task suites completed by the performer.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    How to reject all assignments if performer sends answers too fast.</span>
+
+<span class="sd">    &gt;&gt;&gt; new_pool = toloka.pool.Pool(....)</span>
+<span class="sd">    &gt;&gt;&gt; new_pool.quality_control.add_action(</span>
+<span class="sd">    &gt;&gt;&gt;     collector=toloka.collectors.AssignmentSubmitTime(history_size=5, fast_submit_threshold_seconds=20),</span>
+<span class="sd">    &gt;&gt;&gt;     conditions=[toloka.conditions.FastSubmittedCount &gt; 3],</span>
+<span class="sd">    &gt;&gt;&gt;     action=toloka.actions.RejectAllAssignments(public_comment=&#39;Too fast answering. You are cheater!&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    ...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AssignmentSubmitTime.Parameters"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.AssignmentSubmitTime.Parameters">[docs]</a>    <span class="k">class</span> <span class="nc">Parameters</span><span class="p">(</span><span class="n">BaseParameters</span><span class="o">.</span><span class="n">Parameters</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">fast_submit_threshold_seconds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">history_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;Method generated by attrs for class AssignmentSubmitTime.Parameters.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="o">...</span></div>
+
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">fast_submit_threshold_seconds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">history_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class AssignmentSubmitTime.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_compatible_conditions</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Captcha"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.Captcha">[docs]</a><span class="k">class</span> <span class="nc">Captcha</span><span class="p">(</span><span class="n">CollectorConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Captchas provide a high level of protection from robots</span>
+
+<span class="sd">    Used with conditions:</span>
+<span class="sd">        * StoredResultsCount - How many times the performer entered captcha.</span>
+<span class="sd">        * SuccessRate - Percentage of correct answers of the performer to the captcha.</span>
+<span class="sd">        * FailRate - Percentage of wrong answers of the performer to the captcha.</span>
+
+<span class="sd">    Used with actions:</span>
+<span class="sd">        * RestrictionV2 - Block access to projects or pools.</span>
+<span class="sd">        * ApproveAllAssignments - Approve all replies from the performer.</span>
+<span class="sd">        * RejectAllAssignments - Reject all replies from the performer.</span>
+<span class="sd">        * SetSkill - Set perfmer skill value.</span>
+<span class="sd">        * SetSkillFromOutputField - Set performer skill value from source.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        parameters.history_size: The number of times the performer was shown a captcha recently.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    How to ban a performer in this project if he mistakes in captcha.</span>
+
+<span class="sd">    &gt;&gt;&gt; new_pool = toloka.pool.Pool(....)</span>
+<span class="sd">    &gt;&gt;&gt; new_pool.quality_control.add_action(</span>
+<span class="sd">    &gt;&gt;&gt; collector=toloka.collectors.Captcha(history_size=3),</span>
+<span class="sd">    &gt;&gt;&gt;     conditions=[</span>
+<span class="sd">    &gt;&gt;&gt;         toloka.conditions.SuccessRate &lt; 60,</span>
+<span class="sd">    &gt;&gt;&gt;     ],</span>
+<span class="sd">    &gt;&gt;&gt;     action=toloka.actions.RestrictionV2(</span>
+<span class="sd">    &gt;&gt;&gt;         scope=toloka.user_restriction.UserRestriction.PROJECT,</span>
+<span class="sd">    &gt;&gt;&gt;         duration=15,</span>
+<span class="sd">    &gt;&gt;&gt;         duration_unit=&#39;DAYS&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;         private_comment=&#39;Performer often make mistakes in captcha&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;     )</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    ...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Captcha.Parameters"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.Captcha.Parameters">[docs]</a>    <span class="k">class</span> <span class="nc">Parameters</span><span class="p">(</span><span class="n">BaseParameters</span><span class="o">.</span><span class="n">Parameters</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">history_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Captcha.Parameters.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="o">...</span></div>
+
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">history_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Captcha.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_compatible_conditions</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="GoldenSet"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.GoldenSet">[docs]</a><span class="k">class</span> <span class="nc">GoldenSet</span><span class="p">(</span><span class="n">CollectorConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;How performer answers on control tasks</span>
+
+<span class="sd">    Use control tasks to assign a skill to performers based on their responses and ban performers who submit incorrect responses.</span>
+
+<span class="sd">    Don&#39;t use it if:</span>
+<span class="sd">    - You have a lot of response options.</span>
+<span class="sd">    - Users need to attach a file to their assignment.</span>
+<span class="sd">    - Users need to transcribe text.</span>
+<span class="sd">    - Users need to select objects in a photo.</span>
+<span class="sd">    - Tasks don&#39;t have a correct or incorrect response. For example: &quot;Which image do you like best?&quot; or</span>
+<span class="sd">    &quot;Choose the page design option that you like best&quot;.</span>
+
+<span class="sd">    Used with conditions:</span>
+<span class="sd">        * TotalAnswersCount - The number of completed control and training tasks.</span>
+<span class="sd">        * CorrectAnswersRate - The percentage of correct responses in training and control tasks.</span>
+<span class="sd">        * IncorrectAnswersRate - The percentage of incorrect responses in training and control tasks.</span>
+<span class="sd">        * GoldenSetAnswersCount - The number of completed control tasks</span>
+<span class="sd">        * GoldenSetCorrectAnswersRate - The percentage of correct responses in control tasks.</span>
+<span class="sd">        * GoldenSetIncorrectAnswersRate - The percentage of incorrect responses in control tasks.</span>
+
+<span class="sd">    Used with actions:</span>
+<span class="sd">        * RestrictionV2 - Block access to projects or pools.</span>
+<span class="sd">        * ApproveAllAssignments - Approve all replies from the performer.</span>
+<span class="sd">        * RejectAllAssignments - Reject all replies from the performer.</span>
+<span class="sd">        * SetSkill - Set perfmer skill value.</span>
+<span class="sd">        * SetSkillFromOutputField - Set performer skill value from source.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        parameters.history_size: The number of the performer&#39;s last responses to control tasks.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    How to approve all assignments if performer doing well with golden tasks.</span>
+
+<span class="sd">    &gt;&gt;&gt; new_pool = toloka.pool.Pool(....)</span>
+<span class="sd">    &gt;&gt;&gt; new_pool.quality_control.add_action(</span>
+<span class="sd">    &gt;&gt;&gt;     collector=toloka.collectors.GoldenSet(history_size=5),</span>
+<span class="sd">    &gt;&gt;&gt;     conditions=[toloka.conditions.GoldenSetCorrectAnswersRate &gt; 90],</span>
+<span class="sd">    &gt;&gt;&gt;     action=toloka.actions.ApproveAllAssignments()</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    ...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GoldenSet.Parameters"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.GoldenSet.Parameters">[docs]</a>    <span class="k">class</span> <span class="nc">Parameters</span><span class="p">(</span><span class="n">BaseParameters</span><span class="o">.</span><span class="n">Parameters</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">history_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;Method generated by attrs for class GoldenSet.Parameters.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="o">...</span></div>
+
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">history_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class GoldenSet.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_compatible_conditions</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Income"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.Income">[docs]</a><span class="k">class</span> <span class="nc">Income</span><span class="p">(</span><span class="n">CollectorConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Limit the performer&#39;s daily earnings in the pool</span>
+
+<span class="sd">    Helpful when you need to:</span>
+<span class="sd">    - Get responses from as many performers as possible.</span>
+
+<span class="sd">    Used with conditions:</span>
+<span class="sd">        * IncomeSumForLast24Hours - The performer earnings for completed tasks in the pool over the last 24 hours.</span>
+
+<span class="sd">    Used with actions:</span>
+<span class="sd">        * RestrictionV2 - Block access to projects or pools.</span>
+<span class="sd">        * ApproveAllAssignments - Approve all replies from the performer.</span>
+<span class="sd">        * RejectAllAssignments - Reject all replies from the performer.</span>
+<span class="sd">        * SetSkill - Set perfmer skill value.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    How to ban a performer in this project if he made enough answers.</span>
+
+<span class="sd">    &gt;&gt;&gt; new_pool = toloka.pool.Pool(....)</span>
+<span class="sd">    &gt;&gt;&gt; new_pool.quality_control.add_action(</span>
+<span class="sd">    &gt;&gt;&gt;     collector=toloka.collectors.Income(),</span>
+<span class="sd">    &gt;&gt;&gt;     conditions=[toloka.conditions.IncomeSumForLast24Hours &gt; 1],</span>
+<span class="sd">    &gt;&gt;&gt;     action=toloka.actions.RestrictionV2(</span>
+<span class="sd">    &gt;&gt;&gt;         scope=toloka.user_restriction.UserRestriction.PROJECT,</span>
+<span class="sd">    &gt;&gt;&gt;         duration=15,</span>
+<span class="sd">    &gt;&gt;&gt;         duration_unit=&#39;DAYS&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;         private_comment=&#39;No need more answers from this performer&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;     )</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    ...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Income.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_compatible_conditions</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="MajorityVote"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.MajorityVote">[docs]</a><span class="k">class</span> <span class="nc">MajorityVote</span><span class="p">(</span><span class="n">CollectorConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Majority vote is a quality control method based on coinciding responses from the majority</span>
+
+<span class="sd">    The response chosen by the majority is considered correct, and other responses are considered incorrect.</span>
+<span class="sd">    Depending on the percentage of correct responses, you can either increase the user&#39;s skill value, or ban the user from tasks.</span>
+
+<span class="sd">    Used with conditions:</span>
+<span class="sd">        * TotalAnswersCount - The number of completed tasks by the performer.</span>
+<span class="sd">        * CorrectAnswersRate - The percentage of correct responses.</span>
+<span class="sd">        * IncorrectAnswersRate - The percentage of incorrect responses.</span>
+
+<span class="sd">    Used with actions:</span>
+<span class="sd">        * RestrictionV2 - Block access to projects or pools.</span>
+<span class="sd">        * ApproveAllAssignments - Approve all replies from the performer.</span>
+<span class="sd">        * RejectAllAssignments - Reject all replies from the performer.</span>
+<span class="sd">        * SetSkill - Set perfmer skill value.</span>
+<span class="sd">        * SetSkillFromOutputField - Set performer skill value from source.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        parameters.answer_threshold: The number of users considered the majority (for example, 3 out of 5).</span>
+<span class="sd">        parameters.history_size: The maximum number of the user&#39;s recent responses in the project to use for calculating</span>
+<span class="sd">    		the percentage of correct responses. If this field is omitted, the calculation is based on all the user&#39;s</span>
+<span class="sd">    		responses in the pool.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    How to ban a performer in this project if he made enough answers.</span>
+
+<span class="sd">    &gt;&gt;&gt; new_pool = toloka.pool.Pool(....)</span>
+<span class="sd">    &gt;&gt;&gt; new_pool.quality_control.add_action(</span>
+<span class="sd">    &gt;&gt;&gt;     collector=toloka.collectors.MajorityVote(answer_threshold=2),</span>
+<span class="sd">    &gt;&gt;&gt;     conditions=[</span>
+<span class="sd">    &gt;&gt;&gt;         toloka.conditions.TotalAnswersCount &gt; 9,</span>
+<span class="sd">    &gt;&gt;&gt;         toloka.conditions.CorrectAnswersRate &lt; 60,</span>
+<span class="sd">    &gt;&gt;&gt;     ],</span>
+<span class="sd">    &gt;&gt;&gt;     action=toloka.actions.RejectAllAssignments(public_comment=&#39;Too low quality&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    ...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MajorityVote.Parameters"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.MajorityVote.Parameters">[docs]</a>    <span class="k">class</span> <span class="nc">Parameters</span><span class="p">(</span><span class="n">BaseParameters</span><span class="o">.</span><span class="n">Parameters</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">answer_threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">history_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;Method generated by attrs for class MajorityVote.Parameters.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="o">...</span></div>
+
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">answer_threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">history_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class MajorityVote.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_compatible_conditions</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="SkippedInRowAssignments"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.SkippedInRowAssignments">[docs]</a><span class="k">class</span> <span class="nc">SkippedInRowAssignments</span><span class="p">(</span><span class="n">CollectorConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Skipping tasks is considered an indirect indicator of the quality of responses.</span>
+
+<span class="sd">    You can block access to a pool or project if a user skips multiple task suites in a row.</span>
+
+<span class="sd">    Used with conditions:</span>
+<span class="sd">        * SkippedInRowCount - How many tasks in a row the performer skipped.</span>
+
+<span class="sd">    Used with actions:</span>
+<span class="sd">        * RestrictionV2 - Block access to projects or pools.</span>
+<span class="sd">        * ApproveAllAssignments - Approve all replies from the performer.</span>
+<span class="sd">        * RejectAllAssignments - Reject all replies from the performer.</span>
+<span class="sd">        * SetSkill - Set perfmer skill value.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    How to ban a performer in this project if he skipped tasks.</span>
+
+<span class="sd">    &gt;&gt;&gt; new_pool = toloka.pool.Pool(....)</span>
+<span class="sd">    &gt;&gt;&gt; new_pool.quality_control.add_action(</span>
+<span class="sd">    &gt;&gt;&gt;     collector=toloka.collectors.SkippedInRowAssignments(),</span>
+<span class="sd">    &gt;&gt;&gt;     conditions=[toloka.conditions.SkippedInRowCount &gt; 3],</span>
+<span class="sd">    &gt;&gt;&gt;     action=toloka.actions.RestrictionV2(</span>
+<span class="sd">    &gt;&gt;&gt;         scope=toloka.user_restriction.UserRestriction.PROJECT,</span>
+<span class="sd">    &gt;&gt;&gt;         duration=15,</span>
+<span class="sd">    &gt;&gt;&gt;         duration_unit=&#39;DAYS&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;         private_comment=&#39;Lazy performer&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;     )</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    ...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class SkippedInRowAssignments.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_compatible_conditions</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Training"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.Training">[docs]</a><span class="k">class</span> <span class="nc">Training</span><span class="p">(</span><span class="n">CollectorConfig</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Training.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_compatible_conditions</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="UsersAssessment"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.collectors.UsersAssessment">[docs]</a><span class="k">class</span> <span class="nc">UsersAssessment</span><span class="p">(</span><span class="n">CollectorConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Recompletion of assignments from banned users</span>
+
+<span class="sd">    If you or the system banned a performer and you want someone else to complete their tasks.</span>
+<span class="sd">    This rule will help you do this automatically.</span>
+
+<span class="sd">    Used with conditions:</span>
+<span class="sd">        * PoolAccessRevokedReason - Reason for loss of access of the performer to the current pool.</span>
+<span class="sd">        * SkillId - The performer no longer meets the specific skill filter.</span>
+
+<span class="sd">    Used with actions:</span>
+<span class="sd">        * ChangeOverlap - Increase the overlap of the set of tasks.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    How to resend rejected assignments for re-completion to other performers.</span>
+
+<span class="sd">    &gt;&gt;&gt; new_pool = toloka.pool.Pool(....)</span>
+<span class="sd">    &gt;&gt;&gt; new_pool.quality_control.add_action(</span>
+<span class="sd">    &gt;&gt;&gt;     collector=toloka.collectors.UsersAssessment(),</span>
+<span class="sd">    &gt;&gt;&gt;     conditions=[toloka.conditions.PoolAccessRevokedReason == toloka.conditions.PoolAccessRevokedReason.RESTRICTION],</span>
+<span class="sd">    &gt;&gt;&gt;     action=toloka.actions.ChangeOverlap(delta=1, open_pool=True),</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    ...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class UsersAssessment.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_compatible_conditions</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, username.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

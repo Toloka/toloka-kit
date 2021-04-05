@@ -1,0 +1,295 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>toloka.client.user_bonus &mdash; toloka-kit 0.1.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> toloka-kit
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.pool.html">toloka.client.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.primitives.html">toloka.client.primitives package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.html">toloka.client.project package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.template_builder.html">toloka.client.project.template_builder package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.html">toloka.client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.util.html">toloka.client.util package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.html">toloka package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">toloka-kit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../client.html">toloka.client</a> &raquo;</li>
+        
+      <li>toloka.client.user_bonus</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for toloka.client.user_bonus</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span>
+<span class="kn">from</span> <span class="nn">toloka.client.primitives.base</span> <span class="kn">import</span> <span class="n">BaseTolokaObject</span>
+<span class="kn">from</span> <span class="nn">toloka.client.primitives.parameter</span> <span class="kn">import</span> <span class="n">Parameters</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Dict</span>
+<span class="p">)</span>
+<div class="viewcode-block" id="UserBonus"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.user_bonus.UserBonus">[docs]</a><span class="k">class</span> <span class="nc">UserBonus</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Issuing a bonus to a specific performer</span>
+
+<span class="sd">    It&#39;s addition to payment for completed tasks.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        user_id ( Optional[str]): Performer ID to whom the bonus will be issued.</span>
+<span class="sd">        amount ( Optional[Decimal]): The bonus amount in dollars. Can be from 0.01 to 100 dollars per user per time.</span>
+<span class="sd">        private_comment ( Optional[str]): Comments that are only visible to the requester.</span>
+<span class="sd">        public_title ( Optional[Any]): Message header for the user. You can provide a title in several languages</span>
+<span class="sd">    		(the message will come in the user&#39;s language).</span>
+<span class="sd">        public_message ( Optional[Any]): Message text for the user. You can provide text in several languages</span>
+<span class="sd">    		(the message will come in the user&#39;s language).</span>
+<span class="sd">        without_message ( Optional[bool]): Do not send a bonus message to the user. To award a bonus without a message, specify null</span>
+<span class="sd">    		for public_title and public_message and True for without_message.</span>
+<span class="sd">        assignment_id ( Optional[str]): The answer to the task for which this bonus was issued.</span>
+<span class="sd">        id ( Optional[str]): Internal ID of the issued bonus. Read only.</span>
+<span class="sd">        created ( Optional[datetime]): Date the bonus was awarded, in UTC. Read only.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    How to create bonus with message for specific assignment.</span>
+
+<span class="sd">    &gt;&gt;&gt; new_bonus = toloka_client.create_user_bonus(</span>
+<span class="sd">    &gt;&gt;&gt;     UserBonus(</span>
+<span class="sd">    &gt;&gt;&gt;         user_id=&#39;1&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;         amount=&#39;0.50&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;         public_title=&#39;Perfect job!&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;         public_message=&#39;You are the best performer EVER!&#39;</span>
+<span class="sd">    &gt;&gt;&gt;         assignment_id=&#39;012345&#39;</span>
+<span class="sd">    &gt;&gt;&gt;     )</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    ...</span>
+
+<span class="sd">    Hoiw to create bonus with message in several languages.</span>
+
+<span class="sd">    &gt;&gt;&gt; new_bonus = toloka_client.create_user_bonus(</span>
+<span class="sd">    &gt;&gt;&gt;     UserBonus(</span>
+<span class="sd">    &gt;&gt;&gt;         user_id=&#39;1&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;         amount=&#39;0.10&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;         public_title= {</span>
+<span class="sd">    &gt;&gt;&gt;             &#39;EN&#39;: &#39;Good Job!&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;             &#39;RU&#39;: &#39;Молодец!&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;         },</span>
+<span class="sd">    &gt;&gt;&gt;         public_message: {</span>
+<span class="sd">    &gt;&gt;&gt;             &#39;EN&#39;: &#39;Ten tasks completed&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;             &#39;RU&#39;: &#39;Выполнено 10 заданий&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;         },</span>
+<span class="sd">    &gt;&gt;&gt;     )</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    ...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">private_comment</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">public_title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">public_message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">without_message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">assignment_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">created</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class UserBonus.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="UserBonusCreateRequestParameters"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.user_bonus.UserBonusCreateRequestParameters">[docs]</a><span class="k">class</span> <span class="nc">UserBonusCreateRequestParameters</span><span class="p">(</span><span class="n">Parameters</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parameters for creating performer bonuses</span>
+
+<span class="sd">    Used in methods &#39;create_user_bonus&#39;, &#39;create_user_bonuses&#39; и &#39;create_user_bonuses_async&#39; of the class TolokaClient,</span>
+<span class="sd">    to clarify the behavior when creating bonuses.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        operation_id ( Optional[str]): Operation ID. If asynchronous creation is used, by this identifier you can later get</span>
+<span class="sd">    		results of creating bonuses.</span>
+<span class="sd">        skip_invalid_items ( Optional[bool]): Validation parameters of objects:</span>
+<span class="sd">    		* True - Award a bonus if the object with bonus information passed validation. Otherwise, skip the bonus.</span>
+<span class="sd">    		* False - Default behaviour. Stop the operation and don&#39;t award bonuses if at least one object didn&#39;t pass validation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">operation_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">skip_invalid_items</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class UserBonusCreateRequestParameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, username.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

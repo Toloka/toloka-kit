@@ -1,0 +1,259 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>toloka.client.exceptions &mdash; toloka-kit 0.1.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> toloka-kit
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.pool.html">toloka.client.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.primitives.html">toloka.client.primitives package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.html">toloka.client.project package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.template_builder.html">toloka.client.project.template_builder package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.html">toloka.client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.util.html">toloka.client.util package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.html">toloka package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">toloka-kit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../client.html">toloka.client</a> &raquo;</li>
+        
+      <li>toloka.client.exceptions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for toloka.client.exceptions</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">requests.models</span> <span class="kn">import</span> <span class="n">Response</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Optional</span>
+<span class="p">)</span>
+<div class="viewcode-block" id="SpecClassIdentificationError"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.exceptions.SpecClassIdentificationError">[docs]</a><span class="k">class</span> <span class="nc">SpecClassIdentificationError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">spec_field</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">spec_enum</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class SpecClassIdentificationError.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="ApiError"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.exceptions.ApiError">[docs]</a><span class="k">class</span> <span class="nc">ApiError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">status_code</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">request_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ApiError.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="ValidationApiError"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.exceptions.ValidationApiError">[docs]</a><span class="k">class</span> <span class="nc">ValidationApiError</span><span class="p">(</span><span class="n">ApiError</span><span class="p">):</span>
+    <span class="n">invalid_fields</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="InternalApiError"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.exceptions.InternalApiError">[docs]</a><span class="k">class</span> <span class="nc">InternalApiError</span><span class="p">(</span><span class="n">ApiError</span><span class="p">):</span>
+    <span class="o">...</span></div>
+
+<div class="viewcode-block" id="AuthenticationApiError"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.exceptions.AuthenticationApiError">[docs]</a><span class="k">class</span> <span class="nc">AuthenticationApiError</span><span class="p">(</span><span class="n">ApiError</span><span class="p">):</span>
+    <span class="o">...</span></div>
+
+<div class="viewcode-block" id="AccessDeniedApiError"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.exceptions.AccessDeniedApiError">[docs]</a><span class="k">class</span> <span class="nc">AccessDeniedApiError</span><span class="p">(</span><span class="n">ApiError</span><span class="p">):</span>
+    <span class="o">...</span></div>
+
+<div class="viewcode-block" id="RemoteServiceUnavailableApiError"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.exceptions.RemoteServiceUnavailableApiError">[docs]</a><span class="k">class</span> <span class="nc">RemoteServiceUnavailableApiError</span><span class="p">(</span><span class="n">ApiError</span><span class="p">):</span>
+    <span class="o">...</span></div>
+
+<div class="viewcode-block" id="DoesNotExistApiError"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.exceptions.DoesNotExistApiError">[docs]</a><span class="k">class</span> <span class="nc">DoesNotExistApiError</span><span class="p">(</span><span class="n">ApiError</span><span class="p">):</span>
+    <span class="o">...</span></div>
+
+<div class="viewcode-block" id="ConflictStateApiError"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.exceptions.ConflictStateApiError">[docs]</a><span class="k">class</span> <span class="nc">ConflictStateApiError</span><span class="p">(</span><span class="n">ApiError</span><span class="p">):</span>
+    <span class="o">...</span></div>
+
+<div class="viewcode-block" id="TooManyRequestsApiError"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.exceptions.TooManyRequestsApiError">[docs]</a><span class="k">class</span> <span class="nc">TooManyRequestsApiError</span><span class="p">(</span><span class="n">ApiError</span><span class="p">):</span>
+    <span class="o">...</span></div>
+
+<div class="viewcode-block" id="IncorrectActionsApiError"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.exceptions.IncorrectActionsApiError">[docs]</a><span class="k">class</span> <span class="nc">IncorrectActionsApiError</span><span class="p">(</span><span class="n">ApiError</span><span class="p">):</span>
+    <span class="o">...</span></div>
+
+<div class="viewcode-block" id="raise_on_api_error"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.exceptions.raise_on_api_error">[docs]</a><span class="k">def</span> <span class="nf">raise_on_api_error</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">Response</span><span class="p">):</span> <span class="o">...</span></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, username.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,549 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>toloka.client.project.field_spec &mdash; toloka-kit 0.1.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> toloka-kit
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/toloka.client.pool.html">toloka.client.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/toloka.client.primitives.html">toloka.client.primitives package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/toloka.client.project.html">toloka.client.project package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/toloka.client.project.template_builder.html">toloka.client.project.template_builder package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/toloka.client.html">toloka.client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/toloka.client.util.html">toloka.client.util package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/toloka.html">toloka package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">toloka-kit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../client.html">toloka.client</a> &raquo;</li>
+        
+          <li><a href="../project.html">toloka.client.project</a> &raquo;</li>
+        
+      <li>toloka.client.project.field_spec</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for toloka.client.project.field_spec</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">toloka.client.primitives.base</span> <span class="kn">import</span> <span class="n">BaseTolokaObject</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Dict</span>
+<span class="p">)</span>
+<div class="viewcode-block" id="FieldType"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.FieldType">[docs]</a><span class="k">class</span> <span class="nc">FieldType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+    <span class="n">BOOLEAN</span> <span class="o">=</span> <span class="s1">&#39;boolean&#39;</span>
+    <span class="n">STRING</span> <span class="o">=</span> <span class="s1">&#39;string&#39;</span>
+    <span class="n">FLOAT</span> <span class="o">=</span> <span class="s1">&#39;float&#39;</span>
+    <span class="n">INTEGER</span> <span class="o">=</span> <span class="s1">&#39;integer&#39;</span>
+    <span class="n">URL</span> <span class="o">=</span> <span class="s1">&#39;url&#39;</span>
+    <span class="n">FILE</span> <span class="o">=</span> <span class="s1">&#39;file&#39;</span>
+    <span class="n">COORDINATES</span> <span class="o">=</span> <span class="s1">&#39;coordinates&#39;</span>
+    <span class="n">JSON</span> <span class="o">=</span> <span class="s1">&#39;json&#39;</span>
+    <span class="n">ARRAY_BOOLEAN</span> <span class="o">=</span> <span class="s1">&#39;array_boolean&#39;</span>
+    <span class="n">ARRAY_STRING</span> <span class="o">=</span> <span class="s1">&#39;array_string&#39;</span>
+    <span class="n">ARRAY_INTEGER</span> <span class="o">=</span> <span class="s1">&#39;array_integer&#39;</span>
+    <span class="n">ARRAY_FLOAT</span> <span class="o">=</span> <span class="s1">&#39;array_float&#39;</span>
+    <span class="n">ARRAY_URL</span> <span class="o">=</span> <span class="s1">&#39;array_url&#39;</span>
+    <span class="n">ARRAY_FILE</span> <span class="o">=</span> <span class="s1">&#39;array_file&#39;</span>
+    <span class="n">ARRAY_COORDINATES</span> <span class="o">=</span> <span class="s1">&#39;array_coordinates&#39;</span>
+    <span class="n">ARRAY_JSON</span> <span class="o">=</span> <span class="s1">&#39;array_json&#39;</span></div>
+
+
+<div class="viewcode-block" id="FieldSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.FieldSpec">[docs]</a><span class="k">class</span> <span class="nc">FieldSpec</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A base class for field specifications used in project&#39;s `input_spec` and `output_spec`</span>
+
+<span class="sd">    for input and respose data validation specification respectively. Use subclasses of this</span>
+<span class="sd">    class defined below to define the data type (string, integer, URL, etc.) and specify</span>
+<span class="sd">    validation parameters (such as string length).</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class FieldSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_variant_registry</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="BooleanSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.BooleanSpec">[docs]</a><span class="k">class</span> <span class="nc">BooleanSpec</span><span class="p">(</span><span class="n">FieldSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A boolean field specification</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">        allowed_values ( Optional[List[bool]]): Allowed values</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">allowed_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class BooleanSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="StringSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.StringSpec">[docs]</a><span class="k">class</span> <span class="nc">StringSpec</span><span class="p">(</span><span class="n">FieldSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A string field specification</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">        min_length ( Optional[int]): Minimum length of the string</span>
+<span class="sd">        max_length ( Optional[int]): Maximum length of the string</span>
+<span class="sd">        allowed_values ( Optional[List[str]]): Allowed values</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">min_length</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_length</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">allowed_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class StringSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="IntegerSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.IntegerSpec">[docs]</a><span class="k">class</span> <span class="nc">IntegerSpec</span><span class="p">(</span><span class="n">FieldSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An integer field specification</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">        min_value ( Optional[int]): Minimum value of the number</span>
+<span class="sd">        max_value ( Optional[int]): Maximum value of the number</span>
+<span class="sd">        allowed_values ( Optional[List[int]]): Allowed values</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">min_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">allowed_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class IntegerSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="FloatSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.FloatSpec">[docs]</a><span class="k">class</span> <span class="nc">FloatSpec</span><span class="p">(</span><span class="n">FieldSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An floating point field specification</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">        min_value ( Optional[float]): Minimum value of the number</span>
+<span class="sd">        max_value ( Optional[float]): Maximum value of the number</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">min_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class FloatSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="UrlSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.UrlSpec">[docs]</a><span class="k">class</span> <span class="nc">UrlSpec</span><span class="p">(</span><span class="n">FieldSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A url field specification</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class UrlSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="FileSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.FileSpec">[docs]</a><span class="k">class</span> <span class="nc">FileSpec</span><span class="p">(</span><span class="n">FieldSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A file field specification (only for output data)</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class FileSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="CoordinatesSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.CoordinatesSpec">[docs]</a><span class="k">class</span> <span class="nc">CoordinatesSpec</span><span class="p">(</span><span class="n">FieldSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Geographical coordinates field specification, such as “53.910236,27.531110</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">        current_location ( Optional[bool]): put the user&#39;s current coordinates in the field (true/false).</span>
+<span class="sd">    		Used in tasks for the mobile app.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">current_location</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class CoordinatesSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="JsonSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.JsonSpec">[docs]</a><span class="k">class</span> <span class="nc">JsonSpec</span><span class="p">(</span><span class="n">FieldSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A JSON object field specification</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class JsonSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="ArrayBooleanSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.ArrayBooleanSpec">[docs]</a><span class="k">class</span> <span class="nc">ArrayBooleanSpec</span><span class="p">(</span><span class="n">BooleanSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A boolean array field specification</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">        allowed_values ( Optional[List[bool]]): Allowed values</span>
+<span class="sd">        min_size ( Optional[int]): Minimum number of elements in the array</span>
+<span class="sd">        min_size ( Optional[int]): Maximum number of elements in the array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">allowed_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">min_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ArrayBooleanSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="ArrayStringSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.ArrayStringSpec">[docs]</a><span class="k">class</span> <span class="nc">ArrayStringSpec</span><span class="p">(</span><span class="n">StringSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A string array field specification</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">        min_length ( Optional[int]): Minimum length of the string</span>
+<span class="sd">        max_length ( Optional[int]): Maximum length of the string</span>
+<span class="sd">        allowed_values ( Optional[List[str]]): Allowed values</span>
+<span class="sd">        min_size ( Optional[int]): Minimum number of elements in the array</span>
+<span class="sd">        min_size ( Optional[int]): Maximum number of elements in the array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">min_length</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_length</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">allowed_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">min_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ArrayStringSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="ArrayIntegerSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.ArrayIntegerSpec">[docs]</a><span class="k">class</span> <span class="nc">ArrayIntegerSpec</span><span class="p">(</span><span class="n">IntegerSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An integer array field specification</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">        min_value ( Optional[int]): Minimum value of the number</span>
+<span class="sd">        max_value ( Optional[int]): Maximum value of the number</span>
+<span class="sd">        allowed_values ( Optional[List[int]]): Allowed values</span>
+<span class="sd">        min_size ( Optional[int]): Minimum number of elements in the array</span>
+<span class="sd">        min_size ( Optional[int]): Maximum number of elements in the array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">min_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">allowed_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">min_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ArrayIntegerSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="ArrayFloatSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.ArrayFloatSpec">[docs]</a><span class="k">class</span> <span class="nc">ArrayFloatSpec</span><span class="p">(</span><span class="n">FloatSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An floating point array field specification</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">        min_value ( Optional[float]): Minimum value of the number</span>
+<span class="sd">        max_value ( Optional[float]): Maximum value of the number</span>
+<span class="sd">        min_size ( Optional[int]): Minimum number of elements in the array</span>
+<span class="sd">        min_size ( Optional[int]): Maximum number of elements in the array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">min_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">min_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ArrayFloatSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="ArrayUrlSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.ArrayUrlSpec">[docs]</a><span class="k">class</span> <span class="nc">ArrayUrlSpec</span><span class="p">(</span><span class="n">UrlSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A url array field specification</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">        min_size ( Optional[int]): Minimum number of elements in the array</span>
+<span class="sd">        min_size ( Optional[int]): Maximum number of elements in the array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">min_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ArrayUrlSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="ArrayFileSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.ArrayFileSpec">[docs]</a><span class="k">class</span> <span class="nc">ArrayFileSpec</span><span class="p">(</span><span class="n">FileSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A file array field specification (only for output data)</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">        min_size ( Optional[int]): Minimum number of elements in the array</span>
+<span class="sd">        min_size ( Optional[int]): Maximum number of elements in the array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">min_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ArrayFileSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="ArrayCoordinatesSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.field_spec.ArrayCoordinatesSpec">[docs]</a><span class="k">class</span> <span class="nc">ArrayCoordinatesSpec</span><span class="p">(</span><span class="n">CoordinatesSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Geographical coordinates array field specification</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        required ( Optional[bool]): Whether the object or input field is required</span>
+<span class="sd">        hidden ( Optional[bool]): Whether or not to hide the input value field from the user</span>
+<span class="sd">        current_location ( Optional[bool]): put the user&#39;s current coordinates in the field (true/false).</span>
+<span class="sd">    		Used in tasks for the mobile app</span>
+<span class="sd">        min_size ( Optional[int]): Minimum number of elements in the array</span>
+<span class="sd">        min_size ( Optional[int]): Maximum number of elements in the array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hidden</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">current_location</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">min_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ArrayCoordinatesSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, username.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

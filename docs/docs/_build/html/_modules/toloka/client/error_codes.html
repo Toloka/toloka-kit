@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>toloka.client.error_codes &mdash; toloka-kit 0.1.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> toloka-kit
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.pool.html">toloka.client.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.primitives.html">toloka.client.primitives package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.html">toloka.client.project package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.template_builder.html">toloka.client.project.template_builder package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.html">toloka.client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.util.html">toloka.client.util package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.html">toloka package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">toloka-kit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../client.html">toloka.client</a> &raquo;</li>
+        
+      <li>toloka.client.error_codes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for toloka.client.error_codes</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<div class="viewcode-block" id="CommonErrorCodes"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.error_codes.CommonErrorCodes">[docs]</a><span class="k">class</span> <span class="nc">CommonErrorCodes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+    <span class="n">ACCESS_DENIED</span> <span class="o">=</span> <span class="s1">&#39;ACCESS_DENIED&#39;</span>
+    <span class="n">AUTHENTICATION_ERROR</span> <span class="o">=</span> <span class="s1">&#39;AUTHENTICATION_ERROR&#39;</span>
+    <span class="n">CONFLICT_STATE</span> <span class="o">=</span> <span class="s1">&#39;CONFLICT_STATE&#39;</span>
+    <span class="n">DOES_NOT_EXIST</span> <span class="o">=</span> <span class="s1">&#39;DOES_NOT_EXIST&#39;</span>
+    <span class="n">INTERNAL_ERROR</span> <span class="o">=</span> <span class="s1">&#39;INTERNAL_ERROR&#39;</span>
+    <span class="n">REMOTE_SERVICE_UNAVAILABLE</span> <span class="o">=</span> <span class="s1">&#39;REMOTE_SERVICE_UNAVAILABLE&#39;</span>
+    <span class="n">TOO_MANY_REQUESTS</span> <span class="o">=</span> <span class="s1">&#39;TOO_MANY_REQUESTS&#39;</span>
+    <span class="n">VALIDATION_ERROR</span> <span class="o">=</span> <span class="s1">&#39;VALIDATION_ERROR&#39;</span></div>
+
+
+<div class="viewcode-block" id="InternalErrorCodes"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.error_codes.InternalErrorCodes">[docs]</a><span class="k">class</span> <span class="nc">InternalErrorCodes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+    <span class="n">ACCOUNT_ALREADY_USED</span> <span class="o">=</span> <span class="s1">&#39;ACCOUNT_ALREADY_USED&#39;</span>
+    <span class="n">ACCOUNT_MUST_BE_IDENTIFIED</span> <span class="o">=</span> <span class="s1">&#39;ACCOUNT_MUST_BE_IDENTIFIED&#39;</span>
+    <span class="n">ADJUSTER_NOT_FOUND</span> <span class="o">=</span> <span class="s1">&#39;ADJUSTER_NOT_FOUND&#39;</span>
+    <span class="n">ALL_ASSIGNMENTS_EXHAUSTED</span> <span class="o">=</span> <span class="s1">&#39;ALL_ASSIGNMENTS_EXHAUSTED&#39;</span>
+    <span class="n">ASSIGNMENTS_AGGREGATION_DENIED</span> <span class="o">=</span> <span class="s1">&#39;ASSIGNMENTS_AGGREGATION_DENIED&#39;</span>
+    <span class="n">ASSIGNMENTS_COUNT_CONFLICT</span> <span class="o">=</span> <span class="s1">&#39;ASSIGNMENTS_COUNT_CONFLICT&#39;</span>
+    <span class="n">BATCH_INITIALIZATION_ERROR</span> <span class="o">=</span> <span class="s1">&#39;BATCH_INITIALIZATION_ERROR&#39;</span>
+    <span class="n">BATCH_REJECTED</span> <span class="o">=</span> <span class="s1">&#39;BATCH_REJECTED&#39;</span>
+    <span class="n">BILLING_NOT_SYNCHRONIZED</span> <span class="o">=</span> <span class="s1">&#39;BILLING_NOT_SYNCHRONIZED&#39;</span>
+    <span class="n">CAPTCHA_REQUIRED</span> <span class="o">=</span> <span class="s1">&#39;CAPTCHA_REQUIRED&#39;</span>
+    <span class="n">DELETE_ALL_TASKS_CONFLICT</span> <span class="o">=</span> <span class="s1">&#39;DELETE_ALL_TASKS_CONFLICT&#39;</span>
+    <span class="n">EMPTY_POOL</span> <span class="o">=</span> <span class="s1">&#39;EMPTY_POOL&#39;</span>
+    <span class="n">INAPPROPRIATE_STATUS</span> <span class="o">=</span> <span class="s1">&#39;INAPPROPRIATE_STATUS&#39;</span>
+    <span class="n">INCORRECT_RECIPIENTS</span> <span class="o">=</span> <span class="s1">&#39;INCORRECT_RECIPIENTS&#39;</span>
+    <span class="n">INVALID_OPERATION_TYPE</span> <span class="o">=</span> <span class="s1">&#39;INVALID_OPERATION_TYPE&#39;</span>
+    <span class="n">INVALID_REFERRAL_CODE</span> <span class="o">=</span> <span class="s1">&#39;INVALID_REFERRAL_CODE&#39;</span>
+    <span class="n">INVALID_WORKER_STATUS_ERROR</span> <span class="o">=</span> <span class="s1">&#39;INVALID_WORKER_STATUS_ERROR&#39;</span>
+    <span class="n">MIXER_CONFIG_REQUIRED</span> <span class="o">=</span> <span class="s1">&#39;MIXER_CONFIG_REQUIRED&#39;</span>
+    <span class="n">NEED_PHONE_CONFIRMATION</span> <span class="o">=</span> <span class="s1">&#39;NEED_PHONE_CONFIRMATION&#39;</span>
+    <span class="n">NOT_ENOUGH_BALANCE</span> <span class="o">=</span> <span class="s1">&#39;NOT_ENOUGH_BALANCE&#39;</span>
+    <span class="n">OAUTH_AUTHENTICATION_ERROR</span> <span class="o">=</span> <span class="s1">&#39;OAUTH_AUTHENTICATION_ERROR&#39;</span>
+    <span class="n">OPERATION_ALREADY_EXISTS</span> <span class="o">=</span> <span class="s1">&#39;OPERATION_ALREADY_EXISTS&#39;</span>
+    <span class="n">OPERATION_EXECUTION_ERROR</span> <span class="o">=</span> <span class="s1">&#39;OPERATION_EXECUTION_ERROR&#39;</span>
+    <span class="n">OPERATION_LOGS_ARCHIVED</span> <span class="o">=</span> <span class="s1">&#39;OPERATION_LOGS_ARCHIVED&#39;</span>
+    <span class="n">PAYONEER_ACCOUNT_NOT_ACTIVE</span> <span class="o">=</span> <span class="s1">&#39;PAYONEER_ACCOUNT_NOT_ACTIVE&#39;</span>
+    <span class="n">PAYPAL_AUTH_CODE_INVALID</span> <span class="o">=</span> <span class="s1">&#39;PAYPAL_AUTH_CODE_INVALID&#39;</span>
+    <span class="n">PAYPAL_UNVERIFIED_USER</span> <span class="o">=</span> <span class="s1">&#39;PAYPAL_UNVERIFIED_USER&#39;</span>
+    <span class="n">POOL_ASSIGNMENTS_COUNT_EXCEEDED</span> <span class="o">=</span> <span class="s1">&#39;POOL_ASSIGNMENTS_COUNT_EXCEEDED&#39;</span>
+    <span class="n">POOL_ASSIGNMENTS_EXHAUSTED</span> <span class="o">=</span> <span class="s1">&#39;POOL_ASSIGNMENTS_EXHAUSTED&#39;</span>
+    <span class="n">POOL_INAPPROPRIATE_STATUS</span> <span class="o">=</span> <span class="s1">&#39;POOL_INAPPROPRIATE_STATUS&#39;</span>
+    <span class="n">POOL_INVALID_FILTER_FOR_MAP_ISSUING</span> <span class="o">=</span> <span class="s1">&#39;POOL_INVALID_FILTER_FOR_MAP_ISSUING&#39;</span>
+    <span class="n">POOL_IS_TRAINING</span> <span class="o">=</span> <span class="s1">&#39;POOL_IS_TRAINING&#39;</span>
+    <span class="n">POOL_LOCKED_BY_ANOTHER_OPERATION</span> <span class="o">=</span> <span class="s1">&#39;POOL_LOCKED_BY_ANOTHER_OPERATION&#39;</span>
+    <span class="n">POOL_TASKS_COUNT_EXCEEDED</span> <span class="o">=</span> <span class="s1">&#39;POOL_TASKS_COUNT_EXCEEDED&#39;</span>
+    <span class="n">POOL_TASK_SUITES_COUNT_EXCEEDED</span> <span class="o">=</span> <span class="s1">&#39;POOL_TASK_SUITES_COUNT_EXCEEDED&#39;</span>
+    <span class="n">POOL_TASK_TYPE_CONFLICT</span> <span class="o">=</span> <span class="s1">&#39;POOL_TASK_TYPE_CONFLICT&#39;</span>
+    <span class="n">PROJECT_INAPPROPRIATE_STATUS</span> <span class="o">=</span> <span class="s1">&#39;PROJECT_INAPPROPRIATE_STATUS&#39;</span>
+    <span class="n">RESULTS_EXPIRED</span> <span class="o">=</span> <span class="s1">&#39;RESULTS_EXPIRED&#39;</span>
+    <span class="n">SECURE_PHONE_DUPLICATION</span> <span class="o">=</span> <span class="s1">&#39;SECURE_PHONE_DUPLICATION&#39;</span>
+    <span class="n">SECURE_PHONE_MISSING</span> <span class="o">=</span> <span class="s1">&#39;SECURE_PHONE_MISSING&#39;</span>
+    <span class="n">SECURE_PHONE_WAS_CHANGED</span> <span class="o">=</span> <span class="s1">&#39;SECURE_PHONE_WAS_CHANGED&#39;</span>
+    <span class="n">SKILL_IS_TRAINING</span> <span class="o">=</span> <span class="s1">&#39;SKILL_IS_TRAINING&#39;</span>
+    <span class="n">SKILL_IS_USED</span> <span class="o">=</span> <span class="s1">&#39;SKILL_IS_USED&#39;</span>
+    <span class="n">SKILL_IS_USED_BY_PROJECTS</span> <span class="o">=</span> <span class="s1">&#39;SKILL_IS_USED_BY_PROJECTS&#39;</span>
+    <span class="n">SKILL_REMOVED</span> <span class="o">=</span> <span class="s1">&#39;SKILL_REMOVED&#39;</span>
+    <span class="n">SUBMITTED_ASSIGNMENTS_CONFLICT</span> <span class="o">=</span> <span class="s1">&#39;SUBMITTED_ASSIGNMENTS_CONFLICT&#39;</span>
+    <span class="n">SYNC_POOL_CLONE_ERROR</span> <span class="o">=</span> <span class="s1">&#39;SYNC_POOL_CLONE_ERROR&#39;</span>
+    <span class="n">SYSTEM_SCOPE_MODIFICATION</span> <span class="o">=</span> <span class="s1">&#39;SYSTEM_SCOPE_MODIFICATION&#39;</span>
+    <span class="n">TASK_VALIDATION_ERROR</span> <span class="o">=</span> <span class="s1">&#39;TASK_VALIDATION_ERROR&#39;</span>
+    <span class="n">THERE_IS_ACTIVE_ASSIGNMENT</span> <span class="o">=</span> <span class="s1">&#39;THERE_IS_ACTIVE_ASSIGNMENT&#39;</span>
+    <span class="n">THERE_IS_REJECTED_ASSIGNMENT</span> <span class="o">=</span> <span class="s1">&#39;THERE_IS_REJECTED_ASSIGNMENT&#39;</span>
+    <span class="n">TOO_MANY_ACTIVE_ASSIGNMENTS</span> <span class="o">=</span> <span class="s1">&#39;TOO_MANY_ACTIVE_ASSIGNMENTS&#39;</span>
+    <span class="n">TRAINING_ARCHIVE_CONFLICT</span> <span class="o">=</span> <span class="s1">&#39;TRAINING_ARCHIVE_CONFLICT&#39;</span>
+    <span class="n">UNABLE_TO_UPLOAD_FILE</span> <span class="o">=</span> <span class="s1">&#39;UNABLE_TO_UPLOAD_FILE&#39;</span>
+    <span class="n">UNARCHIVED_POOLS_CONFLICT</span> <span class="o">=</span> <span class="s1">&#39;UNARCHIVED_POOLS_CONFLICT&#39;</span>
+    <span class="n">UNSUPPORTED_ALGORITHM</span> <span class="o">=</span> <span class="s1">&#39;UNSUPPORTED_ALGORITHM&#39;</span>
+    <span class="n">UNSUPPORTED_REGION</span> <span class="o">=</span> <span class="s1">&#39;UNSUPPORTED_REGION&#39;</span>
+    <span class="n">USER_ALREADY_REGISTERED</span> <span class="o">=</span> <span class="s1">&#39;USER_ALREADY_REGISTERED&#39;</span>
+    <span class="n">USER_HAS_PDD_ALIAS</span> <span class="o">=</span> <span class="s1">&#39;USER_HAS_PDD_ALIAS&#39;</span>
+    <span class="n">WITHDRAWAL_TRANSACTION_CANNOT_BE_CANCELLED</span> <span class="o">=</span> <span class="s1">&#39;WITHDRAWAL_TRANSACTION_CANNOT_BE_CANCELLED&#39;</span>
+    <span class="n">WITHDRAWAL_TRANSACTION_CANNOT_BE_CANCELLED_DUE_TO_TIME_LIMIT</span> <span class="o">=</span> <span class="s1">&#39;WITHDRAWAL_TRANSACTION_CANNOT_BE_CANCELLED_DUE_TO_TIME_LIMIT&#39;</span>
+    <span class="n">WORKER_SKILL_EXISTS</span> <span class="o">=</span> <span class="s1">&#39;WORKER_SKILL_EXISTS&#39;</span>
+    <span class="n">WRONG_FILE_FORMAT</span> <span class="o">=</span> <span class="s1">&#39;WRONG_FILE_FORMAT&#39;</span>
+    <span class="n">WRONG_REVISION</span> <span class="o">=</span> <span class="s1">&#39;WRONG_REVISION&#39;</span></div>
+
+
+<div class="viewcode-block" id="ValidationErrorCodes"><a class="viewcode-back" href="../../../source/toloka.client.html#toloka.client.error_codes.ValidationErrorCodes">[docs]</a><span class="k">class</span> <span class="nc">ValidationErrorCodes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An enumeration.&quot;&quot;&quot;</span>
+
+    <span class="n">ARRAY_EXPECTED</span> <span class="o">=</span> <span class="s1">&#39;ARRAY_EXPECTED&#39;</span>
+    <span class="n">ARRAY_SIZE_GREATER_THAN_MAX</span> <span class="o">=</span> <span class="s1">&#39;ARRAY_SIZE_GREATER_THAN_MAX&#39;</span>
+    <span class="n">ARRAY_SIZE_LESS_THAN_MIN</span> <span class="o">=</span> <span class="s1">&#39;ARRAY_SIZE_LESS_THAN_MIN&#39;</span>
+    <span class="n">ARRAY_SIZE_OUT_OF_BOUNDS</span> <span class="o">=</span> <span class="s1">&#39;ARRAY_SIZE_OUT_OF_BOUNDS&#39;</span>
+    <span class="n">BLANK_STRING_NOT_ALLOWED</span> <span class="o">=</span> <span class="s1">&#39;BLANK_STRING_NOT_ALLOWED&#39;</span>
+    <span class="n">BOOLEAN_EXPECTED</span> <span class="o">=</span> <span class="s1">&#39;BOOLEAN_EXPECTED&#39;</span>
+    <span class="n">CHARACTER_NOT_ALLOWED</span> <span class="o">=</span> <span class="s1">&#39;CHARACTER_NOT_ALLOWED&#39;</span>
+    <span class="n">DATE_OUT_OF_RANGE</span> <span class="o">=</span> <span class="s1">&#39;DATE_OUT_OF_RANGE&#39;</span>
+    <span class="n">DUPLICATE_VALUE_IN_ARRAY</span> <span class="o">=</span> <span class="s1">&#39;DUPLICATE_VALUE_IN_ARRAY&#39;</span>
+    <span class="n">EMPTY_OBJECT_NOT_ALLOWED</span> <span class="o">=</span> <span class="s1">&#39;EMPTY_OBJECT_NOT_ALLOWED&#39;</span>
+    <span class="n">ENTITY_ACCESS_DENIED</span> <span class="o">=</span> <span class="s1">&#39;ENTITY_ACCESS_DENIED&#39;</span>
+    <span class="n">ENTITY_DOES_NOT_EXIST</span> <span class="o">=</span> <span class="s1">&#39;ENTITY_DOES_NOT_EXIST&#39;</span>
+    <span class="n">FLOAT_EXPECTED</span> <span class="o">=</span> <span class="s1">&#39;FLOAT_EXPECTED&#39;</span>
+    <span class="n">INTEGER_EXPECTED</span> <span class="o">=</span> <span class="s1">&#39;INTEGER_EXPECTED&#39;</span>
+    <span class="n">INVALID_COORDINATES_SYNTAX</span> <span class="o">=</span> <span class="s1">&#39;INVALID_COORDINATES_SYNTAX&#39;</span>
+    <span class="n">INVALID_DATE_SYNTAX</span> <span class="o">=</span> <span class="s1">&#39;INVALID_DATE_SYNTAX&#39;</span>
+    <span class="n">INVALID_DATE_TIME_SYNTAX</span> <span class="o">=</span> <span class="s1">&#39;INVALID_DATE_TIME_SYNTAX&#39;</span>
+    <span class="n">INVALID_REGEX_SYNTAX</span> <span class="o">=</span> <span class="s1">&#39;INVALID_REGEX_SYNTAX&#39;</span>
+    <span class="n">INVALID_URL_SYNTAX</span> <span class="o">=</span> <span class="s1">&#39;INVALID_URL_SYNTAX&#39;</span>
+    <span class="n">INVALID_VALUE</span> <span class="o">=</span> <span class="s1">&#39;INVALID_VALUE&#39;</span>
+    <span class="n">JSON_EXPECTED</span> <span class="o">=</span> <span class="s1">&#39;JSON_EXPECTED&#39;</span>
+    <span class="n">MAX_ONE_PROPERTY_ALLOWED</span> <span class="o">=</span> <span class="s1">&#39;MAX_ONE_PROPERTY_ALLOWED&#39;</span>
+    <span class="n">NAME_LENGTH_LESS_THAN_MIN</span> <span class="o">=</span> <span class="s1">&#39;NAME_LENGTH_LESS_THAN_MIN&#39;</span>
+    <span class="n">NOT_NULL_BODY</span> <span class="o">=</span> <span class="s1">&#39;NOT_NULL_BODY&#39;</span>
+    <span class="n">OBJECT_EXPECTED</span> <span class="o">=</span> <span class="s1">&#39;OBJECT_EXPECTED&#39;</span>
+    <span class="n">OBJECT_SIZE_BYTES_GREATER_THAN_MAX</span> <span class="o">=</span> <span class="s1">&#39;OBJECT_SIZE_BYTES_GREATER_THAN_MAX&#39;</span>
+    <span class="n">PATTERN_MISMATCH</span> <span class="o">=</span> <span class="s1">&#39;PATTERN_MISMATCH&#39;</span>
+    <span class="n">SIMPLE_VALUE_EXPECTED</span> <span class="o">=</span> <span class="s1">&#39;SIMPLE_VALUE_EXPECTED&#39;</span>
+    <span class="n">STRING_EXPECTED</span> <span class="o">=</span> <span class="s1">&#39;STRING_EXPECTED&#39;</span>
+    <span class="n">STRING_LENGTH_GREATER_THAN_MAX</span> <span class="o">=</span> <span class="s1">&#39;STRING_LENGTH_GREATER_THAN_MAX&#39;</span>
+    <span class="n">STRING_LENGTH_LESS_THAN_MIN</span> <span class="o">=</span> <span class="s1">&#39;STRING_LENGTH_LESS_THAN_MIN&#39;</span>
+    <span class="n">STRING_LENGTH_OUT_OF_BOUNDS</span> <span class="o">=</span> <span class="s1">&#39;STRING_LENGTH_OUT_OF_BOUNDS&#39;</span>
+    <span class="n">UNKNOWN_ENUM_VALUE</span> <span class="o">=</span> <span class="s1">&#39;UNKNOWN_ENUM_VALUE&#39;</span>
+    <span class="n">UUID_EXPECTED</span> <span class="o">=</span> <span class="s1">&#39;UUID_EXPECTED&#39;</span>
+    <span class="n">VALUES_REQUIRED</span> <span class="o">=</span> <span class="s1">&#39;VALUES_REQUIRED&#39;</span>
+    <span class="n">VALUE_GREATER_THAN_MAX</span> <span class="o">=</span> <span class="s1">&#39;VALUE_GREATER_THAN_MAX&#39;</span>
+    <span class="n">VALUE_LESS_THAN_MIN</span> <span class="o">=</span> <span class="s1">&#39;VALUE_LESS_THAN_MIN&#39;</span>
+    <span class="n">VALUE_NOT_ALLOWED</span> <span class="o">=</span> <span class="s1">&#39;VALUE_NOT_ALLOWED&#39;</span>
+    <span class="n">VALUE_OUT_OF_BOUNDS</span> <span class="o">=</span> <span class="s1">&#39;VALUE_OUT_OF_BOUNDS&#39;</span>
+    <span class="n">VALUE_REQUIRED</span> <span class="o">=</span> <span class="s1">&#39;VALUE_REQUIRED&#39;</span></div>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, username.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

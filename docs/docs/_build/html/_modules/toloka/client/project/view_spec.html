@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>toloka.client.project.view_spec &mdash; toloka-kit 0.1.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> toloka-kit
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/toloka.client.pool.html">toloka.client.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/toloka.client.primitives.html">toloka.client.primitives package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/toloka.client.project.html">toloka.client.project package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/toloka.client.project.template_builder.html">toloka.client.project.template_builder package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/toloka.client.html">toloka.client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/toloka.client.util.html">toloka.client.util package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/toloka.html">toloka package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">toloka-kit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../client.html">toloka.client</a> &raquo;</li>
+        
+          <li><a href="../project.html">toloka.client.project</a> &raquo;</li>
+        
+      <li>toloka.client.project.view_spec</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for toloka.client.project.view_spec</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">toloka.client.primitives.base</span> <span class="kn">import</span> <span class="n">BaseTolokaObject</span>
+<span class="kn">from</span> <span class="nn">toloka.client.project.template_builder</span> <span class="kn">import</span> <span class="n">TemplateBuilder</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Dict</span>
+<span class="p">)</span>
+<div class="viewcode-block" id="ViewSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.view_spec.ViewSpec">[docs]</a><span class="k">class</span> <span class="nc">ViewSpec</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Description of the task interface</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CLASSIC</span> <span class="o">=</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="ViewSpec.Settings"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.view_spec.ViewSpec.Settings">[docs]</a>    <span class="k">class</span> <span class="nc">Settings</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;ViewSpec Settings</span>
+
+<span class="sd">        Attributes:</span>
+<span class="sd">            show_finish ( Optional[bool]): Show the Back to main page button.</span>
+<span class="sd">            show_fullscreen ( Optional[bool]): Show the Expand to fullscreen button.</span>
+<span class="sd">            show_instructions ( Optional[bool]): Show the Instructions button.</span>
+<span class="sd">            show_message ( Optional[bool]): Show the Message for the requester button.</span>
+<span class="sd">            show_reward ( Optional[bool]): Show the price per task page.</span>
+<span class="sd">            show_skip ( Optional[bool]): Show the Skip button.</span>
+<span class="sd">            show_submit ( Optional[bool]): Show the Next button.</span>
+<span class="sd">            show_timer ( Optional[bool]): Show the timer.</span>
+<span class="sd">            show_title ( Optional[bool]): Show the project name in task titles.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">show_finish</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">show_fullscreen</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">show_instructions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">show_message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">show_reward</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">show_skip</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">show_submit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">show_timer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">show_title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ViewSpec.Settings.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="o">...</span></div>
+
+
+
+    <span class="n">TEMPLATE_BUILDER</span> <span class="o">=</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="ViewSpec.Type"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.view_spec.ViewSpec.Type">[docs]</a>    <span class="k">class</span> <span class="nc">Type</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A view spec type</span>
+
+<span class="sd">        Attributes:</span>
+<span class="sd">            CLASSIC: A view defined with HTML, CSS and JS</span>
+<span class="sd">            TEMPLATE_BUILDER: A view defined with template builder components&quot;&quot;&quot;</span>
+
+        <span class="n">CLASSIC</span> <span class="o">=</span> <span class="s1">&#39;classic&#39;</span>
+        <span class="n">TEMPLATE_BUILDER</span> <span class="o">=</span> <span class="s1">&#39;tb&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Settings</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ViewSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="n">_variant_registry</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="ClassicViewSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.view_spec.ClassicViewSpec">[docs]</a><span class="k">class</span> <span class="nc">ClassicViewSpec</span><span class="p">(</span><span class="n">ViewSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A classic view specification defined with HTML, CSS and JS.</span>
+
+<span class="sd">    For more information, see Toloka Requester&#39;s guide</span>
+<span class="sd">    https://yandex.ru/support/toloka-requester/?lang=en</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        script ( Optional[str]): JavaScript interface for the task.</span>
+<span class="sd">        markup ( Optional[str]): Task interface.</span>
+<span class="sd">        styles ( Optional[str]): CSS task interface.</span>
+<span class="sd">        asserts: Linked files such as:</span>
+<span class="sd">    		* CSS styles</span>
+<span class="sd">    		* JavaScript libraries</span>
+<span class="sd">    		* Toloka assets with the $TOLOKA_ASSETS prefix</span>
+<span class="sd">    		Add items in the order they should be linked when running the task interface.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ClassicViewSpec.Assets"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.view_spec.ClassicViewSpec.Assets">[docs]</a>    <span class="k">class</span> <span class="nc">Assets</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;style_urls: Links to CSS libraries.</span>
+
+<span class="sd">        script_urls: Links to JavaScript libraries and Toloka assets.</span>
+<span class="sd">            Toloka assets:</span>
+<span class="sd">            * &quot;$TOLOKA_ASSETS/js/toloka-handlebars-templates.js&quot; — Handlebars. Ssee the description on the template</span>
+<span class="sd">                engine website here http://handlebarsjs.com/</span>
+<span class="sd">            * &quot;$TOLOKA_ASSETS/js/image-annotation.js&quot; — Image labeling interface. See image with area selection in</span>
+<span class="sd">                the Requester&#39;s guide here https://yandex.ru/support/toloka-requester/concepts/t-components/image-annotation.html/?lang=en</span>
+<span class="sd">            Note that the image labeling interface should only be connected together with the Handlebars helpers.</span>
+<span class="sd">            The order of connection matters:</span>
+<span class="sd">            &gt;&gt;&gt; scipt_utls = [</span>
+<span class="sd">            &gt;&gt;&gt;     &quot;$TOLOKA_ASSETS/js/toloka-handlebars-templates.js&quot;,</span>
+<span class="sd">            &gt;&gt;&gt;     &quot;$TOLOKA_ASSETS/js/image-annotation.js&quot;,</span>
+<span class="sd">            &gt;&gt;&gt; ]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">style_urls</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">script_urls</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ClassicViewSpec.Assets.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="o">...</span></div>
+
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ViewSpec</span><span class="o">.</span><span class="n">Settings</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">script</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">markup</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">styles</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">assets</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Assets</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class ClassicViewSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="TemplateBuilderViewSpec"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.view_spec.TemplateBuilderViewSpec">[docs]</a><span class="k">class</span> <span class="nc">TemplateBuilderViewSpec</span><span class="p">(</span><span class="n">ViewSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A template builder view scpecification that defines an interface with</span>
+
+<span class="sd">    template builder components</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        config ( Optional[TemplateBuilder]): A template builder config</span>
+<span class="sd">        core_version ( Optional[str]): Default template components version. Most users will not need to change this parameter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ViewSpec</span><span class="o">.</span><span class="n">Settings</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TemplateBuilder</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">core_version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class TemplateBuilderViewSpec.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+<div class="viewcode-block" id="TemplateBuilderViewSpec.structure"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.view_spec.TemplateBuilderViewSpec.structure">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">structure</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span> <span class="o">...</span></div>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="TemplateBuilderViewSpec.unstructure"><a class="viewcode-back" href="../../../../source/toloka.client.project.html#toloka.client.project.view_spec.TemplateBuilderViewSpec.unstructure">[docs]</a>    <span class="k">def</span> <span class="nf">unstructure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="o">...</span></div></div>
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, username.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

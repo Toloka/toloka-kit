@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>toloka.client.project &mdash; toloka-kit 0.1.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> toloka-kit
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.pool.html">toloka.client.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.primitives.html">toloka.client.primitives package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.html">toloka.client.project package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.project.template_builder.html">toloka.client.project.template_builder package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.html">toloka.client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.client.util.html">toloka.client.util package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/toloka.html">toloka package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">toloka-kit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../client.html">toloka.client</a> &raquo;</li>
+        
+      <li>toloka.client.project</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for toloka.client.project</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">toloka.client.primitives.base</span> <span class="kn">import</span> <span class="n">BaseTolokaObject</span>
+<span class="kn">from</span> <span class="nn">toloka.client.project.task_spec</span> <span class="kn">import</span> <span class="n">TaskSpec</span>
+<span class="kn">from</span> <span class="nn">toloka.client.quality_control</span> <span class="kn">import</span> <span class="n">QualityControl</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Dict</span>
+<span class="p">)</span>
+<div class="viewcode-block" id="Project"><a class="viewcode-back" href="../../../source/toloka.client.project.html#toloka.client.project.Project">[docs]</a><span class="k">class</span> <span class="nc">Project</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Top-level object in Toloka. All other entities are contained in some project.</span>
+
+<span class="sd">    Describes one type of task from the requester&#39;s point of view. For example: one project can describe image segmentation,</span>
+<span class="sd">    another project can test this segmentation. The easier the task, the better the results. If your task contains more</span>
+<span class="sd">    than one question, it may be worth dividing it into several projects.</span>
+
+<span class="sd">    In a project, you set properties for tasks and responses:</span>
+<span class="sd">    * Input data parameters. These parameters describe the objects to display in a task, such as images or text.</span>
+<span class="sd">    * Output data parameters. These parameters describe users&#39; responses. They are used for validating the</span>
+<span class="sd">        responses entered: the data type (integer, string, etc.), range of values, string length, and so on.</span>
+<span class="sd">    * Task interface. For more information about how to define the appearance of tasks, see the document</span>
+<span class="sd">        Toloka. requester&#39;s guide.</span>
+
+<span class="sd">    Pools and training pools are related to a project.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        public_name ( Optional[str]): Name of the project. Visible to users.</span>
+<span class="sd">        public_description ( Optional[str]): Description of the project. Visible to users.</span>
+<span class="sd">        public_instructions ( Optional[str]): Instructions for completing the task. You can use any HTML markup in the instructions.</span>
+<span class="sd">        private_comment ( Optional[str]): Comments about the project. Visible only to the requester.</span>
+<span class="sd">        task_spec ( Optional[TaskSpec]): Parameters for input and output data and the task interface.</span>
+<span class="sd">        assignments_issuing_type ( Optional[AssignmentsIssuingType]): How to assign tasks. The default value is AUTOMATED.</span>
+<span class="sd">        assignments_automerge_enabled ( Optional[bool]): Solve merging identical tasks in the project.</span>
+<span class="sd">        max_active_assignments_count ( Optional[int]): The number of task suites the user can complete simultaneously (“Active” status)</span>
+<span class="sd">        quality_control ( Optional[QualityControl]): The quality control rule.</span>
+<span class="sd">        status ( Optional[ProjectStatus]): Project status.</span>
+<span class="sd">        created ( Optional[datetime]): The UTC date and time the project was created.</span>
+<span class="sd">        id ( Optional[str]): Project ID (assigned automatically).</span>
+<span class="sd">        public_instructions ( Optional[str]): Instructions for completing tasks. You can use any HTML markup in the instructions.</span>
+<span class="sd">        private_comment ( Optional[str]): Comment on the project. Available only to the customer.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    How to create a new project.</span>
+
+<span class="sd">    &gt;&gt;&gt; toloka_client = toloka.TolokaClient(your_token, &#39;PRODUCTION&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; new_project = toloka.project.Project(</span>
+<span class="sd">    &gt;&gt;&gt;     assignments_issuing_type=toloka.project.Project.AssignmentsIssuingType.AUTOMATED,</span>
+<span class="sd">    &gt;&gt;&gt;     public_name=&#39;My best project!!!&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;     public_description=&#39;Look at the instruction and do it well&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;     public_instructions=&#39;!Describe your task for performers here!&#39;,</span>
+<span class="sd">    &gt;&gt;&gt;     task_spec=toloka.project.task_spec.TaskSpec(</span>
+<span class="sd">    &gt;&gt;&gt;         input_spec={&#39;image&#39;: toloka.project.field_spec.UrlSpec()},</span>
+<span class="sd">    &gt;&gt;&gt;         output_spec={&#39;result&#39;: toloka.project.field_spec.StringSpec(allowed_values=[&#39;OK&#39;, &#39;BAD&#39;])},</span>
+<span class="sd">    &gt;&gt;&gt;         view_spec=verification_interface_prepared_before,</span>
+<span class="sd">    &gt;&gt;&gt;     ),</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    &gt;&gt;&gt; new_project = toloka_client.create_project(new_project)</span>
+<span class="sd">    &gt;&gt;&gt; print(new_project.id)</span>
+<span class="sd">    ...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Project.AssignmentsIssuingType"><a class="viewcode-back" href="../../../source/toloka.client.project.html#toloka.client.project.Project.AssignmentsIssuingType">[docs]</a>    <span class="k">class</span> <span class="nc">AssignmentsIssuingType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;How to assign tasks:</span>
+
+<span class="sd">        Attributes:</span>
+<span class="sd">            AUTOMATED: The user is assigned a task suite from the pool. You can configure the order</span>
+<span class="sd">                for assigning task suites.</span>
+<span class="sd">            MAP_SELECTOR: The user chooses a task suite on the map. If you are using MAP_SELECTOR,</span>
+<span class="sd">            specify the text to display in the map by setting assignments_issuing_view_config.&quot;&quot;&quot;</span>
+
+        <span class="n">AUTOMATED</span> <span class="o">=</span> <span class="s1">&#39;AUTOMATED&#39;</span>
+        <span class="n">MAP_SELECTOR</span> <span class="o">=</span> <span class="s1">&#39;MAP_SELECTOR&#39;</span></div>
+
+
+<div class="viewcode-block" id="Project.AssignmentsIssuingViewConfig"><a class="viewcode-back" href="../../../source/toloka.client.project.html#toloka.client.project.Project.AssignmentsIssuingViewConfig">[docs]</a>    <span class="k">class</span> <span class="nc">AssignmentsIssuingViewConfig</span><span class="p">(</span><span class="n">BaseTolokaObject</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;How the task will be displayed on the map</span>
+
+<span class="sd">        Used only then assignments_issuing_type == MAP_SELECTOR</span>
+
+<span class="sd">        Attributes:</span>
+<span class="sd">            title_template ( Optional[str]): Name of the task. Users will see it in the task preview mode.</span>
+<span class="sd">            description_template ( Optional[str]): Brief description of the task. Users will see it in the task preview mode.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">title_template</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">description_template</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Project.AssignmentsIssuingViewConfig.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Project.ProjectStatus"><a class="viewcode-back" href="../../../source/toloka.client.project.html#toloka.client.project.Project.ProjectStatus">[docs]</a>    <span class="k">class</span> <span class="nc">ProjectStatus</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Project status:</span>
+
+<span class="sd">        Attributes:</span>
+<span class="sd">            ACTIVE: A project is active</span>
+<span class="sd">            ARCHIVED: A project is archived&quot;&quot;&quot;</span>
+
+        <span class="n">ACTIVE</span> <span class="o">=</span> <span class="s1">&#39;ACTIVE&#39;</span>
+        <span class="n">ARCHIVED</span> <span class="o">=</span> <span class="s1">&#39;ARCHIVED&#39;</span></div>
+
+
+    <span class="n">QualityControl</span> <span class="o">=</span> <span class="n">QualityControl</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">public_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">public_description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">task_spec</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TaskSpec</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">assignments_issuing_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AssignmentsIssuingType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">assignments_issuing_view_config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AssignmentsIssuingViewConfig</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">assignments_automerge_enabled</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_active_assignments_count</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">quality_control</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">QualityControl</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ProjectStatus</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">created</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">public_instructions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">private_comment</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Method generated by attrs for class Project.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, username.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
