@@ -5,6 +5,7 @@ __all__ = [
     'BaseSortItem',
     'BaseSortItems',
     'SearchRequestMetaclass',
+    'BaseSearchRequest',
     'ProjectSearchRequest',
     'ProjectSortItems',
     'PoolSearchRequest',
@@ -38,7 +39,7 @@ from typing import Optional, TypeVar, Type, Union, List, get_type_hints, cast
 
 import attr
 
-from ._converter import structure, unstructure
+from ._converter import converter, structure, unstructure
 from .assignment import Assignment
 from .attachment import Attachment
 from .message_thread import Folder
@@ -149,7 +150,15 @@ class SearchRequestMetaclass(BaseTolokaObjectMetaclass):
         return subclass
 
 
-class ProjectSearchRequest(metaclass=SearchRequestMetaclass):
+class BaseSearchRequest(BaseTolokaObject, metaclass=SearchRequestMetaclass):
+    """Base class for all search request classes
+    """
+
+    class CompareFields:
+        pass
+
+
+class ProjectSearchRequest(BaseSearchRequest):
     """Parameters for searching projects
 
     Attributes:
@@ -198,7 +207,7 @@ ProjectSortItems = BaseSortItems.for_fields(
 )
 
 
-class PoolSearchRequest(metaclass=SearchRequestMetaclass):
+class PoolSearchRequest(BaseSearchRequest):
     """Parameters for searching pools
 
     Attributes:
@@ -256,7 +265,7 @@ PoolSortItems = BaseSortItems.for_fields(
 )
 
 
-class TrainingSearchRequest(metaclass=SearchRequestMetaclass):
+class TrainingSearchRequest(BaseSearchRequest):
     """Parameters for searching training pools
 
     Attributes:
@@ -313,7 +322,7 @@ TrainingSortItems = BaseSortItems.for_fields(
 )
 
 
-class SkillSearchRequest(metaclass=SearchRequestMetaclass):
+class SkillSearchRequest(BaseSearchRequest):
     """Parameters for searching skill
 
     Attributes:
@@ -358,7 +367,7 @@ SkillSortItems = BaseSortItems.for_fields(
 )
 
 
-class AssignmentSearchRequest(metaclass=SearchRequestMetaclass):
+class AssignmentSearchRequest(BaseSearchRequest):
     """Parameters for searching assignment
 
     Attributes:
@@ -393,7 +402,28 @@ class AssignmentSearchRequest(metaclass=SearchRequestMetaclass):
         created: datetime.datetime
         submitted: datetime.datetime
 
-    status: Assignment.Status
+    def _list_converter(value):
+        if value is None:
+            return value
+        if isinstance(value, str):
+            value = value.split(',')
+            value = [item.strip() for item in value]
+        if not isinstance(value, list):
+            value = [value]
+        return [Assignment.Status(item) for item in value]
+
+    def _list_setter(self, attribute, value):
+        return AssignmentSearchRequest._list_converter(value)
+
+    def unstructure(self) -> Optional[dict]:
+        data = super().unstructure()
+
+        if self.status is not None:
+            data['status'] = ','.join(converter.unstructure(item) for item in self.status)
+
+        return data
+
+    status: List[Assignment.Status] = attr.attrib(converter=_list_converter, on_setattr=_list_setter)
     task_id: str
     task_suite_id: str
     pool_id: str
@@ -424,7 +454,7 @@ AssignmentSortItems = BaseSortItems.for_fields(
 )
 
 
-class AggregatedSolutionSearchRequest(metaclass=SearchRequestMetaclass):
+class AggregatedSolutionSearchRequest(BaseSearchRequest):
     """Parameters for searching aggregated solution
 
     Attributes:
@@ -452,7 +482,7 @@ AggregatedSolutionSortItems = BaseSortItems.for_fields(
 )
 
 
-class TaskSearchRequest(metaclass=SearchRequestMetaclass):
+class TaskSearchRequest(BaseSearchRequest):
     """Parameters for searching tasks
 
     Attributes:
@@ -504,7 +534,7 @@ TaskSortItems = BaseSortItems.for_fields(
 )
 
 
-class TaskSuiteSearchRequest(metaclass=SearchRequestMetaclass):
+class TaskSuiteSearchRequest(BaseSearchRequest):
     """Parameters for searching task suites
 
     Attributes:
@@ -559,7 +589,7 @@ TaskSuiteSortItems = BaseSortItems.for_fields(
 )
 
 
-class AttachmentSearchRequest(metaclass=SearchRequestMetaclass):
+class AttachmentSearchRequest(BaseSearchRequest):
     """Parameters for searching attachment
 
     Attributes:
@@ -617,7 +647,7 @@ AttachmentSortItems = BaseSortItems.for_fields(
 )
 
 
-class UserSkillSearchRequest(metaclass=SearchRequestMetaclass):
+class UserSkillSearchRequest(BaseSearchRequest):
     """Parameters for searching user skill
 
     Attributes:
@@ -672,7 +702,7 @@ UserSkillSortItems = BaseSortItems.for_fields(
 )
 
 
-class UserRestrictionSearchRequest(metaclass=SearchRequestMetaclass):
+class UserRestrictionSearchRequest(BaseSearchRequest):
     """Parameters for searching user restriction
 
     Attributes:
@@ -726,7 +756,7 @@ UserRestrictionSortItems = BaseSortItems.for_fields(
 )
 
 
-class UserBonusSearchRequest(metaclass=SearchRequestMetaclass):
+class UserBonusSearchRequest(BaseSearchRequest):
     """Parameters for searching user bonus
 
     Attributes:
@@ -773,7 +803,7 @@ UserBonusSortItems = BaseSortItems.for_fields(
 )
 
 
-class MessageThreadSearchRequest(metaclass=SearchRequestMetaclass):
+class MessageThreadSearchRequest(BaseSearchRequest):
     """Parameters for searching message threads
 
     Attributes:
@@ -793,8 +823,29 @@ class MessageThreadSearchRequest(metaclass=SearchRequestMetaclass):
         id: str
         created: datetime.datetime
 
-    folder: Folder
-    folder_ne: Folder
+    def _list_converter(value):
+        if value is None:
+            return value
+        if isinstance(value, str):
+            value = value.split(',')
+            value = [item.strip() for item in value]
+        if not isinstance(value, list):
+            value = [value]
+        return [Folder(item) for item in value]
+
+    def _list_setter(self, attribute, value):
+        return MessageThreadSearchRequest._list_converter(value)
+
+    def unstructure(self) -> Optional[dict]:
+        data = super().unstructure()
+        if self.folder is not None:
+            data['folder'] = ','.join(converter.unstructure(item) for item in self.folder)
+        if self.folder_ne is not None:
+            data['folder_ne'] = ','.join(converter.unstructure(item) for item in self.folder_ne)
+        return data
+
+    folder: List[Folder] = attr.attrib(converter=_list_converter, on_setattr=_list_setter)
+    folder_ne: List[Folder] = attr.attrib(converter=_list_converter, on_setattr=_list_setter)
 
 
 MessageThreadSortItems = BaseSortItems.for_fields(

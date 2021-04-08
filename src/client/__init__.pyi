@@ -528,7 +528,7 @@ class TolokaClient(object):
         Example:
             How to process all accepted assignmens.
 
-            >>> for assignment in toloka_client.get_assignments(pool_id=some_pool_id, status=toloka.assignment.Assignment.ACCEPTED):
+            >>> for assignment in toloka_client.get_assignments(pool_id=some_pool_id, status=['ACCEPTED', 'SUBMITTED']):
             >>>     # somehow process "assignment"
             ...
         """
@@ -553,7 +553,7 @@ class TolokaClient(object):
         Example:
             How to process all accepted assignmens.
 
-            >>> for assignment in toloka_client.get_assignments(pool_id=some_pool_id, status=toloka.assignment.Assignment.ACCEPTED):
+            >>> for assignment in toloka_client.get_assignments(pool_id=some_pool_id, status=['ACCEPTED', 'SUBMITTED']):
             >>>     # somehow process "assignment"
             ...
         """
@@ -920,6 +920,12 @@ class TolokaClient(object):
 
         Yields:
             MessageThread: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all unread incoming messages.
+
+            >>> message_threads = toloka_client.get_message_threads(folder=['INBOX', 'UNREAD'])
+            ...
         """
         ...
 
@@ -938,6 +944,12 @@ class TolokaClient(object):
 
         Yields:
             MessageThread: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all unread incoming messages.
+
+            >>> message_threads = toloka_client.get_message_threads(folder=['INBOX', 'UNREAD'])
+            ...
         """
         ...
 
@@ -1108,6 +1120,17 @@ class TolokaClient(object):
 
         Yields:
             Project: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all active projects.
+
+            >>> active_projects = toloka_client.get_projects(status='ACTIVE'):
+            ...
+
+            How to get all your projects.
+
+            >>> my_projects = toloka_client.get_projects()
+            ...
         """
         ...
 
@@ -1126,6 +1149,17 @@ class TolokaClient(object):
 
         Yields:
             Project: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all active projects.
+
+            >>> active_projects = toloka_client.get_projects(status='ACTIVE'):
+            ...
+
+            How to get all your projects.
+
+            >>> my_projects = toloka_client.get_projects()
+            ...
         """
         ...
 
@@ -1401,6 +1435,17 @@ class TolokaClient(object):
 
         Yields:
             Pool: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all open pools from project.
+
+            >>> open_pools = toloka_client.get_pools(project_id=my_project_id, status='OPEN')
+            ...
+
+            How to get all pools from project.
+
+            >>> all_pools = toloka_client.get_pools(project_id=my_project_id)
+            ...
         """
         ...
 
@@ -1419,6 +1464,17 @@ class TolokaClient(object):
 
         Yields:
             Pool: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all open pools from project.
+
+            >>> open_pools = toloka_client.get_pools(project_id=my_project_id, status='OPEN')
+            ...
+
+            How to get all pools from project.
+
+            >>> all_pools = toloka_client.get_pools(project_id=my_project_id)
+            ...
         """
         ...
 
@@ -1713,6 +1769,12 @@ class TolokaClient(object):
 
         Yields:
             Training: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all trainings in project.
+
+            >>> trainings = toloka_client.get_trainings(project_id=project_id)
+            ...
         """
         ...
 
@@ -1731,6 +1793,12 @@ class TolokaClient(object):
 
         Yields:
             Training: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all trainings in project.
+
+            >>> trainings = toloka_client.get_trainings(project_id=project_id)
+            ...
         """
         ...
 

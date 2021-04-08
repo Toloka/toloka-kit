@@ -394,7 +394,7 @@ class TolokaClient:
         Example:
             How to process all accepted assignmens.
 
-            >>> for assignment in toloka_client.get_assignments(pool_id=some_pool_id, status=toloka.assignment.Assignment.ACCEPTED):
+            >>> for assignment in toloka_client.get_assignments(pool_id=some_pool_id, status=['ACCEPTED', 'SUBMITTED']):
             >>>     # somehow process "assignment"
             ...
         """
@@ -590,6 +590,12 @@ class TolokaClient:
 
         Yields:
             MessageThread: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all unread incoming messages.
+
+            >>> message_threads = toloka_client.get_message_threads(folder=['INBOX', 'UNREAD'])
+            ...
         """
         return self._find_all(self.find_message_threads, request)
 
@@ -720,6 +726,17 @@ class TolokaClient:
 
         Yields:
             Project: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all active projects.
+
+            >>> active_projects = toloka_client.get_projects(status='ACTIVE'):
+            ...
+
+            How to get all your projects.
+
+            >>> my_projects = toloka_client.get_projects()
+            ...
         """
         return self._find_all(self.find_projects, request)
 
@@ -997,6 +1014,17 @@ class TolokaClient:
 
         Yields:
             Pool: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all open pools from project.
+
+            >>> open_pools = toloka_client.get_pools(project_id=my_project_id, status='OPEN')
+            ...
+
+            How to get all pools from project.
+
+            >>> all_pools = toloka_client.get_pools(project_id=my_project_id)
+            ...
         """
         return self._find_all(self.find_pools, request)
 
@@ -1235,6 +1263,12 @@ class TolokaClient:
 
         Yields:
             Training: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all trainings in project.
+
+            >>> trainings = toloka_client.get_trainings(project_id=project_id)
+            ...
         """
         return self._find_all(self.find_trainings, request)
 
