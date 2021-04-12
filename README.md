@@ -5,8 +5,10 @@
 [github_tests_badge]: https://github.com/Toloka/toloka-kit/workflows/Tests/badge.svg?branch=main
 [github_tests_link]: https://github.com/Toloka/toloka-kit/actions?query=workflow:Tests
 
+[**<span style="color:red">Documentation</span>**](https://toloka.github.io/toloka-kit)
+
 [Website](https://toloka.ai) |
-[Documentation](https://yandex.ru/dev/toloka/doc/concepts/about.html?lang=en)|
+[API Documentation](https://yandex.ru/dev/toloka/doc/concepts/about.html?lang=en) |
 [Platform](http://toloka.yandex.com)
 
 
@@ -25,7 +27,7 @@ Requirements
 - Register in [Toloka.ai](https://toloka.ai/) as requester. Registration process described [here.](https://yandex.ru/support/toloka-requester/concepts/access.html?lang=en)
 - [Topping up your account.](https://yandex.ru/support/toloka-requester/concepts/refill.html?lang=en)
 - Getting an OAuth. Learn more in [help](https://yandex.ru/dev/toloka/doc/concepts/access.html?lang=en) and in the image below.
-                                         
+
 
 ![How to get OAuth token](./examples/image_segmentation/img/OAuth.png "How to get OAuth token")
 
@@ -49,7 +51,7 @@ print(toloka_client.get_requester())
 Useful Links
 --------------
 - [Toloka homepage.](https://toloka.ai/)
-- [Toloka requester's guide.](https://yandex.ru/support/toloka-requester/index.html?lang=en) 
+- [Toloka requester's guide.](https://yandex.ru/support/toloka-requester/index.html?lang=en)
 - We recommend that you first get acquainted with Toloka through the web interface and implement [one of the tutorials.](https://yandex.ru/support/toloka-requester/concepts/usecases.html)
 - [Toloka API documentation.](https://yandex.com/dev/toloka/doc/concepts/about.html?lang=en)
 - [Toloka-kit usage examples.](https://github.com/Toloka/toloka-kit/tree/main/examples)
