@@ -132,6 +132,39 @@ def test_get_message_threads(requests_mock, toloka_client, toloka_url, message_t
     assert threads == client.unstructure(list(result))
 
 
+@pytest.mark.parametrize(
+    ['raw_result', 'folder', 'folder_ne'],
+    [
+        ({'folder': 'OUTBOX', 'folder_ne': 'IMPORTANT'}, client.message_thread.Folder.OUTBOX, client.message_thread.Folder.IMPORTANT),
+        ({'folder': 'OUTBOX', 'folder_ne': 'IMPORTANT'}, 'OUTBOX', 'IMPORTANT'),
+        ({'folder': 'OUTBOX'}, 'OUTBOX', None),
+        (
+            {'folder': 'INBOX,UNREAD', 'folder_ne': 'IMPORTANT,AUTOMATIC_NOTIFICATION'},
+            [client.message_thread.Folder.INBOX, client.message_thread.Folder.UNREAD],
+            [client.message_thread.Folder.IMPORTANT, client.message_thread.Folder.AUTOMATIC_NOTIFICATION],
+        ),
+        (
+            {'folder': 'INBOX,UNREAD', 'folder_ne': 'IMPORTANT,AUTOMATIC_NOTIFICATION'},
+            ['INBOX', 'UNREAD'],
+            ['IMPORTANT', 'AUTOMATIC_NOTIFICATION'],
+        ),
+        (
+            {'folder': 'INBOX,UNREAD', 'folder_ne': 'IMPORTANT,AUTOMATIC_NOTIFICATION'},
+            'INBOX, UNREAD',
+            'IMPORTANT, AUTOMATIC_NOTIFICATION',
+        ),
+    ]
+)
+def test_message_thread_search_request(folder, folder_ne, raw_result):
+    request = client.search_requests.MessageThreadSearchRequest(folder=folder, folder_ne=folder_ne)
+    assert client.unstructure(request) == raw_result
+
+    request = client.search_requests.MessageThreadSearchRequest()
+    request.folder = folder
+    request.folder_ne = folder_ne
+    assert client.unstructure(request) == raw_result
+
+
 def test_compose_thread_direct(requests_mock, toloka_client, toloka_url, message_thread_base_map, compose_details_direct_map):
     raw_request = {
         'topic': {'EN': 'Message title'},

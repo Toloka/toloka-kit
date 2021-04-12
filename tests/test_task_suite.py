@@ -216,6 +216,7 @@ def task_suites_result_map():
                 'created': '2016-07-09T14:40:00',
             },
         },
+        'validation_errors': {},
     }
 
 

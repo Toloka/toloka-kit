@@ -120,6 +120,26 @@ def test_get_assignments(requests_mock, toloka_client, toloka_url, assignment_ma
     assert assignments == client.unstructure(list(result))
 
 
+@pytest.mark.parametrize(
+    ['raw_result', 'input_status'],
+    [
+        ({'status': 'ACCEPTED', 'pool_id': '21'}, client.assignment.Assignment.ACCEPTED),
+        ({'status': 'ACCEPTED', 'pool_id': '21'}, 'ACCEPTED'),
+        ({'status': 'ACCEPTED,SUBMITTED', 'pool_id': '21'}, [client.assignment.Assignment.ACCEPTED, client.assignment.Assignment.SUBMITTED]),
+        ({'status': 'ACCEPTED,SUBMITTED', 'pool_id': '21'}, 'ACCEPTED, SUBMITTED'),
+        ({'status': 'ACCEPTED,SUBMITTED', 'pool_id': '21'}, ['ACCEPTED', 'SUBMITTED']),
+        ({'pool_id': '21'}, None),
+    ]
+)
+def test_assignments_search_request(input_status, raw_result):
+    request = client.search_requests.AssignmentSearchRequest(status=input_status, pool_id='21')
+    assert client.unstructure(request) == raw_result
+
+    request = client.search_requests.AssignmentSearchRequest(pool_id='21')
+    request.status = input_status
+    assert client.unstructure(request) == raw_result
+
+
 def test_patch_assignment(requests_mock, toloka_client, toloka_url, assignment_map):
     raw_request = {
         'status': 'ACCEPTED',

@@ -1,3 +1,4 @@
+__all__ = ['Owner']
 from .primitives.base import BaseTolokaObject
 
 

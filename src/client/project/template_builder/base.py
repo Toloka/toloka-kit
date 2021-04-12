@@ -1,5 +1,17 @@
+__all__ = [
+    'ComponentType',
+    'BaseTemplate',
+    'BaseComponent',
+    'BaseComponentOr',
+    'base_component_or',
+    'VersionedBaseComponent',
+    'UnknownComponent',
+    'RefComponent',
+    'ListDirection',
+    'ListSize'
+]
 from enum import Enum, unique
-from typing import ClassVar, Type, Optional, Any
+from typing import ClassVar, Type, Optional, Any, Union
 
 from ..._converter import converter
 from ...primitives.base import attribute, BaseTolokaObject, BaseTolokaObjectMetaclass
@@ -59,6 +71,7 @@ class ComponentType(Enum):
     HELPER_SWITCH = 'helper.switch'
     HELPER_TEXT_TRANSFORM = 'helper.text-transform'
     HELPER_TRANSFORM = 'helper.transform'
+    HELPER_YANDEX_DISK_PROXY = '@yandex-toloka/helper.proxy'
     LAYOUT_BARS = 'layout.bars'
     LAYOUT_COLUMNS = 'layout.columns'
     LAYOUT_SIDE_BY_SIDE = 'layout.side-by-side'
@@ -104,6 +117,7 @@ class BaseComponent(BaseTemplate, spec_enum=ComponentType, spec_field='type'):
 
 class BaseComponentOr(BaseTolokaObject):
     type_: ClassVar[Type]
+    union_type: ClassVar[Type]
 
     @classmethod
     def structure(cls, data):
@@ -124,6 +138,7 @@ def base_component_or(type_: Type, class_name_suffix: Optional[str] = None):
         cls = BaseTolokaObjectMetaclass(name, (BaseComponentOr,), {})
         cls.__module__ = __name__
         cls.type_ = type_
+        cls.union_type = cls.type_ if cls.type_ is Any else Union[BaseComponent, cls.type_]
         base_component_or._cache[type_] = cls
 
     return base_component_or._cache[type_]
@@ -144,6 +159,17 @@ class UnknownComponent(BaseTemplate):
 
 
 class RefComponent(BaseTemplate):
+    """If you need to insert the same or similar code snippets many times, reuse them.
+
+    This helps make your configuration shorter and makes it easier for you to edit duplicate chunks of code.
+
+    You can insert a code snippet from another part of the configuration anywhere inside the configuration. To do this,
+    use the structure RefComponent(ref="path.to.element").
+
+    This is useful when you need to insert the same snippet at multiple places in your code. For example, if you need
+    to run the same action using multiple buttons, put this action in a variable and call it using RefComponent.
+    """
+
     ref: str = attribute(origin='$ref')  # example: "vars.path.to.element"
 
 

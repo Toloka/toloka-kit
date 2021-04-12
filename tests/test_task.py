@@ -173,6 +173,18 @@ def create_tasks_log():
             'success': False,
             'type': 'TASK_VALIDATE'
         },
+        {
+            'input': {
+                'pool_id': 22
+            },
+            'output': {
+                'code': 'EMPTY_POOL',
+                'message': 'Pool contains no tasks. Operation is not allowed',
+                'request_id': 'ao_c8e4cb72-8d4b-4894-bc6e-65a403e6337e',
+            },
+            'success': False,
+            'type': 'POOL_OPEN',
+        },
     ]
 
 

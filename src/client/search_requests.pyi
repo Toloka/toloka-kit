@@ -69,7 +69,12 @@ class BaseSortItems(BaseTolokaObject):
 class SearchRequestMetaclass(BaseTolokaObjectMetaclass):
     ...
 
-class ProjectSearchRequest(object):
+class BaseSearchRequest(BaseTolokaObject):
+    """Base class for all search request classes
+    """
+    ...
+
+class ProjectSearchRequest(BaseSearchRequest):
     """Parameters for searching projects
 
     Attributes:
@@ -165,7 +170,7 @@ class ProjectSortItems(BaseSortItems):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[SortItem]]
 
-class PoolSearchRequest(object):
+class PoolSearchRequest(BaseSearchRequest):
     """Parameters for searching pools
 
     Attributes:
@@ -278,7 +283,7 @@ class PoolSortItems(BaseSortItems):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[SortItem]]
 
-class TrainingSearchRequest(object):
+class TrainingSearchRequest(BaseSearchRequest):
     """Parameters for searching training pools
 
     Attributes:
@@ -391,7 +396,7 @@ class TrainingSortItems(BaseSortItems):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[SortItem]]
 
-class SkillSearchRequest(object):
+class SkillSearchRequest(BaseSearchRequest):
     """Parameters for searching skill
 
     Attributes:
@@ -483,7 +488,7 @@ class SkillSortItems(BaseSortItems):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[SortItem]]
 
-class AssignmentSearchRequest(object):
+class AssignmentSearchRequest(BaseSearchRequest):
     """Parameters for searching assignment
 
     Attributes:
@@ -556,6 +561,12 @@ class AssignmentSearchRequest(object):
         submitted_gte: Optional[datetime] = ...
     ) -> None: ...
 
+    def _list_converter(value): ...
+
+    def _list_setter(self, attribute, value): ...
+
+    def unstructure(self) -> Optional[dict]: ...
+
     status: Optional[Assignment.Status]
     task_id: Optional[str]
     task_suite_id: Optional[str]
@@ -608,7 +619,7 @@ class AssignmentSortItems(BaseSortItems):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[SortItem]]
 
-class AggregatedSolutionSearchRequest(object):
+class AggregatedSolutionSearchRequest(BaseSearchRequest):
     """Parameters for searching aggregated solution
 
     Attributes:
@@ -675,7 +686,7 @@ class AggregatedSolutionSortItems(BaseSortItems):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[SortItem]]
 
-class TaskSearchRequest(object):
+class TaskSearchRequest(BaseSearchRequest):
     """Parameters for searching tasks
 
     Attributes:
@@ -783,7 +794,7 @@ class TaskSortItems(BaseSortItems):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[SortItem]]
 
-class TaskSuiteSearchRequest(object):
+class TaskSuiteSearchRequest(BaseSearchRequest):
     """Parameters for searching task suites
 
     Attributes:
@@ -895,7 +906,7 @@ class TaskSuiteSortItems(BaseSortItems):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[SortItem]]
 
-class AttachmentSearchRequest(object):
+class AttachmentSearchRequest(BaseSearchRequest):
     """Parameters for searching attachment
 
     Attributes:
@@ -1005,7 +1016,7 @@ class AttachmentSortItems(BaseSortItems):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[SortItem]]
 
-class UserSkillSearchRequest(object):
+class UserSkillSearchRequest(BaseSearchRequest):
     """Parameters for searching user skill
 
     Attributes:
@@ -1116,7 +1127,7 @@ class UserSkillSortItems(BaseSortItems):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[SortItem]]
 
-class UserRestrictionSearchRequest(object):
+class UserRestrictionSearchRequest(BaseSearchRequest):
     """Parameters for searching user restriction
 
     Attributes:
@@ -1220,7 +1231,7 @@ class UserRestrictionSortItems(BaseSortItems):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[SortItem]]
 
-class UserBonusSearchRequest(object):
+class UserBonusSearchRequest(BaseSearchRequest):
     """Parameters for searching user bonus
 
     Attributes:
@@ -1315,7 +1326,7 @@ class UserBonusSortItems(BaseSortItems):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[SortItem]]
 
-class MessageThreadSearchRequest(object):
+class MessageThreadSearchRequest(BaseSearchRequest):
     """Parameters for searching message threads
 
     Attributes:
@@ -1365,6 +1376,12 @@ class MessageThreadSearchRequest(object):
         created_gt: Optional[datetime] = ...,
         created_gte: Optional[datetime] = ...
     ) -> None: ...
+
+    def _list_converter(value): ...
+
+    def _list_setter(self, attribute, value): ...
+
+    def unstructure(self) -> Optional[dict]: ...
 
     folder: Optional[Folder]
     folder_ne: Optional[Folder]

@@ -1,3 +1,4 @@
+__all__ = ['InfiniteOverlapParametersMixin']
 from typing import Optional
 
 import attr

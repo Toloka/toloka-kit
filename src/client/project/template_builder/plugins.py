@@ -1,3 +1,9 @@
+__all__ = [
+    'BasePluginV1',
+    'HotkeysPluginV1',
+    'TriggerPluginV1',
+    'TolokaPluginV1'
+]
 from enum import Enum, unique
 from typing import List, Any
 
@@ -7,10 +13,21 @@ from .base import VersionedBaseComponent, BaseComponent, ComponentType, BaseTemp
 
 
 class BasePluginV1(VersionedBaseComponent):
+    """Plugins that provide expanded functionality. For example, you can use plugin.hotkeys to set up shortcuts.
+
+    """
+
     pass
 
 
 class HotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_HOTKEYS):
+    """Lets you set keyboard shortcuts for actions.
+
+    Attributes:
+        key_ + [a-z|0-9|up|down]: An action that is triggered when you press the specified keyboard key. The keyboard
+            shortcut is set in the key, and the action is specified in the value
+    """
+
     key_a: base_component_or(Any) = attribute(default=None, origin='a')
     key_b: base_component_or(Any) = attribute(default=None, origin='b')
     key_c: base_component_or(Any) = attribute(default=None, origin='c')
@@ -52,6 +69,21 @@ class HotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_HOTKEYS):
 
 
 class TriggerPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TRIGGER):
+    """Use this to configure triggers that trigger a specific action when an event occurs.
+
+    The action is set in the action property, and the event is described in the other fields.
+
+    The event can be triggered immediately when the task is loaded ("fireImmediately": true) or when data changes in
+    the property specified in onChangeOf.
+
+    You can also set conditions in the conditions property that must be met in order for the trigger to fire.
+    Attributes:
+        action: The action to perform when the trigger fires.
+        condition: The condition that must be met in order to fire the trigger.
+        fire_immediately: Flag indicating whether the trigger should be fired immediately after the task is loaded.
+        on_change_of: The data that triggers the action when changed.
+    """
+
     action: BaseComponent
     condition: BaseComponent
     fire_immediately: base_component_or(bool) = attribute(origin='fireImmediately')
@@ -59,11 +91,25 @@ class TriggerPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TRIGGER):
 
 
 class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
+    """A plugin with extra settings for tasks in Toloka.
+
+    Attributes:
+        layout: Settings for the task appearance in Toloka.
+        notifications: Notifications shown at the top of the page.
+    """
 
     class TolokaPluginLayout(BaseTemplate):
+        """How to display task.
+
+        """
 
         @unique
         class Kind(Enum):
+            """scroll (default) — display multiple tasks on the page at the same time.
+
+            pager — display only one task on the page, with a button to switch between tasks at the bottom.
+            """
+
             PAGER = 'pager'
             SCROLL = 'scroll'
 

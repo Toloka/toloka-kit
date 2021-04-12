@@ -1,3 +1,4 @@
+__all__: list = []
 import functools
 import linecache
 import uuid
@@ -117,7 +118,10 @@ def create_setter(attr_path: str, attr_type=Parameter.empty):
             Parameter(name='self', kind=Parameter.POSITIONAL_OR_KEYWORD),
             Parameter(name=attr_name, kind=Parameter.POSITIONAL_OR_KEYWORD, annotation=attr_type),
         ]),
-        f'self.{attr_path} = {attr_name}',
+        (
+            f'"""A shortcut setter for {attr_path}"""\n'
+            f'self.{attr_path} = {attr_name}'
+        )
     )
 
 
@@ -176,6 +180,9 @@ def expand(arg_name):
                 return func(*bound.args, **bound.kwargs)
             except TypeError:
                 return expanded_func(*args, **kwargs)
+
+        wrapped._func = func
+        wrapped._expanded_func = expanded_func
         wrapped._func_sig = func_sig
         wrapped._expanded_func_sig = _get_signature(expanded_func)
         wrapped._expanded_by = arg_name
