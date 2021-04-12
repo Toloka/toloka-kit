@@ -550,3 +550,43 @@ class TransformHelperV1(BaseHelperV1):
     version: Optional[str]
     into: Optional[Any]
     items: Optional[Union[BaseComponent, List[Any]]]
+
+
+class YandexDiskProxyHelperV1(BaseHelperV1):
+    """You can use this component to download files from Yandex.Disk.
+
+    To use YandexDiskProxyHelper, connect Yandex.Disk to your Toloka account and add the proxy by following
+    the instructions: https://yandex.com/support/toloka-requester/concepts/prepare-data.html?lang=en
+    Select the component that you want to add, such as view.image for an image or view.audio for an audio file.
+    In the url property of this component, use YandexDiskProxyHelper.
+    Attributes:
+        path: Path to the file in the /&lt;Proxy name&gt;/&lt;File name&gt;.&lt;type&gt; format
+    """
+
+    def __repr__(self): ...
+
+    def __str__(self): ...
+
+    def __eq__(self, other): ...
+
+    def __ne__(self, other): ...
+
+    def __lt__(self, other): ...
+
+    def __le__(self, other): ...
+
+    def __gt__(self, other): ...
+
+    def __ge__(self, other): ...
+
+    def __setattr__(self, name, val): ...
+
+    def __init__(
+        self,*,
+        version: Optional[str] = ...,
+        path: Optional[Union[BaseComponent, str]] = ...
+    ) -> None: ...
+
+    _unexpected: Optional[Dict[str, Any]]
+    version: Optional[str]
+    path: Optional[Union[BaseComponent, str]]

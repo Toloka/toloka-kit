@@ -9,7 +9,8 @@ __all__ = [
     'SearchQueryHelperV1',
     'SwitchHelperV1',
     'TextTransformHelperV1',
-    'TransformHelperV1'
+    'TransformHelperV1',
+    'YandexDiskProxyHelperV1'
 ]
 from enum import Enum, unique
 from typing import List, Any
@@ -252,3 +253,17 @@ class TransformHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_TRANSFORM)
 
     into: base_component_or(Any)
     items: base_component_or(List[base_component_or(Any)], 'ListBaseComponentOrAny')
+
+
+class YandexDiskProxyHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_YANDEX_DISK_PROXY):
+    """You can use this component to download files from Yandex.Disk.
+
+    To use YandexDiskProxyHelper, connect Yandex.Disk to your Toloka account and add the proxy by following
+    the instructions: https://yandex.com/support/toloka-requester/concepts/prepare-data.html?lang=en
+    Select the component that you want to add, such as view.image for an image or view.audio for an audio file.
+    In the url property of this component, use YandexDiskProxyHelper.
+    Attributes:
+        path: Path to the file in the /&lt;Proxy name&gt;/&lt;File name&gt;.&lt;type&gt; format
+    """
+
+    path: base_component_or(str)

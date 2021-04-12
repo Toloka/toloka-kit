@@ -71,6 +71,7 @@ class ComponentType(Enum):
     HELPER_SWITCH = 'helper.switch'
     HELPER_TEXT_TRANSFORM = 'helper.text-transform'
     HELPER_TRANSFORM = 'helper.transform'
+    HELPER_YANDEX_DISK_PROXY = '@yandex-toloka/helper.proxy'
     LAYOUT_BARS = 'layout.bars'
     LAYOUT_COLUMNS = 'layout.columns'
     LAYOUT_SIDE_BY_SIDE = 'layout.side-by-side'
