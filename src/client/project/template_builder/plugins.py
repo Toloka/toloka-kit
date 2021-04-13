@@ -96,6 +96,17 @@ class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
     Attributes:
         layout: Settings for the task appearance in Toloka.
         notifications: Notifications shown at the top of the page.
+
+    Example:
+        How to set the task width on the task page.
+
+        >>> task_width_plugin = tb.plugins.TolokaPluginV1(
+        >>>     layout = tb.plugins.TolokaPluginV1.TolokaPluginLayout(
+        >>>         kind='scroll',
+        >>>         task_width=400,
+        >>>     )
+        >>> )
+        ...
     """
 
     class TolokaPluginLayout(BaseTemplate):

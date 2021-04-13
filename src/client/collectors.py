@@ -244,8 +244,9 @@ class Captcha(CollectorConfig, spec_value=CollectorConfig.Type.CAPTCHA):
         How to ban a performer in this project if he mistakes in captcha.
 
         >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool.set_captcha_frequency('MEDIUM')
         >>> new_pool.quality_control.add_action(
-        >>> collector=toloka.collectors.Captcha(history_size=3),
+        >>> collector=toloka.collectors.Captcha(history_size=5),
         >>>     conditions=[
         >>>         toloka.conditions.SuccessRate < 60,
         >>>     ],
