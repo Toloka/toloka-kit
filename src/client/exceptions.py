@@ -23,6 +23,13 @@ from .error_codes import CommonErrorCodes, InternalErrorCodes
 # Client errors
 @attr.attrs(auto_attribs=True, str=True, kw_only=True)
 class SpecClassIdentificationError(Exception):
+    """Raised when cannot find spec_сlass for spec_field value.
+
+    Attributes:
+        spec_field: value that defines spec_class type
+        spec_enum: enum class containing spec_class possible types
+    """
+
     spec_field: Optional[str] = None
     spec_enum: Optional[str] = None
 
@@ -30,6 +37,16 @@ class SpecClassIdentificationError(Exception):
 # API errors
 @attr.attrs(auto_attribs=True, str=True, kw_only=True)
 class ApiError(Exception):
+    """Error returned from the API Call.
+
+    Attributes:
+        status_code: response status code.
+        request_id: request ID
+        code: error code string
+        message: error message
+        payload: additional payload
+    """
+
     status_code: Optional[int] = None
     request_id: Optional[str] = None
     code: Optional[str] = None
@@ -38,6 +55,15 @@ class ApiError(Exception):
 
 
 class ValidationApiError(ApiError):
+    """Field validation error returned from the API Call.
+
+    Attributes:
+        status_code: response status code.
+        request_id: request ID
+        code: error code string
+        message: error message
+        invalid_fields: the list of the invalid fields
+    """
 
     _invalid_fields: Optional[List[str]] = None
 

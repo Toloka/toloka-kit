@@ -14,8 +14,8 @@ class Attachment(BaseTolokaObject):
         id: File ID.
         name: File name.
         details: Infomation about the pool, the task, and the user who uploaded the file.
-        created: The date when the file was uploaded to Toloka.
-        media_type: MIME type of the data.
+        created: Date the file was uploaded to Toloka.
+        media_type: MIME data type.
         owner: Owner
     """
 
@@ -23,11 +23,11 @@ class Attachment(BaseTolokaObject):
         ...
 
     class Details(BaseTolokaObject):
-        """Infomation about the pool, the task, and the user who uploaded the file.
+        """Information about the pool, task, and user from which the file was received.
 
         Attributes:
-            user_id: ID of the user who uploaded the file.
-            assignment_id: ID of the task suite assignment to a user.
+            user_id: ID of the user from whom the file was received.
+            assignment_id: ID for issuing a set of tasks to the user.
             pool_id: Pool ID.
         """
 
@@ -94,6 +94,8 @@ class Attachment(BaseTolokaObject):
     owner: Optional[Owner]
 
 class AssignmentAttachment(Attachment):
+    """Assignment Attachment.
+    """
 
     def __repr__(self): ...
 

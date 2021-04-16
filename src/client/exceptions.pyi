@@ -3,6 +3,12 @@ from typing import Any, List, Optional
 
 
 class SpecClassIdentificationError(Exception):
+    """Raised when cannot find spec_сlass for spec_field value.
+
+    Attributes:
+        spec_field: value that defines spec_class type
+        spec_enum: enum class containing spec_class possible types
+    """
 
     def __repr__(self): ...
 
@@ -30,6 +36,15 @@ class SpecClassIdentificationError(Exception):
     spec_enum: Optional[str]
 
 class ApiError(Exception):
+    """Error returned from the API Call.
+
+    Attributes:
+        status_code: response status code.
+        request_id: request ID
+        code: error code string
+        message: error message
+        payload: additional payload
+    """
 
     def __repr__(self): ...
 
@@ -63,6 +78,15 @@ class ApiError(Exception):
     payload: Optional[Any]
 
 class ValidationApiError(ApiError):
+    """Field validation error returned from the API Call.
+
+    Attributes:
+        status_code: response status code.
+        request_id: request ID
+        code: error code string
+        message: error message
+        invalid_fields: the list of the invalid fields
+    """
 
     _invalid_fields: Optional[List[str]]
 
