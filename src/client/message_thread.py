@@ -17,6 +17,13 @@ from .primitives.base import attribute, BaseTolokaObject
 
 @unique
 class RecipientsSelectType(Enum):
+    """Method for specifying recipients.
+
+    * DIRECT - specify user IDs.
+    * FILTER - select users using filter.
+    * ALL - send a message to all users who have tried to complete your tasks at least once.
+    """
+
     DIRECT = 'DIRECT'
     FILTER = 'FILTER'
     ALL = 'ALL'
@@ -24,6 +31,9 @@ class RecipientsSelectType(Enum):
 
 @unique
 class Folder(Enum):
+    """Folders for a thread.
+    """
+
     INBOX = 'INBOX'
     OUTBOX = 'OUTBOX'
     AUTOMATIC_NOTIFICATION = 'AUTOMATIC_NOTIFICATION'
@@ -32,20 +42,24 @@ class Folder(Enum):
 
 
 class Interlocutor(BaseTolokaObject):
-    """Interlocutor
+    """Information about the sender or recipient.
 
     Attributes:
         id: ID of the sender or recipient.
-        role: Role of the sender or recipient in Toloka:
-            * USER — Performer.
-            * REQUESTER
-            * ADMINISTRATOR
-            * SYSTEM — For messages sent automatically.
-        myself: Marks a sender or recipient with your ID. If this is your ID, it is set to true.
+        role: Role of the sender or recipient in Toloka.
+        myself: Marks a sender or recipient with your ID. f the ID belongs to you, the value is specified true.
     """
 
     @unique
     class InterlocutorRole(Enum):
+        """Role of the sender or recipient in Toloka.
+
+        * USER — Performer.
+        * REQUESTER - Customer.
+        * ADMINISTRATOR - Administrator.
+        * SYSTEM — For messages sent automatically.
+        """
+
         USER = 'USER'
         REQUESTER = 'REQUESTER'
         ADMINISTRATOR = 'ADMINISTRATOR'
@@ -57,29 +71,38 @@ class Interlocutor(BaseTolokaObject):
 
 
 class MessageThread(BaseTolokaObject):
-    """MessageThread
+    """Message thread.
 
+    The sent message is added to the new message thread. Until the first response is received the message chain is in
+    the folder UNREAD. If there are several addresses in the chain and one of them responds, a new message chain
+    will be created
     Attributes:
         id: Message thread ID.
         topic: Message thread title.
-        interlocutors_inlined: bool
-        interlocutors: List[Interlocutor]
+        interlocutors_inlined: Access information about the sender and recipients.
+            * True - information is available in the field interlocutors.
+            * False - information is available on a separate request.
+        interlocutors: Information about the sender and recipients, sorted by IDs.
         messages_inlined: Access to message threads:
             * True — The message is available in the messages field.
             * False — The message is available in a separate request.
-        messages: List[Message]
+        messages: Messages in the thread. Sorted by creation date (new first).
         meta: Meta
-        answerable: Whether the message can be responded to:
+        answerable: Ability to reply to a message:
             * True — The performer can respond to the message.
             * False — The performer cannot respond to the message.
         folders: Folders where the thread is located.
         compose_details: For messages that you sent: details of the POST request for creating the message.
-        created: Date the first message in the thread was created.
+        created: The date the first message in the chain was created.
     """
 
     class ComposeDetails(BaseTolokaObject):
         """For messages that you sent: details of the POST request for creating the message.
 
+        Attributes:
+            recipients_select_type: Method for specifying recipients.
+            recipients_ids: List of recipients IDs.
+            recipients_filter: Condition to filter recipients.
         """
 
         recipients_select_type: RecipientsSelectType
@@ -121,26 +144,40 @@ class MessageThread(BaseTolokaObject):
 
 
 class MessageThreadReply(BaseTolokaObject):
+    """Reply to message thread.
+
+    Attributes:
+        text: Message text. You can provide text in several languages (the message will come in the user's language).
+            Format: {"<language RU / EN/TR/ID / FR>": "<message text>"}.
+    """
+
     text: Dict[str, str]
 
 
 class MessageThreadFolders(BaseTolokaObject):
+    """Add a message thread to one or more folders
+
+    Attributes:
+        folders: Folders to add/remove a message thread to/from.
+    """
+
     folders: List[Folder]
 
 
 class MessageThreadCompose(BaseTolokaObject):
-    """MessageThreadCompose
+    """Sent message to perfromer
 
     Attributes:
-        recipients_select_type: Method for selecting recipients
-        topic: Subject of the message. You can enter the subject in multiple
-            languages (the message is sent in the user's language).
-        text: Message text. You can enter the text in multiple languages (the message is sent in the user's language)
-        answerable: Whether the message can be responded to:
+        recipients_select_type: Method for specifying recipients
+        topic: Post title. You can provide a title in several languages (the message will come in the user's language).
+            Format: "<language RU/EN/TR/ID/FR>": "<topic text>".
+        text: Message text. You can provide text in several languages (the message will come in the user's language).
+            Format: "<language RU/EN/TR/ID/FR>": "<message text>".
+        answerable: Ability to reply to a message:
             * True — Users can respond to the message.
             * False — Users can't respond to the message.
-        recipients_ids: The list of IDs of users who will receive the message.
-        recipients_filter: Filter for selecting recipients.
+        recipients_ids: List of IDs of users to whom the message will be sent.
+        recipients_filter: Filter to select recipients.
     """
 
     recipients_select_type: RecipientsSelectType

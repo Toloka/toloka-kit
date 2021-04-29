@@ -8,6 +8,9 @@ from enum import Enum, unique
 
 @unique
 class CommonErrorCodes(Enum):
+    """Types of error codes returned by the API
+    """
+
     ACCESS_DENIED = 'ACCESS_DENIED'
     AUTHENTICATION_ERROR = 'AUTHENTICATION_ERROR'
     CONFLICT_STATE = 'CONFLICT_STATE'
@@ -20,6 +23,9 @@ class CommonErrorCodes(Enum):
 
 @unique
 class InternalErrorCodes(Enum):
+    """Types of internal error codes returned by the API
+    """
+
     ACCOUNT_ALREADY_USED = 'ACCOUNT_ALREADY_USED'
     ACCOUNT_MUST_BE_IDENTIFIED = 'ACCOUNT_MUST_BE_IDENTIFIED'
     ADJUSTER_NOT_FOUND = 'ADJUSTER_NOT_FOUND'
@@ -89,6 +95,9 @@ class InternalErrorCodes(Enum):
 
 @unique
 class ValidationErrorCodes(Enum):
+    """Types of validation error codes returned by the API
+    """
+
     ARRAY_EXPECTED = 'ARRAY_EXPECTED'
     ARRAY_SIZE_GREATER_THAN_MAX = 'ARRAY_SIZE_GREATER_THAN_MAX'
     ARRAY_SIZE_LESS_THAN_MIN = 'ARRAY_SIZE_LESS_THAN_MIN'

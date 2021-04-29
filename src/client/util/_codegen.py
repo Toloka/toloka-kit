@@ -1,4 +1,4 @@
-__all__: list = []
+__all__: list = ['BaseParameters']
 import functools
 import linecache
 import uuid
@@ -156,7 +156,7 @@ def expand_func_by_argument(func: Callable, arg_name: str) -> Callable:
     new_params = list(func_params)
     new_params[arg_index:arg_index + 1] = arg_type_sig.parameters.values()
 
-    return _compile_function(
+    expanded_func = _compile_function(
         f'{func.__name__}_expanded_by_{arg_name}',
         func_sig.replace(parameters=new_params),
         dedent(f'''
@@ -165,6 +165,8 @@ def expand_func_by_argument(func: Callable, arg_name: str) -> Callable:
         '''),
         {arg_type.__name__: arg_type, 'func': func, 'NOTHING': attr.NOTHING}
     )
+    expanded_func.__doc__ = func.__doc__
+    return expanded_func
 
 
 def expand(arg_name):

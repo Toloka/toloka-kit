@@ -767,7 +767,7 @@ class TolokaClient:
 
         Args:
             project_id: ID of the project to be cloned.
-            reuse_controllers: Use same quality controllers in cloned and created projects. Defaults to True.
+            reuse_quality_controllers: Use same quality controllers in cloned and created projects. Defaults to True.
                 This means that all quality control rules will be applied to both projects.
                 For example, if you have rule "fast_submitted_count", fast responses counts across both projects.
 
@@ -1498,6 +1498,7 @@ class TolokaClient:
             50
 
             How to create golden-tasks.
+
             >>> dataset = pd.read_csv('dateset.tsv', sep=';')
             >>> golden_tasks = []
             >>> for _, row in dataset.iterrows():

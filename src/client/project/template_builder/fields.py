@@ -313,6 +313,18 @@ class MediaFileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_MEDIA_FILE):
         hint: Hint text.
         multiple: Determines whether multiple files can be uploaded:
         validation: Validation based on condition.
+
+    Example:
+        How to allow performers to upload images and make photos.
+
+        >>> image_loader = tb.fields.MediaFileFieldV1(
+        >>>     label='Upload a photo',
+        >>>     data=tb.data.OutputData(path='image'),
+        >>>     validation=tb.conditions.RequiredConditionV1(),
+        >>>     accept=tb.fields.MediaFileFieldV1.Accept(photo=True, gallery=True),
+        >>>     multiple=False,
+        >>> )
+        ...
     """
 
     class Accept(BaseTemplate):
@@ -390,6 +402,19 @@ class RadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_RADIO_GROUP)
         hint: Hint text.
         options: List of options to choose from
         validation: Validation based on condition.
+
+    Example:
+        How to add label selector to interface.
+
+        >>> radio_group_field = tb.fields.RadioGroupFieldV1(
+        >>>     data=tb.data.OutputData(path='result'),
+        >>>     validation=tb.conditions.RequiredConditionV1(),
+        >>>     options=[
+        >>>         tb.fields.GroupFieldOption(label='Cat', value='cat'),
+        >>>         tb.fields.GroupFieldOption(label='Dog', value='dog'),
+        >>>     ]
+        >>> )
+        ...
     """
 
     options: base_component_or(List[base_component_or(GroupFieldOption)], 'ListBaseComponentOrGroupFieldOption')

@@ -7,10 +7,12 @@ __all__ = [
     'ComparableConditionMixin',
     'StatefulComparableConditionMixin'
 ]
+
 from enum import unique, Enum
 from typing import Type
 
 import attr
+import sys
 
 from .base import attribute, BaseTolokaObjectMetaclass
 
@@ -38,7 +40,6 @@ class IdentityOperator(Enum):
 
 
 def _create_operator_metaclass_new(operator_enum: Type[Enum]):
-
     def __new__(mcs, name, bases, namespace, kw_only=False, **kwargs):
         annotations = namespace.get('__annotations__', {})
         namespace['__annotations__'] = dict(operator=operator_enum, **annotations)
@@ -46,6 +47,20 @@ def _create_operator_metaclass_new(operator_enum: Type[Enum]):
         return super(mcs, mcs).__new__(mcs, name, bases, namespace, kw_only=kw_only, **kwargs)
 
     return __new__
+
+
+def _eq_compatible_with_help(cls, value):
+    # help(toloka.conditions) does not work if we use our custom __eq__ logic here
+    # so we need to check that __eq__ was called from help() and use standard logic if true
+    is_called_from_help = False
+    frame = sys._getframe()
+    while frame:
+        if frame.f_code.co_filename.endswith('pydoc.py') and frame.f_code.co_name == 'help':
+            is_called_from_help = True
+            break
+        frame = frame.f_back
+
+    return value is cls if isinstance(value, type) or is_called_from_help else cls.eq(value)
 
 
 class _InclusionConditionMetaclass(BaseTolokaObjectMetaclass):
@@ -70,12 +85,10 @@ class _IdentityConditionMetaclass(BaseTolokaObjectMetaclass):
     def __hash__(cls):
         return super().__hash__()
 
-    def __eq__(cls, value):
-        return value is cls if isinstance(value, type) else cls.eq(value)
-
     def __ne__(cls, value):
         return value is not cls if isinstance(value, type) else cls.ne(value)
 
+    __eq__ = _eq_compatible_with_help
     __new__ = _create_operator_metaclass_new(IdentityOperator)
 
 
@@ -102,9 +115,6 @@ class _ComparableConditionMetaclass(BaseTolokaObjectMetaclass):
     def __hash__(cls):
         return super().__hash__()
 
-    def __eq__(cls, value):
-        return value is cls if isinstance(value, type) else cls.eq(value)
-
     def __ne__(cls, value):
         return value is not cls if isinstance(value, type) else cls.ne(value)
 
@@ -112,6 +122,7 @@ class _ComparableConditionMetaclass(BaseTolokaObjectMetaclass):
     __le__ = lte
     __gt__ = gt
     __ge__ = gte
+    __eq__ = _eq_compatible_with_help
     __new__ = _create_operator_metaclass_new(CompareOperator)
 
 
