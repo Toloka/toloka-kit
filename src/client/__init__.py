@@ -76,6 +76,8 @@ class TolokaClient:
             * If you specify a single value for the timeout, it will be applied to both the connect and the read timeouts.
             * Specify a tuple if you would like to set the values separately.
             * Set the timeout value to None if you're willing to wait forever.
+        url: If you want to set a specific URL for some reason, for example, for testing.
+            You can only set one parameter, "url" or "environment", not both.
 
     Example:
         How to create TolokaClient and make you first request to Toloka.
@@ -89,20 +91,28 @@ class TolokaClient:
 
     @unique
     class Environment(Enum):
-        SANDBOX = 'https://sandbox.toloka.yandex.ru/api'
-        PRODUCTION = 'https://toloka.yandex.ru/api'
+        SANDBOX = 'https://sandbox.toloka.yandex.ru'
+        PRODUCTION = 'https://toloka.yandex.ru'
 
     def __init__(
         self,
         token: str,
-        environment: Union[Environment, str],
+        environment: Union[Environment, str, None] = None,
         retries: Union[int, Retry] = 3,
-        timeout: Union[float, Tuple[float, float]] = 10.0
+        timeout: Union[float, Tuple[float, float]] = 10.0,
+        url: Optional[str] = None
     ):
-        if not isinstance(environment, TolokaClient.Environment):
-            environment = TolokaClient.Environment[environment.upper()]
+        if url is None and environment is None:
+            raise ValueError('You must pass at least one parameter: url or environment.')
+        if url is not None and environment is not None:
+            raise ValueError('You can only pass one parameter: environment or url. Both are now set.')
+        if url is not None:
+            self.url = url[:-1] if len(url) > 0 and url[-1] == '/' else url
+        else:
+            if not isinstance(environment, TolokaClient.Environment):
+                environment = TolokaClient.Environment[environment.upper()]
+            self.url = environment.value
         self.token = token
-        self.url = environment.value
         status_list = [status_code for status_code in requests.status_codes._codes if status_code > 405]
         if not isinstance(retries, Retry):
             retries = Retry(
@@ -136,7 +146,7 @@ class TolokaClient:
                     params[key] = 'true' if value else 'false'
         if self.default_timeout is not None and 'timeout' not in kwargs:
             kwargs['timeout'] = self.default_timeout
-        response = self.session.request(method, f'{self.url}{path}', **kwargs)
+        response = self.session.request(method, f'{self.url}/api{path}', **kwargs)
         raise_on_api_error(response)
         return response
 

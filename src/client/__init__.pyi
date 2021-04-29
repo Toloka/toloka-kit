@@ -150,6 +150,8 @@ class TolokaClient(object):
             * If you specify a single value for the timeout, it will be applied to both the connect and the read timeouts.
             * Specify a tuple if you would like to set the values separately.
             * Set the timeout value to None if you're willing to wait forever.
+        url: If you want to set a specific URL for some reason, for example, for testing.
+            You can only set one parameter, "url" or "environment", not both.
 
     Example:
         How to create TolokaClient and make you first request to Toloka.
@@ -167,9 +169,10 @@ class TolokaClient(object):
     def __init__(
         self,
         token: str,
-        environment: Union[Environment, str],
+        environment: Union[Environment, str, None],
         retries: Union[int, Retry] = ...,
-        timeout: Union[float, Tuple[float, float]] = ...
+        timeout: Union[float, Tuple[float, float]] = ...,
+        url: Optional[str] = ...
     ): ...
 
     @overload
