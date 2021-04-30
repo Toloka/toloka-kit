@@ -1,3 +1,5 @@
+* Simplify import for base classes.
+
 0.1.5
 -------------------
 Fixing issues with `create_tasks` and `create_task_suites`

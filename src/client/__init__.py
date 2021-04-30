@@ -1,4 +1,20 @@
-__all__ = ['TolokaClient']
+__all__ = [
+    'TolokaClient',
+    'Assignment',
+    'Attachment',
+    'Folder',
+    'MessageThread',
+    'MessageThreadReply',
+    'MessageThreadFolders',
+    'MessageThreadCompose',
+    'Skill',
+    'TaskSuite',
+    'Task',
+    'Training',
+    'UserBonus',
+    'Pool',
+    'Project',
+]
 import datetime
 from decimal import Decimal
 import time
