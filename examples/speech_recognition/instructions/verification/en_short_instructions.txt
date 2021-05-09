@@ -1,0 +1,1 @@
+Check whether the specified text sounded right and there are no noises and technical defects.

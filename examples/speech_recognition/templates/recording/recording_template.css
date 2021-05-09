@@ -1,0 +1,114 @@
+/* Task on the page */
+.task-suite {
+    padding: 10px;
+    width: 100%;
+}
+
+.task {
+    width: 500px;
+}
+
+/* Text to read aloud */
+.obj-text {
+    font-size: 18px;
+    border: 1px solid #ccc;
+    padding: 15px;
+    position: relative;
+    height: 100px;
+    overflow: auto;
+    background-color: #e6f7dc;
+}
+
+/* Audio player */
+.obj-audio {
+    border: 1px solid #ccc;
+    padding:15px 15px 15px 15px;
+    position:relative;
+    height: 120px;
+}
+
+.obj-audio p {
+    text-align: center;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.record {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    max-width: 250px;
+}
+
+.field {
+    margin: 3px 0 3px;
+}
+
+/* File upload */
+.field_file__uploader {
+    display: block;
+}
+
+.field_file__form {
+    text-align: center;
+    display: block;
+}
+
+.field_file__label {
+    height: auto;
+}
+
+.tsk-block {
+    border-radius: 3px;
+    margin-bottom:10px;
+}
+
+/* Voice recorder icon */
+.field_file__label .icon {
+    display: block;
+    margin: 0 auto;
+    width: 64px;
+    height: 64px;
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeD0iMCIgeT0iMCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiB2aWV3Qm94PSIwIDAgNjQgNjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwYXRoIGQ9Ik0zMiAwQzE0LjMgMCAwIDE0LjMgMCAzMnMxNC4zIDMyIDMyIDMyIDMyLTE0LjMgMzItMzJTNDkuNyAwIDMyIDB6TTMyIDYyQzE1LjQgNjIgMiA0OC42IDIgMzIgMiAxNS40IDE1LjQgMiAzMiAyYzE2LjYgMCAzMCAxMy40IDMwIDMwQzYyIDQ4LjYgNDguNiA2MiAzMiA2MnoiLz48cGF0aCBkPSJNMzIgMzdjMy4zIDAgNi0yLjcgNi02di05YzAtMy4zLTIuNy02LTYtNiAtMy4zIDAtNiAyLjctNiA2djlDMjYgMzQuMyAyOC43IDM3IDMyIDM3ek0yOCAyMmMwLTIuMiAxLjgtNCA0LTRzNCAxLjggNCA0djljMCAyLjItMS44IDQtNCA0cy00LTEuOC00LTRWMjJ6TTQyIDMxYzAtMC42LTAuNC0xLTEtMXMtMSAwLjQtMSAxYzAgNC40LTMuNiA4LTggOHMtOC0zLjYtOC04YzAtMC42LTAuNC0xLTEtMXMtMSAwLjQtMSAxYzAgNS4yIDMuOSA5LjQgOSA5LjlWNDZoLTNjLTAuNiAwLTEgMC40LTEgMXMwLjQgMSAxIDFoOGMwLjYgMCAxLTAuNCAxLTFzLTAuNC0xLTEtMWgtM3YtNS4xQzM4LjEgNDAuNCA0MiAzNi4yIDQyIDMxeiIvPjwvc3ZnPg==);
+}
+
+.field_file__label .field_file__upload {
+    font-size: 25px;
+    line-height: 40px;
+}
+
+.field_file__files {
+    text-align: center;
+    display: block;
+}
+.field_file__files__file {
+    display: flex;
+    justify-content: center;
+}
+.field_file .file__name {
+    font-size: 20px;
+    line-height: 20px;
+    overflow: hidden;
+}
+.field_file .icon_clear {
+    width: 20px;
+    height: 20px;
+    background-size: 100%;
+    margin-left: 5px;
+}
+
+/* Displaying task content on a mobile device */
+@media (max-width: 768px) {
+    .task {
+        display: block;
+        margin: 5px auto 15px;
+        box-shadow: none !important;
+        width: 100%;
+    }
+    .obj-text {
+        overflow: visible;
+        height: auto;
+    }
+}

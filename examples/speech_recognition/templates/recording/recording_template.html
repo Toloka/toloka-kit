@@ -1,0 +1,20 @@
+<!-- Text to read aloud -->
+<div class="tsk-block obj-text">
+    {{text}}
+</div>
+
+<!-- Play audio in task review mode -->
+<div class="tsk-block obj-audio">
+    {{#if reviewMode}}
+        <p>
+            <audio controls controlslist="nodownload">
+                <source src="{{audio}}" type="audio/wav">
+            </audio>
+        </p>
+    {{else}}
+        <!-- Voice recorder -->
+        <div class="record">
+            {{field type="file" sources="RECORDER" fileType="AUDIO" name="audio_record" label="Record audio" validation-show="top-center"}}
+        </div>
+    {{/if}}
+</div>
