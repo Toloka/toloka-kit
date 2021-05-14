@@ -1,4 +1,4 @@
-# Toloka Kit
+# Toloka-Kit
 
 [![GitHub Tests][github_tests_badge]][github_tests_link]
 
