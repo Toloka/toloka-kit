@@ -109,6 +109,22 @@ class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
     Attributes:
         config: A template builder config
         core_version: Default template components version. Most users will not need to change this parameter.
+
+    Example:
+        How to declare simple interface:
+
+        >>> import toloka.client.project.template_builder as tb
+        >>> project_interface = toloka.project.view_spec.TemplateBuilderViewSpec(
+        >>>     config=tb.TemplateBuilder(
+        >>>         view=tb.view.ListViewV1(
+        >>>             items=[header, output_field, radiobuttons],
+        >>>             validation=some_validation,
+        >>>         ),
+        >>>         plugins=[plugin1, plugin2]
+        >>>     )
+        >>> )
+        >>> # add 'project_interface' to 'toloka.project.Project' instance
+        ...
     """
 
     config: TemplateBuilder

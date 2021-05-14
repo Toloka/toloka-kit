@@ -85,6 +85,15 @@ class IfHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_IF):
         condition: Condition to check.
         else_: The element that is returned if the condition from the condition property is false (returns false).
         then: The element that is returned if the condition from the condition property is true (returns true).
+
+    Example:
+        How to show a part of the interface by condition.
+
+        >>> hidden_ui = tb.helpers.IfHelperV1(
+        >>>     condition=tb.conditions.EqualsConditionV1(data=tb.data.OutputData(path='show_me'), to='show'),
+        >>>     then=tb.view.ListViewV1(items=[header, buttons, images]),
+        >>> )
+        ...
     """
 
     condition: BaseComponent

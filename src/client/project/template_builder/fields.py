@@ -81,6 +81,19 @@ class ButtonRadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON
         hint: Hint text.
         options: Array of information about the buttons.
         validation: Validation based on condition.
+
+    Example:
+        How to add buttons for classification task.
+
+        >>> classification_buttons = tb.fields.ButtonRadioGroupFieldV1(
+        >>>     options=[
+        >>>         tb.fields.GroupFieldOption(label='Cat', value='cat'),
+        >>>         tb.fields.GroupFieldOption(label='Dog', value='dog'),
+        >>>     ],
+        >>>     data=tb.data.OutputData(path='class'),
+        >>>     validation=tb.conditions.RequiredConditionV1(hint='Choose one of the answer options'),
+        >>> )
+        ...
     """
 
     options: base_component_or(List[base_component_or(GroupFieldOption)], 'ListBaseComponentOrGroupFieldOption')
