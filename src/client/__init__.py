@@ -107,8 +107,8 @@ class TolokaClient:
 
     @unique
     class Environment(Enum):
-        SANDBOX = 'https://sandbox.toloka.yandex.ru'
-        PRODUCTION = 'https://toloka.yandex.ru'
+        SANDBOX = 'https://sandbox.toloka.yandex.com'
+        PRODUCTION = 'https://toloka.yandex.com'
 
     def __init__(
         self,
@@ -123,7 +123,7 @@ class TolokaClient:
         if url is not None and environment is not None:
             raise ValueError('You can only pass one parameter: environment or url. Both are now set.')
         if url is not None:
-            self.url = url[:-1] if len(url) > 0 and url[-1] == '/' else url
+            self.url = url[:-1] if url.endswith('/') else url
         else:
             if not isinstance(environment, TolokaClient.Environment):
                 environment = TolokaClient.Environment[environment.upper()]
@@ -701,7 +701,9 @@ class TolokaClient:
             ...
         """
         response = self._request('post', '/v1/projects', json=unstructure(project))
-        return structure(response, Project)
+        result = structure(response, Project)
+        logger.info(f'A new project with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/project/{result.id}')
+        return result
 
     @expand('request')
     def find_projects(self, request: search_requests.ProjectSearchRequest,
@@ -937,7 +939,9 @@ class TolokaClient:
         """
         operation = self.clone_pool_async(pool_id)
         operation = self.wait_operation(operation)
-        return self.get_pool(operation.details.pool_id)
+        result = self.get_pool(operation.details.pool_id)
+        logger.info(f'A new pool with ID "{result.id}" has been cloned. Link to open in web interface: {self.url}/requester/project/{result.project_id}/pool/{result.id}')
+        return result
 
     def clone_pool_async(self, pool_id: str) -> operations.PoolCloneOperation:
         """Duplicates existing pool, asynchronous version
@@ -989,7 +993,9 @@ class TolokaClient:
             raise ValueError('Training pools are not supported')
 
         response = self._request('post', '/v1/pools', json=unstructure(pool))
-        return structure(response, Pool)
+        result = structure(response, Pool)
+        logger.info(f'A new pool with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/project/{result.project_id}/pool/{result.id}')
+        return result
 
     @expand('request')
     def find_pools(self, request: search_requests.PoolSearchRequest,
@@ -1192,7 +1198,9 @@ class TolokaClient:
         """
         operation = self.clone_training_async(training_id)
         operation = self.wait_operation(operation)
-        return self.get_training(operation.details.training_id)
+        result = self.get_training(operation.details.training_id)
+        logger.info(f'A new training with ID "{result.id}" has been cloned. Link to open in web interface: {self.url}/requester/project/{result.project_id}/training/{result.id}')
+        return result
 
     def clone_training_async(self, training_id: str) -> operations.TrainingCloneOperation:
         """Duplicates existing training, asynchronous version
@@ -1239,7 +1247,9 @@ class TolokaClient:
             ...
         """
         response = self._request('post', '/v1/trainings', json=unstructure(training))
-        return structure(response, Training)
+        result = structure(response, Training)
+        logger.info(f'A new training with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/project/{result.project_id}/training/{result.id}')
+        return result
 
     @expand('request')
     def find_trainings(self, request: search_requests.TrainingSearchRequest,
@@ -1364,7 +1374,9 @@ class TolokaClient:
             ...
         """
         response = self._request('post', '/v1/skills', json=unstructure(skill))
-        return structure(response, Skill)
+        result = structure(response, Skill)
+        logger.info(f'A new skill with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/quality/skill/{result.id}')
+        return result
 
     @expand('request')
     def find_skills(self, request: search_requests.SkillSearchRequest,
