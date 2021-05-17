@@ -94,6 +94,13 @@ def run():
         type=int,
         default=os.cpu_count() - 1,
     )
+    parser.add_argument(
+        "-p",
+        "--prefix",
+        help="starting prefix for wikipedia iterationg",
+        type=str,
+        default="",
+    )
 
     args = parser.parse_args()
 
@@ -112,7 +119,7 @@ def run():
         args.verbose,
         args.merge,
     )
-    corpus.collect_data(args.num_of_processes)
+    corpus.collect_data(args.num_of_processes, args.prefix)
     if args.save:
         corpus.save_tsv(args.file_path, args.encoding, args.write_len, args.skip_titles)
 

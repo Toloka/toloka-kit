@@ -7,6 +7,7 @@ import os
 import random
 import re
 import requests
+import time
 
 from datetime import datetime
 from bs4 import BeautifulSoup
@@ -87,11 +88,11 @@ class Corpus:
 
         return paragaraphs
 
-    def collect_data(self, n_proc=os.cpu_count() - 1):
+    def collect_data(self, n_proc=os.cpu_count() - 1, prefix=""):
         print(f"Started collecting data using {n_proc} jobs...")
         start_time = datetime.now()
         corpus_gens = []
-        pages_gen = self.site.query(list="allpages", apprefix="")
+        pages_gen = self.site.query(list="allpages", apprefix=prefix)
         with mp.Pool(n_proc) as pool:
             while True:
                 batch = []
