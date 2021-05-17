@@ -1,0 +1,1 @@
+Vérifiez si le texte spécifié sonnait correctement et qu'il n'y a pas de bruits et de défauts techniques.

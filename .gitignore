@@ -18,3 +18,5 @@
 !*.pyi
 !*.toml
 !*.yml
+!*.txt
+!*.html
