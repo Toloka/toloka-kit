@@ -3,6 +3,7 @@ __all__ = [
     'InputData',
     'InternalData',
     'LocalData',
+    'LocationData',
     'OutputData',
     'RelativeData'
 ]
@@ -58,6 +59,15 @@ class LocalData(BaseData, spec_value=ComponentType.DATA_LOCAL):
             path to the array element, specify its sequence number starting from zero, for example: items.0
         default: The value to be used as the default data. This value will be shown in the interface, so it might hide
             some placeholders, for example, in the field.text component.
+    """
+
+    pass
+
+
+class LocationData(BaseComponent, spec_value=ComponentType.DATA_LOCATION):
+    """This component sends the device coordinates
+
+    To find out if the transmitted coordinates match the ones that you specified, use the conditions.DistanceConditionV1.
     """
 
     pass

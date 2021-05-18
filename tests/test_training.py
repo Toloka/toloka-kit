@@ -1,4 +1,5 @@
 import datetime
+import logging
 from operator import itemgetter
 from urllib.parse import urlparse, parse_qs
 
@@ -114,7 +115,7 @@ def test_get_training(requests_mock, toloka_client, toloka_url, training_map_wit
     assert training_map_with_readonly == client.unstructure(toloka_client.get_training('21'))
 
 
-def test_create_training(requests_mock, toloka_client, toloka_url, training_map, training_map_with_readonly):
+def test_create_training(requests_mock, toloka_client, toloka_url, training_map, training_map_with_readonly, caplog):
 
     def trainings(request, context):
         assert training_map == request.json()
@@ -122,8 +123,15 @@ def test_create_training(requests_mock, toloka_client, toloka_url, training_map,
 
     requests_mock.post(f'{toloka_url}/trainings', json=trainings, status_code=201)
     training = client.structure(training_map, client.training.Training)
-    result = toloka_client.create_training(training)
-    assert training_map_with_readonly == client.unstructure(result)
+    with caplog.at_level(logging.INFO):
+        caplog.clear()
+        result = toloka_client.create_training(training)
+        assert caplog.record_tuples == [(
+            'toloka.client',
+            logging.INFO,
+            'A new training with ID "21" has been created. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/project/10/training/21'
+        )]
+        assert training_map_with_readonly == client.unstructure(result)
 
 
 def test_update_training(requests_mock, toloka_client, toloka_url, training_map_with_readonly):
@@ -313,7 +321,7 @@ def test_clone_training_async(requests_mock, toloka_client, toloka_url, complete
 
 
 def test_clone_training(requests_mock, toloka_client, toloka_url,
-                        clone_operation_map, complete_clone_operation_map, cloned_training_map_with_readonly):
+                        clone_operation_map, complete_clone_operation_map, cloned_training_map_with_readonly, caplog):
     requests_mock.post(f'{toloka_url}/trainings/21/clone', json=clone_operation_map, status_code=202)
     requests_mock.get(
         f'{toloka_url}/operations/{clone_operation_map["id"]}',
@@ -322,5 +330,12 @@ def test_clone_training(requests_mock, toloka_client, toloka_url,
     )
     requests_mock.get(f'{toloka_url}/trainings/22', json=cloned_training_map_with_readonly, status_code=200)
 
-    result = toloka_client.clone_training('21')
-    assert cloned_training_map_with_readonly == client.unstructure(result)
+    with caplog.at_level(logging.INFO):
+        caplog.clear()
+        result = toloka_client.clone_training('21')
+        assert caplog.record_tuples == [(
+            'toloka.client',
+            logging.INFO,
+            'A new training with ID "22" has been cloned. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/project/10/training/22'
+        )]
+        assert cloned_training_map_with_readonly == client.unstructure(result)

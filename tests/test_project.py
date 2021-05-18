@@ -5,6 +5,7 @@ from urllib.parse import urlparse, parse_qs
 
 import io
 import json
+import logging
 import pandas as pd
 import pytest
 import toloka.client as client
@@ -175,8 +176,9 @@ def test_get_project_returns_internal_server_error(requests_mock, toloka_client,
         assert getattr(excinfo.value, key) == value
 
 
-def test_create_project(requests_mock, toloka_client, toloka_url):
-    project_map = {
+@pytest.fixture
+def simple_poject_map():
+    return {
         'id': 10,
         'public_name': 'Map Task',
         'public_description': 'Simple map task',
@@ -241,11 +243,19 @@ def test_create_project(requests_mock, toloka_client, toloka_url):
         'created': '2015-12-09T12:10:00',
     }
 
-    requests_mock.post(f'{toloka_url}/projects', headers={'Content-Type': 'application/json; charset=UTF-8'}, json=project_map, status_code=201)
 
-    project = client.structure(project_map, client.project.Project)
-    result = toloka_client.create_project(project)
-    assert project == result
+def test_create_project(requests_mock, toloka_client, toloka_url, simple_poject_map, caplog):
+    requests_mock.post(f'{toloka_url}/projects', headers={'Content-Type': 'application/json; charset=UTF-8'}, json=simple_poject_map, status_code=201)
+
+    project = client.structure(simple_poject_map, client.project.Project)
+    with caplog.at_level(logging.INFO):
+        caplog.clear()
+        result = toloka_client.create_project(project)
+        assert caplog.record_tuples == [(
+            'toloka.client', logging.INFO,
+            'A new project with ID "10" has been created. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/project/10'
+        )]
+        assert project == result
 
 
 def test_create_project_check_validation_errors(requests_mock, toloka_client, toloka_url):

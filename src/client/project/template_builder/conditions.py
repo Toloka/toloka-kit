@@ -2,6 +2,7 @@ __all__ = [
     'BaseConditionV1',
     'AllConditionV1',
     'AnyConditionV1',
+    'DistanceConditionV1',
     'EmptyConditionV1',
     'EqualsConditionV1',
     'LinkOpenedConditionV1',
@@ -10,9 +11,11 @@ __all__ = [
     'PlayedFullyConditionV1',
     'RequiredConditionV1',
     'SchemaConditionV1',
-    'SubArrayConditionV1'
+    'SubArrayConditionV1',
 ]
 from typing import List, Any, Dict
+
+from ...primitives.base import attribute
 
 from .base import BaseComponent, ComponentType, VersionedBaseComponent, base_component_or
 
@@ -36,6 +39,25 @@ class AllConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ALL):
     Attributes:
         conditions: A set of conditions that must be met.
         hint: Validation error message that the user will see.
+
+    Example:
+        How to check several conditions.
+
+        >>> coordinates_validation = tb.conditions.AllConditionV1(
+        >>>     conditions=[
+        >>>         tb.conditions.RequiredConditionV1(
+        >>>             data=tb.data.OutputData(path='performer_coordinates'),
+        >>>             hint="Couldn't get your coordinates. Please enable geolocation.",
+        >>>         ),
+        >>>         tb.conditions.DistanceConditionV1(
+        >>>             x=tb.data.LocationData(),
+        >>>             y=tb.data.InputData(path='coordinates'),
+        >>>             max=500,
+        >>>             hint='You are too far from the destination coordinates.',
+        >>>         ),
+        >>>     ],
+        >>> )
+        ...
     """
 
     conditions: base_component_or(List[BaseComponent], 'ListBaseComponent')
@@ -53,6 +75,35 @@ class AnyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ANY):
     """
 
     conditions: base_component_or(List[BaseComponent], 'ListBaseComponent')
+
+
+class DistanceConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_YANDEX_DISTANCE):
+    """This component checks whether the sent coordinates match the ones that you specified
+
+    For example, you want the user to take a photo of a specific place. The condition.distance component checks whether
+    the photo was taken at the location that you specified.
+
+    Attributes:
+        from_: First point.
+        to_: Second point.
+        max: The distance in meters by which the X and Y coordinates may differ.
+        hint: Validation error message that the user will see.
+
+    Example:
+        How to check that performer is in the right place.
+
+        >>> distance_condition = tb.conditions.DistanceConditionV1(
+        >>>     from_=tb.data.LocationData(),
+        >>>     to_=tb.data.InputData(path='coordinates'),
+        >>>     max=500,
+        >>>     hint='You are too far from the destination coordinates.',
+        >>> ),
+        ...
+    """
+
+    from_: base_component_or(str) = attribute(origin='from')
+    to_: base_component_or(str) = attribute(origin='to')
+    max: base_component_or(float)
 
 
 class EmptyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_EMPTY):
@@ -159,6 +210,16 @@ class RequiredConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_RE
         data: Data to be filled in. If the property is not specified, the data of the parent component (the one that
             contains condition.required) is used.
         hint: Validation error message that the user will see.
+
+    Example:
+        How to check that image is uploaded.
+
+        >>> image = tb.fields.MediaFileFieldV1(
+        >>>     data=tb.data.OutputData(path='image'),
+        >>>     accept=tb.fields.MediaFileFieldV1.Accept(photo=True, gallery=True),
+        >>>     validation=tb.conditions.RequiredConditionV1(hint='Your must upload photo.'),
+        >>> )
+        ...
     """
 
     data: base_component_or(Any)

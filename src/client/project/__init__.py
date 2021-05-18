@@ -1,8 +1,46 @@
-__all__ = ['Project']
+__all__ = [
+    'Project',
+    'ClassicViewSpec',
+    'TemplateBuilderViewSpec',
+    'BooleanSpec',
+    'StringSpec',
+    'IntegerSpec',
+    'FloatSpec',
+    'UrlSpec',
+    'FileSpec',
+    'CoordinatesSpec',
+    'JsonSpec',
+    'ArrayBooleanSpec',
+    'ArrayStringSpec',
+    'ArrayIntegerSpec',
+    'ArrayFloatSpec',
+    'ArrayUrlSpec',
+    'ArrayFileSpec',
+    'ArrayCoordinatesSpec',
+]
+
 import datetime
 from enum import Enum, unique
 
 from ..primitives.base import BaseTolokaObject
+from ..project.field_spec import (
+    BooleanSpec,
+    StringSpec,
+    IntegerSpec,
+    FloatSpec,
+    UrlSpec,
+    FileSpec,
+    CoordinatesSpec,
+    JsonSpec,
+    ArrayBooleanSpec,
+    ArrayStringSpec,
+    ArrayIntegerSpec,
+    ArrayFloatSpec,
+    ArrayUrlSpec,
+    ArrayFileSpec,
+    ArrayCoordinatesSpec,
+)
+from ..project.view_spec import ClassicViewSpec, TemplateBuilderViewSpec
 from ..project.task_spec import TaskSpec
 from ..quality_control import QualityControl
 

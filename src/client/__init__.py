@@ -1,4 +1,20 @@
-__all__ = ['TolokaClient']
+__all__ = [
+    'TolokaClient',
+    'Assignment',
+    'Attachment',
+    'Folder',
+    'MessageThread',
+    'MessageThreadReply',
+    'MessageThreadFolders',
+    'MessageThreadCompose',
+    'Skill',
+    'TaskSuite',
+    'Task',
+    'Training',
+    'UserBonus',
+    'Pool',
+    'Project',
+]
 import datetime
 from decimal import Decimal
 import time
@@ -76,6 +92,8 @@ class TolokaClient:
             * If you specify a single value for the timeout, it will be applied to both the connect and the read timeouts.
             * Specify a tuple if you would like to set the values separately.
             * Set the timeout value to None if you're willing to wait forever.
+        url: If you want to set a specific URL for some reason, for example, for testing.
+            You can only set one parameter, "url" or "environment", not both.
 
     Example:
         How to create TolokaClient and make you first request to Toloka.
@@ -89,20 +107,28 @@ class TolokaClient:
 
     @unique
     class Environment(Enum):
-        SANDBOX = 'https://sandbox.toloka.yandex.ru/api'
-        PRODUCTION = 'https://toloka.yandex.ru/api'
+        SANDBOX = 'https://sandbox.toloka.yandex.com'
+        PRODUCTION = 'https://toloka.yandex.com'
 
     def __init__(
         self,
         token: str,
-        environment: Union[Environment, str],
+        environment: Union[Environment, str, None] = None,
         retries: Union[int, Retry] = 3,
-        timeout: Union[float, Tuple[float, float]] = 10.0
+        timeout: Union[float, Tuple[float, float]] = 10.0,
+        url: Optional[str] = None
     ):
-        if not isinstance(environment, TolokaClient.Environment):
-            environment = TolokaClient.Environment[environment.upper()]
+        if url is None and environment is None:
+            raise ValueError('You must pass at least one parameter: url or environment.')
+        if url is not None and environment is not None:
+            raise ValueError('You can only pass one parameter: environment or url. Both are now set.')
+        if url is not None:
+            self.url = url[:-1] if url.endswith('/') else url
+        else:
+            if not isinstance(environment, TolokaClient.Environment):
+                environment = TolokaClient.Environment[environment.upper()]
+            self.url = environment.value
         self.token = token
-        self.url = environment.value
         status_list = [status_code for status_code in requests.status_codes._codes if status_code > 405]
         if not isinstance(retries, Retry):
             retries = Retry(
@@ -136,7 +162,7 @@ class TolokaClient:
                     params[key] = 'true' if value else 'false'
         if self.default_timeout is not None and 'timeout' not in kwargs:
             kwargs['timeout'] = self.default_timeout
-        response = self.session.request(method, f'{self.url}{path}', **kwargs)
+        response = self.session.request(method, f'{self.url}/api{path}', **kwargs)
         raise_on_api_error(response)
         return response
 
@@ -675,7 +701,9 @@ class TolokaClient:
             ...
         """
         response = self._request('post', '/v1/projects', json=unstructure(project))
-        return structure(response, Project)
+        result = structure(response, Project)
+        logger.info(f'A new project with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/project/{result.id}')
+        return result
 
     @expand('request')
     def find_projects(self, request: search_requests.ProjectSearchRequest,
@@ -911,7 +939,9 @@ class TolokaClient:
         """
         operation = self.clone_pool_async(pool_id)
         operation = self.wait_operation(operation)
-        return self.get_pool(operation.details.pool_id)
+        result = self.get_pool(operation.details.pool_id)
+        logger.info(f'A new pool with ID "{result.id}" has been cloned. Link to open in web interface: {self.url}/requester/project/{result.project_id}/pool/{result.id}')
+        return result
 
     def clone_pool_async(self, pool_id: str) -> operations.PoolCloneOperation:
         """Duplicates existing pool, asynchronous version
@@ -963,7 +993,9 @@ class TolokaClient:
             raise ValueError('Training pools are not supported')
 
         response = self._request('post', '/v1/pools', json=unstructure(pool))
-        return structure(response, Pool)
+        result = structure(response, Pool)
+        logger.info(f'A new pool with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/project/{result.project_id}/pool/{result.id}')
+        return result
 
     @expand('request')
     def find_pools(self, request: search_requests.PoolSearchRequest,
@@ -1166,7 +1198,9 @@ class TolokaClient:
         """
         operation = self.clone_training_async(training_id)
         operation = self.wait_operation(operation)
-        return self.get_training(operation.details.training_id)
+        result = self.get_training(operation.details.training_id)
+        logger.info(f'A new training with ID "{result.id}" has been cloned. Link to open in web interface: {self.url}/requester/project/{result.project_id}/training/{result.id}')
+        return result
 
     def clone_training_async(self, training_id: str) -> operations.TrainingCloneOperation:
         """Duplicates existing training, asynchronous version
@@ -1213,7 +1247,9 @@ class TolokaClient:
             ...
         """
         response = self._request('post', '/v1/trainings', json=unstructure(training))
-        return structure(response, Training)
+        result = structure(response, Training)
+        logger.info(f'A new training with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/project/{result.project_id}/training/{result.id}')
+        return result
 
     @expand('request')
     def find_trainings(self, request: search_requests.TrainingSearchRequest,
@@ -1338,7 +1374,9 @@ class TolokaClient:
             ...
         """
         response = self._request('post', '/v1/skills', json=unstructure(skill))
-        return structure(response, Skill)
+        result = structure(response, Skill)
+        logger.info(f'A new skill with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/quality/skill/{result.id}')
+        return result
 
     @expand('request')
     def find_skills(self, request: search_requests.SkillSearchRequest,

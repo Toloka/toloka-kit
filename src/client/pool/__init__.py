@@ -1,6 +1,9 @@
 __all__ = [
     'Pool',
-    'PoolPatchRequest'
+    'PoolPatchRequest',
+    'DynamicOverlapConfig',
+    'DynamicPricingConfig',
+    'MixerConfig',
 ]
 import datetime
 from enum import Enum, unique

@@ -10,13 +10,13 @@ def toloka_client() -> TolokaClient:
 
 
 @pytest.fixture
-def toloka_url(toloka_client) -> str:
-    return f'{toloka_client.url}/v1'
+def toloka_api_url(toloka_client) -> str:
+    return f'{toloka_client.url}/api'
 
 
 @pytest.fixture
-def toloka_api_url(toloka_client) -> str:
-    return f'{toloka_client.url}'
+def toloka_url(toloka_api_url) -> str:
+    return f'{toloka_api_url}/v1'
 
 
 @pytest.fixture
