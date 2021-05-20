@@ -1,12 +1,8 @@
 import itertools
 import multiprocessing as mp
-import nltk
 import logging
 import numpy as np
 import os
-import random
-import re
-import requests
 import time
 
 from datetime import datetime
