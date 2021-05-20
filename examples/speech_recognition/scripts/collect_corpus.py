@@ -101,6 +101,20 @@ def run():
         type=str,
         default="",
     )
+    parser.add_argument(
+        "-f_latex",
+        "--filter_latex",
+        help="flag for filtering texts with latex insertions like \displaystyle",
+        action="store_true",
+        default=True,
+    )
+    parser.add_argument(
+        "-f_punc",
+        "--filter_punctuation",
+        help='flag for filtering texts with wrong punctuation like "....," May cause skipping names like "!!!" (american band)',
+        action="store_true",
+        default=False,
+    )
 
     args = parser.parse_args()
 
@@ -111,13 +125,15 @@ def run():
         level=logging.INFO,
     )
     corpus = Corpus(
-        args.lang,
-        args.max_size,
-        args.random_choise,
-        args.min_paragraph_len,
-        args.max_paragraph_len,
-        args.verbose,
-        args.merge,
+        lang=args.lang,
+        max_size=args.max_size,
+        random_choise=args.random_choise,
+        min_len=args.min_paragraph_len,
+        max_len=args.max_paragraph_len,
+        verbose=args.verbose,
+        merge=args.merge,
+        filter_latex=args.filter_latex,
+        filter_punctuation=args.filter_punctuation,
     )
     corpus.collect_data(args.num_of_processes, args.prefix)
     if args.save:
