@@ -43,8 +43,7 @@ Note: this project is still under heavy development and interfaces may change sl
 ```python
 import toloka.client as toloka
 
-token = input("Enter your token:")
-toloka_client = toloka.TolokaClient(token, 'PRODUCTION')  # or switch to SANDBOX
+toloka_client = toloka.TolokaClient(input("Enter your token:"), 'PRODUCTION')
 print(toloka_client.get_requester())
 ```
 
