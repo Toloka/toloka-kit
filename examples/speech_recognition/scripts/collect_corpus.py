@@ -106,7 +106,7 @@ def run():
         "--filter_latex",
         help="flag for filtering texts with latex insertions like \displaystyle",
         action="store_true",
-        default=True,
+        default=False,
     )
     parser.add_argument(
         "-f_punc",
