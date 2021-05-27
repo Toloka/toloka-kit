@@ -1,4 +1,7 @@
-* Simplify import for base classes.
+0.1.7
+-------------------
+* Fixed error on ARRAY_JSON typed fields specs structuring
+
 
 0.1.6
 -------------------

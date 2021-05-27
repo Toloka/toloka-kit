@@ -159,7 +159,7 @@ class ArrayBooleanSpec(BooleanSpec, spec_value=FieldType.ARRAY_BOOLEAN):
         hidden: Whether or not to hide the input value field from the user
         allowed_values: Allowed values
         min_size: Minimum number of elements in the array
-        min_size: Maximum number of elements in the array
+        max_size: Maximum number of elements in the array
     """
     min_size: int
     max_size: int
@@ -175,7 +175,7 @@ class ArrayStringSpec(StringSpec, spec_value=FieldType.ARRAY_STRING):
         max_length: Maximum length of the string
         allowed_values: Allowed values
         min_size: Minimum number of elements in the array
-        min_size: Maximum number of elements in the array
+        max_size: Maximum number of elements in the array
     """
     min_size: int
     max_size: int
@@ -191,7 +191,7 @@ class ArrayIntegerSpec(IntegerSpec, spec_value=FieldType.ARRAY_INTEGER):
         max_value: Maximum value of the number
         allowed_values: Allowed values
         min_size: Minimum number of elements in the array
-        min_size: Maximum number of elements in the array
+        max_size: Maximum number of elements in the array
     """
     min_size: int
     max_size: int
@@ -206,7 +206,7 @@ class ArrayFloatSpec(FloatSpec, spec_value=FieldType.ARRAY_FLOAT):
         min_value: Minimum value of the number
         max_value: Maximum value of the number
         min_size: Minimum number of elements in the array
-        min_size: Maximum number of elements in the array
+        max_size: Maximum number of elements in the array
     """
     min_size: int
     max_size: int
@@ -219,7 +219,7 @@ class ArrayUrlSpec(UrlSpec, spec_value=FieldType.ARRAY_URL):
         required: Whether the object or input field is required
         hidden: Whether or not to hide the input value field from the user
         min_size: Minimum number of elements in the array
-        min_size: Maximum number of elements in the array
+        max_size: Maximum number of elements in the array
     """
     min_size: int
     max_size: int
@@ -232,7 +232,7 @@ class ArrayFileSpec(FileSpec, spec_value=FieldType.ARRAY_FILE):
         required: Whether the object or input field is required
         hidden: Whether or not to hide the input value field from the user
         min_size: Minimum number of elements in the array
-        min_size: Maximum number of elements in the array
+        max_size: Maximum number of elements in the array
     """
     min_size: int
     max_size: int
@@ -247,7 +247,20 @@ class ArrayCoordinatesSpec(CoordinatesSpec, spec_value=FieldType.ARRAY_COORDINAT
         current_location: put the user's current coordinates in the field (true/false).
             Used in tasks for the mobile app
         min_size: Minimum number of elements in the array
-        min_size: Maximum number of elements in the array
+        max_size: Maximum number of elements in the array
+    """
+    min_size: int
+    max_size: int
+
+
+class ArrayJsonSpec(JsonSpec, spec_value=FieldType.ARRAY_JSON):
+    """A JSON object field specification
+
+    Attributes:
+        required: Whether the object or input field is required
+        hidden: Whether or not to hide the input value field from the user
+        min_size: Minimum number of elements in the array
+        max_size: Maximum number of elements in the array
     """
     min_size: int
     max_size: int
