@@ -162,16 +162,6 @@ class Pool(BaseTolokaObject):
         default_overlap_for_new_task_suites: Optional[int]
         default_overlap_for_new_tasks: Optional[int]
 
-
-
-    DynamicOverlapConfig = DynamicOverlapConfig
-
-    DynamicPricingConfig = DynamicPricingConfig
-
-    MixerConfig = MixerConfig
-
-    QualityControl = QualityControl
-
     class Status(Enum):
         """Status of the pool
 
@@ -234,13 +224,6 @@ class Pool(BaseTolokaObject):
         """
         ...
 
-    @overload
-    def set_captcha_frequency(self, *args, **kwargs):
-        """A shortcut setter for quality_control.captcha_frequency
-        """
-        ...
-
-    @overload
     def set_captcha_frequency(self, captcha_frequency: QualityControl.CaptchaFrequency):
         """A shortcut setter for quality_control.captcha_frequency
         """
@@ -431,5 +414,3 @@ class PoolPatchRequest(BaseTolokaObject):
 
     _unexpected: Optional[Dict[str, Any]]
     priority: Optional[int]
-
-DynamicOverlapConfig = DynamicOverlapConfigDynamicPricingConfig = DynamicPricingConfigMixerConfig = MixerConfig

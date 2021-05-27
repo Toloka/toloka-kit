@@ -133,7 +133,7 @@ from typing import (
     Optional,
     BinaryIO
 )
-from urllib3.util.retry import Retry
+from urllib3.util.retry import Retry  # type: ignore
 from uuid import UUID
 
 
@@ -2778,5 +2778,3 @@ class TolokaClient:
             Operation: Completed operation.
         """
         ...
-
-Assignment = AssignmentAttachment = AttachmentFolder = FolderMessageThread = MessageThreadMessageThreadReply = MessageThreadReplyMessageThreadFolders = MessageThreadFoldersMessageThreadCompose = MessageThreadComposeSkill = SkillTaskSuite = TaskSuiteTask = TaskTraining = TrainingUserBonus = UserBonusPool = PoolProject = Project

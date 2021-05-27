@@ -28,18 +28,11 @@ class CloneResults(tuple):
         """
         ...
 
-    def _replace(self, /, **kwds):
+    def _replace(self, **kwds):
         """Return a new CloneResults object replacing specified fields with new values
         """
         ...
 
-    pools = ...
-
-    project = ...
-
-    trainings = ...
-
     project: Project
     pools: List[Pool]
     trainings: List[Training]
-

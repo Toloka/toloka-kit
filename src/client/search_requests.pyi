@@ -22,7 +22,11 @@ from typing import (
 )
 
 
-SortItemSelf = TypeVar('SortItemSelf', covariant=False, contravariant=False, bound='BaseSortItem')SortItemsSelf = TypeVar('SortItemsSelf', covariant=False, contravariant=False, bound='BaseSortItems')class SortOrder(Enum):
+SortItemSelf = TypeVar('SortItemSelf', bound='BaseSortItem')
+SortItemsSelf = TypeVar('SortItemsSelf', bound='BaseSortItems')
+
+
+class SortOrder(Enum):
     """An enumeration.
     """
 
@@ -42,7 +46,7 @@ class BaseSortItem(BaseTolokaObject):
     def for_fields(cls, sort_fields: List[str]): ...
 
     @classmethod
-    def structure(cls: Type[TypeVar('SortItemSelf', covariant=False, contravariant=False, bound='BaseSortItem')], value: Union[TypeVar('SortItemSelf', covariant=False, contravariant=False, bound='BaseSortItem'), str]) -> TypeVar('SortItemSelf', covariant=False, contravariant=False, bound='BaseSortItem'): ...
+    def structure(cls: Type[SortItemSelf], value: Union[SortItemSelf, str]) -> SortItemSelf: ... # type: ignore
 
     def unstructure(self): ...
 
@@ -65,7 +69,10 @@ class BaseSortItems(BaseTolokaObject):
     _unexpected: Optional[Dict[str, Any]]
 
 class SearchRequestMetaclass(BaseTolokaObjectMetaclass):
-    ...class BaseSearchRequest(BaseTolokaObject):
+    ...
+
+
+class BaseSearchRequest(BaseTolokaObject):
     """Base class for all search request classes
     """
 
