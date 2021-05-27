@@ -253,7 +253,7 @@ class ArrayCoordinatesSpec(CoordinatesSpec, spec_value=FieldType.ARRAY_COORDINAT
     max_size: int
 
 
-class ArrayJsonSpec(FieldSpec, spec_value=FieldType.ARRAY_JSON):
+class ArrayJsonSpec(JsonSpec, spec_value=FieldType.ARRAY_JSON):
     """A JSON object field specification
 
     Attributes:
