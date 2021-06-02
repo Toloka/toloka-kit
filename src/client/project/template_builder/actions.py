@@ -60,10 +60,11 @@ class NotifyActionV1(BaseActionV1, spec_value=ComponentType.ACTION_NOTIFY):
         class Theme(Enum):
             """The background color of the message.
 
-            info — blue
-            success — green
-            warning — yellow
-            danger — red
+            Attributes:
+                INFO: blue
+                SUCCESS: green
+                WARNING: yellow
+                DANGER: red
             """
 
             DANGER = 'danger'

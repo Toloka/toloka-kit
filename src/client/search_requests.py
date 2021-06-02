@@ -402,7 +402,7 @@ class AssignmentSearchRequest(BaseSearchRequest):
         created: datetime.datetime
         submitted: datetime.datetime
 
-    def _list_converter(value):
+    def _list_converter(value: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]]):
         if value is None:
             return value
         if isinstance(value, str):
@@ -823,7 +823,7 @@ class MessageThreadSearchRequest(BaseSearchRequest):
         id: str
         created: datetime.datetime
 
-    def _list_converter(value):
+    def _list_converter(value: Union[str, Folder, List[Union[str, Folder]]]) -> List[Folder]:
         if value is None:
             return value
         if isinstance(value, str):

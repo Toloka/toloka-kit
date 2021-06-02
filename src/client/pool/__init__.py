@@ -239,20 +239,23 @@ class Pool(BaseTolokaObject):
 
     set_training_requirement = expand('training_requirement')(create_setter(
         'quality_control.training_requirement',
-        QualityControl.TrainingRequirement
+        QualityControl.TrainingRequirement,
+        __name__,
     ))
 
     set_captcha_frequency = expand('captcha_frequency')(create_setter(
         'quality_control.captcha_frequency',
-        QualityControl.CaptchaFrequency
+        QualityControl.CaptchaFrequency,
+        __name__,
     ))
 
     set_checkpoints_config = expand('checkpoints_config')(create_setter(
         'quality_control.checkpoints_config',
-        QualityControl.CheckpointsConfig
+        QualityControl.CheckpointsConfig,
+        __name__,
     ))
 
-    set_quality_control_configs = create_setter('quality_control.configs')
+    set_quality_control_configs = create_setter('quality_control.configs', module=__name__)
     set_quality_control_configs.__doc__ = """A shortcut method for setting """
 
 

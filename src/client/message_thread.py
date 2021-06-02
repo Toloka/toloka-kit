@@ -19,9 +19,10 @@ from .primitives.base import attribute, BaseTolokaObject
 class RecipientsSelectType(Enum):
     """Method for specifying recipients.
 
-    * DIRECT - specify user IDs.
-    * FILTER - select users using filter.
-    * ALL - send a message to all users who have tried to complete your tasks at least once.
+    Attributes:
+        DIRECT: specify user IDs.
+        FILTER: select users using filter.
+        ALL: send a message to all users who have tried to complete your tasks at least once.
     """
 
     DIRECT = 'DIRECT'
@@ -54,10 +55,11 @@ class Interlocutor(BaseTolokaObject):
     class InterlocutorRole(Enum):
         """Role of the sender or recipient in Toloka.
 
-        * USER — Performer.
-        * REQUESTER - Customer.
-        * ADMINISTRATOR - Administrator.
-        * SYSTEM — For messages sent automatically.
+        Attributes:
+            USER: Performer.
+            REQUESTER: Customer.
+            ADMINISTRATOR: Administrator.
+            SYSTEM: For messages sent automatically.
         """
 
         USER = 'USER'

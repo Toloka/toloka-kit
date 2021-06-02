@@ -4,7 +4,7 @@ import linecache
 import uuid
 from inspect import signature, Signature, Parameter
 from textwrap import dedent, indent
-from typing import Callable
+from typing import Callable, Optional
 
 import attr
 
@@ -109,10 +109,10 @@ def _compile_function(func_name, func_sig, func_body, globs=None):
     return func
 
 
-def create_setter(attr_path: str, attr_type=Parameter.empty):
+def create_setter(attr_path: str, attr_type=Parameter.empty, module: Optional[str] = None):
     """Generates a setter method for an attribute"""
     attr_name = attr_path.split('.')[-1]
-    return _compile_function(
+    func = _compile_function(
         f'codegen_setter_for_{attr_path.replace(".", "_")}',
         Signature(parameters=[
             Parameter(name='self', kind=Parameter.POSITIONAL_OR_KEYWORD),
@@ -123,6 +123,9 @@ def create_setter(attr_path: str, attr_type=Parameter.empty):
             f'self.{attr_path} = {attr_name}'
         )
     )
+    if module:
+        func.__module__ = module
+    return func
 
 
 def codegen_attr_attributes_setters(cls):
@@ -135,7 +138,7 @@ def codegen_attr_attributes_setters(cls):
         type_ = is_optional_of(field.type) or field.type
         if attr.has(type_):
             setter_name = f'set_{field.name}'
-            setter = expand(field.name)(create_setter(field.name, type_))
+            setter = expand(field.name)(create_setter(field.name, type_, cls.__module__))
             setattr(cls, setter_name, setter)
     return cls
 

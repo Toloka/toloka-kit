@@ -63,11 +63,13 @@ class AlertViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ALERT):
 
     @unique
     class Theme(Enum):
-        """info (default) — Blue.
+        """An enumeration
 
-        success — Green.
-        warning — Yellow.
-        danger — Red.
+        Attributes:
+            INFO: (default) Blue.
+            SUCCESS: Green.
+            WARNING: Yellow.
+            DANGER: Red.
         """
 
         DANGER = 'danger'

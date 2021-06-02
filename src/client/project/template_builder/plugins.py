@@ -128,9 +128,11 @@ class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
 
         @unique
         class Kind(Enum):
-            """scroll (default) — display multiple tasks on the page at the same time.
+            """An enumeration.
 
-            pager — display only one task on the page, with a button to switch between tasks at the bottom.
+            Attributes:
+                SCROLL: (default) display multiple tasks on the page at the same time.
+                PAGER: display only one task on the page, with a button to switch between tasks at the bottom.
             """
 
             PAGER = 'pager'

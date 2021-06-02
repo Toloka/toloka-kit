@@ -65,10 +65,11 @@ class Operation(BaseTolokaObject, spec_enum=OperationType, spec_field='type'):
     class Status(Enum):
         """The status of the operation:
 
-        * PENDING - Not started yet.
-        * RUNNING - In progress.
-        * SUCCESS - Completed successfully.
-        * FAIL - Not completed.
+        Attributes:
+            PENDING: Not started yet.
+            RUNNING: In progress.
+            SUCCESS: Completed successfully.
+            FAIL: Not completed.
         """
 
         PENDING = 'PENDING'
