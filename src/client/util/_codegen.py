@@ -4,7 +4,7 @@ import linecache
 import uuid
 from inspect import signature, Signature, Parameter
 from textwrap import dedent, indent
-from typing import Callable, Optional
+from typing import Callable, Dict, List, Optional
 
 import attr
 
@@ -62,6 +62,17 @@ def _get_annotations_from_signature(sig: Signature) -> dict:
         annotations['return'] = sig.return_annotation
 
     return annotations
+
+
+def _check_arguments_compatibility(sig: Signature, args: List, kwargs: Dict):
+    """Checks if arguments are suitable for provided signature"""
+
+    try:
+        sig.bind(*args, **kwargs)
+    except TypeError:
+        return False
+
+    return True
 
 
 def _get_signature_invocation_string(sig: Signature) -> str:
@@ -180,11 +191,11 @@ def expand(arg_name):
 
         @functools.wraps(func)
         def wrapped(*args, **kwargs):
-            try:
-                bound = func_sig.bind(*args, **kwargs)
-                return func(*bound.args, **bound.kwargs)
-            except TypeError:
-                return expanded_func(*args, **kwargs)
+
+            if _check_arguments_compatibility(func_sig, args, kwargs):
+                return func(*args, **kwargs)
+
+            return expanded_func(*args, **kwargs)
 
         wrapped._func = func
         wrapped._expanded_func = expanded_func
