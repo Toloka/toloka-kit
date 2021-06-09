@@ -1,0 +1,79 @@
+<style>
+body {
+    min-height: 400px;
+}
+
+.hide {
+    display: none;
+}
+
+.hide+label~div {
+    display: none;
+}
+
+.hide+label {
+    border-bottom: 1px dotted green;
+    padding: 0;
+    color: green;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.hide:checked+label {
+    color: red;
+    border-bottom: 0;
+}
+
+.hide:checked+label+div {
+    display: block;
+    padding: 10px;
+}
+
+.demo {
+    margin: 5% 10%;
+}
+
+.padt {
+    padding: 5px 5px 5px 5px;
+}
+</style>
+<div>Vous devez écrire la phrase telle quelle, dans la même langue que celle de la tâche.</div>
+<ul>
+   <li>
+      Écrivez les mots suggérés sur un morceau de papier <b>blanc</b>, <b>sans dames, points ou règles</b><br>
+      <div>
+         <input type="checkbox" class="hide" id="lines"> <label for="lines">Exemples:</label>
+         <div>Une <b>bonne </b>option est une feuille vierge sans images:<br> <img width="50%" alt="" src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/good-color.jpg"> <br><br><b>Mauvaise</b> option - le papier quadrillé interfère avec la perception du texte:<br> <img width="50%" alt="" src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/bad-lines.jpg"> </div>
+      </div>
+   </li>
+   <li>
+      Utilisez un stylo <b>noir </b>ou <b>bleu foncé </b>pour le contraste et la clarté. 
+      <div>
+         <input type="checkbox" class="hide" id="color"> <label for="color">Exemples:</label>
+         <div><b>Bonne</b> couleur d'encre de stylo:<br> <img width="50%" alt="" src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/good-color.jpg"> <br><br><span style="font-weight:700">Mauvaise&nbsp;</span>couleur de l'encre du stylo (gris) - le texte est très difficile à voir:<br> <img width="50%" alt="" src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/bad-color-gray.jpg"> <br><br><span style="font-weight:700">Mauvaise&nbsp;</span>couleur de l'encre du stylo (rose) - devrait être noire ou bleu foncé:<br> <img width="50%" alt="" src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/bad-color-pink.jpg"></div>
+      </div>
+   </li>
+   <li>
+      Conserver la <b>casse</b> et la <b>ponctuation</b> dans le texte suggéré - c'est-à-dire écrire toutes les majuscules en majuscules, ne pas omettre les signes de ponctuation, le cas échéant.&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
+      <div>
+         <input type="checkbox" class="hide" id="registry"> <label for="registry">Exemples:</label>
+         <div>Expression écrite suggérée: "<i>Bonjour! Comment allez-vous aujourd'hui?" - maman a demandé.</i><br>Expression <b>correctement </b>orthographiée:<br> <img width="50%" alt="" src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/french-good-registry.jpg"> <br><br>Phrase <b>mal </b>orthographiée - signes de ponctuation et majuscules manquants ou modifiés:<br> <img width="50%" alt="" src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/french-bad-registry.jpg"> </div>
+      </div>
+   </li>
+   <li>
+      Ensuite, prenez une photo du texte écrit afin qu'il soit clairement visible, que la photo ne soit pas surexposée ou trop sombre, elle ne doit pas montrer d'ombres&nbsp;supplémentaires, <b>de symboles ou de texte ne provenant pas du devoir. </b><br>Après cela, recadrez l'image dans la galerie afin que le texte occupe la majorité de l'image résultante. <br>Si votre téléphone laisse des filigranes sur les photos, recadrez l'image pour qu'elle ne tombe pas dessus ou désactivez l'affichage des filigranes.&nbsp; 
+      <div>
+         <input type="checkbox" class="hide" id="photo"> <label for="photo">Exemples:</label>
+         <div><b>Bon </b>exemple:<br> <img width="50%" alt="" src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/russian.jpg"> <br><br><b>Mauvaise</b> photo - il y a un filigrane de la caméra du smartphone sur l'écran:<br> <img width="50%" alt="" src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/bad-watermark.jpg"> <br><br><b>Mauvaise </b>photo - l'image n'est pas recadrée, il y a beaucoup d'espace vide sur l'écran:<br> <img width="50%" alt="" src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/bad-uncut.jpg"> </div>
+      </div>
+   </li>
+   <li>
+      Faites pivoter la photo capturée dans la galerie si nécessaire:
+      <div>
+         <input type="checkbox" class="hide" id="orient"> <label for="orient">Exemples:</label>
+         <div>Photo <b>correctement </b>orientée:<br> <img width="50%" alt="" src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/good-orientation.jpg"> <br><br>Photo <b>mal </b>orientée:<br> <img alt="" src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/bad-orientation.jpg" width="10%"> </div>
+      </div>
+   </li>
+   <li>Un exemple de devoir correctement rempli pour la phrase "<i>Bonjour! Comment allez-vous aujourd'hui?" - maman a demandé.</i><br><img width="70%" alt="" src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/french-good-registry.jpg"></li>
+</ul>
+Si vous avez des questions, veuillez contacter les messages personnels du client<br>

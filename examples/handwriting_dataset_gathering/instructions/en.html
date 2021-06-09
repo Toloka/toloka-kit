@@ -1,0 +1,79 @@
+<style>
+body {
+    min-height: 400px;
+}
+
+.hide {
+    display: none;
+}
+
+.hide+label~div {
+    display: none;
+}
+
+.hide+label {
+    border-bottom: 1px dotted green;
+    padding: 0;
+    color: green;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.hide:checked+label {
+    color: red;
+    border-bottom: 0;
+}
+
+.hide:checked+label+div {
+    display: block;
+    padding: 10px;
+}
+
+.demo {
+    margin: 5% 10%;
+}
+
+.padt {
+    padding: 5px 5px 5px 5px;
+}
+</style>
+<div>You should write the phrase as-is, in the same language that is on the task.</div>
+<ul>
+   <li>
+      Write the suggested words on a <b>white </b>piece of paper, without<b> checkers, dots or rulers</b><br>
+      <div>
+         <input id="lines" class="hide" type="checkbox"> <label for="lines">Examples:</label>
+         <div><b>Good </b>variant - plain white paper without any extra pictures:<br> <img src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/good-color.jpg" alt="" width="50%"> <br><br><span style="font-weight:700">Bad&nbsp;</span>option - checkered paper interferes with the perception of the text:<br><img src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/bad-lines.jpg" alt="" width="50%"> </div>
+      </div>
+   </li>
+   <li>
+      Use a <b>black </b>or<b> dark blue </b>pen for contrast and clarity. 
+      <div>
+         <input id="color" class="hide" type="checkbox"> <label for="color">Examples:</label>
+         <div><span style="font-weight:700">Good</span>&nbsp;ink color:<br> <img src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/good-color.jpg" alt="" width="50%"> <br><br><span style="font-weight:700">Poor</span>&nbsp;ink color (gray) - the text is very difficult to see:<br><img src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/bad-color-gray.jpg" alt="" width="50%"> <br><br><span style="font-weight:700">Poor</span>&nbsp;ink color (pink) - should be black or dark blue:<br><img src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/bad-color-pink.jpg" alt="" width="50%"></div>
+      </div>
+   </li>
+   <li>
+      Preserve letter <b>case </b>and <b>punctuation </b>in the suggested text - i.e. write all capital letters in capital letters, do not omit punctuation marks, if any.&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
+      <div>
+         <input id="registry" class="hide" type="checkbox"> <label for="registry">Examples:</label>
+         <div> Suggested phrase from the assignment: <i>"Привет! Как сегодня твои дела?" - спросила мама.</i><br><br><span style="font-weight:700">Correctly&nbsp;</span>spelled phrase:<br><img src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/good-registry.jpg" alt="" width="50%"> <br><br><span style="font-weight:700">Incorrectly&nbsp;</span>spelled phrase - missing or changed punctuation marks and capital letters:<br><img src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/bad-registry.jpg" alt="" width="50%"> </div>
+      </div>
+   </li>
+   <li>
+      Then take a photo of the written text so that it can be clearly seen, the photo is not overexposed or too dark, it<b> should not show extra shadows, symbols or text not from the assignment. </b><br>After that, crop the image in the gallery so that the text takes up majority of the resulting picture. <br>If your phone leaves watermarks in photos, crop the image so that it does not fall on it or turn off the display of watermarks.&nbsp; 
+      <div>
+         <input id="photo" class="hide" type="checkbox"> <label for="photo">Examples:</label>
+         <div><b>Good</b>&nbsp;photo:<br> <img src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/russian.jpg" alt="" width="50%"> <br><br><span style="font-weight:700">Bad&nbsp;</span>photo - there is a watermark of the smartphone camera on the screen:<br> <img src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/bad-watermark.jpg" alt="" width="50%"> <br><br><span style="font-weight:700">Bad&nbsp;</span>photo - the image is not cropped, there is a lot of empty space on the screen:<br> <img src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/bad-uncut.jpg" alt="" width="50%"> </div>
+      </div>
+   </li>
+   <li>
+      Rotate the captured photo in the gallery if necessary:
+      <div>
+         <input id="orient" class="hide" type="checkbox"> <label for="orient">Examples:</label>
+         <div><span style="font-weight:700">Correctly&nbsp;</span>oriented photo:<br> <img src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/good-orientation.jpg" alt="" width="50%"> <br><br><span style="font-weight:700">Incorrectly</span>&nbsp;oriented photo:<br> <img src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/bad-orientation.jpg" width="10%" alt=""> </div>
+      </div>
+   </li>
+   <li>An example of a correctly completed assignment for the phrase "Hello! How are you today?" - mom asked<i>.</i><br><img src="https://toloka.yandex.ru/api/proxy/PUBLIC-PROXY-NAME/good-registry.jpg" alt="" width="70%"></li>
+</ul>
+If you have any questions, please contact the customer's personal messages<br>

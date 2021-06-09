@@ -1,0 +1,11 @@
+requests
+pandas
+numpy
+matplotlib
+tqdm
+nltk
+path
+wiki_dump_reader
+toloka-kit==0.1.7
+yadisk
+ipyplot
