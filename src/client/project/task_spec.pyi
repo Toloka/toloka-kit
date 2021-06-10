@@ -2,11 +2,10 @@ from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.project.field_spec import FieldSpec
 from toloka.client.project.view_spec import ViewSpec
 from typing import (
+    Any,
     Dict,
-    Optional,
-    Any
+    Optional
 )
-
 
 class TaskSpec(BaseTolokaObject):
     """Parameters for input and output data and the task interface.
@@ -28,4 +27,3 @@ class TaskSpec(BaseTolokaObject):
     input_spec: Optional[Dict[str, FieldSpec]]
     output_spec: Optional[Dict[str, FieldSpec]]
     view_spec: Optional[ViewSpec]
-

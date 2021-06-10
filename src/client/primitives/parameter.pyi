@@ -1,10 +1,9 @@
 from toloka.client.primitives.base import BaseTolokaObject
 from typing import (
+    Any,
     Dict,
-    Optional,
-    Any
+    Optional
 )
-
 
 class Parameters(BaseTolokaObject):
     def __init__(self) -> None:
@@ -15,4 +14,3 @@ class Parameters(BaseTolokaObject):
     def unstructure(self) -> dict: ...
 
     _unexpected: Optional[Dict[str, Any]]
-

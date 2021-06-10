@@ -1,12 +1,11 @@
 from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
 from typing import (
+    Any,
     Dict,
-    Optional,
     List,
-    Any
+    Optional
 )
-
 
 class FieldType(Enum):
     """An enumeration.
@@ -29,6 +28,7 @@ class FieldType(Enum):
     ARRAY_COORDINATES = 'array_coordinates'
     ARRAY_JSON = 'array_json'
 
+
 class FieldSpec(BaseTolokaObject):
     """A base class for field specifications used in project's `input_spec` and `output_spec`
     for input and respose data validation specification respectively. Use subclasses of this
@@ -49,6 +49,7 @@ class FieldSpec(BaseTolokaObject):
     required: Optional[bool]
     hidden: Optional[bool]
 
+
 class BooleanSpec(FieldSpec):
     """A boolean field specification
 
@@ -67,6 +68,7 @@ class BooleanSpec(FieldSpec):
     required: Optional[bool]
     hidden: Optional[bool]
     allowed_values: Optional[List[bool]]
+
 
 class StringSpec(FieldSpec):
     """A string field specification
@@ -91,6 +93,7 @@ class StringSpec(FieldSpec):
     max_length: Optional[int]
     allowed_values: Optional[List[str]]
 
+
 class IntegerSpec(FieldSpec):
     """An integer field specification
 
@@ -114,6 +117,7 @@ class IntegerSpec(FieldSpec):
     max_value: Optional[int]
     allowed_values: Optional[List[int]]
 
+
 class FloatSpec(FieldSpec):
     """An floating point field specification
 
@@ -135,6 +139,7 @@ class FloatSpec(FieldSpec):
     min_value: Optional[float]
     max_value: Optional[float]
 
+
 class UrlSpec(FieldSpec):
     """A url field specification
 
@@ -152,6 +157,7 @@ class UrlSpec(FieldSpec):
     required: Optional[bool]
     hidden: Optional[bool]
 
+
 class FileSpec(FieldSpec):
     """A file field specification (only for output data)
 
@@ -168,6 +174,7 @@ class FileSpec(FieldSpec):
     _unexpected: Optional[Dict[str, Any]]
     required: Optional[bool]
     hidden: Optional[bool]
+
 
 class CoordinatesSpec(FieldSpec):
     """Geographical coordinates field specification, such as “53.910236,27.531110
@@ -189,6 +196,7 @@ class CoordinatesSpec(FieldSpec):
     hidden: Optional[bool]
     current_location: Optional[bool]
 
+
 class JsonSpec(FieldSpec):
     """A JSON object field specification
 
@@ -206,6 +214,7 @@ class JsonSpec(FieldSpec):
     required: Optional[bool]
     hidden: Optional[bool]
 
+
 class ArrayBooleanSpec(BooleanSpec):
     """A boolean array field specification
 
@@ -214,7 +223,7 @@ class ArrayBooleanSpec(BooleanSpec):
         hidden: Whether or not to hide the input value field from the user
         allowed_values: Allowed values
         min_size: Minimum number of elements in the array
-        min_size: Maximum number of elements in the array
+        max_size: Maximum number of elements in the array
     """
 
     def __init__(self, *, required: Optional[bool] = True, hidden: Optional[bool] = False, allowed_values: Optional[List[bool]] = None, min_size: Optional[int] = None, max_size: Optional[int] = None) -> None:
@@ -229,6 +238,7 @@ class ArrayBooleanSpec(BooleanSpec):
     min_size: Optional[int]
     max_size: Optional[int]
 
+
 class ArrayStringSpec(StringSpec):
     """A string array field specification
 
@@ -239,7 +249,7 @@ class ArrayStringSpec(StringSpec):
         max_length: Maximum length of the string
         allowed_values: Allowed values
         min_size: Minimum number of elements in the array
-        min_size: Maximum number of elements in the array
+        max_size: Maximum number of elements in the array
     """
 
     def __init__(self, *, required: Optional[bool] = True, hidden: Optional[bool] = False, min_length: Optional[int] = None, max_length: Optional[int] = None, allowed_values: Optional[List[str]] = None, min_size: Optional[int] = None, max_size: Optional[int] = None) -> None:
@@ -256,6 +266,7 @@ class ArrayStringSpec(StringSpec):
     min_size: Optional[int]
     max_size: Optional[int]
 
+
 class ArrayIntegerSpec(IntegerSpec):
     """An integer array field specification
 
@@ -266,7 +277,7 @@ class ArrayIntegerSpec(IntegerSpec):
         max_value: Maximum value of the number
         allowed_values: Allowed values
         min_size: Minimum number of elements in the array
-        min_size: Maximum number of elements in the array
+        max_size: Maximum number of elements in the array
     """
 
     def __init__(self, *, required: Optional[bool] = True, hidden: Optional[bool] = False, min_value: Optional[int] = None, max_value: Optional[int] = None, allowed_values: Optional[List[int]] = None, min_size: Optional[int] = None, max_size: Optional[int] = None) -> None:
@@ -283,6 +294,7 @@ class ArrayIntegerSpec(IntegerSpec):
     min_size: Optional[int]
     max_size: Optional[int]
 
+
 class ArrayFloatSpec(FloatSpec):
     """An floating point array field specification
 
@@ -292,7 +304,7 @@ class ArrayFloatSpec(FloatSpec):
         min_value: Minimum value of the number
         max_value: Maximum value of the number
         min_size: Minimum number of elements in the array
-        min_size: Maximum number of elements in the array
+        max_size: Maximum number of elements in the array
     """
 
     def __init__(self, *, required: Optional[bool] = True, hidden: Optional[bool] = False, min_value: Optional[float] = None, max_value: Optional[float] = None, min_size: Optional[int] = None, max_size: Optional[int] = None) -> None:
@@ -308,6 +320,7 @@ class ArrayFloatSpec(FloatSpec):
     min_size: Optional[int]
     max_size: Optional[int]
 
+
 class ArrayUrlSpec(UrlSpec):
     """A url array field specification
 
@@ -315,7 +328,7 @@ class ArrayUrlSpec(UrlSpec):
         required: Whether the object or input field is required
         hidden: Whether or not to hide the input value field from the user
         min_size: Minimum number of elements in the array
-        min_size: Maximum number of elements in the array
+        max_size: Maximum number of elements in the array
     """
 
     def __init__(self, *, required: Optional[bool] = True, hidden: Optional[bool] = False, min_size: Optional[int] = None, max_size: Optional[int] = None) -> None:
@@ -329,6 +342,7 @@ class ArrayUrlSpec(UrlSpec):
     min_size: Optional[int]
     max_size: Optional[int]
 
+
 class ArrayFileSpec(FileSpec):
     """A file array field specification (only for output data)
 
@@ -336,7 +350,7 @@ class ArrayFileSpec(FileSpec):
         required: Whether the object or input field is required
         hidden: Whether or not to hide the input value field from the user
         min_size: Minimum number of elements in the array
-        min_size: Maximum number of elements in the array
+        max_size: Maximum number of elements in the array
     """
 
     def __init__(self, *, required: Optional[bool] = True, hidden: Optional[bool] = False, min_size: Optional[int] = None, max_size: Optional[int] = None) -> None:
@@ -350,6 +364,7 @@ class ArrayFileSpec(FileSpec):
     min_size: Optional[int]
     max_size: Optional[int]
 
+
 class ArrayCoordinatesSpec(CoordinatesSpec):
     """Geographical coordinates array field specification
 
@@ -359,7 +374,7 @@ class ArrayCoordinatesSpec(CoordinatesSpec):
         current_location: put the user's current coordinates in the field (true/false).
             Used in tasks for the mobile app
         min_size: Minimum number of elements in the array
-        min_size: Maximum number of elements in the array
+        max_size: Maximum number of elements in the array
     """
 
     def __init__(self, *, required: Optional[bool] = True, hidden: Optional[bool] = False, current_location: Optional[bool] = None, min_size: Optional[int] = None, max_size: Optional[int] = None) -> None:
@@ -373,4 +388,3 @@ class ArrayCoordinatesSpec(CoordinatesSpec):
     current_location: Optional[bool]
     min_size: Optional[int]
     max_size: Optional[int]
-

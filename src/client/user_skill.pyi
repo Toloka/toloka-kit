@@ -2,11 +2,10 @@ from datetime import datetime
 from decimal import Decimal
 from toloka.client.primitives.base import BaseTolokaObject
 from typing import (
+    Any,
     Dict,
-    Optional,
-    Any
+    Optional
 )
-
 
 class SetUserSkillRequest(BaseTolokaObject):
     """Parameters for setting the skill value of a specific performer
@@ -29,6 +28,7 @@ class SetUserSkillRequest(BaseTolokaObject):
     skill_id: Optional[str]
     user_id: Optional[str]
     value: Optional[Decimal]
+
 
 class UserSkill(BaseTolokaObject):
     """Describes the value of a specific skill for a specific performer
@@ -56,4 +56,3 @@ class UserSkill(BaseTolokaObject):
     exact_value: Optional[Decimal]
     created: Optional[datetime]
     modified: Optional[datetime]
-

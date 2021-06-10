@@ -1,10 +1,9 @@
 from toloka.client.primitives.base import BaseTolokaObject
 from typing import (
+    Any,
     Dict,
-    Optional,
-    Any
+    Optional
 )
-
 
 class OperationLogItem(BaseTolokaObject):
     """Objects of which the operation log consists
@@ -28,4 +27,3 @@ class OperationLogItem(BaseTolokaObject):
     success: Optional[bool]
     input: Optional[Dict[str, Any]]
     output: Optional[Dict[str, Any]]
-

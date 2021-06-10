@@ -3,12 +3,11 @@ from toloka.client.task import Task
 from toloka.client.task_suite import TaskSuite
 from toloka.client.user_bonus import UserBonus
 from typing import (
+    Any,
     Dict,
-    Optional,
     List,
-    Any
+    Optional
 )
-
 
 class FieldValidationError(BaseTolokaObject):
     """Error that contains information about an invalid field
@@ -29,6 +28,7 @@ class FieldValidationError(BaseTolokaObject):
     message: Optional[str]
     params: Optional[List[Any]]
 
+
 class TaskBatchCreateResult(BaseTolokaObject):
     """The list with the results of the tasks creation operation.
 
@@ -45,6 +45,7 @@ class TaskBatchCreateResult(BaseTolokaObject):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[Dict[str, Task]]
     validation_errors: Optional[Dict[str, Dict[str, FieldValidationError]]]
+
 
 class TaskSuiteBatchCreateResult(BaseTolokaObject):
     """The list with the results of the task suites creation operation.
@@ -63,6 +64,7 @@ class TaskSuiteBatchCreateResult(BaseTolokaObject):
     items: Optional[Dict[str, TaskSuite]]
     validation_errors: Optional[Dict[str, Dict[str, FieldValidationError]]]
 
+
 class UserBonusBatchCreateResult(BaseTolokaObject):
     """The list with the results of the user bonuses creation operation.
 
@@ -79,4 +81,3 @@ class UserBonusBatchCreateResult(BaseTolokaObject):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[Dict[str, UserBonus]]
     validation_errors: Optional[Dict[str, Dict[str, FieldValidationError]]]
-

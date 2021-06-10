@@ -4,14 +4,13 @@ from toloka.client.primitives.infinite_overlap import InfiniteOverlapParametersM
 from toloka.client.primitives.parameter import Parameters
 from toloka.client.task import BaseTask
 from typing import (
-    List,
     Any,
     Dict,
-    overload,
-    Optional
+    List,
+    Optional,
+    overload
 )
 from uuid import UUID
-
 
 class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
     """A set of tasks issued to the performer at a time
@@ -74,6 +73,7 @@ class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
     automerged: Optional[bool]
     created: Optional[datetime]
 
+
 class TaskSuiteCreateRequestParameters(Parameters):
     """Parameters for TaskSuite creation controlling
 
@@ -106,6 +106,7 @@ class TaskSuiteCreateRequestParameters(Parameters):
     open_pool: Optional[bool]
     async_mode: Optional[bool]
 
+
 class TaskSuiteOverlapPatch(BaseTolokaObject):
     """Parameters to stop issuing a specific TaskSuite
     """
@@ -117,6 +118,7 @@ class TaskSuiteOverlapPatch(BaseTolokaObject):
 
     _unexpected: Optional[Dict[str, Any]]
     overlap: Optional[int]
+
 
 class TaskSuitePatch(InfiniteOverlapParametersMixin, BaseTolokaObject):
     """Parameters for changing specific TaskSuite
@@ -139,4 +141,3 @@ class TaskSuitePatch(InfiniteOverlapParametersMixin, BaseTolokaObject):
     _overlap: Optional[int]
     issuing_order_override: Optional[float]
     open_pool: Optional[bool]
-

@@ -6,15 +6,15 @@ from decimal import Decimal
 from enum import Enum
 from pandas.core.frame import DataFrame
 from toloka.client.aggregation import (
-    PoolAggregatedSolutionRequest,
-    AggregatedSolutionType,
     AggregatedSolution,
+    AggregatedSolutionType,
+    PoolAggregatedSolutionRequest,
     WeightedDynamicOverlapTaskAggregatedSolutionRequest
 )
 from toloka.client.analytics_request import AnalyticsRequest
 from toloka.client.assignment import (
-    AssignmentPatch,
     Assignment,
+    AssignmentPatch,
     GetAssignmentsTsvParameters
 )
 from toloka.client.attachment import Attachment
@@ -26,91 +26,91 @@ from toloka.client.batch_create_results import (
 from toloka.client.clone_results import CloneResults
 from toloka.client.filter import FilterCondition
 from toloka.client.message_thread import (
+    Folder,
+    MessageThread,
     MessageThreadCompose,
     MessageThreadFolders,
-    Folder,
-    RecipientsSelectType,
     MessageThreadReply,
-    MessageThread
+    RecipientsSelectType
 )
 from toloka.client.operation_log import OperationLogItem
 from toloka.client.operations import (
-    PoolCloseOperation,
-    PoolArchiveOperation,
     AggregatedSolutionOperation,
-    PoolOpenOperation,
-    UserBonusCreateBatchOperation,
-    TrainingArchiveOperation,
-    ProjectArchiveOperation,
-    TrainingCloseOperation,
-    TrainingCloneOperation,
     Operation,
+    PoolArchiveOperation,
     PoolCloneOperation,
-    TrainingOpenOperation,
+    PoolCloseOperation,
+    PoolOpenOperation,
+    ProjectArchiveOperation,
     TaskSuiteCreateBatchOperation,
-    TasksCreateOperation
+    TasksCreateOperation,
+    TrainingArchiveOperation,
+    TrainingCloneOperation,
+    TrainingCloseOperation,
+    TrainingOpenOperation,
+    UserBonusCreateBatchOperation
 )
 from toloka.client.pool import (
-    PoolPatchRequest,
-    Pool
+    Pool,
+    PoolPatchRequest
 )
 from toloka.client.project import Project
 from toloka.client.requester import Requester
 from toloka.client.search_requests import (
-    TaskSearchRequest,
-    TaskSuiteSearchRequest,
-    UserRestrictionSearchRequest,
-    AttachmentSortItems,
-    SkillSortItems,
-    UserSkillSortItems,
-    PoolSortItems,
-    TaskSortItems,
-    SkillSearchRequest,
-    AttachmentSearchRequest,
-    MessageThreadSortItems,
     AggregatedSolutionSearchRequest,
+    AggregatedSolutionSortItems,
+    AssignmentSearchRequest,
+    AssignmentSortItems,
+    AttachmentSearchRequest,
+    AttachmentSortItems,
+    MessageThreadSearchRequest,
+    MessageThreadSortItems,
+    PoolSearchRequest,
+    PoolSortItems,
+    ProjectSearchRequest,
+    ProjectSortItems,
+    SkillSearchRequest,
+    SkillSortItems,
+    TaskSearchRequest,
+    TaskSortItems,
+    TaskSuiteSearchRequest,
+    TaskSuiteSortItems,
     TrainingSearchRequest,
+    TrainingSortItems,
+    UserBonusSearchRequest,
+    UserBonusSortItems,
+    UserRestrictionSearchRequest,
     UserRestrictionSortItems,
     UserSkillSearchRequest,
-    AggregatedSolutionSortItems,
-    AssignmentSortItems,
-    MessageThreadSearchRequest,
-    ProjectSortItems,
-    TaskSuiteSortItems,
-    UserBonusSortItems,
-    ProjectSearchRequest,
-    PoolSearchRequest,
-    UserBonusSearchRequest,
-    TrainingSortItems,
-    AssignmentSearchRequest
+    UserSkillSortItems
 )
 from toloka.client.search_results import (
-    AssignmentSearchResult,
-    SkillSearchResult,
-    ProjectSearchResult,
-    UserRestrictionSearchResult,
     AggregatedSolutionSearchResult,
-    TrainingSearchResult,
-    UserSkillSearchResult,
+    AssignmentSearchResult,
+    AttachmentSearchResult,
     MessageThreadSearchResult,
-    UserBonusSearchResult,
-    TaskSuiteSearchResult,
     PoolSearchResult,
+    ProjectSearchResult,
+    SkillSearchResult,
     TaskSearchResult,
-    AttachmentSearchResult
+    TaskSuiteSearchResult,
+    TrainingSearchResult,
+    UserBonusSearchResult,
+    UserRestrictionSearchResult,
+    UserSkillSearchResult
 )
 from toloka.client.skill import Skill
 from toloka.client.task import (
     CreateTaskParameters,
     CreateTasksParameters,
-    TaskPatch,
+    Task,
     TaskOverlapPatch,
-    Task
+    TaskPatch
 )
 from toloka.client.task_suite import (
-    TaskSuiteOverlapPatch,
     TaskSuite,
     TaskSuiteCreateRequestParameters,
+    TaskSuiteOverlapPatch,
     TaskSuitePatch
 )
 from toloka.client.training import Training
@@ -120,22 +120,21 @@ from toloka.client.user_bonus import (
 )
 from toloka.client.user_restriction import UserRestriction
 from toloka.client.user_skill import (
-    UserSkill,
-    SetUserSkillRequest
+    SetUserSkillRequest,
+    UserSkill
 )
 from typing import (
-    Tuple,
-    List,
+    BinaryIO,
     Dict,
-    Union,
-    overload,
     Generator,
+    List,
     Optional,
-    BinaryIO
+    Tuple,
+    Union,
+    overload
 )
 from urllib3.util.retry import Retry  # type: ignore
 from uuid import UUID
-
 
 class TolokaClient:
     """Implements interaction with the Toloka API
@@ -181,19 +180,7 @@ class TolokaClient:
         SANDBOX = 'https://sandbox.toloka.yandex.com'
         PRODUCTION = 'https://toloka.yandex.com'
 
-
-
     def __init__(self, token: str, environment: Union[Environment, str, None] = None, retries: Union[int, Retry] = 3, timeout: Union[float, Tuple[float, float]] = ..., url: Optional[str] = None): ...
-
-    def _find_all(self, find_function, request): ...
-
-    def _raw_request(self, method, path, **kwargs): ...
-
-    def _request(self, method, path, **kwargs): ...
-
-    def _search_request(self, method, path, request, sort, limit): ...
-
-    def _sync_via_async(self, objects, parameters, url, result_type, operation_type, output_id_field, get_method): ...
 
     def accept_assignment(self, assignment_id: str, public_comment: str) -> Assignment:
         """Marks one assignment as accepted
@@ -900,7 +887,7 @@ class TolokaClient:
             >>> ]
             >>> created_result = toloka_client.create_tasks(tasks, allow_defaults=True)
             >>> print(len(created_result.items))
-            50
+            ...
 
             How to create golden-tasks.
 
@@ -916,7 +903,7 @@ class TolokaClient:
             >>>         )
             >>> created_result = toloka_client.create_tasks(golden_tasks, allow_defaults=True)
             >>> print(len(created_result.items))
-            10
+            ...
         """
         ...
 
@@ -953,7 +940,7 @@ class TolokaClient:
             >>> ]
             >>> created_result = toloka_client.create_tasks(tasks, allow_defaults=True)
             >>> print(len(created_result.items))
-            50
+            ...
 
             How to create golden-tasks.
 
@@ -969,7 +956,7 @@ class TolokaClient:
             >>>         )
             >>> created_result = toloka_client.create_tasks(golden_tasks, allow_defaults=True)
             >>> print(len(created_result.items))
-            10
+            ...
         """
         ...
 
@@ -1060,6 +1047,7 @@ class TolokaClient:
             >>>         assignment_id='012345'
             >>>     )
             >>> )
+            ...
         """
         ...
 
@@ -1232,7 +1220,7 @@ class TolokaClient:
         ...
 
     @overload
-    def find_assignments(self, status=None, task_id: Optional[str] = None, task_suite_id: Optional[str] = None, pool_id: Optional[str] = None, user_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, submitted_lt: Optional[datetime] = None, submitted_lte: Optional[datetime] = None, submitted_gt: Optional[datetime] = None, submitted_gte: Optional[datetime] = None, sort: Union[List[str], AssignmentSortItems, None] = None, limit: Optional[int] = None) -> AssignmentSearchResult:
+    def find_assignments(self, status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]] = None, task_id: Optional[str] = None, task_suite_id: Optional[str] = None, pool_id: Optional[str] = None, user_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, submitted_lt: Optional[datetime] = None, submitted_lte: Optional[datetime] = None, submitted_gt: Optional[datetime] = None, submitted_gte: Optional[datetime] = None, sort: Union[List[str], AssignmentSortItems, None] = None, limit: Optional[int] = None) -> AssignmentSearchResult:
         """Finds all assignments that match certain rules
 
         As a result, it returns an object that contains the first part of the found assignments and whether there
@@ -1312,7 +1300,7 @@ class TolokaClient:
         ...
 
     @overload
-    def find_message_threads(self, folder=None, folder_ne=None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], MessageThreadSortItems, None] = None, limit: Optional[int] = None) -> MessageThreadSearchResult:
+    def find_message_threads(self, folder: Union[str, Folder, List[Union[str, Folder]]] = None, folder_ne: Union[str, Folder, List[Union[str, Folder]]] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], MessageThreadSortItems, None] = None, limit: Optional[int] = None) -> MessageThreadSearchResult:
         """Finds all message threads that match certain rules
 
         As a result, it returns an object that contains the first part of the found threads and whether there
@@ -1740,7 +1728,7 @@ class TolokaClient:
             >>> operation = toloka_client.get_analytics([CompletionPercentagePoolAnalytics(subject_id=pool_id)])
             >>> operation = toloka_client.wait_operation(operation)
             >>> print(op.details['value'][0]['result']['value'])
-            92
+            ...
         """
         ...
 
@@ -1756,7 +1744,7 @@ class TolokaClient:
         ...
 
     @overload
-    def get_assignments(self, status=None, task_id: Optional[str] = None, task_suite_id: Optional[str] = None, pool_id: Optional[str] = None, user_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, submitted_lt: Optional[datetime] = None, submitted_lte: Optional[datetime] = None, submitted_gt: Optional[datetime] = None, submitted_gte: Optional[datetime] = None) -> Generator[Assignment, None, None]:
+    def get_assignments(self, status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]] = None, task_id: Optional[str] = None, task_suite_id: Optional[str] = None, pool_id: Optional[str] = None, user_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, submitted_lt: Optional[datetime] = None, submitted_lte: Optional[datetime] = None, submitted_gt: Optional[datetime] = None, submitted_gte: Optional[datetime] = None) -> Generator[Assignment, None, None]:
         """Finds all assignments that match certain rules and returns them in an iterable object
 
         Unlike find_assignments, returns generator. Does not sort assignments.
@@ -1887,7 +1875,7 @@ class TolokaClient:
         ...
 
     @overload
-    def get_message_threads(self, folder=None, folder_ne=None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[MessageThread, None, None]:
+    def get_message_threads(self, folder: Union[str, Folder, List[Union[str, Folder]]] = None, folder_ne: Union[str, Folder, List[Union[str, Folder]]] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[MessageThread, None, None]:
         """Finds all message threads that match certain rules and returns them in an iterable object
 
         Unlike find_message_threads, returns generator. Does not sort threads.

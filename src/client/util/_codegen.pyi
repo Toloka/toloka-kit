@@ -1,13 +1,13 @@
 from toloka.client.primitives.base import BaseTolokaObject
 from typing import (
+    Any,
     Dict,
     Optional,
-    Any,
     overload
 )
 
-
 __all__: list
+
 
 class BaseParameters(BaseTolokaObject):
     class Parameters(BaseTolokaObject):
@@ -17,8 +17,6 @@ class BaseParameters(BaseTolokaObject):
             ...
 
         _unexpected: Optional[Dict[str, Any]]
-
-
 
     @overload
     def __init__(self) -> None:
@@ -34,4 +32,3 @@ class BaseParameters(BaseTolokaObject):
 
     _unexpected: Optional[Dict[str, Any]]
     parameters: Optional[Parameters]
-

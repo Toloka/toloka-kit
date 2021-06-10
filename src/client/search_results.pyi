@@ -13,12 +13,11 @@ from toloka.client.user_bonus import UserBonus
 from toloka.client.user_restriction import UserRestriction
 from toloka.client.user_skill import UserSkill
 from typing import (
+    Any,
     Dict,
-    Optional,
     List,
-    Any
+    Optional
 )
-
 
 class AggregatedSolutionSearchResult(BaseTolokaObject):
     """The list of found AggregatedSolutions and whether there is something else on the original request
@@ -38,6 +37,7 @@ class AggregatedSolutionSearchResult(BaseTolokaObject):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[AggregatedSolution]]
     has_more: Optional[bool]
+
 
 class AssignmentSearchResult(BaseTolokaObject):
     """The list of found assignments and whether there is something else on the original request
@@ -60,6 +60,7 @@ class AssignmentSearchResult(BaseTolokaObject):
     items: Optional[List[Assignment]]
     has_more: Optional[bool]
 
+
 class AttachmentSearchResult(BaseTolokaObject):
     """The list of found attachments and whether there is something else on the original request
 
@@ -80,6 +81,7 @@ class AttachmentSearchResult(BaseTolokaObject):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[Attachment]]
     has_more: Optional[bool]
+
 
 class MessageThreadSearchResult(BaseTolokaObject):
     """The list of found message chains and whether there is something else on the original request
@@ -102,6 +104,7 @@ class MessageThreadSearchResult(BaseTolokaObject):
     items: Optional[List[MessageThread]]
     has_more: Optional[bool]
 
+
 class ProjectSearchResult(BaseTolokaObject):
     """The list of found projects and whether there is something else on the original request
 
@@ -122,6 +125,7 @@ class ProjectSearchResult(BaseTolokaObject):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[Project]]
     has_more: Optional[bool]
+
 
 class PoolSearchResult(BaseTolokaObject):
     """The list of found pools and whether there is something else on the original request
@@ -144,6 +148,7 @@ class PoolSearchResult(BaseTolokaObject):
     items: Optional[List[Pool]]
     has_more: Optional[bool]
 
+
 class SkillSearchResult(BaseTolokaObject):
     """The list of found skills and whether there is something else on the original request
 
@@ -164,6 +169,7 @@ class SkillSearchResult(BaseTolokaObject):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[Skill]]
     has_more: Optional[bool]
+
 
 class TaskSearchResult(BaseTolokaObject):
     """The list of found tasks and whether there is something else on the original request
@@ -186,6 +192,7 @@ class TaskSearchResult(BaseTolokaObject):
     items: Optional[List[Task]]
     has_more: Optional[bool]
 
+
 class TaskSuiteSearchResult(BaseTolokaObject):
     """The list of found sets of tasks and whether there is something else on the original request
 
@@ -206,6 +213,7 @@ class TaskSuiteSearchResult(BaseTolokaObject):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[TaskSuite]]
     has_more: Optional[bool]
+
 
 class TrainingSearchResult(BaseTolokaObject):
     """The list of found training pools and whether there is something else on the original request
@@ -228,6 +236,7 @@ class TrainingSearchResult(BaseTolokaObject):
     items: Optional[List[Training]]
     has_more: Optional[bool]
 
+
 class UserBonusSearchResult(BaseTolokaObject):
     """The list of found user bonuses and whether there is something else on the original request
 
@@ -248,6 +257,7 @@ class UserBonusSearchResult(BaseTolokaObject):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[UserBonus]]
     has_more: Optional[bool]
+
 
 class UserRestrictionSearchResult(BaseTolokaObject):
     """The list of found user restrictions and whether there is something else on the original request
@@ -270,6 +280,7 @@ class UserRestrictionSearchResult(BaseTolokaObject):
     items: Optional[List[UserRestriction]]
     has_more: Optional[bool]
 
+
 class UserSkillSearchResult(BaseTolokaObject):
     """The list of found user skills and whether there is something else on the original request
 
@@ -290,4 +301,3 @@ class UserSkillSearchResult(BaseTolokaObject):
     _unexpected: Optional[Dict[str, Any]]
     items: Optional[List[UserSkill]]
     has_more: Optional[bool]
-

@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class CommonErrorCodes(Enum):
     """Types of error codes returned by the API
     """
@@ -13,6 +12,7 @@ class CommonErrorCodes(Enum):
     REMOTE_SERVICE_UNAVAILABLE = 'REMOTE_SERVICE_UNAVAILABLE'
     TOO_MANY_REQUESTS = 'TOO_MANY_REQUESTS'
     VALIDATION_ERROR = 'VALIDATION_ERROR'
+
 
 class InternalErrorCodes(Enum):
     """Types of internal error codes returned by the API
@@ -83,6 +83,7 @@ class InternalErrorCodes(Enum):
     WRONG_FILE_FORMAT = 'WRONG_FILE_FORMAT'
     WRONG_REVISION = 'WRONG_REVISION'
 
+
 class ValidationErrorCodes(Enum):
     """Types of validation error codes returned by the API
     """
@@ -127,4 +128,3 @@ class ValidationErrorCodes(Enum):
     VALUE_NOT_ALLOWED = 'VALUE_NOT_ALLOWED'
     VALUE_OUT_OF_BOUNDS = 'VALUE_OUT_OF_BOUNDS'
     VALUE_REQUIRED = 'VALUE_REQUIRED'
-

@@ -1475,7 +1475,7 @@ class TolokaClient:
             >>> operation = toloka_client.get_analytics([CompletionPercentagePoolAnalytics(subject_id=pool_id)])
             >>> operation = toloka_client.wait_operation(operation)
             >>> print(op.details['value'][0]['result']['value'])
-            92
+            ...
         """
         response = self._request('post', '/staging/analytics-2', json=unstructure(stats))
         return structure(response, operations.Operation)
@@ -1533,7 +1533,7 @@ class TolokaClient:
             >>> ]
             >>> created_result = toloka_client.create_tasks(tasks, allow_defaults=True)
             >>> print(len(created_result.items))
-            50
+            ...
 
             How to create golden-tasks.
 
@@ -1549,7 +1549,7 @@ class TolokaClient:
             >>>         )
             >>> created_result = toloka_client.create_tasks(golden_tasks, allow_defaults=True)
             >>> print(len(created_result.items))
-            10
+            ...
         """
         if not parameters:
             parameters = task.CreateTasksParameters()
@@ -1914,6 +1914,7 @@ class TolokaClient:
             >>>         assignment_id='012345'
             >>>     )
             >>> )
+            ...
         """
         response = self._request(
             'post', '/v1/user-bonuses', json=unstructure(user_bonus),

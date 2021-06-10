@@ -1,11 +1,10 @@
 from datetime import datetime
 from toloka.client.primitives.base import BaseTolokaObject
 from typing import (
+    Any,
     Dict,
-    Optional,
-    Any
+    Optional
 )
-
 
 class Skill(BaseTolokaObject):
     """A skill is an assessment of some aspect of a user's responses (a number from 0 to 100)
@@ -69,4 +68,3 @@ class Skill(BaseTolokaObject):
     public_requester_description: Optional[Dict[str, str]]
     id: Optional[str]
     created: Optional[datetime]
-

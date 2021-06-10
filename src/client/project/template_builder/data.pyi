@@ -1,10 +1,9 @@
 from toloka.client.project.template_builder.base import BaseComponent
 from typing import (
+    Any,
     Dict,
-    Optional,
-    Any
+    Optional
 )
-
 
 class BaseData(BaseComponent):
     """Components used for working with data: input, output, or intermediate.
@@ -18,6 +17,7 @@ class BaseData(BaseComponent):
     _unexpected: Optional[Dict[str, Any]]
     path: Optional[Any]
     default: Optional[Any]
+
 
 class InputData(BaseData):
     """The input data.
@@ -40,6 +40,7 @@ class InputData(BaseData):
     path: Optional[Any]
     default: Optional[Any]
 
+
 class InternalData(BaseData):
     """The data available only from within the task.
 
@@ -59,6 +60,7 @@ class InternalData(BaseData):
     _unexpected: Optional[Dict[str, Any]]
     path: Optional[Any]
     default: Optional[Any]
+
 
 class LocalData(BaseData):
     """The local data available only from inside the component.
@@ -80,6 +82,7 @@ class LocalData(BaseData):
     path: Optional[Any]
     default: Optional[Any]
 
+
 class LocationData(BaseComponent):
     """This component sends the device coordinates
 
@@ -92,6 +95,7 @@ class LocationData(BaseComponent):
         ...
 
     _unexpected: Optional[Dict[str, Any]]
+
 
 class OutputData(BaseData):
     """The output data.
@@ -113,6 +117,7 @@ class OutputData(BaseData):
     path: Optional[Any]
     default: Optional[Any]
 
+
 class RelativeData(BaseData):
     """A special component for saving data.
 
@@ -132,4 +137,3 @@ class RelativeData(BaseData):
     _unexpected: Optional[Dict[str, Any]]
     path: Optional[Any]
     default: Optional[Any]
-

@@ -1,18 +1,16 @@
 from attr._make import Attribute
 from enum import Enum
 from typing import (
-    TypeVar,
-    List,
-    Type,
     Any,
     Dict,
-    Union,
-    Optional
+    List,
+    Optional,
+    Type,
+    TypeVar,
+    Union
 )
 
-
 E = TypeVar('E', bound=Enum)
-
 
 class VariantRegistry:
     def __init__(self, field: str, enum: Type[E]): ...
@@ -21,9 +19,11 @@ class VariantRegistry:
 
 def attribute(*args, required=False, origin=None, **kwargs): ...
 
+
 class BaseTolokaObjectMetaclass(type):
     @staticmethod
     def transformer(type_: type, fields: List[Attribute]) -> List[Attribute]: ...
+
 
 class BaseTolokaObject:
     """A base class for classes representing Toloka objects.
@@ -62,4 +62,3 @@ class BaseTolokaObject:
     def unstructure(self) -> Optional[dict]: ...
 
     _unexpected: Optional[Dict[str, Any]]
-

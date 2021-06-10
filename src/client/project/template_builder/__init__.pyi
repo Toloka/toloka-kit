@@ -1,105 +1,104 @@
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.project.field_spec import FieldSpec
 from toloka.client.project.template_builder.actions import (
-    OpenLinkActionV1,
-    PlayPauseActionV1,
+    BulkActionV1,
     NotifyActionV1,
     OpenCloseActionV1,
-    ToggleActionV1,
+    OpenLinkActionV1,
+    PlayPauseActionV1,
+    RotateActionV1,
     SetActionV1,
-    BulkActionV1,
-    RotateActionV1
+    ToggleActionV1
 )
 from toloka.client.project.template_builder.base import BaseComponent
 from toloka.client.project.template_builder.conditions import (
+    AllConditionV1,
+    AnyConditionV1,
     EmptyConditionV1,
-    NotConditionV1,
     EqualsConditionV1,
+    LinkOpenedConditionV1,
+    NotConditionV1,
     PlayedConditionV1,
     PlayedFullyConditionV1,
     RequiredConditionV1,
-    SubArrayConditionV1,
-    AllConditionV1,
     SchemaConditionV1,
-    AnyConditionV1,
-    LinkOpenedConditionV1
+    SubArrayConditionV1
 )
 from toloka.client.project.template_builder.data import (
-    InternalData,
     InputData,
-    RelativeData,
+    InternalData,
     LocalData,
-    OutputData
+    OutputData,
+    RelativeData
 )
 from toloka.client.project.template_builder.fields import (
-    TextFieldV1,
-    NumberFieldV1,
-    GroupFieldOption,
-    MediaFileFieldV1,
-    CheckboxFieldV1,
-    FileFieldV1,
-    ListFieldV1,
-    RadioGroupFieldV1,
-    DateFieldV1,
-    TextareaFieldV1,
-    ImageAnnotationFieldV1,
     ButtonRadioFieldV1,
     ButtonRadioGroupFieldV1,
-    PhoneNumberFieldV1,
+    CheckboxFieldV1,
+    CheckboxGroupFieldV1,
+    DateFieldV1,
     EmailFieldV1,
+    FileFieldV1,
+    GroupFieldOption,
+    ImageAnnotationFieldV1,
+    ListFieldV1,
+    MediaFileFieldV1,
+    NumberFieldV1,
+    PhoneNumberFieldV1,
+    RadioGroupFieldV1,
     SelectFieldV1,
-    CheckboxGroupFieldV1
+    TextFieldV1,
+    TextareaFieldV1
 )
 from toloka.client.project.template_builder.helpers import (
-    SwitchHelperV1,
-    TransformHelperV1,
     ConcatArraysHelperV1,
-    IfHelperV1,
-    ReplaceHelperV1,
-    Object2EntriesHelperV1,
-    TextTransformHelperV1,
     Entries2ObjectHelperV1,
-    YandexDiskProxyHelperV1,
+    IfHelperV1,
+    JoinHelperV1,
+    Object2EntriesHelperV1,
+    ReplaceHelperV1,
     SearchQueryHelperV1,
-    JoinHelperV1
+    SwitchHelperV1,
+    TextTransformHelperV1,
+    TransformHelperV1,
+    YandexDiskProxyHelperV1
 )
 from toloka.client.project.template_builder.layouts import (
     BarsLayoutV1,
-    SidebarLayoutV1,
     ColumnsLayoutV1,
-    SideBySideLayoutV1
+    SideBySideLayoutV1,
+    SidebarLayoutV1
 )
 from toloka.client.project.template_builder.plugins import (
-    TriggerPluginV1,
     HotkeysPluginV1,
-    TolokaPluginV1
+    TolokaPluginV1,
+    TriggerPluginV1
 )
 from toloka.client.project.template_builder.view import (
-    ImageViewV1,
-    DividerViewV1,
-    MarkdownViewV1,
-    VideoViewV1,
-    DeviceFrameViewV1,
     ActionButtonViewV1,
     AlertViewV1,
+    AudioViewV1,
     CollapseViewV1,
+    DeviceFrameViewV1,
+    DividerViewV1,
+    GroupViewV1,
+    IframeViewV1,
+    ImageViewV1,
     LabeledListViewV1,
     LinkViewV1,
-    GroupViewV1,
     ListViewV1,
+    MarkdownViewV1,
     TextViewV1,
-    AudioViewV1,
-    IframeViewV1
+    VideoViewV1
 )
 from typing import (
-    Tuple,
-    List,
     Any,
     Dict,
-    Union,
-    Optional
+    List,
+    Optional,
+    Tuple,
+    Union
 )
-
 
 class TemplateBuilder(BaseTolokaObject):
     def __init__(self, *, view: Optional[BaseComponent] = None, plugins: Optional[List[BaseComponent]] = None, vars: Optional[Dict[str, Any]] = None) -> None:
@@ -111,5 +110,6 @@ class TemplateBuilder(BaseTolokaObject):
     view: Optional[BaseComponent]
     plugins: Optional[List[BaseComponent]]
     vars: Optional[Dict[str, Any]]
+
 
 def get_input_and_output(tb_config: Union[dict, TemplateBuilder]) -> Tuple[Dict[str, FieldSpec], Dict[str, FieldSpec]]: ...

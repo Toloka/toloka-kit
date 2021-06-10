@@ -1,10 +1,9 @@
 from toloka.client.primitives.base import BaseTolokaObject
 from typing import (
+    Any,
     Dict,
-    Optional,
-    Any
+    Optional
 )
-
 
 class Owner(BaseTolokaObject):
     """Parameters of the customer who created an object.
@@ -27,4 +26,3 @@ class Owner(BaseTolokaObject):
     id: Optional[str]
     myself: Optional[bool]
     company_id: Optional[str]
-

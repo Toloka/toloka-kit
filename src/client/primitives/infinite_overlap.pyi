@@ -1,6 +1,5 @@
 from typing import Optional
 
-
 class InfiniteOverlapParametersMixin:
     """This mixin provides `overlap` and `infinite_overlap` attributes
     and is responsible for maintaining their consistency.
@@ -21,10 +20,6 @@ class InfiniteOverlapParametersMixin:
         """
         ...
 
-    infinite_overlap = ...
-
-    overlap = ...
-
     def unset_overlap(self):
         """Unsets overlap
         """
@@ -38,4 +33,3 @@ class InfiniteOverlapParametersMixin:
 
     _infinite_overlap: Optional[bool]
     _overlap: Optional[int]
-

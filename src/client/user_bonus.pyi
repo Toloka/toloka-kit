@@ -3,11 +3,10 @@ from decimal import Decimal
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.primitives.parameter import Parameters
 from typing import (
+    Any,
     Dict,
-    Optional,
-    Any
+    Optional
 )
-
 
 class UserBonus(BaseTolokaObject):
     """Issuing a bonus to a specific performer
@@ -77,6 +76,7 @@ class UserBonus(BaseTolokaObject):
     id: Optional[str]
     created: Optional[datetime]
 
+
 class UserBonusCreateRequestParameters(Parameters):
     """Parameters for creating performer bonuses
 
@@ -99,4 +99,3 @@ class UserBonusCreateRequestParameters(Parameters):
     _unexpected: Optional[Dict[str, Any]]
     operation_id: Optional[str]
     skip_invalid_items: Optional[bool]
-

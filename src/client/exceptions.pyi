@@ -1,10 +1,9 @@
 from requests.models import Response
 from typing import (
-    Optional,
+    Any,
     List,
-    Any
+    Optional
 )
-
 
 class SpecClassIdentificationError(Exception):
     """Raised when cannot find spec_сlass for spec_field value.
@@ -21,6 +20,7 @@ class SpecClassIdentificationError(Exception):
 
     spec_field: Optional[str]
     spec_enum: Optional[str]
+
 
 class ApiError(Exception):
     """Error returned from the API Call.
@@ -44,6 +44,7 @@ class ApiError(Exception):
     message: Optional[str]
     payload: Optional[Any]
 
+
 class ValidationApiError(ApiError):
     """Field validation error returned from the API Call.
 
@@ -55,14 +56,13 @@ class ValidationApiError(ApiError):
         invalid_fields: the list of the invalid fields
     """
 
-    invalid_fields = ...
-
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
     message: Optional[str]
     payload: Optional[Any]
     _invalid_fields: Optional[List[str]]
+
 
 class InternalApiError(ApiError):
     status_code: Optional[int]
@@ -71,12 +71,14 @@ class InternalApiError(ApiError):
     message: Optional[str]
     payload: Optional[Any]
 
+
 class AuthenticationApiError(ApiError):
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
     message: Optional[str]
     payload: Optional[Any]
+
 
 class AccessDeniedApiError(ApiError):
     status_code: Optional[int]
@@ -85,12 +87,14 @@ class AccessDeniedApiError(ApiError):
     message: Optional[str]
     payload: Optional[Any]
 
+
 class RemoteServiceUnavailableApiError(ApiError):
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
     message: Optional[str]
     payload: Optional[Any]
+
 
 class DoesNotExistApiError(ApiError):
     status_code: Optional[int]
@@ -99,12 +103,14 @@ class DoesNotExistApiError(ApiError):
     message: Optional[str]
     payload: Optional[Any]
 
+
 class ConflictStateApiError(ApiError):
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
     message: Optional[str]
     payload: Optional[Any]
+
 
 class TooManyRequestsApiError(ApiError):
     status_code: Optional[int]
@@ -113,11 +119,13 @@ class TooManyRequestsApiError(ApiError):
     message: Optional[str]
     payload: Optional[Any]
 
+
 class IncorrectActionsApiError(ApiError):
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
     message: Optional[str]
     payload: Optional[Any]
+
 
 def raise_on_api_error(response: Response): ...

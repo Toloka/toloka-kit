@@ -1,11 +1,10 @@
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.task_distribution_function import TaskDistributionFunction
 from typing import (
+    Any,
     Dict,
-    Optional,
-    Any
+    Optional
 )
-
 
 class MixerConfig(BaseTolokaObject):
     """Parameters for automatically creating a task suite ("smart mixing").
@@ -69,4 +68,3 @@ class MixerConfig(BaseTolokaObject):
     shuffle_tasks_in_task_suite: Optional[bool]
     golden_task_distribution_function: Optional[TaskDistributionFunction]
     training_task_distribution_function: Optional[TaskDistributionFunction]
-

@@ -1,8 +1,7 @@
 from typing import (
-    Dict,
-    Any
+    Any,
+    Dict
 )
-
 
 class Solution:
     """Performer response for one task
@@ -17,4 +16,3 @@ class Solution:
         ...
 
     output_values: Dict[str, Any]
-

@@ -1,15 +1,14 @@
 from toloka.client.project.template_builder.base import (
-    VersionedBaseComponent,
-    BaseComponent
+    BaseComponent,
+    VersionedBaseComponent
 )
 from typing import (
-    List,
     Any,
     Dict,
-    Union,
-    Optional
+    List,
+    Optional,
+    Union
 )
-
 
 class BaseConditionV1(VersionedBaseComponent):
     """Check an expression against a condition.
@@ -25,6 +24,7 @@ class BaseConditionV1(VersionedBaseComponent):
     _unexpected: Optional[Dict[str, Any]]
     version: Optional[str]
     hint: Optional[Any]
+
 
 class AllConditionV1(BaseConditionV1):
     """Checks that all child conditions are met.
@@ -67,6 +67,7 @@ class AllConditionV1(BaseConditionV1):
     hint: Optional[Any]
     conditions: Optional[Union[BaseComponent, List[BaseComponent]]]
 
+
 class AnyConditionV1(BaseConditionV1):
     """Checks that at least one of the child conditions is met.
 
@@ -87,6 +88,7 @@ class AnyConditionV1(BaseConditionV1):
     version: Optional[str]
     hint: Optional[Any]
     conditions: Optional[Union[BaseComponent, List[BaseComponent]]]
+
 
 class DistanceConditionV1(BaseConditionV1):
     """This component checks whether the sent coordinates match the ones that you specified
@@ -124,6 +126,7 @@ class DistanceConditionV1(BaseConditionV1):
     to_: Optional[Union[BaseComponent, str]]
     max: Optional[Union[BaseComponent, float]]
 
+
 class EmptyConditionV1(BaseConditionV1):
     """Checks that the data is empty (undefined).
 
@@ -146,6 +149,7 @@ class EmptyConditionV1(BaseConditionV1):
     version: Optional[str]
     hint: Optional[Any]
     data: Optional[Any]
+
 
 class EqualsConditionV1(BaseConditionV1):
     """Checks whether the original value is equal to the specified value.
@@ -182,6 +186,7 @@ class EqualsConditionV1(BaseConditionV1):
     to: Optional[Any]
     data: Optional[Any]
 
+
 class LinkOpenedConditionV1(BaseConditionV1):
     """Checks that the user clicked the link.
 
@@ -204,6 +209,7 @@ class LinkOpenedConditionV1(BaseConditionV1):
     hint: Optional[Any]
     url: Optional[Any]
 
+
 class NotConditionV1(BaseConditionV1):
     """Returns the inverse of the specified condition.
 
@@ -223,6 +229,7 @@ class NotConditionV1(BaseConditionV1):
     hint: Optional[Any]
     condition: Optional[BaseComponent]
 
+
 class PlayedConditionV1(BaseConditionV1):
     """Checks the start of playback.
 
@@ -241,6 +248,7 @@ class PlayedConditionV1(BaseConditionV1):
     version: Optional[str]
     hint: Optional[Any]
 
+
 class PlayedFullyConditionV1(BaseConditionV1):
     """This component checks for the end of playback.
 
@@ -258,6 +266,7 @@ class PlayedFullyConditionV1(BaseConditionV1):
     _unexpected: Optional[Dict[str, Any]]
     version: Optional[str]
     hint: Optional[Any]
+
 
 class RequiredConditionV1(BaseConditionV1):
     """Checks that the data is filled in. This way you can get the user to answer all the required questions.
@@ -290,6 +299,7 @@ class RequiredConditionV1(BaseConditionV1):
     hint: Optional[Any]
     data: Optional[Any]
 
+
 class SchemaConditionV1(BaseConditionV1):
     """Allows validating data using JSON Schema. This is a special format for describing data in JSON format.
 
@@ -316,6 +326,7 @@ class SchemaConditionV1(BaseConditionV1):
     data: Optional[Any]
     schema: Optional[Dict]
 
+
 class SubArrayConditionV1(BaseConditionV1):
     """Checks that the array in data is a subarray for parent.
 
@@ -335,4 +346,3 @@ class SubArrayConditionV1(BaseConditionV1):
     hint: Optional[Any]
     data: Optional[Any]
     parent: Optional[Any]
-
