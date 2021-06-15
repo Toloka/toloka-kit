@@ -795,7 +795,7 @@ class TolokaClient:
 
         Args:
             project_id: ID of the project to be cloned.
-            reuse_quality_controllers: Use same quality controllers in cloned and created projects. Defaults to True.
+            reuse_controllers: Use same quality controllers in cloned and created projects. Defaults to True.
                 This means that all quality control rules will be applied to both projects.
                 For example, if you have rule "fast_submitted_count", fast responses counts across both projects.
 
