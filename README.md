@@ -1,9 +1,12 @@
 # Toloka-Kit
 
 [![GitHub Tests][github_tests_badge]][github_tests_link]
+[![GitHub Tests][github_coverage_badge]][github_coverage_link]
 
 [github_tests_badge]: https://github.com/Toloka/toloka-kit/workflows/Tests/badge.svg?branch=main
 [github_tests_link]: https://github.com/Toloka/toloka-kit/actions?query=workflow:Tests
+[github_coverage_badge]: https://codecov.io/gh/Toloka/toloka-kit/branch/main/graph/badge.svg
+[github_coverage_link]: https://codecov.io/gh/Toloka/toloka-kit
 
 [**<span style="color:red">Documentation</span>**](https://yandex.com/dev/toloka/toloka-kit/doc/)
 
