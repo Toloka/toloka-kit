@@ -21,7 +21,8 @@ from toloka.client.attachment import Attachment
 from toloka.client.batch_create_results import (
     TaskBatchCreateResult,
     TaskSuiteBatchCreateResult,
-    UserBonusBatchCreateResult
+    UserBonusBatchCreateResult,
+    WebhookSubscriptionBatchCreateResult
 )
 from toloka.client.clone_results import CloneResults
 from toloka.client.filter import FilterCondition
@@ -82,7 +83,9 @@ from toloka.client.search_requests import (
     UserRestrictionSearchRequest,
     UserRestrictionSortItems,
     UserSkillSearchRequest,
-    UserSkillSortItems
+    UserSkillSortItems,
+    WebhookSubscriptionSearchRequest,
+    WebhookSubscriptionSortItems
 )
 from toloka.client.search_results import (
     AggregatedSolutionSearchResult,
@@ -97,7 +100,8 @@ from toloka.client.search_results import (
     TrainingSearchResult,
     UserBonusSearchResult,
     UserRestrictionSearchResult,
-    UserSkillSearchResult
+    UserSkillSearchResult,
+    WebhookSubscriptionSearchResult
 )
 from toloka.client.skill import Skill
 from toloka.client.task import (
@@ -123,6 +127,7 @@ from toloka.client.user_skill import (
     SetUserSkillRequest,
     UserSkill
 )
+from toloka.client.webhook_subscription import WebhookSubscription
 from typing import (
     BinaryIO,
     Dict,
@@ -1115,6 +1120,39 @@ class TolokaClient:
         """
         ...
 
+    def create_webhook_subscriptions(self, subscriptions: List[WebhookSubscription]) -> WebhookSubscriptionBatchCreateResult:
+        """Creates (upsert) many webhook-subscriptions.
+
+        Args:
+            subscriptions: List of webhook-subscriptions, that will be created.
+
+        Returns:
+            batch_create_results.WebhookSubscriptionBatchCreateResult: Result of subscriptions creation.
+                Contains created subscriptions in "items" and problems in "validation_errors".
+
+        Raises:
+            ValidationApiError: If no subscriptions were created.
+
+        Example:
+            How to create several subscriptions.
+
+            >>> created_result = toloka_client.create_webhook_subscriptions([
+            >>>     {
+            >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
+            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.ASSIGNMENT_CREATED,
+            >>>         'pool_id': '121212'
+            >>>     },
+            >>>     {
+            >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
+            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.POOL_CLOSED,
+            >>>         'pool_id': '121212',
+            >>>     }
+            >>> ])
+            >>> print(len(created_result.items))
+            2
+        """
+        ...
+
     def delete_user_restriction(self, user_restriction_id: str) -> None:
         """Unlocks existing restriction
 
@@ -1130,6 +1168,14 @@ class TolokaClient:
 
         Args:
             user_skill_id: ID of the fact that the performer has a skill to delete.
+        """
+        ...
+
+    def delete_webhook_subscription(self, webhook_subscription_id: str) -> None:
+        """Drop specific webhook-subscription
+
+        Args:
+            webhook_subscription_id: ID of the webhook-subscription to delete.
         """
         ...
 
@@ -1703,6 +1749,48 @@ class TolokaClient:
 
         Returns:
             UserSkillSearchResult: The first "limit" user skills in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_webhook_subscriptions(self, event_type: Optional[WebhookSubscription.EventType] = None, pool_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], WebhookSubscriptionSortItems, None] = None, limit: Optional[int] = None) -> WebhookSubscriptionSearchResult:
+        """Finds all webhook-subscriptions that match certain rules
+
+        As a result, it returns an object that contains the first part of the found webhook-subscriptions
+        and whether there are any more results.
+        It is better to use the "get_webhook_subscriptions" method, they allow to iterate through all results
+        and not just the first output.
+
+        Args:
+            request: How to search webhook-subscriptions.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 100 000.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            WebhookSubscriptionSearchResult: The first "limit" webhook-subscriptions in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_webhook_subscriptions(self, request: WebhookSubscriptionSearchRequest, sort: Union[List[str], WebhookSubscriptionSortItems, None] = None, limit: Optional[int] = None) -> WebhookSubscriptionSearchResult:
+        """Finds all webhook-subscriptions that match certain rules
+
+        As a result, it returns an object that contains the first part of the found webhook-subscriptions
+        and whether there are any more results.
+        It is better to use the "get_webhook_subscriptions" method, they allow to iterate through all results
+        and not just the first output.
+
+        Args:
+            request: How to search webhook-subscriptions.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 100 000.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            WebhookSubscriptionSearchResult: The first "limit" webhook-subscriptions in "items".
                 And a mark that there is more.
         """
         ...
@@ -2399,6 +2487,47 @@ class TolokaClient:
 
         Yields:
             UserSkill: The next object corresponding to the request parameters.
+        """
+        ...
+
+    def get_webhook_subscription(self, webhook_subscription_id: str) -> WebhookSubscription:
+        """Get one specific webhook-subscription
+
+        Args:
+            webhook_subscription_id: ID of the subscription.
+
+        Returns:
+            WebhookSubscription: The subscription.
+        """
+        ...
+
+    @overload
+    def get_webhook_subscriptions(self, event_type: Optional[WebhookSubscription.EventType] = None, pool_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[WebhookSubscription, None, None]:
+        """Finds all webhook-subscriptions that match certain rules and returns them in an iterable object
+
+        Unlike find_webhook-subscriptions, returns generator. Does not sort webhook-subscriptions.
+        While iterating over the result, several requests to the Toloka server is possible.
+
+        Args:
+            request: How to search webhook-subscriptions.
+
+        Yields:
+            WebhookSubscription: The next object corresponding to the request parameters.
+        """
+        ...
+
+    @overload
+    def get_webhook_subscriptions(self, request: WebhookSubscriptionSearchRequest) -> Generator[WebhookSubscription, None, None]:
+        """Finds all webhook-subscriptions that match certain rules and returns them in an iterable object
+
+        Unlike find_webhook-subscriptions, returns generator. Does not sort webhook-subscriptions.
+        While iterating over the result, several requests to the Toloka server is possible.
+
+        Args:
+            request: How to search webhook-subscriptions.
+
+        Yields:
+            WebhookSubscription: The next object corresponding to the request parameters.
         """
         ...
 

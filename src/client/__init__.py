@@ -64,6 +64,7 @@ from .user_bonus import UserBonus, UserBonusCreateRequestParameters
 from .user_restriction import UserRestriction
 from .user_skill import SetUserSkillRequest, UserSkill
 from .util._codegen import expand
+from .webhook_subscription import WebhookSubscription
 
 logger = logging.getLogger(__name__)
 
@@ -177,12 +178,12 @@ class TolokaClient:
             params['limit'] = limit
         return self._request(method, path, params=params)
 
-    def _find_all(self, find_function, request):
-        result = find_function(request, sort=['id'])
+    def _find_all(self, find_function, request, sort_field: str = 'id'):
+        result = find_function(request, sort=[sort_field])
         while result.has_more:
-            request = attr.evolve(request, id_gt=result.items[-1].id)
+            request = attr.evolve(request, **{f'{sort_field}_gt': getattr(result.items[-1], sort_field)})
             yield from result.items
-            result = find_function(request, sort=['id'])
+            result = find_function(request, sort=[sort_field])
 
         yield from result.items
 
@@ -2174,6 +2175,100 @@ class TolokaClient:
             user_skill_id: ID of the fact that the performer has a skill to delete.
         """
         self._raw_request('delete', f'/v1/user-skills/{user_skill_id}')
+
+    def create_webhook_subscriptions(self, subscriptions: List[WebhookSubscription]) -> batch_create_results.WebhookSubscriptionBatchCreateResult:
+        """Creates (upsert) many webhook-subscriptions.
+
+        Args:
+            subscriptions: List of webhook-subscriptions, that will be created.
+
+        Returns:
+            batch_create_results.WebhookSubscriptionBatchCreateResult: Result of subscriptions creation.
+                Contains created subscriptions in "items" and problems in "validation_errors".
+
+        Raises:
+            ValidationApiError: If no subscriptions were created.
+
+        Example:
+            How to create several subscriptions.
+
+            >>> created_result = toloka_client.create_webhook_subscriptions([
+            >>>     {
+            >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
+            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.ASSIGNMENT_CREATED,
+            >>>         'pool_id': '121212'
+            >>>     },
+            >>>     {
+            >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
+            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.POOL_CLOSED,
+            >>>         'pool_id': '121212',
+            >>>     }
+            >>> ])
+            >>> print(len(created_result.items))
+            2
+        """
+        response = self._request('put', '/v1/webhook-subscriptions', json=unstructure(subscriptions))
+        return structure(response, batch_create_results.WebhookSubscriptionBatchCreateResult)
+
+    def get_webhook_subscription(self, webhook_subscription_id: str) -> WebhookSubscription:
+        """Get one specific webhook-subscription
+
+        Args:
+            webhook_subscription_id: ID of the subscription.
+
+        Returns:
+            WebhookSubscription: The subscription.
+        """
+        response = self._request('get', f'/v1/webhook-subscriptions/{webhook_subscription_id}')
+        return structure(response, WebhookSubscription)
+
+    @expand('request')
+    def find_webhook_subscriptions(self, request: search_requests.WebhookSubscriptionSearchRequest,
+                                   sort: Union[List[str], search_requests.WebhookSubscriptionSortItems, None] = None,
+                                   limit: Optional[int] = None) -> search_results.WebhookSubscriptionSearchResult:
+        """Finds all webhook-subscriptions that match certain rules
+
+        As a result, it returns an object that contains the first part of the found webhook-subscriptions
+        and whether there are any more results.
+        It is better to use the "get_webhook_subscriptions" method, they allow to iterate through all results
+        and not just the first output.
+
+        Args:
+            request: How to search webhook-subscriptions.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 100 000.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            WebhookSubscriptionSearchResult: The first "limit" webhook-subscriptions in "items".
+                And a mark that there is more.
+        """
+        sort = None if sort is None else structure(sort, search_requests.WebhookSubscriptionSortItems)
+        response = self._search_request('get', '/v1/webhook-subscriptions', request, sort, limit)
+        return structure(response, search_results.WebhookSubscriptionSearchResult)
+
+    @expand('request')
+    def get_webhook_subscriptions(self, request: search_requests.WebhookSubscriptionSearchRequest) -> Generator[WebhookSubscription, None, None]:
+        """Finds all webhook-subscriptions that match certain rules and returns them in an iterable object
+
+        Unlike find_webhook-subscriptions, returns generator. Does not sort webhook-subscriptions.
+        While iterating over the result, several requests to the Toloka server is possible.
+
+        Args:
+            request: How to search webhook-subscriptions.
+
+        Yields:
+            WebhookSubscription: The next object corresponding to the request parameters.
+        """
+        return self._find_all(self.find_webhook_subscriptions, request, sort_field='created')
+
+    def delete_webhook_subscription(self, webhook_subscription_id: str) -> None:
+        """Drop specific webhook-subscription
+
+        Args:
+            webhook_subscription_id: ID of the webhook-subscription to delete.
+        """
+        self._raw_request('delete', f'/v1/webhook-subscriptions/{webhook_subscription_id}')
 
     # Experimental section
 
