@@ -45,6 +45,7 @@ class WebhookSubscription(BaseTolokaObject):
     webhook_url: str
     event_type: EventType
     pool_id: str
+    secret_key: str
 
     # Readonly
     id: str

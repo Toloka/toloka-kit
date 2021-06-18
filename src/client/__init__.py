@@ -2176,7 +2176,7 @@ class TolokaClient:
         """
         self._raw_request('delete', f'/v1/user-skills/{user_skill_id}')
 
-    def create_webhook_subscriptions(self, subscriptions: List[WebhookSubscription]) -> batch_create_results.WebhookSubscriptionBatchCreateResult:
+    def upsert_webhook_subscriptions(self, subscriptions: List[WebhookSubscription]) -> batch_create_results.WebhookSubscriptionBatchCreateResult:
         """Creates (upsert) many webhook-subscriptions.
 
         Args:
@@ -2192,7 +2192,7 @@ class TolokaClient:
         Example:
             How to create several subscriptions.
 
-            >>> created_result = toloka_client.create_webhook_subscriptions([
+            >>> created_result = toloka_client.upsert_webhook_subscriptions([
             >>>     {
             >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
             >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.ASSIGNMENT_CREATED,
