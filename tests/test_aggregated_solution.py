@@ -148,3 +148,55 @@ def test_find_aggregated_solutions(requests_mock, toloka_client, toloka_url):
         limit=42,
     )
     assert raw_result == client.unstructure(result)
+
+
+def test_get_aggregated_solutions(requests_mock, toloka_client, toloka_url):
+    backend_solutions = [
+        {
+            'pool_id': '11',
+            'task_id': '111',
+            'output_values': {'out1': True},
+            'confidence': 0.111
+        },
+        {
+            'pool_id': '11',
+            'task_id': '112',
+            'output_values': {'out1': True},
+            'confidence': 0.112
+        },
+        {
+            'pool_id': '11',
+            'task_id': '113',
+            'output_values': {'out1': True},
+            'confidence': 0.113
+        },
+        {
+            'pool_id': '11',
+            'task_id': '114',
+            'output_values': {'out1': True},
+            'confidence': 0.114
+        },
+        {
+            'pool_id': '11',
+            'task_id': '115',
+            'output_values': {'out1': True},
+            'confidence': 0.115
+        }
+    ]
+
+    def find_aggregated_solutions_mock(request, _):
+        params = parse_qs(urlparse(request.url).query)
+        task_id_gt = params.pop('task_id_gt', None)
+        assert {'sort': ['task_id']} == params, params
+        solutions_greater = [
+            item
+            for item in backend_solutions
+            if task_id_gt is None or item['task_id'] > task_id_gt[0]
+        ][:2]  # For test purposes return 2 items at a time.
+        has_more = (solutions_greater[-1]['task_id'] != backend_solutions[-1]['task_id'])
+        return {'items': solutions_greater, 'has_more': has_more}
+
+    requests_mock.get(f'{toloka_url}/aggregated-solutions/some_op_id',
+                      json=find_aggregated_solutions_mock,
+                      status_code=200)
+    assert backend_solutions == client.unstructure(list(toloka_client.get_aggregated_solutions('some_op_id')))
