@@ -82,6 +82,18 @@ class TriggerPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TRIGGER):
         condition: The condition that must be met in order to fire the trigger.
         fire_immediately: Flag indicating whether the trigger should be fired immediately after the task is loaded.
         on_change_of: The data that triggers the action when changed.
+
+    Example:
+        How to save the performer coordinates to the output.
+
+        >>> coordinates_save_plugin = tb.plugins.TriggerPluginV1(
+        >>>     fire_immediately=True,
+        >>>     action=tb.actions.SetActionV1(
+        >>>         data=tb.data.OutputData(path='performer_coordinates'),
+        >>>         payload=tb.data.LocationData()
+        >>>     ),
+        >>> )
+        ...
     """
 
     action: BaseComponent
@@ -116,9 +128,11 @@ class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
 
         @unique
         class Kind(Enum):
-            """scroll (default) — display multiple tasks on the page at the same time.
+            """An enumeration.
 
-            pager — display only one task on the page, with a button to switch between tasks at the bottom.
+            Attributes:
+                SCROLL: (default) display multiple tasks on the page at the same time.
+                PAGER: display only one task on the page, with a button to switch between tasks at the bottom.
             """
 
             PAGER = 'pager'

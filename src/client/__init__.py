@@ -1,4 +1,20 @@
-__all__ = ['TolokaClient']
+__all__ = [
+    'TolokaClient',
+    'Assignment',
+    'Attachment',
+    'Folder',
+    'MessageThread',
+    'MessageThreadReply',
+    'MessageThreadFolders',
+    'MessageThreadCompose',
+    'Skill',
+    'TaskSuite',
+    'Task',
+    'Training',
+    'UserBonus',
+    'Pool',
+    'Project',
+]
 import datetime
 from decimal import Decimal
 import time
@@ -48,6 +64,7 @@ from .user_bonus import UserBonus, UserBonusCreateRequestParameters
 from .user_restriction import UserRestriction
 from .user_skill import SetUserSkillRequest, UserSkill
 from .util._codegen import expand
+from .webhook_subscription import WebhookSubscription
 
 logger = logging.getLogger(__name__)
 
@@ -76,6 +93,8 @@ class TolokaClient:
             * If you specify a single value for the timeout, it will be applied to both the connect and the read timeouts.
             * Specify a tuple if you would like to set the values separately.
             * Set the timeout value to None if you're willing to wait forever.
+        url: If you want to set a specific URL for some reason, for example, for testing.
+            You can only set one parameter, "url" or "environment", not both.
 
     Example:
         How to create TolokaClient and make you first request to Toloka.
@@ -89,20 +108,28 @@ class TolokaClient:
 
     @unique
     class Environment(Enum):
-        SANDBOX = 'https://sandbox.toloka.yandex.ru/api'
-        PRODUCTION = 'https://toloka.yandex.ru/api'
+        SANDBOX = 'https://sandbox.toloka.yandex.com'
+        PRODUCTION = 'https://toloka.yandex.com'
 
     def __init__(
         self,
         token: str,
-        environment: Union[Environment, str],
+        environment: Union[Environment, str, None] = None,
         retries: Union[int, Retry] = 3,
-        timeout: Union[float, Tuple[float, float]] = 10.0
+        timeout: Union[float, Tuple[float, float]] = 10.0,
+        url: Optional[str] = None
     ):
-        if not isinstance(environment, TolokaClient.Environment):
-            environment = TolokaClient.Environment[environment.upper()]
+        if url is None and environment is None:
+            raise ValueError('You must pass at least one parameter: url or environment.')
+        if url is not None and environment is not None:
+            raise ValueError('You can only pass one parameter: environment or url. Both are now set.')
+        if url is not None:
+            self.url = url[:-1] if url.endswith('/') else url
+        else:
+            if not isinstance(environment, TolokaClient.Environment):
+                environment = TolokaClient.Environment[environment.upper()]
+            self.url = environment.value
         self.token = token
-        self.url = environment.value
         status_list = [status_code for status_code in requests.status_codes._codes if status_code > 405]
         if not isinstance(retries, Retry):
             retries = Retry(
@@ -136,7 +163,7 @@ class TolokaClient:
                     params[key] = 'true' if value else 'false'
         if self.default_timeout is not None and 'timeout' not in kwargs:
             kwargs['timeout'] = self.default_timeout
-        response = self.session.request(method, f'{self.url}{path}', **kwargs)
+        response = self.session.request(method, f'{self.url}/api{path}', **kwargs)
         raise_on_api_error(response)
         return response
 
@@ -151,12 +178,12 @@ class TolokaClient:
             params['limit'] = limit
         return self._request(method, path, params=params)
 
-    def _find_all(self, find_function, request):
-        result = find_function(request, sort=['id'])
+    def _find_all(self, find_function, request, sort_field: str = 'id'):
+        result = find_function(request, sort=[sort_field])
         while result.has_more:
-            request = attr.evolve(request, id_gt=result.items[-1].id)
+            request = attr.evolve(request, **{f'{sort_field}_gt': getattr(result.items[-1], sort_field)})
             yield from result.items
-            result = find_function(request, sort=['id'])
+            result = find_function(request, sort=[sort_field])
 
         yield from result.items
 
@@ -675,7 +702,9 @@ class TolokaClient:
             ...
         """
         response = self._request('post', '/v1/projects', json=unstructure(project))
-        return structure(response, Project)
+        result = structure(response, Project)
+        logger.info(f'A new project with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/project/{result.id}')
+        return result
 
     @expand('request')
     def find_projects(self, request: search_requests.ProjectSearchRequest,
@@ -767,7 +796,7 @@ class TolokaClient:
 
         Args:
             project_id: ID of the project to be cloned.
-            reuse_quality_controllers: Use same quality controllers in cloned and created projects. Defaults to True.
+            reuse_controllers: Use same quality controllers in cloned and created projects. Defaults to True.
                 This means that all quality control rules will be applied to both projects.
                 For example, if you have rule "fast_submitted_count", fast responses counts across both projects.
 
@@ -911,7 +940,9 @@ class TolokaClient:
         """
         operation = self.clone_pool_async(pool_id)
         operation = self.wait_operation(operation)
-        return self.get_pool(operation.details.pool_id)
+        result = self.get_pool(operation.details.pool_id)
+        logger.info(f'A new pool with ID "{result.id}" has been cloned. Link to open in web interface: {self.url}/requester/project/{result.project_id}/pool/{result.id}')
+        return result
 
     def clone_pool_async(self, pool_id: str) -> operations.PoolCloneOperation:
         """Duplicates existing pool, asynchronous version
@@ -963,7 +994,9 @@ class TolokaClient:
             raise ValueError('Training pools are not supported')
 
         response = self._request('post', '/v1/pools', json=unstructure(pool))
-        return structure(response, Pool)
+        result = structure(response, Pool)
+        logger.info(f'A new pool with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/project/{result.project_id}/pool/{result.id}')
+        return result
 
     @expand('request')
     def find_pools(self, request: search_requests.PoolSearchRequest,
@@ -1166,7 +1199,9 @@ class TolokaClient:
         """
         operation = self.clone_training_async(training_id)
         operation = self.wait_operation(operation)
-        return self.get_training(operation.details.training_id)
+        result = self.get_training(operation.details.training_id)
+        logger.info(f'A new training with ID "{result.id}" has been cloned. Link to open in web interface: {self.url}/requester/project/{result.project_id}/training/{result.id}')
+        return result
 
     def clone_training_async(self, training_id: str) -> operations.TrainingCloneOperation:
         """Duplicates existing training, asynchronous version
@@ -1213,7 +1248,9 @@ class TolokaClient:
             ...
         """
         response = self._request('post', '/v1/trainings', json=unstructure(training))
-        return structure(response, Training)
+        result = structure(response, Training)
+        logger.info(f'A new training with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/project/{result.project_id}/training/{result.id}')
+        return result
 
     @expand('request')
     def find_trainings(self, request: search_requests.TrainingSearchRequest,
@@ -1338,7 +1375,9 @@ class TolokaClient:
             ...
         """
         response = self._request('post', '/v1/skills', json=unstructure(skill))
-        return structure(response, Skill)
+        result = structure(response, Skill)
+        logger.info(f'A new skill with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/quality/skill/{result.id}')
+        return result
 
     @expand('request')
     def find_skills(self, request: search_requests.SkillSearchRequest,
@@ -1437,7 +1476,7 @@ class TolokaClient:
             >>> operation = toloka_client.get_analytics([CompletionPercentagePoolAnalytics(subject_id=pool_id)])
             >>> operation = toloka_client.wait_operation(operation)
             >>> print(op.details['value'][0]['result']['value'])
-            92
+            ...
         """
         response = self._request('post', '/staging/analytics-2', json=unstructure(stats))
         return structure(response, operations.Operation)
@@ -1495,7 +1534,7 @@ class TolokaClient:
             >>> ]
             >>> created_result = toloka_client.create_tasks(tasks, allow_defaults=True)
             >>> print(len(created_result.items))
-            50
+            ...
 
             How to create golden-tasks.
 
@@ -1511,7 +1550,7 @@ class TolokaClient:
             >>>         )
             >>> created_result = toloka_client.create_tasks(golden_tasks, allow_defaults=True)
             >>> print(len(created_result.items))
-            10
+            ...
         """
         if not parameters:
             parameters = task.CreateTasksParameters()
@@ -1876,6 +1915,7 @@ class TolokaClient:
             >>>         assignment_id='012345'
             >>>     )
             >>> )
+            ...
         """
         response = self._request(
             'post', '/v1/user-bonuses', json=unstructure(user_bonus),
@@ -2135,6 +2175,100 @@ class TolokaClient:
             user_skill_id: ID of the fact that the performer has a skill to delete.
         """
         self._raw_request('delete', f'/v1/user-skills/{user_skill_id}')
+
+    def create_webhook_subscriptions(self, subscriptions: List[WebhookSubscription]) -> batch_create_results.WebhookSubscriptionBatchCreateResult:
+        """Creates (upsert) many webhook-subscriptions.
+
+        Args:
+            subscriptions: List of webhook-subscriptions, that will be created.
+
+        Returns:
+            batch_create_results.WebhookSubscriptionBatchCreateResult: Result of subscriptions creation.
+                Contains created subscriptions in "items" and problems in "validation_errors".
+
+        Raises:
+            ValidationApiError: If no subscriptions were created.
+
+        Example:
+            How to create several subscriptions.
+
+            >>> created_result = toloka_client.create_webhook_subscriptions([
+            >>>     {
+            >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
+            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.ASSIGNMENT_CREATED,
+            >>>         'pool_id': '121212'
+            >>>     },
+            >>>     {
+            >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
+            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.POOL_CLOSED,
+            >>>         'pool_id': '121212',
+            >>>     }
+            >>> ])
+            >>> print(len(created_result.items))
+            2
+        """
+        response = self._request('put', '/v1/webhook-subscriptions', json=unstructure(subscriptions))
+        return structure(response, batch_create_results.WebhookSubscriptionBatchCreateResult)
+
+    def get_webhook_subscription(self, webhook_subscription_id: str) -> WebhookSubscription:
+        """Get one specific webhook-subscription
+
+        Args:
+            webhook_subscription_id: ID of the subscription.
+
+        Returns:
+            WebhookSubscription: The subscription.
+        """
+        response = self._request('get', f'/v1/webhook-subscriptions/{webhook_subscription_id}')
+        return structure(response, WebhookSubscription)
+
+    @expand('request')
+    def find_webhook_subscriptions(self, request: search_requests.WebhookSubscriptionSearchRequest,
+                                   sort: Union[List[str], search_requests.WebhookSubscriptionSortItems, None] = None,
+                                   limit: Optional[int] = None) -> search_results.WebhookSubscriptionSearchResult:
+        """Finds all webhook-subscriptions that match certain rules
+
+        As a result, it returns an object that contains the first part of the found webhook-subscriptions
+        and whether there are any more results.
+        It is better to use the "get_webhook_subscriptions" method, they allow to iterate through all results
+        and not just the first output.
+
+        Args:
+            request: How to search webhook-subscriptions.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 100 000.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            WebhookSubscriptionSearchResult: The first "limit" webhook-subscriptions in "items".
+                And a mark that there is more.
+        """
+        sort = None if sort is None else structure(sort, search_requests.WebhookSubscriptionSortItems)
+        response = self._search_request('get', '/v1/webhook-subscriptions', request, sort, limit)
+        return structure(response, search_results.WebhookSubscriptionSearchResult)
+
+    @expand('request')
+    def get_webhook_subscriptions(self, request: search_requests.WebhookSubscriptionSearchRequest) -> Generator[WebhookSubscription, None, None]:
+        """Finds all webhook-subscriptions that match certain rules and returns them in an iterable object
+
+        Unlike find_webhook-subscriptions, returns generator. Does not sort webhook-subscriptions.
+        While iterating over the result, several requests to the Toloka server is possible.
+
+        Args:
+            request: How to search webhook-subscriptions.
+
+        Yields:
+            WebhookSubscription: The next object corresponding to the request parameters.
+        """
+        return self._find_all(self.find_webhook_subscriptions, request, sort_field='created')
+
+    def delete_webhook_subscription(self, webhook_subscription_id: str) -> None:
+        """Drop specific webhook-subscription
+
+        Args:
+            webhook_subscription_id: ID of the webhook-subscription to delete.
+        """
+        self._raw_request('delete', f'/v1/webhook-subscriptions/{webhook_subscription_id}')
 
     # Experimental section
 

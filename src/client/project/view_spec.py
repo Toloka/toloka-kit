@@ -69,7 +69,7 @@ class ClassicViewSpec(ViewSpec, spec_value=ViewSpec.CLASSIC):
         script: JavaScript interface for the task.
         markup: Task interface.
         styles: CSS task interface.
-        asserts: Linked files such as:
+        assets: Linked files such as:
             * CSS styles
             * JavaScript libraries
             * Toloka assets with the $TOLOKA_ASSETS prefix
@@ -78,20 +78,30 @@ class ClassicViewSpec(ViewSpec, spec_value=ViewSpec.CLASSIC):
     """
 
     class Assets(BaseTolokaObject):
-        """
-        style_urls: Links to CSS libraries.
-        script_urls: Links to JavaScript libraries and Toloka assets.
-            Toloka assets:
-            * "$TOLOKA_ASSETS/js/toloka-handlebars-templates.js" — Handlebars. Ssee the description on the template
-                engine website here http://handlebarsjs.com/
-            * "$TOLOKA_ASSETS/js/image-annotation.js" — Image labeling interface. See image with area selection in
-                the Requester's guide here https://yandex.ru/support/toloka-requester/concepts/t-components/image-annotation.html/?lang=en
-            Note that the image labeling interface should only be connected together with the Handlebars helpers.
-            The order of connection matters:
-            >>> scipt_utls = [
-            >>>     "$TOLOKA_ASSETS/js/toloka-handlebars-templates.js",
-            >>>     "$TOLOKA_ASSETS/js/image-annotation.js",
-            >>> ]
+        """Linked files with assets.
+
+        Attributes:
+            style_urls: Links to CSS libraries.
+            script_urls: Links to JavaScript libraries and Toloka assets.
+                Toloka assets:
+                * "$TOLOKA_ASSETS/js/toloka-handlebars-templates.js" — Handlebars. See the description on the template
+                    engine website here http://handlebarsjs.com/
+                * "$TOLOKA_ASSETS/js/image-annotation.js" — Image labeling interface. See image with area selection in
+                    the Requester's guide here https://yandex.ru/support/toloka-requester/concepts/t-components/image-annotation.html/?lang=en
+                Note that the image labeling interface should only be connected together with the Handlebars helpers.
+                The order of connection matters.
+
+        Examples:
+            >>> from toloka.client.project.view_spec import ClassicViewSpec
+            >>> view_spec = ClassicViewSpec(
+            >>>     ...,
+            >>>     assets = ClassicViewSpec.Assets(
+            >>>         script_utls = [
+            >>>             "$TOLOKA_ASSETS/js/toloka-handlebars-templates.js",
+            >>>             "$TOLOKA_ASSETS/js/image-annotation.js",
+            >>>         ]
+            >>>     )
+            >>> )
         """
         style_urls: List[str]
         script_urls: List[str]
@@ -109,6 +119,22 @@ class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
     Attributes:
         config: A template builder config
         core_version: Default template components version. Most users will not need to change this parameter.
+
+    Example:
+        How to declare simple interface:
+
+        >>> import toloka.client.project.template_builder as tb
+        >>> project_interface = toloka.project.view_spec.TemplateBuilderViewSpec(
+        >>>     config=tb.TemplateBuilder(
+        >>>         view=tb.view.ListViewV1(
+        >>>             items=[header, output_field, radiobuttons],
+        >>>             validation=some_validation,
+        >>>         ),
+        >>>         plugins=[plugin1, plugin2]
+        >>>     )
+        >>> )
+        >>> # add 'project_interface' to 'toloka.project.Project' instance
+        ...
     """
 
     config: TemplateBuilder

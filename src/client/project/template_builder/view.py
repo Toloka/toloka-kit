@@ -11,6 +11,7 @@ __all__ = [
     'ImageViewV1',
     'LabeledListViewV1',
     'LinkViewV1',
+    'LinkGroupViewV1',
     'ListViewV1',
     'MarkdownViewV1',
     'TextViewV1',
@@ -62,11 +63,13 @@ class AlertViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ALERT):
 
     @unique
     class Theme(Enum):
-        """info (default) — Blue.
+        """An enumeration
 
-        success — Green.
-        warning — Yellow.
-        danger — Red.
+        Attributes:
+            INFO: (default) Blue.
+            SUCCESS: Green.
+            WARNING: Yellow.
+            DANGER: Red.
         """
 
         DANGER = 'danger'
@@ -282,6 +285,52 @@ class LinkViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK):
     content: base_component_or(Any)
 
 
+class LinkGroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK_GROUP):
+    """Puts links into groups
+
+    The most important link in a group can be highlighted with a border: set the theme property to primary for this link.
+    This only groups links, unlike GroupViewV1.
+
+    Attributes:
+        label: Label above the component.
+        hint: Hint text.
+        links: Array of links that make up a group.
+        validation: Validation based on condition.
+
+    Example:
+        How to add several links.
+
+        >>> links = tb.view.LinkGroupViewV1(
+        >>>     links=[
+        >>>         tb.view.LinkGroupViewV1.Link(
+        >>>             url='https://any.com/useful/url/1',
+        >>>             content='Example1',
+        >>>         ),
+        >>>         tb.view.LinkGroupViewV1.Link(
+        >>>             url='https://any.com/useful/url/2',
+        >>>             content='Example2',
+        >>>         ),
+        >>>     ]
+        >>> )
+        ...
+    """
+
+    class Link(BaseTemplate):
+        """Link parameters
+
+        Attributes:
+            content: Link text that's displayed to the user. Unviewed links are blue and underlined, and clicked links are purple.
+            theme: Defines the appearance of the link. If you specify "theme": "primary", it's a button, otherwise it's a text link.
+            url: Link address
+        """
+
+        content: base_component_or(str)
+        theme: base_component_or(str)
+        url: base_component_or(str)
+
+    links: base_component_or(List[base_component_or(Link)], 'ListBaseComponentOrLink')
+
+
 class ListViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LIST):
     """Block for displaying data in a list.
 
@@ -303,20 +352,26 @@ class ListViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LIST):
 class MarkdownViewV1(BaseViewV1, spec_value=ComponentType.VIEW_MARKDOWN):
     """Block for displaying text in Markdown.
 
-    The contents of the block are written to the content property in a single line. To insert line breaks, use
-    .
-        Straight quotation marks (") must be escaped like this: ".
+    The contents of the block are written to the content property in a single line. To insert line breaks, use \\n
+    Straight quotation marks (") must be escaped like this: \\".
 
-        Note that the view.markdown component is resource-intensive and might overload weak user devices.
-        Do not use this component to display plain text. If you need to display text without formatting, use the view.text
-        component. If you need to insert a link, use view.link, and for an image use view.image.
-        Links with Markdown are appended with target="_blank" (the link opens in a new tab), as well as
-        rel="noopener noreferrer"
-        Attributes:
-            label: Label above the component.
-            content: Text in Markdown.
-            hint: Hint text.
-            validation: Validation based on condition.
+    Note that the view.markdown component is resource-intensive and might overload weak user devices.
+    Do not use this component to display plain text. If you need to display text without formatting, use the view.text
+    component. If you need to insert a link, use view.link, and for an image use view.image.
+    Links with Markdown are appended with target="_blank" (the link opens in a new tab), as well as
+    rel="noopener noreferrer"
+
+    Attributes:
+        label: Label above the component.
+        content: Text in Markdown.
+        hint: Hint text.
+        validation: Validation based on condition.
+
+    Example:
+        How to add a title and description on the task interface.
+
+        >>> header = tb.view.MarkdownViewV1(content='# Some Header:\n---\nSome detailed description')
+        ...
     """
 
     content: base_component_or(Any)
@@ -328,9 +383,15 @@ class TextViewV1(BaseViewV1, spec_value=ComponentType.VIEW_TEXT):
     If you need formatted text, use view.markdown.
     Attributes:
         label: Label above the component.
-        content: The text displayed in the block. To insert a new line, use
+        content: The text displayed in the block. To insert a new line, use \n
         hint: Hint text.
         validation: Validation based on condition.
+
+    Example:
+        How to show labeled field from the task inputs.
+
+        >>> text_view = tb.view.TextViewV1(label='My label:', content=tb.data.InputData(path='imput_field_name'))
+        ...
     """
 
     content: base_component_or(Any)

@@ -1,3 +1,4 @@
+import logging
 from operator import itemgetter
 from urllib.parse import urlparse, parse_qs
 
@@ -91,7 +92,7 @@ def test_get_skill(skill_sample, requests_mock, toloka_client, toloka_url):
     assert skill_sample == client.unstructure(result)
 
 
-def test_create_skill(skill_sample, skill_header, requests_mock, toloka_client, toloka_url):
+def test_create_skill(skill_sample, skill_header, requests_mock, toloka_client, toloka_url, caplog):
     def create_skill(request, context):
         assert request.json() == skill_header
         return skill_sample
@@ -103,10 +104,15 @@ def test_create_skill(skill_sample, skill_header, requests_mock, toloka_client, 
     )
 
     # Request object syntax
-    result = toloka_client.create_skill(
-        client.Skill(**skill_header)
-    )
-    assert skill_sample == client.unstructure(result)
+    with caplog.at_level(logging.INFO):
+        caplog.clear()
+        result = toloka_client.create_skill(client.Skill(**skill_header))
+        assert caplog.record_tuples == [(
+            'toloka.client',
+            logging.INFO,
+            'A new skill with ID "21" has been created. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/quality/skill/21'
+        )]
+        assert skill_sample == client.unstructure(result)
 
     # Expanded syntax
     result = toloka_client.create_skill(

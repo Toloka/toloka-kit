@@ -87,7 +87,7 @@ class Task(InfiniteOverlapParametersMixin, BaseTask):
         >>> ]
         >>> created_tasks = toloka_client.create_tasks(tasks, allow_defaults=True)
         >>> print(len(created_tasks.items))
-        2
+        ...
     """
 
     class BaselineSolution(BaseTolokaObject):

@@ -1,11 +1,9 @@
-from typing import NamedTuple, List
+from toloka.client.pool import Pool
+from toloka.client.project import Project
+from toloka.client.training import Training
+from typing import List
 
-from .pool import Pool
-from .project import Project
-from .training import Training
-
-
-class CloneResults(NamedTuple):
+class CloneResults(tuple):
     """Objects created as a result of deep cloning of the project
 
     Attributes:
@@ -13,6 +11,7 @@ class CloneResults(NamedTuple):
         pools (List[Pool]): New pools. Can be empty.
         trainings (List[Training]): New trainings. Can be empty.
     """
+
     project: Project
     pools: List[Pool]
     trainings: List[Training]

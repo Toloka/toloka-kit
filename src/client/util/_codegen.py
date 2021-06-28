@@ -4,7 +4,7 @@ import linecache
 import uuid
 from inspect import signature, Signature, Parameter
 from textwrap import dedent, indent
-from typing import Callable
+from typing import Callable, Dict, List, Optional
 
 import attr
 
@@ -64,6 +64,17 @@ def _get_annotations_from_signature(sig: Signature) -> dict:
     return annotations
 
 
+def _check_arguments_compatibility(sig: Signature, args: List, kwargs: Dict):
+    """Checks if arguments are suitable for provided signature"""
+
+    try:
+        sig.bind(*args, **kwargs)
+    except TypeError:
+        return False
+
+    return True
+
+
 def _get_signature_invocation_string(sig: Signature) -> str:
     """
     Generates a string that could be added to a function
@@ -109,10 +120,10 @@ def _compile_function(func_name, func_sig, func_body, globs=None):
     return func
 
 
-def create_setter(attr_path: str, attr_type=Parameter.empty):
+def create_setter(attr_path: str, attr_type=Parameter.empty, module: Optional[str] = None):
     """Generates a setter method for an attribute"""
     attr_name = attr_path.split('.')[-1]
-    return _compile_function(
+    func = _compile_function(
         f'codegen_setter_for_{attr_path.replace(".", "_")}',
         Signature(parameters=[
             Parameter(name='self', kind=Parameter.POSITIONAL_OR_KEYWORD),
@@ -123,6 +134,9 @@ def create_setter(attr_path: str, attr_type=Parameter.empty):
             f'self.{attr_path} = {attr_name}'
         )
     )
+    if module:
+        func.__module__ = module
+    return func
 
 
 def codegen_attr_attributes_setters(cls):
@@ -135,7 +149,7 @@ def codegen_attr_attributes_setters(cls):
         type_ = is_optional_of(field.type) or field.type
         if attr.has(type_):
             setter_name = f'set_{field.name}'
-            setter = expand(field.name)(create_setter(field.name, type_))
+            setter = expand(field.name)(create_setter(field.name, type_, cls.__module__))
             setattr(cls, setter_name, setter)
     return cls
 
@@ -177,11 +191,11 @@ def expand(arg_name):
 
         @functools.wraps(func)
         def wrapped(*args, **kwargs):
-            try:
-                bound = func_sig.bind(*args, **kwargs)
-                return func(*bound.args, **bound.kwargs)
-            except TypeError:
-                return expanded_func(*args, **kwargs)
+
+            if _check_arguments_compatibility(func_sig, args, kwargs):
+                return func(*args, **kwargs)
+
+            return expanded_func(*args, **kwargs)
 
         wrapped._func = func
         wrapped._expanded_func = expanded_func

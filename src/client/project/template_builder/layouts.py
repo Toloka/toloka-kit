@@ -65,9 +65,10 @@ class ColumnsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COLUMNS):
     class VerticalAlign(Enum):
         """Vertical alignment of column content.
 
-        top — Aligned to the top of a column.
-        middle — Aligned to the middle of the column that is filled in the most.
-        bottom — Aligned to the bottom of a column.
+        Attributes:
+            TOP: Aligned to the top of a column.
+            MIDDLE: Aligned to the middle of the column that is filled in the most.
+            BOTTOM: Aligned to the bottom of a column.
         """
 
         BOTTOM = 'bottom'

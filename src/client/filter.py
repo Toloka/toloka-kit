@@ -57,6 +57,7 @@ class FilterCondition(BaseTolokaObject):
         >>>    (toloka.filter.Languages.in_('EN')) &
         >>>    (toloka.client.filter.DeviceCategory.in_(toloka.client.filter.DeviceCategory.SMARTPHONE))
         >>> )
+        ...
     """
 
     def __or__(self, other: 'FilterCondition'):

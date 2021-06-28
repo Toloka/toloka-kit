@@ -1,11 +1,14 @@
-# Toloka Kit
+# Toloka-Kit
 
 [![GitHub Tests][github_tests_badge]][github_tests_link]
+[![GitHub Tests][github_coverage_badge]][github_coverage_link]
 
 [github_tests_badge]: https://github.com/Toloka/toloka-kit/workflows/Tests/badge.svg?branch=main
 [github_tests_link]: https://github.com/Toloka/toloka-kit/actions?query=workflow:Tests
+[github_coverage_badge]: https://codecov.io/gh/Toloka/toloka-kit/branch/main/graph/badge.svg
+[github_coverage_link]: https://codecov.io/gh/Toloka/toloka-kit
 
-[**<span style="color:red">Documentation</span>**](https://toloka.github.io/toloka-kit)
+[**<span style="color:red">Documentation</span>**](https://yandex.com/dev/toloka/toloka-kit/doc/)
 
 [Website](https://toloka.ai) |
 [API Documentation](https://yandex.ru/dev/toloka/doc/concepts/about.html?lang=en) |
@@ -43,8 +46,7 @@ Note: this project is still under heavy development and interfaces may change sl
 ```python
 import toloka.client as toloka
 
-token = input("Enter your token:")
-toloka_client = toloka.TolokaClient(token, 'PRODUCTION')  # or switch to SANDBOX
+toloka_client = toloka.TolokaClient(input("Enter your token:"), 'PRODUCTION')
 print(toloka_client.get_requester())
 ```
 

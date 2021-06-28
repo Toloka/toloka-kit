@@ -1,3 +1,18 @@
+0.1.7
+-------------------
+* Fixed error on ARRAY_JSON typed fields specs structuring
+
+
+0.1.6
+-------------------
+* Improved docstrings
+* Supported list of statuses as valid argument for `get_assignments` and `get_message_threads`
+* Fixed `help` on filter classes with overlloaded `__eq__`
+* Added `YandexDiskProxyHelperV1` component for template builder
+* TolokaClient can now be created with url
+* Added `__all__` for modules
+* Created objects' urls are now logged under INFO level, if possible
+
 0.1.5
 -------------------
 Fixing issues with `create_tasks` and `create_task_suites`

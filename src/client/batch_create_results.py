@@ -10,6 +10,7 @@ from .primitives.base import BaseTolokaObject, BaseTolokaObjectMetaclass
 from .task import Task
 from .task_suite import TaskSuite
 from .user_bonus import UserBonus
+from .webhook_subscription import WebhookSubscription
 
 
 class FieldValidationError(BaseTolokaObject):
@@ -68,5 +69,14 @@ UserBonusBatchCreateResult = _create_batch_create_result_class_for(
     Attributes:
         items: Object with information about issued bonuses.
         validation_errors: Object with validation errors. Returned if the parameter is used in the request skip_invalid_items=True.
+    """
+)
+WebhookSubscriptionBatchCreateResult = _create_batch_create_result_class_for(
+    WebhookSubscription,
+    """The list with the results of the webhook-subscriptions creation operation.
+
+    Attributes:
+        items: Object with created webhook-subscriptions.
+        validation_errors: Object with validation errors.
     """
 )

@@ -48,6 +48,7 @@ from .project import Project
 from .training import Training
 from .user_restriction import UserRestriction
 from .primitives.base import BaseTolokaObject, BaseTolokaObjectMetaclass
+from .webhook_subscription import WebhookSubscription
 
 SortItemSelf = TypeVar('SortItemSelf', bound='BaseSortItem')
 SortItemsSelf = TypeVar('SortItemsSelf', bound='BaseSortItems')
@@ -402,7 +403,7 @@ class AssignmentSearchRequest(BaseSearchRequest):
         created: datetime.datetime
         submitted: datetime.datetime
 
-    def _list_converter(value):
+    def _list_converter(value: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]]):
         if value is None:
             return value
         if isinstance(value, str):
@@ -823,7 +824,7 @@ class MessageThreadSearchRequest(BaseSearchRequest):
         id: str
         created: datetime.datetime
 
-    def _list_converter(value):
+    def _list_converter(value: Union[str, Folder, List[Union[str, Folder]]]) -> List[Folder]:
         if value is None:
             return value
         if isinstance(value, str):
@@ -860,5 +861,52 @@ MessageThreadSortItems = BaseSortItems.for_fields(
         items: Fields by which to sort. Possible values:
             * id - Thread ID in ascending order.
             * created - Creation date in UTC format yyyy-MM-DD (ascending).
+    """
+)
+
+
+class WebhookSubscriptionSearchRequest(BaseSearchRequest):
+    """Parameters for searching webhook-subscriptions.
+
+    Attributes:
+        event_type: Event type.
+        pool_id: ID of the pool for which subscription information is requested.
+        id_lt: Subscriptions with an ID less than the specified value.
+        id_lte: Subscriptions with an ID less than or equal to the specified value.
+        id_gt: Subscriptions with an ID greater than the specified value.
+        id_gte: Subscriptions with an ID greater than or equal to the specified value.
+        created_lt: Subscriptions created before the specified date.
+        created_lte: Subscriptions created before or on the specified date.
+        created_gt: Subscriptions created after the specified date.
+        created_gte: Subscriptions created after or on the specified date.
+    """
+
+    class CompareFields:
+        id: str
+        created: datetime.datetime
+
+    event_type: WebhookSubscription.EventType
+    pool_id: str
+
+
+WebhookSubscriptionSortItems = BaseSortItems.for_fields(
+    'WebhookSubscriptionSortItems', ['id', 'created'],
+    # docstring
+    """Parameters for sorting webhook-subscriptions search results
+
+    You can specify multiple parameters.
+    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: Fields by which to sort. Possible values:
+            * id - Subscription ID (in ascending order).
+            * created - Date of creation of the subscription in UTC in the format YYYY-MM-DD (ascending).
+
+    Example:
+        How to specify and use SortItems.
+
+        >>> sort = toloka.client.search_requests.WebhookSubscriptionSortItems(['-created', 'id'])
+        >>> result = toloka_client.find_webhook_subscriptions(event_type=some_event_type, pool_id=my_pretty_pool_id, sort=sort, limit=10)
+        ...
     """
 )

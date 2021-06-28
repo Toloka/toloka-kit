@@ -1,5 +1,6 @@
 import datetime
 from operator import itemgetter
+import logging
 from urllib.parse import urlparse, parse_qs
 
 import pytest
@@ -87,7 +88,7 @@ def test_get_pool_training(requests_mock, toloka_client, toloka_url, training_po
     assert training_pool_map == client.unstructure(toloka_client.get_pool('22'))
 
 
-def test_create_pool(requests_mock, toloka_client, toloka_url, pool_map, pool_map_with_readonly):
+def test_create_pool(requests_mock, toloka_client, toloka_url, pool_map, pool_map_with_readonly, caplog):
 
     def pools(request, context):
         assert pool_map == request.json()
@@ -95,8 +96,14 @@ def test_create_pool(requests_mock, toloka_client, toloka_url, pool_map, pool_ma
 
     requests_mock.post(f'{toloka_url}/pools', json=pools, status_code=201)
     pool = client.structure(pool_map, client.pool.Pool)
-    result = toloka_client.create_pool(pool)
-    assert pool_map_with_readonly == client.unstructure(result)
+    with caplog.at_level(logging.INFO):
+        caplog.clear()
+        result = toloka_client.create_pool(pool)
+        assert caplog.record_tuples == [(
+            'toloka.client', logging.INFO,
+            'A new pool with ID "21" has been created. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/project/10/pool/21'
+        )]
+        assert pool_map_with_readonly == client.unstructure(result)
 
 
 def test_create_pool_check_all_filters(requests_mock, toloka_client, toloka_url, pool_map_with_readonly):
@@ -491,7 +498,7 @@ def test_clone_pool_async(requests_mock, toloka_client, toloka_url, complete_clo
 
 
 def test_clone_pool(requests_mock, toloka_client, toloka_url,
-                    clone_pool_operation_map, complete_clone_pool_operation_map, cloned_pool_map):
+                    clone_pool_operation_map, complete_clone_pool_operation_map, cloned_pool_map, caplog):
     requests_mock.post(f'{toloka_url}/pools/21/clone', json=clone_pool_operation_map, status_code=202)
     requests_mock.get(
         f'{toloka_url}/operations/{clone_pool_operation_map["id"]}',
@@ -500,5 +507,12 @@ def test_clone_pool(requests_mock, toloka_client, toloka_url,
     )
     requests_mock.get(f'{toloka_url}/pools/22', json=cloned_pool_map, status_code=200)
 
-    result = toloka_client.clone_pool('21')
-    assert cloned_pool_map == client.unstructure(result)
+    with caplog.at_level(logging.INFO):
+        caplog.clear()
+        result = toloka_client.clone_pool('21')
+        assert caplog.record_tuples == [(
+            'toloka.client',
+            logging.INFO,
+            'A new pool with ID "22" has been cloned. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/project/10/pool/22'
+        )]
+        assert cloned_pool_map == client.unstructure(result)

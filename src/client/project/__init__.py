@@ -1,8 +1,46 @@
-__all__ = ['Project']
+__all__ = [
+    'Project',
+    'ClassicViewSpec',
+    'TemplateBuilderViewSpec',
+    'BooleanSpec',
+    'StringSpec',
+    'IntegerSpec',
+    'FloatSpec',
+    'UrlSpec',
+    'FileSpec',
+    'CoordinatesSpec',
+    'JsonSpec',
+    'ArrayBooleanSpec',
+    'ArrayStringSpec',
+    'ArrayIntegerSpec',
+    'ArrayFloatSpec',
+    'ArrayUrlSpec',
+    'ArrayFileSpec',
+    'ArrayCoordinatesSpec',
+]
+
 import datetime
 from enum import Enum, unique
 
 from ..primitives.base import BaseTolokaObject
+from ..project.field_spec import (
+    BooleanSpec,
+    StringSpec,
+    IntegerSpec,
+    FloatSpec,
+    UrlSpec,
+    FileSpec,
+    CoordinatesSpec,
+    JsonSpec,
+    ArrayBooleanSpec,
+    ArrayStringSpec,
+    ArrayIntegerSpec,
+    ArrayFloatSpec,
+    ArrayUrlSpec,
+    ArrayFileSpec,
+    ArrayCoordinatesSpec,
+)
+from ..project.view_spec import ClassicViewSpec, TemplateBuilderViewSpec
 from ..project.task_spec import TaskSpec
 from ..quality_control import QualityControl
 
@@ -67,7 +105,7 @@ class Project(BaseTolokaObject):
             AUTOMATED: The user is assigned a task suite from the pool. You can configure the order
                 for assigning task suites.
             MAP_SELECTOR: The user chooses a task suite on the map. If you are using MAP_SELECTOR,
-            specify the text to display in the map by setting assignments_issuing_view_config.
+                specify the text to display in the map by setting assignments_issuing_view_config.
         """
 
         AUTOMATED = 'AUTOMATED'
