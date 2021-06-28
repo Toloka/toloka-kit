@@ -1,3 +1,10 @@
+0.1.8
+-------------------
+* Added `get_aggregated_solutions` method
+* Supported webhooks related methods
+* Tracebacks in expanded methods do not show confusing TypeError as an original exception
+
+
 0.1.7
 -------------------
 * Fixed error on ARRAY_JSON typed fields specs structuring
