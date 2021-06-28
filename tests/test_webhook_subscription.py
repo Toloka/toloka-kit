@@ -1,5 +1,4 @@
 import datetime
-from operator import itemgetter
 from urllib.parse import urlparse, parse_qs
 from uuid import uuid4
 
@@ -28,7 +27,7 @@ def webhook_subscriptions_map():
 
 
 @pytest.fixture
-def create_webhook_subscriptions_result_map():
+def upsert_webhook_subscriptions_result_map():
     return {
         'items': {
             '0': {
@@ -57,20 +56,20 @@ def create_webhook_subscriptions_result_map():
     }
 
 
-def test_create_webhook_subscriptions(
+def test_upsert_webhook_subscriptions(
     requests_mock, toloka_client, toloka_url,
-    webhook_subscriptions_map, create_webhook_subscriptions_result_map
+    webhook_subscriptions_map, upsert_webhook_subscriptions_result_map
 ):
 
-    def create_webhook_subscriptions_mock(request, _):
+    def upsert_webhook_subscriptions_mock(request, _):
         assert webhook_subscriptions_map == request.json()
-        return create_webhook_subscriptions_result_map
+        return upsert_webhook_subscriptions_result_map
 
-    # create_webhook_subscriptions -> operation
-    requests_mock.put(f'{toloka_url}/webhook-subscriptions', json=create_webhook_subscriptions_mock, status_code=201)
+    # upsert_webhook_subscriptions -> operation
+    requests_mock.put(f'{toloka_url}/webhook-subscriptions', json=upsert_webhook_subscriptions_mock, status_code=201)
 
-    result = toloka_client.create_webhook_subscriptions(webhook_subscriptions_map)
-    assert create_webhook_subscriptions_result_map == client.unstructure(result)
+    result = toloka_client.upsert_webhook_subscriptions(webhook_subscriptions_map)
+    assert upsert_webhook_subscriptions_result_map == client.unstructure(result)
 
 
 @pytest.fixture

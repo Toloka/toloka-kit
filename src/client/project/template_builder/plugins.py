@@ -26,6 +26,16 @@ class HotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_HOTKEYS):
     Attributes:
         key_ + [a-z|0-9|up|down]: An action that is triggered when you press the specified keyboard key. The keyboard
             shortcut is set in the key, and the action is specified in the value
+
+    Example:
+        How to create hotkeys for classification buttons.
+
+        >>> hot_keys_plugin = tb.HotkeysPluginV1(
+        >>>     key_1=tb.SetActionV1(data=tb.OutputData(path='result'), payload='cat'),
+        >>>     key_2=tb.SetActionV1(data=tb.OutputData(path='result'), payload='dog'),
+        >>>     key_3=tb.SetActionV1(data=tb.OutputData(path='result'), payload='other'),
+        >>> )
+        ...
     """
 
     key_a: base_component_or(Any) = attribute(default=None, origin='a')

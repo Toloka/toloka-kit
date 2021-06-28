@@ -1120,7 +1120,7 @@ class TolokaClient:
         """
         ...
 
-    def create_webhook_subscriptions(self, subscriptions: List[WebhookSubscription]) -> WebhookSubscriptionBatchCreateResult:
+    def upsert_webhook_subscriptions(self, subscriptions: List[WebhookSubscription]) -> WebhookSubscriptionBatchCreateResult:
         """Creates (upsert) many webhook-subscriptions.
 
         Args:
@@ -1136,7 +1136,7 @@ class TolokaClient:
         Example:
             How to create several subscriptions.
 
-            >>> created_result = toloka_client.create_webhook_subscriptions([
+            >>> created_result = toloka_client.upsert_webhook_subscriptions([
             >>>     {
             >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
             >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.ASSIGNMENT_CREATED,
@@ -1197,7 +1197,8 @@ class TolokaClient:
 
     @overload
     def find_aggregated_solutions(self, operation_id: str, task_id_lt: Optional[str] = None, task_id_lte: Optional[str] = None, task_id_gt: Optional[str] = None, task_id_gte: Optional[str] = None, sort: Union[List[str], AggregatedSolutionSortItems, None] = None, limit: Optional[int] = None) -> AggregatedSolutionSearchResult:
-        """Gets aggregated responses after the AggregatedSolutionOperation completes
+        """Gets aggregated responses after the AggregatedSolutionOperation completes.
+        It is better to use the "get_aggregated_solutions" method, that allows to iterate through all results.
 
         Note: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
         methods and can perform on your computers: https://github.com/Toloka/crowd-kit
@@ -1232,7 +1233,8 @@ class TolokaClient:
 
     @overload
     def find_aggregated_solutions(self, operation_id: str, request: AggregatedSolutionSearchRequest, sort: Union[List[str], AggregatedSolutionSortItems, None] = None, limit: Optional[int] = None) -> AggregatedSolutionSearchResult:
-        """Gets aggregated responses after the AggregatedSolutionOperation completes
+        """Gets aggregated responses after the AggregatedSolutionOperation completes.
+        It is better to use the "get_aggregated_solutions" method, that allows to iterate through all results.
 
         Note: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
         methods and can perform on your computers: https://github.com/Toloka/crowd-kit
@@ -1260,6 +1262,54 @@ class TolokaClient:
             >>>         task_id_gt=current_result.items[len(current_result.items) - 1].task_id,
             >>>     )
             >>>     aggregation_results = aggregation_results + current_result.items
+            >>> print(len(aggregation_results))
+            ...
+        """
+        ...
+
+    @overload
+    def get_aggregated_solutions(self, operation_id: str, task_id_lt: Optional[str] = None, task_id_lte: Optional[str] = None, task_id_gt: Optional[str] = None, task_id_gte: Optional[str] = None) -> Generator[AggregatedSolution, None, None]:
+        """Finds all aggregated responses after the AggregatedSolutionOperation completes
+
+        Note: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
+        methods and can perform on your computers: https://github.com/Toloka/crowd-kit
+
+        Args:
+            operation_id: From what aggregation operation you want to get results.
+            request: How to filter search results.
+
+        Yields:
+            AggregatedSolution: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all aggregated solutions from pool.
+
+            >>> # run toloka_client.aggregate_solutions_by_pool and wait operation for closing.
+            >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
+            >>> print(len(aggregation_results))
+            ...
+        """
+        ...
+
+    @overload
+    def get_aggregated_solutions(self, operation_id: str, request: AggregatedSolutionSearchRequest) -> Generator[AggregatedSolution, None, None]:
+        """Finds all aggregated responses after the AggregatedSolutionOperation completes
+
+        Note: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
+        methods and can perform on your computers: https://github.com/Toloka/crowd-kit
+
+        Args:
+            operation_id: From what aggregation operation you want to get results.
+            request: How to filter search results.
+
+        Yields:
+            AggregatedSolution: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all aggregated solutions from pool.
+
+            >>> # run toloka_client.aggregate_solutions_by_pool and wait operation for closing.
+            >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
             >>> print(len(aggregation_results))
             ...
         """
