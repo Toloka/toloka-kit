@@ -1,4 +1,9 @@
 __all__ = [
+    'field_spec',
+    'task_spec',
+    'template_builder',
+    'view_spec',
+
     'Project',
     'ClassicViewSpec',
     'TemplateBuilderViewSpec',
@@ -21,6 +26,11 @@ __all__ = [
 
 import datetime
 from enum import Enum, unique
+
+from . import field_spec
+from . import task_spec
+from . import template_builder
+from . import view_spec
 
 from ..primitives.base import BaseTolokaObject
 from ..project.field_spec import (

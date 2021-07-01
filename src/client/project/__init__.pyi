@@ -1,3 +1,29 @@
+__all__ = [
+    'field_spec',
+    'task_spec',
+    'template_builder',
+    'view_spec',
+
+    'Project',
+    'ClassicViewSpec',
+    'TemplateBuilderViewSpec',
+    'BooleanSpec',
+    'StringSpec',
+    'IntegerSpec',
+    'FloatSpec',
+    'UrlSpec',
+    'FileSpec',
+    'CoordinatesSpec',
+    'JsonSpec',
+    'ArrayBooleanSpec',
+    'ArrayStringSpec',
+    'ArrayIntegerSpec',
+    'ArrayFloatSpec',
+    'ArrayUrlSpec',
+    'ArrayFileSpec',
+    'ArrayCoordinatesSpec',
+]
+
 from datetime import datetime
 from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
