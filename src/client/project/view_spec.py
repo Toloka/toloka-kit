@@ -157,7 +157,7 @@ class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
                 raise RuntimeError(f'Different versions of the same component: {comp_type}')
 
         data['lock'] = lock
-        data['config'] = json.dumps(data['config'])
+        data['config'] = json.dumps(data['config'], indent=4, ensure_ascii=False)
         return data
 
     @classmethod
