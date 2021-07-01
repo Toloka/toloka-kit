@@ -2,12 +2,14 @@ __all__ = [
     'BasePluginV1',
     'HotkeysPluginV1',
     'TriggerPluginV1',
-    'TolokaPluginV1'
+    'TolokaPluginV1',
 ]
+
 from enum import Enum, unique
 from typing import List, Any
 
 from ...primitives.base import attribute
+from ...util._codegen import expand
 
 from .base import VersionedBaseComponent, BaseComponent, ComponentType, BaseTemplate, base_component_or
 
@@ -123,10 +125,8 @@ class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
         How to set the task width on the task page.
 
         >>> task_width_plugin = tb.plugins.TolokaPluginV1(
-        >>>     layout = tb.plugins.TolokaPluginV1.TolokaPluginLayout(
-        >>>         kind='scroll',
-        >>>         task_width=400,
-        >>>     )
+        >>>     kind='scroll',
+        >>>     task_width=400,
         >>> )
         ...
     """
@@ -148,8 +148,10 @@ class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
             PAGER = 'pager'
             SCROLL = 'scroll'
 
-        kind: Kind = Kind.SCROLL
+        kind: Kind
         task_width: float = attribute(origin='taskWidth')
 
     layout: base_component_or(TolokaPluginLayout) = attribute(factory=TolokaPluginLayout)
     notifications: base_component_or(List[BaseComponent], 'ListBaseComponent')
+
+TolokaPluginV1.__init__ = expand('layout', TolokaPluginV1.TolokaPluginLayout)(TolokaPluginV1.__init__)

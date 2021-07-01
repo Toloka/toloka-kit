@@ -4,7 +4,7 @@ import linecache
 import uuid
 from inspect import signature, Signature, Parameter
 from textwrap import dedent, indent
-from typing import Callable, Dict, List, Optional
+from typing import Callable, Dict, List, Optional, Type
 
 import attr
 
@@ -154,13 +154,14 @@ def codegen_attr_attributes_setters(cls):
     return cls
 
 
-def expand_func_by_argument(func: Callable, arg_name: str) -> Callable:
+def expand_func_by_argument(func: Callable, arg_name: str, arg_type: Optional[Type] = None) -> Callable:
     func_sig = _get_signature(func)
     func_params = list(func_sig.parameters.values())
 
     arg_param = func_sig.parameters[arg_name]
     arg_index = next(i for (i, p) in enumerate(func_params) if p is arg_param)
-    arg_type = is_optional_of(arg_param.annotation) or arg_param.annotation
+    if arg_type is None:
+        arg_type = is_optional_of(arg_param.annotation) or arg_param.annotation
     arg_type_sig = _get_signature(arg_type)
 
     # TODO: add tests
@@ -183,11 +184,11 @@ def expand_func_by_argument(func: Callable, arg_name: str) -> Callable:
     return expanded_func
 
 
-def expand(arg_name):
+def expand(arg_name, arg_type=None):
 
     def wrapper(func):
         func_sig = _get_signature(func)
-        expanded_func = expand_func_by_argument(func, arg_name)
+        expanded_func = expand_func_by_argument(func, arg_name, arg_type)
 
         @functools.wraps(func)
         def wrapped(*args, **kwargs):
