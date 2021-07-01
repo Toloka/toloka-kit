@@ -107,7 +107,7 @@ class Pool(BaseTolokaObject):
         >>>     defaults=toloka.pool.Pool.Defaults(default_overlap_for_new_task_suites=3),
         >>>     filter=toloka.filter.Languages.in_('EN'),
         >>> )
-        >>> new_pool.set_mixer_config(real_tasks_count=10, golden_tasks_count=0, training_tasks_count=0)
+        >>> new_pool.set_mixer_config(real_tasks_count=10)
         >>> new_pool.quality_control.add_action(...)
         >>> new_pool = toloka_client.create_pool(new_pool)
         >>> print(new_pool.id)

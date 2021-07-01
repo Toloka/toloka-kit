@@ -923,7 +923,7 @@ class TolokaClient:
         # create trainings
         new_trainings = []
         old_to_new_train_ids = {}
-        for training in self.get_trainings(project_id=project_id):
+        for training in self.get_trainings(project_id=project_id):  # noqa
             old_id = training.id
             training.project_id = new_project.id
             new_training = self.create_training(training)

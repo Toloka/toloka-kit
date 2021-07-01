@@ -56,9 +56,9 @@ class MixerConfig(BaseTolokaObject):
         ...
 
     _unexpected: Optional[Dict[str, Any]]
-    real_tasks_count: Optional[int]
-    golden_tasks_count: Optional[int]
-    training_tasks_count: Optional[int]
+    real_tasks_count: int
+    golden_tasks_count: int
+    training_tasks_count: int
     min_real_tasks_count: Optional[int]
     min_golden_tasks_count: Optional[int]
     min_training_tasks_count: Optional[int]

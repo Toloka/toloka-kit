@@ -1,5 +1,6 @@
 __all__ = ['MixerConfig']
-from ..primitives.base import BaseTolokaObject
+
+from ..primitives.base import attribute, BaseTolokaObject
 from ..task_distribution_function import TaskDistributionFunction
 
 
@@ -47,9 +48,9 @@ class MixerConfig(BaseTolokaObject):
             change the frequency of training tasks as the user completes more tasks.
     """
 
-    real_tasks_count: int
-    golden_tasks_count: int
-    training_tasks_count: int
+    real_tasks_count: int = attribute(default=0, required=True)
+    golden_tasks_count: int = attribute(default=0, required=True)
+    training_tasks_count: int = attribute(default=0, required=True)
     min_real_tasks_count: int
     min_golden_tasks_count: int
     min_training_tasks_count: int
