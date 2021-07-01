@@ -13,6 +13,7 @@ from typing import List
 from .template_builder import TemplateBuilder
 from ..primitives.base import attribute, BaseTolokaObject
 from ..util import traverse_dicts_recursively
+from ..util._codegen import expand
 
 
 class ViewSpec(BaseTolokaObject, spec_enum='Type', spec_field='type'):
@@ -117,7 +118,9 @@ class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
     template builder components
 
     Attributes:
-        config: A template builder config
+        view:
+        plugins:
+        vars:
         core_version: Default template components version. Most users will not need to change this parameter.
 
     Example:
@@ -125,13 +128,11 @@ class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
 
         >>> import toloka.client.project.template_builder as tb
         >>> project_interface = toloka.project.view_spec.TemplateBuilderViewSpec(
-        >>>     config=tb.TemplateBuilder(
-        >>>         view=tb.view.ListViewV1(
-        >>>             items=[header, output_field, radiobuttons],
-        >>>             validation=some_validation,
-        >>>         ),
-        >>>         plugins=[plugin1, plugin2]
-        >>>     )
+        >>>     view=tb.view.ListViewV1(
+        >>>         items=[header, output_field, radiobuttons],
+        >>>         validation=some_validation,
+        >>>     ),
+        >>>     plugins=[plugin1, plugin2]
         >>> )
         >>> # add 'project_interface' to 'toloka.project.Project' instance
         ...
@@ -173,3 +174,6 @@ class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
                 dct['version'] = lock[dct['type']]
 
         return super().structure(data_copy)
+
+
+TemplateBuilderViewSpec.__init__ = expand('config')(TemplateBuilderViewSpec.__init__)
