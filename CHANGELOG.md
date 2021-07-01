@@ -1,3 +1,6 @@
+* Retry Toloka quotas. Minute quotas are retried by default. And you can turn on the retrying of hourly and daily quotas.
+
+
 0.1.8
 -------------------
 * Added `get_aggregated_solutions` method

@@ -167,6 +167,12 @@ class TolokaClient:
             * Set the timeout value to None if you're willing to wait forever.
         url: If you want to set a specific URL for some reason, for example, for testing.
             You can only set one parameter, "url" or "environment", not both.
+        retry_quotas: List of quotas that must be retried. By default retries only minutes quotas.
+            You must set this parameter to None, then you specify the 'retries' parameter as Retry instance.
+            You can specify quotas:
+            * MIN - Retry minutes quotas.
+            * HOUR - Retry hourly quotas. This is means that the program just sleeps for an hour! Be careful.
+            * DAY - Retry daily quotas. We strongly not recommended retrying these quotas.
 
     Example:
         How to create TolokaClient and make you first request to Toloka.
@@ -185,7 +191,7 @@ class TolokaClient:
         SANDBOX = 'https://sandbox.toloka.yandex.com'
         PRODUCTION = 'https://toloka.yandex.com'
 
-    def __init__(self, token: str, environment: Union[Environment, str, None] = None, retries: Union[int, Retry] = 3, timeout: Union[float, Tuple[float, float]] = ..., url: Optional[str] = None): ...
+    def __init__(self, token: str, environment: Union[Environment, str, None] = None, retries: Union[int, Retry] = 3, timeout: Union[float, Tuple[float, float]] = ..., url: Optional[str] = None, retry_quotas: Union[List[str], str, None] = ...): ...
 
     def accept_assignment(self, assignment_id: str, public_comment: str) -> Assignment:
         """Marks one assignment as accepted

@@ -55,6 +55,7 @@ from .message_thread import (
 )
 from .operation_log import OperationLogItem
 from .pool import Pool, PoolPatchRequest
+from .primitives.retry import TolokaRetry
 from .project import Project
 from .training import Training
 from .requester import Requester
@@ -96,6 +97,12 @@ class TolokaClient:
             * Set the timeout value to None if you're willing to wait forever.
         url: If you want to set a specific URL for some reason, for example, for testing.
             You can only set one parameter, "url" or "environment", not both.
+        retry_quotas: List of quotas that must be retried. By default retries only minutes quotas. None or empty list for not retrying quotas.
+            You must set this parameter to None, then you specify the 'retries' parameter as Retry instance.
+            You can specify quotas:
+            * MIN - Retry minutes quotas.
+            * HOUR - Retry hourly quotas. This is means that the program just sleeps for an hour! Be careful.
+            * DAY - Retry daily quotas. We strongly not recommended retrying these quotas.
 
     Example:
         How to create TolokaClient and make you first request to Toloka.
@@ -118,7 +125,8 @@ class TolokaClient:
         environment: Union[Environment, str, None] = None,
         retries: Union[int, Retry] = 3,
         timeout: Union[float, Tuple[float, float]] = 10.0,
-        url: Optional[str] = None
+        url: Optional[str] = None,
+        retry_quotas: Union[List[str], str, None] = TolokaRetry.Unit.MIN
     ):
         if url is None and environment is None:
             raise ValueError('You must pass at least one parameter: url or environment.')
@@ -130,10 +138,13 @@ class TolokaClient:
             if not isinstance(environment, TolokaClient.Environment):
                 environment = TolokaClient.Environment[environment.upper()]
             self.url = environment.value
+        if isinstance(retries, Retry) and retry_quotas is not None:
+            raise ValueError('You must set retry_quotas parameter to None when you specify retries parameters not as int.')
         self.token = token
         status_list = [status_code for status_code in requests.status_codes._codes if status_code > 405]
         if not isinstance(retries, Retry):
-            retries = Retry(
+            retries = TolokaRetry(
+                retry_quotas=retry_quotas,
                 total=retries,
                 status_forcelist=status_list,
                 method_whitelist=['HEAD', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'POST', 'PATCH'],
