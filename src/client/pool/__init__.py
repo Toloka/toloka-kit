@@ -195,7 +195,7 @@ class Pool(BaseTolokaObject):
     may_contain_adult_content: bool
     reward_per_assignment: float
     assignment_max_duration_seconds: int
-    defaults: Defaults
+    defaults: Defaults = attr.attrib(factory=lambda: Pool.Defaults(default_overlap_for_new_task_suites=1))
 
     will_expire: datetime.datetime
 
