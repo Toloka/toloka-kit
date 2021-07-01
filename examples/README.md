@@ -19,7 +19,9 @@ Why it may be usefull:
 | Blood cells classification | Available soon | ```CV```,  ```Classification```, ```Medicine```, ```Benchmark```|
 
 # Need more examples?
-If you have an example of data labeling using toloka-kit, do not hesitate to send us a [pool request](https://github.com/Toloka/toloka-kit/pulls). Ideally, a great example should contain the following aspects:
+If you have an example of data labeling using toloka-kit, do not hesitate to send it. Add a link to your GitHub repository and a description to this table via a [pool request](https://github.com/Toloka/toloka-kit/pulls).
+
+Ideally, a great example should contain the following aspects:
 - Problem statement;
 - How to set up a project;
 - Where to get the data for the example;

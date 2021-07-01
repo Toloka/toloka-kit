@@ -19,8 +19,8 @@ Designed by engineers for engineers, Toloka lets you integrate an on-demand work
 
 Main advantages of Toloka:
   - **Top-quality data** -  Collect and annotate training data that meets and exceeds industry quality standards thanks to multiple quality control methods and mechanisms available in Toloka.
-  - **Scalable projects** - Have any amounts of image, text, speech, audio or video data collected and labeled for you by millions of skilled Toloka users across the globe.
-  - **Cost-efficiency** - Save time and money with this purpose-built platform for handling large-scale data collection and annotation projects, on demand 24/7, at your own price and within your timeframe.
+  - **Scalable projects** - Have any amounts of image, text, speech, audio, or video data collected and labeled for you by millions of skilled Toloka users across the globe.
+  - **Cost-efficiency** - Save time and money with this purpose-built platform for handling large-scale data collection and annotation projects, on-demand 24/7, at your own price and within your timeframe.
   - **Free, powerful API** - Build scalable and fully automated human-in-the-loop machine learning pipelines with a powerful open API.
 
 
@@ -40,7 +40,7 @@ Installing toloka-kit is as easy as:
 ```
 $ pip install toloka-kit
 ```
-Note: this project is still under heavy development and interfaces may change slightly. For production environments please specify exact package version such as `toloka-kit==0.1.3`
+Note: this project is still under heavy development and interfaces may change slightly. For production environments please specify exact package version. For example: `toloka-kit==0.1.8`
 
 **Try your first program and checks the validity of the OAuth token:**
 ```python
@@ -56,7 +56,7 @@ Useful Links
 - [Toloka requester's guide.](https://yandex.ru/support/toloka-requester/index.html?lang=en)
 - We recommend that you first get acquainted with Toloka through the web interface and implement [one of the tutorials.](https://yandex.ru/support/toloka-requester/concepts/usecases.html)
 - [Toloka API documentation.](https://yandex.com/dev/toloka/doc/concepts/about.html?lang=en)
-- [Toloka-kit usage examples.](https://github.com/Toloka/toloka-kit/tree/main/examples)
+- [Toloka-kit usage examples.](https://github.com/Toloka/toloka-kit/tree/main/examples#toloka-kit-usage-examples)
 
 Questions and bug reports
 --------------
@@ -65,6 +65,9 @@ Questions and bug reports
 * Seek prompt advice at English-speaking [Telegram chat](https://t.me/toloka_tech) (Mostly tech question)
 
 
+Contributing
+-------
+Feel free to contribute to toloka-kit. Right now, we really need more [usage examples.](https://github.com/Toloka/toloka-kit/tree/main/examples#need-more-examples)
 
 License
 -------
