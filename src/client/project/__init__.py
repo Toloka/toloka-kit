@@ -32,7 +32,7 @@ from . import task_spec
 from . import template_builder
 from . import view_spec
 
-from ..primitives.base import BaseTolokaObject
+from ..primitives.base import attribute, BaseTolokaObject
 from ..project.field_spec import (
     BooleanSpec,
     StringSpec,
@@ -92,7 +92,6 @@ class Project(BaseTolokaObject):
 
         >>> toloka_client = toloka.TolokaClient(your_token, 'PRODUCTION')
         >>> new_project = toloka.project.Project(
-        >>>     assignments_issuing_type=toloka.project.Project.AssignmentsIssuingType.AUTOMATED,
         >>>     public_name='My best project!!!',
         >>>     public_description='Look at the instruction and do it well',
         >>>     public_instructions='!Describe your task for performers here!',
@@ -151,7 +150,7 @@ class Project(BaseTolokaObject):
     public_name: str  # public
     public_description: str  # public
     task_spec: TaskSpec  # public
-    assignments_issuing_type: AssignmentsIssuingType  # AssignmentsIssuingType  # public
+    assignments_issuing_type: AssignmentsIssuingType = attribute(default=AssignmentsIssuingType.AUTOMATED, required=True)  # AssignmentsIssuingType  # public
 
     assignments_issuing_view_config: AssignmentsIssuingViewConfig
     assignments_automerge_enabled: bool
