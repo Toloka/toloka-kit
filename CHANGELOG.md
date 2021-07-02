@@ -1,3 +1,13 @@
+0.1.9
+-------------------
+* Improved support by static analyzers
+* Added default value for `Pool.defaults` attribute
+* Added default value 0 for `real_tasks_count`, `golden_tasks_count`, `training_tasks_count` in `MixerConfig`
+* Added default value `AUTOMATED` for `Project.assignments_issuing_type` attribute
+* Simplified `TolokaPluginV1`' interface by expanding `layout` attribute
+* Simplified `TemplateBuilderViewSpec`'s interface by expanding `config` attribute
+* Fixed an issue with `TemplateBuilder` config displayed in one line in Toloka's web interface
+* `City`, `Languages`, `RegionByPhone` and `RegionByIp` filters now have `include` and `exclude`. Thix methods will eventually replace misleading `in_` and `not_in` method names. As for now, all variants are available for backward compatibility
 * Retry Toloka quotas. Minute quotas are retried by default. And you can turn on the retrying of hourly and daily quotas.
 
 
