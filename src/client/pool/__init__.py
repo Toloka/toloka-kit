@@ -1,4 +1,8 @@
 __all__ = [
+    'dynamic_overlap_config',
+    'dynamic_pricing_config',
+    'mixer_config',
+
     'Pool',
     'PoolPatchRequest',
     'DynamicOverlapConfig',
@@ -10,6 +14,10 @@ from enum import Enum, unique
 from typing import Dict, List, Optional
 
 import attr
+
+from . import dynamic_overlap_config
+from . import dynamic_pricing_config
+from . import mixer_config
 
 from .dynamic_overlap_config import DynamicOverlapConfig
 from .dynamic_pricing_config import DynamicPricingConfig
@@ -99,7 +107,7 @@ class Pool(BaseTolokaObject):
         >>>     defaults=toloka.pool.Pool.Defaults(default_overlap_for_new_task_suites=3),
         >>>     filter=toloka.filter.Languages.in_('EN'),
         >>> )
-        >>> new_pool.set_mixer_config(real_tasks_count=10, golden_tasks_count=0, training_tasks_count=0)
+        >>> new_pool.set_mixer_config(real_tasks_count=10)
         >>> new_pool.quality_control.add_action(...)
         >>> new_pool = toloka_client.create_pool(new_pool)
         >>> print(new_pool.id)
@@ -187,7 +195,7 @@ class Pool(BaseTolokaObject):
     may_contain_adult_content: bool
     reward_per_assignment: float
     assignment_max_duration_seconds: int
-    defaults: Defaults
+    defaults: Defaults = attr.attrib(factory=lambda: Pool.Defaults(default_overlap_for_new_task_suites=1))
 
     will_expire: datetime.datetime
 

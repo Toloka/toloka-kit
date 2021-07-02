@@ -1,3 +1,15 @@
+__all__ = [
+    'dynamic_overlap_config',
+    'dynamic_pricing_config',
+    'mixer_config',
+
+    'Pool',
+    'PoolPatchRequest',
+    'DynamicOverlapConfig',
+    'DynamicPricingConfig',
+    'MixerConfig',
+]
+
 from datetime import datetime
 from enum import Enum
 from toloka.client.filter import FilterCondition
@@ -92,7 +104,7 @@ class Pool(BaseTolokaObject):
         >>>     defaults=toloka.pool.Pool.Defaults(default_overlap_for_new_task_suites=3),
         >>>     filter=toloka.filter.Languages.in_('EN'),
         >>> )
-        >>> new_pool.set_mixer_config(real_tasks_count=10, golden_tasks_count=0, training_tasks_count=0)
+        >>> new_pool.set_mixer_config(real_tasks_count=10)
         >>> new_pool.quality_control.add_action(...)
         >>> new_pool = toloka_client.create_pool(new_pool)
         >>> print(new_pool.id)
@@ -279,7 +291,7 @@ class Pool(BaseTolokaObject):
         ...
 
     @overload
-    def set_mixer_config(self, *, real_tasks_count: Optional[int] = None, golden_tasks_count: Optional[int] = None, training_tasks_count: Optional[int] = None, min_real_tasks_count: Optional[int] = None, min_golden_tasks_count: Optional[int] = None, min_training_tasks_count: Optional[int] = None, force_last_assignment: Optional[bool] = None, force_last_assignment_delay_seconds: Optional[int] = None, mix_tasks_in_creation_order: Optional[bool] = None, shuffle_tasks_in_task_suite: Optional[bool] = None, golden_task_distribution_function: Optional[TaskDistributionFunction] = None, training_task_distribution_function: Optional[TaskDistributionFunction] = None):
+    def set_mixer_config(self, *, real_tasks_count: int = 0, golden_tasks_count: int = 0, training_tasks_count: int = 0, min_real_tasks_count: Optional[int] = None, min_golden_tasks_count: Optional[int] = None, min_training_tasks_count: Optional[int] = None, force_last_assignment: Optional[bool] = None, force_last_assignment_delay_seconds: Optional[int] = None, mix_tasks_in_creation_order: Optional[bool] = None, shuffle_tasks_in_task_suite: Optional[bool] = None, golden_task_distribution_function: Optional[TaskDistributionFunction] = None, training_task_distribution_function: Optional[TaskDistributionFunction] = None):
         """A shortcut setter for mixer_config
         """
         ...

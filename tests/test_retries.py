@@ -32,7 +32,7 @@ def test_retries_from_int():
 def test_retries_from_class():
     with mock.patch('urllib3.connection.HTTPSConnection.request') as request_mock:
         request_mock.side_effect = urllib_request_mock
-        toloka_client = TolokaClient('fake-token', 'SANDBOX', Retry(connect=2))
+        toloka_client = TolokaClient('fake-token', 'SANDBOX', Retry(connect=2), retry_quotas=None)
         with pytest.raises(requests.exceptions.ConnectionError):
             toloka_client.get_requester()
         assert request_mock.call_count == 3

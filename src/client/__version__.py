@@ -1,3 +1,3 @@
 __title__ = 'toloka-kit'
-__version__ = '0.1.8'
+__version__ = '0.1.9'
 __license__ = 'Apache 2.0'

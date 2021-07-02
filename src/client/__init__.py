@@ -1,4 +1,35 @@
 __all__ = [
+    'actions',
+    'aggregation',
+    'analytics_request',
+    'assignment',
+    'attachment',
+    'batch_create_results',
+    'clone_results',
+    'collectors',
+    'conditions',
+    'error_codes',
+    'exceptions',
+    'filter',
+    'message_thread',
+    'operation_log',
+    'operations',
+    'owner',
+    'quality_control',
+    'requester',
+    'search_requests',
+    'search_results',
+    'skill',
+    'solution',
+    'task',
+    'task_distribution_function',
+    'task_suite',
+    'training',
+    'user_bonus',
+    'user_restriction',
+    'user_skill',
+    'webhook_subscription',
+
     'TolokaClient',
     'Assignment',
     'Attachment',
@@ -32,16 +63,37 @@ from requests.adapters import HTTPAdapter
 from typing import BinaryIO, Generator, List, Optional, Tuple, Union
 from urllib3.util.retry import Retry
 
-from . import actions  # noqa: F401
+from . import actions
 from . import aggregation
+from . import analytics_request
+from . import assignment
+from . import attachment
 from . import batch_create_results
-from . import collectors  # noqa: F401
-from . import conditions  # noqa: F401
+from . import clone_results
+from . import collectors
+from . import conditions
+from . import error_codes
+from . import exceptions
+from . import filter
+from . import message_thread
+from . import operation_log
 from . import operations
+from . import owner
+from . import quality_control
+from . import requester
 from . import search_requests
 from . import search_results
+from . import skill
+from . import solution
 from . import task
+from . import task_distribution_function
 from . import task_suite
+from . import training
+from . import user_bonus
+from . import user_restriction
+from . import user_skill
+from . import webhook_subscription
+
 from .__version__ import __version__
 from ._converter import structure, unstructure
 from .aggregation import AggregatedSolution
@@ -55,6 +107,7 @@ from .message_thread import (
 )
 from .operation_log import OperationLogItem
 from .pool import Pool, PoolPatchRequest
+from .primitives.retry import TolokaRetry
 from .project import Project
 from .training import Training
 from .requester import Requester
@@ -96,6 +149,12 @@ class TolokaClient:
             * Set the timeout value to None if you're willing to wait forever.
         url: If you want to set a specific URL for some reason, for example, for testing.
             You can only set one parameter, "url" or "environment", not both.
+        retry_quotas: List of quotas that must be retried. By default retries only minutes quotas. None or empty list for not retrying quotas.
+            You must set this parameter to None, then you specify the 'retries' parameter as Retry instance.
+            You can specify quotas:
+            * MIN - Retry minutes quotas.
+            * HOUR - Retry hourly quotas. This is means that the program just sleeps for an hour! Be careful.
+            * DAY - Retry daily quotas. We strongly not recommended retrying these quotas.
 
     Example:
         How to create TolokaClient and make you first request to Toloka.
@@ -118,7 +177,8 @@ class TolokaClient:
         environment: Union[Environment, str, None] = None,
         retries: Union[int, Retry] = 3,
         timeout: Union[float, Tuple[float, float]] = 10.0,
-        url: Optional[str] = None
+        url: Optional[str] = None,
+        retry_quotas: Union[List[str], str, None] = TolokaRetry.Unit.MIN
     ):
         if url is None and environment is None:
             raise ValueError('You must pass at least one parameter: url or environment.')
@@ -130,10 +190,13 @@ class TolokaClient:
             if not isinstance(environment, TolokaClient.Environment):
                 environment = TolokaClient.Environment[environment.upper()]
             self.url = environment.value
+        if isinstance(retries, Retry) and retry_quotas is not None:
+            raise ValueError('You must set retry_quotas parameter to None when you specify retries parameters not as int.')
         self.token = token
         status_list = [status_code for status_code in requests.status_codes._codes if status_code > 405]
         if not isinstance(retries, Retry):
-            retries = Retry(
+            retries = TolokaRetry(
+                retry_quotas=retry_quotas,
                 total=retries,
                 status_forcelist=status_list,
                 method_whitelist=['HEAD', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'POST', 'PATCH'],
@@ -860,7 +923,7 @@ class TolokaClient:
         # create trainings
         new_trainings = []
         old_to_new_train_ids = {}
-        for training in self.get_trainings(project_id=project_id):
+        for training in self.get_trainings(project_id=project_id):  # noqa
             old_id = training.id
             training.project_id = new_project.id
             new_training = self.create_training(training)

@@ -1,3 +1,29 @@
+__all__ = [
+    'field_spec',
+    'task_spec',
+    'template_builder',
+    'view_spec',
+
+    'Project',
+    'ClassicViewSpec',
+    'TemplateBuilderViewSpec',
+    'BooleanSpec',
+    'StringSpec',
+    'IntegerSpec',
+    'FloatSpec',
+    'UrlSpec',
+    'FileSpec',
+    'CoordinatesSpec',
+    'JsonSpec',
+    'ArrayBooleanSpec',
+    'ArrayStringSpec',
+    'ArrayIntegerSpec',
+    'ArrayFloatSpec',
+    'ArrayUrlSpec',
+    'ArrayFileSpec',
+    'ArrayCoordinatesSpec',
+]
+
 from datetime import datetime
 from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
@@ -67,7 +93,6 @@ class Project(BaseTolokaObject):
 
         >>> toloka_client = toloka.TolokaClient(your_token, 'PRODUCTION')
         >>> new_project = toloka.project.Project(
-        >>>     assignments_issuing_type=toloka.project.Project.AssignmentsIssuingType.AUTOMATED,
         >>>     public_name='My best project!!!',
         >>>     public_description='Look at the instruction and do it well',
         >>>     public_instructions='!Describe your task for performers here!',
@@ -134,7 +159,7 @@ class Project(BaseTolokaObject):
     public_name: Optional[str]
     public_description: Optional[str]
     task_spec: Optional[TaskSpec]
-    assignments_issuing_type: Optional[AssignmentsIssuingType]
+    assignments_issuing_type: AssignmentsIssuingType
     assignments_issuing_view_config: Optional[AssignmentsIssuingViewConfig]
     assignments_automerge_enabled: Optional[bool]
     max_active_assignments_count: Optional[int]
