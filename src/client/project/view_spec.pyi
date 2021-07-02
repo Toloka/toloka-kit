@@ -1,6 +1,8 @@
 from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.project.template_builder import TemplateBuilder
+from toloka.client.project.template_builder.base import BaseComponent
+
 from typing import (
     Any,
     Dict,
