@@ -216,7 +216,7 @@ class TolokaClient:
             * Set the timeout value to None if you're willing to wait forever.
         url: If you want to set a specific URL for some reason, for example, for testing.
             You can only set one parameter, "url" or "environment", not both.
-        retry_quotas: List of quotas that must be retried. By default retries only minutes quotas.
+        retry_quotas: List of quotas that must be retried. By default retries only minutes quotas. None or empty list for not retrying quotas.
             You must set this parameter to None, then you specify the 'retries' parameter as Retry instance.
             You can specify quotas:
             * MIN - Retry minutes quotas.
@@ -240,9 +240,21 @@ class TolokaClient:
         SANDBOX = 'https://sandbox.toloka.yandex.com'
         PRODUCTION = 'https://toloka.yandex.com'
 
-    def __init__(self, token: str, environment: Union[Environment, str, None] = None, retries: Union[int, Retry] = 3, timeout: Union[float, Tuple[float, float]] = ..., url: Optional[str] = None, retry_quotas: Union[List[str], str, None] = ...): ...
+    def __init__(
+        self,
+        token: str,
+        environment: Union[Environment, str, None] = None,
+        retries: Union[int, Retry] = 3,
+        timeout: Union[float, Tuple[float, float]] = ...,
+        url: Optional[str] = None,
+        retry_quotas: Union[List[str], str, None] = 'MIN'
+    ): ...
 
-    def accept_assignment(self, assignment_id: str, public_comment: str) -> Assignment:
+    def accept_assignment(
+        self,
+        assignment_id: str,
+        public_comment: str
+    ) -> Assignment:
         """Marks one assignment as accepted
 
         Used then your pool created with auto_accept_solutions=False parametr.
@@ -261,7 +273,11 @@ class TolokaClient:
         """
         ...
 
-    def add_message_thread_to_folders(self, message_thread_id: str, folders: Union[List[Folder], MessageThreadFolders]) -> MessageThread:
+    def add_message_thread_to_folders(
+        self,
+        message_thread_id: str,
+        folders: Union[List[Folder], MessageThreadFolders]
+    ) -> MessageThread:
         """Adds a message chain to one or more folders ("unread", "important" etc.)
 
         Args:
@@ -274,7 +290,14 @@ class TolokaClient:
         ...
 
     @overload
-    def aggregate_solutions_by_pool(self, *, type: Optional[AggregatedSolutionType] = None, pool_id: Optional[str] = None, answer_weight_skill_id: Optional[str] = None, fields: Optional[List[PoolAggregatedSolutionRequest.Field]] = None) -> AggregatedSolutionOperation:
+    def aggregate_solutions_by_pool(
+        self,
+        *,
+        type: Optional[AggregatedSolutionType] = None,
+        pool_id: Optional[str] = None,
+        answer_weight_skill_id: Optional[str] = None,
+        fields: Optional[List[PoolAggregatedSolutionRequest.Field]] = None
+    ) -> AggregatedSolutionOperation:
         """Starts aggregation of solutions in the pool
 
         Responses to all completed tasks will be aggregated.
@@ -336,7 +359,14 @@ class TolokaClient:
         ...
 
     @overload
-    def aggregate_solutions_by_task(self, *, task_id: Optional[str] = None, pool_id: Optional[str] = None, answer_weight_skill_id: Optional[str] = None, fields: Optional[List[WeightedDynamicOverlapTaskAggregatedSolutionRequest.Field]] = None) -> AggregatedSolution:
+    def aggregate_solutions_by_task(
+        self,
+        *,
+        task_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        answer_weight_skill_id: Optional[str] = None,
+        fields: Optional[List[WeightedDynamicOverlapTaskAggregatedSolutionRequest.Field]] = None
+    ) -> AggregatedSolution:
         """Starts aggregation of solutions to a single task
 
         The method only starts the aggregation and returns the operation for further tracking.
@@ -501,7 +531,11 @@ class TolokaClient:
         """
         ...
 
-    def clone_project(self, project_id: str, reuse_controllers: bool = True) -> CloneResults:
+    def clone_project(
+        self,
+        project_id: str,
+        reuse_controllers: bool = True
+    ) -> CloneResults:
         """Synchronously clones the project, all pools and trainings
 
         Emulates cloning behaviour via Toloka interface:
@@ -515,7 +549,7 @@ class TolokaClient:
 
         Args:
             project_id: ID of the project to be cloned.
-            reuse_quality_controllers: Use same quality controllers in cloned and created projects. Defaults to True.
+            reuse_controllers: Use same quality controllers in cloned and created projects. Defaults to True.
                 This means that all quality control rules will be applied to both projects.
                 For example, if you have rule "fast_submitted_count", fast responses counts across both projects.
 
@@ -611,7 +645,16 @@ class TolokaClient:
         ...
 
     @overload
-    def compose_message_thread(self, *, recipients_select_type: Optional[RecipientsSelectType] = None, topic: Optional[Dict[str, str]] = None, text: Optional[Dict[str, str]] = None, answerable: Optional[bool] = None, recipients_ids: Optional[List[str]] = None, recipients_filter: Optional[FilterCondition] = None) -> MessageThread:
+    def compose_message_thread(
+        self,
+        *,
+        recipients_select_type: Optional[RecipientsSelectType] = None,
+        topic: Optional[Dict[str, str]] = None,
+        text: Optional[Dict[str, str]] = None,
+        answerable: Optional[bool] = None,
+        recipients_ids: Optional[List[str]] = None,
+        recipients_filter: Optional[FilterCondition] = None
+    ) -> MessageThread:
         """Sends message to performer
 
         The sent message is added to a new message thread.
@@ -701,7 +744,19 @@ class TolokaClient:
         ...
 
     @overload
-    def create_skill(self, *, name: Optional[str] = None, private_comment: Optional[str] = None, hidden: Optional[bool] = None, skill_ttl_hours: Optional[int] = None, training: Optional[bool] = None, public_name: Optional[Dict[str, str]] = None, public_requester_description: Optional[Dict[str, str]] = None, id: Optional[str] = None, created: Optional[datetime] = None) -> Skill:
+    def create_skill(
+        self,
+        *,
+        name: Optional[str] = None,
+        private_comment: Optional[str] = None,
+        hidden: Optional[bool] = None,
+        skill_ttl_hours: Optional[int] = None,
+        training: Optional[bool] = None,
+        public_name: Optional[Dict[str, str]] = None,
+        public_requester_description: Optional[Dict[str, str]] = None,
+        id: Optional[str] = None,
+        created: Optional[datetime] = None
+    ) -> Skill:
         """Creates a new Skill
 
         You can send a maximum of 10 requests of this kind per minute and 100 requests per day.
@@ -755,7 +810,13 @@ class TolokaClient:
         ...
 
     @overload
-    def create_task(self, task: Task, *, allow_defaults: Optional[bool] = None, open_pool: Optional[bool] = None) -> Task:
+    def create_task(
+        self,
+        task: Task,
+        *,
+        allow_defaults: Optional[bool] = None,
+        open_pool: Optional[bool] = None
+    ) -> Task:
         """Creates a new task
 
         It's better to use "create_tasks", if you need to insert several tasks.
@@ -772,7 +833,11 @@ class TolokaClient:
         ...
 
     @overload
-    def create_task(self, task: Task, parameters: Optional[CreateTaskParameters] = None) -> Task:
+    def create_task(
+        self,
+        task: Task,
+        parameters: Optional[CreateTaskParameters] = None
+    ) -> Task:
         """Creates a new task
 
         It's better to use "create_tasks", if you need to insert several tasks.
@@ -789,7 +854,16 @@ class TolokaClient:
         ...
 
     @overload
-    def create_task_suite(self, task_suite: TaskSuite, *, operation_id: Optional[UUID] = None, skip_invalid_items: Optional[bool] = None, allow_defaults: Optional[bool] = None, open_pool: Optional[bool] = None, async_mode: Optional[bool] = True) -> TaskSuite:
+    def create_task_suite(
+        self,
+        task_suite: TaskSuite,
+        *,
+        operation_id: Optional[UUID] = None,
+        skip_invalid_items: Optional[bool] = None,
+        allow_defaults: Optional[bool] = None,
+        open_pool: Optional[bool] = None,
+        async_mode: Optional[bool] = True
+    ) -> TaskSuite:
         """Creates a new task suite
 
         Generally, you don't need to create a task set yourself, because you can create tasks and Toloka will create
@@ -808,7 +882,11 @@ class TolokaClient:
         ...
 
     @overload
-    def create_task_suite(self, task_suite: TaskSuite, parameters: Optional[TaskSuiteCreateRequestParameters] = None) -> TaskSuite:
+    def create_task_suite(
+        self,
+        task_suite: TaskSuite,
+        parameters: Optional[TaskSuiteCreateRequestParameters] = None
+    ) -> TaskSuite:
         """Creates a new task suite
 
         Generally, you don't need to create a task set yourself, because you can create tasks and Toloka will create
@@ -827,7 +905,16 @@ class TolokaClient:
         ...
 
     @overload
-    def create_task_suites(self, task_suites: List[TaskSuite], *, operation_id: Optional[UUID] = None, skip_invalid_items: Optional[bool] = None, allow_defaults: Optional[bool] = None, open_pool: Optional[bool] = None, async_mode: Optional[bool] = True) -> TaskSuiteBatchCreateResult:
+    def create_task_suites(
+        self,
+        task_suites: List[TaskSuite],
+        *,
+        operation_id: Optional[UUID] = None,
+        skip_invalid_items: Optional[bool] = None,
+        allow_defaults: Optional[bool] = None,
+        open_pool: Optional[bool] = None,
+        async_mode: Optional[bool] = True
+    ) -> TaskSuiteBatchCreateResult:
         """Creates many task suites in pools
 
         Generally, you don't need to create a task set yourself, because you can create tasks and Toloka will create
@@ -855,7 +942,11 @@ class TolokaClient:
         ...
 
     @overload
-    def create_task_suites(self, task_suites: List[TaskSuite], parameters: Optional[TaskSuiteCreateRequestParameters] = None) -> TaskSuiteBatchCreateResult:
+    def create_task_suites(
+        self,
+        task_suites: List[TaskSuite],
+        parameters: Optional[TaskSuiteCreateRequestParameters] = None
+    ) -> TaskSuiteBatchCreateResult:
         """Creates many task suites in pools
 
         Generally, you don't need to create a task set yourself, because you can create tasks and Toloka will create
@@ -883,7 +974,16 @@ class TolokaClient:
         ...
 
     @overload
-    def create_task_suites_async(self, task_suites: List[TaskSuite], *, operation_id: Optional[UUID] = None, skip_invalid_items: Optional[bool] = None, allow_defaults: Optional[bool] = None, open_pool: Optional[bool] = None, async_mode: Optional[bool] = True) -> TaskSuiteCreateBatchOperation:
+    def create_task_suites_async(
+        self,
+        task_suites: List[TaskSuite],
+        *,
+        operation_id: Optional[UUID] = None,
+        skip_invalid_items: Optional[bool] = None,
+        allow_defaults: Optional[bool] = None,
+        open_pool: Optional[bool] = None,
+        async_mode: Optional[bool] = True
+    ) -> TaskSuiteCreateBatchOperation:
         """Creates many task suites in pools, asynchronous version
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
@@ -899,7 +999,11 @@ class TolokaClient:
         ...
 
     @overload
-    def create_task_suites_async(self, task_suites: List[TaskSuite], parameters: Optional[TaskSuiteCreateRequestParameters] = None) -> TaskSuiteCreateBatchOperation:
+    def create_task_suites_async(
+        self,
+        task_suites: List[TaskSuite],
+        parameters: Optional[TaskSuiteCreateRequestParameters] = None
+    ) -> TaskSuiteCreateBatchOperation:
         """Creates many task suites in pools, asynchronous version
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
@@ -915,7 +1019,16 @@ class TolokaClient:
         ...
 
     @overload
-    def create_tasks(self, tasks: List[Task], *, allow_defaults: Optional[bool] = None, open_pool: Optional[bool] = None, skip_invalid_items: Optional[bool] = None, operation_id: Optional[UUID] = None, async_mode: Optional[bool] = True) -> TaskBatchCreateResult:
+    def create_tasks(
+        self,
+        tasks: List[Task],
+        *,
+        allow_defaults: Optional[bool] = None,
+        open_pool: Optional[bool] = None,
+        skip_invalid_items: Optional[bool] = None,
+        operation_id: Optional[UUID] = None,
+        async_mode: Optional[bool] = True
+    ) -> TaskBatchCreateResult:
         """Creates many tasks in pools
 
         By default uses asynchronous operation inside. It's better not to set "async_mode=False", if you not understand
@@ -968,7 +1081,11 @@ class TolokaClient:
         ...
 
     @overload
-    def create_tasks(self, tasks: List[Task], parameters: Optional[CreateTasksParameters] = None) -> TaskBatchCreateResult:
+    def create_tasks(
+        self,
+        tasks: List[Task],
+        parameters: Optional[CreateTasksParameters] = None
+    ) -> TaskBatchCreateResult:
         """Creates many tasks in pools
 
         By default uses asynchronous operation inside. It's better not to set "async_mode=False", if you not understand
@@ -1021,7 +1138,16 @@ class TolokaClient:
         ...
 
     @overload
-    def create_tasks_async(self, tasks: List[Task], *, allow_defaults: Optional[bool] = None, open_pool: Optional[bool] = None, skip_invalid_items: Optional[bool] = None, operation_id: Optional[UUID] = None, async_mode: Optional[bool] = True) -> TasksCreateOperation:
+    def create_tasks_async(
+        self,
+        tasks: List[Task],
+        *,
+        allow_defaults: Optional[bool] = None,
+        open_pool: Optional[bool] = None,
+        skip_invalid_items: Optional[bool] = None,
+        operation_id: Optional[UUID] = None,
+        async_mode: Optional[bool] = True
+    ) -> TasksCreateOperation:
         """Creates many tasks in pools, asynchronous version
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
@@ -1037,7 +1163,11 @@ class TolokaClient:
         ...
 
     @overload
-    def create_tasks_async(self, tasks: List[Task], parameters: Optional[CreateTasksParameters] = None) -> TasksCreateOperation:
+    def create_tasks_async(
+        self,
+        tasks: List[Task],
+        parameters: Optional[CreateTasksParameters] = None
+    ) -> TasksCreateOperation:
         """Creates many tasks in pools, asynchronous version
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
@@ -1083,7 +1213,11 @@ class TolokaClient:
         """
         ...
 
-    def create_user_bonus(self, user_bonus: UserBonus, parameters: Optional[UserBonusCreateRequestParameters] = None) -> UserBonus:
+    def create_user_bonus(
+        self,
+        user_bonus: UserBonus,
+        parameters: Optional[UserBonusCreateRequestParameters] = None
+    ) -> UserBonus:
         """Issues payments directly to the performer
 
         You can send a maximum of 10,000 requests of this kind per day.
@@ -1112,7 +1246,13 @@ class TolokaClient:
         ...
 
     @overload
-    def create_user_bonuses(self, user_bonuses: List[UserBonus], *, operation_id: Optional[str] = None, skip_invalid_items: Optional[bool] = None) -> UserBonusBatchCreateResult:
+    def create_user_bonuses(
+        self,
+        user_bonuses: List[UserBonus],
+        *,
+        operation_id: Optional[str] = None,
+        skip_invalid_items: Optional[bool] = None
+    ) -> UserBonusBatchCreateResult:
         """Creates many user bonuses
 
         Right now it's safer to use asynchronous version: "create_user_bonuses_async"
@@ -1129,7 +1269,11 @@ class TolokaClient:
         ...
 
     @overload
-    def create_user_bonuses(self, user_bonuses: List[UserBonus], parameters: Optional[UserBonusCreateRequestParameters] = None) -> UserBonusBatchCreateResult:
+    def create_user_bonuses(
+        self,
+        user_bonuses: List[UserBonus],
+        parameters: Optional[UserBonusCreateRequestParameters] = None
+    ) -> UserBonusBatchCreateResult:
         """Creates many user bonuses
 
         Right now it's safer to use asynchronous version: "create_user_bonuses_async"
@@ -1146,7 +1290,13 @@ class TolokaClient:
         ...
 
     @overload
-    def create_user_bonuses_async(self, user_bonuses: List[UserBonus], *, operation_id: Optional[str] = None, skip_invalid_items: Optional[bool] = None) -> UserBonusCreateBatchOperation:
+    def create_user_bonuses_async(
+        self,
+        user_bonuses: List[UserBonus],
+        *,
+        operation_id: Optional[str] = None,
+        skip_invalid_items: Optional[bool] = None
+    ) -> UserBonusCreateBatchOperation:
         """Issues payments directly to the performers, asynchronously creates many user bonuses
 
         You can send a maximum of 10,000 requests of this kind per day.
@@ -1161,7 +1311,11 @@ class TolokaClient:
         ...
 
     @overload
-    def create_user_bonuses_async(self, user_bonuses: List[UserBonus], parameters: Optional[UserBonusCreateRequestParameters] = None) -> UserBonusCreateBatchOperation:
+    def create_user_bonuses_async(
+        self,
+        user_bonuses: List[UserBonus],
+        parameters: Optional[UserBonusCreateRequestParameters] = None
+    ) -> UserBonusCreateBatchOperation:
         """Issues payments directly to the performers, asynchronously creates many user bonuses
 
         You can send a maximum of 10,000 requests of this kind per day.
@@ -1172,39 +1326,6 @@ class TolokaClient:
 
         Returns:
             UserBonusCreateBatchOperation: An operation upon completion of which the bonuses can be considered created.
-        """
-        ...
-
-    def upsert_webhook_subscriptions(self, subscriptions: List[WebhookSubscription]) -> WebhookSubscriptionBatchCreateResult:
-        """Creates (upsert) many webhook-subscriptions.
-
-        Args:
-            subscriptions: List of webhook-subscriptions, that will be created.
-
-        Returns:
-            batch_create_results.WebhookSubscriptionBatchCreateResult: Result of subscriptions creation.
-                Contains created subscriptions in "items" and problems in "validation_errors".
-
-        Raises:
-            ValidationApiError: If no subscriptions were created.
-
-        Example:
-            How to create several subscriptions.
-
-            >>> created_result = toloka_client.upsert_webhook_subscriptions([
-            >>>     {
-            >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
-            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.ASSIGNMENT_CREATED,
-            >>>         'pool_id': '121212'
-            >>>     },
-            >>>     {
-            >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
-            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.POOL_CLOSED,
-            >>>         'pool_id': '121212',
-            >>>     }
-            >>> ])
-            >>> print(len(created_result.items))
-            2
         """
         ...
 
@@ -1234,7 +1355,11 @@ class TolokaClient:
         """
         ...
 
-    def download_attachment(self, attachment_id: str, out: BinaryIO) -> None:
+    def download_attachment(
+        self,
+        attachment_id: str,
+        out: BinaryIO
+    ) -> None:
         """Downloads specific attachment
 
         Args:
@@ -1251,7 +1376,16 @@ class TolokaClient:
         ...
 
     @overload
-    def find_aggregated_solutions(self, operation_id: str, task_id_lt: Optional[str] = None, task_id_lte: Optional[str] = None, task_id_gt: Optional[str] = None, task_id_gte: Optional[str] = None, sort: Union[List[str], AggregatedSolutionSortItems, None] = None, limit: Optional[int] = None) -> AggregatedSolutionSearchResult:
+    def find_aggregated_solutions(
+        self,
+        operation_id: str,
+        task_id_lt: Optional[str] = None,
+        task_id_lte: Optional[str] = None,
+        task_id_gt: Optional[str] = None,
+        task_id_gte: Optional[str] = None,
+        sort: Union[List[str], AggregatedSolutionSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> AggregatedSolutionSearchResult:
         """Gets aggregated responses after the AggregatedSolutionOperation completes.
         It is better to use the "get_aggregated_solutions" method, that allows to iterate through all results.
 
@@ -1287,7 +1421,13 @@ class TolokaClient:
         ...
 
     @overload
-    def find_aggregated_solutions(self, operation_id: str, request: AggregatedSolutionSearchRequest, sort: Union[List[str], AggregatedSolutionSortItems, None] = None, limit: Optional[int] = None) -> AggregatedSolutionSearchResult:
+    def find_aggregated_solutions(
+        self,
+        operation_id: str,
+        request: AggregatedSolutionSearchRequest,
+        sort: Union[List[str], AggregatedSolutionSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> AggregatedSolutionSearchResult:
         """Gets aggregated responses after the AggregatedSolutionOperation completes.
         It is better to use the "get_aggregated_solutions" method, that allows to iterate through all results.
 
@@ -1323,7 +1463,825 @@ class TolokaClient:
         ...
 
     @overload
-    def get_aggregated_solutions(self, operation_id: str, task_id_lt: Optional[str] = None, task_id_lte: Optional[str] = None, task_id_gt: Optional[str] = None, task_id_gte: Optional[str] = None) -> Generator[AggregatedSolution, None, None]:
+    def find_assignments(
+        self,
+        status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]] = None,
+        task_id: Optional[str] = None,
+        task_suite_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        user_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        submitted_lt: Optional[datetime] = None,
+        submitted_lte: Optional[datetime] = None,
+        submitted_gt: Optional[datetime] = None,
+        submitted_gte: Optional[datetime] = None,
+        sort: Union[List[str], AssignmentSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> AssignmentSearchResult:
+        """Finds all assignments that match certain rules
+
+        As a result, it returns an object that contains the first part of the found assignments and whether there
+        are any more results.
+        It is better to use the "get_assignments" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search assignments.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of assignments returned. The maximum is 100,000.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            search_results.AssignmentSearchResult: The first "limit" assignments in "items". And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_assignments(
+        self,
+        request: AssignmentSearchRequest,
+        sort: Union[List[str], AssignmentSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> AssignmentSearchResult:
+        """Finds all assignments that match certain rules
+
+        As a result, it returns an object that contains the first part of the found assignments and whether there
+        are any more results.
+        It is better to use the "get_assignments" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search assignments.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of assignments returned. The maximum is 100,000.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            search_results.AssignmentSearchResult: The first "limit" assignments in "items". And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_attachments(
+        self,
+        name: Optional[str] = None,
+        type: Optional[Attachment.Type] = None,
+        user_id: Optional[str] = None,
+        assignment_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        owner_id: Optional[str] = None,
+        owner_company_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        sort: Union[List[str], AttachmentSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> AttachmentSearchResult:
+        """Finds all attachments that match certain rules
+
+        As a result, it returns an object that contains the first part of the found attachments and whether there
+        are any more results.
+        It is better to use the "get_attachments" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search attachments.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 100,000.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            search_results.AttachmentSearchResult: The first "limit" assignments in "items". And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_attachments(
+        self,
+        request: AttachmentSearchRequest,
+        sort: Union[List[str], AttachmentSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> AttachmentSearchResult:
+        """Finds all attachments that match certain rules
+
+        As a result, it returns an object that contains the first part of the found attachments and whether there
+        are any more results.
+        It is better to use the "get_attachments" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search attachments.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 100,000.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            search_results.AttachmentSearchResult: The first "limit" assignments in "items". And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_message_threads(
+        self,
+        folder: Union[str, Folder, List[Union[str, Folder]]] = None,
+        folder_ne: Union[str, Folder, List[Union[str, Folder]]] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        sort: Union[List[str], MessageThreadSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> MessageThreadSearchResult:
+        """Finds all message threads that match certain rules
+
+        As a result, it returns an object that contains the first part of the found threads and whether there
+        are any more results.
+        It is better to use the "get_message_threads" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request:  How to search threads.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 300.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            search_results.MessageThreadSearchResult: The first "limit" message threads in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_message_threads(
+        self,
+        request: MessageThreadSearchRequest,
+        sort: Union[List[str], MessageThreadSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> MessageThreadSearchResult:
+        """Finds all message threads that match certain rules
+
+        As a result, it returns an object that contains the first part of the found threads and whether there
+        are any more results.
+        It is better to use the "get_message_threads" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request:  How to search threads.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 300.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            search_results.MessageThreadSearchResult: The first "limit" message threads in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_pools(
+        self,
+        status: Optional[Pool.Status] = None,
+        project_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        last_started_lt: Optional[datetime] = None,
+        last_started_lte: Optional[datetime] = None,
+        last_started_gt: Optional[datetime] = None,
+        last_started_gte: Optional[datetime] = None,
+        sort: Union[List[str], PoolSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> PoolSearchResult:
+        """Finds all pools that match certain rules
+
+        As a result, it returns an object that contains the first part of the found pools and whether there
+        are any more results.
+        It is better to use the "get_pools" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search pools.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 300.
+                Defaults to None, in which case it returns first 20 results.
+
+        Returns:
+            search_results.PoolSearchResult: The first "limit" pools in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_pools(
+        self,
+        request: PoolSearchRequest,
+        sort: Union[List[str], PoolSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> PoolSearchResult:
+        """Finds all pools that match certain rules
+
+        As a result, it returns an object that contains the first part of the found pools and whether there
+        are any more results.
+        It is better to use the "get_pools" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search pools.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 300.
+                Defaults to None, in which case it returns first 20 results.
+
+        Returns:
+            search_results.PoolSearchResult: The first "limit" pools in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_projects(
+        self,
+        status: Optional[Project.ProjectStatus] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        sort: Union[List[str], ProjectSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> ProjectSearchResult:
+        """Finds all projects that match certain rules
+
+        As a result, it returns an object that contains the first part of the found projects and whether there
+        are any more results.
+        It is better to use the "get_projects" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search projects.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 300.
+                Defaults to None, in which case it returns first 20 results.
+
+        Returns:
+            search_results.ProjectSearchResult: The first "limit" projects in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_projects(
+        self,
+        request: ProjectSearchRequest,
+        sort: Union[List[str], ProjectSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> ProjectSearchResult:
+        """Finds all projects that match certain rules
+
+        As a result, it returns an object that contains the first part of the found projects and whether there
+        are any more results.
+        It is better to use the "get_projects" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search projects.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 300.
+                Defaults to None, in which case it returns first 20 results.
+
+        Returns:
+            search_results.ProjectSearchResult: The first "limit" projects in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_skills(
+        self,
+        name: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        sort: Union[List[str], SkillSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> SkillSearchResult:
+        """Finds all skills that match certain rules
+
+        As a result, it returns an object that contains the first part of the found skills and whether there
+        are any more results.
+        It is better to use the "get_skills" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search skills.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned.
+
+        Returns:
+            SkillSearchResult: The first "limit" skills in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_skills(
+        self,
+        request: SkillSearchRequest,
+        sort: Union[List[str], SkillSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> SkillSearchResult:
+        """Finds all skills that match certain rules
+
+        As a result, it returns an object that contains the first part of the found skills and whether there
+        are any more results.
+        It is better to use the "get_skills" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search skills.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned.
+
+        Returns:
+            SkillSearchResult: The first "limit" skills in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_task_suites(
+        self,
+        task_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        overlap: Optional[int] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        overlap_lt: Optional[int] = None,
+        overlap_lte: Optional[int] = None,
+        overlap_gt: Optional[int] = None,
+        overlap_gte: Optional[int] = None,
+        sort: Union[List[str], TaskSuiteSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> TaskSuiteSearchResult:
+        """Finds all task suites that match certain rules
+
+        As a result, it returns an object that contains the first part of the found task suites and whether there
+        are any more results.
+        It is better to use the "get_task_suites" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search task suites.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 100 000.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            TaskSuiteSearchResult: The first "limit" task suites in "items". And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_task_suites(
+        self,
+        request: TaskSuiteSearchRequest,
+        sort: Union[List[str], TaskSuiteSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> TaskSuiteSearchResult:
+        """Finds all task suites that match certain rules
+
+        As a result, it returns an object that contains the first part of the found task suites and whether there
+        are any more results.
+        It is better to use the "get_task_suites" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search task suites.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 100 000.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            TaskSuiteSearchResult: The first "limit" task suites in "items". And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_tasks(
+        self,
+        pool_id: Optional[str] = None,
+        overlap: Optional[int] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        overlap_lt: Optional[int] = None,
+        overlap_lte: Optional[int] = None,
+        overlap_gt: Optional[int] = None,
+        overlap_gte: Optional[int] = None,
+        sort: Union[List[str], TaskSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> TaskSearchResult:
+        """Finds all tasks that match certain rules
+
+        As a result, it returns an object that contains the first part of the found tasks and whether there
+        are any more results.
+        It is better to use the "get_tasks" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search tasks.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 100 000.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            TaskSearchResult: The first "limit" tasks in "items". And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_tasks(
+        self,
+        request: TaskSearchRequest,
+        sort: Union[List[str], TaskSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> TaskSearchResult:
+        """Finds all tasks that match certain rules
+
+        As a result, it returns an object that contains the first part of the found tasks and whether there
+        are any more results.
+        It is better to use the "get_tasks" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search tasks.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 100 000.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            TaskSearchResult: The first "limit" tasks in "items". And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_trainings(
+        self,
+        status: Optional[Training.Status] = None,
+        project_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        last_started_lt: Optional[datetime] = None,
+        last_started_lte: Optional[datetime] = None,
+        last_started_gt: Optional[datetime] = None,
+        last_started_gte: Optional[datetime] = None,
+        sort: Union[List[str], TrainingSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> TrainingSearchResult:
+        """Finds all trainings that match certain rules
+
+        As a result, it returns an object that contains the first part of the found trainings and whether there
+        are any more results.
+        It is better to use the "get_trainings" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search trainings.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned.
+
+        Returns:
+            search_results.PoolSearchResult: The first "limit" trainings in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_trainings(
+        self,
+        request: TrainingSearchRequest,
+        sort: Union[List[str], TrainingSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> TrainingSearchResult:
+        """Finds all trainings that match certain rules
+
+        As a result, it returns an object that contains the first part of the found trainings and whether there
+        are any more results.
+        It is better to use the "get_trainings" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search trainings.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned.
+
+        Returns:
+            search_results.PoolSearchResult: The first "limit" trainings in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_user_bonuses(
+        self,
+        user_id: Optional[str] = None,
+        private_comment: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        sort: Union[List[str], UserBonusSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> UserBonusSearchResult:
+        """Finds all user bonuses that match certain rules
+
+        As a result, it returns an object that contains the first part of the found user bonuses and whether there
+        are any more results.
+        It is better to use the "get_user_bonuses" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search user bonuses.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned.
+
+        Returns:
+            UserBonusSearchResult: The first "limit" user bonuses in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_user_bonuses(
+        self,
+        request: UserBonusSearchRequest,
+        sort: Union[List[str], UserBonusSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> UserBonusSearchResult:
+        """Finds all user bonuses that match certain rules
+
+        As a result, it returns an object that contains the first part of the found user bonuses and whether there
+        are any more results.
+        It is better to use the "get_user_bonuses" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search user bonuses.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned.
+
+        Returns:
+            UserBonusSearchResult: The first "limit" user bonuses in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_user_restrictions(
+        self,
+        scope: Optional[UserRestriction.Scope] = None,
+        user_id: Optional[str] = None,
+        project_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        sort: Union[List[str], UserRestrictionSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> UserRestrictionSearchResult:
+        """Finds all user restrictions that match certain rules
+
+        As a result, it returns an object that contains the first part of the found user restrictions and whether there
+        are any more results.
+        It is better to use the "get_user_restriction" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search user restrictions.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned.
+
+        Returns:
+            UserRestrictionSearchResult: The first "limit" user restrictions in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_user_restrictions(
+        self,
+        request: UserRestrictionSearchRequest,
+        sort: Union[List[str], UserRestrictionSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> UserRestrictionSearchResult:
+        """Finds all user restrictions that match certain rules
+
+        As a result, it returns an object that contains the first part of the found user restrictions and whether there
+        are any more results.
+        It is better to use the "get_user_restriction" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search user restrictions.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned.
+
+        Returns:
+            UserRestrictionSearchResult: The first "limit" user restrictions in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_user_skills(
+        self,
+        name: Optional[str] = None,
+        user_id: Optional[str] = None,
+        skill_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        modified_lt: Optional[datetime] = None,
+        modified_lte: Optional[datetime] = None,
+        modified_gt: Optional[datetime] = None,
+        modified_gte: Optional[datetime] = None,
+        sort: Union[List[str], UserSkillSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> UserSkillSearchResult:
+        """Finds all user skills that match certain rules
+
+        UserSkill describe the skill value for a specific performer.
+        As a result, it returns an object that contains the first part of the found user skills and whether there
+        are any more results.
+        It is better to use the "get_user_skills" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search user skills.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned.
+
+        Returns:
+            UserSkillSearchResult: The first "limit" user skills in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_user_skills(
+        self,
+        request: UserSkillSearchRequest,
+        sort: Union[List[str], UserSkillSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> UserSkillSearchResult:
+        """Finds all user skills that match certain rules
+
+        UserSkill describe the skill value for a specific performer.
+        As a result, it returns an object that contains the first part of the found user skills and whether there
+        are any more results.
+        It is better to use the "get_user_skills" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search user skills.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned.
+
+        Returns:
+            UserSkillSearchResult: The first "limit" user skills in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_webhook_subscriptions(
+        self,
+        event_type: Optional[WebhookSubscription.EventType] = None,
+        pool_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        sort: Union[List[str], WebhookSubscriptionSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> WebhookSubscriptionSearchResult:
+        """Finds all webhook-subscriptions that match certain rules
+
+        As a result, it returns an object that contains the first part of the found webhook-subscriptions
+        and whether there are any more results.
+        It is better to use the "get_webhook_subscriptions" method, they allow to iterate through all results
+        and not just the first output.
+
+        Args:
+            request: How to search webhook-subscriptions.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 100 000.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            WebhookSubscriptionSearchResult: The first "limit" webhook-subscriptions in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def find_webhook_subscriptions(
+        self,
+        request: WebhookSubscriptionSearchRequest,
+        sort: Union[List[str], WebhookSubscriptionSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> WebhookSubscriptionSearchResult:
+        """Finds all webhook-subscriptions that match certain rules
+
+        As a result, it returns an object that contains the first part of the found webhook-subscriptions
+        and whether there are any more results.
+        It is better to use the "get_webhook_subscriptions" method, they allow to iterate through all results
+        and not just the first output.
+
+        Args:
+            request: How to search webhook-subscriptions.
+            sort: How to sort result. Defaults to None.
+            limit: Limit on the number of results returned. The maximum is 100 000.
+                Defaults to None, in which case it returns first 50 results.
+
+        Returns:
+            WebhookSubscriptionSearchResult: The first "limit" webhook-subscriptions in "items".
+                And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def get_aggregated_solutions(
+        self,
+        operation_id: str,
+        task_id_lt: Optional[str] = None,
+        task_id_lte: Optional[str] = None,
+        task_id_gt: Optional[str] = None,
+        task_id_gte: Optional[str] = None
+    ) -> Generator[AggregatedSolution, None, None]:
         """Finds all aggregated responses after the AggregatedSolutionOperation completes
 
         Note: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
@@ -1347,7 +2305,11 @@ class TolokaClient:
         ...
 
     @overload
-    def get_aggregated_solutions(self, operation_id: str, request: AggregatedSolutionSearchRequest) -> Generator[AggregatedSolution, None, None]:
+    def get_aggregated_solutions(
+        self,
+        operation_id: str,
+        request: AggregatedSolutionSearchRequest
+    ) -> Generator[AggregatedSolution, None, None]:
         """Finds all aggregated responses after the AggregatedSolutionOperation completes
 
         Note: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
@@ -1367,536 +2329,6 @@ class TolokaClient:
             >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
             >>> print(len(aggregation_results))
             ...
-        """
-        ...
-
-    @overload
-    def find_assignments(self, status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]] = None, task_id: Optional[str] = None, task_suite_id: Optional[str] = None, pool_id: Optional[str] = None, user_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, submitted_lt: Optional[datetime] = None, submitted_lte: Optional[datetime] = None, submitted_gt: Optional[datetime] = None, submitted_gte: Optional[datetime] = None, sort: Union[List[str], AssignmentSortItems, None] = None, limit: Optional[int] = None) -> AssignmentSearchResult:
-        """Finds all assignments that match certain rules
-
-        As a result, it returns an object that contains the first part of the found assignments and whether there
-        are any more results.
-        It is better to use the "get_assignments" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search assignments.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of assignments returned. The maximum is 100,000.
-                Defaults to None, in which case it returns first 50 results.
-
-        Returns:
-            search_results.AssignmentSearchResult: The first "limit" assignments in "items". And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_assignments(self, request: AssignmentSearchRequest, sort: Union[List[str], AssignmentSortItems, None] = None, limit: Optional[int] = None) -> AssignmentSearchResult:
-        """Finds all assignments that match certain rules
-
-        As a result, it returns an object that contains the first part of the found assignments and whether there
-        are any more results.
-        It is better to use the "get_assignments" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search assignments.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of assignments returned. The maximum is 100,000.
-                Defaults to None, in which case it returns first 50 results.
-
-        Returns:
-            search_results.AssignmentSearchResult: The first "limit" assignments in "items". And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_attachments(self, name: Optional[str] = None, type: Optional[Attachment.Type] = None, user_id: Optional[str] = None, assignment_id: Optional[str] = None, pool_id: Optional[str] = None, owner_id: Optional[str] = None, owner_company_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], AttachmentSortItems, None] = None, limit: Optional[int] = None) -> AttachmentSearchResult:
-        """Finds all attachments that match certain rules
-
-        As a result, it returns an object that contains the first part of the found attachments and whether there
-        are any more results.
-        It is better to use the "get_attachments" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search attachments.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 100,000.
-                Defaults to None, in which case it returns first 50 results.
-
-        Returns:
-            search_results.AttachmentSearchResult: The first "limit" assignments in "items". And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_attachments(self, request: AttachmentSearchRequest, sort: Union[List[str], AttachmentSortItems, None] = None, limit: Optional[int] = None) -> AttachmentSearchResult:
-        """Finds all attachments that match certain rules
-
-        As a result, it returns an object that contains the first part of the found attachments and whether there
-        are any more results.
-        It is better to use the "get_attachments" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search attachments.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 100,000.
-                Defaults to None, in which case it returns first 50 results.
-
-        Returns:
-            search_results.AttachmentSearchResult: The first "limit" assignments in "items". And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_message_threads(self, folder: Union[str, Folder, List[Union[str, Folder]]] = None, folder_ne: Union[str, Folder, List[Union[str, Folder]]] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], MessageThreadSortItems, None] = None, limit: Optional[int] = None) -> MessageThreadSearchResult:
-        """Finds all message threads that match certain rules
-
-        As a result, it returns an object that contains the first part of the found threads and whether there
-        are any more results.
-        It is better to use the "get_message_threads" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request:  How to search threads.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 300.
-                Defaults to None, in which case it returns first 50 results.
-
-        Returns:
-            search_results.MessageThreadSearchResult: The first "limit" message threads in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_message_threads(self, request: MessageThreadSearchRequest, sort: Union[List[str], MessageThreadSortItems, None] = None, limit: Optional[int] = None) -> MessageThreadSearchResult:
-        """Finds all message threads that match certain rules
-
-        As a result, it returns an object that contains the first part of the found threads and whether there
-        are any more results.
-        It is better to use the "get_message_threads" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request:  How to search threads.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 300.
-                Defaults to None, in which case it returns first 50 results.
-
-        Returns:
-            search_results.MessageThreadSearchResult: The first "limit" message threads in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_pools(self, status: Optional[Pool.Status] = None, project_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, last_started_lt: Optional[datetime] = None, last_started_lte: Optional[datetime] = None, last_started_gt: Optional[datetime] = None, last_started_gte: Optional[datetime] = None, sort: Union[List[str], PoolSortItems, None] = None, limit: Optional[int] = None) -> PoolSearchResult:
-        """Finds all pools that match certain rules
-
-        As a result, it returns an object that contains the first part of the found pools and whether there
-        are any more results.
-        It is better to use the "get_pools" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search pools.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 300.
-                Defaults to None, in which case it returns first 20 results.
-
-        Returns:
-            search_results.PoolSearchResult: The first "limit" pools in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_pools(self, request: PoolSearchRequest, sort: Union[List[str], PoolSortItems, None] = None, limit: Optional[int] = None) -> PoolSearchResult:
-        """Finds all pools that match certain rules
-
-        As a result, it returns an object that contains the first part of the found pools and whether there
-        are any more results.
-        It is better to use the "get_pools" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search pools.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 300.
-                Defaults to None, in which case it returns first 20 results.
-
-        Returns:
-            search_results.PoolSearchResult: The first "limit" pools in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_projects(self, status: Optional[Project.ProjectStatus] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], ProjectSortItems, None] = None, limit: Optional[int] = None) -> ProjectSearchResult:
-        """Finds all projects that match certain rules
-
-        As a result, it returns an object that contains the first part of the found projects and whether there
-        are any more results.
-        It is better to use the "get_projects" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search projects.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 300.
-                Defaults to None, in which case it returns first 20 results.
-
-        Returns:
-            search_results.ProjectSearchResult: The first "limit" projects in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_projects(self, request: ProjectSearchRequest, sort: Union[List[str], ProjectSortItems, None] = None, limit: Optional[int] = None) -> ProjectSearchResult:
-        """Finds all projects that match certain rules
-
-        As a result, it returns an object that contains the first part of the found projects and whether there
-        are any more results.
-        It is better to use the "get_projects" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search projects.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 300.
-                Defaults to None, in which case it returns first 20 results.
-
-        Returns:
-            search_results.ProjectSearchResult: The first "limit" projects in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_skills(self, name: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], SkillSortItems, None] = None, limit: Optional[int] = None) -> SkillSearchResult:
-        """Finds all skills that match certain rules
-
-        As a result, it returns an object that contains the first part of the found skills and whether there
-        are any more results.
-        It is better to use the "get_skills" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search skills.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned.
-
-        Returns:
-            SkillSearchResult: The first "limit" skills in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_skills(self, request: SkillSearchRequest, sort: Union[List[str], SkillSortItems, None] = None, limit: Optional[int] = None) -> SkillSearchResult:
-        """Finds all skills that match certain rules
-
-        As a result, it returns an object that contains the first part of the found skills and whether there
-        are any more results.
-        It is better to use the "get_skills" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search skills.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned.
-
-        Returns:
-            SkillSearchResult: The first "limit" skills in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_task_suites(self, task_id: Optional[str] = None, pool_id: Optional[str] = None, overlap: Optional[int] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, overlap_lt: Optional[int] = None, overlap_lte: Optional[int] = None, overlap_gt: Optional[int] = None, overlap_gte: Optional[int] = None, sort: Union[List[str], TaskSuiteSortItems, None] = None, limit: Optional[int] = None) -> TaskSuiteSearchResult:
-        """Finds all task suites that match certain rules
-
-        As a result, it returns an object that contains the first part of the found task suites and whether there
-        are any more results.
-        It is better to use the "get_task_suites" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search task suites.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 100 000.
-                Defaults to None, in which case it returns first 50 results.
-
-        Returns:
-            TaskSuiteSearchResult: The first "limit" task suites in "items". And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_task_suites(self, request: TaskSuiteSearchRequest, sort: Union[List[str], TaskSuiteSortItems, None] = None, limit: Optional[int] = None) -> TaskSuiteSearchResult:
-        """Finds all task suites that match certain rules
-
-        As a result, it returns an object that contains the first part of the found task suites and whether there
-        are any more results.
-        It is better to use the "get_task_suites" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search task suites.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 100 000.
-                Defaults to None, in which case it returns first 50 results.
-
-        Returns:
-            TaskSuiteSearchResult: The first "limit" task suites in "items". And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_tasks(self, pool_id: Optional[str] = None, overlap: Optional[int] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, overlap_lt: Optional[int] = None, overlap_lte: Optional[int] = None, overlap_gt: Optional[int] = None, overlap_gte: Optional[int] = None, sort: Union[List[str], TaskSortItems, None] = None, limit: Optional[int] = None) -> TaskSearchResult:
-        """Finds all tasks that match certain rules
-
-        As a result, it returns an object that contains the first part of the found tasks and whether there
-        are any more results.
-        It is better to use the "get_tasks" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search tasks.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 100 000.
-                Defaults to None, in which case it returns first 50 results.
-
-        Returns:
-            TaskSearchResult: The first "limit" tasks in "items". And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_tasks(self, request: TaskSearchRequest, sort: Union[List[str], TaskSortItems, None] = None, limit: Optional[int] = None) -> TaskSearchResult:
-        """Finds all tasks that match certain rules
-
-        As a result, it returns an object that contains the first part of the found tasks and whether there
-        are any more results.
-        It is better to use the "get_tasks" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search tasks.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 100 000.
-                Defaults to None, in which case it returns first 50 results.
-
-        Returns:
-            TaskSearchResult: The first "limit" tasks in "items". And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_trainings(self, status: Optional[Training.Status] = None, project_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, last_started_lt: Optional[datetime] = None, last_started_lte: Optional[datetime] = None, last_started_gt: Optional[datetime] = None, last_started_gte: Optional[datetime] = None, sort: Union[List[str], TrainingSortItems, None] = None, limit: Optional[int] = None) -> TrainingSearchResult:
-        """Finds all trainings that match certain rules
-
-        As a result, it returns an object that contains the first part of the found trainings and whether there
-        are any more results.
-        It is better to use the "get_trainings" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search trainings.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned.
-
-        Returns:
-            search_results.PoolSearchResult: The first "limit" trainings in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_trainings(self, request: TrainingSearchRequest, sort: Union[List[str], TrainingSortItems, None] = None, limit: Optional[int] = None) -> TrainingSearchResult:
-        """Finds all trainings that match certain rules
-
-        As a result, it returns an object that contains the first part of the found trainings and whether there
-        are any more results.
-        It is better to use the "get_trainings" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search trainings.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned.
-
-        Returns:
-            search_results.PoolSearchResult: The first "limit" trainings in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_user_bonuses(self, user_id: Optional[str] = None, private_comment: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], UserBonusSortItems, None] = None, limit: Optional[int] = None) -> UserBonusSearchResult:
-        """Finds all user bonuses that match certain rules
-
-        As a result, it returns an object that contains the first part of the found user bonuses and whether there
-        are any more results.
-        It is better to use the "get_user_bonuses" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search user bonuses.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned.
-
-        Returns:
-            UserBonusSearchResult: The first "limit" user bonuses in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_user_bonuses(self, request: UserBonusSearchRequest, sort: Union[List[str], UserBonusSortItems, None] = None, limit: Optional[int] = None) -> UserBonusSearchResult:
-        """Finds all user bonuses that match certain rules
-
-        As a result, it returns an object that contains the first part of the found user bonuses and whether there
-        are any more results.
-        It is better to use the "get_user_bonuses" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search user bonuses.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned.
-
-        Returns:
-            UserBonusSearchResult: The first "limit" user bonuses in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_user_restrictions(self, scope: Optional[UserRestriction.Scope] = None, user_id: Optional[str] = None, project_id: Optional[str] = None, pool_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], UserRestrictionSortItems, None] = None, limit: Optional[int] = None) -> UserRestrictionSearchResult:
-        """Finds all user restrictions that match certain rules
-
-        As a result, it returns an object that contains the first part of the found user restrictions and whether there
-        are any more results.
-        It is better to use the "get_user_restriction" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search user restrictions.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned.
-
-        Returns:
-            UserRestrictionSearchResult: The first "limit" user restrictions in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_user_restrictions(self, request: UserRestrictionSearchRequest, sort: Union[List[str], UserRestrictionSortItems, None] = None, limit: Optional[int] = None) -> UserRestrictionSearchResult:
-        """Finds all user restrictions that match certain rules
-
-        As a result, it returns an object that contains the first part of the found user restrictions and whether there
-        are any more results.
-        It is better to use the "get_user_restriction" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search user restrictions.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned.
-
-        Returns:
-            UserRestrictionSearchResult: The first "limit" user restrictions in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_user_skills(self, name: Optional[str] = None, user_id: Optional[str] = None, skill_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, modified_lt: Optional[datetime] = None, modified_lte: Optional[datetime] = None, modified_gt: Optional[datetime] = None, modified_gte: Optional[datetime] = None, sort: Union[List[str], UserSkillSortItems, None] = None, limit: Optional[int] = None) -> UserSkillSearchResult:
-        """Finds all user skills that match certain rules
-
-        UserSkill describe the skill value for a specific performer.
-        As a result, it returns an object that contains the first part of the found user skills and whether there
-        are any more results.
-        It is better to use the "get_user_skills" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search user skills.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned.
-
-        Returns:
-            UserSkillSearchResult: The first "limit" user skills in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_user_skills(self, request: UserSkillSearchRequest, sort: Union[List[str], UserSkillSortItems, None] = None, limit: Optional[int] = None) -> UserSkillSearchResult:
-        """Finds all user skills that match certain rules
-
-        UserSkill describe the skill value for a specific performer.
-        As a result, it returns an object that contains the first part of the found user skills and whether there
-        are any more results.
-        It is better to use the "get_user_skills" method, they allow to iterate trought all results
-        and not just the first output.
-
-        Args:
-            request: How to search user skills.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned.
-
-        Returns:
-            UserSkillSearchResult: The first "limit" user skills in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_webhook_subscriptions(self, event_type: Optional[WebhookSubscription.EventType] = None, pool_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], WebhookSubscriptionSortItems, None] = None, limit: Optional[int] = None) -> WebhookSubscriptionSearchResult:
-        """Finds all webhook-subscriptions that match certain rules
-
-        As a result, it returns an object that contains the first part of the found webhook-subscriptions
-        and whether there are any more results.
-        It is better to use the "get_webhook_subscriptions" method, they allow to iterate through all results
-        and not just the first output.
-
-        Args:
-            request: How to search webhook-subscriptions.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 100 000.
-                Defaults to None, in which case it returns first 50 results.
-
-        Returns:
-            WebhookSubscriptionSearchResult: The first "limit" webhook-subscriptions in "items".
-                And a mark that there is more.
-        """
-        ...
-
-    @overload
-    def find_webhook_subscriptions(self, request: WebhookSubscriptionSearchRequest, sort: Union[List[str], WebhookSubscriptionSortItems, None] = None, limit: Optional[int] = None) -> WebhookSubscriptionSearchResult:
-        """Finds all webhook-subscriptions that match certain rules
-
-        As a result, it returns an object that contains the first part of the found webhook-subscriptions
-        and whether there are any more results.
-        It is better to use the "get_webhook_subscriptions" method, they allow to iterate through all results
-        and not just the first output.
-
-        Args:
-            request: How to search webhook-subscriptions.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 100 000.
-                Defaults to None, in which case it returns first 50 results.
-
-        Returns:
-            WebhookSubscriptionSearchResult: The first "limit" webhook-subscriptions in "items".
-                And a mark that there is more.
         """
         ...
 
@@ -1937,7 +2369,26 @@ class TolokaClient:
         ...
 
     @overload
-    def get_assignments(self, status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]] = None, task_id: Optional[str] = None, task_suite_id: Optional[str] = None, pool_id: Optional[str] = None, user_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, submitted_lt: Optional[datetime] = None, submitted_lte: Optional[datetime] = None, submitted_gt: Optional[datetime] = None, submitted_gte: Optional[datetime] = None) -> Generator[Assignment, None, None]:
+    def get_assignments(
+        self,
+        status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]] = None,
+        task_id: Optional[str] = None,
+        task_suite_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        user_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        submitted_lt: Optional[datetime] = None,
+        submitted_lte: Optional[datetime] = None,
+        submitted_gt: Optional[datetime] = None,
+        submitted_gte: Optional[datetime] = None
+    ) -> Generator[Assignment, None, None]:
         """Finds all assignments that match certain rules and returns them in an iterable object
 
         Unlike find_assignments, returns generator. Does not sort assignments.
@@ -1981,7 +2432,16 @@ class TolokaClient:
         ...
 
     @overload
-    def get_assignments_df(self, pool_id: str, *, status: Optional[List[GetAssignmentsTsvParameters.Status]] = ..., start_time_from: Optional[datetime] = None, start_time_to: Optional[datetime] = None, exclude_banned: Optional[bool] = None, field: Optional[List[GetAssignmentsTsvParameters.Field]] = ...) -> DataFrame:
+    def get_assignments_df(
+        self,
+        pool_id: str,
+        *,
+        status: Optional[List[GetAssignmentsTsvParameters.Status]] = ...,
+        start_time_from: Optional[datetime] = None,
+        start_time_to: Optional[datetime] = None,
+        exclude_banned: Optional[bool] = None,
+        field: Optional[List[GetAssignmentsTsvParameters.Field]] = ...
+    ) -> DataFrame:
         """Downloads assignments as pandas.DataFrame
 
         Experimental method.
@@ -2003,7 +2463,11 @@ class TolokaClient:
         ...
 
     @overload
-    def get_assignments_df(self, pool_id: str, parameters: GetAssignmentsTsvParameters) -> DataFrame:
+    def get_assignments_df(
+        self,
+        pool_id: str,
+        parameters: GetAssignmentsTsvParameters
+    ) -> DataFrame:
         """Downloads assignments as pandas.DataFrame
 
         Experimental method.
@@ -2038,7 +2502,24 @@ class TolokaClient:
         ...
 
     @overload
-    def get_attachments(self, name: Optional[str] = None, type: Optional[Attachment.Type] = None, user_id: Optional[str] = None, assignment_id: Optional[str] = None, pool_id: Optional[str] = None, owner_id: Optional[str] = None, owner_company_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[Attachment, None, None]:
+    def get_attachments(
+        self,
+        name: Optional[str] = None,
+        type: Optional[Attachment.Type] = None,
+        user_id: Optional[str] = None,
+        assignment_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        owner_id: Optional[str] = None,
+        owner_company_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None
+    ) -> Generator[Attachment, None, None]:
         """Finds all attachments that match certain rules and returns their metadata in an iterable object
 
         Unlike find_attachments, returns generator. Does not sort attachments.
@@ -2068,7 +2549,19 @@ class TolokaClient:
         ...
 
     @overload
-    def get_message_threads(self, folder: Union[str, Folder, List[Union[str, Folder]]] = None, folder_ne: Union[str, Folder, List[Union[str, Folder]]] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[MessageThread, None, None]:
+    def get_message_threads(
+        self,
+        folder: Union[str, Folder, List[Union[str, Folder]]] = None,
+        folder_ne: Union[str, Folder, List[Union[str, Folder]]] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None
+    ) -> Generator[MessageThread, None, None]:
         """Finds all message threads that match certain rules and returns them in an iterable object
 
         Unlike find_message_threads, returns generator. Does not sort threads.
@@ -2150,7 +2643,23 @@ class TolokaClient:
         ...
 
     @overload
-    def get_pools(self, status: Optional[Pool.Status] = None, project_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, last_started_lt: Optional[datetime] = None, last_started_lte: Optional[datetime] = None, last_started_gt: Optional[datetime] = None, last_started_gte: Optional[datetime] = None) -> Generator[Pool, None, None]:
+    def get_pools(
+        self,
+        status: Optional[Pool.Status] = None,
+        project_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        last_started_lt: Optional[datetime] = None,
+        last_started_lte: Optional[datetime] = None,
+        last_started_gt: Optional[datetime] = None,
+        last_started_gte: Optional[datetime] = None
+    ) -> Generator[Pool, None, None]:
         """Finds all pools that match certain rules and returns them in an iterable object
 
         Unlike find_pools, returns generator. Does not sort pools.
@@ -2213,7 +2722,18 @@ class TolokaClient:
         ...
 
     @overload
-    def get_projects(self, status: Optional[Project.ProjectStatus] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[Project, None, None]:
+    def get_projects(
+        self,
+        status: Optional[Project.ProjectStatus] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None
+    ) -> Generator[Project, None, None]:
         """Finds all projects that match certain rules and returns them in an iterable object
 
         Unlike find_projects, returns generator. Does not sort projects.
@@ -2284,7 +2804,18 @@ class TolokaClient:
         ...
 
     @overload
-    def get_skills(self, name: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[Skill, None, None]:
+    def get_skills(
+        self,
+        name: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None
+    ) -> Generator[Skill, None, None]:
         """Finds all skills that match certain rules and returns them in an iterable object
 
         Unlike find_skills, returns generator. Does not sort skills.
@@ -2356,7 +2887,24 @@ class TolokaClient:
         ...
 
     @overload
-    def get_task_suites(self, task_id: Optional[str] = None, pool_id: Optional[str] = None, overlap: Optional[int] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, overlap_lt: Optional[int] = None, overlap_lte: Optional[int] = None, overlap_gt: Optional[int] = None, overlap_gte: Optional[int] = None) -> Generator[TaskSuite, None, None]:
+    def get_task_suites(
+        self,
+        task_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        overlap: Optional[int] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        overlap_lt: Optional[int] = None,
+        overlap_lte: Optional[int] = None,
+        overlap_gt: Optional[int] = None,
+        overlap_gte: Optional[int] = None
+    ) -> Generator[TaskSuite, None, None]:
         """Finds all task suites that match certain rules and returns them in an iterable object
 
         Unlike find_task_suites, returns generator. Does not sort task suites.
@@ -2386,7 +2934,23 @@ class TolokaClient:
         ...
 
     @overload
-    def get_tasks(self, pool_id: Optional[str] = None, overlap: Optional[int] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, overlap_lt: Optional[int] = None, overlap_lte: Optional[int] = None, overlap_gt: Optional[int] = None, overlap_gte: Optional[int] = None) -> Generator[Task, None, None]:
+    def get_tasks(
+        self,
+        pool_id: Optional[str] = None,
+        overlap: Optional[int] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        overlap_lt: Optional[int] = None,
+        overlap_lte: Optional[int] = None,
+        overlap_gt: Optional[int] = None,
+        overlap_gte: Optional[int] = None
+    ) -> Generator[Task, None, None]:
         """Finds all tasks that match certain rules and returns them in an iterable object
 
         Unlike find_tasks, returns generator. Does not sort tasks.
@@ -2427,7 +2991,23 @@ class TolokaClient:
         ...
 
     @overload
-    def get_trainings(self, status: Optional[Training.Status] = None, project_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, last_started_lt: Optional[datetime] = None, last_started_lte: Optional[datetime] = None, last_started_gt: Optional[datetime] = None, last_started_gte: Optional[datetime] = None) -> Generator[Training, None, None]:
+    def get_trainings(
+        self,
+        status: Optional[Training.Status] = None,
+        project_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        last_started_lt: Optional[datetime] = None,
+        last_started_lte: Optional[datetime] = None,
+        last_started_gt: Optional[datetime] = None,
+        last_started_gte: Optional[datetime] = None
+    ) -> Generator[Training, None, None]:
         """Finds all trainings that match certain rules and returns them in an iterable object
 
         Unlike find_trainings, returns generator. Does not sort trainings.
@@ -2480,7 +3060,19 @@ class TolokaClient:
         ...
 
     @overload
-    def get_user_bonuses(self, user_id: Optional[str] = None, private_comment: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[UserBonus, None, None]:
+    def get_user_bonuses(
+        self,
+        user_id: Optional[str] = None,
+        private_comment: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None
+    ) -> Generator[UserBonus, None, None]:
         """Finds all user bonuses that match certain rules and returns them in an iterable object
 
         Unlike find_user_bonuses, returns generator. Does not sort user bonuses.
@@ -2521,7 +3113,21 @@ class TolokaClient:
         ...
 
     @overload
-    def get_user_restrictions(self, scope: Optional[UserRestriction.Scope] = None, user_id: Optional[str] = None, project_id: Optional[str] = None, pool_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[UserRestriction, None, None]:
+    def get_user_restrictions(
+        self,
+        scope: Optional[UserRestriction.Scope] = None,
+        user_id: Optional[str] = None,
+        project_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None
+    ) -> Generator[UserRestriction, None, None]:
         """Finds all user restrictions that match certain rules and returns them in an iterable object
 
         Unlike find_user_restrictions, returns generator. Does not sort user restrictions.
@@ -2564,7 +3170,24 @@ class TolokaClient:
         ...
 
     @overload
-    def get_user_skills(self, name: Optional[str] = None, user_id: Optional[str] = None, skill_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, modified_lt: Optional[datetime] = None, modified_lte: Optional[datetime] = None, modified_gt: Optional[datetime] = None, modified_gte: Optional[datetime] = None) -> Generator[UserSkill, None, None]:
+    def get_user_skills(
+        self,
+        name: Optional[str] = None,
+        user_id: Optional[str] = None,
+        skill_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        modified_lt: Optional[datetime] = None,
+        modified_lte: Optional[datetime] = None,
+        modified_gt: Optional[datetime] = None,
+        modified_gte: Optional[datetime] = None
+    ) -> Generator[UserSkill, None, None]:
         """Finds all user skills that match certain rules and returns them in an iterable object
 
         UserSkill describe the skill value for a specific performer.
@@ -2607,7 +3230,19 @@ class TolokaClient:
         ...
 
     @overload
-    def get_webhook_subscriptions(self, event_type: Optional[WebhookSubscription.EventType] = None, pool_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[WebhookSubscription, None, None]:
+    def get_webhook_subscriptions(
+        self,
+        event_type: Optional[WebhookSubscription.EventType] = None,
+        pool_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None
+    ) -> Generator[WebhookSubscription, None, None]:
         """Finds all webhook-subscriptions that match certain rules and returns them in an iterable object
 
         Unlike find_webhook-subscriptions, returns generator. Does not sort webhook-subscriptions.
@@ -2685,7 +3320,13 @@ class TolokaClient:
         ...
 
     @overload
-    def patch_assignment(self, assignment_id: str, *, public_comment: Optional[str] = None, status: Optional[Assignment.Status] = None) -> Assignment:
+    def patch_assignment(
+        self,
+        assignment_id: str,
+        *,
+        public_comment: Optional[str] = None,
+        status: Optional[Assignment.Status] = None
+    ) -> Assignment:
         """Changes status and comment on assignment
 
         It's better to use methods "reject_assignment" and "accept_assignment".
@@ -2700,7 +3341,11 @@ class TolokaClient:
         ...
 
     @overload
-    def patch_assignment(self, assignment_id: str, patch: AssignmentPatch) -> Assignment:
+    def patch_assignment(
+        self,
+        assignment_id: str,
+        patch: AssignmentPatch
+    ) -> Assignment:
         """Changes status and comment on assignment
 
         It's better to use methods "reject_assignment" and "accept_assignment".
@@ -2715,7 +3360,11 @@ class TolokaClient:
         ...
 
     @overload
-    def patch_pool(self, pool_id: str, priority: Optional[int] = None) -> Pool:
+    def patch_pool(
+        self,
+        pool_id: str,
+        priority: Optional[int] = None
+    ) -> Pool:
         """Changes the priority of the pool issue
 
         Args:
@@ -2736,7 +3385,11 @@ class TolokaClient:
         ...
 
     @overload
-    def patch_pool(self, pool_id: str, request: PoolPatchRequest) -> Pool:
+    def patch_pool(
+        self,
+        pool_id: str,
+        request: PoolPatchRequest
+    ) -> Pool:
         """Changes the priority of the pool issue
 
         Args:
@@ -2757,7 +3410,14 @@ class TolokaClient:
         ...
 
     @overload
-    def patch_task(self, task_id: str, *, overlap: Optional[int] = None, infinite_overlap: Optional[bool] = None, baseline_solutions: Optional[List[Task.BaselineSolution]] = None) -> Task:
+    def patch_task(
+        self,
+        task_id: str,
+        *,
+        overlap: Optional[int] = None,
+        infinite_overlap: Optional[bool] = None,
+        baseline_solutions: Optional[List[Task.BaselineSolution]] = None
+    ) -> Task:
         """Changes the task overlap
 
         Args:
@@ -2770,7 +3430,11 @@ class TolokaClient:
         ...
 
     @overload
-    def patch_task(self, task_id: str, patch: TaskPatch) -> Task:
+    def patch_task(
+        self,
+        task_id: str,
+        patch: TaskPatch
+    ) -> Task:
         """Changes the task overlap
 
         Args:
@@ -2783,7 +3447,13 @@ class TolokaClient:
         ...
 
     @overload
-    def patch_task_overlap_or_min(self, task_id: str, *, overlap: Optional[int] = None, infinite_overlap: Optional[bool] = None) -> Task:
+    def patch_task_overlap_or_min(
+        self,
+        task_id: str,
+        *,
+        overlap: Optional[int] = None,
+        infinite_overlap: Optional[bool] = None
+    ) -> Task:
         """Stops issuing the task
 
         Args:
@@ -2796,7 +3466,11 @@ class TolokaClient:
         ...
 
     @overload
-    def patch_task_overlap_or_min(self, task_id: str, patch: TaskOverlapPatch) -> Task:
+    def patch_task_overlap_or_min(
+        self,
+        task_id: str,
+        patch: TaskOverlapPatch
+    ) -> Task:
         """Stops issuing the task
 
         Args:
@@ -2809,7 +3483,15 @@ class TolokaClient:
         ...
 
     @overload
-    def patch_task_suite(self, task_suite_id: str, *, infinite_overlap=None, overlap=None, issuing_order_override: Optional[float] = None, open_pool: Optional[bool] = None) -> TaskSuite:
+    def patch_task_suite(
+        self,
+        task_suite_id: str,
+        *,
+        infinite_overlap=None,
+        overlap=None,
+        issuing_order_override: Optional[float] = None,
+        open_pool: Optional[bool] = None
+    ) -> TaskSuite:
         """Changes the task suite overlap or priority
 
         Args:
@@ -2822,7 +3504,11 @@ class TolokaClient:
         ...
 
     @overload
-    def patch_task_suite(self, task_suite_id: str, patch: TaskSuitePatch) -> TaskSuite:
+    def patch_task_suite(
+        self,
+        task_suite_id: str,
+        patch: TaskSuitePatch
+    ) -> TaskSuite:
         """Changes the task suite overlap or priority
 
         Args:
@@ -2835,7 +3521,12 @@ class TolokaClient:
         ...
 
     @overload
-    def patch_task_suite_overlap_or_min(self, task_suite_id: str, *, overlap: Optional[int] = None) -> TaskSuite:
+    def patch_task_suite_overlap_or_min(
+        self,
+        task_suite_id: str,
+        *,
+        overlap: Optional[int] = None
+    ) -> TaskSuite:
         """Stops issuing the task suites
 
         Args:
@@ -2848,7 +3539,11 @@ class TolokaClient:
         ...
 
     @overload
-    def patch_task_suite_overlap_or_min(self, task_suite_id: str, patch: TaskSuiteOverlapPatch) -> TaskSuite:
+    def patch_task_suite_overlap_or_min(
+        self,
+        task_suite_id: str,
+        patch: TaskSuiteOverlapPatch
+    ) -> TaskSuite:
         """Stops issuing the task suites
 
         Args:
@@ -2860,7 +3555,11 @@ class TolokaClient:
         """
         ...
 
-    def reject_assignment(self, assignment_id: str, public_comment: str) -> Assignment:
+    def reject_assignment(
+        self,
+        assignment_id: str,
+        public_comment: str
+    ) -> Assignment:
         """Marks one assignment as rejected
 
         Used then your pool created with auto_accept_solutions=False parametr.
@@ -2879,7 +3578,11 @@ class TolokaClient:
         """
         ...
 
-    def remove_message_thread_from_folders(self, message_thread_id: str, folders: Union[List[Folder], MessageThreadFolders]) -> MessageThread:
+    def remove_message_thread_from_folders(
+        self,
+        message_thread_id: str,
+        folders: Union[List[Folder], MessageThreadFolders]
+    ) -> MessageThread:
         """Deletes a message chain from one or more folders ("unread", "important" etc.)
 
         Args:
@@ -2891,7 +3594,11 @@ class TolokaClient:
         """
         ...
 
-    def reply_message_thread(self, message_thread_id: str, reply: MessageThreadReply) -> MessageThread:
+    def reply_message_thread(
+        self,
+        message_thread_id: str,
+        reply: MessageThreadReply
+    ) -> MessageThread:
         """Replies to a message in thread
 
         Args:
@@ -2915,7 +3622,13 @@ class TolokaClient:
         ...
 
     @overload
-    def set_user_skill(self, *, skill_id: Optional[str] = None, user_id: Optional[str] = None, value: Optional[Decimal] = None) -> UserSkill:
+    def set_user_skill(
+        self,
+        *,
+        skill_id: Optional[str] = None,
+        user_id: Optional[str] = None,
+        value: Optional[Decimal] = None
+    ) -> UserSkill:
         """Sets the skill value to the performer
 
         Args:
@@ -2938,7 +3651,11 @@ class TolokaClient:
         """
         ...
 
-    def update_pool(self, pool_id: str, pool: Pool) -> Pool:
+    def update_pool(
+        self,
+        pool_id: str,
+        pool: Pool
+    ) -> Pool:
         """Makes changes to the pool
 
         Args:
@@ -2950,7 +3667,11 @@ class TolokaClient:
         """
         ...
 
-    def update_project(self, project_id: str, project: Project) -> Project:
+    def update_project(
+        self,
+        project_id: str,
+        project: Project
+    ) -> Project:
         """Makes changes to the project
 
         Args:
@@ -2962,7 +3683,11 @@ class TolokaClient:
         """
         ...
 
-    def update_skill(self, skill_id: str, skill: Skill) -> Skill:
+    def update_skill(
+        self,
+        skill_id: str,
+        skill: Skill
+    ) -> Skill:
         """Makes changes to the skill
 
         Args:
@@ -2974,7 +3699,11 @@ class TolokaClient:
         """
         ...
 
-    def update_training(self, training_id: str, training: Training) -> Training:
+    def update_training(
+        self,
+        training_id: str,
+        training: Training
+    ) -> Training:
         """Makes changes to the training
 
         Args:
@@ -2986,7 +3715,44 @@ class TolokaClient:
         """
         ...
 
-    def wait_operation(self, op: Operation, timeout: timedelta = ...) -> Operation:
+    def upsert_webhook_subscriptions(self, subscriptions: List[WebhookSubscription]) -> WebhookSubscriptionBatchCreateResult:
+        """Creates (upsert) many webhook-subscriptions.
+
+        Args:
+            subscriptions: List of webhook-subscriptions, that will be created.
+
+        Returns:
+            batch_create_results.WebhookSubscriptionBatchCreateResult: Result of subscriptions creation.
+                Contains created subscriptions in "items" and problems in "validation_errors".
+
+        Raises:
+            ValidationApiError: If no subscriptions were created.
+
+        Example:
+            How to create several subscriptions.
+
+            >>> created_result = toloka_client.upsert_webhook_subscriptions([
+            >>>     {
+            >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
+            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.ASSIGNMENT_CREATED,
+            >>>         'pool_id': '121212'
+            >>>     },
+            >>>     {
+            >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
+            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.POOL_CLOSED,
+            >>>         'pool_id': '121212',
+            >>>     }
+            >>> ])
+            >>> print(len(created_result.items))
+            2
+        """
+        ...
+
+    def wait_operation(
+        self,
+        op: Operation,
+        timeout: timedelta = ...
+    ) -> Operation:
         """Waits for the operation to complete, and return it
 
         Args:

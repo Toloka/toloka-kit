@@ -13,11 +13,25 @@ from typing import (
 E = TypeVar('E', bound=Enum)
 
 class VariantRegistry:
-    def __init__(self, field: str, enum: Type[E]): ...
+    def __init__(
+        self,
+        field: str,
+        enum: Type[E]
+    ): ...
 
-    def register(self, type_: type, value: E) -> type: ...
+    def register(
+        self,
+        type_: type,
+        value: E
+    ) -> type: ...
 
-def attribute(*args, required=False, origin=None, **kwargs): ...
+
+def attribute(
+    *args,
+    required=False,
+    origin=None,
+    **kwargs
+): ...
 
 
 class BaseTolokaObjectMetaclass(type):
