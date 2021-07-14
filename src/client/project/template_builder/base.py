@@ -1,10 +1,11 @@
 __all__ = [
     'ComponentType',
+    'BaseTemplateMetaclass',
     'BaseTemplate',
     'BaseComponent',
     'BaseComponentOr',
     'base_component_or',
-    'VersionedBaseComponent',
+    'VersionedBaseComponentMetaclass',
     'UnknownComponent',
     'RefComponent',
     'ListDirection',
@@ -99,7 +100,12 @@ class ComponentType(Enum):
     VIEW_VIDEO = 'view.video'
 
 
-class BaseTemplate(BaseTolokaObject):
+class BaseTemplateMetaclass(BaseTolokaObjectMetaclass):
+    def __new__(mcs, *args, kw_only=False, **kwargs):
+        return super().__new__(mcs, *args, kw_only=kw_only, **kwargs)
+
+
+class BaseTemplate(BaseTolokaObject, metaclass=BaseTemplateMetaclass):
 
     @classmethod
     def structure(cls, data: dict):
@@ -147,14 +153,23 @@ def base_component_or(type_: Type, class_name_suffix: Optional[str] = None):
     return base_component_or._cache[type_]
 
 
-class VersionedBaseComponent(BaseComponent):
+class VersionedBaseComponentMetaclass(BaseTemplateMetaclass):
 
     def _validate_v1(self, attribute, value: str) -> str:
         if not value.startswith('1.'):
             raise ValueError('only v1 components are supported')
         return value
 
-    version: str = attribute(default='1.0.0', validator=_validate_v1, on_setattr=_validate_v1)
+    def __new__(mcs, name, bases, namespace, **kwargs):
+        if 'version' not in namespace:
+            namespace['version'] = attribute(
+                default='1.0.0',
+                validator=VersionedBaseComponentMetaclass._validate_v1,
+                on_setattr=VersionedBaseComponentMetaclass._validate_v1,
+                kw_only=True
+            )
+            namespace.setdefault('__annotations__', {})['version'] = str
+        return super().__new__(mcs, name, bases, namespace, **kwargs)
 
 
 class UnknownComponent(BaseTemplate):
@@ -167,7 +182,7 @@ class RefComponent(BaseTemplate):
     This helps make your configuration shorter and makes it easier for you to edit duplicate chunks of code.
 
     You can insert a code snippet from another part of the configuration anywhere inside the configuration. To do this,
-    use the structure RefComponent(ref="path.to.element").
+    use the structure RefComponent("path.to.element").
 
     This is useful when you need to insert the same snippet at multiple places in your code. For example, if you need
     to run the same action using multiple buttons, put this action in a variable and call it using RefComponent.

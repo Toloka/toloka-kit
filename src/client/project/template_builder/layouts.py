@@ -10,16 +10,24 @@ from typing import List
 
 from ...primitives.base import attribute
 
-from .base import BaseComponent, ComponentType, VersionedBaseComponent, base_component_or
+from .base import BaseComponent, ComponentType, VersionedBaseComponentMetaclass, base_component_or
 
 
-class BaseLayoutV1(VersionedBaseComponent):
+class BaseLayoutV1Metaclass(VersionedBaseComponentMetaclass):
+    def __new__(mcs, name, bases, namespace, **kwargs):
+        if 'validation' not in namespace:
+            namespace['validation'] = attribute(kw_only=True)
+            namespace.setdefault('__annotations__', {})['validation'] = BaseComponent
+        return super().__new__(mcs, name, bases, namespace, **kwargs)
+
+
+class BaseLayoutV1(BaseComponent, metaclass=BaseLayoutV1Metaclass):
     """Options for positioning elements in the interface, such as in columns or side-by-side.
 
     If you have more than one element in the interface, these components will help you arrange them the way you want.
     """
 
-    validation: BaseComponent
+    pass
 
 
 class BarsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_BARS):
@@ -30,15 +38,15 @@ class BarsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_BARS):
     The top bar is located at the top edge of the component, and the bottom one is at the bottom edge. The content is
     placed between the bars and takes up all available space.
     Attributes:
+        content: The main content.
         bar_after: The bar displayed at the bottom edge of the component.
         bar_before: The bar displayed at the top edge of the component.
-        content: The main content.
         validation: Validation based on condition.
     """
 
     content: BaseComponent
-    bar_after: BaseComponent = attribute(origin='barAfter')
-    bar_before: BaseComponent = attribute(origin='barBefore')
+    bar_after: BaseComponent = attribute(origin='barAfter', kw_only=True)
+    bar_before: BaseComponent = attribute(origin='barBefore', kw_only=True)
 
 
 class ColumnsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COLUMNS):
@@ -46,9 +54,9 @@ class ColumnsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COLUMNS):
 
     Use it to customize the display of content: set the column width and adjust the vertical alignment of content.
     Attributes:
+        items: Columns to divide the interface into.
         full_height: Switches the component to column mode at full height and with individual scrolling. Otherwise, the
             height is determined by the height of the column that is filled in the most.
-        items: Columns to divide the interface into.
         min_width: The minimum width of the component; if it is narrower, columns are output sequentially, one by one.
         ratio: An array of values that specify the relative width of columns. For example, if you have 3 columns, the
             value [1,2,1] divides the space into 4 parts and the column in the middle is twice as large as the other
@@ -76,10 +84,10 @@ class ColumnsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COLUMNS):
         TOP = 'top'
 
     items: base_component_or(List[BaseComponent], 'ListBaseComponent')
-    full_height: base_component_or(bool) = attribute(origin='fullHeight')
-    min_width: base_component_or(float) = attribute(origin='minWidth')
-    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat')
-    vertical_align: base_component_or(VerticalAlign) = attribute(origin='verticalAlign')
+    full_height: base_component_or(bool) = attribute(origin='fullHeight', kw_only=True)
+    min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)
+    vertical_align: base_component_or(VerticalAlign) = attribute(origin='verticalAlign', kw_only=True)
 
 
 class SideBySideLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_SIDE_BY_SIDE):
@@ -98,7 +106,7 @@ class SideBySideLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_SIDE_BY_S
 
     controls: BaseComponent
     items: base_component_or(List[BaseComponent], 'ListBaseComponent')
-    min_item_width: base_component_or(float) = attribute(origin='minItemWidth')
+    min_item_width: base_component_or(float) = attribute(origin='minItemWidth', kw_only=True)
 
 
 class SidebarLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_SIDEBAR):
@@ -128,6 +136,6 @@ class SidebarLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_SIDEBAR):
 
     content: BaseComponent
     controls: BaseComponent
-    controls_width: base_component_or(float) = attribute(origin='controlsWidth')
-    extra_controls: BaseComponent = attribute(origin='extraControls')
-    min_width: base_component_or(float) = attribute(origin='minWidth')
+    controls_width: base_component_or(float) = attribute(origin='controlsWidth', kw_only=True)
+    extra_controls: BaseComponent = attribute(origin='extraControls', kw_only=True)
+    min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)

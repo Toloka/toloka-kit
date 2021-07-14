@@ -17,16 +17,24 @@ from typing import List, Any, Dict
 
 from ...primitives.base import attribute
 
-from .base import BaseComponent, ComponentType, VersionedBaseComponent, base_component_or
+from .base import BaseComponent, ComponentType, VersionedBaseComponentMetaclass, base_component_or
 
 
-class BaseConditionV1(VersionedBaseComponent):
+class BaseConditionV1Metaclass(VersionedBaseComponentMetaclass):
+    def __new__(mcs, name, bases, namespace, **kwargs):
+        if 'hint' not in namespace:
+            namespace['hint'] = attribute(kw_only=True)
+            namespace.setdefault('__annotations__', {})['hint'] = base_component_or(Any)
+        return super().__new__(mcs, name, bases, namespace, **kwargs)
+
+
+class BaseConditionV1(BaseComponent, metaclass=BaseConditionV1Metaclass):
     """Check an expression against a condition.
 
     For example, you can check that a text field is filled in.
     """
 
-    hint: base_component_or(Any)
+    pass
 
 
 class AllConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ALL):
@@ -44,15 +52,15 @@ class AllConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ALL):
         How to check several conditions.
 
         >>> coordinates_validation = tb.conditions.AllConditionV1(
-        >>>     conditions=[
+        >>>     [
         >>>         tb.conditions.RequiredConditionV1(
-        >>>             data=tb.data.OutputData(path='performer_coordinates'),
+        >>>             tb.data.OutputData('performer_coordinates'),
         >>>             hint="Couldn't get your coordinates. Please enable geolocation.",
         >>>         ),
         >>>         tb.conditions.DistanceConditionV1(
-        >>>             x=tb.data.LocationData(),
-        >>>             y=tb.data.InputData(path='coordinates'),
-        >>>             max=500,
+        >>>             tb.data.LocationData(),
+        >>>             tb.data.InputData('coordinates'),
+        >>>             500,
         >>>             hint='You are too far from the destination coordinates.',
         >>>         ),
         >>>     ],
@@ -93,9 +101,9 @@ class DistanceConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_YA
         How to check that performer is in the right place.
 
         >>> distance_condition = tb.conditions.DistanceConditionV1(
-        >>>     from_=tb.data.LocationData(),
-        >>>     to_=tb.data.InputData(path='coordinates'),
-        >>>     max=500,
+        >>>     tb.data.LocationData(),
+        >>>     tb.data.InputData('coordinates'),
+        >>>     500,
         >>>     hint='You are too far from the destination coordinates.',
         >>> ),
         ...
@@ -130,6 +138,12 @@ class EqualsConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_EQUA
     When substituting values, you can refer to data.* or another element using $ref. You can also use helpers and
     conditions to get the value.
     Attributes:
+        to: The value to compare with the original.
+            How to pass a value:
+            * Specify the value itself, like the number 42 or a string.
+            * Get the value from your data.
+            * Refer to another element using $ref.
+            * Use helpers and conditions to get the value.
         data: Original value. If not specified, it uses the value returned by the parent component (the component that
             contains condition.equals).
             How to pass a value:
@@ -138,12 +152,6 @@ class EqualsConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_EQUA
                 * Refer to another element using $ref.
                 * Use helpers and conditions to get the value.
         hint: Validation error message that the user will see.
-        to: The value to compare with the original.
-            How to pass a value:
-            * Specify the value itself, like the number 42 or a string.
-            * Get the value from your data.
-            * Refer to another element using $ref.
-            * Use helpers and conditions to get the value.
     """
 
     to: base_component_or(Any)
@@ -158,8 +166,8 @@ class LinkOpenedConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_
 
     This condition can be used in the view.link component and also anywhere you can use (conditions).
     Attributes:
-        hint: Validation error message that the user will see.
         url: The link that must be clicked.
+        hint: Validation error message that the user will see.
     """
 
     url: base_component_or(Any)
@@ -215,8 +223,8 @@ class RequiredConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_RE
         How to check that image is uploaded.
 
         >>> image = tb.fields.MediaFileFieldV1(
-        >>>     data=tb.data.OutputData(path='image'),
-        >>>     accept=tb.fields.MediaFileFieldV1.Accept(photo=True, gallery=True),
+        >>>     tb.data.OutputData('image'),
+        >>>     tb.fields.MediaFileFieldV1.Accept(photo=True, gallery=True),
         >>>     validation=tb.conditions.RequiredConditionV1(hint='Your must upload photo.'),
         >>> )
         ...
@@ -236,8 +244,8 @@ class SchemaConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_SCHE
         * If you already have a prepared JSON Schema configuration for the check and you want to use it.
     Attributes:
         data: Data that should be checked.
-        hint: Validation error message that the user will see.
         schema: The schema for validating data.
+        hint: Validation error message that the user will see.
     """
 
     data: base_component_or(Any)
@@ -249,8 +257,8 @@ class SubArrayConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_SU
 
     Attributes:
         data: Subarray that is checked for in parent.
-        hint: Validation error message that the user will see.
         parent: The array where data is searched for.
+        hint: Validation error message that the user will see.
     """
 
     data: base_component_or(Any)

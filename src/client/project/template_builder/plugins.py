@@ -11,10 +11,10 @@ from typing import List, Any
 from ...primitives.base import attribute
 from ...util._codegen import expand
 
-from .base import VersionedBaseComponent, BaseComponent, ComponentType, BaseTemplate, base_component_or
+from .base import VersionedBaseComponentMetaclass, BaseComponent, ComponentType, BaseTemplate, base_component_or
 
 
-class BasePluginV1(VersionedBaseComponent):
+class BasePluginV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):
     """Plugins that provide expanded functionality. For example, you can use plugin.hotkeys to set up shortcuts.
 
     """
@@ -33,51 +33,51 @@ class HotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_HOTKEYS):
         How to create hotkeys for classification buttons.
 
         >>> hot_keys_plugin = tb.HotkeysPluginV1(
-        >>>     key_1=tb.SetActionV1(data=tb.OutputData(path='result'), payload='cat'),
-        >>>     key_2=tb.SetActionV1(data=tb.OutputData(path='result'), payload='dog'),
-        >>>     key_3=tb.SetActionV1(data=tb.OutputData(path='result'), payload='other'),
+        >>>     key_1=tb.SetActionV1(tb.OutputData('result'), 'cat'),
+        >>>     key_2=tb.SetActionV1(tb.OutputData('result'), 'dog'),
+        >>>     key_3=tb.SetActionV1(tb.OutputData('result'), 'other'),
         >>> )
         ...
     """
 
-    key_a: base_component_or(Any) = attribute(default=None, origin='a')
-    key_b: base_component_or(Any) = attribute(default=None, origin='b')
-    key_c: base_component_or(Any) = attribute(default=None, origin='c')
-    key_d: base_component_or(Any) = attribute(default=None, origin='d')
-    key_e: base_component_or(Any) = attribute(default=None, origin='e')
-    key_f: base_component_or(Any) = attribute(default=None, origin='f')
-    key_g: base_component_or(Any) = attribute(default=None, origin='g')
-    key_h: base_component_or(Any) = attribute(default=None, origin='h')
-    key_i: base_component_or(Any) = attribute(default=None, origin='i')
-    key_j: base_component_or(Any) = attribute(default=None, origin='j')
-    key_k: base_component_or(Any) = attribute(default=None, origin='k')
-    key_l: base_component_or(Any) = attribute(default=None, origin='l')
-    key_m: base_component_or(Any) = attribute(default=None, origin='m')
-    key_n: base_component_or(Any) = attribute(default=None, origin='n')
-    key_o: base_component_or(Any) = attribute(default=None, origin='o')
-    key_p: base_component_or(Any) = attribute(default=None, origin='p')
-    key_q: base_component_or(Any) = attribute(default=None, origin='q')
-    key_r: base_component_or(Any) = attribute(default=None, origin='r')
-    key_s: base_component_or(Any) = attribute(default=None, origin='s')
-    key_t: base_component_or(Any) = attribute(default=None, origin='t')
-    key_u: base_component_or(Any) = attribute(default=None, origin='u')
-    key_v: base_component_or(Any) = attribute(default=None, origin='v')
-    key_w: base_component_or(Any) = attribute(default=None, origin='w')
-    key_x: base_component_or(Any) = attribute(default=None, origin='x')
-    key_y: base_component_or(Any) = attribute(default=None, origin='y')
-    key_z: base_component_or(Any) = attribute(default=None, origin='z')
-    key_0: base_component_or(Any) = attribute(default=None, origin='0')
-    key_1: base_component_or(Any) = attribute(default=None, origin='1')
-    key_2: base_component_or(Any) = attribute(default=None, origin='2')
-    key_3: base_component_or(Any) = attribute(default=None, origin='3')
-    key_4: base_component_or(Any) = attribute(default=None, origin='4')
-    key_5: base_component_or(Any) = attribute(default=None, origin='5')
-    key_6: base_component_or(Any) = attribute(default=None, origin='6')
-    key_7: base_component_or(Any) = attribute(default=None, origin='7')
-    key_8: base_component_or(Any) = attribute(default=None, origin='8')
-    key_9: base_component_or(Any) = attribute(default=None, origin='9')
-    key_up: base_component_or(Any) = attribute(default=None, origin='up')
-    key_down: base_component_or(Any) = attribute(default=None, origin='down')
+    key_a: base_component_or(Any) = attribute(default=None, origin='a', kw_only=True)
+    key_b: base_component_or(Any) = attribute(default=None, origin='b', kw_only=True)
+    key_c: base_component_or(Any) = attribute(default=None, origin='c', kw_only=True)
+    key_d: base_component_or(Any) = attribute(default=None, origin='d', kw_only=True)
+    key_e: base_component_or(Any) = attribute(default=None, origin='e', kw_only=True)
+    key_f: base_component_or(Any) = attribute(default=None, origin='f', kw_only=True)
+    key_g: base_component_or(Any) = attribute(default=None, origin='g', kw_only=True)
+    key_h: base_component_or(Any) = attribute(default=None, origin='h', kw_only=True)
+    key_i: base_component_or(Any) = attribute(default=None, origin='i', kw_only=True)
+    key_j: base_component_or(Any) = attribute(default=None, origin='j', kw_only=True)
+    key_k: base_component_or(Any) = attribute(default=None, origin='k', kw_only=True)
+    key_l: base_component_or(Any) = attribute(default=None, origin='l', kw_only=True)
+    key_m: base_component_or(Any) = attribute(default=None, origin='m', kw_only=True)
+    key_n: base_component_or(Any) = attribute(default=None, origin='n', kw_only=True)
+    key_o: base_component_or(Any) = attribute(default=None, origin='o', kw_only=True)
+    key_p: base_component_or(Any) = attribute(default=None, origin='p', kw_only=True)
+    key_q: base_component_or(Any) = attribute(default=None, origin='q', kw_only=True)
+    key_r: base_component_or(Any) = attribute(default=None, origin='r', kw_only=True)
+    key_s: base_component_or(Any) = attribute(default=None, origin='s', kw_only=True)
+    key_t: base_component_or(Any) = attribute(default=None, origin='t', kw_only=True)
+    key_u: base_component_or(Any) = attribute(default=None, origin='u', kw_only=True)
+    key_v: base_component_or(Any) = attribute(default=None, origin='v', kw_only=True)
+    key_w: base_component_or(Any) = attribute(default=None, origin='w', kw_only=True)
+    key_x: base_component_or(Any) = attribute(default=None, origin='x', kw_only=True)
+    key_y: base_component_or(Any) = attribute(default=None, origin='y', kw_only=True)
+    key_z: base_component_or(Any) = attribute(default=None, origin='z', kw_only=True)
+    key_0: base_component_or(Any) = attribute(default=None, origin='0', kw_only=True)
+    key_1: base_component_or(Any) = attribute(default=None, origin='1', kw_only=True)
+    key_2: base_component_or(Any) = attribute(default=None, origin='2', kw_only=True)
+    key_3: base_component_or(Any) = attribute(default=None, origin='3', kw_only=True)
+    key_4: base_component_or(Any) = attribute(default=None, origin='4', kw_only=True)
+    key_5: base_component_or(Any) = attribute(default=None, origin='5', kw_only=True)
+    key_6: base_component_or(Any) = attribute(default=None, origin='6', kw_only=True)
+    key_7: base_component_or(Any) = attribute(default=None, origin='7', kw_only=True)
+    key_8: base_component_or(Any) = attribute(default=None, origin='8', kw_only=True)
+    key_9: base_component_or(Any) = attribute(default=None, origin='9', kw_only=True)
+    key_up: base_component_or(Any) = attribute(default=None, origin='up', kw_only=True)
+    key_down: base_component_or(Any) = attribute(default=None, origin='down', kw_only=True)
 
 
 class TriggerPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TRIGGER):
@@ -108,10 +108,10 @@ class TriggerPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TRIGGER):
         ...
     """
 
-    action: BaseComponent
-    condition: BaseComponent
-    fire_immediately: base_component_or(bool) = attribute(origin='fireImmediately')
-    on_change_of: BaseComponent = attribute(origin='onChangeOf')
+    action: BaseComponent = attribute(kw_only=True)
+    condition: BaseComponent = attribute(kw_only=True)
+    fire_immediately: base_component_or(bool) = attribute(origin='fireImmediately', kw_only=True)
+    on_change_of: BaseComponent = attribute(origin='onChangeOf', kw_only=True)
 
 
 class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
@@ -125,7 +125,7 @@ class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
         How to set the task width on the task page.
 
         >>> task_width_plugin = tb.plugins.TolokaPluginV1(
-        >>>     kind='scroll',
+        >>>     'scroll',
         >>>     task_width=400,
         >>> )
         ...
@@ -149,9 +149,9 @@ class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
             SCROLL = 'scroll'
 
         kind: Kind
-        task_width: float = attribute(origin='taskWidth')
+        task_width: float = attribute(origin='taskWidth', kw_only=True)
 
     layout: base_component_or(TolokaPluginLayout) = attribute(factory=TolokaPluginLayout)
-    notifications: base_component_or(List[BaseComponent], 'ListBaseComponent')
+    notifications: base_component_or(List[BaseComponent], 'ListBaseComponent') = attribute(kw_only=True)
 
 TolokaPluginV1.__init__ = expand('layout', TolokaPluginV1.TolokaPluginLayout)(TolokaPluginV1.__init__)

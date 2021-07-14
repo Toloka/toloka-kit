@@ -9,16 +9,29 @@ __all__ = [
 ]
 from typing import Any
 
-from .base import BaseComponent, ComponentType, base_component_or
+from ...primitives.base import attribute
+from .base import BaseComponent, ComponentType, base_component_or, BaseTemplateMetaclass
 
 
-class BaseData(BaseComponent):
+class BaseDataMetaclass(BaseTemplateMetaclass):
+    def __new__(mcs, name, bases, namespace, **kwargs):
+
+        if 'path' not in namespace:
+            namespace['path'] = attribute()
+            namespace.setdefault('__annotations__', {})['path'] = base_component_or(Any)
+        if 'default' not in namespace:
+            namespace['default'] = attribute()
+            namespace.setdefault('__annotations__', {})['default'] = base_component_or(Any)
+
+        return super().__new__(mcs, name, bases, namespace, **kwargs)
+
+
+class BaseData(BaseComponent, metaclass=BaseDataMetaclass):
     """Components used for working with data: input, output, or intermediate.
 
     """
 
-    path: base_component_or(Any)
-    default: base_component_or(Any)
+    pass
 
 
 class InputData(BaseData, spec_value=ComponentType.DATA_INPUT):

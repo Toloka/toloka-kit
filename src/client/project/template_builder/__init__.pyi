@@ -21,6 +21,7 @@ __all__ = [
     'ToggleActionV1',
     'AllConditionV1',
     'AnyConditionV1',
+    'DistanceConditionV1',
     'EmptyConditionV1',
     'EqualsConditionV1',
     'LinkOpenedConditionV1',
@@ -103,6 +104,7 @@ from toloka.client.project.template_builder.base import BaseComponent
 from toloka.client.project.template_builder.conditions import (
     AllConditionV1,
     AnyConditionV1,
+    DistanceConditionV1,
     EmptyConditionV1,
     EqualsConditionV1,
     LinkOpenedConditionV1,

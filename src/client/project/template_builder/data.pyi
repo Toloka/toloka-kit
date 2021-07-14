@@ -11,7 +11,6 @@ class BaseData(BaseComponent):
 
     def __init__(
         self,
-        *,
         path: Optional[Any] = None,
         default: Optional[Any] = None
     ) -> None:
@@ -38,7 +37,6 @@ class InputData(BaseData):
 
     def __init__(
         self,
-        *,
         path: Optional[Any] = None,
         default: Optional[Any] = None
     ) -> None:
@@ -64,7 +62,6 @@ class InternalData(BaseData):
 
     def __init__(
         self,
-        *,
         path: Optional[Any] = None,
         default: Optional[Any] = None
     ) -> None:
@@ -90,7 +87,6 @@ class LocalData(BaseData):
 
     def __init__(
         self,
-        *,
         path: Optional[Any] = None,
         default: Optional[Any] = None
     ) -> None:
@@ -130,7 +126,6 @@ class OutputData(BaseData):
 
     def __init__(
         self,
-        *,
         path: Optional[Any] = None,
         default: Optional[Any] = None
     ) -> None:
@@ -156,7 +151,6 @@ class RelativeData(BaseData):
 
     def __init__(
         self,
-        *,
         path: Optional[Any] = None,
         default: Optional[Any] = None
     ) -> None:
