@@ -2384,6 +2384,7 @@ class TolokaClient:
 
     # User bonus
 
+    @expand('parameters')
     def create_user_bonus(self, user_bonus: UserBonus, parameters: Optional[UserBonusCreateRequestParameters] = None) -> UserBonus:
         """Issues payments directly to the performer
 

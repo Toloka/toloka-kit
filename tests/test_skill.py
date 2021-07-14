@@ -127,6 +127,20 @@ def test_create_skill(skill_sample, skill_header, requests_mock, toloka_client, 
     assert skill_sample == client.unstructure(result)
 
 
+def test_create_skill_readonly_fields(skill_sample, toloka_client):
+    with pytest.raises(TypeError):
+        toloka_client.create_skill(
+            id='21',
+            name='Skill name',
+            private_comment='Private comment',
+            hidden=False,
+            public_requester_description={
+                'EN': 'Skill description',
+                'RU': 'Описание навыка',
+            },
+        )
+
+
 def test_update_skill(skill_sample, skill_header, requests_mock, toloka_client, toloka_url):
     def update_skill(request, context):
         assert request.json() == skill_header

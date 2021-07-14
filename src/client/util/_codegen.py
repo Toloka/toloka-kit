@@ -2,17 +2,17 @@ __all__: list = ['BaseParameters']
 import functools
 import linecache
 import uuid
-from inspect import signature, Signature, Parameter
+from inspect import signature, Signature, Parameter, BoundArguments
 from textwrap import dedent, indent
-from typing import Callable, Dict, List, Optional, Type
+from typing import Any, Callable, Dict, List, Optional, Tuple, Type
 
 import attr
 
-from ..primitives.base import BaseTolokaObject, BaseTolokaObjectMetaclass
+from ..primitives.base import BaseTolokaObject, BaseTolokaObjectMetaclass, READONLY_KEY
 from ..util._typing import is_optional_of
 
 
-def _get_signature(func: Callable):
+def _get_signature(func: Callable) -> Signature:
     """
     Correctly processes a signature for a callable. Correctly processes
     classes
@@ -64,15 +64,12 @@ def _get_annotations_from_signature(sig: Signature) -> dict:
     return annotations
 
 
-def _check_arguments_compatibility(sig: Signature, args: List, kwargs: Dict):
-    """Checks if arguments are suitable for provided signature"""
-
+def _try_bind_arguments(sig: Signature, args: List, kwargs: Dict) -> Tuple[Optional[BoundArguments], Optional[TypeError]]:
+    """Checks if arguments are suitable for provided signature. Return bindings and exception."""
     try:
-        sig.bind(*args, **kwargs)
-    except TypeError:
-        return False
-
-    return True
+        return sig.bind(*args, **kwargs), None
+    except TypeError as err:
+        return None, err
 
 
 def _get_signature_invocation_string(sig: Signature) -> str:
@@ -155,20 +152,27 @@ def codegen_attr_attributes_setters(cls):
 
 
 def expand_func_by_argument(func: Callable, arg_name: str, arg_type: Optional[Type] = None) -> Callable:
-    func_sig = _get_signature(func)
-    func_params = list(func_sig.parameters.values())
+    func_sig: Signature = _get_signature(func)
+    func_params: List[Parameter] = list(func_sig.parameters.values())
 
-    arg_param = func_sig.parameters[arg_name]
+    arg_param: Parameter = func_sig.parameters[arg_name]
     arg_index = next(i for (i, p) in enumerate(func_params) if p is arg_param)
     if arg_type is None:
         arg_type = is_optional_of(arg_param.annotation) or arg_param.annotation
-    arg_type_sig = _get_signature(arg_type)
+    arg_type_sig: Signature = _get_signature(arg_type)
 
     # TODO: add tests
     if arg_param.kind == Parameter.KEYWORD_ONLY:
         arg_type_sig = _make_keyword_only_signature(arg_type_sig)
 
-    new_params = list(func_params)
+    if attr.has(arg_type):
+        additional_params: dict[str, Parameter] = dict(arg_type_sig.parameters)
+        for field in attr.fields(arg_type):
+            if field.metadata.get(READONLY_KEY, False):
+                additional_params.pop(field.name)
+        arg_type_sig = arg_type_sig.replace(parameters=list(additional_params.values()))
+
+    new_params: List[Parameter] = list(func_params)
     new_params[arg_index:arg_index + 1] = arg_type_sig.parameters.values()
 
     expanded_func = _compile_function(
@@ -184,18 +188,44 @@ def expand_func_by_argument(func: Callable, arg_name: str, arg_type: Optional[Ty
     return expanded_func
 
 
-def expand(arg_name, arg_type=None):
+def _check_arg_type_compatibility(func_sig: Signature, arg_name: str, arg_type: Optional[Type], bound: BoundArguments) -> Tuple[bool, Optional[str]]:
+    arg_param: Parameter = func_sig.parameters[arg_name]
+    if arg_type is None:
+        arg_type = is_optional_of(arg_param.annotation) or arg_param.annotation
+    bound.apply_defaults()
+    arg_candidate: Any = bound.arguments[arg_name]  # incoming argument
+    if isinstance(arg_candidate, arg_type):
+        return True, None
+    return False, f'Argument "{arg_candidate}" has type "{type(arg_candidate)}" that is not a subclass of "{arg_type}"'
 
+
+def expand(arg_name: str, arg_type: Optional[Type] = None, check_type: bool = True) -> Callable:
+    """Allows you to call function also via passing values for creating "arg_name", not only via passing an instance of "arg_name"
+
+    Args:
+        arg_name: Parameter that will be expanded.
+        arg_type: Specify the type of this parameter. Defaults to None and calc it themselves.
+        check_type: If True, check that one argument has a compatible type for none expanded version. If not, calls an expanded version. Defaults to True.
+    """
     def wrapper(func):
-        func_sig = _get_signature(func)
-        expanded_func = expand_func_by_argument(func, arg_name, arg_type)
+        func_sig: Signature = _get_signature(func)
+        expanded_func: Callable = expand_func_by_argument(func, arg_name, arg_type)
+        expanded_func_sig: Signature = _get_signature(expanded_func)
 
         @functools.wraps(func)
         def wrapped(*args, **kwargs):
+            bound, func_problem = _try_bind_arguments(func_sig, args, kwargs)
+            if bound is not None:
+                if check_type and arg_name not in kwargs:
+                    fit, func_problem = _check_arg_type_compatibility(func_sig, arg_name, arg_type, bound)
+                    if fit:
+                        return func(*args, **kwargs)
+                else:
+                    return func(*args, **kwargs)
 
-            if _check_arguments_compatibility(func_sig, args, kwargs):
-                return func(*args, **kwargs)
-
+            bound, expand_func_problem = _try_bind_arguments(expanded_func_sig, args, kwargs)
+            if bound is None:
+                raise TypeError(f'Arguments does not fit standart or expanded version.\nStandart version on problem: {func_problem}\nExpand version on problem: {expand_func_problem}')
             return expanded_func(*args, **kwargs)
 
         wrapped._func = func

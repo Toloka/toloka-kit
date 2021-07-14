@@ -460,7 +460,7 @@ def test_patch_task(requests_mock, toloka_client, toloka_url, task_map_with_read
     requests_mock.patch(f'{toloka_url}/tasks/task-1', json=tasks)
 
     # Request object syntax
-    request = client.unstructure(raw_request)
+    request = client.structure(raw_request, client.task.TaskPatch)
     result = toloka_client.patch_task('task-1', request)
     assert raw_result == client.unstructure(result)
 
@@ -513,7 +513,7 @@ def test_task_overlap_or_min(requests_mock, toloka_client, toloka_url, task_map_
     requests_mock.patch(f'{toloka_url}/tasks/task-1/set-overlap-or-min', json=tasks)
 
     # Request object syntax
-    request = client.unstructure(raw_request)
+    request = client.structure(raw_request, client.task.TaskPatch)
     result = toloka_client.patch_task_overlap_or_min('task-1', request)
     assert raw_result == client.unstructure(result)
 
@@ -533,7 +533,7 @@ def test_task_overlap_or_min_infinite_overlap(requests_mock, toloka_client, tolo
     requests_mock.patch(f'{toloka_url}/tasks/task-1/set-overlap-or-min', json=tasks)
 
     # Request object syntax
-    request = client.unstructure(raw_request)
+    request = client.structure(raw_request, client.task.TaskPatch)
     result = toloka_client.patch_task_overlap_or_min('task-1', request)
     assert raw_result == client.unstructure(result)
 

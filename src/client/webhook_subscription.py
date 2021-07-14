@@ -4,7 +4,7 @@ __all__ = [
 from datetime import datetime
 from enum import Enum, unique
 
-from .primitives.base import BaseTolokaObject
+from .primitives.base import attribute, BaseTolokaObject
 
 
 class WebhookSubscription(BaseTolokaObject):
@@ -48,5 +48,5 @@ class WebhookSubscription(BaseTolokaObject):
     secret_key: str
 
     # Readonly
-    id: str
-    created: datetime
+    id: str = attribute(readonly=True)
+    created: datetime = attribute(readonly=True)

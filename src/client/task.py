@@ -57,8 +57,8 @@ class BaseTask(BaseTolokaObject):
     message_on_unknown_solution: str
 
     # Readonly
-    id: str
-    origin_task_id: str
+    id: str = attribute(readonly=True)
+    origin_task_id: str = attribute(readonly=True)
 
 
 class Task(InfiniteOverlapParametersMixin, BaseTask):
@@ -96,14 +96,14 @@ class Task(InfiniteOverlapParametersMixin, BaseTask):
 
     pool_id: str
 
-    remaining_overlap: int
+    remaining_overlap: int = attribute(readonly=True)
     reserved_for: List[str]
     unavailable_for: List[str]
     traits_all_of: List[str]
     traits_any_of: List[str]
     traits_none_of_any: List[str]
-    origin_task_id: str
-    created: datetime.datetime
+    origin_task_id: str = attribute(readonly=True)
+    created: datetime.datetime = attribute(readonly=True)
     baseline_solutions: List[BaselineSolution]
 
 

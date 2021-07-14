@@ -64,10 +64,10 @@ class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
     latitude: float
 
     # Readonly
-    id: str
-    remaining_overlap: int
-    automerged: bool
-    created: datetime.datetime
+    id: str = attribute(readonly=True)
+    remaining_overlap: int = attribute(readonly=True)
+    automerged: bool = attribute(readonly=True)
+    created: datetime.datetime = attribute(readonly=True)
 
     @expand('base_task')
     def add_base_task(self, base_task: BaseTask) -> 'TaskSuite':
