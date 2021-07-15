@@ -157,7 +157,7 @@ class ChangeOverlap(RuleAction, spec_value=RuleType.CHANGE_OVERLAP):
 
 
 class SetSkill(RuleAction, spec_value=RuleType.SET_SKILL):
-    """Set perfmer skill value
+    """Set performer skill value
 
     Attributes:
         parameters.skill_id: ID of the skill to update.

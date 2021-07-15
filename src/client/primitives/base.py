@@ -44,7 +44,7 @@ class VariantRegistry:
         return self.registered_classes[value]
 
 
-def attribute(*args, required=False, origin=None, readonly=False, **kwargs):
+def attribute(*args, required: bool = False, origin: Optional[str] = None, readonly: bool = False, **kwargs):
     """Proxy for attr.attrib(...). Adds several keywords.
 
     Args:
