@@ -216,7 +216,7 @@ class TolokaClient:
             * Set the timeout value to None if you're willing to wait forever.
         url: If you want to set a specific URL for some reason, for example, for testing.
             You can only set one parameter, "url" or "environment", not both.
-        retry_quotas: List of quotas that must be retried. By default retries only minutes quotas.
+        retry_quotas: List of quotas that must be retried. By default retries only minutes quotas. None or empty list for not retrying quotas.
             You must set this parameter to None, then you specify the 'retries' parameter as Retry instance.
             You can specify quotas:
             * MIN - Retry minutes quotas.
@@ -224,13 +224,13 @@ class TolokaClient:
             * DAY - Retry daily quotas. We strongly not recommended retrying these quotas.
 
     Example:
-        How to create TolokaClient and make you first request to Toloka.
+        How to create TolokaClient instance and make your first request to Toloka.
 
-        >>> import toloka.client as toloka
-        >>> token = input("Enter your token:")
-        >>> toloka_client = toloka.TolokaClient(token, 'PRODUCTION')
-        >>> print(toloka_client.get_requester())
+        >>> your_oauth_token = input('Enter your token:')
+        >>> toloka_client = toloka.TolokaClient(your_oauth_token, 'PRODUCTION')  # Or switch to 'SANDBOX' environment
         ...
+
+        **Note**: `toloka_client` instance will be used to pass all API calls later on.
     """
 
     class Environment(Enum):
@@ -240,9 +240,21 @@ class TolokaClient:
         SANDBOX = 'https://sandbox.toloka.yandex.com'
         PRODUCTION = 'https://toloka.yandex.com'
 
-    def __init__(self, token: str, environment: Union[Environment, str, None] = None, retries: Union[int, Retry] = 3, timeout: Union[float, Tuple[float, float]] = ..., url: Optional[str] = None, retry_quotas: Union[List[str], str, None] = ...): ...
+    def __init__(
+        self,
+        token: str,
+        environment: Union[Environment, str, None] = None,
+        retries: Union[int, Retry] = 3,
+        timeout: Union[float, Tuple[float, float]] = ...,
+        url: Optional[str] = None,
+        retry_quotas: Union[List[str], str, None] = 'MIN'
+    ): ...
 
-    def accept_assignment(self, assignment_id: str, public_comment: str) -> Assignment:
+    def accept_assignment(
+        self,
+        assignment_id: str,
+        public_comment: str
+    ) -> Assignment:
         """Marks one assignment as accepted
 
         Used then your pool created with auto_accept_solutions=False parametr.
@@ -257,11 +269,16 @@ class TolokaClient:
         Example:
             How to accept one assignment.
 
-            >>> toloka_client.accept_assignment(assignment_id, "Well done!")
+            >>> toloka_client.accept_assignment(assignment_id, 'Well done!')
+            ...
         """
         ...
 
-    def add_message_thread_to_folders(self, message_thread_id: str, folders: Union[List[Folder], MessageThreadFolders]) -> MessageThread:
+    def add_message_thread_to_folders(
+        self,
+        message_thread_id: str,
+        folders: Union[List[Folder], MessageThreadFolders]
+    ) -> MessageThread:
         """Adds a message chain to one or more folders ("unread", "important" etc.)
 
         Args:
@@ -270,17 +287,28 @@ class TolokaClient:
 
         Returns:
             MessageThread: Full object by ID with updated folders.
+
+        Example:
+            >>> toloka_client.add_message_thread_to_folders(message_thread_id='1', folders=['IMPORTANT'])
+            ...
         """
         ...
 
     @overload
-    def aggregate_solutions_by_pool(self, *, type: Optional[AggregatedSolutionType] = None, pool_id: Optional[str] = None, answer_weight_skill_id: Optional[str] = None, fields: Optional[List[PoolAggregatedSolutionRequest.Field]] = None) -> AggregatedSolutionOperation:
+    def aggregate_solutions_by_pool(
+        self,
+        *,
+        type: Optional[AggregatedSolutionType] = None,
+        pool_id: Optional[str] = None,
+        answer_weight_skill_id: Optional[str] = None,
+        fields: Optional[List[PoolAggregatedSolutionRequest.Field]] = None
+    ) -> AggregatedSolutionOperation:
         """Starts aggregation of solutions in the pool
 
         Responses to all completed tasks will be aggregated.
         The method only starts the aggregation and returns the operation for further tracking.
 
-        Note: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
+        **Note**: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
         methods and can perform on your computers: https://github.com/Toloka/crowd-kit
 
         Args:
@@ -311,7 +339,7 @@ class TolokaClient:
         Responses to all completed tasks will be aggregated.
         The method only starts the aggregation and returns the operation for further tracking.
 
-        Note: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
+        **Note**: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
         methods and can perform on your computers: https://github.com/Toloka/crowd-kit
 
         Args:
@@ -336,7 +364,14 @@ class TolokaClient:
         ...
 
     @overload
-    def aggregate_solutions_by_task(self, *, task_id: Optional[str] = None, pool_id: Optional[str] = None, answer_weight_skill_id: Optional[str] = None, fields: Optional[List[WeightedDynamicOverlapTaskAggregatedSolutionRequest.Field]] = None) -> AggregatedSolution:
+    def aggregate_solutions_by_task(
+        self,
+        *,
+        task_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        answer_weight_skill_id: Optional[str] = None,
+        fields: Optional[List[WeightedDynamicOverlapTaskAggregatedSolutionRequest.Field]] = None
+    ) -> AggregatedSolution:
         """Starts aggregation of solutions to a single task
 
         The method only starts the aggregation and returns the operation for further tracking.
@@ -400,6 +435,11 @@ class TolokaClient:
 
         Returns:
             Pool: Object with updated status.
+
+        Example:
+            >>> closed_pool = next(toloka_client.get_pools(status='CLOSED'))
+            >>> toloka_client.archive_pool(pool_id=closed_pool.id)
+            ...
         """
         ...
 
@@ -414,6 +454,12 @@ class TolokaClient:
 
         Returns:
             PoolArchiveOperation: An operation upon completion of which you can get the pool with updated status.
+
+        Example:
+            >>> closed_pool = next(toloka_client.get_pools(status='CLOSED'))
+            >>> archive_op = toloka_client.archive_pool_async(pool_id=closed_pool.id)
+            >>> toloka_client.wait_operation(archive_op)
+            ...
         """
         ...
 
@@ -428,6 +474,10 @@ class TolokaClient:
 
         Returns:
             Project: Object with updated status.
+
+        Example:
+            >>> toloka_client.archive_project(project_id='1')
+            ...
         """
         ...
 
@@ -442,6 +492,11 @@ class TolokaClient:
 
         Returns:
             ProjectArchiveOperation: An operation upon completion of which you can get the project with updated status.
+
+        Example:
+            >>> archive_op = toloka_client.archive_project_async(project_id='1')
+            >>> toloka_client.wait_operation(archive_op)
+            ...
         """
         ...
 
@@ -456,6 +511,11 @@ class TolokaClient:
 
         Returns:
             Training: Object with updated status.
+
+        Example:
+            >>> closed_training = next(toloka_client.get_trainings(status='CLOSED'))
+            >>> toloka_client.archive_training(training_id=closed_training.id)
+            ...
         """
         ...
 
@@ -470,6 +530,12 @@ class TolokaClient:
 
         Returns:
             TrainingArchiveOperation: An operation upon completion of which you can get the training with updated status.
+
+        Example:
+            >>> closed_training = next(toloka_client.find_trainings(status='CLOSED'))
+            >>> archive_op = toloka_client.archive_training_async(training_id=closed_training.id)
+            >>> toloka_client.wait_operation(archive_op)
+            ...
         """
         ...
 
@@ -484,6 +550,10 @@ class TolokaClient:
 
         Returns:
             Pool: New pool.
+
+        Example:
+            >>> toloka_client.clone_pool(pool_id='1')
+            ...
         """
         ...
 
@@ -498,10 +568,19 @@ class TolokaClient:
 
         Returns:
             PoolCloneOperation: An operation upon completion of which you can get the new pool.
+
+        Example:
+            >>> new_pool = toloka_client.clone_pool_async(pool_id='1')
+            >>> toloka_client.wait_operation(new_pool)
+            ...
         """
         ...
 
-    def clone_project(self, project_id: str, reuse_controllers: bool = True) -> CloneResults:
+    def clone_project(
+        self,
+        project_id: str,
+        reuse_controllers: bool = True
+    ) -> CloneResults:
         """Synchronously clones the project, all pools and trainings
 
         Emulates cloning behaviour via Toloka interface:
@@ -515,7 +594,7 @@ class TolokaClient:
 
         Args:
             project_id: ID of the project to be cloned.
-            reuse_quality_controllers: Use same quality controllers in cloned and created projects. Defaults to True.
+            reuse_controllers: Use same quality controllers in cloned and created projects. Defaults to True.
                 This means that all quality control rules will be applied to both projects.
                 For example, if you have rule "fast_submitted_count", fast responses counts across both projects.
 
@@ -541,6 +620,10 @@ class TolokaClient:
 
         Returns:
             Training: New training.
+
+        Example:
+            >>> toloka_client.clone_training(training_id='1')
+            ...
         """
         ...
 
@@ -555,6 +638,11 @@ class TolokaClient:
 
         Returns:
             TrainingCloneOperation: An operation upon completion of which you can get the new training.
+
+        Example:
+            >>> clone_training = toloka_client.clone_training_async(training_id='1')
+            >>> toloka_client.wait_operation(clone_training)
+            ...
         """
         ...
 
@@ -568,6 +656,11 @@ class TolokaClient:
 
         Returns:
             Pool: Pool object with new status.
+
+        Example:
+            >>> open_pool = next(toloka_client.get_pools(status='OPEN'))
+            >>> toloka_client.close_pool(pool_id=open_pool.id)
+            ...
         """
         ...
 
@@ -581,12 +674,33 @@ class TolokaClient:
 
         Returns:
             PoolCloseOperation: An operation upon completion of which you can get the pool with updated status.
+
+        Example:
+            >>> open_pool = next(toloka_client.get_pools(status='OPEN'))
+            >>> close_op = toloka_client.close_pool_async(pool_id=open_pool.id)
+            >>> toloka_client.wait_operation(close_op)
+            ...
         """
         ...
 
-    def close_pool_for_update(self, pool_id: str) -> Pool: ...
+    def close_pool_for_update(self, pool_id: str) -> Pool:
+        """Closes pool for update
 
-    def close_pool_for_update_async(self, pool_id: str) -> PoolCloseOperation: ...
+        Example:
+            >>> toloka_client.close_pool_for_update(pool_id='1')
+            ...
+        """
+        ...
+
+    def close_pool_for_update_async(self, pool_id: str) -> PoolCloseOperation:
+        """Closes pool for update, asynchronous version
+
+        Example:
+            >>> close_op = toloka_client.close_pool_for_update_async(pool_id='1')
+            >>> toloka_client.wait_operation(close_op)
+            ...
+        """
+        ...
 
     def close_training(self, training_id: str) -> Training:
         """Stops distributing tasks from the training
@@ -596,6 +710,11 @@ class TolokaClient:
 
         Returns:
             Training: Training object with new status.
+
+        Example:
+            >>> open_training = next(toloka_client.get_trainings(status='OPEN'))
+            >>> toloka_client.close_training(training_id=open_training.id)
+            ...
         """
         ...
 
@@ -607,11 +726,26 @@ class TolokaClient:
 
         Returns:
             TrainingCloseOperation: An operation upon completion of which you can get the training with updated status.
+
+        Example:
+            >>> open_training = next(toloka_client.get_trainings(status='OPEN'))
+            >>> close_training = toloka_client.close_training_async(training_id=open_training.id)
+            >>> toloka_client.wait_operation(close_training)
+            ...
         """
         ...
 
     @overload
-    def compose_message_thread(self, *, recipients_select_type: Optional[RecipientsSelectType] = None, topic: Optional[Dict[str, str]] = None, text: Optional[Dict[str, str]] = None, answerable: Optional[bool] = None, recipients_ids: Optional[List[str]] = None, recipients_filter: Optional[FilterCondition] = None) -> MessageThread:
+    def compose_message_thread(
+        self,
+        *,
+        recipients_select_type: Optional[RecipientsSelectType] = None,
+        topic: Optional[Dict[str, str]] = None,
+        text: Optional[Dict[str, str]] = None,
+        answerable: Optional[bool] = None,
+        recipients_ids: Optional[List[str]] = None,
+        recipients_filter: Optional[FilterCondition] = None
+    ) -> MessageThread:
         """Sends message to performer
 
         The sent message is added to a new message thread.
@@ -621,6 +755,18 @@ class TolokaClient:
 
         Returns:
             MessageThread: New created thread.
+
+        Example:
+            If you want to thank Toloka performers who have tried to complete your tasks, send them a nice message.
+
+            >>> message_text = 'Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!'
+            >>> toloka_client.compose_message_thread(
+            >>>     recipients_select_type='ALL',
+            >>>     topic={'EN':'Thank you, performer!'},
+            >>>     text={'EN': message_text},
+            >>>     answerable=False
+            >>> )
+            ...
         """
         ...
 
@@ -635,6 +781,18 @@ class TolokaClient:
 
         Returns:
             MessageThread: New created thread.
+
+        Example:
+            If you want to thank Toloka performers who have tried to complete your tasks, send them a nice message.
+
+            >>> message_text = 'Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!'
+            >>> toloka_client.compose_message_thread(
+            >>>     recipients_select_type='ALL',
+            >>>     topic={'EN':'Thank you, performer!'},
+            >>>     text={'EN': message_text},
+            >>>     answerable=False
+            >>> )
+            ...
         """
         ...
 
@@ -652,7 +810,6 @@ class TolokaClient:
         Example:
             How to create a new pool in a project.
 
-            >>> toloka_client = toloka.TolokaClient(your_token, 'PRODUCTION')
             >>> new_pool = toloka.pool.Pool(
             >>>     project_id=existing_project_id,
             >>>     private_name='Pool 1',
@@ -701,7 +858,17 @@ class TolokaClient:
         ...
 
     @overload
-    def create_skill(self, *, name: Optional[str] = None, private_comment: Optional[str] = None, hidden: Optional[bool] = None, skill_ttl_hours: Optional[int] = None, training: Optional[bool] = None, public_name: Optional[Dict[str, str]] = None, public_requester_description: Optional[Dict[str, str]] = None, id: Optional[str] = None, created: Optional[datetime] = None) -> Skill:
+    def create_skill(
+        self,
+        *,
+        name: Optional[str] = None,
+        private_comment: Optional[str] = None,
+        hidden: Optional[bool] = None,
+        skill_ttl_hours: Optional[int] = None,
+        training: Optional[bool] = None,
+        public_name: Optional[Dict[str, str]] = None,
+        public_requester_description: Optional[Dict[str, str]] = None
+    ) -> Skill:
         """Creates a new Skill
 
         You can send a maximum of 10 requests of this kind per minute and 100 requests per day.
@@ -713,13 +880,13 @@ class TolokaClient:
             Skill: Created skill. With read-only fields.
 
         Example:
-            How to create new skill.
+            How to create a new skill.
 
             >>> new_skill = toloka_client.create_skill(
             >>>     name='Area selection of road signs',
             >>>     public_requester_description={
             >>>         'EN': 'Performer is annotating road signs',
-            >>>         'RU': 'Как исполнитель размечает дорожные знаки',
+            >>>         'FR': 'L'exécuteur marque les signaux routier',
             >>>     },
             >>> )
             >>> print(new_skill.id)
@@ -740,13 +907,13 @@ class TolokaClient:
             Skill: Created skill. With read-only fields.
 
         Example:
-            How to create new skill.
+            How to create a new skill.
 
             >>> new_skill = toloka_client.create_skill(
             >>>     name='Area selection of road signs',
             >>>     public_requester_description={
             >>>         'EN': 'Performer is annotating road signs',
-            >>>         'RU': 'Как исполнитель размечает дорожные знаки',
+            >>>         'FR': 'L'exécuteur marque les signaux routier',
             >>>     },
             >>> )
             >>> print(new_skill.id)
@@ -755,7 +922,13 @@ class TolokaClient:
         ...
 
     @overload
-    def create_task(self, task: Task, *, allow_defaults: Optional[bool] = None, open_pool: Optional[bool] = None) -> Task:
+    def create_task(
+        self,
+        task: Task,
+        *,
+        allow_defaults: Optional[bool] = None,
+        open_pool: Optional[bool] = None
+    ) -> Task:
         """Creates a new task
 
         It's better to use "create_tasks", if you need to insert several tasks.
@@ -768,11 +941,22 @@ class TolokaClient:
 
         Returns:
             Task: Created task.
+
+        Example:
+            >>> task = toloka.task.Task(
+            >>>             input_values={'image': 'https://tlk.s3.yandex.net/dataset/cats_vs_dogs/dogs/048e5760fc5a46faa434922b2447a527.jpg'},
+            >>>             pool_id='1')
+            >>> toloka_client.create_task(task=task, allow_defaults=True)
+            ...
         """
         ...
 
     @overload
-    def create_task(self, task: Task, parameters: Optional[CreateTaskParameters] = None) -> Task:
+    def create_task(
+        self,
+        task: Task,
+        parameters: Optional[CreateTaskParameters] = None
+    ) -> Task:
         """Creates a new task
 
         It's better to use "create_tasks", if you need to insert several tasks.
@@ -785,11 +969,27 @@ class TolokaClient:
 
         Returns:
             Task: Created task.
+
+        Example:
+            >>> task = toloka.task.Task(
+            >>>             input_values={'image': 'https://tlk.s3.yandex.net/dataset/cats_vs_dogs/dogs/048e5760fc5a46faa434922b2447a527.jpg'},
+            >>>             pool_id='1')
+            >>> toloka_client.create_task(task=task, allow_defaults=True)
+            ...
         """
         ...
 
     @overload
-    def create_task_suite(self, task_suite: TaskSuite, *, operation_id: Optional[UUID] = None, skip_invalid_items: Optional[bool] = None, allow_defaults: Optional[bool] = None, open_pool: Optional[bool] = None, async_mode: Optional[bool] = True) -> TaskSuite:
+    def create_task_suite(
+        self,
+        task_suite: TaskSuite,
+        *,
+        operation_id: Optional[UUID] = None,
+        skip_invalid_items: Optional[bool] = None,
+        allow_defaults: Optional[bool] = None,
+        open_pool: Optional[bool] = None,
+        async_mode: Optional[bool] = True
+    ) -> TaskSuite:
         """Creates a new task suite
 
         Generally, you don't need to create a task set yourself, because you can create tasks and Toloka will create
@@ -804,11 +1004,23 @@ class TolokaClient:
 
         Returns:
             TaskSuite: Created task suite.
+
+        Example:
+            >>> new_task_suite = toloka.task_suite.TaskSuite(
+            >>>                 pool_id='1',
+            >>>                 tasks=[toloka.task.Task(input_values={'label': 'Cats vs Dogs'})],
+            >>>                 overlap=2)
+            >>> toloka_client.create_task_suite(new_task_suite)
+            ...
         """
         ...
 
     @overload
-    def create_task_suite(self, task_suite: TaskSuite, parameters: Optional[TaskSuiteCreateRequestParameters] = None) -> TaskSuite:
+    def create_task_suite(
+        self,
+        task_suite: TaskSuite,
+        parameters: Optional[TaskSuiteCreateRequestParameters] = None
+    ) -> TaskSuite:
         """Creates a new task suite
 
         Generally, you don't need to create a task set yourself, because you can create tasks and Toloka will create
@@ -823,11 +1035,28 @@ class TolokaClient:
 
         Returns:
             TaskSuite: Created task suite.
+
+        Example:
+            >>> new_task_suite = toloka.task_suite.TaskSuite(
+            >>>                 pool_id='1',
+            >>>                 tasks=[toloka.task.Task(input_values={'label': 'Cats vs Dogs'})],
+            >>>                 overlap=2)
+            >>> toloka_client.create_task_suite(new_task_suite)
+            ...
         """
         ...
 
     @overload
-    def create_task_suites(self, task_suites: List[TaskSuite], *, operation_id: Optional[UUID] = None, skip_invalid_items: Optional[bool] = None, allow_defaults: Optional[bool] = None, open_pool: Optional[bool] = None, async_mode: Optional[bool] = True) -> TaskSuiteBatchCreateResult:
+    def create_task_suites(
+        self,
+        task_suites: List[TaskSuite],
+        *,
+        operation_id: Optional[UUID] = None,
+        skip_invalid_items: Optional[bool] = None,
+        allow_defaults: Optional[bool] = None,
+        open_pool: Optional[bool] = None,
+        async_mode: Optional[bool] = True
+    ) -> TaskSuiteBatchCreateResult:
         """Creates many task suites in pools
 
         Generally, you don't need to create a task set yourself, because you can create tasks and Toloka will create
@@ -845,17 +1074,37 @@ class TolokaClient:
                 operations is used.
 
         Returns:
-            TaskSuiteBatchCreateResult: Result of task suites creating. Contains created task suites in "items" and
+            TaskSuiteBatchCreateResult: Result of task suites creating. Contains created task suites in `items` and
                 problems in "validation_errors".
 
         Raises:
             ValidationApiError: If no tasks were created, or skip_invalid_items==False and there is a problem when
                 checking any task.
+
+        Example:
+            >>> task_suites = [
+            >>>     toloka.task_suite.TaskSuite(
+            >>>         pool_id=pool.id,
+            >>>         overlap=1,
+            >>>         tasks=[
+            >>>             toloka.task.Task(input_values={
+            >>>                 'input1': some_input_value,
+            >>>                 'input2': some_input_value
+            >>>             })
+            >>>         ]
+            >>>     )
+            >>> ]
+            >>> task_suites = toloka_client.create_task_suites(task_suites)
+            ...
         """
         ...
 
     @overload
-    def create_task_suites(self, task_suites: List[TaskSuite], parameters: Optional[TaskSuiteCreateRequestParameters] = None) -> TaskSuiteBatchCreateResult:
+    def create_task_suites(
+        self,
+        task_suites: List[TaskSuite],
+        parameters: Optional[TaskSuiteCreateRequestParameters] = None
+    ) -> TaskSuiteBatchCreateResult:
         """Creates many task suites in pools
 
         Generally, you don't need to create a task set yourself, because you can create tasks and Toloka will create
@@ -873,17 +1122,42 @@ class TolokaClient:
                 operations is used.
 
         Returns:
-            TaskSuiteBatchCreateResult: Result of task suites creating. Contains created task suites in "items" and
+            TaskSuiteBatchCreateResult: Result of task suites creating. Contains created task suites in `items` and
                 problems in "validation_errors".
 
         Raises:
             ValidationApiError: If no tasks were created, or skip_invalid_items==False and there is a problem when
                 checking any task.
+
+        Example:
+            >>> task_suites = [
+            >>>     toloka.task_suite.TaskSuite(
+            >>>         pool_id=pool.id,
+            >>>         overlap=1,
+            >>>         tasks=[
+            >>>             toloka.task.Task(input_values={
+            >>>                 'input1': some_input_value,
+            >>>                 'input2': some_input_value
+            >>>             })
+            >>>         ]
+            >>>     )
+            >>> ]
+            >>> task_suites = toloka_client.create_task_suites(task_suites)
+            ...
         """
         ...
 
     @overload
-    def create_task_suites_async(self, task_suites: List[TaskSuite], *, operation_id: Optional[UUID] = None, skip_invalid_items: Optional[bool] = None, allow_defaults: Optional[bool] = None, open_pool: Optional[bool] = None, async_mode: Optional[bool] = True) -> TaskSuiteCreateBatchOperation:
+    def create_task_suites_async(
+        self,
+        task_suites: List[TaskSuite],
+        *,
+        operation_id: Optional[UUID] = None,
+        skip_invalid_items: Optional[bool] = None,
+        allow_defaults: Optional[bool] = None,
+        open_pool: Optional[bool] = None,
+        async_mode: Optional[bool] = True
+    ) -> TaskSuiteCreateBatchOperation:
         """Creates many task suites in pools, asynchronous version
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
@@ -895,11 +1169,32 @@ class TolokaClient:
 
         Returns:
             TaskSuiteCreateBatchOperation: An operation upon completion of which you can get the created teask suites.
+
+        Example:
+            >>> task_suites = [
+            >>>     toloka.task_suite.TaskSuite(
+            >>>         pool_id=pool.id,
+            >>>         overlap=1,
+            >>>         tasks=[
+            >>>             toloka.task.Task(input_values={
+            >>>                 'input1': some_input_value,
+            >>>                 'input2': some_input_value
+            >>>             })
+            >>>         ]
+            >>>     )
+            >>> ]
+            >>> task_suites_op = toloka_client.create_task_suites_async(task_suites)
+            >>> toloka_client.wait_operation(task_suites_op)
+            ...
         """
         ...
 
     @overload
-    def create_task_suites_async(self, task_suites: List[TaskSuite], parameters: Optional[TaskSuiteCreateRequestParameters] = None) -> TaskSuiteCreateBatchOperation:
+    def create_task_suites_async(
+        self,
+        task_suites: List[TaskSuite],
+        parameters: Optional[TaskSuiteCreateRequestParameters] = None
+    ) -> TaskSuiteCreateBatchOperation:
         """Creates many task suites in pools, asynchronous version
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
@@ -911,11 +1206,37 @@ class TolokaClient:
 
         Returns:
             TaskSuiteCreateBatchOperation: An operation upon completion of which you can get the created teask suites.
+
+        Example:
+            >>> task_suites = [
+            >>>     toloka.task_suite.TaskSuite(
+            >>>         pool_id=pool.id,
+            >>>         overlap=1,
+            >>>         tasks=[
+            >>>             toloka.task.Task(input_values={
+            >>>                 'input1': some_input_value,
+            >>>                 'input2': some_input_value
+            >>>             })
+            >>>         ]
+            >>>     )
+            >>> ]
+            >>> task_suites_op = toloka_client.create_task_suites_async(task_suites)
+            >>> toloka_client.wait_operation(task_suites_op)
+            ...
         """
         ...
 
     @overload
-    def create_tasks(self, tasks: List[Task], *, allow_defaults: Optional[bool] = None, open_pool: Optional[bool] = None, skip_invalid_items: Optional[bool] = None, operation_id: Optional[UUID] = None, async_mode: Optional[bool] = True) -> TaskBatchCreateResult:
+    def create_tasks(
+        self,
+        tasks: List[Task],
+        *,
+        allow_defaults: Optional[bool] = None,
+        open_pool: Optional[bool] = None,
+        skip_invalid_items: Optional[bool] = None,
+        operation_id: Optional[UUID] = None,
+        async_mode: Optional[bool] = True
+    ) -> TaskBatchCreateResult:
         """Creates many tasks in pools
 
         By default uses asynchronous operation inside. It's better not to set "async_mode=False", if you not understand
@@ -930,7 +1251,7 @@ class TolokaClient:
                 operations is used.
 
         Returns:
-            batch_create_results.TaskBatchCreateResult: Result of tasks creating. Contains created tasks in "items" and
+            batch_create_results.TaskBatchCreateResult: Result of tasks creating. Contains created tasks in `items` and
                 problems in "validation_errors".
 
         Raises:
@@ -938,7 +1259,7 @@ class TolokaClient:
                 checking any task.
 
         Example:
-            How to create regular tasks from csv.
+            How to create regular tasks from tsv.
 
             >>> dataset = pandas.read_csv('dataset.tsv', sep='  ')
             >>> tasks = [
@@ -968,7 +1289,11 @@ class TolokaClient:
         ...
 
     @overload
-    def create_tasks(self, tasks: List[Task], parameters: Optional[CreateTasksParameters] = None) -> TaskBatchCreateResult:
+    def create_tasks(
+        self,
+        tasks: List[Task],
+        parameters: Optional[CreateTasksParameters] = None
+    ) -> TaskBatchCreateResult:
         """Creates many tasks in pools
 
         By default uses asynchronous operation inside. It's better not to set "async_mode=False", if you not understand
@@ -983,7 +1308,7 @@ class TolokaClient:
                 operations is used.
 
         Returns:
-            batch_create_results.TaskBatchCreateResult: Result of tasks creating. Contains created tasks in "items" and
+            batch_create_results.TaskBatchCreateResult: Result of tasks creating. Contains created tasks in `items` and
                 problems in "validation_errors".
 
         Raises:
@@ -991,7 +1316,7 @@ class TolokaClient:
                 checking any task.
 
         Example:
-            How to create regular tasks from csv.
+            How to create regular tasks from tsv.
 
             >>> dataset = pandas.read_csv('dataset.tsv', sep='  ')
             >>> tasks = [
@@ -1021,7 +1346,16 @@ class TolokaClient:
         ...
 
     @overload
-    def create_tasks_async(self, tasks: List[Task], *, allow_defaults: Optional[bool] = None, open_pool: Optional[bool] = None, skip_invalid_items: Optional[bool] = None, operation_id: Optional[UUID] = None, async_mode: Optional[bool] = True) -> TasksCreateOperation:
+    def create_tasks_async(
+        self,
+        tasks: List[Task],
+        *,
+        allow_defaults: Optional[bool] = None,
+        open_pool: Optional[bool] = None,
+        skip_invalid_items: Optional[bool] = None,
+        operation_id: Optional[UUID] = None,
+        async_mode: Optional[bool] = True
+    ) -> TasksCreateOperation:
         """Creates many tasks in pools, asynchronous version
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
@@ -1033,11 +1367,28 @@ class TolokaClient:
 
         Returns:
             TasksCreateOperation: An operation upon completion of which you can get the created tasks.
+
+        Example:
+            >>> training_tasks = [
+            >>>     toloka.task.Task(
+            >>>                 input_values={'image': 'link1'},
+            >>>                 pool_id='1'),
+            >>>     toloka.task.Task(
+            >>>             input_values={'image': 'link2'},
+            >>>             pool_id='1')
+            >>> ]
+            >>> tasks_op = toloka_client.create_tasks_async(training_tasks)
+            >>> toloka_client.wait_operation(tasks_op)
+            ...
         """
         ...
 
     @overload
-    def create_tasks_async(self, tasks: List[Task], parameters: Optional[CreateTasksParameters] = None) -> TasksCreateOperation:
+    def create_tasks_async(
+        self,
+        tasks: List[Task],
+        parameters: Optional[CreateTasksParameters] = None
+    ) -> TasksCreateOperation:
         """Creates many tasks in pools, asynchronous version
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
@@ -1049,6 +1400,19 @@ class TolokaClient:
 
         Returns:
             TasksCreateOperation: An operation upon completion of which you can get the created tasks.
+
+        Example:
+            >>> training_tasks = [
+            >>>     toloka.task.Task(
+            >>>                 input_values={'image': 'link1'},
+            >>>                 pool_id='1'),
+            >>>     toloka.task.Task(
+            >>>             input_values={'image': 'link2'},
+            >>>             pool_id='1')
+            >>> ]
+            >>> tasks_op = toloka_client.create_tasks_async(training_tasks)
+            >>> toloka_client.wait_operation(tasks_op)
+            ...
         """
         ...
 
@@ -1083,7 +1447,14 @@ class TolokaClient:
         """
         ...
 
-    def create_user_bonus(self, user_bonus: UserBonus, parameters: Optional[UserBonusCreateRequestParameters] = None) -> UserBonus:
+    @overload
+    def create_user_bonus(
+        self,
+        user_bonus: UserBonus,
+        *,
+        operation_id: Optional[str] = None,
+        skip_invalid_items: Optional[bool] = None
+    ) -> UserBonus:
         """Issues payments directly to the performer
 
         You can send a maximum of 10,000 requests of this kind per day.
@@ -1096,14 +1467,15 @@ class TolokaClient:
             UserBonus: Created bonus.
 
         Example:
-            How to create bonus with message for specific assignment.
+            Create bonus for specific assignment.
 
+            >>> import decimal
             >>> new_bonus = toloka_client.create_user_bonus(
             >>>     UserBonus(
             >>>         user_id='1',
-            >>>         amount='0.50',
+            >>>         amount=decimal.Decimal('0.50'),
             >>>         public_title='Perfect job!',
-            >>>         public_message='You are the best performer EVER!'
+            >>>         public_message='You are the best performer!',
             >>>         assignment_id='012345'
             >>>     )
             >>> )
@@ -1112,99 +1484,198 @@ class TolokaClient:
         ...
 
     @overload
-    def create_user_bonuses(self, user_bonuses: List[UserBonus], *, operation_id: Optional[str] = None, skip_invalid_items: Optional[bool] = None) -> UserBonusBatchCreateResult:
-        """Creates many user bonuses
-
-        Right now it's safer to use asynchronous version: "create_user_bonuses_async"
-        You can send a maximum of 10,000 requests of this kind per day.
-
-        Args:
-            user_bonuses: To whom, how much to pay and for what.
-            parameters: Parameters for UserBonus creation controlling.
-
-        Returns:
-            UserBonusBatchCreateResult: Result of user bonuses creating. Contains created user bonuses in "items" and
-                problems in "validation_errors".
-        """
-        ...
-
-    @overload
-    def create_user_bonuses(self, user_bonuses: List[UserBonus], parameters: Optional[UserBonusCreateRequestParameters] = None) -> UserBonusBatchCreateResult:
-        """Creates many user bonuses
-
-        Right now it's safer to use asynchronous version: "create_user_bonuses_async"
-        You can send a maximum of 10,000 requests of this kind per day.
-
-        Args:
-            user_bonuses: To whom, how much to pay and for what.
-            parameters: Parameters for UserBonus creation controlling.
-
-        Returns:
-            UserBonusBatchCreateResult: Result of user bonuses creating. Contains created user bonuses in "items" and
-                problems in "validation_errors".
-        """
-        ...
-
-    @overload
-    def create_user_bonuses_async(self, user_bonuses: List[UserBonus], *, operation_id: Optional[str] = None, skip_invalid_items: Optional[bool] = None) -> UserBonusCreateBatchOperation:
-        """Issues payments directly to the performers, asynchronously creates many user bonuses
+    def create_user_bonus(
+        self,
+        user_bonus: UserBonus,
+        parameters: Optional[UserBonusCreateRequestParameters] = None
+    ) -> UserBonus:
+        """Issues payments directly to the performer
 
         You can send a maximum of 10,000 requests of this kind per day.
 
         Args:
-            user_bonuses: To whom, how much to pay and for what.
+            user_bonus: To whom, how much to pay and for what.
             parameters: Parameters for UserBonus creation controlling.
 
         Returns:
-            UserBonusCreateBatchOperation: An operation upon completion of which the bonuses can be considered created.
-        """
-        ...
-
-    @overload
-    def create_user_bonuses_async(self, user_bonuses: List[UserBonus], parameters: Optional[UserBonusCreateRequestParameters] = None) -> UserBonusCreateBatchOperation:
-        """Issues payments directly to the performers, asynchronously creates many user bonuses
-
-        You can send a maximum of 10,000 requests of this kind per day.
-
-        Args:
-            user_bonuses: To whom, how much to pay and for what.
-            parameters: Parameters for UserBonus creation controlling.
-
-        Returns:
-            UserBonusCreateBatchOperation: An operation upon completion of which the bonuses can be considered created.
-        """
-        ...
-
-    def upsert_webhook_subscriptions(self, subscriptions: List[WebhookSubscription]) -> WebhookSubscriptionBatchCreateResult:
-        """Creates (upsert) many webhook-subscriptions.
-
-        Args:
-            subscriptions: List of webhook-subscriptions, that will be created.
-
-        Returns:
-            batch_create_results.WebhookSubscriptionBatchCreateResult: Result of subscriptions creation.
-                Contains created subscriptions in "items" and problems in "validation_errors".
-
-        Raises:
-            ValidationApiError: If no subscriptions were created.
+            UserBonus: Created bonus.
 
         Example:
-            How to create several subscriptions.
+            Create bonus for specific assignment.
 
-            >>> created_result = toloka_client.upsert_webhook_subscriptions([
-            >>>     {
-            >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
-            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.ASSIGNMENT_CREATED,
-            >>>         'pool_id': '121212'
-            >>>     },
-            >>>     {
-            >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
-            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.POOL_CLOSED,
-            >>>         'pool_id': '121212',
-            >>>     }
-            >>> ])
-            >>> print(len(created_result.items))
-            2
+            >>> import decimal
+            >>> new_bonus = toloka_client.create_user_bonus(
+            >>>     UserBonus(
+            >>>         user_id='1',
+            >>>         amount=decimal.Decimal('0.50'),
+            >>>         public_title='Perfect job!',
+            >>>         public_message='You are the best performer!',
+            >>>         assignment_id='012345'
+            >>>     )
+            >>> )
+            ...
+        """
+        ...
+
+    @overload
+    def create_user_bonuses(
+        self,
+        user_bonuses: List[UserBonus],
+        *,
+        operation_id: Optional[str] = None,
+        skip_invalid_items: Optional[bool] = None
+    ) -> UserBonusBatchCreateResult:
+        """Creates many user bonuses
+
+        Right now it's safer to use asynchronous version: "create_user_bonuses_async"
+        You can send a maximum of 10,000 requests of this kind per day.
+
+        Args:
+            user_bonuses: To whom, how much to pay and for what.
+            parameters: Parameters for UserBonus creation controlling.
+
+        Returns:
+            UserBonusBatchCreateResult: Result of user bonuses creating. Contains created user bonuses in `items` and
+                problems in "validation_errors".
+
+        Example:
+            >>> import decimal
+            >>> new_bonuses=[
+            >>>     UserBonus(
+            >>>         user_id='1',
+            >>>         amount=decimal.Decimal('0.50'),
+            >>>         public_title='Perfect job!',
+            >>>         public_message='You are the best performer!',
+            >>>         assignment_id='1'),
+            >>>     UserBonus(
+            >>>         user_id='2',
+            >>>         amount=decimal.Decimal('1.0'),
+            >>>         public_title='Excellent work!',
+            >>>         public_message='You completed all the tasks!',
+            >>>         assignment_id='2')
+            >>> ]
+            >>> toloka_client.create_user_bonuses(new_bonuses)
+            ...
+        """
+        ...
+
+    @overload
+    def create_user_bonuses(
+        self,
+        user_bonuses: List[UserBonus],
+        parameters: Optional[UserBonusCreateRequestParameters] = None
+    ) -> UserBonusBatchCreateResult:
+        """Creates many user bonuses
+
+        Right now it's safer to use asynchronous version: "create_user_bonuses_async"
+        You can send a maximum of 10,000 requests of this kind per day.
+
+        Args:
+            user_bonuses: To whom, how much to pay and for what.
+            parameters: Parameters for UserBonus creation controlling.
+
+        Returns:
+            UserBonusBatchCreateResult: Result of user bonuses creating. Contains created user bonuses in `items` and
+                problems in "validation_errors".
+
+        Example:
+            >>> import decimal
+            >>> new_bonuses=[
+            >>>     UserBonus(
+            >>>         user_id='1',
+            >>>         amount=decimal.Decimal('0.50'),
+            >>>         public_title='Perfect job!',
+            >>>         public_message='You are the best performer!',
+            >>>         assignment_id='1'),
+            >>>     UserBonus(
+            >>>         user_id='2',
+            >>>         amount=decimal.Decimal('1.0'),
+            >>>         public_title='Excellent work!',
+            >>>         public_message='You completed all the tasks!',
+            >>>         assignment_id='2')
+            >>> ]
+            >>> toloka_client.create_user_bonuses(new_bonuses)
+            ...
+        """
+        ...
+
+    @overload
+    def create_user_bonuses_async(
+        self,
+        user_bonuses: List[UserBonus],
+        *,
+        operation_id: Optional[str] = None,
+        skip_invalid_items: Optional[bool] = None
+    ) -> UserBonusCreateBatchOperation:
+        """Issues payments directly to the performers, asynchronously creates many user bonuses
+
+        You can send a maximum of 10,000 requests of this kind per day.
+
+        Args:
+            user_bonuses: To whom, how much to pay and for what.
+            parameters: Parameters for UserBonus creation controlling.
+
+        Returns:
+            UserBonusCreateBatchOperation: An operation upon completion of which the bonuses can be considered created.
+
+        Example:
+            >>> import decimal
+            >>> new_bonuses=[
+            >>>     UserBonus(
+            >>>         user_id='1',
+            >>>         amount=decimal.Decimal('0.50'),
+            >>>         public_title='Perfect job!',
+            >>>         public_message='You are the best performer!',
+            >>>         assignment_id='1'),
+            >>>     UserBonus(
+            >>>         user_id='2',
+            >>>         amount=decimal.Decimal('1.0'),
+            >>>         public_title='Excellent work!',
+            >>>         public_message='You completed all the tasks!',
+            >>>         assignment_id='2')
+            >>> ]
+            >>> create_bonuses = toloka_client.create_user_bonuses_async(new_bonuses)
+            >>> toloka_client.wait_operation(create_bonuses)
+            ...
+        """
+        ...
+
+    @overload
+    def create_user_bonuses_async(
+        self,
+        user_bonuses: List[UserBonus],
+        parameters: Optional[UserBonusCreateRequestParameters] = None
+    ) -> UserBonusCreateBatchOperation:
+        """Issues payments directly to the performers, asynchronously creates many user bonuses
+
+        You can send a maximum of 10,000 requests of this kind per day.
+
+        Args:
+            user_bonuses: To whom, how much to pay and for what.
+            parameters: Parameters for UserBonus creation controlling.
+
+        Returns:
+            UserBonusCreateBatchOperation: An operation upon completion of which the bonuses can be considered created.
+
+        Example:
+            >>> import decimal
+            >>> new_bonuses=[
+            >>>     UserBonus(
+            >>>         user_id='1',
+            >>>         amount=decimal.Decimal('0.50'),
+            >>>         public_title='Perfect job!',
+            >>>         public_message='You are the best performer!',
+            >>>         assignment_id='1'),
+            >>>     UserBonus(
+            >>>         user_id='2',
+            >>>         amount=decimal.Decimal('1.0'),
+            >>>         public_title='Excellent work!',
+            >>>         public_message='You completed all the tasks!',
+            >>>         assignment_id='2')
+            >>> ]
+            >>> create_bonuses = toloka_client.create_user_bonuses_async(new_bonuses)
+            >>> toloka_client.wait_operation(create_bonuses)
+            ...
         """
         ...
 
@@ -1213,6 +1684,10 @@ class TolokaClient:
 
         Args:
             user_restriction_id: Restriction that should be removed.
+
+        Example:
+            >>> toloka_client.delete_user_restriction(user_restriction_id='1')
+            ...
         """
         ...
 
@@ -1223,6 +1698,10 @@ class TolokaClient:
 
         Args:
             user_skill_id: ID of the fact that the performer has a skill to delete.
+
+        Example:
+            >>> toloka_client.delete_user_skill(user_skill_id='1')
+            ...
         """
         ...
 
@@ -1234,7 +1713,11 @@ class TolokaClient:
         """
         ...
 
-    def download_attachment(self, attachment_id: str, out: BinaryIO) -> None:
+    def download_attachment(
+        self,
+        attachment_id: str,
+        out: BinaryIO
+    ) -> None:
         """Downloads specific attachment
 
         Args:
@@ -1242,20 +1725,29 @@ class TolokaClient:
             out: File object where to put downloaded file.
 
         Example:
-            How to download attachment.
+            How to download an attachment.
 
             >>> with open('my_new_file.txt', 'wb') as out_f:
-            >>>     toloka_client.download_attachment('attachment-id', out_f)
+            >>>     toloka_client.download_attachment(attachment_id='1', out=out_f)
             ...
         """
         ...
 
     @overload
-    def find_aggregated_solutions(self, operation_id: str, task_id_lt: Optional[str] = None, task_id_lte: Optional[str] = None, task_id_gt: Optional[str] = None, task_id_gte: Optional[str] = None, sort: Union[List[str], AggregatedSolutionSortItems, None] = None, limit: Optional[int] = None) -> AggregatedSolutionSearchResult:
+    def find_aggregated_solutions(
+        self,
+        operation_id: str,
+        task_id_lt: Optional[str] = None,
+        task_id_lte: Optional[str] = None,
+        task_id_gt: Optional[str] = None,
+        task_id_gte: Optional[str] = None,
+        sort: Union[List[str], AggregatedSolutionSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> AggregatedSolutionSearchResult:
         """Gets aggregated responses after the AggregatedSolutionOperation completes.
         It is better to use the "get_aggregated_solutions" method, that allows to iterate through all results.
 
-        Note: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
+        **Note**: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
         methods and can perform on your computers: https://github.com/Toloka/crowd-kit
 
         Args:
@@ -1266,7 +1758,7 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 50 results.
 
         Returns:
-            search_results.AggregatedSolutionSearchResult: The first "limit" solutions in "items". And a mark that there is more.
+            search_results.AggregatedSolutionSearchResult: The first `limit` solutions in `items`. And a mark that there is more.
 
         Example:
             How to get all aggregated solutions from pool.
@@ -1287,11 +1779,17 @@ class TolokaClient:
         ...
 
     @overload
-    def find_aggregated_solutions(self, operation_id: str, request: AggregatedSolutionSearchRequest, sort: Union[List[str], AggregatedSolutionSortItems, None] = None, limit: Optional[int] = None) -> AggregatedSolutionSearchResult:
+    def find_aggregated_solutions(
+        self,
+        operation_id: str,
+        request: AggregatedSolutionSearchRequest,
+        sort: Union[List[str], AggregatedSolutionSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> AggregatedSolutionSearchResult:
         """Gets aggregated responses after the AggregatedSolutionOperation completes.
         It is better to use the "get_aggregated_solutions" method, that allows to iterate through all results.
 
-        Note: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
+        **Note**: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
         methods and can perform on your computers: https://github.com/Toloka/crowd-kit
 
         Args:
@@ -1302,7 +1800,7 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 50 results.
 
         Returns:
-            search_results.AggregatedSolutionSearchResult: The first "limit" solutions in "items". And a mark that there is more.
+            search_results.AggregatedSolutionSearchResult: The first `limit` solutions in `items`. And a mark that there is more.
 
         Example:
             How to get all aggregated solutions from pool.
@@ -1323,55 +1821,28 @@ class TolokaClient:
         ...
 
     @overload
-    def get_aggregated_solutions(self, operation_id: str, task_id_lt: Optional[str] = None, task_id_lte: Optional[str] = None, task_id_gt: Optional[str] = None, task_id_gte: Optional[str] = None) -> Generator[AggregatedSolution, None, None]:
-        """Finds all aggregated responses after the AggregatedSolutionOperation completes
-
-        Note: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
-        methods and can perform on your computers: https://github.com/Toloka/crowd-kit
-
-        Args:
-            operation_id: From what aggregation operation you want to get results.
-            request: How to filter search results.
-
-        Yields:
-            AggregatedSolution: The next object corresponding to the request parameters.
-
-        Example:
-            How to get all aggregated solutions from pool.
-
-            >>> # run toloka_client.aggregate_solutions_by_pool and wait operation for closing.
-            >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
-            >>> print(len(aggregation_results))
-            ...
-        """
-        ...
-
-    @overload
-    def get_aggregated_solutions(self, operation_id: str, request: AggregatedSolutionSearchRequest) -> Generator[AggregatedSolution, None, None]:
-        """Finds all aggregated responses after the AggregatedSolutionOperation completes
-
-        Note: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
-        methods and can perform on your computers: https://github.com/Toloka/crowd-kit
-
-        Args:
-            operation_id: From what aggregation operation you want to get results.
-            request: How to filter search results.
-
-        Yields:
-            AggregatedSolution: The next object corresponding to the request parameters.
-
-        Example:
-            How to get all aggregated solutions from pool.
-
-            >>> # run toloka_client.aggregate_solutions_by_pool and wait operation for closing.
-            >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
-            >>> print(len(aggregation_results))
-            ...
-        """
-        ...
-
-    @overload
-    def find_assignments(self, status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]] = None, task_id: Optional[str] = None, task_suite_id: Optional[str] = None, pool_id: Optional[str] = None, user_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, submitted_lt: Optional[datetime] = None, submitted_lte: Optional[datetime] = None, submitted_gt: Optional[datetime] = None, submitted_gte: Optional[datetime] = None, sort: Union[List[str], AssignmentSortItems, None] = None, limit: Optional[int] = None) -> AssignmentSearchResult:
+    def find_assignments(
+        self,
+        status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]] = None,
+        task_id: Optional[str] = None,
+        task_suite_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        user_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        submitted_lt: Optional[datetime] = None,
+        submitted_lte: Optional[datetime] = None,
+        submitted_gt: Optional[datetime] = None,
+        submitted_gte: Optional[datetime] = None,
+        sort: Union[List[str], AssignmentSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> AssignmentSearchResult:
         """Finds all assignments that match certain rules
 
         As a result, it returns an object that contains the first part of the found assignments and whether there
@@ -1386,12 +1857,25 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 50 results.
 
         Returns:
-            search_results.AssignmentSearchResult: The first "limit" assignments in "items". And a mark that there is more.
+            search_results.AssignmentSearchResult: The first `limit` assignments in `items`. And a mark that there is more.
+
+        Example:
+            Search for `SKIPPED` or `EXPIRED` assignments in the specified pool.
+
+            >>> toloka_client.find_assignments(pool_id='1', status = ['SKIPPED', 'EXPIRED'])
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_assignments(self, request: AssignmentSearchRequest, sort: Union[List[str], AssignmentSortItems, None] = None, limit: Optional[int] = None) -> AssignmentSearchResult:
+    def find_assignments(
+        self,
+        request: AssignmentSearchRequest,
+        sort: Union[List[str], AssignmentSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> AssignmentSearchResult:
         """Finds all assignments that match certain rules
 
         As a result, it returns an object that contains the first part of the found assignments and whether there
@@ -1406,12 +1890,39 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 50 results.
 
         Returns:
-            search_results.AssignmentSearchResult: The first "limit" assignments in "items". And a mark that there is more.
+            search_results.AssignmentSearchResult: The first `limit` assignments in `items`. And a mark that there is more.
+
+        Example:
+            Search for `SKIPPED` or `EXPIRED` assignments in the specified pool.
+
+            >>> toloka_client.find_assignments(pool_id='1', status = ['SKIPPED', 'EXPIRED'])
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_attachments(self, name: Optional[str] = None, type: Optional[Attachment.Type] = None, user_id: Optional[str] = None, assignment_id: Optional[str] = None, pool_id: Optional[str] = None, owner_id: Optional[str] = None, owner_company_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], AttachmentSortItems, None] = None, limit: Optional[int] = None) -> AttachmentSearchResult:
+    def find_attachments(
+        self,
+        name: Optional[str] = None,
+        type: Optional[Attachment.Type] = None,
+        user_id: Optional[str] = None,
+        assignment_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        owner_id: Optional[str] = None,
+        owner_company_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        sort: Union[List[str], AttachmentSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> AttachmentSearchResult:
         """Finds all attachments that match certain rules
 
         As a result, it returns an object that contains the first part of the found attachments and whether there
@@ -1426,12 +1937,25 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 50 results.
 
         Returns:
-            search_results.AttachmentSearchResult: The first "limit" assignments in "items". And a mark that there is more.
+            search_results.AttachmentSearchResult: The first `limit` assignments in `items`. And a mark that there is more.
+
+        Example:
+            Let's find attachments in the pool and sort them by id and date of creation.
+
+            >>> toloka_client.find_attachments(pool_id='1', sort=['-created', '-id'], limit=10)
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_attachments(self, request: AttachmentSearchRequest, sort: Union[List[str], AttachmentSortItems, None] = None, limit: Optional[int] = None) -> AttachmentSearchResult:
+    def find_attachments(
+        self,
+        request: AttachmentSearchRequest,
+        sort: Union[List[str], AttachmentSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> AttachmentSearchResult:
         """Finds all attachments that match certain rules
 
         As a result, it returns an object that contains the first part of the found attachments and whether there
@@ -1446,12 +1970,34 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 50 results.
 
         Returns:
-            search_results.AttachmentSearchResult: The first "limit" assignments in "items". And a mark that there is more.
+            search_results.AttachmentSearchResult: The first `limit` assignments in `items`. And a mark that there is more.
+
+        Example:
+            Let's find attachments in the pool and sort them by id and date of creation.
+
+            >>> toloka_client.find_attachments(pool_id='1', sort=['-created', '-id'], limit=10)
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_message_threads(self, folder: Union[str, Folder, List[Union[str, Folder]]] = None, folder_ne: Union[str, Folder, List[Union[str, Folder]]] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], MessageThreadSortItems, None] = None, limit: Optional[int] = None) -> MessageThreadSearchResult:
+    def find_message_threads(
+        self,
+        folder: Union[str, Folder, List[Union[str, Folder]]] = None,
+        folder_ne: Union[str, Folder, List[Union[str, Folder]]] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        sort: Union[List[str], MessageThreadSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> MessageThreadSearchResult:
         """Finds all message threads that match certain rules
 
         As a result, it returns an object that contains the first part of the found threads and whether there
@@ -1466,13 +2012,24 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 50 results.
 
         Returns:
-            search_results.MessageThreadSearchResult: The first "limit" message threads in "items".
+            search_results.MessageThreadSearchResult: The first `limit` message threads in `items`.
                 And a mark that there is more.
+
+        Example:
+            Find all message threads in the Inbox folder.
+
+            >>> toloka_client.find_message_threads(folder='INBOX')
+            ...
         """
         ...
 
     @overload
-    def find_message_threads(self, request: MessageThreadSearchRequest, sort: Union[List[str], MessageThreadSortItems, None] = None, limit: Optional[int] = None) -> MessageThreadSearchResult:
+    def find_message_threads(
+        self,
+        request: MessageThreadSearchRequest,
+        sort: Union[List[str], MessageThreadSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> MessageThreadSearchResult:
         """Finds all message threads that match certain rules
 
         As a result, it returns an object that contains the first part of the found threads and whether there
@@ -1487,13 +2044,37 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 50 results.
 
         Returns:
-            search_results.MessageThreadSearchResult: The first "limit" message threads in "items".
+            search_results.MessageThreadSearchResult: The first `limit` message threads in `items`.
                 And a mark that there is more.
+
+        Example:
+            Find all message threads in the Inbox folder.
+
+            >>> toloka_client.find_message_threads(folder='INBOX')
+            ...
         """
         ...
 
     @overload
-    def find_pools(self, status: Optional[Pool.Status] = None, project_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, last_started_lt: Optional[datetime] = None, last_started_lte: Optional[datetime] = None, last_started_gt: Optional[datetime] = None, last_started_gte: Optional[datetime] = None, sort: Union[List[str], PoolSortItems, None] = None, limit: Optional[int] = None) -> PoolSearchResult:
+    def find_pools(
+        self,
+        status: Optional[Pool.Status] = None,
+        project_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        last_started_lt: Optional[datetime] = None,
+        last_started_lte: Optional[datetime] = None,
+        last_started_gt: Optional[datetime] = None,
+        last_started_gte: Optional[datetime] = None,
+        sort: Union[List[str], PoolSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> PoolSearchResult:
         """Finds all pools that match certain rules
 
         As a result, it returns an object that contains the first part of the found pools and whether there
@@ -1508,13 +2089,36 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 20 results.
 
         Returns:
-            search_results.PoolSearchResult: The first "limit" pools in "items".
+            search_results.PoolSearchResult: The first `limit` pools in `items`.
                 And a mark that there is more.
+
+        Examples:
+            Find all pools in all projects.
+
+            >>> toloka_client.find_pools()
+            ...
+
+            Find all open pools in all projects.
+
+            >>> toloka_client.find_pools(status='OPEN')
+            ...
+
+            Find open pools in a specific project.
+
+            >>> toloka_client.find_pools(status='OPEN', project_id='1')
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_pools(self, request: PoolSearchRequest, sort: Union[List[str], PoolSortItems, None] = None, limit: Optional[int] = None) -> PoolSearchResult:
+    def find_pools(
+        self,
+        request: PoolSearchRequest,
+        sort: Union[List[str], PoolSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> PoolSearchResult:
         """Finds all pools that match certain rules
 
         As a result, it returns an object that contains the first part of the found pools and whether there
@@ -1529,13 +2133,44 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 20 results.
 
         Returns:
-            search_results.PoolSearchResult: The first "limit" pools in "items".
+            search_results.PoolSearchResult: The first `limit` pools in `items`.
                 And a mark that there is more.
+
+        Examples:
+            Find all pools in all projects.
+
+            >>> toloka_client.find_pools()
+            ...
+
+            Find all open pools in all projects.
+
+            >>> toloka_client.find_pools(status='OPEN')
+            ...
+
+            Find open pools in a specific project.
+
+            >>> toloka_client.find_pools(status='OPEN', project_id='1')
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_projects(self, status: Optional[Project.ProjectStatus] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], ProjectSortItems, None] = None, limit: Optional[int] = None) -> ProjectSearchResult:
+    def find_projects(
+        self,
+        status: Optional[Project.ProjectStatus] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        sort: Union[List[str], ProjectSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> ProjectSearchResult:
         """Finds all projects that match certain rules
 
         As a result, it returns an object that contains the first part of the found projects and whether there
@@ -1550,13 +2185,26 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 20 results.
 
         Returns:
-            search_results.ProjectSearchResult: The first "limit" projects in "items".
+            search_results.ProjectSearchResult: The first `limit` projects in `items`.
                 And a mark that there is more.
+
+        Example:
+            Find projects that were created before a specific date.
+
+            >>> toloka_client.find_projects(created_lt='2021-06-01T00:00:00')
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_projects(self, request: ProjectSearchRequest, sort: Union[List[str], ProjectSortItems, None] = None, limit: Optional[int] = None) -> ProjectSearchResult:
+    def find_projects(
+        self,
+        request: ProjectSearchRequest,
+        sort: Union[List[str], ProjectSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> ProjectSearchResult:
         """Finds all projects that match certain rules
 
         As a result, it returns an object that contains the first part of the found projects and whether there
@@ -1571,13 +2219,34 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 20 results.
 
         Returns:
-            search_results.ProjectSearchResult: The first "limit" projects in "items".
+            search_results.ProjectSearchResult: The first `limit` projects in `items`.
                 And a mark that there is more.
+
+        Example:
+            Find projects that were created before a specific date.
+
+            >>> toloka_client.find_projects(created_lt='2021-06-01T00:00:00')
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_skills(self, name: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], SkillSortItems, None] = None, limit: Optional[int] = None) -> SkillSearchResult:
+    def find_skills(
+        self,
+        name: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        sort: Union[List[str], SkillSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> SkillSearchResult:
         """Finds all skills that match certain rules
 
         As a result, it returns an object that contains the first part of the found skills and whether there
@@ -1591,13 +2260,26 @@ class TolokaClient:
             limit: Limit on the number of results returned.
 
         Returns:
-            SkillSearchResult: The first "limit" skills in "items".
+            SkillSearchResult: The first `limit` skills in `items`.
                 And a mark that there is more.
+
+        Example:
+            Find ten most recently created skills.
+
+            >>> toloka_client.find_skills(sort=['-created', '-id'], limit=10)
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_skills(self, request: SkillSearchRequest, sort: Union[List[str], SkillSortItems, None] = None, limit: Optional[int] = None) -> SkillSearchResult:
+    def find_skills(
+        self,
+        request: SkillSearchRequest,
+        sort: Union[List[str], SkillSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> SkillSearchResult:
         """Finds all skills that match certain rules
 
         As a result, it returns an object that contains the first part of the found skills and whether there
@@ -1611,13 +2293,40 @@ class TolokaClient:
             limit: Limit on the number of results returned.
 
         Returns:
-            SkillSearchResult: The first "limit" skills in "items".
+            SkillSearchResult: The first `limit` skills in `items`.
                 And a mark that there is more.
+
+        Example:
+            Find ten most recently created skills.
+
+            >>> toloka_client.find_skills(sort=['-created', '-id'], limit=10)
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_task_suites(self, task_id: Optional[str] = None, pool_id: Optional[str] = None, overlap: Optional[int] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, overlap_lt: Optional[int] = None, overlap_lte: Optional[int] = None, overlap_gt: Optional[int] = None, overlap_gte: Optional[int] = None, sort: Union[List[str], TaskSuiteSortItems, None] = None, limit: Optional[int] = None) -> TaskSuiteSearchResult:
+    def find_task_suites(
+        self,
+        task_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        overlap: Optional[int] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        overlap_lt: Optional[int] = None,
+        overlap_lte: Optional[int] = None,
+        overlap_gt: Optional[int] = None,
+        overlap_gte: Optional[int] = None,
+        sort: Union[List[str], TaskSuiteSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> TaskSuiteSearchResult:
         """Finds all task suites that match certain rules
 
         As a result, it returns an object that contains the first part of the found task suites and whether there
@@ -1632,12 +2341,25 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 50 results.
 
         Returns:
-            TaskSuiteSearchResult: The first "limit" task suites in "items". And a mark that there is more.
+            TaskSuiteSearchResult: The first `limit` task suites in `items`. And a mark that there is more.
+
+        Example:
+            Find three most recently created task suites in a specified pool.
+
+            >>> toloka_client.find_task_suites(pool_id='1', sort=['-created', '-id'], limit=3)
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_task_suites(self, request: TaskSuiteSearchRequest, sort: Union[List[str], TaskSuiteSortItems, None] = None, limit: Optional[int] = None) -> TaskSuiteSearchResult:
+    def find_task_suites(
+        self,
+        request: TaskSuiteSearchRequest,
+        sort: Union[List[str], TaskSuiteSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> TaskSuiteSearchResult:
         """Finds all task suites that match certain rules
 
         As a result, it returns an object that contains the first part of the found task suites and whether there
@@ -1652,12 +2374,38 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 50 results.
 
         Returns:
-            TaskSuiteSearchResult: The first "limit" task suites in "items". And a mark that there is more.
+            TaskSuiteSearchResult: The first `limit` task suites in `items`. And a mark that there is more.
+
+        Example:
+            Find three most recently created task suites in a specified pool.
+
+            >>> toloka_client.find_task_suites(pool_id='1', sort=['-created', '-id'], limit=3)
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_tasks(self, pool_id: Optional[str] = None, overlap: Optional[int] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, overlap_lt: Optional[int] = None, overlap_lte: Optional[int] = None, overlap_gt: Optional[int] = None, overlap_gte: Optional[int] = None, sort: Union[List[str], TaskSortItems, None] = None, limit: Optional[int] = None) -> TaskSearchResult:
+    def find_tasks(
+        self,
+        pool_id: Optional[str] = None,
+        overlap: Optional[int] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        overlap_lt: Optional[int] = None,
+        overlap_lte: Optional[int] = None,
+        overlap_gt: Optional[int] = None,
+        overlap_gte: Optional[int] = None,
+        sort: Union[List[str], TaskSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> TaskSearchResult:
         """Finds all tasks that match certain rules
 
         As a result, it returns an object that contains the first part of the found tasks and whether there
@@ -1672,12 +2420,25 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 50 results.
 
         Returns:
-            TaskSearchResult: The first "limit" tasks in "items". And a mark that there is more.
+            TaskSearchResult: The first `limit` tasks in `items`. And a mark that there is more.
+
+        Example:
+            Find three most recently created tasks in a specified pool.
+
+            >>> toloka_client.find_tasks(pool_id='1', sort=['-created', '-id'], limit=3)
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_tasks(self, request: TaskSearchRequest, sort: Union[List[str], TaskSortItems, None] = None, limit: Optional[int] = None) -> TaskSearchResult:
+    def find_tasks(
+        self,
+        request: TaskSearchRequest,
+        sort: Union[List[str], TaskSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> TaskSearchResult:
         """Finds all tasks that match certain rules
 
         As a result, it returns an object that contains the first part of the found tasks and whether there
@@ -1692,12 +2453,38 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 50 results.
 
         Returns:
-            TaskSearchResult: The first "limit" tasks in "items". And a mark that there is more.
+            TaskSearchResult: The first `limit` tasks in `items`. And a mark that there is more.
+
+        Example:
+            Find three most recently created tasks in a specified pool.
+
+            >>> toloka_client.find_tasks(pool_id='1', sort=['-created', '-id'], limit=3)
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_trainings(self, status: Optional[Training.Status] = None, project_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, last_started_lt: Optional[datetime] = None, last_started_lte: Optional[datetime] = None, last_started_gt: Optional[datetime] = None, last_started_gte: Optional[datetime] = None, sort: Union[List[str], TrainingSortItems, None] = None, limit: Optional[int] = None) -> TrainingSearchResult:
+    def find_trainings(
+        self,
+        status: Optional[Training.Status] = None,
+        project_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        last_started_lt: Optional[datetime] = None,
+        last_started_lte: Optional[datetime] = None,
+        last_started_gt: Optional[datetime] = None,
+        last_started_gte: Optional[datetime] = None,
+        sort: Union[List[str], TrainingSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> TrainingSearchResult:
         """Finds all trainings that match certain rules
 
         As a result, it returns an object that contains the first part of the found trainings and whether there
@@ -1711,13 +2498,36 @@ class TolokaClient:
             limit: Limit on the number of results returned.
 
         Returns:
-            search_results.PoolSearchResult: The first "limit" trainings in "items".
+            search_results.TrainingSearchResult: The first `limit` trainings in `items`.
                 And a mark that there is more.
+
+        Examples:
+            Find all trainings in all projects.
+
+            >>> toloka_client.find_trainings()
+            ...
+
+            Find all open trainings in all projects.
+
+            >>> toloka_client.find_trainings(status='OPEN')
+            ...
+
+            Find all open trainings in a specific project.
+
+            >>> toloka_client.find_trainings(status='OPEN', project_id='1')
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_trainings(self, request: TrainingSearchRequest, sort: Union[List[str], TrainingSortItems, None] = None, limit: Optional[int] = None) -> TrainingSearchResult:
+    def find_trainings(
+        self,
+        request: TrainingSearchRequest,
+        sort: Union[List[str], TrainingSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> TrainingSearchResult:
         """Finds all trainings that match certain rules
 
         As a result, it returns an object that contains the first part of the found trainings and whether there
@@ -1731,13 +2541,46 @@ class TolokaClient:
             limit: Limit on the number of results returned.
 
         Returns:
-            search_results.PoolSearchResult: The first "limit" trainings in "items".
+            search_results.TrainingSearchResult: The first `limit` trainings in `items`.
                 And a mark that there is more.
+
+        Examples:
+            Find all trainings in all projects.
+
+            >>> toloka_client.find_trainings()
+            ...
+
+            Find all open trainings in all projects.
+
+            >>> toloka_client.find_trainings(status='OPEN')
+            ...
+
+            Find all open trainings in a specific project.
+
+            >>> toloka_client.find_trainings(status='OPEN', project_id='1')
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_user_bonuses(self, user_id: Optional[str] = None, private_comment: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], UserBonusSortItems, None] = None, limit: Optional[int] = None) -> UserBonusSearchResult:
+    def find_user_bonuses(
+        self,
+        user_id: Optional[str] = None,
+        assignment_id: Optional[str] = None,
+        private_comment: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        sort: Union[List[str], UserBonusSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> UserBonusSearchResult:
         """Finds all user bonuses that match certain rules
 
         As a result, it returns an object that contains the first part of the found user bonuses and whether there
@@ -1751,13 +2594,24 @@ class TolokaClient:
             limit: Limit on the number of results returned.
 
         Returns:
-            UserBonusSearchResult: The first "limit" user bonuses in "items".
+            UserBonusSearchResult: The first `limit` user bonuses in `items`.
                 And a mark that there is more.
+
+        Example:
+            >>> toloka_client.find_user_bonuses(user_id='1', sort=['-created', '-id'], limit=3)
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_user_bonuses(self, request: UserBonusSearchRequest, sort: Union[List[str], UserBonusSortItems, None] = None, limit: Optional[int] = None) -> UserBonusSearchResult:
+    def find_user_bonuses(
+        self,
+        request: UserBonusSearchRequest,
+        sort: Union[List[str], UserBonusSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> UserBonusSearchResult:
         """Finds all user bonuses that match certain rules
 
         As a result, it returns an object that contains the first part of the found user bonuses and whether there
@@ -1771,13 +2625,35 @@ class TolokaClient:
             limit: Limit on the number of results returned.
 
         Returns:
-            UserBonusSearchResult: The first "limit" user bonuses in "items".
+            UserBonusSearchResult: The first `limit` user bonuses in `items`.
                 And a mark that there is more.
+
+        Example:
+            >>> toloka_client.find_user_bonuses(user_id='1', sort=['-created', '-id'], limit=3)
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_user_restrictions(self, scope: Optional[UserRestriction.Scope] = None, user_id: Optional[str] = None, project_id: Optional[str] = None, pool_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], UserRestrictionSortItems, None] = None, limit: Optional[int] = None) -> UserRestrictionSearchResult:
+    def find_user_restrictions(
+        self,
+        scope: Optional[UserRestriction.Scope] = None,
+        user_id: Optional[str] = None,
+        project_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        sort: Union[List[str], UserRestrictionSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> UserRestrictionSearchResult:
         """Finds all user restrictions that match certain rules
 
         As a result, it returns an object that contains the first part of the found user restrictions and whether there
@@ -1791,13 +2667,24 @@ class TolokaClient:
             limit: Limit on the number of results returned.
 
         Returns:
-            UserRestrictionSearchResult: The first "limit" user restrictions in "items".
+            UserRestrictionSearchResult: The first `limit` user restrictions in `items`.
                 And a mark that there is more.
+
+        Example:
+            >>> toloka_client.find_user_restrictions(sort=['-created', '-id'], limit=10)
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_user_restrictions(self, request: UserRestrictionSearchRequest, sort: Union[List[str], UserRestrictionSortItems, None] = None, limit: Optional[int] = None) -> UserRestrictionSearchResult:
+    def find_user_restrictions(
+        self,
+        request: UserRestrictionSearchRequest,
+        sort: Union[List[str], UserRestrictionSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> UserRestrictionSearchResult:
         """Finds all user restrictions that match certain rules
 
         As a result, it returns an object that contains the first part of the found user restrictions and whether there
@@ -1811,13 +2698,38 @@ class TolokaClient:
             limit: Limit on the number of results returned.
 
         Returns:
-            UserRestrictionSearchResult: The first "limit" user restrictions in "items".
+            UserRestrictionSearchResult: The first `limit` user restrictions in `items`.
                 And a mark that there is more.
+
+        Example:
+            >>> toloka_client.find_user_restrictions(sort=['-created', '-id'], limit=10)
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_user_skills(self, name: Optional[str] = None, user_id: Optional[str] = None, skill_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, modified_lt: Optional[datetime] = None, modified_lte: Optional[datetime] = None, modified_gt: Optional[datetime] = None, modified_gte: Optional[datetime] = None, sort: Union[List[str], UserSkillSortItems, None] = None, limit: Optional[int] = None) -> UserSkillSearchResult:
+    def find_user_skills(
+        self,
+        name: Optional[str] = None,
+        user_id: Optional[str] = None,
+        skill_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        modified_lt: Optional[datetime] = None,
+        modified_lte: Optional[datetime] = None,
+        modified_gt: Optional[datetime] = None,
+        modified_gte: Optional[datetime] = None,
+        sort: Union[List[str], UserSkillSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> UserSkillSearchResult:
         """Finds all user skills that match certain rules
 
         UserSkill describe the skill value for a specific performer.
@@ -1832,13 +2744,24 @@ class TolokaClient:
             limit: Limit on the number of results returned.
 
         Returns:
-            UserSkillSearchResult: The first "limit" user skills in "items".
+            UserSkillSearchResult: The first `limit` user skills in `items`.
                 And a mark that there is more.
+
+        Example:
+            >>> toloka_client.find_user_skills(limit=10)
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_user_skills(self, request: UserSkillSearchRequest, sort: Union[List[str], UserSkillSortItems, None] = None, limit: Optional[int] = None) -> UserSkillSearchResult:
+    def find_user_skills(
+        self,
+        request: UserSkillSearchRequest,
+        sort: Union[List[str], UserSkillSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> UserSkillSearchResult:
         """Finds all user skills that match certain rules
 
         UserSkill describe the skill value for a specific performer.
@@ -1853,13 +2776,33 @@ class TolokaClient:
             limit: Limit on the number of results returned.
 
         Returns:
-            UserSkillSearchResult: The first "limit" user skills in "items".
+            UserSkillSearchResult: The first `limit` user skills in `items`.
                 And a mark that there is more.
+
+        Example:
+            >>> toloka_client.find_user_skills(limit=10)
+            ...
+
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     @overload
-    def find_webhook_subscriptions(self, event_type: Optional[WebhookSubscription.EventType] = None, pool_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, sort: Union[List[str], WebhookSubscriptionSortItems, None] = None, limit: Optional[int] = None) -> WebhookSubscriptionSearchResult:
+    def find_webhook_subscriptions(
+        self,
+        event_type: Optional[WebhookSubscription.EventType] = None,
+        pool_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        sort: Union[List[str], WebhookSubscriptionSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> WebhookSubscriptionSearchResult:
         """Finds all webhook-subscriptions that match certain rules
 
         As a result, it returns an object that contains the first part of the found webhook-subscriptions
@@ -1874,13 +2817,18 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 50 results.
 
         Returns:
-            WebhookSubscriptionSearchResult: The first "limit" webhook-subscriptions in "items".
+            WebhookSubscriptionSearchResult: The first `limit` webhook-subscriptions in `items`.
                 And a mark that there is more.
         """
         ...
 
     @overload
-    def find_webhook_subscriptions(self, request: WebhookSubscriptionSearchRequest, sort: Union[List[str], WebhookSubscriptionSortItems, None] = None, limit: Optional[int] = None) -> WebhookSubscriptionSearchResult:
+    def find_webhook_subscriptions(
+        self,
+        request: WebhookSubscriptionSearchRequest,
+        sort: Union[List[str], WebhookSubscriptionSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> WebhookSubscriptionSearchResult:
         """Finds all webhook-subscriptions that match certain rules
 
         As a result, it returns an object that contains the first part of the found webhook-subscriptions
@@ -1895,8 +2843,65 @@ class TolokaClient:
                 Defaults to None, in which case it returns first 50 results.
 
         Returns:
-            WebhookSubscriptionSearchResult: The first "limit" webhook-subscriptions in "items".
+            WebhookSubscriptionSearchResult: The first `limit` webhook-subscriptions in `items`.
                 And a mark that there is more.
+        """
+        ...
+
+    @overload
+    def get_aggregated_solutions(
+        self,
+        operation_id: str,
+        task_id_lt: Optional[str] = None,
+        task_id_lte: Optional[str] = None,
+        task_id_gt: Optional[str] = None,
+        task_id_gte: Optional[str] = None
+    ) -> Generator[AggregatedSolution, None, None]:
+        """Finds all aggregated responses after the AggregatedSolutionOperation completes
+
+        **Note**: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
+        methods and can perform on your computers: https://github.com/Toloka/crowd-kit
+
+        Args:
+            operation_id: From what aggregation operation you want to get results.
+            request: How to filter search results.
+
+        Yields:
+            AggregatedSolution: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all aggregated solutions from pool.
+
+            >>> # run toloka_client.aggregate_solutions_by_pool and wait operation for closing.
+            >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
+            ...
+        """
+        ...
+
+    @overload
+    def get_aggregated_solutions(
+        self,
+        operation_id: str,
+        request: AggregatedSolutionSearchRequest
+    ) -> Generator[AggregatedSolution, None, None]:
+        """Finds all aggregated responses after the AggregatedSolutionOperation completes
+
+        **Note**: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
+        methods and can perform on your computers: https://github.com/Toloka/crowd-kit
+
+        Args:
+            operation_id: From what aggregation operation you want to get results.
+            request: How to filter search results.
+
+        Yields:
+            AggregatedSolution: The next object corresponding to the request parameters.
+
+        Example:
+            How to get all aggregated solutions from pool.
+
+            >>> # run toloka_client.aggregate_solutions_by_pool and wait operation for closing.
+            >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
+            ...
         """
         ...
 
@@ -1933,11 +2938,34 @@ class TolokaClient:
 
         Returns:
             Assignment: The solution read as a result.
+
+        Example:
+            >>> toloka_client.get_assignment(assignment_id='1')
+            ...
         """
         ...
 
     @overload
-    def get_assignments(self, status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]] = None, task_id: Optional[str] = None, task_suite_id: Optional[str] = None, pool_id: Optional[str] = None, user_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, submitted_lt: Optional[datetime] = None, submitted_lte: Optional[datetime] = None, submitted_gt: Optional[datetime] = None, submitted_gte: Optional[datetime] = None) -> Generator[Assignment, None, None]:
+    def get_assignments(
+        self,
+        status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]] = None,
+        task_id: Optional[str] = None,
+        task_suite_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        user_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        submitted_lt: Optional[datetime] = None,
+        submitted_lte: Optional[datetime] = None,
+        submitted_gt: Optional[datetime] = None,
+        submitted_gte: Optional[datetime] = None
+    ) -> Generator[Assignment, None, None]:
         """Finds all assignments that match certain rules and returns them in an iterable object
 
         Unlike find_assignments, returns generator. Does not sort assignments.
@@ -1950,10 +2978,11 @@ class TolokaClient:
             Assignment: The next object corresponding to the request parameters.
 
         Example:
-            How to process all accepted assignmens.
+            Let’s make a list of `assignment_id` of all `SUBMITTED` assignments in the specified pool.
 
-            >>> for assignment in toloka_client.get_assignments(pool_id=some_pool_id, status=['ACCEPTED', 'SUBMITTED']):
-            >>>     # somehow process "assignment"
+            >>> from toloka.client import Assignment
+            >>> assignments = toloka_client.get_assignments(pool_id='1', status=Assignment.SUBMITTED)
+            >>> result_list = [assignment.id for assignment in assignments]
             ...
         """
         ...
@@ -1972,16 +3001,26 @@ class TolokaClient:
             Assignment: The next object corresponding to the request parameters.
 
         Example:
-            How to process all accepted assignmens.
+            Let’s make a list of `assignment_id` of all `SUBMITTED` assignments in the specified pool.
 
-            >>> for assignment in toloka_client.get_assignments(pool_id=some_pool_id, status=['ACCEPTED', 'SUBMITTED']):
-            >>>     # somehow process "assignment"
+            >>> from toloka.client import Assignment
+            >>> assignments = toloka_client.get_assignments(pool_id='1', status=Assignment.SUBMITTED)
+            >>> result_list = [assignment.id for assignment in assignments]
             ...
         """
         ...
 
     @overload
-    def get_assignments_df(self, pool_id: str, *, status: Optional[List[GetAssignmentsTsvParameters.Status]] = ..., start_time_from: Optional[datetime] = None, start_time_to: Optional[datetime] = None, exclude_banned: Optional[bool] = None, field: Optional[List[GetAssignmentsTsvParameters.Field]] = ...) -> DataFrame:
+    def get_assignments_df(
+        self,
+        pool_id: str,
+        *,
+        status: Optional[List[GetAssignmentsTsvParameters.Status]] = ...,
+        start_time_from: Optional[datetime] = None,
+        start_time_to: Optional[datetime] = None,
+        exclude_banned: Optional[bool] = None,
+        field: Optional[List[GetAssignmentsTsvParameters.Field]] = ...
+    ) -> DataFrame:
         """Downloads assignments as pandas.DataFrame
 
         Experimental method.
@@ -1999,11 +3038,27 @@ class TolokaClient:
                 * "HINT" - Hints for completing tasks. Filled in for training tasks.
                 * "ACCEPT" - Fields describing the deferred acceptance of tasks.
                 * "ASSIGNMENT" - fields describing additional information about the Assignment.
+
+        Example:
+            Get all assignments from the specified pool by `pool_id` to [pandas.DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html).
+            And apply the native pandas `rename` method to change columns' names.
+
+            >>> answers_df = toloka_client.get_assignments_df(pool_id='1')
+            >>> answers_df = answers_df.rename(columns={
+            >>>     'INPUT:image': 'task',
+            >>>     'OUTPUT:result': 'label',
+            >>>     'ASSIGNMENT:worker_id': 'performer'
+            >>> })
+            ...
         """
         ...
 
     @overload
-    def get_assignments_df(self, pool_id: str, parameters: GetAssignmentsTsvParameters) -> DataFrame:
+    def get_assignments_df(
+        self,
+        pool_id: str,
+        parameters: GetAssignmentsTsvParameters
+    ) -> DataFrame:
         """Downloads assignments as pandas.DataFrame
 
         Experimental method.
@@ -2021,6 +3076,18 @@ class TolokaClient:
                 * "HINT" - Hints for completing tasks. Filled in for training tasks.
                 * "ACCEPT" - Fields describing the deferred acceptance of tasks.
                 * "ASSIGNMENT" - fields describing additional information about the Assignment.
+
+        Example:
+            Get all assignments from the specified pool by `pool_id` to [pandas.DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html).
+            And apply the native pandas `rename` method to change columns' names.
+
+            >>> answers_df = toloka_client.get_assignments_df(pool_id='1')
+            >>> answers_df = answers_df.rename(columns={
+            >>>     'INPUT:image': 'task',
+            >>>     'OUTPUT:result': 'label',
+            >>>     'ASSIGNMENT:worker_id': 'performer'
+            >>> })
+            ...
         """
         ...
 
@@ -2034,11 +3101,34 @@ class TolokaClient:
 
         Returns:
             Attachment: The attachment metadata read as a result.
+
+        Example:
+            Specify an `attachment_id` to get the information about any attachment object.
+
+            >>> toloka_client.get_attachment(attachment_id='1')
+            ...
         """
         ...
 
     @overload
-    def get_attachments(self, name: Optional[str] = None, type: Optional[Attachment.Type] = None, user_id: Optional[str] = None, assignment_id: Optional[str] = None, pool_id: Optional[str] = None, owner_id: Optional[str] = None, owner_company_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[Attachment, None, None]:
+    def get_attachments(
+        self,
+        name: Optional[str] = None,
+        type: Optional[Attachment.Type] = None,
+        user_id: Optional[str] = None,
+        assignment_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        owner_id: Optional[str] = None,
+        owner_company_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None
+    ) -> Generator[Attachment, None, None]:
         """Finds all attachments that match certain rules and returns their metadata in an iterable object
 
         Unlike find_attachments, returns generator. Does not sort attachments.
@@ -2049,6 +3139,12 @@ class TolokaClient:
 
         Yields:
             Attachment: The next object corresponding to the request parameters.
+
+        Example:
+            Make a list of all received attachments in the specified pool.
+
+            >>> results_list = [attachment for attachment in toloka_client.get_attachments(pool_id='1')]
+            ...
         """
         ...
 
@@ -2064,11 +3160,29 @@ class TolokaClient:
 
         Yields:
             Attachment: The next object corresponding to the request parameters.
+
+        Example:
+            Make a list of all received attachments in the specified pool.
+
+            >>> results_list = [attachment for attachment in toloka_client.get_attachments(pool_id='1')]
+            ...
         """
         ...
 
     @overload
-    def get_message_threads(self, folder: Union[str, Folder, List[Union[str, Folder]]] = None, folder_ne: Union[str, Folder, List[Union[str, Folder]]] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[MessageThread, None, None]:
+    def get_message_threads(
+        self,
+        folder: Union[str, Folder, List[Union[str, Folder]]] = None,
+        folder_ne: Union[str, Folder, List[Union[str, Folder]]] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None
+    ) -> Generator[MessageThread, None, None]:
         """Finds all message threads that match certain rules and returns them in an iterable object
 
         Unlike find_message_threads, returns generator. Does not sort threads.
@@ -2120,6 +3234,10 @@ class TolokaClient:
 
         Returns:
             Operation: The operation.
+
+        Example:
+            >>> op = toloka_client.get_operation(operation_id='1')
+            ...
         """
         ...
 
@@ -2135,6 +3253,10 @@ class TolokaClient:
 
         Returns:
             List[OperationLogItem]: Logs for the operation.
+
+        Example:
+            >>> op = toloka_client.get_operation_log(operation_id='1')
+            ...
         """
         ...
 
@@ -2146,11 +3268,31 @@ class TolokaClient:
 
         Returns:
             Pool: The pool.
+
+        Example:
+            >>> toloka_client.get_pool(pool_id='1')
+            ...
         """
         ...
 
     @overload
-    def get_pools(self, status: Optional[Pool.Status] = None, project_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, last_started_lt: Optional[datetime] = None, last_started_lte: Optional[datetime] = None, last_started_gt: Optional[datetime] = None, last_started_gte: Optional[datetime] = None) -> Generator[Pool, None, None]:
+    def get_pools(
+        self,
+        status: Optional[Pool.Status] = None,
+        project_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        last_started_lt: Optional[datetime] = None,
+        last_started_lte: Optional[datetime] = None,
+        last_started_gt: Optional[datetime] = None,
+        last_started_gte: Optional[datetime] = None
+    ) -> Generator[Pool, None, None]:
         """Finds all pools that match certain rules and returns them in an iterable object
 
         Unlike find_pools, returns generator. Does not sort pools.
@@ -2165,12 +3307,12 @@ class TolokaClient:
         Example:
             How to get all open pools from project.
 
-            >>> open_pools = toloka_client.get_pools(project_id=my_project_id, status='OPEN')
+            >>> open_pools = toloka_client.get_pools(project_id='1', status='OPEN')
             ...
 
             How to get all pools from project.
 
-            >>> all_pools = toloka_client.get_pools(project_id=my_project_id)
+            >>> all_pools = toloka_client.get_pools(project_id='1')
             ...
         """
         ...
@@ -2191,12 +3333,12 @@ class TolokaClient:
         Example:
             How to get all open pools from project.
 
-            >>> open_pools = toloka_client.get_pools(project_id=my_project_id, status='OPEN')
+            >>> open_pools = toloka_client.get_pools(project_id='1', status='OPEN')
             ...
 
             How to get all pools from project.
 
-            >>> all_pools = toloka_client.get_pools(project_id=my_project_id)
+            >>> all_pools = toloka_client.get_pools(project_id='1')
             ...
         """
         ...
@@ -2209,11 +3351,26 @@ class TolokaClient:
 
         Returns:
             Project: The project.
+
+        Example:
+            >>> toloka_client.get_project(project_id='1')
+            ...
         """
         ...
 
     @overload
-    def get_projects(self, status: Optional[Project.ProjectStatus] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[Project, None, None]:
+    def get_projects(
+        self,
+        status: Optional[Project.ProjectStatus] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None
+    ) -> Generator[Project, None, None]:
         """Finds all projects that match certain rules and returns them in an iterable object
 
         Unlike find_projects, returns generator. Does not sort projects.
@@ -2226,12 +3383,12 @@ class TolokaClient:
             Project: The next object corresponding to the request parameters.
 
         Example:
-            How to get all active projects.
+            Get all active projects.
 
-            >>> active_projects = toloka_client.get_projects(status='ACTIVE'):
+            >>> active_projects = toloka_client.get_projects(status='ACTIVE')
             ...
 
-            How to get all your projects.
+            Get all your projects.
 
             >>> my_projects = toloka_client.get_projects()
             ...
@@ -2252,12 +3409,12 @@ class TolokaClient:
             Project: The next object corresponding to the request parameters.
 
         Example:
-            How to get all active projects.
+            Get all active projects.
 
-            >>> active_projects = toloka_client.get_projects(status='ACTIVE'):
+            >>> active_projects = toloka_client.get_projects(status='ACTIVE')
             ...
 
-            How to get all your projects.
+            Get all your projects.
 
             >>> my_projects = toloka_client.get_projects()
             ...
@@ -2269,6 +3426,21 @@ class TolokaClient:
 
         Returns:
             Requester: Object that contains all information about customer.
+
+        Examples:
+            Make sure that you've entered a valid OAuth token.
+
+            >>> toloka_client.get_requester()
+            ...
+
+            You can also estimate approximate pipeline costs and check if there is enough money on your account.
+
+            >>> requester = toloka_client.get_requester()
+            >>> if requester.balance >= approx_pipeline_price:
+            >>>     print('You have enough money on your account!')
+            >>> else:
+            >>>     print('You haven't got enough money on your account!')
+            ...
         """
         ...
 
@@ -2280,11 +3452,26 @@ class TolokaClient:
 
         Returns:
             Skill: The skill.
+
+        Example:
+            >>> toloka_client.get_skill(skill_id='1')
+            ...
         """
         ...
 
     @overload
-    def get_skills(self, name: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[Skill, None, None]:
+    def get_skills(
+        self,
+        name: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None
+    ) -> Generator[Skill, None, None]:
         """Finds all skills that match certain rules and returns them in an iterable object
 
         Unlike find_skills, returns generator. Does not sort skills.
@@ -2341,6 +3528,10 @@ class TolokaClient:
 
         Returns:
             Task: The task.
+
+        Example:
+            >>> toloka_client.get_task(task_id='1')
+            ...
         """
         ...
 
@@ -2352,11 +3543,32 @@ class TolokaClient:
 
         Returns:
             TaskSuite: The task suite.
+
+        Example:
+            >>> toloka_client.get_task_suite(task_suite_id='1')
+            ...
         """
         ...
 
     @overload
-    def get_task_suites(self, task_id: Optional[str] = None, pool_id: Optional[str] = None, overlap: Optional[int] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, overlap_lt: Optional[int] = None, overlap_lte: Optional[int] = None, overlap_gt: Optional[int] = None, overlap_gte: Optional[int] = None) -> Generator[TaskSuite, None, None]:
+    def get_task_suites(
+        self,
+        task_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        overlap: Optional[int] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        overlap_lt: Optional[int] = None,
+        overlap_lte: Optional[int] = None,
+        overlap_gt: Optional[int] = None,
+        overlap_gte: Optional[int] = None
+    ) -> Generator[TaskSuite, None, None]:
         """Finds all task suites that match certain rules and returns them in an iterable object
 
         Unlike find_task_suites, returns generator. Does not sort task suites.
@@ -2367,6 +3579,12 @@ class TolokaClient:
 
         Yields:
             TaskSuite: The next object corresponding to the request parameters.
+
+        Example:
+            Get task suites from a specific pool.
+
+            >>> results_list = [task_suite for task_suite in toloka_client.get_task_suites(pool_id='1')]
+            ...
         """
         ...
 
@@ -2382,11 +3600,33 @@ class TolokaClient:
 
         Yields:
             TaskSuite: The next object corresponding to the request parameters.
+
+        Example:
+            Get task suites from a specific pool.
+
+            >>> results_list = [task_suite for task_suite in toloka_client.get_task_suites(pool_id='1')]
+            ...
         """
         ...
 
     @overload
-    def get_tasks(self, pool_id: Optional[str] = None, overlap: Optional[int] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, overlap_lt: Optional[int] = None, overlap_lte: Optional[int] = None, overlap_gt: Optional[int] = None, overlap_gte: Optional[int] = None) -> Generator[Task, None, None]:
+    def get_tasks(
+        self,
+        pool_id: Optional[str] = None,
+        overlap: Optional[int] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        overlap_lt: Optional[int] = None,
+        overlap_lte: Optional[int] = None,
+        overlap_gt: Optional[int] = None,
+        overlap_gte: Optional[int] = None
+    ) -> Generator[Task, None, None]:
         """Finds all tasks that match certain rules and returns them in an iterable object
 
         Unlike find_tasks, returns generator. Does not sort tasks.
@@ -2397,6 +3637,12 @@ class TolokaClient:
 
         Yields:
             Task: The next object corresponding to the request parameters.
+
+        Example:
+            Get tasks from a specific pool.
+
+            >>> results_list = [task for task in toloka_client.get_tasks(pool_id='1')]
+            ...
         """
         ...
 
@@ -2412,6 +3658,12 @@ class TolokaClient:
 
         Yields:
             Task: The next object corresponding to the request parameters.
+
+        Example:
+            Get tasks from a specific pool.
+
+            >>> results_list = [task for task in toloka_client.get_tasks(pool_id='1')]
+            ...
         """
         ...
 
@@ -2423,11 +3675,31 @@ class TolokaClient:
 
         Returns:
             Training: The training.
+
+        Example:
+            >>> toloka_client.get_training(training_id='1')
+            ...
         """
         ...
 
     @overload
-    def get_trainings(self, status: Optional[Training.Status] = None, project_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, last_started_lt: Optional[datetime] = None, last_started_lte: Optional[datetime] = None, last_started_gt: Optional[datetime] = None, last_started_gte: Optional[datetime] = None) -> Generator[Training, None, None]:
+    def get_trainings(
+        self,
+        status: Optional[Training.Status] = None,
+        project_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        last_started_lt: Optional[datetime] = None,
+        last_started_lte: Optional[datetime] = None,
+        last_started_gt: Optional[datetime] = None,
+        last_started_gte: Optional[datetime] = None
+    ) -> Generator[Training, None, None]:
         """Finds all trainings that match certain rules and returns them in an iterable object
 
         Unlike find_trainings, returns generator. Does not sort trainings.
@@ -2476,11 +3748,28 @@ class TolokaClient:
 
         Returns:
             UserBonus: The user bonus.
+
+        Example:
+            >>> toloka_client.get_user_bonus(user_bonus_id='1')
+            ...
         """
         ...
 
     @overload
-    def get_user_bonuses(self, user_id: Optional[str] = None, private_comment: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[UserBonus, None, None]:
+    def get_user_bonuses(
+        self,
+        user_id: Optional[str] = None,
+        assignment_id: Optional[str] = None,
+        private_comment: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None
+    ) -> Generator[UserBonus, None, None]:
         """Finds all user bonuses that match certain rules and returns them in an iterable object
 
         Unlike find_user_bonuses, returns generator. Does not sort user bonuses.
@@ -2491,6 +3780,10 @@ class TolokaClient:
 
         Yields:
             UserBonus: The next object corresponding to the request parameters.
+
+        Example:
+            >>> bonuses = [bonus for bonus in toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00')]
+            ...
         """
         ...
 
@@ -2506,6 +3799,10 @@ class TolokaClient:
 
         Yields:
             UserBonus: The next object corresponding to the request parameters.
+
+        Example:
+            >>> bonuses = [bonus for bonus in toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00')]
+            ...
         """
         ...
 
@@ -2517,11 +3814,29 @@ class TolokaClient:
 
         Returns:
             UserRestriction: The user restriction.
+
+        Example:
+            >>> toloka_client.get_user_restriction(user_restriction_id='1')
+            ...
         """
         ...
 
     @overload
-    def get_user_restrictions(self, scope: Optional[UserRestriction.Scope] = None, user_id: Optional[str] = None, project_id: Optional[str] = None, pool_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[UserRestriction, None, None]:
+    def get_user_restrictions(
+        self,
+        scope: Optional[UserRestriction.Scope] = None,
+        user_id: Optional[str] = None,
+        project_id: Optional[str] = None,
+        pool_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None
+    ) -> Generator[UserRestriction, None, None]:
         """Finds all user restrictions that match certain rules and returns them in an iterable object
 
         Unlike find_user_restrictions, returns generator. Does not sort user restrictions.
@@ -2532,6 +3847,10 @@ class TolokaClient:
 
         Yields:
             UserRestriction: The next object corresponding to the request parameters.
+
+        Example:
+        >>> results_list = [restriction for restriction in toloka_client.get_user_restrictions(scope='ALL_PROJECTS')]
+        ...
         """
         ...
 
@@ -2547,6 +3866,10 @@ class TolokaClient:
 
         Yields:
             UserRestriction: The next object corresponding to the request parameters.
+
+        Example:
+        >>> results_list = [restriction for restriction in toloka_client.get_user_restrictions(scope='ALL_PROJECTS')]
+        ...
         """
         ...
 
@@ -2560,11 +3883,32 @@ class TolokaClient:
 
         Returns:
             UserSkill: The skill value.
+
+        Example:
+            >>> toloka_client.get_user_skill(user_skill_id='1')
+            ...
         """
         ...
 
     @overload
-    def get_user_skills(self, name: Optional[str] = None, user_id: Optional[str] = None, skill_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None, modified_lt: Optional[datetime] = None, modified_lte: Optional[datetime] = None, modified_gt: Optional[datetime] = None, modified_gte: Optional[datetime] = None) -> Generator[UserSkill, None, None]:
+    def get_user_skills(
+        self,
+        name: Optional[str] = None,
+        user_id: Optional[str] = None,
+        skill_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None,
+        modified_lt: Optional[datetime] = None,
+        modified_lte: Optional[datetime] = None,
+        modified_gt: Optional[datetime] = None,
+        modified_gte: Optional[datetime] = None
+    ) -> Generator[UserSkill, None, None]:
         """Finds all user skills that match certain rules and returns them in an iterable object
 
         UserSkill describe the skill value for a specific performer.
@@ -2576,6 +3920,10 @@ class TolokaClient:
 
         Yields:
             UserSkill: The next object corresponding to the request parameters.
+
+        Example:
+            >>> results_list = [skill for skill in toloka_client.get_user_skills()]
+            ...
         """
         ...
 
@@ -2592,6 +3940,10 @@ class TolokaClient:
 
         Yields:
             UserSkill: The next object corresponding to the request parameters.
+
+        Example:
+            >>> results_list = [skill for skill in toloka_client.get_user_skills()]
+            ...
         """
         ...
 
@@ -2607,7 +3959,19 @@ class TolokaClient:
         ...
 
     @overload
-    def get_webhook_subscriptions(self, event_type: Optional[WebhookSubscription.EventType] = None, pool_id: Optional[str] = None, id_lt: Optional[str] = None, id_lte: Optional[str] = None, id_gt: Optional[str] = None, id_gte: Optional[str] = None, created_lt: Optional[datetime] = None, created_lte: Optional[datetime] = None, created_gt: Optional[datetime] = None, created_gte: Optional[datetime] = None) -> Generator[WebhookSubscription, None, None]:
+    def get_webhook_subscriptions(
+        self,
+        event_type: Optional[WebhookSubscription.EventType] = None,
+        pool_id: Optional[str] = None,
+        id_lt: Optional[str] = None,
+        id_lte: Optional[str] = None,
+        id_gt: Optional[str] = None,
+        id_gte: Optional[str] = None,
+        created_lt: Optional[datetime] = None,
+        created_lte: Optional[datetime] = None,
+        created_gt: Optional[datetime] = None,
+        created_gte: Optional[datetime] = None
+    ) -> Generator[WebhookSubscription, None, None]:
         """Finds all webhook-subscriptions that match certain rules and returns them in an iterable object
 
         Unlike find_webhook-subscriptions, returns generator. Does not sort webhook-subscriptions.
@@ -2646,6 +4010,12 @@ class TolokaClient:
 
         Returns:
             Pool: Pool object with new status.
+
+        Example:
+            Open the pool for performers.
+
+            >>> toloka_client.open_pool(pool_id='1')
+            ...
         """
         ...
 
@@ -2659,6 +4029,13 @@ class TolokaClient:
 
         Returns:
             PoolOpenOperation: An operation upon completion of which you can get the pool with new status.
+
+        Example:
+            Open the pool for performers.
+
+            >>> open_pool = toloka_client.open_pool(pool_id='1')
+            >>> toloka_client.wait_operation(open_pool)
+            ...
         """
         ...
 
@@ -2670,6 +4047,12 @@ class TolokaClient:
 
         Returns:
             Training: Training object with new status.
+
+        Example:
+            Open the training for performers.
+
+            >>> toloka_client.open_training(training_id='1')
+            ...
         """
         ...
 
@@ -2681,11 +4064,24 @@ class TolokaClient:
 
         Returns:
             TrainingOpenOperation: An operation upon completion of which you can get the training with new status.
+
+        Example:
+            Open the training for performers.
+
+            >>> open_training = toloka_client.open_training_async(training_id='1')
+            >>> toloka_client.wait_operation(open_training)
+            ...
         """
         ...
 
     @overload
-    def patch_assignment(self, assignment_id: str, *, public_comment: Optional[str] = None, status: Optional[Assignment.Status] = None) -> Assignment:
+    def patch_assignment(
+        self,
+        assignment_id: str,
+        *,
+        public_comment: Optional[str] = None,
+        status: Optional[Assignment.Status] = None
+    ) -> Assignment:
         """Changes status and comment on assignment
 
         It's better to use methods "reject_assignment" and "accept_assignment".
@@ -2696,11 +4092,19 @@ class TolokaClient:
 
         Returns:
             Assignment: Object with new status.
+
+        Example:
+            >>> toloka_client.patch_assignment(assignment_id='1', public_comment='Some issues present, but work is acceptable', status='ACCEPTED')
+            ...
         """
         ...
 
     @overload
-    def patch_assignment(self, assignment_id: str, patch: AssignmentPatch) -> Assignment:
+    def patch_assignment(
+        self,
+        assignment_id: str,
+        patch: AssignmentPatch
+    ) -> Assignment:
         """Changes status and comment on assignment
 
         It's better to use methods "reject_assignment" and "accept_assignment".
@@ -2711,11 +4115,19 @@ class TolokaClient:
 
         Returns:
             Assignment: Object with new status.
+
+        Example:
+            >>> toloka_client.patch_assignment(assignment_id='1', public_comment='Some issues present, but work is acceptable', status='ACCEPTED')
+            ...
         """
         ...
 
     @overload
-    def patch_pool(self, pool_id: str, priority: Optional[int] = None) -> Pool:
+    def patch_pool(
+        self,
+        pool_id: str,
+        priority: Optional[int] = None
+    ) -> Pool:
         """Changes the priority of the pool issue
 
         Args:
@@ -2726,17 +4138,19 @@ class TolokaClient:
             Pool: Object with updated priority.
 
         Example:
-            How to set highest priority to some pool.
+            Set the highest priority to a specified pool.
 
-            >>> toloka_client = toloka.TolokaClient(your_token, 'PRODUCTION')
-            >>> patched_pool = toloka_client.patch_pool(existing_pool_id, 100)
-            >>> print(patched_pool.priority)
+            >>> toloka_client.patch_pool(pool_id='1', priority=100)
             ...
         """
         ...
 
     @overload
-    def patch_pool(self, pool_id: str, request: PoolPatchRequest) -> Pool:
+    def patch_pool(
+        self,
+        pool_id: str,
+        request: PoolPatchRequest
+    ) -> Pool:
         """Changes the priority of the pool issue
 
         Args:
@@ -2747,17 +4161,22 @@ class TolokaClient:
             Pool: Object with updated priority.
 
         Example:
-            How to set highest priority to some pool.
+            Set the highest priority to a specified pool.
 
-            >>> toloka_client = toloka.TolokaClient(your_token, 'PRODUCTION')
-            >>> patched_pool = toloka_client.patch_pool(existing_pool_id, 100)
-            >>> print(patched_pool.priority)
+            >>> toloka_client.patch_pool(pool_id='1', priority=100)
             ...
         """
         ...
 
     @overload
-    def patch_task(self, task_id: str, *, overlap: Optional[int] = None, infinite_overlap: Optional[bool] = None, baseline_solutions: Optional[List[Task.BaselineSolution]] = None) -> Task:
+    def patch_task(
+        self,
+        task_id: str,
+        *,
+        overlap: Optional[int] = None,
+        infinite_overlap: Optional[bool] = None,
+        baseline_solutions: Optional[List[Task.BaselineSolution]] = None
+    ) -> Task:
         """Changes the task overlap
 
         Args:
@@ -2770,7 +4189,11 @@ class TolokaClient:
         ...
 
     @overload
-    def patch_task(self, task_id: str, patch: TaskPatch) -> Task:
+    def patch_task(
+        self,
+        task_id: str,
+        patch: TaskPatch
+    ) -> Task:
         """Changes the task overlap
 
         Args:
@@ -2783,7 +4206,13 @@ class TolokaClient:
         ...
 
     @overload
-    def patch_task_overlap_or_min(self, task_id: str, *, overlap: Optional[int] = None, infinite_overlap: Optional[bool] = None) -> Task:
+    def patch_task_overlap_or_min(
+        self,
+        task_id: str,
+        *,
+        overlap: Optional[int] = None,
+        infinite_overlap: Optional[bool] = None
+    ) -> Task:
         """Stops issuing the task
 
         Args:
@@ -2792,11 +4221,23 @@ class TolokaClient:
 
         Returns:
             Task: Task with updated fields.
+
+        Example:
+            Set an infinite overlap for a specific task in training.
+
+            >>> toloka_client.patch_task_overlap_or_min(task_id='1', infinite_overlap=True)
+            ...
+
+            **Note**: you can't set infinite overlap in a regular pool.
         """
         ...
 
     @overload
-    def patch_task_overlap_or_min(self, task_id: str, patch: TaskOverlapPatch) -> Task:
+    def patch_task_overlap_or_min(
+        self,
+        task_id: str,
+        patch: TaskOverlapPatch
+    ) -> Task:
         """Stops issuing the task
 
         Args:
@@ -2805,11 +4246,27 @@ class TolokaClient:
 
         Returns:
             Task: Task with updated fields.
+
+        Example:
+            Set an infinite overlap for a specific task in training.
+
+            >>> toloka_client.patch_task_overlap_or_min(task_id='1', infinite_overlap=True)
+            ...
+
+            **Note**: you can't set infinite overlap in a regular pool.
         """
         ...
 
     @overload
-    def patch_task_suite(self, task_suite_id: str, *, infinite_overlap=None, overlap=None, issuing_order_override: Optional[float] = None, open_pool: Optional[bool] = None) -> TaskSuite:
+    def patch_task_suite(
+        self,
+        task_suite_id: str,
+        *,
+        infinite_overlap=None,
+        overlap=None,
+        issuing_order_override: Optional[float] = None,
+        open_pool: Optional[bool] = None
+    ) -> TaskSuite:
         """Changes the task suite overlap or priority
 
         Args:
@@ -2818,11 +4275,21 @@ class TolokaClient:
 
         Returns:
             TaskSuite: Task suite with updated fields.
+
+        Example:
+            Change the task suite's priority.
+
+            >>> toloka_client.patch_task_suite(task_suite_id='1', issuing_order_override=100)
+            ...
         """
         ...
 
     @overload
-    def patch_task_suite(self, task_suite_id: str, patch: TaskSuitePatch) -> TaskSuite:
+    def patch_task_suite(
+        self,
+        task_suite_id: str,
+        patch: TaskSuitePatch
+    ) -> TaskSuite:
         """Changes the task suite overlap or priority
 
         Args:
@@ -2831,11 +4298,22 @@ class TolokaClient:
 
         Returns:
             TaskSuite: Task suite with updated fields.
+
+        Example:
+            Change the task suite's priority.
+
+            >>> toloka_client.patch_task_suite(task_suite_id='1', issuing_order_override=100)
+            ...
         """
         ...
 
     @overload
-    def patch_task_suite_overlap_or_min(self, task_suite_id: str, *, overlap: Optional[int] = None) -> TaskSuite:
+    def patch_task_suite_overlap_or_min(
+        self,
+        task_suite_id: str,
+        *,
+        overlap: Optional[int] = None
+    ) -> TaskSuite:
         """Stops issuing the task suites
 
         Args:
@@ -2844,11 +4322,19 @@ class TolokaClient:
 
         Returns:
             TaskSuite: Task suite with updated fields.
+
+        Example:
+            >>> toloka_client.patch_task_suite_overlap_or_min(task_suite_id='1', overlap=100)
+            ...
         """
         ...
 
     @overload
-    def patch_task_suite_overlap_or_min(self, task_suite_id: str, patch: TaskSuiteOverlapPatch) -> TaskSuite:
+    def patch_task_suite_overlap_or_min(
+        self,
+        task_suite_id: str,
+        patch: TaskSuiteOverlapPatch
+    ) -> TaskSuite:
         """Stops issuing the task suites
 
         Args:
@@ -2857,10 +4343,18 @@ class TolokaClient:
 
         Returns:
             TaskSuite: Task suite with updated fields.
+
+        Example:
+            >>> toloka_client.patch_task_suite_overlap_or_min(task_suite_id='1', overlap=100)
+            ...
         """
         ...
 
-    def reject_assignment(self, assignment_id: str, public_comment: str) -> Assignment:
+    def reject_assignment(
+        self,
+        assignment_id: str,
+        public_comment: str
+    ) -> Assignment:
         """Marks one assignment as rejected
 
         Used then your pool created with auto_accept_solutions=False parametr.
@@ -2873,13 +4367,18 @@ class TolokaClient:
             Assignment: Object with new status.
 
         Example:
-            How to reject one assignment.
+            Reject an assignment that was completed too fast.
 
-            >>> toloka_client.reject_assignment(assignment_id, "Bad work.")
+            >>> toloka_client.reject_assignment(assignment_id='1', 'Assignment was completed too fast.')
+            ...
         """
         ...
 
-    def remove_message_thread_from_folders(self, message_thread_id: str, folders: Union[List[Folder], MessageThreadFolders]) -> MessageThread:
+    def remove_message_thread_from_folders(
+        self,
+        message_thread_id: str,
+        folders: Union[List[Folder], MessageThreadFolders]
+    ) -> MessageThread:
         """Deletes a message chain from one or more folders ("unread", "important" etc.)
 
         Args:
@@ -2888,10 +4387,18 @@ class TolokaClient:
 
         Returns:
             MessageThread: Full object by ID with updated folders.
+
+        Example:
+            >>> toloka_client.remove_message_thread_from_folders(message_thread_id='1', folders=['IMPORTANT'])
+            ...
         """
         ...
 
-    def reply_message_thread(self, message_thread_id: str, reply: MessageThreadReply) -> MessageThread:
+    def reply_message_thread(
+        self,
+        message_thread_id: str,
+        reply: MessageThreadReply
+    ) -> MessageThread:
         """Replies to a message in thread
 
         Args:
@@ -2900,6 +4407,13 @@ class TolokaClient:
 
         Returns:
             MessageThread: New created message.
+
+        Example:
+            >>> message_threads = toloka_client.get_message_threads(folder='UNREAD')
+            >>> message_reply = {'EN': 'Thank you for your message! I will get back to you soon.'}
+            >>> for thread in message_threads:
+            >>>     toloka_client.reply_message_thread(message_thread_id=thread.id, reply=toloka.message_thread.MessageThreadReply(text=message_reply))
+            ...
         """
         ...
 
@@ -2911,11 +4425,29 @@ class TolokaClient:
 
         Returns:
             UserRestriction: Created restriction object.
+
+        Example:
+            If performer often makes mistakes, we will restrict access to all our projects.
+
+            >>> new_restriction = toloka_client.set_user_restriction(
+            >>>     toloka.user_restriction.ProjectUserRestriction(
+            >>>         user_id='1',
+            >>>         private_comment='Performer often makes mistakes',
+            >>>         project_id='5'
+            >>>     )
+            >>> )
+            ...
         """
         ...
 
     @overload
-    def set_user_skill(self, *, skill_id: Optional[str] = None, user_id: Optional[str] = None, value: Optional[Decimal] = None) -> UserSkill:
+    def set_user_skill(
+        self,
+        *,
+        skill_id: Optional[str] = None,
+        user_id: Optional[str] = None,
+        value: Optional[Decimal] = None
+    ) -> UserSkill:
         """Sets the skill value to the performer
 
         Args:
@@ -2923,6 +4455,11 @@ class TolokaClient:
 
         Returns:
             UserSkill: Сreated fact of skill installation.
+
+        Example:
+            >>> from decimal import *
+            >>> toloka_client.set_user_skill(skill_id='1', user_id='1', value=Decimal(100))
+            ...
         """
         ...
 
@@ -2935,10 +4472,19 @@ class TolokaClient:
 
         Returns:
             UserSkill: Сreated fact of skill installation.
+
+        Example:
+            >>> from decimal import *
+            >>> toloka_client.set_user_skill(skill_id='1', user_id='1', value=Decimal(100))
+            ...
         """
         ...
 
-    def update_pool(self, pool_id: str, pool: Pool) -> Pool:
+    def update_pool(
+        self,
+        pool_id: str,
+        pool: Pool
+    ) -> Pool:
         """Makes changes to the pool
 
         Args:
@@ -2947,10 +4493,18 @@ class TolokaClient:
 
         Returns:
             Pool: Pool object with all fields.
+
+        Example:
+            >>> updated_pool = toloka_client.update_pool(pool_id=old_pool_id, pool=new_pool_object)
+            ...
         """
         ...
 
-    def update_project(self, project_id: str, project: Project) -> Project:
+    def update_project(
+        self,
+        project_id: str,
+        project: Project
+    ) -> Project:
         """Makes changes to the project
 
         Args:
@@ -2959,10 +4513,18 @@ class TolokaClient:
 
         Returns:
             Project: Project object with all fields.
+
+        Example:
+            >>> updated_project = toloka_client.update_project(project_id=old_project.id, project=new_project_object)
+            ...
         """
         ...
 
-    def update_skill(self, skill_id: str, skill: Skill) -> Skill:
+    def update_skill(
+        self,
+        skill_id: str,
+        skill: Skill
+    ) -> Skill:
         """Makes changes to the skill
 
         Args:
@@ -2971,10 +4533,18 @@ class TolokaClient:
 
         Returns:
             Skill: Modified skill object with all fields.
+
+        Example:
+            >>> toloka_client.create_skill(skill_id=old_skill_id, skill=new_skill_object)
+            ...
         """
         ...
 
-    def update_training(self, training_id: str, training: Training) -> Training:
+    def update_training(
+        self,
+        training_id: str,
+        training: Training
+    ) -> Training:
         """Makes changes to the training
 
         Args:
@@ -2983,10 +4553,53 @@ class TolokaClient:
 
         Returns:
             Training: Training object with all fields.
+
+        Example:
+            If you want to update any configurations of the existing training.
+
+            >>> updated_training = toloka_client.update_training(training_id=old_training_id, training=new_training_object)
+            ...
         """
         ...
 
-    def wait_operation(self, op: Operation, timeout: timedelta = ...) -> Operation:
+    def upsert_webhook_subscriptions(self, subscriptions: List[WebhookSubscription]) -> WebhookSubscriptionBatchCreateResult:
+        """Creates (upsert) many webhook-subscriptions.
+
+        Args:
+            subscriptions: List of webhook-subscriptions, that will be created.
+
+        Returns:
+            batch_create_results.WebhookSubscriptionBatchCreateResult: Result of subscriptions creation.
+                Contains created subscriptions in `items` and problems in "validation_errors".
+
+        Raises:
+            ValidationApiError: If no subscriptions were created.
+
+        Example:
+            How to create several subscriptions.
+
+            >>> created_result = toloka_client.upsert_webhook_subscriptions([
+            >>>     {
+            >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
+            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.ASSIGNMENT_CREATED,
+            >>>         'pool_id': '121212'
+            >>>     },
+            >>>     {
+            >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
+            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.POOL_CLOSED,
+            >>>         'pool_id': '121212',
+            >>>     }
+            >>> ])
+            >>> print(len(created_result.items))
+            ...
+        """
+        ...
+
+    def wait_operation(
+        self,
+        op: Operation,
+        timeout: timedelta = ...
+    ) -> Operation:
         """Waits for the operation to complete, and return it
 
         Args:
@@ -2998,5 +4611,22 @@ class TolokaClient:
 
         Returns:
             Operation: Completed operation.
+
+        Example:
+            Waiting for the pool to close can be running in the background.
+
+            >>> pool = toloka_client.get_pool(pool_id)
+            >>> while not pool.is_closed():
+            >>>     op = toloka_client.get_analytics([toloka.analytics_request.CompletionPercentagePoolAnalytics(subject_id=pool.id)])
+            >>>     op = toloka_client.wait_operation(op)
+            >>>     percentage = op.details['value'][0]['result']['value']
+            >>>     print(
+            >>>         f'   {datetime.datetime.now().strftime("%H:%M:%S")}     '
+            >>>         f'Pool {pool.id} - {percentage}%'
+            >>>         )
+            >>>     time.sleep(60 * minutes_to_wait)
+            >>>     pool = toloka_client.get_pool(pool.id)
+            >>> print('Pool was closed.')
+            ...
         """
         ...

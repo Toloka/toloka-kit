@@ -1,3 +1,12 @@
+0.1.10
+-------------------
+
+* `TemplateBuilder` components now support positional arguments
+* Added `readonly` flag to attributes
+* Added `ACCEPT_AFTER_REJECT` value to ` AssessmentEvent.Type`
+* Added `assignment_id` attribute to `UserBonusSearchRequest`
+* Improved stub files formatting
+
 0.1.9
 -------------------
 * Improved support by static analyzers

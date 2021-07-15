@@ -22,6 +22,7 @@ __all__ = [
     'ToggleActionV1',
     'AllConditionV1',
     'AnyConditionV1',
+    'DistanceConditionV1',
     'EmptyConditionV1',
     'EqualsConditionV1',
     'LinkOpenedConditionV1',
@@ -113,6 +114,7 @@ from .actions import (
 from .conditions import (
     AllConditionV1,
     AnyConditionV1,
+    DistanceConditionV1,
     EmptyConditionV1,
     EqualsConditionV1,
     LinkOpenedConditionV1,

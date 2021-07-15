@@ -78,6 +78,23 @@ def test_get_pools(requests_mock, toloka_client, toloka_url, pool_map_with_reado
     assert expected_pools == client.unstructure(list(result))
 
 
+def test_get_pools_one_params(requests_mock, toloka_client, toloka_url, pool_map_with_readonly):
+    pools = [dict(pool_map_with_readonly, id=str(i)) for i in range(10)]
+    pools.sort(key=itemgetter('id'))
+    expected_pools = [pool for pool in pools]
+
+    def get_pools(request, context):
+        params = parse_qs(urlparse(request.url).query)
+        assert {'status': ['OPEN'], 'sort': ['id']} == params
+        return {'items': [pool for pool in pools], 'has_more': False}
+
+    requests_mock.get(f'{toloka_url}/pools', json=get_pools)
+
+    # Expanded positional syntax
+    result = toloka_client.get_pools('OPEN')
+    assert expected_pools == client.unstructure(list(result))
+
+
 def test_get_pool(requests_mock, toloka_client, toloka_url, pool_map_with_readonly):
     requests_mock.get(f'{toloka_url}/pools/21', json=pool_map_with_readonly)
     assert pool_map_with_readonly == client.unstructure(toloka_client.get_pool('21'))
@@ -279,6 +296,10 @@ def test_patch_pool(requests_mock, toloka_client, toloka_url, pool_map_with_read
 
     # Expanded syntax
     result = toloka_client.patch_pool('21', priority=42)
+    assert raw_result == client.unstructure(result)
+
+    # Expanded positional syntax
+    result = toloka_client.patch_pool('21', 42)
     assert raw_result == client.unstructure(result)
 
 
@@ -516,3 +537,22 @@ def test_clone_pool(requests_mock, toloka_client, toloka_url,
             'A new pool with ID "22" has been cloned. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/project/10/pool/22'
         )]
         assert cloned_pool_map == client.unstructure(result)
+
+
+@pytest.fixture
+def simple_project_with_mixer_config():
+    return {
+        'project_id': '12345',
+        'defaults': {'default_overlap_for_new_task_suites': 1},
+        'quality_control': {'configs': []},
+        'mixer_config': {'real_tasks_count': 1, 'golden_tasks_count': 0, 'training_tasks_count': 0},
+    }
+
+
+def test_mixer_config_expand(simple_project_with_mixer_config):
+    pool = client.Pool(project_id='12345')
+    pool.set_mixer_config(real_tasks_count=1)
+    assert client.unstructure(pool) == simple_project_with_mixer_config
+
+    with pytest.raises(TypeError):
+        pool.set_mixer_config(1)

@@ -22,17 +22,38 @@ from typing import List, Any
 
 from ...primitives.base import attribute
 
-from .base import BaseTemplate, BaseComponent, ListDirection, ListSize, ComponentType, VersionedBaseComponent, base_component_or
+from .base import (
+    BaseTemplate,
+    BaseComponent,
+    ListDirection,
+    ListSize,
+    ComponentType,
+    VersionedBaseComponentMetaclass,
+    base_component_or
+)
 
 
-class BaseViewV1(VersionedBaseComponent):
+class BaseViewV1Metaclass(VersionedBaseComponentMetaclass):
+    def __new__(mcs, name, bases, namespace, **kwargs):
+
+        if 'hint' not in namespace:
+            namespace['hint'] = attribute(kw_only=True)
+            namespace.setdefault('__annotations__', {})['hint'] = base_component_or(Any)
+        if 'label' not in namespace:
+            namespace['label'] = attribute(kw_only=True)
+            namespace.setdefault('__annotations__', {})['label'] = base_component_or(Any)
+        if 'validation' not in namespace:
+            namespace['validation'] = attribute(kw_only=True)
+            namespace.setdefault('__annotations__', {})['validation'] = BaseComponent
+        return super().__new__(mcs, name, bases, namespace, **kwargs)
+
+
+class BaseViewV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):
     """Elements displayed in the interface, such as text, list, audio player, or image.
 
     """
 
-    hint: base_component_or(Any)
-    label: base_component_or(Any)
-    validation: BaseComponent
+    pass
 
 
 class ActionButtonViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ACTION_BUTTON):
@@ -40,8 +61,8 @@ class ActionButtonViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ACTION_BUTTON
 
     When clicking the button, an action specified in the action property is called.
     Attributes:
-        label: Button text.
         action: Action called when clicking the button.
+        label: Button text.
         hint: Hint text.
         validation: Validation based on condition.
     """
@@ -54,8 +75,8 @@ class AlertViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ALERT):
 
     You can use both plain text and other visual components inside it.
     Attributes:
-        label: Label above the component.
         content: Content of the block with important information.
+        label: Label above the component.
         hint: Hint text.
         theme: Determines the block color.
         validation: Validation based on condition.
@@ -78,7 +99,7 @@ class AlertViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ALERT):
         WARNING = 'warning'
 
     content: BaseComponent
-    theme: base_component_or(Theme)
+    theme: base_component_or(Theme) = attribute(kw_only=True)
 
 
 class AudioViewV1(BaseViewV1, spec_value=ComponentType.VIEW_AUDIO):
@@ -86,15 +107,15 @@ class AudioViewV1(BaseViewV1, spec_value=ComponentType.VIEW_AUDIO):
 
     Format support depends on the user's browser, OS, and device. We recommend using MP3.
     Attributes:
+        url: Audio link.
         label: Label above the component.
         hint: Hint text.
         loop: Automatically replay audio.
-        url: Audio link.
         validation: Validation based on condition.
     """
 
     url: base_component_or(Any)
-    loop: base_component_or(bool)
+    loop: base_component_or(bool) = attribute(kw_only=True)
 
 
 class CollapseViewV1(BaseViewV1, spec_value=ComponentType.VIEW_COLLAPSE):
@@ -114,8 +135,9 @@ class CollapseViewV1(BaseViewV1, spec_value=ComponentType.VIEW_COLLAPSE):
         validation: Validation based on condition.
     """
 
+    label: base_component_or(Any)
     content: BaseComponent
-    default_opened: base_component_or(bool) = attribute(origin='defaultOpened')
+    default_opened: base_component_or(bool) = attribute(origin='defaultOpened', kw_only=True)
 
 
 class DeviceFrameViewV1(BaseViewV1, spec_value=ComponentType.VIEW_DEVICE_FRAME):
@@ -123,8 +145,8 @@ class DeviceFrameViewV1(BaseViewV1, spec_value=ComponentType.VIEW_DEVICE_FRAME):
 
     You can place other components inside the frame.
     Attributes:
-        label: Label above the component.
         content: Content inside the frame.
+        label: Label above the component.
         full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
             of 400 pixels.
         hint: Hint text.
@@ -136,10 +158,10 @@ class DeviceFrameViewV1(BaseViewV1, spec_value=ComponentType.VIEW_DEVICE_FRAME):
     """
 
     content: BaseComponent
-    full_height: base_component_or(bool) = attribute(origin='fullHeight')
-    max_width: base_component_or(float) = attribute(origin='maxWidth')
-    min_width: base_component_or(float) = attribute(origin='minWidth')
-    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat')
+    full_height: base_component_or(bool) = attribute(origin='fullHeight', kw_only=True)
+    max_width: base_component_or(float) = attribute(origin='maxWidth', kw_only=True)
+    min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)
 
 
 class DividerViewV1(BaseViewV1, spec_value=ComponentType.VIEW_DIVIDER):
@@ -159,8 +181,8 @@ class GroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_GROUP):
     """Groups components visually into framed blocks.
 
     Attributes:
-        label: Group heading.
         content: Content of a group block.
+        label: Group heading.
         hint: Explanation of the group heading. To insert a new line, use
             .
         validation: Validation based on condition.
@@ -173,6 +195,7 @@ class IframeViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IFRAME):
     """Displays the web page at the URL in an iframe window.
 
     Attributes:
+        url: URL of the web page.
         label: Label above the component.
         full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
             of 400 pixels.
@@ -185,16 +208,17 @@ class IframeViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IFRAME):
     """
 
     url: base_component_or(str)
-    full_height: base_component_or(bool) = attribute(origin='fullHeight')
-    max_width: base_component_or(float) = attribute(origin='maxWidth')
-    min_width: base_component_or(float) = attribute(origin='minWidth')
-    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat')
+    full_height: base_component_or(bool) = attribute(origin='fullHeight', kw_only=True)
+    max_width: base_component_or(float) = attribute(origin='maxWidth', kw_only=True)
+    min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)
 
 
 class ImageViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IMAGE):
     """Displays an image.
 
     Attributes:
+        url: Image link.
         label: Label above the component.
         full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
             of 400 pixels.
@@ -213,20 +237,19 @@ class ImageViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IMAGE):
             If false, the image fits in the parent element and, when clicked, opens in its original size in the module
             window.
             Images in SVG format with no size specified always fit in their parent elements.
-        url: Image link.
         validation: Validation based on condition.
     """
 
     url: base_component_or(Any)
-    full_height: base_component_or(bool) = attribute(origin='fullHeight')
-    max_width: base_component_or(float) = attribute(origin='maxWidth')
-    min_width: base_component_or(float) = attribute(origin='minWidth')
-    no_border: base_component_or(bool) = attribute(origin='noBorder')
-    no_lazy_load: base_component_or(bool) = attribute(origin='noLazyLoad')
-    popup: base_component_or(bool)
-    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat')
-    rotatable: base_component_or(bool)
-    scrollable: base_component_or(bool)
+    full_height: base_component_or(bool) = attribute(origin='fullHeight', kw_only=True)
+    max_width: base_component_or(float) = attribute(origin='maxWidth', kw_only=True)
+    min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
+    no_border: base_component_or(bool) = attribute(origin='noBorder', kw_only=True)
+    no_lazy_load: base_component_or(bool) = attribute(origin='noLazyLoad', kw_only=True)
+    popup: base_component_or(bool) = attribute(kw_only=True)
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)
+    rotatable: base_component_or(bool) = attribute(kw_only=True)
+    scrollable: base_component_or(bool) = attribute(kw_only=True)
 
 
 class LabeledListViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LABELED_LIST):
@@ -234,9 +257,9 @@ class LabeledListViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LABELED_LIST):
 
     If you don't need labels, use view.list.
     Attributes:
+        items: List items.
         label: Label above the component.
         hint: Hint text.
-        items: List items.
         min_width: The minimum width of list content. If the component width is less than the specified value, it
             switches to compact mode.
         validation: Validation based on condition.
@@ -246,21 +269,21 @@ class LabeledListViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LABELED_LIST):
         """Item.
 
         Attributes:
+            content: List item content.
+            label: A label displayed next to a list item.
             center_label: If true, a label is center-aligned relative to the content of a list item (content). Use it
                 if the list consists of large items, such as images or multi-line text.
                 By default, false (the label is aligned to the top of the content block).
-            content: List item content.
             hint: A pop-up hint displayed next to a label.
-            label: A label displayed next to a list item.
         """
 
         content: BaseComponent
         label: base_component_or(Any)
-        center_label: base_component_or(bool) = attribute(origin='centerLabel')
-        hint: base_component_or(Any)
+        center_label: base_component_or(bool) = attribute(origin='centerLabel', kw_only=True)
+        hint: base_component_or(Any) = attribute(kw_only=True)
 
     items: base_component_or(List[base_component_or(Item)], 'ListBaseComponentOrItem')
-    min_width: base_component_or(float) = attribute(origin='minWidth')
+    min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
 
 
 class LinkViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK):
@@ -274,15 +297,15 @@ class LinkViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK):
 
     To insert a link with a search query, use helper.search-query.
     Attributes:
+        url: Link URL.
         label: Label above the component.
         content: Link text displayed to the user.
         hint: Hint text.
-        url: Link URL.
         validation: Validation based on condition.
     """
 
     url: base_component_or(Any)
-    content: base_component_or(Any)
+    content: base_component_or(Any) = attribute(kw_only=True)
 
 
 class LinkGroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK_GROUP):
@@ -292,23 +315,23 @@ class LinkGroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK_GROUP):
     This only groups links, unlike GroupViewV1.
 
     Attributes:
+        links: Array of links that make up a group.
         label: Label above the component.
         hint: Hint text.
-        links: Array of links that make up a group.
         validation: Validation based on condition.
 
     Example:
         How to add several links.
 
         >>> links = tb.view.LinkGroupViewV1(
-        >>>     links=[
+        >>>     [
         >>>         tb.view.LinkGroupViewV1.Link(
-        >>>             url='https://any.com/useful/url/1',
-        >>>             content='Example1',
+        >>>             'https://any.com/useful/url/1',
+        >>>             'Example1',
         >>>         ),
         >>>         tb.view.LinkGroupViewV1.Link(
-        >>>             url='https://any.com/useful/url/2',
-        >>>             content='Example2',
+        >>>             'https://any.com/useful/url/2',
+        >>>             'Example2',
         >>>         ),
         >>>     ]
         >>> )
@@ -319,14 +342,14 @@ class LinkGroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK_GROUP):
         """Link parameters
 
         Attributes:
+            url: Link address
             content: Link text that's displayed to the user. Unviewed links are blue and underlined, and clicked links are purple.
             theme: Defines the appearance of the link. If you specify "theme": "primary", it's a button, otherwise it's a text link.
-            url: Link address
         """
 
-        content: base_component_or(str)
-        theme: base_component_or(str)
         url: base_component_or(str)
+        content: base_component_or(str)
+        theme: base_component_or(str) = attribute(kw_only=True)
 
     links: base_component_or(List[base_component_or(Link)], 'ListBaseComponentOrLink')
 
@@ -335,18 +358,18 @@ class ListViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LIST):
     """Block for displaying data in a list.
 
     Attributes:
+        items:  Array of list items.
         label: Label above the component.
         direction: Determines the direction of the list.
         hint: Hint text.
-        items:  Array of list items.
         size: Specifies the size of the margins between elements. Acceptable values in ascending order: s, m (default
             value).
         validation: Validation based on condition.
     """
 
     items: base_component_or(List[BaseComponent], 'ListBaseComponent')
-    direction: base_component_or(ListDirection)
-    size: base_component_or(ListSize)
+    direction: base_component_or(ListDirection) = attribute(kw_only=True)
+    size: base_component_or(ListSize) = attribute(kw_only=True)
 
 
 class MarkdownViewV1(BaseViewV1, spec_value=ComponentType.VIEW_MARKDOWN):
@@ -362,15 +385,15 @@ class MarkdownViewV1(BaseViewV1, spec_value=ComponentType.VIEW_MARKDOWN):
     rel="noopener noreferrer"
 
     Attributes:
-        label: Label above the component.
         content: Text in Markdown.
+        label: Label above the component.
         hint: Hint text.
         validation: Validation based on condition.
 
     Example:
         How to add a title and description on the task interface.
 
-        >>> header = tb.view.MarkdownViewV1(content='# Some Header:\n---\nSome detailed description')
+        >>> header = tb.view.MarkdownViewV1('# Some Header:\n---\nSome detailed description')
         ...
     """
 
@@ -382,15 +405,15 @@ class TextViewV1(BaseViewV1, spec_value=ComponentType.VIEW_TEXT):
 
     If you need formatted text, use view.markdown.
     Attributes:
-        label: Label above the component.
         content: The text displayed in the block. To insert a new line, use \n
+        label: Label above the component.
         hint: Hint text.
         validation: Validation based on condition.
 
     Example:
         How to show labeled field from the task inputs.
 
-        >>> text_view = tb.view.TextViewV1(label='My label:', content=tb.data.InputData(path='imput_field_name'))
+        >>> text_view = tb.view.TextViewV1(tb.data.InputData('input_field_name'), label='My label:')
         ...
     """
 
@@ -406,6 +429,7 @@ class VideoViewV1(BaseViewV1, spec_value=ComponentType.VIEW_VIDEO):
     The video resolution does not affect the size of the block — the video will fit into the block and will not be
     cropped.
     Attributes:
+        url: Link to the video file.
         label: Label above the component.
         full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
             of 400 pixels.
@@ -414,10 +438,10 @@ class VideoViewV1(BaseViewV1, spec_value=ComponentType.VIEW_VIDEO):
         min_width: Minimum width of the element in pixels. Takes priority over max_width.
         ratio: The aspect ratio of the video block. An array of two numbers: the first sets the width of the block and
             the second sets the height.
-        url: Link to the video file.
         validation: Validation based on condition.
     """
 
-    full_height: base_component_or(bool) = attribute(origin='fullHeight')
-    max_width: base_component_or(float) = attribute(origin='maxWidth')
-    min_width: base_component_or(float) = attribute(origin='minWidth')
+    url: base_component_or(Any)
+    full_height: base_component_or(bool) = attribute(origin='fullHeight', kw_only=True)
+    max_width: base_component_or(float) = attribute(origin='maxWidth', kw_only=True)
+    min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)

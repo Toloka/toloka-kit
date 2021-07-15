@@ -15,6 +15,7 @@ from ..exceptions import SpecClassIdentificationError
 
 REQUIRED_KEY = 'toloka_field_required'
 ORIGIN_KEY = 'toloka_field_origin'
+READONLY_KEY = 'toloka_field_readonly'
 
 E = TypeVar('E', bound=Enum)
 
@@ -43,12 +44,23 @@ class VariantRegistry:
         return self.registered_classes[value]
 
 
-def attribute(*args, required=False, origin=None, **kwargs):
+def attribute(*args, required: bool = False, origin: Optional[str] = None, readonly: bool = False, **kwargs):
+    """Proxy for attr.attrib(...). Adds several keywords.
+
+    Args:
+        *args: All positional arguments from attr.attrib
+        required: If True makes attribute not Optional. All other attributes are optional by default. Defaults to False.
+        origin: Sets field name in dict for attribute, when structuring/unstructuring from dict. Defaults to None.
+        readonly: Affects only when the class 'expanding' as a parameter in some function. If True, drops this attribute from expanded parameters. Defaults to None.
+        **kwargs: All keyword arguments from attr.attrib
+    """
     metadata = {}
     if required:
         metadata[REQUIRED_KEY] = True
     if origin:
         metadata[ORIGIN_KEY] = origin
+    if readonly:
+        metadata[READONLY_KEY] = True
 
     return attr.attrib(*args, metadata=metadata, **kwargs)
 

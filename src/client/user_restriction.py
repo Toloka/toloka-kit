@@ -9,7 +9,7 @@ __all__ = [
 import datetime
 from enum import unique, Enum
 
-from .primitives.base import BaseTolokaObject
+from .primitives.base import attribute, BaseTolokaObject
 
 
 @unique
@@ -76,8 +76,8 @@ class UserRestriction(BaseTolokaObject, spec_enum='Scope', spec_field='scope'):
     will_expire: datetime.datetime
 
     # Readonly
-    id: str
-    created: datetime.datetime
+    id: str = attribute(readonly=True)
+    created: datetime.datetime = attribute(readonly=True)
 
 
 class AllProjectsUserRestriction(UserRestriction, spec_value=UserRestriction.ALL_PROJECTS):

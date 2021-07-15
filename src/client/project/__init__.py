@@ -158,10 +158,10 @@ class Project(BaseTolokaObject):
     quality_control: QualityControl
 
     # metadata: Dict[str, List[str]] ???
-    status: ProjectStatus
-    created: datetime.datetime
+    status: ProjectStatus = attribute(readonly=True)
+    created: datetime.datetime = attribute(readonly=True)
 
-    id: str
+    id: str = attribute(readonly=True)
 
     public_instructions: str  # public
     private_comment: str

@@ -23,19 +23,43 @@ from typing import List, Any, Dict
 
 from ...primitives.base import attribute
 
-from .base import BaseComponent, ListDirection, ListSize, ComponentType, BaseTemplate, VersionedBaseComponent,\
+from .base import (
+    BaseComponent,
+    ListDirection,
+    ListSize,
+    ComponentType,
+    BaseTemplate,
+    VersionedBaseComponentMetaclass,
     base_component_or
+)
 
 
-class BaseFieldV1(VersionedBaseComponent):
+class BaseFieldV1Metaclass(VersionedBaseComponentMetaclass):
+    def __new__(mcs, name, bases, namespace, **kwargs):
+        annotations = namespace.setdefault('__annotations__', {})
+        if 'data' not in namespace:
+            namespace['data'] = attribute()
+            annotation = {'data': BaseComponent}
+            annotations = {**annotation, **annotations}
+        if 'hint' not in namespace:
+            namespace['hint'] = attribute(kw_only=True)
+            annotations['hint'] = base_component_or(Any)
+        if 'label' not in namespace:
+            namespace['label'] = attribute(kw_only=True)
+            annotations['label'] = base_component_or(Any)
+        if 'validation' not in namespace:
+            namespace['validation'] = attribute(kw_only=True)
+            annotations['validation'] = BaseComponent
+        namespace['__annotations__'] = annotations
+        return super().__new__(mcs, name, bases, namespace, **kwargs)
+
+
+class BaseFieldV1(BaseComponent, metaclass=BaseFieldV1Metaclass):
     """Fields for entering data, such as a text field or drop-down list.
 
     """
 
-    data: BaseComponent
-    hint: base_component_or(Any)
-    label: base_component_or(Any)
-    validation: BaseComponent
+    pass
 
 
 class ButtonRadioFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON_RADIO):
@@ -46,10 +70,10 @@ class ButtonRadioFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON_RADI
     The size of the button depends on the size of the label.
     Attributes:
         data: Data with values that will be processed or changed.
+        value_to_set: The value of the output data when the button is clicked.
         label: Label above the component.
         hint: Hint text.
         validation: Validation based on condition.
-        value_to_set: The value of the output data when the button is clicked.
     """
 
     value_to_set: base_component_or(Any) = attribute(origin='valueToSet')
@@ -59,14 +83,14 @@ class GroupFieldOption(BaseTemplate):
     """Option.
 
     Attributes:
-        hint: Additional information.
-        label: The text on the object.
         value: Returned value.
+        label: The text on the object.
+        hint: Additional information.
     """
 
-    label: base_component_or(Any)
     value: base_component_or(Any)
-    hint: base_component_or(Any)
+    label: base_component_or(Any)
+    hint: base_component_or(Any) = attribute(kw_only=True)
 
 
 class ButtonRadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON_RADIO_GROUP):
@@ -77,20 +101,20 @@ class ButtonRadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON
     The size of the button is determined by the length of the text on it.
     Attributes:
         data: Data with values that will be processed or changed.
+        options: Array of information about the buttons.
         label: Label above the component.
         hint: Hint text.
-        options: Array of information about the buttons.
         validation: Validation based on condition.
 
     Example:
         How to add buttons for classification task.
 
         >>> classification_buttons = tb.fields.ButtonRadioGroupFieldV1(
-        >>>     options=[
-        >>>         tb.fields.GroupFieldOption(label='Cat', value='cat'),
-        >>>         tb.fields.GroupFieldOption(label='Dog', value='dog'),
+        >>>     tb.data.OutputData(path='class'),
+        >>>     [
+        >>>         tb.fields.GroupFieldOption('Cat', 'cat'),
+        >>>         tb.fields.GroupFieldOption('Dog', 'dog'),
         >>>     ],
-        >>>     data=tb.data.OutputData(path='class'),
         >>>     validation=tb.conditions.RequiredConditionV1(hint='Choose one of the answer options'),
         >>> )
         ...
@@ -113,8 +137,8 @@ class CheckboxFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_CHECKBOX):
         validation: Validation based on condition.
     """
 
-    disabled: base_component_or(bool)
-    preserve_false: base_component_or(bool) = attribute(origin='preserveFalse')
+    disabled: base_component_or(bool) = attribute(kw_only=True)
+    preserve_false: base_component_or(bool) = attribute(origin='preserveFalse', kw_only=True)
 
 
 class CheckboxGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_CHECKBOX_GROUP):
@@ -122,10 +146,10 @@ class CheckboxGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_CHECKBOX_
 
     Attributes:
         data: Data with values that will be processed or changed.
+        options: Options, where value is the key that the option controls, and label is the text near the option.
         label: Label above the component.
         disabled: If `true', the options are inactive.
         hint: Hint text.
-        options: Options, where value is the key that the option controls, and label is the text near the option.
         preserve_false: Property that specifies whether to return false values in the results. By default, if the
             component returns false, this result will not be added to the output. To add false to the results, specify
             "preserveFalse": true.
@@ -133,8 +157,8 @@ class CheckboxGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_CHECKBOX_
     """
 
     options: base_component_or(List[base_component_or(GroupFieldOption)], 'ListBaseComponentOrGroupFieldOption')
-    disabled: base_component_or(bool)
-    preserve_false: base_component_or(bool) = attribute(origin='preserveFalse')
+    disabled: base_component_or(bool) = attribute(kw_only=True)
+    preserve_false: base_component_or(bool) = attribute(origin='preserveFalse', kw_only=True)
 
 
 class DateFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_DATE):
@@ -143,12 +167,12 @@ class DateFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_DATE):
     You can set a list of dates that the user cannot select.
     Attributes:
         data: Data with values that will be processed or changed.
-        label: Label above the component.
-        block_list: List of dates that the user cannot select.
-            * block_list[]: Date that the user cannot select.
         format: Format of the date entered by the user:
             * date-time — date and time.
             * date — date only.
+        label: Label above the component.
+        block_list: List of dates that the user cannot select.
+            * block_list[]: Date that the user cannot select.
         hint: Hint text.
         max: The latest date and time in the YYYY-MM-DD hh:mm format that the user can select. Where:
             * YYYY is the year.
@@ -167,10 +191,13 @@ class DateFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_DATE):
     """
 
     format: base_component_or(Any)
-    block_list: base_component_or(List[base_component_or(Any)], 'ListBaseComponentOrAny') = attribute(origin='')
-    max: base_component_or(Any)
-    min: base_component_or(Any)
-    placeholder: base_component_or(Any)
+    block_list: base_component_or(List[base_component_or(Any)], 'ListBaseComponentOrAny') = attribute(
+        origin='blockList',
+        kw_only=True
+    )
+    max: base_component_or(Any) = attribute(kw_only=True)
+    min: base_component_or(Any) = attribute(kw_only=True)
+    placeholder: base_component_or(Any) = attribute(kw_only=True)
 
 
 class EmailFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_EMAIL):
@@ -185,7 +212,7 @@ class EmailFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_EMAIL):
         validation: Validation based on condition.
     """
 
-    placeholder: Any
+    placeholder: Any = attribute(kw_only=True)
 
 
 class FileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_FILE):
@@ -198,10 +225,10 @@ class FileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_FILE):
     devices and makes it easier to upload photos and videos.
     Attributes:
         data: Data with values that will be processed or changed.
-        label: Label above the component.
         accept: A list of file types that can be uploaded. By default, you can upload any files.
             Specify the types in the format (https://developer.mozilla.org/en-US/docs/Web/HTTP/BasicsofHTTP/MIME_types).
             For example, you can allow only images to be uploaded by adding the image/jpeg and image/png types.
+        label: Label above the component.
         hint: Hint text.
         multiple: Determines whether multiple files can be uploaded:
             * false (default) — forbidden.
@@ -210,7 +237,7 @@ class FileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_FILE):
     """
 
     accept: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrStr')
-    multiple: base_component_or(bool)
+    multiple: base_component_or(bool) = attribute(kw_only=True)
 
 
 class ImageAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_IMAGE_ANNOTATION):
@@ -222,6 +249,7 @@ class ImageAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_IMAGE_A
     selection modes and hide the rest.
     Attributes:
         data: Data with values that will be processed or changed.
+        image: The image you want to select areas in.
         label: Label above the component.
         disabled: Determines whether adding and deleting areas is allowed:
             * false (default) — Allowed.
@@ -231,7 +259,6 @@ class ImageAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_IMAGE_A
         full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
             of 400 pixels.
         hint: Hint text.
-        image: The image you want to select areas in.
         labels: Used to classify areas.
             You can add several area types. When adding an area type, a button to select it appears in the interface,
             and when setting a new value, a new area selection color is added.
@@ -264,14 +291,14 @@ class ImageAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_IMAGE_A
         POLYGON = 'polygon'
         RECTANGLE = 'rectangle'
 
-    disabled: base_component_or(bool)
-    full_height: base_component_or(bool) = attribute(origin='fullHeight')
     image: base_component_or(str)
-    labels: base_component_or(List[base_component_or(Label)], 'ListBaseComponentOrLabel')
-    min_width: base_component_or(float) = attribute(origin='minWidth')
-    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat')
+    disabled: base_component_or(bool) = attribute(kw_only=True)
+    full_height: base_component_or(bool) = attribute(origin='fullHeight', kw_only=True)
+    labels: base_component_or(List[base_component_or(Label)], 'ListBaseComponentOrLabel') = attribute(kw_only=True)
+    min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)
     shapes: base_component_or(Dict[base_component_or(Shape), base_component_or(bool)],
-                              'DictBaseComponentOrShapeBaseComponentOrBool')
+                              'DictBaseComponentOrShapeBaseComponentOrBool') = attribute(kw_only=True)
 
 
 class ListFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_LIST):
@@ -289,6 +316,9 @@ class ListFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_LIST):
     property to block users from changing a component, like when a certain event occurs.
     Attributes:
         data: Data with values that will be processed or changed.
+        render: Interface template for list items, such as a text field.
+            In nested field.* components, use data.relative for recording responses, otherwise all the list items will
+            have the same value.
         label: Label above the component.
         button_label: Text on the button for adding list items.
         direction: The direction of the list.
@@ -296,19 +326,16 @@ class ListFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_LIST):
             By default it is true (allowed).
         hint: Hint text.
         max_length: Maximum number of list items.
-        render: Interface template for list items, such as a text field.
-            In nested field.* components, use data.relative for recording responses, otherwise all the list items will
-            have the same value.
         size: The distance between list items. Acceptable values in ascending order: s, m (default).
         validation: Validation based on condition.
     """
 
     render: BaseComponent
-    button_label: base_component_or(Any)
-    direction: base_component_or(ListDirection)
-    editable: base_component_or(Any)
-    max_length: base_component_or(float)
-    size: base_component_or(ListSize)
+    button_label: base_component_or(Any) = attribute(kw_only=True)
+    direction: base_component_or(ListDirection) = attribute(kw_only=True)
+    editable: base_component_or(bool) = attribute(kw_only=True)
+    max_length: base_component_or(float) = attribute(kw_only=True)
+    size: base_component_or(ListSize) = attribute(kw_only=True)
 
 
 class MediaFileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_MEDIA_FILE):
@@ -320,9 +347,9 @@ class MediaFileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_MEDIA_FILE):
     field.file for a more flexible configuration of the file types.
     Attributes:
         data: Data with values that will be processed or changed.
-        label: Label above the component.
         accept: Adds different buttons for four types of uploads. Pass the true value for the ones that you need.
             For example, if you need a button for uploading files from the gallery, add the "gallery": true property
+        label: Label above the component.
         hint: Hint text.
         multiple: Determines whether multiple files can be uploaded:
         validation: Validation based on condition.
@@ -350,13 +377,13 @@ class MediaFileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_MEDIA_FILE):
             video: Adds a button for uploading videos.
         """
 
-        file_system: base_component_or(bool) = attribute(origin='fileSystem')
-        gallery: base_component_or(bool)
-        photo: base_component_or(bool)
-        video: base_component_or(bool)
+        file_system: base_component_or(bool) = attribute(origin='fileSystem', kw_only=True)
+        gallery: base_component_or(bool) = attribute(kw_only=True)
+        photo: base_component_or(bool) = attribute(kw_only=True)
+        video: base_component_or(bool) = attribute(kw_only=True)
 
     accept: base_component_or(Accept)
-    multiple: base_component_or(bool)
+    multiple: base_component_or(bool) = attribute(kw_only=True)
 
 
 class NumberFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_NUMBER):
@@ -380,9 +407,9 @@ class NumberFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_NUMBER):
         validation: Validation based on condition.
     """
 
-    maximum: base_component_or(int)
-    minimum: base_component_or(int)
-    placeholder: base_component_or(Any)
+    maximum: base_component_or(int) = attribute(kw_only=True)
+    minimum: base_component_or(int) = attribute(kw_only=True)
+    placeholder: base_component_or(Any) = attribute(kw_only=True)
 
 
 class PhoneNumberFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_PHONE_NUMBER):
@@ -398,7 +425,7 @@ class PhoneNumberFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_PHONE_NUMBE
         validation: Validation based on condition.
     """
 
-    placeholder: base_component_or(str)
+    placeholder: base_component_or(str) = attribute(kw_only=True)
 
 
 class RadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_RADIO_GROUP):
@@ -409,29 +436,29 @@ class RadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_RADIO_GROUP)
     The minimum number of buttons is one. Any type of data can be returned.
     Attributes:
         data: Data with values that will be processed or changed.
+        options: List of options to choose from
         label: Label above the component.
         disabled: This property prevents clicking the button. If the value is true, the button is not active (the user
             will not be able to click it).
         hint: Hint text.
-        options: List of options to choose from
         validation: Validation based on condition.
 
     Example:
         How to add label selector to interface.
 
         >>> radio_group_field = tb.fields.RadioGroupFieldV1(
-        >>>     data=tb.data.OutputData(path='result'),
-        >>>     validation=tb.conditions.RequiredConditionV1(),
-        >>>     options=[
-        >>>         tb.fields.GroupFieldOption(label='Cat', value='cat'),
-        >>>         tb.fields.GroupFieldOption(label='Dog', value='dog'),
-        >>>     ]
+        >>>     tb.data.OutputData(path='result'),
+        >>>     [
+        >>>         tb.fields.GroupFieldOption('Cat', 'cat'),
+        >>>         tb.fields.GroupFieldOption('Dog', 'dog'),
+        >>>     ],
+        >>>     validation=tb.conditions.RequiredConditionV1()
         >>> )
         ...
     """
 
     options: base_component_or(List[base_component_or(GroupFieldOption)], 'ListBaseComponentOrGroupFieldOption')
-    disabled: base_component_or(bool)
+    disabled: base_component_or(bool) = attribute(kw_only=True)
 
 
 class SelectFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_SELECT):
@@ -445,9 +472,9 @@ class SelectFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_SELECT):
     To allow selecting multiple options, use the field.checkbox-group component.
     Attributes:
         data: Data with values that will be processed or changed.
+        options: Options to choose from.
         label: Label above the component.
         hint: Hint text.
-        options: Options to choose from.
         placeholder: The text that will be displayed if none of the options is selected.
         validation: Validation based on condition.
     """
@@ -464,7 +491,7 @@ class SelectFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_SELECT):
         value: base_component_or(Any)
 
     options: base_component_or(Option)
-    placeholder: base_component_or(Any)
+    placeholder: base_component_or(Any) = attribute(kw_only=True)
 
 
 class TextFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXT):
@@ -479,8 +506,8 @@ class TextFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXT):
         validation: Validation based on condition.
     """
 
-    disabled: base_component_or(bool)
-    placeholder: base_component_or(Any)
+    disabled: base_component_or(bool) = attribute(kw_only=True)
+    placeholder: base_component_or(Any) = attribute(kw_only=True)
 
 
 class TextareaFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXTAREA):
@@ -504,7 +531,7 @@ class TextareaFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXTAREA):
         rows: The height of the text box in lines.
     """
 
-    disabled: base_component_or(bool)
-    placeholder: base_component_or(Any)
-    resizable: base_component_or(bool)
-    rows: base_component_or(float)
+    disabled: base_component_or(bool) = attribute(kw_only=True)
+    placeholder: base_component_or(Any) = attribute(kw_only=True)
+    resizable: base_component_or(bool) = attribute(kw_only=True)
+    rows: base_component_or(float) = attribute(kw_only=True)

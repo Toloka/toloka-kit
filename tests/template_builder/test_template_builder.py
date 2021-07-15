@@ -140,89 +140,89 @@ def view_spec_map():
 def test_result(view_spec_map):
     expected_result = TemplateBuilder(
         view=SideBySideLayoutV1(
-            version='1.0.0',
-            controls=ListViewV1(
-                version='1.0.0',
-                items=[
+            ListViewV1(
+                [
                     RadioGroupFieldV1(
-                        version='1.0.0',
-                        data=RefComponent(
-                            ref='vars.0'
+                        RefComponent(
+                            'vars.0'
                         ),
-                        label='Какое фото вам больше нравится?',
-                        options=[
+                        [
                             GroupFieldOption(
-                                label='A',
-                                value='a'
+                                'a',
+                                'A',
                             ),
                             GroupFieldOption(
-                                label='B',
-                                value='b',
+                                'b',
+                                'B',
                                 hint=TextareaFieldV1(
                                     data=InputData(
-                                        path='text'
+                                        'text'
                                     ),
                                     version='1.0.0'
                                 )
                             ),
                             GroupFieldOption(
-                                label='Картинки не загрузились',
-                                value='failure'
+                                'failure',
+                                'Картинки не загрузились',
                             )
                         ],
+                        label='Какое фото вам больше нравится?',
+                        version='1.0.0'
                     ),
                     TextareaFieldV1(
-                        version='1.0.0',
-                        data=OutputData(
-                            path='why'
+                        OutputData(
+                            'why'
                         ),
+                        version='1.0.0',
                         label=InputData(
-                            path='text'
+                            'text'
                         ),
                         validation=RequiredConditionV1(
                             version='1.0.0'
                         )
                     )
-                ]
+                ],
+                version='1.0.0',
             ),
-            items=[
+            [
                 ImageViewV1(
-                    version='1.2.3',
-                    url=InputData(
-                        path='image_a',
+                    InputData(
+                        'image_a',
                     ),
+                    version='1.2.3',
                     full_height=True
                 ),
                 ImageViewV1(
-                    version='1.2.3',
-                    url=InputData(
-                        path='image_b'
+                    InputData(
+                        'image_b'
                     ),
+                    version='1.2.3',
                     full_height=True
                 )
-            ]
+            ],
+            version='1.0.0'
         ),
         plugins=[
             HotkeysPluginV1(
                 version='1.0.0',
                 key_0=SetActionV1(
                     version='1.0.0',
-                    data=RefComponent(ref='vars.0'),
+                    data=RefComponent('vars.0'),
                     payload='failure'
                 ),
                 key_1=SetActionV1(
                     version='1.0.0',
-                    data=RefComponent(ref='vars.0'),
+                    data=RefComponent('vars.0'),
                     payload='a'
                 ),
                 key_2=SetActionV1(
                     version='1.0.0',
-                    data=RefComponent(ref='vars.0'),
+                    data=RefComponent('vars.0'),
                     payload='b'
                 )
             )
         ],
-        vars={'0': OutputData(path='result')}
+        vars={'0': OutputData('result')}
     )
 
     result = ViewSpec.structure(view_spec_map)
@@ -231,13 +231,13 @@ def test_result(view_spec_map):
 
 def test_ref(view_spec_map):
     result = ViewSpec.structure(view_spec_map)
-    assert result.config.plugins[0].key_0.data == RefComponent(ref='vars.0')
+    assert result.config.plugins[0].key_0.data == RefComponent('vars.0')
 
 
 def test_union_with_base_component_parsing(view_spec_map):
     result = ViewSpec.structure(view_spec_map)
-    assert result.config.vars['0'] == OutputData(path='result')
-    assert result.config.view.controls.items[1].label == InputData(path='text')
+    assert result.config.vars['0'] == OutputData('result')
+    assert result.config.view.controls.items[1].label == InputData('text')
 
 
 def test_versions(view_spec_map):
@@ -267,39 +267,39 @@ def test_get_input_and_output():
                 version='1.0.0',
                 items=[
                     RadioGroupFieldV1(
-                        version='1.0.0',
-                        data=RefComponent(
-                            ref='vars.0'
+                        RefComponent(
+                            'vars.0'
                         ),
+                        version='1.0.0',
                         label='Какое фото вам больше нравится?',
                         options=[
                             GroupFieldOption(
-                                label='A',
-                                value='a'
+                                'a',
+                                'A',
                             ),
                             GroupFieldOption(
-                                label='B',
-                                value='b',
+                                'b',
+                                'B',
                                 hint=TextareaFieldV1(
-                                    data=InputData(
-                                        path='text'
+                                    InputData(
+                                        'text'
                                     ),
                                     version='1.0.0'
                                 )
                             ),
                             GroupFieldOption(
-                                label='Картинки не загрузились',
-                                value='failure'
+                                'failure',
+                                'Картинки не загрузились'
                             )
                         ],
                     ),
                     TextareaFieldV1(
-                        version='1.0.0',
-                        data=OutputData(
-                            path='why'
+                        OutputData(
+                            'why'
                         ),
+                        version='1.0.0',
                         label=InputData(
-                            path='text'
+                            'text'
                         ),
                         validation=RequiredConditionV1(
                             version='1.0.0'
@@ -309,17 +309,13 @@ def test_get_input_and_output():
             ),
             items=[
                 ImageViewV1(
+                    InputData('image_a'),
                     version='1.2.3',
-                    url=InputData(
-                        path='image_a',
-                    ),
                     full_height=True
                 ),
                 ImageViewV1(
+                    InputData('image_b'),
                     version='1.2.3',
-                    url=InputData(
-                        path='image_b'
-                    ),
                     full_height=True
                 )
             ]
@@ -328,23 +324,23 @@ def test_get_input_and_output():
             HotkeysPluginV1(
                 version='1.0.0',
                 key_0=SetActionV1(
-                    version='1.0.0',
-                    data=RefComponent(ref='vars.0'),
-                    payload='failure'
+                    RefComponent('vars.0'),
+                    'failure',
+                    version='1.0.0'
                 ),
                 key_1=SetActionV1(
-                    version='1.0.0',
-                    data=RefComponent(ref='vars.0'),
-                    payload='a'
+                    RefComponent('vars.0'),
+                    'a',
+                    version='1.0.0'
                 ),
                 key_2=SetActionV1(
-                    version='1.0.0',
-                    data=RefComponent(ref='vars.0'),
-                    payload='b'
+                    RefComponent('vars.0'),
+                    'b',
+                    version='1.0.0'
                 )
             )
         ],
-        vars={'0': OutputData(path='result')}
+        vars={'0': OutputData('result')}
     )
 
     expected_input = {

@@ -2,7 +2,7 @@ __all__ = ['Skill']
 import datetime
 from typing import Dict
 
-from .primitives.base import BaseTolokaObject
+from .primitives.base import attribute, BaseTolokaObject
 
 LangIso639 = str
 
@@ -65,5 +65,5 @@ class Skill(BaseTolokaObject):
     public_requester_description: Dict[LangIso639, str]
 
     # Readonly
-    id: str
-    created: datetime.datetime
+    id: str = attribute(readonly=True)
+    created: datetime.datetime = attribute(readonly=True)

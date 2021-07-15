@@ -57,13 +57,21 @@ def user_bonus_map_without_message_with_readonly(user_bonus_map_without_message)
 def test_create_user_bonus(requests_mock, toloka_client, toloka_url, user_bonus_map, user_bonus_map_with_readonly):
 
     def user_bonuses(request, context):
+        assert {'skip_invalid_items': ['true']} == parse_qs(urlparse(request.url).query)
         assert user_bonus_map == request.json()
         return simplejson.dumps(user_bonus_map_with_readonly)
 
     requests_mock.post(f'{toloka_url}/user-bonuses', text=user_bonuses, status_code=201)
     user_bonus = client.structure(user_bonus_map, client.user_bonus.UserBonus)
     assert user_bonus.amount == Decimal('1.50')
-    result = toloka_client.create_user_bonus(user_bonus)
+    result = toloka_client.create_user_bonus(
+        user_bonus,
+        client.user_bonus.UserBonusCreateRequestParameters(skip_invalid_items=True),
+    )
+    assert user_bonus_map_with_readonly == client.unstructure(result)
+
+    # Expanded syntax
+    result = toloka_client.create_user_bonus(user_bonus, skip_invalid_items=True)
     assert user_bonus_map_with_readonly == client.unstructure(result)
 
 
