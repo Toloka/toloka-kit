@@ -140,6 +140,7 @@ class AssessmentEvent(IdentityRuleCondition):
     Attributes:
         value: Possible values:
             * conditions.AssessmentEvent.ACCEPT
+            * conditions.AssessmentEvent.ACCEPT_AFTER_REJECT
             * conditions.AssessmentEvent.REJECT
 
     Example:
@@ -159,6 +160,7 @@ class AssessmentEvent(IdentityRuleCondition):
         """
 
         ACCEPT = 'ACCEPT'
+        ACCEPT_AFTER_REJECT = 'ACCEPT_AFTER_REJECT'
         REJECT = 'REJECT'
 
     def __init__(

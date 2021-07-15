@@ -67,16 +67,16 @@ class AcceptanceRate(CollectorConfig):
     - Block access for performers who give incorrect responses.
 
     Used with conditions:
-        * TotalAssignmentsCount - How many assignments from this performer were checked.
-        * AcceptedAssignmentsRate - Percentage of how many assignments were accepted from this performer out of all checked assignment.
-        * RejectedAssignmentsRate - Percentage of how many assignments were rejected from this performer out of all checked assignment.
+    * TotalAssignmentsCount - How many assignments from this performer were checked.
+    * AcceptedAssignmentsRate - Percentage of how many assignments were accepted from this performer out of all checked assignment.
+    * RejectedAssignmentsRate - Percentage of how many assignments were rejected from this performer out of all checked assignment.
 
     Used with actions:
-        * RestrictionV2 - Block access to projects or pools.
-        * ApproveAllAssignments - Approve all replies from the performer.
-        * RejectAllAssignments - Reject all replies from the performer.
-        * SetSkill - Set perfmer skill value.
-        * SetSkillFromOutputField - Set performer skill value from source.
+    * RestrictionV2 - Block access to projects or pools.
+    * ApproveAllAssignments - Approve all replies from the performer.
+    * RejectAllAssignments - Reject all replies from the performer.
+    * SetSkill - Set perfmer skill value.
+    * SetSkillFromOutputField - Set performer skill value from source.
 
     Example:
         How to ban a performer in this project if he makes mistakes.
@@ -129,13 +129,13 @@ class AnswerCount(CollectorConfig):
     - Mark performers completing a task so that you can filter them later in the checking project.
 
     Used with conditions:
-        * AssignmentsAcceptedCount - How many assignment was accepted from performer
+    * AssignmentsAcceptedCount - How many assignment was accepted from performer
 
     Used with actions:
-        * RestrictionV2 - Block access to projects or pools.
-        * ApproveAllAssignments - Approve all replies from the performer.
-        * RejectAllAssignments - Reject all replies from the performer.
-        * SetSkill - Set perfmer skill value.
+    * RestrictionV2 - Block access to projects or pools.
+    * ApproveAllAssignments - Approve all replies from the performer.
+    * RejectAllAssignments - Reject all replies from the performer.
+    * SetSkill - Set perfmer skill value.
 
     Example:
         How to mark performers completing a task so that you can filter them later in the checking project.
@@ -183,13 +183,13 @@ class AssignmentsAssessment(CollectorConfig):
     accepted assignments only.
 
     Used with conditions:
-        * PendingAssignmentsCount - Number of Assignments pending checking.
-        * AcceptedAssignmentsCount - How many times this assignment was accepted.
-        * RejectedAssignmentsCount - How many times this assignment was rejected.
-        * AssessmentEvent - Assessment of the assignment changes its status to the specified one.
+    * PendingAssignmentsCount - Number of Assignments pending checking.
+    * AcceptedAssignmentsCount - How many times this assignment was accepted.
+    * RejectedAssignmentsCount - How many times this assignment was rejected.
+    * AssessmentEvent - Assessment of the assignment changes its status to the specified one.
 
     Used with actions:
-        * ChangeOverlap - Increase the overlap of the set of tasks.
+    * ChangeOverlap - Increase the overlap of the set of tasks.
 
     Example:
         How to resend rejected assignments for re-completion to other performers.
@@ -233,14 +233,14 @@ class AssignmentSubmitTime(CollectorConfig):
     - Provide protection from robots.
 
     Used with conditions:
-        * TotalSubmittedCount - The number of assignments a specific performer completed.
-        * FastSubmittedCount - The number of assignments a specific performer completed too fast.
+    * TotalSubmittedCount - The number of assignments a specific performer completed.
+    * FastSubmittedCount - The number of assignments a specific performer completed too fast.
 
     Used with actions:
-        * RestrictionV2 - Block access to projects or pools.
-        * ApproveAllAssignments - Approve all replies from the performer.
-        * RejectAllAssignments - Reject all replies from the performer.
-        * SetSkill - Set perfmer skill value.
+    * RestrictionV2 - Block access to projects or pools.
+    * ApproveAllAssignments - Approve all replies from the performer.
+    * RejectAllAssignments - Reject all replies from the performer.
+    * SetSkill - Set perfmer skill value.
 
     Attributes:
         parameters.fast_submit_threshold_seconds: The task suite completion time (in seconds).
@@ -306,16 +306,16 @@ class Captcha(CollectorConfig):
     """Captchas provide a high level of protection from robots
 
     Used with conditions:
-        * StoredResultsCount - How many times the performer entered captcha.
-        * SuccessRate - Percentage of correct answers of the performer to the captcha.
-        * FailRate - Percentage of wrong answers of the performer to the captcha.
+    * StoredResultsCount - How many times the performer entered captcha.
+    * SuccessRate - Percentage of correct answers of the performer to the captcha.
+    * FailRate - Percentage of wrong answers of the performer to the captcha.
 
     Used with actions:
-        * RestrictionV2 - Block access to projects or pools.
-        * ApproveAllAssignments - Approve all replies from the performer.
-        * RejectAllAssignments - Reject all replies from the performer.
-        * SetSkill - Set perfmer skill value.
-        * SetSkillFromOutputField - Set performer skill value from source.
+    * RestrictionV2 - Block access to projects or pools.
+    * ApproveAllAssignments - Approve all replies from the performer.
+    * RejectAllAssignments - Reject all replies from the performer.
+    * SetSkill - Set perfmer skill value.
+    * SetSkillFromOutputField - Set performer skill value from source.
 
     Attributes:
         parameters.history_size: The number of times the performer was shown a captcha recently.
@@ -390,19 +390,19 @@ class GoldenSet(CollectorConfig):
     "Choose the page design option that you like best".
 
     Used with conditions:
-        * TotalAnswersCount - The number of completed control and training tasks.
-        * CorrectAnswersRate - The percentage of correct responses in training and control tasks.
-        * IncorrectAnswersRate - The percentage of incorrect responses in training and control tasks.
-        * GoldenSetAnswersCount - The number of completed control tasks
-        * GoldenSetCorrectAnswersRate - The percentage of correct responses in control tasks.
-        * GoldenSetIncorrectAnswersRate - The percentage of incorrect responses in control tasks.
+    * TotalAnswersCount - The number of completed control and training tasks.
+    * CorrectAnswersRate - The percentage of correct responses in training and control tasks.
+    * IncorrectAnswersRate - The percentage of incorrect responses in training and control tasks.
+    * GoldenSetAnswersCount - The number of completed control tasks
+    * GoldenSetCorrectAnswersRate - The percentage of correct responses in control tasks.
+    * GoldenSetIncorrectAnswersRate - The percentage of incorrect responses in control tasks.
 
     Used with actions:
-        * RestrictionV2 - Block access to projects or pools.
-        * ApproveAllAssignments - Approve all replies from the performer.
-        * RejectAllAssignments - Reject all replies from the performer.
-        * SetSkill - Set perfmer skill value.
-        * SetSkillFromOutputField - Set performer skill value from source.
+    * RestrictionV2 - Block access to projects or pools.
+    * ApproveAllAssignments - Approve all replies from the performer.
+    * RejectAllAssignments - Reject all replies from the performer.
+    * SetSkill - Set perfmer skill value.
+    * SetSkillFromOutputField - Set performer skill value from source.
 
     Attributes:
         parameters.history_size: The number of the performer's last responses to control tasks.
@@ -462,13 +462,13 @@ class Income(CollectorConfig):
     - Get responses from as many performers as possible.
 
     Used with conditions:
-        * IncomeSumForLast24Hours - The performer earnings for completed tasks in the pool over the last 24 hours.
+    * IncomeSumForLast24Hours - The performer earnings for completed tasks in the pool over the last 24 hours.
 
     Used with actions:
-        * RestrictionV2 - Block access to projects or pools.
-        * ApproveAllAssignments - Approve all replies from the performer.
-        * RejectAllAssignments - Reject all replies from the performer.
-        * SetSkill - Set perfmer skill value.
+    * RestrictionV2 - Block access to projects or pools.
+    * ApproveAllAssignments - Approve all replies from the performer.
+    * RejectAllAssignments - Reject all replies from the performer.
+    * SetSkill - Set perfmer skill value.
 
     Example:
         How to ban a performer in this project if he made enough answers.
@@ -516,16 +516,16 @@ class MajorityVote(CollectorConfig):
     Depending on the percentage of correct responses, you can either increase the user's skill value, or ban the user from tasks.
 
     Used with conditions:
-        * TotalAnswersCount - The number of completed tasks by the performer.
-        * CorrectAnswersRate - The percentage of correct responses.
-        * IncorrectAnswersRate - The percentage of incorrect responses.
+    * TotalAnswersCount - The number of completed tasks by the performer.
+    * CorrectAnswersRate - The percentage of correct responses.
+    * IncorrectAnswersRate - The percentage of incorrect responses.
 
     Used with actions:
-        * RestrictionV2 - Block access to projects or pools.
-        * ApproveAllAssignments - Approve all replies from the performer.
-        * RejectAllAssignments - Reject all replies from the performer.
-        * SetSkill - Set perfmer skill value.
-        * SetSkillFromOutputField - Set performer skill value from source.
+    * RestrictionV2 - Block access to projects or pools.
+    * ApproveAllAssignments - Approve all replies from the performer.
+    * RejectAllAssignments - Reject all replies from the performer.
+    * SetSkill - Set perfmer skill value.
+    * SetSkillFromOutputField - Set performer skill value from source.
 
     Attributes:
         parameters.answer_threshold: The number of users considered the majority (for example, 3 out of 5).
@@ -597,13 +597,13 @@ class SkippedInRowAssignments(CollectorConfig):
     You can block access to a pool or project if a user skips multiple task suites in a row.
 
     Used with conditions:
-        * SkippedInRowCount - How many tasks in a row the performer skipped.
+    * SkippedInRowCount - How many tasks in a row the performer skipped.
 
     Used with actions:
-        * RestrictionV2 - Block access to projects or pools.
-        * ApproveAllAssignments - Approve all replies from the performer.
-        * RejectAllAssignments - Reject all replies from the performer.
-        * SetSkill - Set perfmer skill value.
+    * RestrictionV2 - Block access to projects or pools.
+    * ApproveAllAssignments - Approve all replies from the performer.
+    * RejectAllAssignments - Reject all replies from the performer.
+    * SetSkill - Set perfmer skill value.
 
     Example:
         How to ban a performer in this project if he skipped tasks.
@@ -674,11 +674,11 @@ class UsersAssessment(CollectorConfig):
     This rule will help you do this automatically.
 
     Used with conditions:
-        * PoolAccessRevokedReason - Reason for loss of access of the performer to the current pool.
-        * SkillId - The performer no longer meets the specific skill filter.
+    * PoolAccessRevokedReason - Reason for loss of access of the performer to the current pool.
+    * SkillId - The performer no longer meets the specific skill filter.
 
     Used with actions:
-        * ChangeOverlap - Increase the overlap of the set of tasks.
+    * ChangeOverlap - Increase the overlap of the set of tasks.
 
     Example:
         How to resend rejected assignments for re-completion to other performers.

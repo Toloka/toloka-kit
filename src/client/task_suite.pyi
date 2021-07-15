@@ -74,9 +74,7 @@ class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
         *,
         input_values: Optional[Dict[str, Any]] = None,
         known_solutions: Optional[List[BaseTask.KnownSolution]] = None,
-        message_on_unknown_solution: Optional[str] = None,
-        id: Optional[str] = None,
-        origin_task_id: Optional[str] = None
+        message_on_unknown_solution: Optional[str] = None
     ) -> 'TaskSuite': ...
 
     @overload

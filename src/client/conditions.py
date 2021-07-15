@@ -105,6 +105,7 @@ class AssessmentEvent(IdentityRuleCondition, spec_value=RuleConditionKey.ASSESSM
     Attributes:
         value: Possible values:
             * conditions.AssessmentEvent.ACCEPT
+            * conditions.AssessmentEvent.ACCEPT_AFTER_REJECT
             * conditions.AssessmentEvent.REJECT
 
     Example:
@@ -122,9 +123,11 @@ class AssessmentEvent(IdentityRuleCondition, spec_value=RuleConditionKey.ASSESSM
     @unique
     class Type(Enum):
         ACCEPT = 'ACCEPT'
+        ACCEPT_AFTER_REJECT = 'ACCEPT_AFTER_REJECT'
         REJECT = 'REJECT'
 
     ACCEPT = Type.ACCEPT
+    ACCEPT_AFTER_REJECT = Type.ACCEPT_AFTER_REJECT
     REJECT = Type.REJECT
 
     value: Type

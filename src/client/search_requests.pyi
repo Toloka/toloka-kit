@@ -1298,6 +1298,7 @@ class UserBonusSearchRequest(BaseSearchRequest):
 
     Attributes:
         user_id: Performer ID.
+        assignment_id: ID of the performer's response to the task.
         private_comment: Comments for the requester.
         id_lt: Bonuses with an ID less than the specified value.
         id_lte: Bonuses with an ID less than or equal to the specified value.
@@ -1316,6 +1317,7 @@ class UserBonusSearchRequest(BaseSearchRequest):
     def __init__(
         self,
         user_id: Optional[str] = None,
+        assignment_id: Optional[str] = None,
         private_comment: Optional[str] = None,
         id_lt: Optional[str] = None,
         id_lte: Optional[str] = None,
@@ -1332,6 +1334,7 @@ class UserBonusSearchRequest(BaseSearchRequest):
 
     _unexpected: Optional[Dict[str, Any]]
     user_id: Optional[str]
+    assignment_id: Optional[str]
     private_comment: Optional[str]
     id_lt: Optional[str]
     id_lte: Optional[str]
