@@ -12,10 +12,18 @@ __all__ = [
 from enum import Enum, unique
 from typing import List, Any
 
-from .base import BaseTemplate, ComponentType, RefComponent, BaseComponent, VersionedBaseComponent, base_component_or
+from ...primitives.base import attribute
+from .base import (
+    BaseTemplate,
+    ComponentType,
+    RefComponent,
+    BaseComponent,
+    VersionedBaseComponentMetaclass,
+    base_component_or
+)
 
 
-class BaseActionV1(VersionedBaseComponent):
+class BaseActionV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):
     """Perform various actions, such as showing notifications.
 
     """
@@ -48,12 +56,12 @@ class NotifyActionV1(BaseActionV1, spec_value=ComponentType.ACTION_NOTIFY):
 
         Attributes:
             content: Message text
+            theme: The background color of the message.
             delay: The duration of the delay (in milliseconds) before the message appears.
             duration: The duration of the message activity (in milliseconds), which includes the duration of the delay
                 before displaying it.
                 For example, if duration is 1000 and delay is 400, the message will be displayed for
                 600 milliseconds.
-            theme: The background color of the message.
         """
 
         @unique
@@ -74,8 +82,8 @@ class NotifyActionV1(BaseActionV1, spec_value=ComponentType.ACTION_NOTIFY):
 
         content: base_component_or(Any)
         theme: base_component_or(Theme)
-        delay: base_component_or(float)
-        duration: base_component_or(float)
+        delay: base_component_or(float) = attribute(kw_only=True)
+        duration: base_component_or(float) = attribute(kw_only=True)
 
     payload: base_component_or(Payload)
 
@@ -122,8 +130,8 @@ class RotateActionV1(BaseActionV1, spec_value=ComponentType.ACTION_ROTATE):
 
     By default it rotates to the right, but you can specify the direction in the payload property.
     Attributes:
-        payload: Sets the direction of rotation.
         view: Points to the component to perform the action with.
+        payload: Sets the direction of rotation.
     """
 
     @unique
@@ -131,8 +139,8 @@ class RotateActionV1(BaseActionV1, spec_value=ComponentType.ACTION_ROTATE):
         LEFT = 'left'
         RIGHT = 'right'
 
-    payload: base_component_or(Payload)
     view: base_component_or(RefComponent)
+    payload: base_component_or(Payload)
 
 
 class SetActionV1(BaseActionV1, spec_value=ComponentType.ACTION_SET):

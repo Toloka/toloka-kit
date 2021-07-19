@@ -2,7 +2,8 @@ __all__ = [
     'FieldValidationError',
     'TaskBatchCreateResult',
     'TaskSuiteBatchCreateResult',
-    'UserBonusBatchCreateResult'
+    'UserBonusBatchCreateResult',
+    'WebhookSubscriptionBatchCreateResult'
 ]
 from typing import Any, Dict, List, Optional, Type
 

@@ -4,7 +4,7 @@ from enum import Enum, unique
 from typing import Dict, List
 
 from .owner import Owner
-from .primitives.base import BaseTolokaObject
+from .primitives.base import attribute, BaseTolokaObject
 from .util._codegen import codegen_attr_attributes_setters
 
 
@@ -98,12 +98,12 @@ class Training(BaseTolokaObject):
     owner: Owner
 
     # Readonly
-    id: str
-    status: Status
-    last_close_reason: CloseReason
-    created: datetime.datetime
-    last_started: datetime.datetime
-    last_stopped: datetime.datetime
+    id: str = attribute(readonly=True)
+    status: Status = attribute(readonly=True)
+    last_close_reason: CloseReason = attribute(readonly=True)
+    created: datetime.datetime = attribute(readonly=True)
+    last_started: datetime.datetime = attribute(readonly=True)
+    last_stopped: datetime.datetime = attribute(readonly=True)
 
     def is_open(self) -> bool:
         return self.status == Training.Status.OPEN

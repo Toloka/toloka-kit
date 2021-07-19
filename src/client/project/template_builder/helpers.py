@@ -17,10 +17,10 @@ from typing import List, Any
 
 from ...primitives.base import attribute
 
-from .base import BaseComponent, ComponentType, BaseTemplate, VersionedBaseComponent, base_component_or
+from .base import BaseComponent, ComponentType, BaseTemplate, VersionedBaseComponentMetaclass, base_component_or
 
 
-class BaseHelperV1(VersionedBaseComponent):
+class BaseHelperV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):
     """Perform various operations, such as if-then-else or switch-case.
 
     """
@@ -83,22 +83,22 @@ class IfHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_IF):
     comment field appear when a negative response is received, but nothing happens when a positive response is received.
     Attributes:
         condition: Condition to check.
-        else_: The element that is returned if the condition from the condition property is false (returns false).
         then: The element that is returned if the condition from the condition property is true (returns true).
+        else_: The element that is returned if the condition from the condition property is false (returns false).
 
     Example:
         How to show a part of the interface by condition.
 
         >>> hidden_ui = tb.helpers.IfHelperV1(
-        >>>     condition=tb.conditions.EqualsConditionV1(data=tb.data.OutputData(path='show_me'), to='show'),
-        >>>     then=tb.view.ListViewV1(items=[header, buttons, images]),
+        >>>     tb.conditions.EqualsConditionV1(tb.data.OutputData('show_me'), 'show'),
+        >>>     tb.view.ListViewV1([header, buttons, images]),
         >>> )
         ...
     """
 
     condition: BaseComponent
     then: base_component_or(Any)
-    else_: base_component_or(Any) = attribute(origin='else')
+    else_: base_component_or(Any) = attribute(origin='else', kw_only=True)
 
 
 class JoinHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_JOIN):
@@ -106,8 +106,8 @@ class JoinHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_JOIN):
 
     You can add a delimiter to separate the strings, such as a space or comma.
     Attributes:
-        by: Delimiter for joining strings. You can use any number of characters in the delimiter.
         items: Array of strings to join.
+        by: Delimiter for joining strings. You can use any number of characters in the delimiter.
     """
 
     items: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrStr')
@@ -162,8 +162,8 @@ class SearchQueryHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_SEARCH_Q
 
     The list of available search engines is specified in the engine enum.
     Attributes:
-        engine: Search engine.
         query: Search query.
+        engine: Search engine.
     """
 
     @unique

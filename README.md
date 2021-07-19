@@ -32,7 +32,7 @@ Requirements
 - Getting an OAuth. Learn more in [help](https://yandex.ru/dev/toloka/doc/concepts/access.html?lang=en) and in the image below.
 
 
-![How to get OAuth token](./examples/image_segmentation/img/OAuth.png "How to get OAuth token")
+![How to get OAuth token](https://tlk.s3.yandex.net/toloka-kit/OAuth.png "How to get OAuth token")
 
 Get Started
 --------------

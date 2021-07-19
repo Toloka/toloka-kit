@@ -11,7 +11,8 @@ __all__ = [
     'TrainingSearchResult',
     'UserBonusSearchResult',
     'UserRestrictionSearchResult',
-    'UserSkillSearchResult'
+    'UserSkillSearchResult',
+    'WebhookSubscriptionSearchResult'
 ]
 from typing import Type, List, Optional
 from .aggregation import AggregatedSolution

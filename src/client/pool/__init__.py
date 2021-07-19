@@ -25,7 +25,7 @@ from .mixer_config import MixerConfig
 from .._converter import unstructure
 from ..filter import FilterCondition, FilterOr, FilterAnd
 from ..owner import Owner
-from ..primitives.base import BaseTolokaObject
+from ..primitives.base import attribute, BaseTolokaObject
 from ..quality_control import QualityControl
 from ..util._codegen import codegen_attr_attributes_setters, create_setter, expand
 
@@ -219,13 +219,13 @@ class Pool(BaseTolokaObject):
     owner: Owner
 
     # Readonly
-    id: str
-    status: Status
-    last_close_reason: CloseReason
-    created: datetime.datetime
-    last_started: datetime.datetime
-    last_stopped: datetime.datetime
-    type: Type
+    id: str = attribute(readonly=True)
+    status: Status = attribute(readonly=True)
+    last_close_reason: CloseReason = attribute(readonly=True)
+    created: datetime.datetime = attribute(readonly=True)
+    last_started: datetime.datetime = attribute(readonly=True)
+    last_stopped: datetime.datetime = attribute(readonly=True)
+    type: Type = attribute(readonly=True)
 
     def unstructure(self) -> Optional[dict]:
         self_unstructured_dict = super().unstructure()

@@ -73,8 +73,8 @@ class UserBonus(BaseTolokaObject):
     assignment_id: str
 
     # Readonly
-    id: str
-    created: datetime.datetime
+    id: str = attribute(readonly=True)
+    created: datetime.datetime = attribute(readonly=True)
 
 
 class UserBonusCreateRequestParameters(Parameters):
