@@ -1074,7 +1074,6 @@ class UserSkillSearchRequest(BaseSearchRequest):
     """Parameters for searching user skill
 
     Attributes:
-        name: Skill name.
         user_id: Performer ID.
         skill_id: Skill ID.
         id_lt: Skills with an ID less than the specified value.
@@ -1098,7 +1097,6 @@ class UserSkillSearchRequest(BaseSearchRequest):
 
     def __init__(
         self,
-        name: Optional[str] = None,
         user_id: Optional[str] = None,
         skill_id: Optional[str] = None,
         id_lt: Optional[str] = None,
@@ -1119,7 +1117,6 @@ class UserSkillSearchRequest(BaseSearchRequest):
         ...
 
     _unexpected: Optional[Dict[str, Any]]
-    name: Optional[str]
     user_id: Optional[str]
     skill_id: Optional[str]
     id_lt: Optional[str]

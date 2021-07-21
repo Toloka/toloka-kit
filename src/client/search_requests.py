@@ -654,7 +654,6 @@ class UserSkillSearchRequest(BaseSearchRequest):
     """Parameters for searching user skill
 
     Attributes:
-        name: Skill name.
         user_id: Performer ID.
         skill_id: Skill ID.
         id_lt: Skills with an ID less than the specified value.
@@ -675,8 +674,6 @@ class UserSkillSearchRequest(BaseSearchRequest):
         id: str
         created: datetime.datetime
         modified: datetime.datetime
-
-    name: str
 
     user_id: str
     skill_id: str

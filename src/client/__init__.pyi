@@ -2712,7 +2712,6 @@ class TolokaClient:
     @overload
     def find_user_skills(
         self,
-        name: Optional[str] = None,
         user_id: Optional[str] = None,
         skill_id: Optional[str] = None,
         id_lt: Optional[str] = None,
