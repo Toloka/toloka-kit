@@ -1,3 +1,22 @@
+__all__ = [
+    'BaseViewV1',
+    'ActionButtonViewV1',
+    'AlertViewV1',
+    'AudioViewV1',
+    'CollapseViewV1',
+    'DeviceFrameViewV1',
+    'DividerViewV1',
+    'GroupViewV1',
+    'IframeViewV1',
+    'ImageViewV1',
+    'LabeledListViewV1',
+    'LinkViewV1',
+    'LinkGroupViewV1',
+    'ListViewV1',
+    'MarkdownViewV1',
+    'TextViewV1',
+    'VideoViewV1',
+]
 from enum import Enum
 from toloka.client.project.template_builder.base import (
     BaseComponent,
@@ -588,7 +607,7 @@ class TextViewV1(BaseViewV1):
 
     If you need formatted text, use view.markdown.
     Attributes:
-        content: The text displayed in the block. To insert a new line, use 
+        content: The text displayed in the block. To insert a new line, use
 
         label: Label above the component.
         hint: Hint text.

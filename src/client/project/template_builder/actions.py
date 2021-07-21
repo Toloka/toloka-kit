@@ -7,7 +7,7 @@ __all__ = [
     'PlayPauseActionV1',
     'RotateActionV1',
     'SetActionV1',
-    'ToggleActionV1'
+    'ToggleActionV1',
 ]
 from enum import Enum, unique
 from typing import List, Any

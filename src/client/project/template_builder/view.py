@@ -15,7 +15,7 @@ __all__ = [
     'ListViewV1',
     'MarkdownViewV1',
     'TextViewV1',
-    'VideoViewV1'
+    'VideoViewV1',
 ]
 from enum import Enum, unique
 from typing import List, Any

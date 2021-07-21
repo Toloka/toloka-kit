@@ -1,3 +1,14 @@
+__all__ = [
+    'BaseActionV1',
+    'BulkActionV1',
+    'NotifyActionV1',
+    'OpenCloseActionV1',
+    'OpenLinkActionV1',
+    'PlayPauseActionV1',
+    'RotateActionV1',
+    'SetActionV1',
+    'ToggleActionV1',
+]
 from enum import Enum
 from toloka.client.project.template_builder.base import (
     BaseComponent,

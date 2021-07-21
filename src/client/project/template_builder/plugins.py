@@ -1,5 +1,7 @@
 __all__ = [
     'BasePluginV1',
+    'ImageAnnotationHotkeysPluginV1',
+    'TextAnnotationHotkeysPluginV1',
     'HotkeysPluginV1',
     'TriggerPluginV1',
     'TolokaPluginV1',
@@ -20,6 +22,59 @@ class BasePluginV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):
     """
 
     pass
+
+
+class ImageAnnotationHotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_IMAGE_ANNOTATION_HOTKEYS):
+    """Used to set hotkeys for the field.image-annotation component.
+
+    You can set hotkeys to select area types and selection modes and to confirm or cancel area creation. When setting
+    hotkeys, you can use the up and down arrows (up,down), numbers, and Latin letters.
+
+    Attributes:
+        cancel: Keyboard shortcut for canceling area creation.
+        confirm: Keyboard shortcut for confirming area creation.
+        labels: Keyboard shortcuts for choosing area types. They're assigned to buttons in the order they are shown if
+            you enabled the option to choose multiple area types.
+        modes: Keyboard shortcuts for choosing selection modes.
+    """
+
+    class Mode(BaseTemplate):
+        """
+        Mode
+
+        Attributes:
+            point: Keyboard shortcut for selecting areas using points.
+            polygon: Keyboard shortcut for selecting areas using polygons.
+            rectangle: Keyboard shortcut for selecting areas using rectangles.
+            select: Keyboard shortcut for selecting shapes and points.
+        """
+
+        point: str = attribute(kw_only=True)
+        polygon: str = attribute(kw_only=True)
+        rectangle: str = attribute(kw_only=True)
+        select: str = attribute(kw_only=True)
+
+    cancel: base_component_or(str) = attribute(kw_only=True)
+    confirm: base_component_or(str) = attribute(kw_only=True)
+    labels: base_component_or(List[str], 'ListStr') = attribute(kw_only=True)
+    modes: base_component_or(Mode) = attribute(kw_only=True)
+
+ImageAnnotationHotkeysPluginV1.__init__ = \
+    expand('modes', ImageAnnotationHotkeysPluginV1.Mode)(ImageAnnotationHotkeysPluginV1.__init__)
+
+
+class TextAnnotationHotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TEXT_ANNOTATION_HOTKEYS):
+    """Use this to set keyboard shortcuts for the field.text-annotation component.
+
+    Attributes:
+        labels: Keyboard shortcuts for selecting categories. They're assigned to buttons with categories in the order
+            they're shown.
+        remove: Use this property to allow the performer to deselect an entire line or part of it. The key that you
+            assign to this property will deselect.
+    """
+
+    labels: base_component_or(List[str], 'ListStr')
+    remove: base_component_or(str)
 
 
 class HotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_HOTKEYS):

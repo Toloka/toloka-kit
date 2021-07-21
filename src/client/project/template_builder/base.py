@@ -9,7 +9,7 @@ __all__ = [
     'UnknownComponent',
     'RefComponent',
     'ListDirection',
-    'ListSize'
+    'ListSize',
 ]
 from enum import Enum, unique
 from typing import ClassVar, Type, Optional, Any, Union
@@ -39,6 +39,7 @@ class ComponentType(Enum):
     CONDITION_PLAYED = 'condition.played'
     CONDITION_PLAYED_FULLY = 'condition.played-fully'
     CONDITION_REQUIRED = 'condition.required'
+    CONDITION_SAME_DOMAIN = 'condition.same-domain'
     CONDITION_SCHEMA = 'condition.schema'
     CONDITION_SUB_ARRAY = 'condition.sub-array'
     CONDITION_YANDEX_DISTANCE = '@yandex-toloka/condition.distance'
@@ -63,6 +64,7 @@ class ComponentType(Enum):
     FIELD_RADIO_GROUP = 'field.radio-group'
     FIELD_SELECT = 'field.select'
     FIELD_TEXT = 'field.text'
+    FIELD_TEXT_ANNOTATION = 'field.text-annotation'
     FIELD_TEXTAREA = 'field.textarea'
     HELPER_CONCAT_ARRAYS = 'helper.concat-arrays'
     HELPER_ENTRIES2OBJECT = 'helper.entries2object'
@@ -74,11 +76,15 @@ class ComponentType(Enum):
     HELPER_SWITCH = 'helper.switch'
     HELPER_TEXT_TRANSFORM = 'helper.text-transform'
     HELPER_TRANSFORM = 'helper.transform'
+    HELPER_TRANSLATE = 'helper.translate'
     HELPER_YANDEX_DISK_PROXY = '@yandex-toloka/helper.proxy'
     LAYOUT_BARS = 'layout.bars'
     LAYOUT_COLUMNS = 'layout.columns'
+    LAYOUT_COMPARE = 'layout.compare'
     LAYOUT_SIDE_BY_SIDE = 'layout.side-by-side'
     LAYOUT_SIDEBAR = 'layout.sidebar'
+    PLUGIN_IMAGE_ANNOTATION_HOTKEYS = 'plugin.field.image-annotation.hotkeys'
+    PLUGIN_TEXT_ANNOTATION_HOTKEYS = 'plugin.field.text-annotation.hotkeys'
     PLUGIN_HOTKEYS = 'plugin.hotkeys'
     PLUGIN_TRIGGER = 'plugin.trigger'
     PLUGIN_TOLOKA = 'plugin.toloka'

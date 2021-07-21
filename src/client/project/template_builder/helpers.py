@@ -10,7 +10,8 @@ __all__ = [
     'SwitchHelperV1',
     'TextTransformHelperV1',
     'TransformHelperV1',
-    'YandexDiskProxyHelperV1'
+    'TranslateHelperV1',
+    'YandexDiskProxyHelperV1',
 ]
 from enum import Enum, unique
 from typing import List, Any
@@ -262,6 +263,27 @@ class TransformHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_TRANSFORM)
 
     into: base_component_or(Any)
     items: base_component_or(List[base_component_or(Any)], 'ListBaseComponentOrAny')
+
+
+class TranslateHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_TRANSLATE):
+    """
+    Component for translating interface elements to other languages.
+
+    In the properties that should be displayed in different languages, add:
+
+    {
+      "type": "helper.translate",
+      "key": "<key name>"
+    {
+
+    Adding the key property displays a field for entering the key text. Enter the text in the source language. In the
+    "Translations" step, add translations for the keys in the desired languages.
+
+    Attributes:
+        key: The key for a text property that you will translate to other languages.
+    """
+
+    key: base_component_or(str)
 
 
 class YandexDiskProxyHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_YANDEX_DISK_PROXY):
