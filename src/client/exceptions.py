@@ -18,6 +18,7 @@ import requests
 import attr
 
 from .error_codes import CommonErrorCodes, InternalErrorCodes
+from .util._docstrings import inherit_docstrings
 
 
 # Client errors
@@ -54,14 +55,11 @@ class ApiError(Exception):
     payload: Optional[Any] = None
 
 
+@inherit_docstrings
 class ValidationApiError(ApiError):
     """Field validation error returned from the API Call.
 
     Attributes:
-        status_code: response status code.
-        request_id: request ID
-        code: error code string
-        message: error message
         invalid_fields: the list of the invalid fields
     """
 
@@ -75,34 +73,42 @@ class ValidationApiError(ApiError):
         return self._invalid_fields
 
 
+@inherit_docstrings
 class InternalApiError(ApiError):
     pass
 
 
+@inherit_docstrings
 class AuthenticationApiError(ApiError):
     pass
 
 
+@inherit_docstrings
 class AccessDeniedApiError(ApiError):
     pass
 
 
+@inherit_docstrings
 class RemoteServiceUnavailableApiError(ApiError):
     pass
 
 
+@inherit_docstrings
 class DoesNotExistApiError(ApiError):
     pass
 
 
+@inherit_docstrings
 class ConflictStateApiError(ApiError):
     pass
 
 
+@inherit_docstrings
 class TooManyRequestsApiError(ApiError):
     pass
 
 
+@inherit_docstrings
 class IncorrectActionsApiError(ApiError):
     pass
 

@@ -17,6 +17,7 @@ __all__ = [
 from enum import Enum, unique
 
 from .primitives.base import attribute, BaseTolokaObject
+from .util._docstrings import inherit_docstrings
 
 
 class AnalyticsRequest(BaseTolokaObject, spec_field='subject', spec_enum='Subject'):
@@ -34,6 +35,7 @@ class AnalyticsRequest(BaseTolokaObject, spec_field='subject', spec_enum='Subjec
     subject_id: str = attribute(required=True)
 
 
+@inherit_docstrings
 class PoolAnalyticsRequest(
     AnalyticsRequest,
     spec_value=AnalyticsRequest.Subject.POOL,
@@ -61,6 +63,7 @@ class PoolAnalyticsRequest(
         ESTIMATED_ASSIGNMENTS_COUNT = 'estimated_assignments_count'
 
 
+@inherit_docstrings
 class RealTasksCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.REAL_TASKS_COUNT):
     """The number of tasks in the pool
 
@@ -69,6 +72,7 @@ class RealTasksCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalytics
     pass
 
 
+@inherit_docstrings
 class SubmitedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.SUBMITTED_ASSIGNMENTS_COUNT):
     """Number of assignments in the "submited" status in the pool
 
@@ -79,18 +83,21 @@ class SubmitedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=Poo
     pass
 
 
+@inherit_docstrings
 class SkippedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.SKIPPED_ASSIGNMENTS_COUNT):
     """Number of assignments in the "skipped" status in the pool
     """
     pass
 
 
+@inherit_docstrings
 class RejectedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.REJECTED_ASSIGNMENTS_COUNT):
     """Number of assignments in the "rejected" status in the pool
     """
     pass
 
 
+@inherit_docstrings
 class ApprovedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.APPROVED_ASSIGNMENTS_COUNT):
     """Number of assignments in the "approved" status in the pool
 
@@ -101,36 +108,42 @@ class ApprovedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=Poo
     pass
 
 
+@inherit_docstrings
 class CompletionPercentagePoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.COMPLETION_PERCENTAGE):
     """Approximate percentage of completed tasks in the pool
     """
     pass
 
 
+@inherit_docstrings
 class AvgSubmitAssignmentMillisPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.AVG_SUBMIT_ASSIGNMENT_MILLIS):
     """Average time to complete one task page in milliseconds
     """
     pass
 
 
+@inherit_docstrings
 class SpentBudgetPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.SPENT_BUDGET):
     """How much money has already been spent on this pool, excluding fee
     """
     pass
 
 
+@inherit_docstrings
 class UniqueWorkersCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.UNIQUE_WORKERS_COUNT):
     """The number of unique performers who took tasks from the pool
     """
     pass
 
 
+@inherit_docstrings
 class UniqueSubmittersCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.UNIQUE_SUBMITTERS_COUNT):
     """The number of unique performers who have submitted to the pool
     """
     pass
 
 
+@inherit_docstrings
 class ActiveWorkersByFilterCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.ACTIVE_WORKERS_BY_FILTER_COUNT):
     """The number of active performers matching the pool filters for the last hours
 
@@ -140,6 +153,7 @@ class ActiveWorkersByFilterCountPoolAnalytics(PoolAnalyticsRequest, spec_value=P
     interval_hours: int = attribute(required=True)
 
 
+@inherit_docstrings
 class EstimatedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.ESTIMATED_ASSIGNMENTS_COUNT):
     """The approximate number of responses to task pages.
     """

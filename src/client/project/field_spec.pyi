@@ -478,7 +478,7 @@ class ArrayCoordinatesSpec(CoordinatesSpec):
         required: Whether the object or input field is required
         hidden: Whether or not to hide the input value field from the user
         current_location: put the user's current coordinates in the field (true/false).
-            Used in tasks for the mobile app
+            Used in tasks for the mobile app.
         min_size: Minimum number of elements in the array
         max_size: Maximum number of elements in the array
     """

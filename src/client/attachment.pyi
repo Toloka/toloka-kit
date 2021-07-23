@@ -77,6 +77,14 @@ class Attachment(BaseTolokaObject):
 
 class AssignmentAttachment(Attachment):
     """Assignment Attachment.
+
+    Attributes:
+        id: File ID.
+        name: File name.
+        details: Infomation about the pool, the task, and the user who uploaded the file.
+        created: Date the file was uploaded to Toloka.
+        media_type: MIME data type.
+        owner: Owner
     """
 
     def __init__(

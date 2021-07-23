@@ -42,6 +42,7 @@ from .primitives.operators import (
     ComparableConditionMixin,
     InclusionConditionMixin,
 )
+from .util._docstrings import inherit_docstrings
 
 
 class FilterCondition(BaseTolokaObject):
@@ -153,12 +154,9 @@ class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
         return super(FilterCondition, cls).structure(data)
 
 
+@inherit_docstrings
 class Profile(Condition, spec_value=Condition.Category.PROFILE, spec_field='key', spec_enum='Key'):
     """Use to select users based on profile data.
-
-    Attributes:
-        operator: Comparison operator in the condition.
-        value: Attribute value from the field key.
     """
 
     @unique
@@ -176,12 +174,9 @@ class Profile(Condition, spec_value=Condition.Category.PROFILE, spec_field='key'
         LANGUAGES = 'languages'
 
 
+@inherit_docstrings
 class Computed(Condition, spec_value=Condition.Category.COMPUTED, spec_field='key', spec_enum='Key'):
     """Use to select users based on data received or calculated by Toloka.
-
-    Attributes:
-        operator: Comparison operator in the condition.
-        value: Attribute value from the field key.
     """
 
     @unique
@@ -224,6 +219,7 @@ class Skill(StatefulComparableConditionMixin, Condition, order=False, eq=False, 
     value: Optional[float] = attribute(default=None, required=True)
 
 
+@inherit_docstrings
 class Gender(Profile, IdentityConditionMixin, spec_value=Profile.Key.GENDER):
     """Use to select users by gender.
 
@@ -245,6 +241,7 @@ class Gender(Profile, IdentityConditionMixin, spec_value=Profile.Key.GENDER):
     value: Gender = attribute(required=True)
 
 
+@inherit_docstrings
 class Country(Profile, IdentityConditionMixin, spec_value=Profile.Key.COUNTRY):
     """Use to select users by country.
 
@@ -255,6 +252,7 @@ class Country(Profile, IdentityConditionMixin, spec_value=Profile.Key.COUNTRY):
     value: str = attribute(required=True)  # ISO 3166-1 alpha-2
 
 
+@inherit_docstrings
 class Citizenship(Profile, IdentityConditionMixin, spec_value=Profile.Key.CITIZENSHIP):
     """Use to select users by citizenship.
 
@@ -265,6 +263,7 @@ class Citizenship(Profile, IdentityConditionMixin, spec_value=Profile.Key.CITIZE
     value: str = attribute(required=True)  # ISO 3166-1 alpha-2
 
 
+@inherit_docstrings
 class Education(Profile, IdentityConditionMixin, spec_value=Profile.Key.EDUCATION):
     """Use to select users by education.
 
@@ -288,6 +287,7 @@ class Education(Profile, IdentityConditionMixin, spec_value=Profile.Key.EDUCATIO
     value: Education = attribute(required=True)
 
 
+@inherit_docstrings
 class AdultAllowed(Profile, IdentityConditionMixin, spec_value=Profile.Key.ADULT_ALLOWED):
     """Use to select users by their agreement to perform tasks that contain adult content.
 
@@ -298,6 +298,7 @@ class AdultAllowed(Profile, IdentityConditionMixin, spec_value=Profile.Key.ADULT
     value: bool = attribute(required=True)
 
 
+@inherit_docstrings
 class DateOfBirth(Profile, ComparableConditionMixin, spec_value=Profile.Key.DATE_OF_BIRTH):
     """Use to select users by date of birth.
 
@@ -308,6 +309,7 @@ class DateOfBirth(Profile, ComparableConditionMixin, spec_value=Profile.Key.DATE
     value: int = attribute(required=True)
 
 
+@inherit_docstrings
 class City(Profile, InclusionConditionMixin, spec_value=Profile.Key.CITY):
     """Use to select users by city.
 
@@ -318,6 +320,7 @@ class City(Profile, InclusionConditionMixin, spec_value=Profile.Key.CITY):
     value: int = attribute(required=True)
 
 
+@inherit_docstrings
 class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAGES):
     """Use to select users by languages specified by the user in the profile.
 
@@ -328,6 +331,7 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
     value: Union[str, List[str]] = attribute(required=True)
 
 
+@inherit_docstrings
 class RegionByPhone(Computed, InclusionConditionMixin, spec_value=Computed.Key.REGION_BY_PHONE):
     """Use to select users by their region determined by the mobile phone number.
 
@@ -338,6 +342,7 @@ class RegionByPhone(Computed, InclusionConditionMixin, spec_value=Computed.Key.R
     value: int = attribute(required=True)
 
 
+@inherit_docstrings
 class RegionByIp(Computed, InclusionConditionMixin, spec_value=Computed.Key.REGION_BY_IP):
     """Use to select users by their region determined by IP address.
 
@@ -348,6 +353,7 @@ class RegionByIp(Computed, InclusionConditionMixin, spec_value=Computed.Key.REGI
     value: int = attribute(required=True)
 
 
+@inherit_docstrings
 class DeviceCategory(Computed, IdentityConditionMixin, spec_value=Computed.Key.DEVICE_CATEGORY):
     """Use to select users by their device category.
 
@@ -373,6 +379,7 @@ class DeviceCategory(Computed, IdentityConditionMixin, spec_value=Computed.Key.D
     value: DeviceCategory = attribute(required=True)
 
 
+@inherit_docstrings
 class ClientType(Computed, IdentityConditionMixin, spec_value=Computed.Key.CLIENT_TYPE):
     """Use to select users by their application type.
 
@@ -391,6 +398,7 @@ class ClientType(Computed, IdentityConditionMixin, spec_value=Computed.Key.CLIEN
     value: ClientType = attribute(required=True)
 
 
+@inherit_docstrings
 class OSFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.OS_FAMILY):
     """Use to select users by their OS family.
 
@@ -424,6 +432,7 @@ class OSFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.OS_FAMI
     value: OSFamily = attribute(required=True)
 
 
+@inherit_docstrings
 class OSVersion(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION):
     """Use to select users by OS full version.
 
@@ -435,6 +444,7 @@ class OSVersion(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_V
     value: float = attribute(required=True)
 
 
+@inherit_docstrings
 class OSVersionMajor(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION_MAJOR):
     """Use to select users by OS major version.
 
@@ -446,6 +456,7 @@ class OSVersionMajor(Computed, ComparableConditionMixin, spec_value=Computed.Key
     value: int = attribute(required=True)
 
 
+@inherit_docstrings
 class OSVersionMinor(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION_MINOR):
     """Use to select users by OS minor version.
 
@@ -457,6 +468,7 @@ class OSVersionMinor(Computed, ComparableConditionMixin, spec_value=Computed.Key
     value: int = attribute(required=True)
 
 
+@inherit_docstrings
 class OSVersionBugfix(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION_BUGFIX):
     """Use to select users by build number (bugfix version) of the operating system.
 
@@ -468,6 +480,7 @@ class OSVersionBugfix(Computed, ComparableConditionMixin, spec_value=Computed.Ke
     value: int = attribute(required=True)
 
 
+@inherit_docstrings
 class UserAgentType(Computed, IdentityConditionMixin, spec_value=Computed.Key.USER_AGENT_TYPE):
     """Use to select users by user agent type:
 
@@ -491,6 +504,7 @@ class UserAgentType(Computed, IdentityConditionMixin, spec_value=Computed.Key.US
     value: UserAgentType = attribute(required=True)
 
 
+@inherit_docstrings
 class UserAgentFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.USER_AGENT_FAMILY):
     """Use to select users by user agent family.
 
@@ -530,6 +544,7 @@ class UserAgentFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.
     value: UserAgentFamily = attribute(required=True)
 
 
+@inherit_docstrings
 class UserAgentVersion(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION):
     """Use to select users by full browser version.
 
@@ -540,6 +555,7 @@ class UserAgentVersion(Computed, ComparableConditionMixin, spec_value=Computed.K
     value: float
 
 
+@inherit_docstrings
 class UserAgentVersionMajor(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION_MAJOR):
     """Use to select users by major browser version.
 
@@ -550,6 +566,7 @@ class UserAgentVersionMajor(Computed, ComparableConditionMixin, spec_value=Compu
     value: int
 
 
+@inherit_docstrings
 class UserAgentVersionMinor(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION_MINOR):
     """Use to select users by minor browser version.
 
@@ -560,6 +577,7 @@ class UserAgentVersionMinor(Computed, ComparableConditionMixin, spec_value=Compu
     value: int
 
 
+@inherit_docstrings
 class UserAgentVersionBugfix(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION_BUGFIX):
     """Use to select users by build number (bugfix version) of the browser.
 
@@ -570,6 +588,7 @@ class UserAgentVersionBugfix(Computed, ComparableConditionMixin, spec_value=Comp
     value: int
 
 
+@inherit_docstrings
 class Rating(Computed, ComparableConditionMixin, spec_value=Computed.Key.RATING):
     """Use to select users by user rating.
 

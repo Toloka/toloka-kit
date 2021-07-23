@@ -22,6 +22,7 @@ from enum import Enum, unique
 from typing import Any, Dict, List
 
 from .primitives.base import BaseTolokaObject
+from .util._docstrings import inherit_docstrings
 
 
 @unique
@@ -71,6 +72,7 @@ class TaskAggregatedSolutionRequest(BaseTolokaObject, spec_field='type', spec_en
     pool_id: str
 
 
+@inherit_docstrings
 class WeightedDynamicOverlapTaskAggregatedSolutionRequest(
     TaskAggregatedSolutionRequest,
     spec_value=AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP

@@ -23,6 +23,7 @@ from enum import Enum, unique
 from typing import Any, ClassVar
 
 from .primitives.base import BaseTolokaObject
+from .util._docstrings import inherit_docstrings
 
 
 @unique
@@ -108,6 +109,7 @@ class Operation(BaseTolokaObject, spec_enum=OperationType, spec_field='type'):
 # Analytics operations
 
 
+@inherit_docstrings
 class AnalyticsOperation(Operation, spec_value=OperationType.ANALYTICS):
     """Operation returned when requesting analytics via TolokaClient.get_analytics()
     """
@@ -118,6 +120,7 @@ class AnalyticsOperation(Operation, spec_value=OperationType.ANALYTICS):
 # Pool operations
 
 
+@inherit_docstrings
 class PoolOperation(Operation):
     """Base class for all operations on pool
 
@@ -131,6 +134,7 @@ class PoolOperation(Operation):
     parameters: Parameters
 
 
+@inherit_docstrings
 class PoolArchiveOperation(PoolOperation, spec_value=OperationType.POOL_ARCHIVE):
     """Operation returned by an asynchronous archive pool via TolokaClient.archive_pool_async()
     """
@@ -138,6 +142,7 @@ class PoolArchiveOperation(PoolOperation, spec_value=OperationType.POOL_ARCHIVE)
     pass
 
 
+@inherit_docstrings
 class PoolCloneOperation(PoolOperation, spec_value=OperationType.POOL_CLONE):
     """Operation returned by an asynchronous cloning pool via TolokaClient.clone_pool_async()
 
@@ -155,6 +160,7 @@ class PoolCloneOperation(PoolOperation, spec_value=OperationType.POOL_CLONE):
     details: Details
 
 
+@inherit_docstrings
 class PoolCloseOperation(PoolOperation, spec_value=OperationType.POOL_CLOSE):
     """Operation returned by an asynchronous closing pool via TolokaClient.close_pool_async()
     """
@@ -162,6 +168,7 @@ class PoolCloseOperation(PoolOperation, spec_value=OperationType.POOL_CLOSE):
     pass
 
 
+@inherit_docstrings
 class PoolOpenOperation(PoolOperation, spec_value=OperationType.POOL_OPEN):
     """Operation returned by an asynchronous opening pool via TolokaClient.open_pool_async()
     """
@@ -172,6 +179,7 @@ class PoolOpenOperation(PoolOperation, spec_value=OperationType.POOL_OPEN):
 # Training operations
 
 
+@inherit_docstrings
 class TrainingOperation(Operation):
     """Base class for all operations on training pool
 
@@ -185,6 +193,7 @@ class TrainingOperation(Operation):
     parameters: Parameters
 
 
+@inherit_docstrings
 class TrainingArchiveOperation(TrainingOperation, spec_value=OperationType.TRAINING_ARCHIVE):
     """Operation returned by an asynchronous archive training pool via TolokaClient.archive_training_async()
     """
@@ -192,6 +201,7 @@ class TrainingArchiveOperation(TrainingOperation, spec_value=OperationType.TRAIN
     pass
 
 
+@inherit_docstrings
 class TrainingCloneOperation(TrainingOperation, spec_value=OperationType.TRAINING_CLONE):
     """Operation returned by an asynchronous cloning training pool via TolokaClient.clone_training_async()
 
@@ -209,6 +219,7 @@ class TrainingCloneOperation(TrainingOperation, spec_value=OperationType.TRAININ
     details: Details
 
 
+@inherit_docstrings
 class TrainingCloseOperation(TrainingOperation, spec_value=OperationType.TRAINING_CLOSE):
     """Operation returned by an asynchronous closing training pool via TolokaClient.close_training_async()
     """
@@ -216,6 +227,7 @@ class TrainingCloseOperation(TrainingOperation, spec_value=OperationType.TRAININ
     pass
 
 
+@inherit_docstrings
 class TrainingOpenOperation(TrainingOperation, spec_value=OperationType.TRAINING_OPEN):
     """Operation returned by an asynchronous opening training pool via TolokaClient.open_training_async()
     """
@@ -226,6 +238,7 @@ class TrainingOpenOperation(TrainingOperation, spec_value=OperationType.TRAINING
 # Project operations
 
 
+@inherit_docstrings
 class ProjectArchiveOperation(Operation, spec_value=OperationType.PROJECT_ARCHIVE):
     """Operation returned by an asynchronous archive project via TolokaClient.archive_project_async()
 
@@ -242,6 +255,7 @@ class ProjectArchiveOperation(Operation, spec_value=OperationType.PROJECT_ARCHIV
 # Task operations
 
 
+@inherit_docstrings
 class TasksCreateOperation(Operation, spec_value=OperationType.TASK_BATCH_CREATE):
     """Operation returned by an asynchronous creating tasks via TolokaClient.create_tasks_async()
 
@@ -272,6 +286,7 @@ class TasksCreateOperation(Operation, spec_value=OperationType.TASK_BATCH_CREATE
 # TaskSuit operations
 
 
+@inherit_docstrings
 class TaskSuiteCreateBatchOperation(Operation, spec_value=OperationType.TASK_SUITE_BATCH_CREATE):
     """Operation returned by an asynchronous creating TaskSuite's via TolokaClient.create_task_suites_async()
 
@@ -301,6 +316,7 @@ class TaskSuiteCreateBatchOperation(Operation, spec_value=OperationType.TASK_SUI
 # Aggregation
 
 
+@inherit_docstrings
 class AggregatedSolutionOperation(Operation, spec_value=OperationType.SOLUTION_AGGREGATE):
     """Operation returned by an asynchronous aggregation responses in pool via TolokaClient.aggregate_solutions_by_pool()
 
@@ -317,6 +333,7 @@ class AggregatedSolutionOperation(Operation, spec_value=OperationType.SOLUTION_A
 # UserBonus
 
 
+@inherit_docstrings
 class UserBonusCreateBatchOperation(Operation, spec_value=OperationType.USER_BONUS_BATCH_CREATE):
     """Operation returned by an asynchronous creating user bonuses via TolokaClient.create_user_bonuses_async()
 

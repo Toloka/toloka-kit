@@ -107,6 +107,7 @@ class UserBonusBatchCreateResult(BaseTolokaObject):
 
 class WebhookSubscriptionBatchCreateResult(BaseTolokaObject):
     """The list with the results of the webhook-subscriptions creation operation.
+
     Attributes:
         items: Object with created webhook-subscriptions.
         validation_errors: Object with validation errors.

@@ -298,7 +298,7 @@ class ChangeOverlap(RuleAction):
 
 
 class SetSkill(RuleAction):
-    """Set perfmer skill value
+    """Set performer skill value
 
     Attributes:
         parameters.skill_id: ID of the skill to update.

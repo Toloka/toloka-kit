@@ -66,6 +66,7 @@ class ValidationApiError(ApiError):
         request_id: request ID
         code: error code string
         message: error message
+        payload: additional payload
         invalid_fields: the list of the invalid fields
     """
 
@@ -78,6 +79,14 @@ class ValidationApiError(ApiError):
 
 
 class InternalApiError(ApiError):
+    """Attributes:
+        status_code: response status code.
+        request_id: request ID
+        code: error code string
+        message: error message
+        payload: additional payload
+    """
+
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
@@ -86,6 +95,14 @@ class InternalApiError(ApiError):
 
 
 class AuthenticationApiError(ApiError):
+    """Attributes:
+        status_code: response status code.
+        request_id: request ID
+        code: error code string
+        message: error message
+        payload: additional payload
+    """
+
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
@@ -94,6 +111,14 @@ class AuthenticationApiError(ApiError):
 
 
 class AccessDeniedApiError(ApiError):
+    """Attributes:
+        status_code: response status code.
+        request_id: request ID
+        code: error code string
+        message: error message
+        payload: additional payload
+    """
+
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
@@ -102,6 +127,14 @@ class AccessDeniedApiError(ApiError):
 
 
 class RemoteServiceUnavailableApiError(ApiError):
+    """Attributes:
+        status_code: response status code.
+        request_id: request ID
+        code: error code string
+        message: error message
+        payload: additional payload
+    """
+
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
@@ -110,6 +143,14 @@ class RemoteServiceUnavailableApiError(ApiError):
 
 
 class DoesNotExistApiError(ApiError):
+    """Attributes:
+        status_code: response status code.
+        request_id: request ID
+        code: error code string
+        message: error message
+        payload: additional payload
+    """
+
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
@@ -118,6 +159,14 @@ class DoesNotExistApiError(ApiError):
 
 
 class ConflictStateApiError(ApiError):
+    """Attributes:
+        status_code: response status code.
+        request_id: request ID
+        code: error code string
+        message: error message
+        payload: additional payload
+    """
+
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
@@ -126,6 +175,14 @@ class ConflictStateApiError(ApiError):
 
 
 class TooManyRequestsApiError(ApiError):
+    """Attributes:
+        status_code: response status code.
+        request_id: request ID
+        code: error code string
+        message: error message
+        payload: additional payload
+    """
+
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]
@@ -134,6 +191,14 @@ class TooManyRequestsApiError(ApiError):
 
 
 class IncorrectActionsApiError(ApiError):
+    """Attributes:
+        status_code: response status code.
+        request_id: request ID
+        code: error code string
+        message: error message
+        payload: additional payload
+    """
+
     status_code: Optional[int]
     request_id: Optional[str]
     code: Optional[str]

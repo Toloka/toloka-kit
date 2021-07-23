@@ -14,6 +14,7 @@ from uuid import UUID
 from .primitives.base import attribute, BaseTolokaObject
 from .primitives.infinite_overlap import InfiniteOverlapParametersMixin
 from .primitives.parameter import Parameters
+from .util._docstrings import inherit_docstrings
 
 
 class BaseTask(BaseTolokaObject):
@@ -61,6 +62,7 @@ class BaseTask(BaseTolokaObject):
     origin_task_id: str = attribute(readonly=True)
 
 
+@inherit_docstrings
 class Task(InfiniteOverlapParametersMixin, BaseTask):
     """The task that will be issued to the performers
 
@@ -123,10 +125,12 @@ class CreateTaskParameters(Parameters):
     open_pool: bool
 
 
+@inherit_docstrings
 class CreateTaskAsyncParameters(CreateTaskParameters):
     operation_id: UUID
 
 
+@inherit_docstrings
 class CreateTasksParameters(CreateTaskParameters):
     """Parameters for Tasks creation controlling
 
@@ -163,6 +167,7 @@ class TaskOverlapPatch(BaseTolokaObject):
     infinite_overlap: bool
 
 
+@inherit_docstrings
 class TaskPatch(TaskOverlapPatch):
     """Parameters for changing overlap or baseline_solutions of a specific Task
 

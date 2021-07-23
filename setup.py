@@ -34,6 +34,7 @@ setup(
         'urllib3',
         'pandas',
         'simplejson',
+        'docstring-parser'
     ],
     extras_require={'dev': ['requests-mock']},
     include_package_data=True,

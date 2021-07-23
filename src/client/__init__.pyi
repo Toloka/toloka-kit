@@ -3848,8 +3848,8 @@ class TolokaClient:
             UserRestriction: The next object corresponding to the request parameters.
 
         Example:
-        >>> results_list = [restriction for restriction in toloka_client.get_user_restrictions(scope='ALL_PROJECTS')]
-        ...
+            >>> results_list = [restriction for restriction in toloka_client.get_user_restrictions(scope='ALL_PROJECTS')]
+            ...
         """
         ...
 
@@ -3867,8 +3867,8 @@ class TolokaClient:
             UserRestriction: The next object corresponding to the request parameters.
 
         Example:
-        >>> results_list = [restriction for restriction in toloka_client.get_user_restrictions(scope='ALL_PROJECTS')]
-        ...
+            >>> results_list = [restriction for restriction in toloka_client.get_user_restrictions(scope='ALL_PROJECTS')]
+            ...
         """
         ...
 

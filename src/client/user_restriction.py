@@ -10,6 +10,7 @@ import datetime
 from enum import unique, Enum
 
 from .primitives.base import attribute, BaseTolokaObject
+from .util._docstrings import inherit_docstrings
 
 
 @unique
@@ -80,6 +81,7 @@ class UserRestriction(BaseTolokaObject, spec_enum='Scope', spec_field='scope'):
     created: datetime.datetime = attribute(readonly=True)
 
 
+@inherit_docstrings
 class AllProjectsUserRestriction(UserRestriction, spec_value=UserRestriction.ALL_PROJECTS):
     """Forbid the performer from doing tasks from all your projects
     """
@@ -87,6 +89,7 @@ class AllProjectsUserRestriction(UserRestriction, spec_value=UserRestriction.ALL
     pass
 
 
+@inherit_docstrings
 class PoolUserRestriction(UserRestriction, spec_value=UserRestriction.POOL):
     """Forbid the performer from doing tasks from a specific pool
 
@@ -97,6 +100,7 @@ class PoolUserRestriction(UserRestriction, spec_value=UserRestriction.POOL):
     pool_id: str
 
 
+@inherit_docstrings
 class ProjectUserRestriction(UserRestriction, spec_value=UserRestriction.PROJECT):
     """Forbid the performer from doing tasks from a specific project
 
@@ -107,6 +111,7 @@ class ProjectUserRestriction(UserRestriction, spec_value=UserRestriction.PROJECT
     project_id: str
 
 
+@inherit_docstrings
 class SystemUserRestriction(UserRestriction, spec_value=UserRestriction.SYSTEM):
     """DEPRECATED
     """
