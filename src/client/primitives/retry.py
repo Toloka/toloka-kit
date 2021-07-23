@@ -49,7 +49,7 @@ class TolokaRetry(Retry):
         kwargs['last_response'] = self._last_response
         return super(TolokaRetry, self).new(retry_quotas=self._retry_quotas, **kwargs)
 
-    def get_retry_after(self, response: "HTTPResponse") -> Optional[float]:
+    def get_retry_after(self, response: HTTPResponse) -> Optional[float]:
         seconds = super(TolokaRetry, self).get_retry_after(response)
         if seconds is not None:
             return seconds

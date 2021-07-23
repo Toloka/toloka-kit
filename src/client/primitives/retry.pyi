@@ -1,11 +1,10 @@
+from requests.packages.urllib3.response import HTTPResponse
+from requests.packages.urllib3.util.retry import Retry
 from typing import (
     List,
     Optional,
     Union
 )
-from urllib3.util.retry import Retry  # type: ignore
-from urllib3.response import HTTPResponse  # type: ignore
-
 
 class TolokaRetry(Retry):
     """Retry toloka quotas. By default only minutes quotas.

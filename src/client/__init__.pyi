@@ -54,6 +54,7 @@ from datetime import (
 from decimal import Decimal
 from enum import Enum
 from pandas.core.frame import DataFrame
+from requests.packages.urllib3.util.retry import Retry
 from toloka.client.aggregation import (
     AggregatedSolution,
     AggregatedSolutionType,
@@ -187,7 +188,6 @@ from typing import (
     Union,
     overload
 )
-from urllib3.util.retry import Retry  # type: ignore
 from uuid import UUID
 
 class TolokaClient:
