@@ -398,12 +398,32 @@ class AssignmentSearchRequest(BaseSearchRequest):
         submitted_lte: Task suites completed before or on the specified date.
         submitted_gt: Task suites completed after the specified date.
         submitted_gte: Task suites completed after or on the specified date.
+        accepted_lt: Task suites accepted before the specified date.
+        accepted_lte: Task suites accepted before or on the specified date.
+        accepted_gt: Task suites accepted after the specified date.
+        accepted_gte: Task suites accepted after or on the specified date.
+        rejected_lt: Task suites rejected before the specified date.
+        rejected_lte: Task suites rejected before or on the specified date.
+        rejected_gt: Task suites rejected after the specified date.
+        rejected_gte: Task suites rejected after or on the specified date.
+        skipped_lt: Task suites skipped before the specified date.
+        skipped_lte: Task suites skipped before or on the specified date.
+        skipped_gt: Task suites skipped after the specified date.
+        skipped_gte: Task suites skipped after or on the specified date.
+        expired_lt: Task suites expired before the specified date.
+        expired_lte: Task suites expired before or on the specified date.
+        expired_gt: Task suites expired after the specified date.
+        expired_gte: Task suites expired after or on the specified date.
     """
 
     class CompareFields:
         id: str
         created: datetime.datetime
         submitted: datetime.datetime
+        accepted: datetime.datetime
+        rejected: datetime.datetime
+        skipped: datetime.datetime
+        expired: datetime.datetime
 
     def _list_converter(value: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]]):
         if value is None:
@@ -434,7 +454,7 @@ class AssignmentSearchRequest(BaseSearchRequest):
 
 
 AssignmentSortItems = BaseSortItems.for_fields(
-    'AssignmentSortItems', ['id', 'created', 'submitted'],
+    'AssignmentSortItems', ['id', 'created', 'submitted', 'accepted', 'rejected', 'skipped', 'expired'],
     # docstring
     """Parameters for sorting assignment search results
 
