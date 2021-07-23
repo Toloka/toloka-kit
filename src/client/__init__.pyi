@@ -208,7 +208,7 @@ class TolokaClient:
             * PRODUCTION: Production version of Toloka for requesters. You spend money and get result.
         retries: Retry policy. You can use the following types:
             * int - The number of retries for all requests. In this case, the retry policy is created automatically.
-            * Retry - Fully specified retry policy that will apply to all requests.
+            * Retry - Deprecated. Use retryer_factory instead. Fully specified retry policy that will apply to all requests.
         timeout: Same as timeout in Requests. The connect timeout is the number of seconds Requests will wait for your client
             to establish a connection to a remote machine call on the socket.
             * If you specify a single value for the timeout, it will be applied to both the connect and the read timeouts.
@@ -222,6 +222,7 @@ class TolokaClient:
             * MIN - Retry minutes quotas.
             * HOUR - Retry hourly quotas. This is means that the program just sleeps for an hour! Be careful.
             * DAY - Retry daily quotas. We strongly not recommended retrying these quotas.
+        retryer_factory: Factory that creates Retry object.
 
     Example:
         How to create TolokaClient instance and make your first request to Toloka.
@@ -247,7 +248,8 @@ class TolokaClient:
         retries: Union[int, Retry] = 3,
         timeout: Union[float, Tuple[float, float]] = ...,
         url: Optional[str] = None,
-        retry_quotas: Union[List[str], str, None] = 'MIN'
+        retry_quotas: Union[List[str], str, None] = 'MIN',
+        retryer_factory: Optional[Callable[[], Retry]] = None,
     ): ...
 
     def accept_assignment(
