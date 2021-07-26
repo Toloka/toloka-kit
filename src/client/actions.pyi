@@ -1,3 +1,14 @@
+__all__ = [
+    'RuleType',
+    'RuleAction',
+    'Restriction',
+    'RestrictionV2',
+    'SetSkillFromOutputField',
+    'ChangeOverlap',
+    'SetSkill',
+    'RejectAllAssignments',
+    'ApproveAllAssignments',
+]
 from enum import Enum
 from toloka.client.conditions import RuleConditionKey
 from toloka.client.user_restriction import (

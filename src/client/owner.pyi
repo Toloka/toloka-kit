@@ -1,3 +1,6 @@
+__all__ = [
+    'Owner',
+]
 from toloka.client.primitives.base import BaseTolokaObject
 from typing import (
     Any,

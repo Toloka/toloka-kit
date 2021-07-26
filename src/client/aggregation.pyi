@@ -1,3 +1,10 @@
+__all__ = [
+    'AggregatedSolutionType',
+    'PoolAggregatedSolutionRequest',
+    'TaskAggregatedSolutionRequest',
+    'WeightedDynamicOverlapTaskAggregatedSolutionRequest',
+    'AggregatedSolution',
+]
 """Module for aggregating results
 
 For example, when you need to decide whether a cat or a dog is in the picture, and you ask more than one performers.

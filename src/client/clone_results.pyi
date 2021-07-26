@@ -1,3 +1,6 @@
+__all__ = [
+    'CloneResults',
+]
 from toloka.client.pool import Pool
 from toloka.client.project import Project
 from toloka.client.training import Training

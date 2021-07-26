@@ -1,3 +1,8 @@
+__all__ = [
+    'ViewSpec',
+    'ClassicViewSpec',
+    'TemplateBuilderViewSpec',
+]
 from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.project.template_builder import TemplateBuilder

@@ -1,3 +1,12 @@
+__all__ = [
+    'RecipientsSelectType',
+    'Folder',
+    'Interlocutor',
+    'MessageThread',
+    'MessageThreadReply',
+    'MessageThreadFolders',
+    'MessageThreadCompose',
+]
 from datetime import datetime
 from enum import Enum
 from toloka.client.filter import FilterCondition

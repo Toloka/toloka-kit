@@ -1,5 +1,4 @@
 __all__ = [
-
     'actions',
     'base',
     'conditions',
@@ -9,7 +8,6 @@ __all__ = [
     'layouts',
     'plugins',
     'view',
-
     'TemplateBuilder',
     'get_input_and_output',
     'BulkActionV1',

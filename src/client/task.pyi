@@ -1,3 +1,12 @@
+__all__ = [
+    'BaseTask',
+    'Task',
+    'CreateTaskParameters',
+    'CreateTaskAsyncParameters',
+    'CreateTasksParameters',
+    'TaskOverlapPatch',
+    'TaskPatch',
+]
 from datetime import datetime
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.primitives.infinite_overlap import InfiniteOverlapParametersMixin

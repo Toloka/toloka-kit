@@ -607,7 +607,7 @@ class TextViewV1(BaseViewV1):
 
     If you need formatted text, use view.markdown.
     Attributes:
-        content: The text displayed in the block. To insert a new line, use
+        content: The text displayed in the block. To insert a new line, use 
 
         label: Label above the component.
         hint: Hint text.

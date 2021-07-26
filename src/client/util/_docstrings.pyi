@@ -1,12 +1,7 @@
-import docstring_parser
-
-from io import StringIO
-from collections import OrderedDict
+__all__ = [
+    'inherit_docstrings',
+]
 from typing import (
-    Any,
-    Collection,
-    Dict,
-    List,
     Type,
     TypeVar
 )

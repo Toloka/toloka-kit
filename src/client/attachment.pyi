@@ -1,3 +1,7 @@
+__all__ = [
+    'Attachment',
+    'AssignmentAttachment',
+]
 from datetime import datetime
 from enum import Enum
 from toloka.client.owner import Owner

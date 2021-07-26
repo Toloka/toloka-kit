@@ -1,3 +1,22 @@
+__all__ = [
+    'FieldType',
+    'FieldSpec',
+    'BooleanSpec',
+    'StringSpec',
+    'IntegerSpec',
+    'FloatSpec',
+    'UrlSpec',
+    'FileSpec',
+    'CoordinatesSpec',
+    'JsonSpec',
+    'ArrayBooleanSpec',
+    'ArrayStringSpec',
+    'ArrayIntegerSpec',
+    'ArrayFloatSpec',
+    'ArrayUrlSpec',
+    'ArrayFileSpec',
+    'ArrayCoordinatesSpec',
+]
 from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
 from typing import (

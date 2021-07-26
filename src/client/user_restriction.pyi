@@ -1,3 +1,11 @@
+__all__ = [
+    'DurationUnit',
+    'UserRestriction',
+    'AllProjectsUserRestriction',
+    'PoolUserRestriction',
+    'ProjectUserRestriction',
+    'SystemUserRestriction',
+]
 from datetime import datetime
 from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject

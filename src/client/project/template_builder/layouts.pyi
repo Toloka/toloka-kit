@@ -1,6 +1,5 @@
 __all__ = [
     'BaseLayoutV1',
-
     'BarsLayoutV1',
     'ColumnsLayoutV1',
     'CompareLayoutItem',
@@ -8,7 +7,6 @@ __all__ = [
     'SideBySideLayoutV1',
     'SidebarLayoutV1',
 ]
-
 from enum import Enum
 from toloka.client.project.template_builder.base import (
     BaseComponent,

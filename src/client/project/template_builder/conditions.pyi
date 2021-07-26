@@ -1,6 +1,5 @@
 __all__ = [
     'BaseConditionV1',
-
     'AllConditionV1',
     'AnyConditionV1',
     'DistanceConditionV1',

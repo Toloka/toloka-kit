@@ -1,3 +1,17 @@
+__all__ = [
+    'SpecClassIdentificationError',
+    'ApiError',
+    'ValidationApiError',
+    'InternalApiError',
+    'AuthenticationApiError',
+    'AccessDeniedApiError',
+    'RemoteServiceUnavailableApiError',
+    'DoesNotExistApiError',
+    'ConflictStateApiError',
+    'TooManyRequestsApiError',
+    'IncorrectActionsApiError',
+    'raise_on_api_error',
+]
 from requests.models import Response
 from typing import (
     Any,

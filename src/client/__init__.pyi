@@ -29,7 +29,6 @@ __all__ = [
     'user_restriction',
     'user_skill',
     'webhook_subscription',
-
     'TolokaClient',
     'Assignment',
     'Attachment',
@@ -46,6 +45,36 @@ __all__ = [
     'Pool',
     'Project',
 ]
+import toloka.client.actions
+import toloka.client.aggregation
+import toloka.client.analytics_request
+import toloka.client.assignment
+import toloka.client.attachment
+import toloka.client.batch_create_results
+import toloka.client.clone_results
+import toloka.client.collectors
+import toloka.client.conditions
+import toloka.client.error_codes
+import toloka.client.exceptions
+import toloka.client.filter
+import toloka.client.message_thread
+import toloka.client.operation_log
+import toloka.client.operations
+import toloka.client.owner
+import toloka.client.quality_control
+import toloka.client.requester
+import toloka.client.search_requests
+import toloka.client.search_results
+import toloka.client.skill
+import toloka.client.solution
+import toloka.client.task
+import toloka.client.task_distribution_function
+import toloka.client.task_suite
+import toloka.client.training
+import toloka.client.user_bonus
+import toloka.client.user_restriction
+import toloka.client.user_skill
+import toloka.client.webhook_subscription
 
 from datetime import (
     datetime,
@@ -3926,7 +3955,6 @@ class TolokaClient:
     @overload
     def get_user_skills(
         self,
-        name: Optional[str] = None,
         user_id: Optional[str] = None,
         skill_id: Optional[str] = None,
         id_lt: Optional[str] = None,

@@ -1,3 +1,23 @@
+__all__ = [
+    'OperationType',
+    'Operation',
+    'AnalyticsOperation',
+    'PoolOperation',
+    'PoolArchiveOperation',
+    'PoolCloneOperation',
+    'PoolCloseOperation',
+    'PoolOpenOperation',
+    'TrainingOperation',
+    'TrainingArchiveOperation',
+    'TrainingCloneOperation',
+    'TrainingCloseOperation',
+    'TrainingOpenOperation',
+    'ProjectArchiveOperation',
+    'TasksCreateOperation',
+    'TaskSuiteCreateBatchOperation',
+    'AggregatedSolutionOperation',
+    'UserBonusCreateBatchOperation',
+]
 from datetime import datetime
 from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
