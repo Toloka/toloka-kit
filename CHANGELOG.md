@@ -1,3 +1,13 @@
+0.1.11
+-------------------
+
+* Added new `TemplateBuilder` components
+* Deleted `name` from `UserSkillSearchRequest`
+* Passing `Retry` object into `TolokaClient.retries` is now deprecated. Use new `TolokaClient.retryer_factory` argument instead.
+* Added `__all__` to stub files
+* Fixed an exception raising when opening an open pool
+* Fixed `TemplateBuilder` view-components bug with the disappearance of the `hint`, `label` and `validation` fields in `0.1.10` version.
+
 0.1.10
 -------------------
 
