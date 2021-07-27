@@ -200,7 +200,7 @@ class TolokaClient:
         # How long to wait for the server to send data before giving up,
         # If None - wait forever for a response/
         self.default_timeout = timeout
-        status_list = [status_code for status_code in requests.status_codes._codes if status_code > 405]
+        status_list = [status_code for status_code in requests.status_codes._codes if status_code >= 411 or status_code == 408]
 
         def _default_retryer_factory() -> Retry:
             return TolokaRetry(
@@ -222,7 +222,7 @@ class TolokaClient:
         else:
             self.retryer_factory = _default_retryer_factory
 
-    @functools.lru_cache
+    @functools.lru_cache(maxsize=128)
     def _session_for_thread(self, thread_id: int) -> requests.Session:
         adapter = HTTPAdapter(max_retries=self.retryer_factory())
         session = requests.Session()
@@ -1122,9 +1122,13 @@ class TolokaClient:
             >>> toloka_client.close_pool(pool_id=open_pool.id)
             ...
         """
-        operation = self.close_pool_async(pool_id)
-        operation = self.wait_operation(operation)
-        return self.get_pool(operation.parameters.pool_id)
+        response = self._raw_request('post', f'/v1/pools/{pool_id}/close')
+        if response.status_code != 204:
+            operation = structure(response.json(parse_float=Decimal), operations.PoolCloseOperation)
+            operation = self.wait_operation(operation)
+            operation.raise_on_fail()
+
+        return self.get_pool(pool_id)
 
     def close_pool_async(self, pool_id: str) -> operations.PoolCloseOperation:
         """Stops distributing tasks from the pool, asynchronous version
@@ -1350,9 +1354,13 @@ class TolokaClient:
             >>> toloka_client.open_pool(pool_id='1')
             ...
         """
-        operation = self.open_pool_async(pool_id)
-        operation = self.wait_operation(operation)
-        return self.get_pool(operation.parameters.pool_id)
+        response = self._raw_request('post', f'/v1/pools/{pool_id}/open')
+        if response.status_code != 204:
+            operation = structure(response.json(parse_float=Decimal), operations.PoolOpenOperation)
+            operation = self.wait_operation(operation)
+            operation.raise_on_fail()
+
+        return self.get_pool(pool_id)
 
     def open_pool_async(self, pool_id: str) -> operations.PoolOpenOperation:
         """Starts distributing tasks from the pool, asynchronous version

@@ -10,7 +10,8 @@ __all__ = [
     'ConflictStateApiError',
     'TooManyRequestsApiError',
     'IncorrectActionsApiError',
-    'raise_on_api_error'
+    'raise_on_api_error',
+    'FailedOperation',
 ]
 from typing import Optional, Any, List
 
@@ -33,6 +34,18 @@ class SpecClassIdentificationError(Exception):
 
     spec_field: Optional[str] = None
     spec_enum: Optional[str] = None
+
+
+@attr.attrs(auto_attribs=True, str=True, kw_only=True)
+class FailedOperation(Exception):
+    """Raised when an operation failed.
+
+    Could be raised when an inner operation failed.
+
+    Attributes:
+        operation: Instance of failed operation.
+    """
+    operation: Optional[Any] = None
 
 
 # API errors

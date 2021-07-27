@@ -209,6 +209,7 @@ from toloka.client.user_skill import (
 from toloka.client.webhook_subscription import WebhookSubscription
 from typing import (
     BinaryIO,
+    Callable,
     Dict,
     Generator,
     List,

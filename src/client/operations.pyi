@@ -107,7 +107,13 @@ class Operation(BaseTolokaObject):
         """
         ...
 
-    def is_completed(self): ...
+    def is_completed(self):
+        """Returns True if the operation is completed. Status equals SUCCESS or FAIL."""
+        ...
+
+    def raise_on_fail(self):
+        """Raises FailedOperation exception if status is FAIL. Otherwise does nothing."""
+        ...
 
     _unexpected: Optional[Dict[str, Any]]
     id: Optional[str]

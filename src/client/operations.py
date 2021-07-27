@@ -22,6 +22,7 @@ import datetime
 from enum import Enum, unique
 from typing import Any, ClassVar
 
+from .exceptions import FailedOperation
 from .primitives.base import BaseTolokaObject
 from .util._docstrings import inherit_docstrings
 
@@ -103,7 +104,13 @@ class Operation(BaseTolokaObject, spec_enum=OperationType, spec_field='type'):
     details: Any  # TODO: cannot structure dict.
 
     def is_completed(self):
+        """Returns True if the operation is completed. Status equals SUCCESS or FAIL."""
         return self.status in [Operation.Status.SUCCESS, Operation.Status.FAIL]
+
+    def raise_on_fail(self):
+        """Raises FailedOperation exception if status is FAIL. Otherwise does nothing."""
+        if self.status == Operation.Status.FAIL:
+            raise FailedOperation(operation=self)
 
 
 # Analytics operations

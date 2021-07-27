@@ -336,13 +336,36 @@ def test_open_pool_async(requests_mock, toloka_client, toloka_url, open_pool_ope
 
 
 def test_open_pool(requests_mock, toloka_client, toloka_url,
-                   open_pool_operation_map, complete_open_pool_operation_map, pool_map_with_readonly):
+                   open_pool_operation_map, complete_open_pool_operation_map, open_pool_map_with_readonly):
     requests_mock.post(f'{toloka_url}/pools/21/open', json=open_pool_operation_map, status_code=202)
     requests_mock.get(f'{toloka_url}/operations/{open_pool_operation_map["id"]}', json=complete_open_pool_operation_map, status_code=200)
-    requests_mock.get(f'{toloka_url}/pools/21', json=pool_map_with_readonly, status_code=200)
+    requests_mock.get(f'{toloka_url}/pools/21', json=open_pool_map_with_readonly, status_code=200)
 
     result = toloka_client.open_pool('21')
-    assert pool_map_with_readonly == client.unstructure(result)
+    assert open_pool_map_with_readonly == client.unstructure(result)
+
+
+def test_open_pool_opened(requests_mock, toloka_client, toloka_url, open_pool_map_with_readonly):
+    requests_mock.post(f'{toloka_url}/pools/21/open', status_code=204)
+    requests_mock.get(f'{toloka_url}/pools/21', json=open_pool_map_with_readonly)
+    result = toloka_client.open_pool('21')
+    assert open_pool_map_with_readonly == client.unstructure(result)
+
+
+@pytest.fixture
+def empty_pool_error():
+    return {
+        'request_id': '8dff48b8e99cd9408fa2d6a906d52205',
+        'code': 'EMPTY_POOL',
+        'message': 'Pool contains no tasks. Operation is not allowed',
+        'payload': None,
+    }
+
+
+def test_open_pool_exception(requests_mock, toloka_client, toloka_url, empty_pool_error):
+    requests_mock.post(f'{toloka_url}/pools/21/open', json=empty_pool_error, status_code=409)
+    with pytest.raises(client.exceptions.IncorrectActionsApiError):
+        toloka_client.open_pool('21')
 
 
 @pytest.mark.xfail(reason='Pseudo operations are not supported yet')
