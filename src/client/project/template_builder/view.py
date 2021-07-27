@@ -48,7 +48,7 @@ class BaseViewV1Metaclass(VersionedBaseComponentMetaclass):
         return super().__new__(mcs, name, bases, namespace, **kwargs)
 
 
-class BaseViewV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):
+class BaseViewV1(BaseComponent, metaclass=BaseViewV1Metaclass):
     """Elements displayed in the interface, such as text, list, audio player, or image.
 
     """
