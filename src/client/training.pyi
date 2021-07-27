@@ -1,3 +1,6 @@
+__all__ = [
+    'Training',
+]
 from datetime import datetime
 from enum import Enum
 from toloka.client.owner import Owner

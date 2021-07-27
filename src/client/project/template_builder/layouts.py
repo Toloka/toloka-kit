@@ -1,16 +1,19 @@
 __all__ = [
     'BaseLayoutV1',
+
     'BarsLayoutV1',
     'ColumnsLayoutV1',
+    'CompareLayoutItem',
+    'CompareLayoutV1',
     'SideBySideLayoutV1',
-    'SidebarLayoutV1'
+    'SidebarLayoutV1',
 ]
 from enum import Enum, unique
 from typing import List
 
 from ...primitives.base import attribute
 
-from .base import BaseComponent, ComponentType, VersionedBaseComponentMetaclass, base_component_or
+from .base import BaseComponent, ComponentType, VersionedBaseComponentMetaclass, base_component_or, BaseTemplate
 
 
 class BaseLayoutV1Metaclass(VersionedBaseComponentMetaclass):
@@ -88,6 +91,48 @@ class ColumnsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COLUMNS):
     min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
     ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)
     vertical_align: base_component_or(VerticalAlign) = attribute(origin='verticalAlign', kw_only=True)
+
+
+class CompareLayoutItem(BaseTemplate):
+    """The compared element.
+
+    Attributes:
+        content: The content of the element that's being compared. Add images, audio recordings, videos, links,
+            or other types of data.
+        controls: Configure the input fields to make the user select an item.
+    """
+
+    content: BaseComponent
+    controls: BaseComponent
+
+
+class CompareLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COMPARE):
+    """Use it to arrange interface elements for comparing them. For example, you can compare several photos.
+
+    Selection buttons can be placed under each of the compared items. You can also add common elements, such as a
+    field for comments.
+
+    Differences from layout.side-by-side:
+
+    * No buttons for hiding items. These are useful if you need to compare 5 photos at once and it's
+    difficult to choose between two of them.
+    * You can add individual selection buttons for every item being compared.
+
+    Attributes:
+        common_controls: The common fields of the component. Add information blocks that are common to all the
+            elements being compared.
+        items: An array with properties of the elements being compared. Set the appearance of the component blocks.
+        min_width: Minimum width of the element in pixels. Default: 400 pixels.
+        validation: Validation based on condition.
+        wide_common_controls: This property increases the common field size of the elements being compared.
+            It's set to false by default: the common fields are displayed in the center, not stretched. If true,
+            the fields are wider than with the default value.
+    """
+
+    common_controls: BaseComponent = attribute(origin='commonControls')
+    items: base_component_or(List[base_component_or(CompareLayoutItem)], 'ListBaseComponentOrCompareLayoutItem')
+    min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
+    wide_common_controls: base_component_or(bool) = attribute(origin='wideCommonControls', kw_only=True)
 
 
 class SideBySideLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_SIDE_BY_SIDE):

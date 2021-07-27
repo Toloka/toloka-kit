@@ -1,3 +1,7 @@
+__all__ = [
+    'SetUserSkillRequest',
+    'UserSkill',
+]
 from datetime import datetime
 from decimal import Decimal
 from toloka.client.primitives.base import BaseTolokaObject

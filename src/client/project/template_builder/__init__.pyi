@@ -1,6 +1,6 @@
 __all__ = [
-
     'actions',
+    'base',
     'conditions',
     'data',
     'fields',
@@ -8,7 +8,6 @@ __all__ = [
     'layouts',
     'plugins',
     'view',
-
     'TemplateBuilder',
     'get_input_and_output',
     'BulkActionV1',
@@ -29,6 +28,7 @@ __all__ = [
     'PlayedConditionV1',
     'PlayedFullyConditionV1',
     'RequiredConditionV1',
+    'SameDomainConditionV1',
     'SchemaConditionV1',
     'SubArrayConditionV1',
     'InputData',
@@ -52,6 +52,7 @@ __all__ = [
     'RadioGroupFieldV1',
     'SelectFieldV1',
     'TextFieldV1',
+    'TextAnnotationFieldV1',
     'TextareaFieldV1',
     'ConcatArraysHelperV1',
     'Entries2ObjectHelperV1',
@@ -63,11 +64,16 @@ __all__ = [
     'SwitchHelperV1',
     'TextTransformHelperV1',
     'TransformHelperV1',
+    'TranslateHelperV1',
     'YandexDiskProxyHelperV1',
     'BarsLayoutV1',
     'ColumnsLayoutV1',
+    'CompareLayoutItem',
+    'CompareLayoutV1',
     'SideBySideLayoutV1',
     'SidebarLayoutV1',
+    'ImageAnnotationHotkeysPluginV1',
+    'TextAnnotationHotkeysPluginV1',
     'HotkeysPluginV1',
     'TriggerPluginV1',
     'TolokaPluginV1',
@@ -112,6 +118,7 @@ from toloka.client.project.template_builder.conditions import (
     PlayedConditionV1,
     PlayedFullyConditionV1,
     RequiredConditionV1,
+    SameDomainConditionV1,
     SchemaConditionV1,
     SubArrayConditionV1
 )
@@ -138,6 +145,7 @@ from toloka.client.project.template_builder.fields import (
     PhoneNumberFieldV1,
     RadioGroupFieldV1,
     SelectFieldV1,
+    TextAnnotationFieldV1,
     TextFieldV1,
     TextareaFieldV1
 )
@@ -152,16 +160,21 @@ from toloka.client.project.template_builder.helpers import (
     SwitchHelperV1,
     TextTransformHelperV1,
     TransformHelperV1,
+    TranslateHelperV1,
     YandexDiskProxyHelperV1
 )
 from toloka.client.project.template_builder.layouts import (
     BarsLayoutV1,
     ColumnsLayoutV1,
+    CompareLayoutItem,
+    CompareLayoutV1,
     SideBySideLayoutV1,
     SidebarLayoutV1
 )
 from toloka.client.project.template_builder.plugins import (
     HotkeysPluginV1,
+    ImageAnnotationHotkeysPluginV1,
+    TextAnnotationHotkeysPluginV1,
     TolokaPluginV1,
     TriggerPluginV1
 )

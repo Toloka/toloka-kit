@@ -1,3 +1,6 @@
+__all__ = [
+    'TaskSpec',
+]
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.project.field_spec import FieldSpec
 from toloka.client.project.view_spec import ViewSpec

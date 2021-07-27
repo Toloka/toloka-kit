@@ -16,7 +16,8 @@ __all__ = [
     'RadioGroupFieldV1',
     'SelectFieldV1',
     'TextFieldV1',
-    'TextareaFieldV1'
+    'TextAnnotationFieldV1',
+    'TextareaFieldV1',
 ]
 from enum import Enum, unique
 from typing import List, Any, Dict
@@ -508,6 +509,43 @@ class TextFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXT):
 
     disabled: base_component_or(bool) = attribute(kw_only=True)
     placeholder: base_component_or(Any) = attribute(kw_only=True)
+
+
+class TextAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXT_ANNOTATION):
+    """A component for text segmentation.
+
+    Use it to select multiple words, individual words, or letters in the text and label them with values. You can create
+    multiple categories to label parts of the text, like all nouns and adjectives.
+
+    You can use plugin.field.text-annotation.hotkeys to assign keyboard shortcuts for selecting categories.
+
+    Attributes:
+        data: Data with values that will be processed or changed.
+        label: Label above the component.
+        adjust: If the property value is set to words, only words can be selected in the text. If you don't use this
+            property, any part of a line can be selected.
+        content: The text where the performer has to select part of a line.
+        disabled: This property blocks the component. If true, the component is unavailable to the performer. The
+            default value is false.
+        hint: Hint text.
+        labels: A category.
+        validation: Validation based on condition.
+    """
+
+    class Label(BaseTemplate):
+        """
+        Attributes:
+            label: Specify the category name in the label property.
+            value: Specify the category value in the value property.
+        """
+
+        label: base_component_or(str)
+        value: base_component_or(str)
+
+    adjust: base_component_or(str) = attribute(kw_only=True)
+    content: base_component_or(str) = attribute(kw_only=True)
+    disabled: base_component_or(bool) = attribute(kw_only=True)
+    labels: base_component_or(List[base_component_or(Label)], 'ListBaseComponentOrLabel') = attribute(kw_only=True)
 
 
 class TextareaFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXTAREA):

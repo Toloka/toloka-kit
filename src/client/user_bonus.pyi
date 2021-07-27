@@ -1,3 +1,7 @@
+__all__ = [
+    'UserBonus',
+    'UserBonusCreateRequestParameters',
+]
 from datetime import datetime
 from decimal import Decimal
 from toloka.client.primitives.base import BaseTolokaObject

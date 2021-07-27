@@ -1,3 +1,12 @@
+__all__ = [
+    'BaseData',
+    'InputData',
+    'InternalData',
+    'LocalData',
+    'LocationData',
+    'OutputData',
+    'RelativeData',
+]
 from toloka.client.project.template_builder.base import BaseComponent
 from typing import (
     Any,

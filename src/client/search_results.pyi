@@ -1,3 +1,19 @@
+__all__ = [
+    'AggregatedSolutionSearchResult',
+    'AssignmentSearchResult',
+    'AttachmentSearchResult',
+    'MessageThreadSearchResult',
+    'ProjectSearchResult',
+    'PoolSearchResult',
+    'SkillSearchResult',
+    'TaskSearchResult',
+    'TaskSuiteSearchResult',
+    'TrainingSearchResult',
+    'UserBonusSearchResult',
+    'UserRestrictionSearchResult',
+    'UserSkillSearchResult',
+    'WebhookSubscriptionSearchResult',
+]
 from toloka.client.aggregation import AggregatedSolution
 from toloka.client.assignment import Assignment
 from toloka.client.attachment import Attachment

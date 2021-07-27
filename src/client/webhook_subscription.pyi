@@ -1,3 +1,6 @@
+__all__ = [
+    'WebhookSubscription',
+]
 from datetime import datetime
 from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject

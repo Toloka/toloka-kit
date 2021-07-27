@@ -1,3 +1,10 @@
+__all__ = [
+    'AggregatedSolutionType',
+    'PoolAggregatedSolutionRequest',
+    'TaskAggregatedSolutionRequest',
+    'WeightedDynamicOverlapTaskAggregatedSolutionRequest',
+    'AggregatedSolution',
+]
 """Module for aggregating results
 
 For example, when you need to decide whether a cat or a dog is in the picture, and you ask more than one performers.
@@ -103,6 +110,8 @@ class WeightedDynamicOverlapTaskAggregatedSolutionRequest(TaskAggregatedSolution
     """Request that allows you to run WeightedDynamicOverlap aggregation on a single task
 
     Attributes:
+        task_id: Answers for which task to aggregate.
+        pool_id: In which pool this task.
         answer_weight_skill_id: A skill that determines the weight of the performer's response.
         fields: Output data fields to use for aggregating responses. For best results, each of these fields
             must have a limited number of response options.

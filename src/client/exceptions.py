@@ -10,7 +10,8 @@ __all__ = [
     'ConflictStateApiError',
     'TooManyRequestsApiError',
     'IncorrectActionsApiError',
-    'raise_on_api_error'
+    'raise_on_api_error',
+    'FailedOperation',
 ]
 from typing import Optional, Any, List
 
@@ -18,6 +19,7 @@ import requests
 import attr
 
 from .error_codes import CommonErrorCodes, InternalErrorCodes
+from .util._docstrings import inherit_docstrings
 
 
 # Client errors
@@ -32,6 +34,18 @@ class SpecClassIdentificationError(Exception):
 
     spec_field: Optional[str] = None
     spec_enum: Optional[str] = None
+
+
+@attr.attrs(auto_attribs=True, str=True, kw_only=True)
+class FailedOperation(Exception):
+    """Raised when an operation failed.
+
+    Could be raised when an inner operation failed.
+
+    Attributes:
+        operation: Instance of failed operation.
+    """
+    operation: Optional[Any] = None
 
 
 # API errors
@@ -54,14 +68,11 @@ class ApiError(Exception):
     payload: Optional[Any] = None
 
 
+@inherit_docstrings
 class ValidationApiError(ApiError):
     """Field validation error returned from the API Call.
 
     Attributes:
-        status_code: response status code.
-        request_id: request ID
-        code: error code string
-        message: error message
         invalid_fields: the list of the invalid fields
     """
 
@@ -75,34 +86,42 @@ class ValidationApiError(ApiError):
         return self._invalid_fields
 
 
+@inherit_docstrings
 class InternalApiError(ApiError):
     pass
 
 
+@inherit_docstrings
 class AuthenticationApiError(ApiError):
     pass
 
 
+@inherit_docstrings
 class AccessDeniedApiError(ApiError):
     pass
 
 
+@inherit_docstrings
 class RemoteServiceUnavailableApiError(ApiError):
     pass
 
 
+@inherit_docstrings
 class DoesNotExistApiError(ApiError):
     pass
 
 
+@inherit_docstrings
 class ConflictStateApiError(ApiError):
     pass
 
 
+@inherit_docstrings
 class TooManyRequestsApiError(ApiError):
     pass
 
 
+@inherit_docstrings
 class IncorrectActionsApiError(ApiError):
     pass
 

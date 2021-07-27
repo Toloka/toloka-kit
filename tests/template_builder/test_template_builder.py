@@ -11,7 +11,7 @@ from toloka.client.project.template_builder.data import OutputData, InputData
 from toloka.client.project.template_builder.fields import RadioGroupFieldV1, TextareaFieldV1, GroupFieldOption
 from toloka.client.project.template_builder.layouts import SideBySideLayoutV1
 from toloka.client.project.template_builder.plugins import HotkeysPluginV1
-from toloka.client.project.template_builder.view import ListViewV1, ImageViewV1
+from toloka.client.project.template_builder.view import ListViewV1, ImageViewV1, TextViewV1
 
 
 @pytest.fixture
@@ -356,3 +356,32 @@ def test_get_input_and_output():
 
     assert expected_input, expected_output == get_input_and_output(tb_config)
     assert expected_input, expected_output == get_input_and_output(tb_config.unstructure())
+
+
+@pytest.fixture
+def text_field_map():
+    return {
+        'content': {
+            'path': 'text',
+            'type': 'data.input',
+        },
+        'hint': 'Read it properly',
+        'label': 'Description',
+        'validation': {
+            'version': '1.0.0',
+            'type': 'condition.required'
+        },
+        'version': '1.0.0',
+        'type': 'view.text'
+    }
+
+
+def test_view_fields(text_field_map):
+    text_field = TextViewV1(
+        InputData('text'),
+        label='Description',
+        hint='Read it properly',
+        validation=RequiredConditionV1()
+    )
+
+    assert text_field_map == text_field.unstructure()

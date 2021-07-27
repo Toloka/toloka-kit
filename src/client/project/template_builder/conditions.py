@@ -1,5 +1,6 @@
 __all__ = [
     'BaseConditionV1',
+
     'AllConditionV1',
     'AnyConditionV1',
     'DistanceConditionV1',
@@ -10,6 +11,7 @@ __all__ = [
     'PlayedConditionV1',
     'PlayedFullyConditionV1',
     'RequiredConditionV1',
+    'SameDomainConditionV1',
     'SchemaConditionV1',
     'SubArrayConditionV1',
 ]
@@ -231,6 +233,32 @@ class RequiredConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_RE
     """
 
     data: base_component_or(Any)
+
+
+class SameDomainConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_SAME_DOMAIN):
+    """Checks if the link that you entered belongs to a specific site. If it does, returns true, otherwise, false.
+
+    Links must be specified in full, including the protocol (http, https, ftp).
+
+    The www. subdomain is ignored when checking, meaning that links to www.example.ru and example.ru are considered
+    to be the same.
+
+    How to pass a link address:
+
+    * Specify it explicitly as a string.
+    * (../operations/work-with-data. dita).
+    * Refer to another element using $ref.
+    * Use helpers and conditions to get the value.
+
+    Attributes:
+        data: The link address to be checked. If you don't specify it, the value returned by the parent component
+            (the one that contains condition.same-domain) is used.
+        original: The link address that your link is compared to.
+        hint: Validation error message that the user will see
+    """
+
+    data: base_component_or(Any)
+    original: base_component_or(Any)
 
 
 class SchemaConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_SCHEMA):

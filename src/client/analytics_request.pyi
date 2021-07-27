@@ -1,3 +1,19 @@
+__all__ = [
+    'AnalyticsRequest',
+    'PoolAnalyticsRequest',
+    'RealTasksCountPoolAnalytics',
+    'SubmitedAssignmentsCountPoolAnalytics',
+    'SkippedAssignmentsCountPoolAnalytics',
+    'RejectedAssignmentsCountPoolAnalytics',
+    'ApprovedAssignmentsCountPoolAnalytics',
+    'CompletionPercentagePoolAnalytics',
+    'AvgSubmitAssignmentMillisPoolAnalytics',
+    'SpentBudgetPoolAnalytics',
+    'UniqueWorkersCountPoolAnalytics',
+    'UniqueSubmittersCountPoolAnalytics',
+    'ActiveWorkersByFilterCountPoolAnalytics',
+    'EstimatedAssignmentsCountPoolAnalytics',
+]
 from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
 from typing import (
@@ -34,6 +50,9 @@ class PoolAnalyticsRequest(AnalyticsRequest):
     """Base class for all analytics requests about pools
 
     Right now you can get analytics only about pool.
+
+    Attributes:
+        subject_id: ID of the object you want to get analytics about.
     """
 
     class Subject(Enum):
@@ -66,6 +85,9 @@ class RealTasksCountPoolAnalytics(PoolAnalyticsRequest):
     """The number of tasks in the pool
 
     It does not take into account the overlap, how many tasks will be on one page, or the presence of golden tasks.
+
+    Attributes:
+        subject_id: ID of the object you want to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -83,6 +105,9 @@ class SubmitedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
     Do not confuse it with the approved status.
     "Submited" status means that the task was completed by the performer and send for review.
     "Approved" status means that the task has passed review and money has been paid for it.
+
+    Attributes:
+        subject_id: ID of the object you want to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -96,6 +121,9 @@ class SubmitedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
 
 class SkippedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
     """Number of assignments in the "skipped" status in the pool
+
+    Attributes:
+        subject_id: ID of the object you want to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -109,6 +137,9 @@ class SkippedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
 
 class RejectedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
     """Number of assignments in the "rejected" status in the pool
+
+    Attributes:
+        subject_id: ID of the object you want to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -126,6 +157,9 @@ class ApprovedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
     Do not confuse it with the submited status.
     "Submited" status means that the task was completed by the performer and send for review.
     "Approved" status means that the task has passed review and money has been paid for it.
+
+    Attributes:
+        subject_id: ID of the object you want to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -139,6 +173,9 @@ class ApprovedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
 
 class CompletionPercentagePoolAnalytics(PoolAnalyticsRequest):
     """Approximate percentage of completed tasks in the pool
+
+    Attributes:
+        subject_id: ID of the object you want to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -152,6 +189,9 @@ class CompletionPercentagePoolAnalytics(PoolAnalyticsRequest):
 
 class AvgSubmitAssignmentMillisPoolAnalytics(PoolAnalyticsRequest):
     """Average time to complete one task page in milliseconds
+
+    Attributes:
+        subject_id: ID of the object you want to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -165,6 +205,9 @@ class AvgSubmitAssignmentMillisPoolAnalytics(PoolAnalyticsRequest):
 
 class SpentBudgetPoolAnalytics(PoolAnalyticsRequest):
     """How much money has already been spent on this pool, excluding fee
+
+    Attributes:
+        subject_id: ID of the object you want to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -178,6 +221,9 @@ class SpentBudgetPoolAnalytics(PoolAnalyticsRequest):
 
 class UniqueWorkersCountPoolAnalytics(PoolAnalyticsRequest):
     """The number of unique performers who took tasks from the pool
+
+    Attributes:
+        subject_id: ID of the object you want to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -191,6 +237,9 @@ class UniqueWorkersCountPoolAnalytics(PoolAnalyticsRequest):
 
 class UniqueSubmittersCountPoolAnalytics(PoolAnalyticsRequest):
     """The number of unique performers who have submitted to the pool
+
+    Attributes:
+        subject_id: ID of the object you want to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -206,6 +255,7 @@ class ActiveWorkersByFilterCountPoolAnalytics(PoolAnalyticsRequest):
     """The number of active performers matching the pool filters for the last hours
 
     Attributes:
+        subject_id: ID of the object you want to get analytics about.
         interval_hours: The number of hours to take into account when collecting statistics.
     """
 
@@ -226,6 +276,9 @@ class ActiveWorkersByFilterCountPoolAnalytics(PoolAnalyticsRequest):
 
 class EstimatedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
     """The approximate number of responses to task pages.
+
+    Attributes:
+        subject_id: ID of the object you want to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:

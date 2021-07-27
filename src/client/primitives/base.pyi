@@ -1,3 +1,9 @@
+__all__ = [
+    'VariantRegistry',
+    'attribute',
+    'BaseTolokaObjectMetaclass',
+    'BaseTolokaObject',
+]
 from attr._make import Attribute
 from enum import Enum
 from typing import (
@@ -28,9 +34,9 @@ class VariantRegistry:
 
 def attribute(
     *args,
-    required=False,
-    origin=None,
-    readonly=False,
+    required: bool = False,
+    origin: Optional[str] = None,
+    readonly: bool = False,
     **kwargs
 ):
     """Proxy for attr.attrib(...). Adds several keywords.

@@ -1,3 +1,6 @@
+__all__ = [
+    'BaseParameters',
+]
 from toloka.client.primitives.base import BaseTolokaObject
 from typing import (
     Any,
@@ -5,9 +8,6 @@ from typing import (
     Optional,
     overload
 )
-
-__all__: list
-
 
 class BaseParameters(BaseTolokaObject):
     class Parameters(BaseTolokaObject):

@@ -1,3 +1,9 @@
+__all__ = [
+    'TaskSuite',
+    'TaskSuiteCreateRequestParameters',
+    'TaskSuiteOverlapPatch',
+    'TaskSuitePatch',
+]
 from datetime import datetime
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.primitives.infinite_overlap import InfiniteOverlapParametersMixin

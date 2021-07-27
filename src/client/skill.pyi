@@ -1,3 +1,6 @@
+__all__ = [
+    'Skill',
+]
 from datetime import datetime
 from toloka.client.primitives.base import BaseTolokaObject
 from typing import (

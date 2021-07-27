@@ -55,12 +55,13 @@ import logging
 import pandas as pd
 import requests
 import time
+import threading
 import uuid
 
 from decimal import Decimal
 from enum import Enum, unique
 from requests.adapters import HTTPAdapter
-from typing import BinaryIO, Generator, List, Optional, Tuple, Union
+from typing import BinaryIO, Callable, Generator, List, Optional, Tuple, Union
 from urllib3.util.retry import Retry
 
 from . import actions
@@ -141,7 +142,7 @@ class TolokaClient:
             * PRODUCTION: Production version of Toloka for requesters. You spend money and get result.
         retries: Retry policy. You can use the following types:
             * int - The number of retries for all requests. In this case, the retry policy is created automatically.
-            * Retry - Fully specified retry policy that will apply to all requests.
+            * Retry - Deprecated. Use retryer_factory instead. Fully specified retry policy that will apply to all requests.
         timeout: Same as timeout in Requests. The connect timeout is the number of seconds Requests will wait for your client
             to establish a connection to a remote machine call on the socket.
             * If you specify a single value for the timeout, it will be applied to both the connect and the read timeouts.
@@ -155,6 +156,7 @@ class TolokaClient:
             * MIN - Retry minutes quotas.
             * HOUR - Retry hourly quotas. This is means that the program just sleeps for an hour! Be careful.
             * DAY - Retry daily quotas. We strongly not recommended retrying these quotas.
+        retryer_factory: Factory that creates Retry object.
 
     Example:
         How to create TolokaClient instance and make your first request to Toloka.
@@ -178,7 +180,8 @@ class TolokaClient:
         retries: Union[int, Retry] = 3,
         timeout: Union[float, Tuple[float, float]] = 10.0,
         url: Optional[str] = None,
-        retry_quotas: Union[List[str], str, None] = TolokaRetry.Unit.MIN
+        retry_quotas: Union[List[str], str, None] = TolokaRetry.Unit.MIN,
+        retryer_factory: Optional[Callable[[], Retry]] = None,
     ):
         if url is None and environment is None:
             raise ValueError('You must pass at least one parameter: url or environment.')
@@ -193,29 +196,48 @@ class TolokaClient:
         if isinstance(retries, Retry) and retry_quotas is not None:
             raise ValueError('You must set retry_quotas parameter to None when you specify retries parameters not as int.')
         self.token = token
-        status_list = [status_code for status_code in requests.status_codes._codes if status_code > 405]
-        if not isinstance(retries, Retry):
-            retries = TolokaRetry(
+        # float, or a (connect timeout, read timeout) tuple
+        # How long to wait for the server to send data before giving up,
+        # If None - wait forever for a response/
+        self.default_timeout = timeout
+        status_list = [status_code for status_code in requests.status_codes._codes if status_code >= 411 or status_code == 408]
+
+        def _default_retryer_factory() -> Retry:
+            return TolokaRetry(
                 retry_quotas=retry_quotas,
                 total=retries,
                 status_forcelist=status_list,
                 method_whitelist=['HEAD', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'POST', 'PATCH'],
                 backoff_factor=2,  # summary retry time more than 10 seconds
             )
-        adapter = HTTPAdapter(max_retries=retries)
-        self.session = requests.Session()
-        self.session.mount(self.url, adapter)
 
-        self.session.headers.update(
+        def _retry_instance() -> Retry:
+            return retries
+
+        if isinstance(retries, Retry):
+            logging.warning("Retry instance usage isn't thread-safe and is deprecated. Use retryer_factory instead.")
+            self.retryer_factory = _retry_instance
+        elif retryer_factory:
+            self.retryer_factory = retryer_factory
+        else:
+            self.retryer_factory = _default_retryer_factory
+
+    @functools.lru_cache(maxsize=128)
+    def _session_for_thread(self, thread_id: int) -> requests.Session:
+        adapter = HTTPAdapter(max_retries=self.retryer_factory())
+        session = requests.Session()
+        session.mount(self.url, adapter)
+        session.headers.update(
             {
                 'Authorization': f'OAuth {self.token}',
                 'User-Agent': f'python-toloka-client-{__version__}',
             }
         )
-        # float, or a (connect timeout, read timeout) tuple
-        # How long to wait for the server to send data before giving up,
-        # If None - wait forever for a response/
-        self.default_timeout = timeout
+        return session
+
+    @property
+    def _session(self):
+        return self._session_for_thread(threading.current_thread().ident)
 
     def _raw_request(self, method, path, **kwargs):
 
@@ -227,7 +249,7 @@ class TolokaClient:
                     params[key] = 'true' if value else 'false'
         if self.default_timeout is not None and 'timeout' not in kwargs:
             kwargs['timeout'] = self.default_timeout
-        response = self.session.request(method, f'{self.url}/api{path}', **kwargs)
+        response = self._session.request(method, f'{self.url}/api{path}', **kwargs)
         raise_on_api_error(response)
         return response
 
@@ -1100,9 +1122,13 @@ class TolokaClient:
             >>> toloka_client.close_pool(pool_id=open_pool.id)
             ...
         """
-        operation = self.close_pool_async(pool_id)
-        operation = self.wait_operation(operation)
-        return self.get_pool(operation.parameters.pool_id)
+        response = self._raw_request('post', f'/v1/pools/{pool_id}/close')
+        if response.status_code != 204:
+            operation = structure(response.json(parse_float=Decimal), operations.PoolCloseOperation)
+            operation = self.wait_operation(operation)
+            operation.raise_on_fail()
+
+        return self.get_pool(pool_id)
 
     def close_pool_async(self, pool_id: str) -> operations.PoolCloseOperation:
         """Stops distributing tasks from the pool, asynchronous version
@@ -1328,9 +1354,13 @@ class TolokaClient:
             >>> toloka_client.open_pool(pool_id='1')
             ...
         """
-        operation = self.open_pool_async(pool_id)
-        operation = self.wait_operation(operation)
-        return self.get_pool(operation.parameters.pool_id)
+        response = self._raw_request('post', f'/v1/pools/{pool_id}/open')
+        if response.status_code != 204:
+            operation = structure(response.json(parse_float=Decimal), operations.PoolOpenOperation)
+            operation = self.wait_operation(operation)
+            operation.raise_on_fail()
+
+        return self.get_pool(pool_id)
 
     def open_pool_async(self, pool_id: str) -> operations.PoolOpenOperation:
         """Starts distributing tasks from the pool, asynchronous version

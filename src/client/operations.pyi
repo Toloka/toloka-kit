@@ -1,3 +1,23 @@
+__all__ = [
+    'OperationType',
+    'Operation',
+    'AnalyticsOperation',
+    'PoolOperation',
+    'PoolArchiveOperation',
+    'PoolCloneOperation',
+    'PoolCloseOperation',
+    'PoolOpenOperation',
+    'TrainingOperation',
+    'TrainingArchiveOperation',
+    'TrainingCloneOperation',
+    'TrainingCloseOperation',
+    'TrainingOpenOperation',
+    'ProjectArchiveOperation',
+    'TasksCreateOperation',
+    'TaskSuiteCreateBatchOperation',
+    'AggregatedSolutionOperation',
+    'UserBonusCreateBatchOperation',
+]
 from datetime import datetime
 from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
@@ -87,7 +107,13 @@ class Operation(BaseTolokaObject):
         """
         ...
 
-    def is_completed(self): ...
+    def is_completed(self):
+        """Returns True if the operation is completed. Status equals SUCCESS or FAIL."""
+        ...
+
+    def raise_on_fail(self):
+        """Raises FailedOperation exception if status is FAIL. Otherwise does nothing."""
+        ...
 
     _unexpected: Optional[Dict[str, Any]]
     id: Optional[str]
@@ -102,6 +128,16 @@ class Operation(BaseTolokaObject):
 
 class AnalyticsOperation(Operation):
     """Operation returned when requesting analytics via TolokaClient.get_analytics()
+
+    Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
     """
 
     def __init__(
@@ -135,6 +171,14 @@ class PoolOperation(Operation):
     """Base class for all operations on pool
 
     Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
         parameters.pool_id: On which pool operation is performed.
     """
 
@@ -176,6 +220,17 @@ class PoolOperation(Operation):
 
 class PoolArchiveOperation(PoolOperation):
     """Operation returned by an asynchronous archive pool via TolokaClient.archive_pool_async()
+
+    Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
+        parameters.pool_id: On which pool operation is performed.
     """
 
     def __init__(
@@ -213,6 +268,15 @@ class PoolCloneOperation(PoolOperation):
     Don't be mistaken.
 
     Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
+        parameters.pool_id: On which pool operation is performed.
         details.pool_id: New pool id created after cloning.
     """
 
@@ -254,6 +318,17 @@ class PoolCloneOperation(PoolOperation):
 
 class PoolCloseOperation(PoolOperation):
     """Operation returned by an asynchronous closing pool via TolokaClient.close_pool_async()
+
+    Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
+        parameters.pool_id: On which pool operation is performed.
     """
 
     def __init__(
@@ -285,6 +360,17 @@ class PoolCloseOperation(PoolOperation):
 
 class PoolOpenOperation(PoolOperation):
     """Operation returned by an asynchronous opening pool via TolokaClient.open_pool_async()
+
+    Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
+        parameters.pool_id: On which pool operation is performed.
     """
 
     def __init__(
@@ -318,6 +404,14 @@ class TrainingOperation(Operation):
     """Base class for all operations on training pool
 
     Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
         parameters.training_id: On which training pool operation is performed.
     """
 
@@ -359,6 +453,17 @@ class TrainingOperation(Operation):
 
 class TrainingArchiveOperation(TrainingOperation):
     """Operation returned by an asynchronous archive training pool via TolokaClient.archive_training_async()
+
+    Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
+        parameters.training_id: On which training pool operation is performed.
     """
 
     def __init__(
@@ -396,6 +501,15 @@ class TrainingCloneOperation(TrainingOperation):
     Don't be mistaken.
 
     Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
+        parameters.training_id: On which training pool operation is performed.
         details.pool_id: New training pool id created after cloning.
     """
 
@@ -437,6 +551,17 @@ class TrainingCloneOperation(TrainingOperation):
 
 class TrainingCloseOperation(TrainingOperation):
     """Operation returned by an asynchronous closing training pool via TolokaClient.close_training_async()
+
+    Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
+        parameters.training_id: On which training pool operation is performed.
     """
 
     def __init__(
@@ -468,6 +593,17 @@ class TrainingCloseOperation(TrainingOperation):
 
 class TrainingOpenOperation(TrainingOperation):
     """Operation returned by an asynchronous opening training pool via TolokaClient.open_training_async()
+
+    Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
+        parameters.training_id: On which training pool operation is performed.
     """
 
     def __init__(
@@ -501,6 +637,14 @@ class ProjectArchiveOperation(Operation):
     """Operation returned by an asynchronous archive project via TolokaClient.archive_project_async()
 
     Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
         parameters.project_id: On which project operation is performed.
     """
 
@@ -546,6 +690,14 @@ class TasksCreateOperation(Operation):
     All parameters are for reference only and describe the initial parameters of the request that this operation monitors.
 
     Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
         parameters.skip_invalid_items: Validation parameters for JSON objects:
             * True - Create the tasks that passed validation. Skip the rest of the tasks.
             * False - If at least one of the tasks didn't pass validation, stop the operation and
@@ -607,6 +759,14 @@ class TaskSuiteCreateBatchOperation(Operation):
     All parameters are for reference only and describe the initial parameters of the request that this operation monitors.
 
     Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
         parameters.skip_invalid_items: Validation parameters for JSON objects:
             * True - Create the task suites that passed validation. Skip the rest of the task suites.
             * False - If at least one of the task suites didn't pass validation, stop the operation and
@@ -665,6 +825,14 @@ class AggregatedSolutionOperation(Operation):
     """Operation returned by an asynchronous aggregation responses in pool via TolokaClient.aggregate_solutions_by_pool()
 
     Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
         parameters.pool_id: In which pool the responses are aggregated.
     """
 
@@ -710,11 +878,19 @@ class UserBonusCreateBatchOperation(Operation):
     All parameters are for reference only and describe the initial parameters of the request that this operation monitors.
 
     Attributes:
+        id: Operation ID.
+        status: The status of the operation.
+        submitted: The UTC date and time the request was sent.
+        parameters: Operation parameters (depending on the operation type).
+        started: The UTC date and time the operation started.
+        finished: The UTC date and time the operation finished.
+        progress: The percentage of the operation completed.
+        details: Details of the operation completion.
         parameters.skip_invalid_items: Validation parameters for JSON objects:
             * True - Create the user bonuses that passed validation. Skip the rest of the user bonuses.
             * False - If at least one of the user bonus didn't pass validation, stop the operation and
                 don't create any user bonus.
-        details.pool_id:
+        details.pool_id: 
         details.total_count: The number of bonuses in the request.
         details.valid_count: The number of JSON objects with bonus information that have passed validation.
         details.not_valid_count: The number of JSON objects with bonus information that failed validation.

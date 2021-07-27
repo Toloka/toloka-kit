@@ -1,3 +1,36 @@
+__all__ = [
+    'FilterCondition',
+    'FilterOr',
+    'FilterAnd',
+    'Condition',
+    'Profile',
+    'Computed',
+    'Skill',
+    'Gender',
+    'Country',
+    'Citizenship',
+    'Education',
+    'AdultAllowed',
+    'DateOfBirth',
+    'City',
+    'Languages',
+    'RegionByPhone',
+    'RegionByIp',
+    'DeviceCategory',
+    'ClientType',
+    'OSFamily',
+    'OSVersion',
+    'OSVersionMajor',
+    'OSVersionMinor',
+    'OSVersionBugfix',
+    'UserAgentType',
+    'UserAgentFamily',
+    'UserAgentVersion',
+    'UserAgentVersionMajor',
+    'UserAgentVersionMinor',
+    'UserAgentVersionBugfix',
+    'Rating',
+]
 from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.primitives.operators import (
@@ -124,7 +157,10 @@ class Profile(Condition):
 
     Attributes:
         operator: Comparison operator in the condition.
-        value: Attribute value from the field key.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
+        value: Attribute value from the field key. For example, the ID of the region specified in the profile,
+            or the minimum skill value.
     """
 
     class Key(Enum):
@@ -160,7 +196,10 @@ class Computed(Condition):
 
     Attributes:
         operator: Comparison operator in the condition.
-        value: Attribute value from the field key.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
+        value: Attribute value from the field key. For example, the ID of the region specified in the profile,
+            or the minimum skill value.
     """
 
     class Key(Enum):
@@ -229,6 +268,9 @@ class Gender(Profile, IdentityConditionMixin):
     """Use to select users by gender.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: User gender.
     """
 
@@ -257,6 +299,9 @@ class Country(Profile, IdentityConditionMixin):
     """Use to select users by country.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Country of the user (two-letter code of the standard ISO 3166-1 alpha-2).
     """
 
@@ -278,6 +323,9 @@ class Citizenship(Profile, IdentityConditionMixin):
     """Use to select users by citizenship.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: User citizenship (two-letter country code) ISO 3166-1 alpha-2
     """
 
@@ -299,6 +347,9 @@ class Education(Profile, IdentityConditionMixin):
     """Use to select users by education.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: User education.
     """
 
@@ -328,6 +379,9 @@ class AdultAllowed(Profile, IdentityConditionMixin):
     """Use to select users by their agreement to perform tasks that contain adult content.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: User agreement.
     """
 
@@ -349,6 +403,9 @@ class DateOfBirth(Profile, ComparableConditionMixin):
     """Use to select users by date of birth.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: The user's date of birth (UNIX time in seconds).
     """
 
@@ -370,6 +427,9 @@ class City(Profile, InclusionConditionMixin):
     """Use to select users by city.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: User city(ID of the region).
     """
 
@@ -391,6 +451,9 @@ class Languages(Profile, InclusionConditionMixin):
     """Use to select users by languages specified by the user in the profile.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Languages specified by the user in the profile (two-letter ISO code of the standard ISO 639-1 in upper case).
     """
 
@@ -412,6 +475,9 @@ class RegionByPhone(Computed, InclusionConditionMixin):
     """Use to select users by their region determined by the mobile phone number.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: The user's region.
     """
 
@@ -433,6 +499,9 @@ class RegionByIp(Computed, InclusionConditionMixin):
     """Use to select users by their region determined by IP address.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: The user's region.
     """
 
@@ -454,6 +523,9 @@ class DeviceCategory(Computed, IdentityConditionMixin):
     """Use to select users by their device category.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: The user's device category.
     """
 
@@ -484,6 +556,9 @@ class ClientType(Computed, IdentityConditionMixin):
     """Use to select users by their application type.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Client application type.
     """
 
@@ -512,6 +587,9 @@ class OSFamily(Computed, IdentityConditionMixin):
     """Use to select users by their OS family.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: The operating system family.
     """
 
@@ -546,7 +624,11 @@ class OSVersion(Computed, ComparableConditionMixin):
     """Use to select users by OS full version.
 
     For example: 14.4
+
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Full version of the operating system.
     """
 
@@ -568,7 +650,11 @@ class OSVersionMajor(Computed, ComparableConditionMixin):
     """Use to select users by OS major version.
 
     For example: 14
+
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Major version of the operating system.
     """
 
@@ -590,7 +676,11 @@ class OSVersionMinor(Computed, ComparableConditionMixin):
     """Use to select users by OS minor version.
 
     For example: 4
+
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Minor version of the operating system.
     """
 
@@ -612,7 +702,11 @@ class OSVersionBugfix(Computed, ComparableConditionMixin):
     """Use to select users by build number (bugfix version) of the operating system.
 
     For example: 1
+
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Build number (bugfix version) of the operating system.
     """
 
@@ -634,6 +728,9 @@ class UserAgentType(Computed, IdentityConditionMixin):
     """Use to select users by user agent type:
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: User agent type.
     """
 
@@ -663,6 +760,9 @@ class UserAgentFamily(Computed, IdentityConditionMixin):
     """Use to select users by user agent family.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: User agent family.
     """
 
@@ -699,6 +799,9 @@ class UserAgentVersion(Computed, ComparableConditionMixin):
     """Use to select users by full browser version.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Full browser version. <Major version>.<Minor version>.
     """
 
@@ -720,6 +823,9 @@ class UserAgentVersionMajor(Computed, ComparableConditionMixin):
     """Use to select users by major browser version.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Major browser version.
     """
 
@@ -741,6 +847,9 @@ class UserAgentVersionMinor(Computed, ComparableConditionMixin):
     """Use to select users by minor browser version.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Minor browser version.
     """
 
@@ -762,6 +871,9 @@ class UserAgentVersionBugfix(Computed, ComparableConditionMixin):
     """Use to select users by build number (bugfix version) of the browser.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Build number (bugfix version) of the browser.
     """
 
@@ -783,6 +895,9 @@ class Rating(Computed, ComparableConditionMixin):
     """Use to select users by user rating.
 
     Attributes:
+        operator: Comparison operator in the condition.
+            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: User rating. Calculated based on earnings in all projects available to the user.
     """
 

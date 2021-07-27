@@ -23,6 +23,7 @@ from uuid import UUID
 from .conditions import RuleCondition
 from .conditions import RuleConditionKey
 from .util._codegen import BaseParameters
+from .util._docstrings import inherit_docstrings
 
 
 class CollectorConfig(BaseParameters, spec_enum='Type', spec_field='type'):
@@ -58,6 +59,7 @@ class CollectorConfig(BaseParameters, spec_enum='Type', spec_field='type'):
     uuid: UUID
 
 
+@inherit_docstrings
 class AcceptanceRate(CollectorConfig, spec_value=CollectorConfig.Type.ACCEPTANCE_RATE):
     """Results of checking the answers of the performer
 
@@ -104,6 +106,7 @@ class AcceptanceRate(CollectorConfig, spec_value=CollectorConfig.Type.ACCEPTANCE
     ])
 
 
+@inherit_docstrings
 class AnswerCount(CollectorConfig, spec_value=CollectorConfig.Type.ANSWER_COUNT):
     """How many assignment was accepted from performer
 
@@ -138,6 +141,7 @@ class AnswerCount(CollectorConfig, spec_value=CollectorConfig.Type.ANSWER_COUNT)
     ])
 
 
+@inherit_docstrings
 class AssignmentsAssessment(CollectorConfig, spec_value=CollectorConfig.Type.ASSIGNMENTS_ASSESSMENT):
     """Processing rejected and accepted assignments
 
@@ -178,6 +182,7 @@ class AssignmentsAssessment(CollectorConfig, spec_value=CollectorConfig.Type.ASS
     ])
 
 
+@inherit_docstrings
 class AssignmentSubmitTime(CollectorConfig, spec_value=CollectorConfig.Type.ASSIGNMENT_SUBMIT_TIME):
     """Filtering cheating performers who respond too quickly
 
@@ -222,6 +227,7 @@ class AssignmentSubmitTime(CollectorConfig, spec_value=CollectorConfig.Type.ASSI
         history_size: Optional[int] = None
 
 
+@inherit_docstrings
 class Captcha(CollectorConfig, spec_value=CollectorConfig.Type.CAPTCHA):
     """Captchas provide a high level of protection from robots
 
@@ -270,6 +276,7 @@ class Captcha(CollectorConfig, spec_value=CollectorConfig.Type.CAPTCHA):
         history_size: Optional[int] = None
 
 
+@inherit_docstrings
 class GoldenSet(CollectorConfig, spec_value=CollectorConfig.Type.GOLDEN_SET):
     """How performer answers on control tasks
 
@@ -326,6 +333,7 @@ class GoldenSet(CollectorConfig, spec_value=CollectorConfig.Type.GOLDEN_SET):
         history_size: Optional[int] = None
 
 
+@inherit_docstrings
 class Income(CollectorConfig, spec_value=CollectorConfig.Type.INCOME):
     """Limit the performer's daily earnings in the pool
 
@@ -363,6 +371,7 @@ class Income(CollectorConfig, spec_value=CollectorConfig.Type.INCOME):
     ])
 
 
+@inherit_docstrings
 class MajorityVote(CollectorConfig, spec_value=CollectorConfig.Type.MAJORITY_VOTE):
     """Majority vote is a quality control method based on coinciding responses from the majority
 
@@ -415,6 +424,7 @@ class MajorityVote(CollectorConfig, spec_value=CollectorConfig.Type.MAJORITY_VOT
     parameters: Parameters
 
 
+@inherit_docstrings
 class SkippedInRowAssignments(CollectorConfig, spec_value=CollectorConfig.Type.SKIPPED_IN_ROW_ASSIGNMENTS):
     """Skipping tasks is considered an indirect indicator of the quality of responses.
 
@@ -451,6 +461,7 @@ class SkippedInRowAssignments(CollectorConfig, spec_value=CollectorConfig.Type.S
     ])
 
 
+@inherit_docstrings
 class Training(CollectorConfig, spec_value=CollectorConfig.Type.TRAINING):
 
     _compatible_conditions: ClassVar[FrozenSet[RuleConditionKey]] = frozenset([
@@ -462,6 +473,7 @@ class Training(CollectorConfig, spec_value=CollectorConfig.Type.TRAINING):
     ])
 
 
+@inherit_docstrings
 class UsersAssessment(CollectorConfig, spec_value=CollectorConfig.Type.USERS_ASSESSMENT):
     """Recompletion of assignments from banned users
 

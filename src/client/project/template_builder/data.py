@@ -5,7 +5,7 @@ __all__ = [
     'LocalData',
     'LocationData',
     'OutputData',
-    'RelativeData'
+    'RelativeData',
 ]
 from typing import Any
 

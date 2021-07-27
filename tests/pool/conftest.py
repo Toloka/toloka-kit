@@ -152,6 +152,14 @@ def pool_map_with_readonly(pool_map):
 
 
 @pytest.fixture
+def open_pool_map_with_readonly(pool_map_with_readonly):
+    return {
+        **pool_map_with_readonly,
+        'status': 'OPEN',
+    }
+
+
+@pytest.fixture
 def training_pool_map():
     return {
         'id': '22',

@@ -1,3 +1,14 @@
+__all__ = [
+    'RuleType',
+    'RuleAction',
+    'Restriction',
+    'RestrictionV2',
+    'SetSkillFromOutputField',
+    'ChangeOverlap',
+    'SetSkill',
+    'RejectAllAssignments',
+    'ApproveAllAssignments',
+]
 from enum import Enum
 from toloka.client.conditions import RuleConditionKey
 from toloka.client.user_restriction import (
@@ -298,7 +309,7 @@ class ChangeOverlap(RuleAction):
 
 
 class SetSkill(RuleAction):
-    """Set perfmer skill value
+    """Set performer skill value
 
     Attributes:
         parameters.skill_id: ID of the skill to update.

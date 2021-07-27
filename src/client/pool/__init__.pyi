@@ -82,7 +82,7 @@ class Pool(BaseTolokaObject):
         training_config: Optional[TrainingConfig]
         metadata: Optional[Dict[str, List[str]]]
         owner: Optional[Owner]
-        id: Pool ID.  Read only field.
+        id: Pool ID. Read only field.
         status: Status of the pool. Read only field.
         last_close_reason: The reason for closing the pool the last time. Read only field.
         created: When this pool was created. Read only field.

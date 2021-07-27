@@ -1,3 +1,6 @@
+__all__ = [
+    'MixerConfig',
+]
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.task_distribution_function import TaskDistributionFunction
 from typing import (

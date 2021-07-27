@@ -8,6 +8,7 @@ from enum import Enum, unique
 
 from .owner import Owner
 from .primitives.base import BaseTolokaObject
+from .util._docstrings import inherit_docstrings
 
 
 class Attachment(BaseTolokaObject, spec_enum='Type', spec_field='attachment_type'):
@@ -51,6 +52,7 @@ class Attachment(BaseTolokaObject, spec_enum='Type', spec_field='attachment_type
     owner: Owner
 
 
+@inherit_docstrings
 class AssignmentAttachment(Attachment, spec_value=Attachment.Type.ASSIGNMENT_ATTACHMENT):
     """Assignment Attachment.
     """

@@ -15,7 +15,7 @@ __all__ = [
     'ListViewV1',
     'MarkdownViewV1',
     'TextViewV1',
-    'VideoViewV1'
+    'VideoViewV1',
 ]
 from enum import Enum, unique
 from typing import List, Any
@@ -48,7 +48,7 @@ class BaseViewV1Metaclass(VersionedBaseComponentMetaclass):
         return super().__new__(mcs, name, bases, namespace, **kwargs)
 
 
-class BaseViewV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):
+class BaseViewV1(BaseComponent, metaclass=BaseViewV1Metaclass):
     """Elements displayed in the interface, such as text, list, audio player, or image.
 
     """

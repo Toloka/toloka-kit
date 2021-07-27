@@ -1,3 +1,10 @@
+__all__ = [
+    'FieldValidationError',
+    'TaskBatchCreateResult',
+    'TaskSuiteBatchCreateResult',
+    'UserBonusBatchCreateResult',
+    'WebhookSubscriptionBatchCreateResult',
+]
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.task import Task
 from toloka.client.task_suite import TaskSuite
@@ -107,6 +114,7 @@ class UserBonusBatchCreateResult(BaseTolokaObject):
 
 class WebhookSubscriptionBatchCreateResult(BaseTolokaObject):
     """The list with the results of the webhook-subscriptions creation operation.
+
     Attributes:
         items: Object with created webhook-subscriptions.
         validation_errors: Object with validation errors.

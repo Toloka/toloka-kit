@@ -1,3 +1,11 @@
+__all__ = [
+    'DurationUnit',
+    'UserRestriction',
+    'AllProjectsUserRestriction',
+    'PoolUserRestriction',
+    'ProjectUserRestriction',
+    'SystemUserRestriction',
+]
 from datetime import datetime
 from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
@@ -85,6 +93,13 @@ class UserRestriction(BaseTolokaObject):
 
 class AllProjectsUserRestriction(UserRestriction):
     """Forbid the performer from doing tasks from all your projects
+
+    Attributes:
+        user_id: Which performer is denied access.
+        private_comment: A comment for you why access to this performer was restricted.
+        will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
+        id: The identifier of a specific fact of access restriction. Read only.
+        created: Date and time when the fact of access restriction was created. Read only.
     """
 
     def __init__(
@@ -112,6 +127,11 @@ class PoolUserRestriction(UserRestriction):
     """Forbid the performer from doing tasks from a specific pool
 
     Attributes:
+        user_id: Which performer is denied access.
+        private_comment: A comment for you why access to this performer was restricted.
+        will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
+        id: The identifier of a specific fact of access restriction. Read only.
+        created: Date and time when the fact of access restriction was created. Read only.
         pool_id: Pool identifier to which access will be denied.
     """
 
@@ -142,6 +162,11 @@ class ProjectUserRestriction(UserRestriction):
     """Forbid the performer from doing tasks from a specific project
 
     Attributes:
+        user_id: Which performer is denied access.
+        private_comment: A comment for you why access to this performer was restricted.
+        will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
+        id: The identifier of a specific fact of access restriction. Read only.
+        created: Date and time when the fact of access restriction was created. Read only.
         project_id: Project identifier to which access will be denied.
     """
 
@@ -170,6 +195,13 @@ class ProjectUserRestriction(UserRestriction):
 
 class SystemUserRestriction(UserRestriction):
     """DEPRECATED
+
+    Attributes:
+        user_id: Which performer is denied access.
+        private_comment: A comment for you why access to this performer was restricted.
+        will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
+        id: The identifier of a specific fact of access restriction. Read only.
+        created: Date and time when the fact of access restriction was created. Read only.
     """
 
     def __init__(

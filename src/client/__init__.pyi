@@ -29,7 +29,6 @@ __all__ = [
     'user_restriction',
     'user_skill',
     'webhook_subscription',
-
     'TolokaClient',
     'Assignment',
     'Attachment',
@@ -46,6 +45,36 @@ __all__ = [
     'Pool',
     'Project',
 ]
+import toloka.client.actions
+import toloka.client.aggregation
+import toloka.client.analytics_request
+import toloka.client.assignment
+import toloka.client.attachment
+import toloka.client.batch_create_results
+import toloka.client.clone_results
+import toloka.client.collectors
+import toloka.client.conditions
+import toloka.client.error_codes
+import toloka.client.exceptions
+import toloka.client.filter
+import toloka.client.message_thread
+import toloka.client.operation_log
+import toloka.client.operations
+import toloka.client.owner
+import toloka.client.quality_control
+import toloka.client.requester
+import toloka.client.search_requests
+import toloka.client.search_results
+import toloka.client.skill
+import toloka.client.solution
+import toloka.client.task
+import toloka.client.task_distribution_function
+import toloka.client.task_suite
+import toloka.client.training
+import toloka.client.user_bonus
+import toloka.client.user_restriction
+import toloka.client.user_skill
+import toloka.client.webhook_subscription
 
 from datetime import (
     datetime,
@@ -54,6 +83,7 @@ from datetime import (
 from decimal import Decimal
 from enum import Enum
 from pandas.core.frame import DataFrame
+from requests.packages.urllib3.util.retry import Retry
 from toloka.client.aggregation import (
     AggregatedSolution,
     AggregatedSolutionType,
@@ -179,6 +209,7 @@ from toloka.client.user_skill import (
 from toloka.client.webhook_subscription import WebhookSubscription
 from typing import (
     BinaryIO,
+    Callable,
     Dict,
     Generator,
     List,
@@ -187,7 +218,6 @@ from typing import (
     Union,
     overload
 )
-from urllib3.util.retry import Retry  # type: ignore
 from uuid import UUID
 
 class TolokaClient:
@@ -208,7 +238,7 @@ class TolokaClient:
             * PRODUCTION: Production version of Toloka for requesters. You spend money and get result.
         retries: Retry policy. You can use the following types:
             * int - The number of retries for all requests. In this case, the retry policy is created automatically.
-            * Retry - Fully specified retry policy that will apply to all requests.
+            * Retry - Deprecated. Use retryer_factory instead. Fully specified retry policy that will apply to all requests.
         timeout: Same as timeout in Requests. The connect timeout is the number of seconds Requests will wait for your client
             to establish a connection to a remote machine call on the socket.
             * If you specify a single value for the timeout, it will be applied to both the connect and the read timeouts.
@@ -222,6 +252,7 @@ class TolokaClient:
             * MIN - Retry minutes quotas.
             * HOUR - Retry hourly quotas. This is means that the program just sleeps for an hour! Be careful.
             * DAY - Retry daily quotas. We strongly not recommended retrying these quotas.
+        retryer_factory: Factory that creates Retry object.
 
     Example:
         How to create TolokaClient instance and make your first request to Toloka.
@@ -247,7 +278,8 @@ class TolokaClient:
         retries: Union[int, Retry] = 3,
         timeout: Union[float, Tuple[float, float]] = ...,
         url: Optional[str] = None,
-        retry_quotas: Union[List[str], str, None] = 'MIN'
+        retry_quotas: Union[List[str], str, None] = 'MIN',
+        retryer_factory: Optional[Callable[[], Retry]] = None,
     ): ...
 
     def accept_assignment(
@@ -1840,6 +1872,22 @@ class TolokaClient:
         submitted_lte: Optional[datetime] = None,
         submitted_gt: Optional[datetime] = None,
         submitted_gte: Optional[datetime] = None,
+        accepted_lt: Optional[datetime] = None,
+        accepted_lte: Optional[datetime] = None,
+        accepted_gt: Optional[datetime] = None,
+        accepted_gte: Optional[datetime] = None,
+        rejected_lt: Optional[datetime] = None,
+        rejected_lte: Optional[datetime] = None,
+        rejected_gt: Optional[datetime] = None,
+        rejected_gte: Optional[datetime] = None,
+        skipped_lt: Optional[datetime] = None,
+        skipped_lte: Optional[datetime] = None,
+        skipped_gt: Optional[datetime] = None,
+        skipped_gte: Optional[datetime] = None,
+        expired_lt: Optional[datetime] = None,
+        expired_lte: Optional[datetime] = None,
+        expired_gt: Optional[datetime] = None,
+        expired_gte: Optional[datetime] = None,
         sort: Union[List[str], AssignmentSortItems, None] = None,
         limit: Optional[int] = None
     ) -> AssignmentSearchResult:
@@ -2712,7 +2760,6 @@ class TolokaClient:
     @overload
     def find_user_skills(
         self,
-        name: Optional[str] = None,
         user_id: Optional[str] = None,
         skill_id: Optional[str] = None,
         id_lt: Optional[str] = None,
@@ -2964,7 +3011,23 @@ class TolokaClient:
         submitted_lt: Optional[datetime] = None,
         submitted_lte: Optional[datetime] = None,
         submitted_gt: Optional[datetime] = None,
-        submitted_gte: Optional[datetime] = None
+        submitted_gte: Optional[datetime] = None,
+        accepted_lt: Optional[datetime] = None,
+        accepted_lte: Optional[datetime] = None,
+        accepted_gt: Optional[datetime] = None,
+        accepted_gte: Optional[datetime] = None,
+        rejected_lt: Optional[datetime] = None,
+        rejected_lte: Optional[datetime] = None,
+        rejected_gt: Optional[datetime] = None,
+        rejected_gte: Optional[datetime] = None,
+        skipped_lt: Optional[datetime] = None,
+        skipped_lte: Optional[datetime] = None,
+        skipped_gt: Optional[datetime] = None,
+        skipped_gte: Optional[datetime] = None,
+        expired_lt: Optional[datetime] = None,
+        expired_lte: Optional[datetime] = None,
+        expired_gt: Optional[datetime] = None,
+        expired_gte: Optional[datetime] = None,
     ) -> Generator[Assignment, None, None]:
         """Finds all assignments that match certain rules and returns them in an iterable object
 
@@ -3849,8 +3912,8 @@ class TolokaClient:
             UserRestriction: The next object corresponding to the request parameters.
 
         Example:
-        >>> results_list = [restriction for restriction in toloka_client.get_user_restrictions(scope='ALL_PROJECTS')]
-        ...
+            >>> results_list = [restriction for restriction in toloka_client.get_user_restrictions(scope='ALL_PROJECTS')]
+            ...
         """
         ...
 
@@ -3868,8 +3931,8 @@ class TolokaClient:
             UserRestriction: The next object corresponding to the request parameters.
 
         Example:
-        >>> results_list = [restriction for restriction in toloka_client.get_user_restrictions(scope='ALL_PROJECTS')]
-        ...
+            >>> results_list = [restriction for restriction in toloka_client.get_user_restrictions(scope='ALL_PROJECTS')]
+            ...
         """
         ...
 
@@ -3893,7 +3956,6 @@ class TolokaClient:
     @overload
     def get_user_skills(
         self,
-        name: Optional[str] = None,
         user_id: Optional[str] = None,
         skill_id: Optional[str] = None,
         id_lt: Optional[str] = None,

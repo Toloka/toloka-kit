@@ -1,3 +1,12 @@
+__all__ = [
+    'BaseTask',
+    'Task',
+    'CreateTaskParameters',
+    'CreateTaskAsyncParameters',
+    'CreateTasksParameters',
+    'TaskOverlapPatch',
+    'TaskPatch',
+]
 from datetime import datetime
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.primitives.infinite_overlap import InfiniteOverlapParametersMixin
@@ -85,17 +94,27 @@ class Task(InfiniteOverlapParametersMixin, BaseTask):
     TaskSuite may contain several Tasks.
 
     Attributes:
+        input_values: Input data for a task. List of pairs:
+            "<input field ID 1>": "<field value 1>",
+            "<input field ID 1>": "<field value 2>",
+            ...
+            "<input field ID n>": "<field value n>"
+        known_solutions: Responses and hints for control tasks and training tasks. If multiple output fields are included
+            in the validation, all combinations of the correct response must be specified.
+        message_on_unknown_solution: Hint for the task (for training tasks).
+        id: Task ID.
+        origin_task_id: ID of the task it was copied from.
         pool_id: The ID of the pool that the task is uploaded to.
         reserved_for: IDs of users who will have access to the task.
         unavailable_for: IDs of users who shouldn't have access to the task.
-        traits_all_of:
-        traits_any_of:
-        traits_none_of_any:
+        traits_all_of: 
+        traits_any_of: 
+        traits_none_of_any: 
         created: The UTC date and time when the task was created.
-        baseline_solutions:
+        baseline_solutions: 
         remaining_overlap: How many times will this task be issued to performers. Read Only field.
 
-    Example:
+    Examples:
         How to create tasks.
 
         >>> tasks = [
@@ -193,6 +212,13 @@ class CreateTaskParameters(Parameters):
 
 
 class CreateTaskAsyncParameters(CreateTaskParameters):
+    """Attributes:
+        allow_defaults: Overlap settings:
+            * True - Use the overlap that is set in the pool parameters (in the defaults.default_overlap_for_new_task_suites key).
+            * False - Use the overlap that is set in the task suite parameters (in the overlap field).
+        open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
+    """
+
     def __init__(
         self,
         *,
@@ -216,6 +242,10 @@ class CreateTasksParameters(CreateTaskParameters):
     Used when creating many Tasks.
 
     Attributes:
+        allow_defaults: Overlap settings:
+            * True - Use the overlap that is set in the pool parameters (in the defaults.default_overlap_for_new_task_suites key).
+            * False - Use the overlap that is set in the task suite parameters (in the overlap field).
+        open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
         skip_invalid_items: Validation parameters:
             * True — Create the tasks that passed validation. Skip the rest of the tasks (errors will
                 be listed in the response to the request).
@@ -277,6 +307,10 @@ class TaskPatch(TaskOverlapPatch):
     """Parameters for changing overlap or baseline_solutions of a specific Task
 
     Attributes:
+        overlap: Overlapping a set of tasks.
+        infinite_overlap: Issue a task with infinite overlap. Used, for example, for sets of training tasks to give them to all users:
+            * True - Set infinite overlap.
+            * False - Leave the overlap specified for the task or pool. Default Behaviour.
         baseline_solutions:
     """
 
