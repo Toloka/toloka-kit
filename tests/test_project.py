@@ -544,3 +544,137 @@ def test_get_assignments_df(requests_mock, toloka_client, toloka_api_url):
 
     assert result.equals(expected_df)
     assert requests_mock.last_request.qs == expected_params
+
+
+@pytest.fixture
+def simple_localization_config_map():
+    return {
+        'default_language': 'RU',
+        'additional_languages':
+        [
+            {
+                'language': 'EN',
+                'public_name':
+                {
+                    'value': 'English Project Name',
+                    'source': 'REQUESTER',
+                },
+                'public_description':
+                {
+                    'value': 'Project Description',
+                    'source': 'REQUESTER',
+                },
+                'public_instructions':
+                {
+                    'value': 'Project Instructions',
+                    'source': 'REQUESTER',
+                },
+            },
+        ],
+    }
+
+
+@pytest.fixture
+def project_map_with_localization(project_map, simple_localization_config_map):
+    return {
+        **project_map,
+        'localization_config': simple_localization_config_map,
+    }
+
+
+def test_localization(requests_mock, toloka_client, toloka_url, project_map, project_map_with_localization):
+    requests_mock.post(f'{toloka_url}/projects', headers={'Content-Type': 'application/json; charset=UTF-8'}, json=project_map_with_localization, status_code=201)
+
+    project = client.structure(project_map, client.project.Project)
+
+    project.localization_config = client.project.LocalizationConfig(
+        default_language='RU',
+        additional_languages=[
+            client.project.AdditionalLanguage(
+                language='EN',
+                public_name=client.project.AdditionalLanguage.FieldTranslation(
+                    value='Project name',
+                    source='REQUESTER',
+                ),
+                public_description=client.project.AdditionalLanguage.FieldTranslation(
+                    value='Translated description',
+                    source='REQUESTER',
+                ),
+                public_instructions=client.project.AdditionalLanguage.FieldTranslation(
+                    value='Translated instruction',
+                    source='REQUESTER',
+                ),
+            )
+        ]
+    )
+
+    result = toloka_client.create_project(project)
+    assert project_map_with_localization == client.unstructure(result)
+
+
+def test_localization_funcs(project_map):
+    project1 = client.structure(project_map, client.project.Project)
+
+    project1.localization_config = client.project.LocalizationConfig(
+        default_language='RU',
+        additional_languages=[
+            client.project.AdditionalLanguage(
+                language='EN',
+                public_name=client.project.AdditionalLanguage.FieldTranslation(
+                    value='Project name',
+                    source='REQUESTER',
+                ),
+                public_description=client.project.AdditionalLanguage.FieldTranslation(
+                    value='Translated description',
+                    source='REQUESTER',
+                ),
+                public_instructions=client.project.AdditionalLanguage.FieldTranslation(
+                    value='Translated instruction',
+                    source='REQUESTER',
+                ),
+            )
+        ]
+    )
+
+    project2 = client.structure(project_map, client.project.Project)
+    project2.set_default_language('RU')
+    project2.add_requester_translation(
+        'EN',
+        public_name='Project name',
+        public_description='Translated description',
+        public_instructions='Translated instruction',
+    )
+    assert client.unstructure(project1) == client.unstructure(project2)
+
+    project3 = client.structure(project_map, client.project.Project)
+    project3.add_requester_translation(
+        'EN',
+        public_name='Project name',
+        public_description='Translated description',
+        public_instructions='Translated instruction',
+    )
+    project3.set_default_language('RU')
+    assert client.unstructure(project1) == client.unstructure(project3)
+
+    project4 = client.structure(project_map, client.project.Project)
+    project4.add_requester_translation(
+        'EN',
+        public_name='',
+        public_description='',
+        public_instructions='',
+    )
+    project4.set_default_language('RU')
+    project4.add_requester_translation(
+        'EN',
+        public_name='Project name',
+        public_description='Translated description',
+        public_instructions='Translated instruction',
+    )
+    assert client.unstructure(project1) == client.unstructure(project4)
+
+    project5 = client.structure(project_map, client.project.Project)
+    project5.set_default_language('RU')
+    project5.add_requester_translation(language='EN', public_name='Project name')
+    project5.add_requester_translation(language='EN', public_description='Translated description')
+    project5.add_requester_translation(language='EN', public_instructions='Translated instruction')
+    assert client.unstructure(project1) == client.unstructure(project5)

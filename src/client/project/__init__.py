@@ -22,10 +22,13 @@ __all__ = [
     'ArrayUrlSpec',
     'ArrayFileSpec',
     'ArrayCoordinatesSpec',
+    'LocalizationConfig',
+    'AdditionalLanguage',
 ]
 
 import datetime
 from enum import Enum, unique
+from typing import Optional
 
 from . import field_spec
 from . import task_spec
@@ -50,6 +53,7 @@ from ..project.field_spec import (
     ArrayFileSpec,
     ArrayCoordinatesSpec,
 )
+from ..project.localization import LocalizationConfig, AdditionalLanguage
 from ..project.view_spec import ClassicViewSpec, TemplateBuilderViewSpec
 from ..project.task_spec import TaskSpec
 from ..quality_control import QualityControl
@@ -165,8 +169,71 @@ class Project(BaseTolokaObject):
 
     public_instructions: str  # public
     private_comment: str
+    localization_config: LocalizationConfig
 
     def __attrs_post_init__(self):
         # TODO: delegate this check to API
         if self.assignments_issuing_type == Project.AssignmentsIssuingType.MAP_SELECTOR:
             assert self.assignments_issuing_view_config is not None
+
+    def set_default_language(self, language: str):
+        """Sets the source language used in the fields public_name, public_description, and public_instructions.
+
+        You must set the default language if you want to use the translation in the project to other languages.
+        Args:
+            language: The source language.
+        """
+        if self.localization_config is None:
+            self.localization_config = LocalizationConfig()
+        self.localization_config.default_language = language
+
+    def add_requester_translation(self, language: str, public_name: Optional[str] = None, public_description: Optional[str] = None, public_instructions: Optional[str] = None):
+        """Add new translations to other language.
+
+        You can call it several times for different languages.
+        If you call it for the same language, it overwrites new values, but don't overwrite values, that you don't pass.
+
+        Args:
+            language (str): Target language. A string from ISO 639-1.
+            public_name (str): Translation of the project name.
+            public_description (str): Translation of the project description.
+            public_instructions (str): Translation of instructions for completing tasks.
+
+        Examples:
+            How to add russian translation to the project:
+
+            >>> project = toloka.Project(
+            >>>     public_name='cats vs dogs',
+            >>>     public_description='image classification',
+            >>>     public_instructions='do it pls',
+            >>>     ...
+            >>> )
+            >>> project.set_default_language('EN')
+            >>> project.add_requester_translation(
+            >>>     language='RU',
+            >>>     public_name='кошки против собак'
+            >>>     public_description='классификация изображений'
+            >>> )
+            >>> project.add_requester_translation(language='RU', public_instructions='сделай это, пожалуйста')
+        """
+        assert language
+
+        if self.localization_config is None:
+            self.localization_config = LocalizationConfig()
+        if self.localization_config.additional_languages is None:
+            self.localization_config.additional_languages = []
+
+        for translation in self.localization_config.additional_languages:
+            if translation.language == language:
+                current_translation = translation
+                break
+        else:
+            current_translation = AdditionalLanguage(language=language)
+            self.localization_config.additional_languages.append(current_translation)
+
+        if public_name is not None:
+            current_translation.public_name = AdditionalLanguage.FieldTranslation(value=public_name)
+        if public_description is not None:
+            current_translation.public_description = AdditionalLanguage.FieldTranslation(value=public_description)
+        if public_instructions is not None:
+            current_translation.public_instructions = AdditionalLanguage.FieldTranslation(value=public_instructions)
