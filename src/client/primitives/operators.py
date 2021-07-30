@@ -15,10 +15,11 @@ import attr
 import sys
 
 from .base import attribute, BaseTolokaObjectMetaclass
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 @unique
-class CompareOperator(Enum):
+class CompareOperator(ExtendableStrEnum):
     EQ = 'EQ'
     NE = 'NE'
     GT = 'GT'
@@ -28,13 +29,13 @@ class CompareOperator(Enum):
 
 
 @unique
-class InclusionOperator(Enum):
+class InclusionOperator(ExtendableStrEnum):
     IN = 'IN'
     NOT_IN = 'NOT_IN'
 
 
 @unique
-class IdentityOperator(Enum):
+class IdentityOperator(ExtendableStrEnum):
     EQ = 'EQ'
     NE = 'NE'
 

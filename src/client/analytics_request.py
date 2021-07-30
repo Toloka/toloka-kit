@@ -14,10 +14,11 @@ __all__ = [
     'ActiveWorkersByFilterCountPoolAnalytics',
     'EstimatedAssignmentsCountPoolAnalytics'
 ]
-from enum import Enum, unique
+from enum import unique
 
 from .primitives.base import attribute, BaseTolokaObject
 from .util._docstrings import inherit_docstrings
+from .util._extendable_enum import ExtendableStrEnum
 
 
 class AnalyticsRequest(BaseTolokaObject, spec_field='subject', spec_enum='Subject'):
@@ -29,7 +30,7 @@ class AnalyticsRequest(BaseTolokaObject, spec_field='subject', spec_enum='Subjec
         subject_id: ID of the object you want to get analytics about.
     """
     @unique
-    class Subject(Enum):
+    class Subject(ExtendableStrEnum):
         POOL = 'POOL'
 
     subject_id: str = attribute(required=True)
@@ -48,7 +49,7 @@ class PoolAnalyticsRequest(
     """
 
     @unique
-    class Subject(Enum):
+    class Subject(ExtendableStrEnum):
         REAL_TASKS_COUNT = 'real_tasks_count'
         SUBMITTED_ASSIGNMENTS_COUNT = 'submitted_assignments_count'
         SKIPPED_ASSIGNMENTS_COUNT = 'skipped_assignments_count'

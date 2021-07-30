@@ -1,5 +1,5 @@
 __all__ = ['QualityControl']
-from enum import Enum, unique
+from enum import unique
 from typing import List
 
 from .actions import RuleAction
@@ -7,6 +7,7 @@ from .collectors import CollectorConfig
 from .conditions import RuleCondition
 from .primitives.base import attribute, BaseTolokaObject
 from .task_distribution_function import TaskDistributionFunction
+from .util._extendable_enum import ExtendableStrEnum
 
 
 class QualityControl(BaseTolokaObject):
@@ -53,7 +54,7 @@ class QualityControl(BaseTolokaObject):
         training_passing_skill_value: int
 
     @unique
-    class CaptchaFrequency(Enum):
+    class CaptchaFrequency(ExtendableStrEnum):
         LOW = 'LOW'
         MEDIUM = 'MEDIUM'
         HIGH = 'HIGH'

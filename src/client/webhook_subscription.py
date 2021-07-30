@@ -2,9 +2,10 @@ __all__ = [
     'WebhookSubscription',
 ]
 from datetime import datetime
-from enum import Enum, unique
+from enum import unique
 
 from .primitives.base import attribute, BaseTolokaObject
+from .util._extendable_enum import ExtendableStrEnum
 
 
 class WebhookSubscription(BaseTolokaObject):
@@ -19,7 +20,7 @@ class WebhookSubscription(BaseTolokaObject):
     """
 
     @unique
-    class EventType(Enum):
+    class EventType(ExtendableStrEnum):
         """Webhook subscription event type:
 
         Attributes:

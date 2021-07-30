@@ -27,7 +27,7 @@ __all__ = [
 ]
 
 import datetime
-from enum import Enum, unique
+from enum import unique
 from typing import Optional
 
 from . import field_spec
@@ -57,6 +57,7 @@ from ..project.localization import LocalizationConfig, AdditionalLanguage
 from ..project.view_spec import ClassicViewSpec, TemplateBuilderViewSpec
 from ..project.task_spec import TaskSpec
 from ..quality_control import QualityControl
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 class Project(BaseTolokaObject):
@@ -111,7 +112,7 @@ class Project(BaseTolokaObject):
     """
 
     @unique
-    class AssignmentsIssuingType(Enum):
+    class AssignmentsIssuingType(ExtendableStrEnum):
         """How to assign tasks:
 
         Attributes:
@@ -125,7 +126,7 @@ class Project(BaseTolokaObject):
         MAP_SELECTOR = 'MAP_SELECTOR'
 
     @unique
-    class ProjectStatus(Enum):
+    class ProjectStatus(ExtendableStrEnum):
         """Project status:
 
         Attributes:

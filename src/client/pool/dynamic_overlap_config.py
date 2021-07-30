@@ -1,8 +1,9 @@
 __all__ = ['DynamicOverlapConfig']
-from enum import Enum, unique
+from enum import unique
 from typing import List
 
 from ..primitives.base import BaseTolokaObject
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 class DynamicOverlapConfig(BaseTolokaObject):
@@ -22,7 +23,7 @@ class DynamicOverlapConfig(BaseTolokaObject):
     """
 
     @unique
-    class Type(Enum):
+    class Type(ExtendableStrEnum):
         """The algorithm for dynamic overlap.
 
         Atttributes:

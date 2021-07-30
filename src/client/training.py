@@ -1,11 +1,12 @@
 __all__ = ['Training']
 import datetime
-from enum import Enum, unique
+from enum import unique
 from typing import Dict, List
 
 from .owner import Owner
 from .primitives.base import attribute, BaseTolokaObject
 from .util._codegen import codegen_attr_attributes_setters
+from .util._extendable_enum import ExtendableStrEnum
 
 
 @codegen_attr_attributes_setters
@@ -47,7 +48,7 @@ class Training(BaseTolokaObject):
     """
 
     @unique
-    class CloseReason(Enum):
+    class CloseReason(ExtendableStrEnum):
         """The reason for closing the pool the last time:
 
         Attributes:
@@ -68,7 +69,7 @@ class Training(BaseTolokaObject):
         FOR_UPDATE = 'FOR_UPDATE'
 
     @unique
-    class Status(Enum):
+    class Status(ExtendableStrEnum):
         """Status of the training pool
 
         Attributes:

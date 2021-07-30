@@ -10,7 +10,7 @@ __all__ = [
     'MixerConfig',
 ]
 import datetime
-from enum import Enum, unique
+from enum import unique
 from typing import Dict, List, Optional
 
 import attr
@@ -28,6 +28,7 @@ from ..owner import Owner
 from ..primitives.base import attribute, BaseTolokaObject
 from ..quality_control import QualityControl
 from ..util._codegen import codegen_attr_attributes_setters, create_setter, expand
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 @codegen_attr_attributes_setters
@@ -127,7 +128,7 @@ class Pool(BaseTolokaObject):
         issue_task_suites_in_creation_order: bool
 
     @unique
-    class CloseReason(Enum):
+    class CloseReason(ExtendableStrEnum):
         """The reason for closing the pool the last time:
 
         Attributes:
@@ -162,7 +163,7 @@ class Pool(BaseTolokaObject):
         default_overlap_for_new_tasks: int
 
     @unique
-    class Status(Enum):
+    class Status(ExtendableStrEnum):
         """Status of the pool
 
         Attributes:
@@ -181,7 +182,7 @@ class Pool(BaseTolokaObject):
         training_skill_ttl_days: int
 
     @unique
-    class Type(Enum):
+    class Type(ExtendableStrEnum):
         REGULAR = 'REGULAR'
         TRAINING = 'TRAINING'
 

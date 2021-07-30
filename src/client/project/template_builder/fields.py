@@ -19,7 +19,7 @@ __all__ = [
     'TextAnnotationFieldV1',
     'TextareaFieldV1',
 ]
-from enum import Enum, unique
+from enum import unique
 from typing import List, Any, Dict
 
 from ...primitives.base import attribute
@@ -33,6 +33,7 @@ from .base import (
     VersionedBaseComponentMetaclass,
     base_component_or
 )
+from ...util._extendable_enum import ExtendableStrEnum
 
 
 class BaseFieldV1Metaclass(VersionedBaseComponentMetaclass):
@@ -287,7 +288,7 @@ class ImageAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_IMAGE_A
         value: base_component_or(str)
 
     @unique
-    class Shape(Enum):
+    class Shape(ExtendableStrEnum):
         POINT = 'point'
         POLYGON = 'polygon'
         RECTANGLE = 'rectangle'

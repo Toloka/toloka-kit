@@ -9,19 +9,20 @@ __all__ = [
     'UnknownComponent',
     'RefComponent',
     'ListDirection',
-    'ListSize',
+    'ListSize'
 ]
-from enum import Enum, unique
+from enum import unique
 from typing import ClassVar, Type, Optional, Any, Union
 
 from ..._converter import converter
 from ...primitives.base import attribute, BaseTolokaObject, BaseTolokaObjectMetaclass
 from ...exceptions import SpecClassIdentificationError
+from ...util._extendable_enum import ExtendableStrEnum
 
 
 # TODO: split into several enums
 @unique
-class ComponentType(Enum):
+class ComponentType(ExtendableStrEnum):
     ACTION_BULK = 'action.bulk'
     ACTION_NOTIFY = 'action.notify'
     ACTION_OPEN_CLOSE = 'action.open-close'
@@ -198,12 +199,12 @@ class RefComponent(BaseTemplate):
 
 
 @unique
-class ListDirection(Enum):
+class ListDirection(ExtendableStrEnum):
     HORIZONTAL = 'horizontal'
     VERTICAL = 'vertical'
 
 
 @unique
-class ListSize(Enum):
+class ListSize(ExtendableStrEnum):
     M = 'm'
     S = 's'

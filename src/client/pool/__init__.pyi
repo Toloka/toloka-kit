@@ -2,7 +2,6 @@ __all__ = [
     'dynamic_overlap_config',
     'dynamic_pricing_config',
     'mixer_config',
-
     'Pool',
     'PoolPatchRequest',
     'DynamicOverlapConfig',

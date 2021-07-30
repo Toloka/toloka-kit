@@ -3,7 +3,6 @@ __all__ = [
     'task_spec',
     'template_builder',
     'view_spec',
-
     'Project',
     'ClassicViewSpec',
     'TemplateBuilderViewSpec',

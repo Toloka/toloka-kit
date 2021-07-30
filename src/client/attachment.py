@@ -4,11 +4,12 @@ __all__ = [
 ]
 
 import datetime
-from enum import Enum, unique
+from enum import unique
 
 from .owner import Owner
 from .primitives.base import BaseTolokaObject
 from .util._docstrings import inherit_docstrings
+from .util._extendable_enum import ExtendableStrEnum
 
 
 class Attachment(BaseTolokaObject, spec_enum='Type', spec_field='attachment_type'):
@@ -25,7 +26,7 @@ class Attachment(BaseTolokaObject, spec_enum='Type', spec_field='attachment_type
     """
 
     @unique
-    class Type(Enum):
+    class Type(ExtendableStrEnum):
         ASSIGNMENT_ATTACHMENT = 'ASSIGNMENT_ATTACHMENT'
 
     ASSIGNMENT_ATTACHMENT = Type.ASSIGNMENT_ATTACHMENT

@@ -16,7 +16,7 @@ __all__ = [
 https://yandex.ru/dev/toloka/doc/concepts/quality_control-docpage/
 """
 
-from enum import Enum, unique
+from enum import unique
 from typing import ClassVar, FrozenSet, List, Optional
 from uuid import UUID
 
@@ -24,6 +24,7 @@ from .conditions import RuleCondition
 from .conditions import RuleConditionKey
 from .util._codegen import BaseParameters
 from .util._docstrings import inherit_docstrings
+from .util._extendable_enum import ExtendableStrEnum
 
 
 class CollectorConfig(BaseParameters, spec_enum='Type', spec_field='type'):
@@ -38,7 +39,7 @@ class CollectorConfig(BaseParameters, spec_enum='Type', spec_field='type'):
     _compatible_conditions: ClassVar[FrozenSet[RuleConditionKey]]
 
     @unique
-    class Type(Enum):
+    class Type(ExtendableStrEnum):
         GOLDEN_SET = 'GOLDEN_SET'
         MAJORITY_VOTE = 'MAJORITY_VOTE'
         CAPTCHA = 'CAPTCHA'

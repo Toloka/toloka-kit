@@ -31,7 +31,7 @@ __all__ = [
     'UserAgentVersionBugfix',
     'Rating'
 ]
-from enum import Enum, unique
+from enum import unique
 from typing import Any, List, Optional, Union
 
 from .primitives.base import attribute, BaseTolokaObject
@@ -43,6 +43,7 @@ from .primitives.operators import (
     InclusionConditionMixin,
 )
 from .util._docstrings import inherit_docstrings
+from .util._extendable_enum import ExtendableStrEnum
 
 
 class FilterCondition(BaseTolokaObject):
@@ -141,7 +142,7 @@ class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
     """
 
     @unique
-    class Category(Enum):
+    class Category(ExtendableStrEnum):
         PROFILE = 'profile'
         COMPUTED = 'computed'
         SKILL = 'skill'
@@ -160,7 +161,7 @@ class Profile(Condition, spec_value=Condition.Category.PROFILE, spec_field='key'
     """
 
     @unique
-    class Key(Enum):
+    class Key(ExtendableStrEnum):
         """Possible criteria for filtering users by profile.
         """
 
@@ -180,7 +181,7 @@ class Computed(Condition, spec_value=Condition.Category.COMPUTED, spec_field='ke
     """
 
     @unique
-    class Key(Enum):
+    class Key(ExtendableStrEnum):
         """Possible criteria for filtering users by computed data.
         """
 
@@ -228,7 +229,7 @@ class Gender(Profile, IdentityConditionMixin, spec_value=Profile.Key.GENDER):
     """
 
     @unique
-    class Gender(Enum):
+    class Gender(ExtendableStrEnum):
         """User gender.
         """
 
@@ -272,7 +273,7 @@ class Education(Profile, IdentityConditionMixin, spec_value=Profile.Key.EDUCATIO
     """
 
     @unique
-    class Education(Enum):
+    class Education(ExtendableStrEnum):
         """User education.
         """
 
@@ -362,7 +363,7 @@ class DeviceCategory(Computed, IdentityConditionMixin, spec_value=Computed.Key.D
     """
 
     @unique
-    class DeviceCategory(Enum):
+    class DeviceCategory(ExtendableStrEnum):
         """Device сategory.
         """
 
@@ -388,7 +389,7 @@ class ClientType(Computed, IdentityConditionMixin, spec_value=Computed.Key.CLIEN
     """
 
     @unique
-    class ClientType(Enum):
+    class ClientType(ExtendableStrEnum):
         """Client application type.
         """
 
@@ -407,7 +408,7 @@ class OSFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.OS_FAMI
     """
 
     @unique
-    class OSFamily(Enum):
+    class OSFamily(ExtendableStrEnum):
         """The operating system family.
         """
 
@@ -489,7 +490,7 @@ class UserAgentType(Computed, IdentityConditionMixin, spec_value=Computed.Key.US
     """
 
     @unique
-    class UserAgentType(Enum):
+    class UserAgentType(ExtendableStrEnum):
         """User agent type.
         """
 
@@ -513,7 +514,7 @@ class UserAgentFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.
     """
 
     @unique
-    class UserAgentFamily(Enum):
+    class UserAgentFamily(ExtendableStrEnum):
         """User agent family.
         """
 

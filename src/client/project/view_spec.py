@@ -7,20 +7,21 @@ __all__ = [
 import json
 
 from copy import deepcopy
-from enum import Enum, unique
+from enum import unique
 from typing import List
 
 from .template_builder import TemplateBuilder
 from ..primitives.base import attribute, BaseTolokaObject
 from ..util import traverse_dicts_recursively
 from ..util._codegen import expand
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 class ViewSpec(BaseTolokaObject, spec_enum='Type', spec_field='type'):
     """Description of the task interface"""
 
     @unique
-    class Type(Enum):
+    class Type(ExtendableStrEnum):
         """A view spec type
 
         Attributes:

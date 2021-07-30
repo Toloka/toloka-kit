@@ -6,6 +6,7 @@ import uuid
 from typing import List, Union
 
 import cattr
+from .util._extendable_enum import ExtendableStrEnum
 
 if sys.version_info[:2] < (3, 7):
     from backports.datetime_fromisoformat import MonkeyPatch
@@ -45,6 +46,17 @@ converter.register_unstructure_hook(datetime.datetime, lambda data: data.isoform
 converter.register_structure_hook(
     Decimal,
     lambda data, type_: Decimal(data)  # type: ignore
+)
+
+# We need to redefine structure/unstructure hook for ExtendableStrEnum because hasattr(type_, 'structure') works incorrect in that case
+converter.register_unstructure_hook(  # type: ignore
+    ExtendableStrEnum,
+    lambda obj: converter._unstructure_enum(obj)  # type: ignore
+)
+
+converter.register_structure_hook(  # type: ignore
+    ExtendableStrEnum,
+    lambda data, type_: converter._structure_call(data, type_)   # type: ignore
 )
 
 

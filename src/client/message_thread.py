@@ -8,15 +8,16 @@ __all__ = [
     'MessageThreadCompose'
 ]
 import datetime
-from enum import Enum, unique
+from enum import unique
 from typing import Dict, List
 
 from .filter import FilterCondition
 from .primitives.base import attribute, BaseTolokaObject
+from .util._extendable_enum import ExtendableStrEnum
 
 
 @unique
-class RecipientsSelectType(Enum):
+class RecipientsSelectType(ExtendableStrEnum):
     """Method for specifying recipients.
 
     Attributes:
@@ -31,7 +32,7 @@ class RecipientsSelectType(Enum):
 
 
 @unique
-class Folder(Enum):
+class Folder(ExtendableStrEnum):
     """Folders for a thread.
     """
 
@@ -52,7 +53,7 @@ class Interlocutor(BaseTolokaObject):
     """
 
     @unique
-    class InterlocutorRole(Enum):
+    class InterlocutorRole(ExtendableStrEnum):
         """Role of the sender or recipient in Toloka.
 
         Attributes:

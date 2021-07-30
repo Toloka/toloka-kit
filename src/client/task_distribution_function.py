@@ -1,8 +1,9 @@
 __all__ = ['TaskDistributionFunction']
-from enum import Enum, unique
+from enum import unique
 from typing import List
 
 from .primitives.base import attribute, BaseTolokaObject
+from .util._extendable_enum import ExtendableStrEnum
 
 
 class TaskDistributionFunction(BaseTolokaObject):
@@ -24,12 +25,12 @@ class TaskDistributionFunction(BaseTolokaObject):
     """
 
     @unique
-    class Scope(Enum):
+    class Scope(ExtendableStrEnum):
         PROJECT = 'PROJECT'
         POOL = 'POOL'
 
     @unique
-    class Distribution(Enum):
+    class Distribution(ExtendableStrEnum):
         UNIFORM = 'UNIFORM'
 
     class Interval(BaseTolokaObject):

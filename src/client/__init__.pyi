@@ -3027,7 +3027,7 @@ class TolokaClient:
         expired_lt: Optional[datetime] = None,
         expired_lte: Optional[datetime] = None,
         expired_gt: Optional[datetime] = None,
-        expired_gte: Optional[datetime] = None,
+        expired_gte: Optional[datetime] = None
     ) -> Generator[Assignment, None, None]:
         """Finds all assignments that match certain rules and returns them in an iterable object
 

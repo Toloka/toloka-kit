@@ -29,15 +29,16 @@ __all__ = [
     'TotalAssignmentsCount',
     'TotalSubmittedCount'
 ]
-from enum import Enum, unique
+from enum import unique
 from typing import Any
 
 from .primitives.base import BaseTolokaObject
 from .primitives.operators import IdentityConditionMixin, ComparableConditionMixin
+from .util._extendable_enum import ExtendableStrEnum
 
 
 @unique
-class RuleConditionKey(Enum):
+class RuleConditionKey(ExtendableStrEnum):
     ACCEPTED_ASSIGNMENTS_COUNT = 'accepted_assignments_count'
     ACCEPTED_ASSIGNMENTS_RATE = 'accepted_assignments_rate'
     ASSESSMENT_EVENT = 'assessment_event'
@@ -121,7 +122,7 @@ class AssessmentEvent(IdentityRuleCondition, spec_value=RuleConditionKey.ASSESSM
     """
 
     @unique
-    class Type(Enum):
+    class Type(ExtendableStrEnum):
         ACCEPT = 'ACCEPT'
         ACCEPT_AFTER_REJECT = 'ACCEPT_AFTER_REJECT'
         REJECT = 'REJECT'
@@ -227,7 +228,7 @@ class PoolAccessRevokedReason(IdentityRuleCondition, spec_value=RuleConditionKey
     """
 
     @unique
-    class Type(Enum):
+    class Type(ExtendableStrEnum):
         SKILL_CHANGE = 'SKILL_CHANGE'
         RESTRICTION = 'RESTRICTION'
 

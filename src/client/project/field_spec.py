@@ -17,15 +17,16 @@ __all__ = [
     'ArrayFileSpec',
     'ArrayCoordinatesSpec'
 ]
-from enum import Enum, unique
+from enum import unique
 from typing import List
 
 from ..primitives.base import BaseTolokaObject
 from ..util._docstrings import inherit_docstrings
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 @unique
-class FieldType(Enum):
+class FieldType(ExtendableStrEnum):
     BOOLEAN = 'boolean'
     STRING = 'string'
     FLOAT = 'float'

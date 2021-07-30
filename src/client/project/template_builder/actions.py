@@ -9,7 +9,7 @@ __all__ = [
     'SetActionV1',
     'ToggleActionV1',
 ]
-from enum import Enum, unique
+from enum import unique
 from typing import List, Any
 
 from ...primitives.base import attribute
@@ -21,6 +21,7 @@ from .base import (
     VersionedBaseComponentMetaclass,
     base_component_or
 )
+from ...util._extendable_enum import ExtendableStrEnum
 
 
 class BaseActionV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):
@@ -65,7 +66,7 @@ class NotifyActionV1(BaseActionV1, spec_value=ComponentType.ACTION_NOTIFY):
         """
 
         @unique
-        class Theme(Enum):
+        class Theme(ExtendableStrEnum):
             """The background color of the message.
 
             Attributes:
@@ -135,7 +136,7 @@ class RotateActionV1(BaseActionV1, spec_value=ComponentType.ACTION_ROTATE):
     """
 
     @unique
-    class Payload(Enum):
+    class Payload(ExtendableStrEnum):
         LEFT = 'left'
         RIGHT = 'right'
 
