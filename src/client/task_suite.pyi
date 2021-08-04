@@ -75,6 +75,9 @@ class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
         ...
 
     @overload
+    def add_base_task(self, base_task: BaseTask) -> 'TaskSuite': ...
+
+    @overload
     def add_base_task(
         self,
         *,
@@ -82,9 +85,6 @@ class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
         known_solutions: Optional[List[BaseTask.KnownSolution]] = None,
         message_on_unknown_solution: Optional[str] = None
     ) -> 'TaskSuite': ...
-
-    @overload
-    def add_base_task(self, base_task: BaseTask) -> 'TaskSuite': ...
 
     _unexpected: Optional[Dict[str, Any]]
     _infinite_overlap: Optional[bool]

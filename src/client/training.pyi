@@ -121,6 +121,12 @@ class Training(BaseTolokaObject):
     def is_open(self) -> bool: ...
 
     @overload
+    def set_owner(self, owner: Owner):
+        """A shortcut setter for owner
+        """
+        ...
+
+    @overload
     def set_owner(
         self,
         *,
@@ -128,12 +134,6 @@ class Training(BaseTolokaObject):
         myself: Optional[bool] = None,
         company_id: Optional[str] = None
     ):
-        """A shortcut setter for owner
-        """
-        ...
-
-    @overload
-    def set_owner(self, owner: Owner):
         """A shortcut setter for owner
         """
         ...
