@@ -50,6 +50,7 @@ class ComponentType(ExtendableStrEnum):
     DATA_LOCATION = '@yandex-toloka/data.location'
     DATA_OUTPUT = 'data.output'
     DATA_RELATIVE = 'data.relative'
+    FIELD_AUDIO = 'field.audio'
     FIELD_BUTTON_RADIO = 'field.button-radio'
     FIELD_BUTTON_RADIO_GROUP = 'field.button-radio-group'
     FIELD_CHECKBOX = 'field.checkbox'
