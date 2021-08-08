@@ -13,6 +13,8 @@ from typing import (
     Optional
 )
 
+from enum import Enum
+
 class QualityControl(BaseTolokaObject):
     """Quality control unit settings and pool ID with training tasks
 

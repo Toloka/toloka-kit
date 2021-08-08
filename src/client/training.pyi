@@ -2,6 +2,7 @@ __all__ = [
     'Training',
 ]
 from datetime import datetime
+from enum import Enum
 from toloka.client.owner import Owner
 from toloka.client.primitives.base import BaseTolokaObject
 from typing import (
@@ -11,6 +12,7 @@ from typing import (
     Optional,
     overload
 )
+
 
 class Training(BaseTolokaObject):
     """Training pool
