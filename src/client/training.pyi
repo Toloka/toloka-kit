@@ -5,6 +5,7 @@ from datetime import datetime
 from enum import Enum
 from toloka.client.owner import Owner
 from toloka.client.primitives.base import BaseTolokaObject
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -51,7 +52,7 @@ class Training(BaseTolokaObject):
         last_stopped: UTC date and time of the last stop of the training pool in ISO 8601 format. Read only.
     """
 
-    class CloseReason(Enum):
+    class CloseReason(ExtendableStrEnum):
         """The reason for closing the pool the last time:
 
         Attributes:
@@ -72,7 +73,7 @@ class Training(BaseTolokaObject):
         BLOCKED = 'BLOCKED'
         FOR_UPDATE = 'FOR_UPDATE'
 
-    class Status(Enum):
+    class Status(ExtendableStrEnum):
         """Status of the training pool
 
         Attributes:

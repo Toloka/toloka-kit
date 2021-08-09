@@ -6,6 +6,7 @@ from toloka.client.collectors import CollectorConfig
 from toloka.client.conditions import RuleCondition
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.task_distribution_function import TaskDistributionFunction
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -46,7 +47,7 @@ class QualityControl(BaseTolokaObject):
         ...
     """
 
-    class CaptchaFrequency(Enum):
+    class CaptchaFrequency(ExtendableStrEnum):
         """An enumeration.
         """
 

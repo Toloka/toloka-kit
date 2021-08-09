@@ -1,0 +1,90 @@
+__all__ = [
+    'AssignmentEvent',
+    'BaseEvent',
+    'TaskEvent',
+    'UserBonusEvent',
+    'UserSkillEvent',
+]
+
+from enum import Enum, unique
+from datetime import datetime
+from ..client import Assignment, Task, UserBonus, UserSkill
+from ..client.primitives.base import BaseTolokaObject
+
+
+class BaseEventTypeEnum(Enum):
+    @property
+    def time_key(self):
+        return self.value.lower()
+
+
+class BaseEvent(BaseTolokaObject):
+    event_time: datetime
+
+
+class AssignmentEvent(BaseEvent):
+    """Assignment-related event.
+
+    Attributes:
+        event_time: Event datetime.
+        event_type: One of the folllowing event types:
+            * CREATED
+            * SUBMITTED
+            * ACCEPTED
+            * REJECTED
+            * SKIPPED
+            * EXPIRED
+        assignment: Assignment object itself.
+    """
+
+    @unique
+    class Type(BaseEventTypeEnum):
+        CREATED = 'CREATED'
+        SUBMITTED = 'SUBMITTED'
+        ACCEPTED = 'ACCEPTED'
+        REJECTED = 'REJECTED'
+        SKIPPED = 'SKIPPED'
+        EXPIRED = 'EXPIRED'
+
+    event_type: Type
+    assignment: Assignment
+
+
+class TaskEvent(BaseEvent):
+    """Task-related event.
+
+    Attributes:
+        event_time: Event datetime.
+        task: Task object itself.
+    """
+    task: Task
+
+
+class UserBonusEvent(BaseEvent):
+    """UserBonus-related event.
+
+    Attributes:
+        event_time: Event datetime.
+        user_bonus: UserBonus object itself.
+    """
+    user_bonus: UserBonus
+
+
+class UserSkillEvent(BaseEvent):
+    """UserSkill-related event.
+
+    Attributes:
+        event_time: Event datetime.
+        event_type: One of the folllowing event types:
+            * CREATED
+            * MODIFIED
+        user_skill: UserSkill object itself.
+    """
+
+    @unique
+    class Type(BaseEventTypeEnum):
+        CREATED = 'CREATED'
+        MODIFIED = 'MODIFIED'
+
+    event_type: Type
+    user_skill: UserSkill
