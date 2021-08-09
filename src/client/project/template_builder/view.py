@@ -15,9 +15,9 @@ __all__ = [
     'ListViewV1',
     'MarkdownViewV1',
     'TextViewV1',
-    'VideoViewV1',
+    'VideoViewV1'
 ]
-from enum import Enum, unique
+from enum import unique
 from typing import List, Any
 
 from ...primitives.base import attribute
@@ -31,6 +31,7 @@ from .base import (
     VersionedBaseComponentMetaclass,
     base_component_or
 )
+from ...util._extendable_enum import ExtendableStrEnum
 
 
 class BaseViewV1Metaclass(VersionedBaseComponentMetaclass):
@@ -83,7 +84,7 @@ class AlertViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ALERT):
     """
 
     @unique
-    class Theme(Enum):
+    class Theme(ExtendableStrEnum):
         """An enumeration
 
         Attributes:

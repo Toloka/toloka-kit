@@ -11,6 +11,7 @@ from enum import unique, Enum
 
 from .primitives.base import attribute, BaseTolokaObject
 from .util._docstrings import inherit_docstrings
+from .util._extendable_enum import ExtendableStrEnum
 
 
 @unique
@@ -54,7 +55,7 @@ class UserRestriction(BaseTolokaObject, spec_enum='Scope', spec_field='scope'):
     """
 
     @unique
-    class Scope(Enum):
+    class Scope(ExtendableStrEnum):
         """Restriction scope
 
         * ALL_PROJECTS - All the requester's projects.

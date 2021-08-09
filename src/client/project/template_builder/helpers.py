@@ -11,14 +11,15 @@ __all__ = [
     'TextTransformHelperV1',
     'TransformHelperV1',
     'TranslateHelperV1',
-    'YandexDiskProxyHelperV1',
+    'YandexDiskProxyHelperV1'
 ]
-from enum import Enum, unique
+from enum import unique
 from typing import List, Any
 
 from ...primitives.base import attribute
 
 from .base import BaseComponent, ComponentType, BaseTemplate, VersionedBaseComponentMetaclass, base_component_or
+from ...util._extendable_enum import ExtendableStrEnum
 
 
 class BaseHelperV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):
@@ -168,7 +169,7 @@ class SearchQueryHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_SEARCH_Q
     """
 
     @unique
-    class Engine(Enum):
+    class Engine(ExtendableStrEnum):
         YANDEX = 'yandex'
         GOOGLE = 'google'
         BING = 'bing'
@@ -237,7 +238,7 @@ class TextTransformHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_TEXT_T
     """
 
     @unique
-    class Transformation(Enum):
+    class Transformation(ExtendableStrEnum):
         UPPERCASE = 'uppercase'
         LOWERCASE = 'lowercase'
         CAPITALIZE = 'capitalize'

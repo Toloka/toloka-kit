@@ -2,7 +2,6 @@ __all__ = [
     'dynamic_overlap_config',
     'dynamic_pricing_config',
     'mixer_config',
-
     'Pool',
     'PoolPatchRequest',
     'DynamicOverlapConfig',
@@ -252,19 +251,36 @@ class Pool(BaseTolokaObject):
     def is_open(self) -> bool: ...
 
     @overload
+    def set_assignments_issuing_config(self, assignments_issuing_config: AssignmentsIssuingConfig):
+        """A shortcut setter for assignments_issuing_config
+        """
+        ...
+
+    @overload
     def set_assignments_issuing_config(self, issue_task_suites_in_creation_order: Optional[bool] = None):
         """A shortcut setter for assignments_issuing_config
         """
         ...
 
     @overload
-    def set_assignments_issuing_config(self, assignments_issuing_config: AssignmentsIssuingConfig):
-        """A shortcut setter for assignments_issuing_config
+    def set_captcha_frequency(self, captcha_frequency: QualityControl.CaptchaFrequency):
+        """A shortcut setter for quality_control.captcha_frequency
         """
         ...
 
-    def set_captcha_frequency(self, captcha_frequency: QualityControl.CaptchaFrequency):
+    @overload
+    def set_captcha_frequency(
+        self,
+        *args,
+        **kwargs
+    ):
         """A shortcut setter for quality_control.captcha_frequency
+        """
+        ...
+
+    @overload
+    def set_checkpoints_config(self, checkpoints_config: QualityControl.CheckpointsConfig):
+        """A shortcut setter for quality_control.checkpoints_config
         """
         ...
 
@@ -281,8 +297,8 @@ class Pool(BaseTolokaObject):
         ...
 
     @overload
-    def set_checkpoints_config(self, checkpoints_config: QualityControl.CheckpointsConfig):
-        """A shortcut setter for quality_control.checkpoints_config
+    def set_defaults(self, defaults: Defaults):
+        """A shortcut setter for defaults
         """
         ...
 
@@ -298,8 +314,8 @@ class Pool(BaseTolokaObject):
         ...
 
     @overload
-    def set_defaults(self, defaults: Defaults):
-        """A shortcut setter for defaults
+    def set_dynamic_overlap_config(self, dynamic_overlap_config: DynamicOverlapConfig):
+        """A shortcut setter for dynamic_overlap_config
         """
         ...
 
@@ -318,8 +334,8 @@ class Pool(BaseTolokaObject):
         ...
 
     @overload
-    def set_dynamic_overlap_config(self, dynamic_overlap_config: DynamicOverlapConfig):
-        """A shortcut setter for dynamic_overlap_config
+    def set_dynamic_pricing_config(self, dynamic_pricing_config: DynamicPricingConfig):
+        """A shortcut setter for dynamic_pricing_config
         """
         ...
 
@@ -335,8 +351,8 @@ class Pool(BaseTolokaObject):
         ...
 
     @overload
-    def set_dynamic_pricing_config(self, dynamic_pricing_config: DynamicPricingConfig):
-        """A shortcut setter for dynamic_pricing_config
+    def set_filter(self, filter: FilterCondition):
+        """A shortcut setter for filter
         """
         ...
 
@@ -347,8 +363,8 @@ class Pool(BaseTolokaObject):
         ...
 
     @overload
-    def set_filter(self, filter: FilterCondition):
-        """A shortcut setter for filter
+    def set_mixer_config(self, mixer_config: MixerConfig):
+        """A shortcut setter for mixer_config
         """
         ...
 
@@ -374,8 +390,8 @@ class Pool(BaseTolokaObject):
         ...
 
     @overload
-    def set_mixer_config(self, mixer_config: MixerConfig):
-        """A shortcut setter for mixer_config
+    def set_owner(self, owner: Owner):
+        """A shortcut setter for owner
         """
         ...
 
@@ -392,8 +408,8 @@ class Pool(BaseTolokaObject):
         ...
 
     @overload
-    def set_owner(self, owner: Owner):
-        """A shortcut setter for owner
+    def set_quality_control(self, quality_control: QualityControl):
+        """A shortcut setter for quality_control
         """
         ...
 
@@ -410,20 +426,8 @@ class Pool(BaseTolokaObject):
         """
         ...
 
-    @overload
-    def set_quality_control(self, quality_control: QualityControl):
-        """A shortcut setter for quality_control
-        """
-        ...
-
     def set_quality_control_configs(self, configs):
         """A shortcut method for setting
-        """
-        ...
-
-    @overload
-    def set_training_config(self, training_skill_ttl_days: Optional[int] = None):
-        """A shortcut setter for training_config
         """
         ...
 
@@ -434,18 +438,24 @@ class Pool(BaseTolokaObject):
         ...
 
     @overload
+    def set_training_config(self, training_skill_ttl_days: Optional[int] = None):
+        """A shortcut setter for training_config
+        """
+        ...
+
+    @overload
+    def set_training_requirement(self, training_requirement: QualityControl.TrainingRequirement):
+        """A shortcut setter for quality_control.training_requirement
+        """
+        ...
+
+    @overload
     def set_training_requirement(
         self,
         *,
         training_pool_id: Optional[str] = None,
         training_passing_skill_value: Optional[int] = None
     ):
-        """A shortcut setter for quality_control.training_requirement
-        """
-        ...
-
-    @overload
-    def set_training_requirement(self, training_requirement: QualityControl.TrainingRequirement):
         """A shortcut setter for quality_control.training_requirement
         """
         ...

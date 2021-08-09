@@ -7,13 +7,14 @@ __all__ = [
     'TolokaPluginV1',
 ]
 
-from enum import Enum, unique
+from enum import unique
 from typing import List, Any
 
 from ...primitives.base import attribute
 from ...util._codegen import expand
 
 from .base import VersionedBaseComponentMetaclass, BaseComponent, ComponentType, BaseTemplate, base_component_or
+from ...util._extendable_enum import ExtendableStrEnum
 
 
 class BasePluginV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):
@@ -192,7 +193,7 @@ class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
         """
 
         @unique
-        class Kind(Enum):
+        class Kind(ExtendableStrEnum):
             """An enumeration.
 
             Attributes:

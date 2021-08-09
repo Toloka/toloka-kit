@@ -6,14 +6,15 @@ __all__ = [
     'CompareLayoutItem',
     'CompareLayoutV1',
     'SideBySideLayoutV1',
-    'SidebarLayoutV1',
+    'SidebarLayoutV1'
 ]
-from enum import Enum, unique
+from enum import unique
 from typing import List
 
 from ...primitives.base import attribute
 
 from .base import BaseComponent, ComponentType, VersionedBaseComponentMetaclass, base_component_or, BaseTemplate
+from ...util._extendable_enum import ExtendableStrEnum
 
 
 class BaseLayoutV1Metaclass(VersionedBaseComponentMetaclass):
@@ -73,7 +74,7 @@ class ColumnsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COLUMNS):
     """
 
     @unique
-    class VerticalAlign(Enum):
+    class VerticalAlign(ExtendableStrEnum):
         """Vertical alignment of column content.
 
         Attributes:

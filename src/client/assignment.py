@@ -6,13 +6,14 @@ __all__ = [
 from attr.validators import optional, instance_of
 import datetime
 from decimal import Decimal
-from enum import Enum, unique
+from enum import unique
 from typing import List, Optional
 
 from .primitives.base import attribute, BaseTolokaObject
 from .primitives.parameter import Parameters
 from .solution import Solution
 from .task import Task
+from .util._extendable_enum import ExtendableStrEnum
 
 
 class Assignment(BaseTolokaObject):
@@ -53,7 +54,7 @@ class Assignment(BaseTolokaObject):
     """
 
     @unique
-    class Status(Enum):
+    class Status(ExtendableStrEnum):
         ACTIVE = 'ACTIVE'
         SUBMITTED = 'SUBMITTED'
         ACCEPTED = 'ACCEPTED'
@@ -122,7 +123,7 @@ class GetAssignmentsTsvParameters(Parameters):
     """
 
     @unique
-    class Status(Enum):
+    class Status(ExtendableStrEnum):
         ACTIVE = 'ACTIVE'
         SUBMITTED = 'SUBMITTED'
         APPROVED = 'APPROVED'
@@ -131,7 +132,7 @@ class GetAssignmentsTsvParameters(Parameters):
         EXPIRED = 'EXPIRED'
 
     @unique
-    class Field(Enum):
+    class Field(ExtendableStrEnum):
         LINK = 'ASSIGNMENT:link'
         ASSIGNMENT_ID = 'ASSIGNMENT:assignment_id'
         TASK_SUITE_ID = 'ASSIGNMENT:task_suite_id'

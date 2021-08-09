@@ -9,15 +9,16 @@ __all__ = [
     'RejectAllAssignments',
     'ApproveAllAssignments'
 ]
-from enum import Enum, unique
+from enum import unique
 
 from .conditions import RuleConditionKey
 from .user_restriction import DurationUnit, UserRestriction
 from .util._codegen import BaseParameters
+from .util._extendable_enum import ExtendableStrEnum
 
 
 @unique
-class RuleType(Enum):
+class RuleType(ExtendableStrEnum):
     RESTRICTION = 'RESTRICTION'
     RESTRICTION_V2 = 'RESTRICTION_V2'
     SET_SKILL_FROM_OUTPUT_FIELD = 'SET_SKILL_FROM_OUTPUT_FIELD'

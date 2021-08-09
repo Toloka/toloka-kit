@@ -19,16 +19,17 @@ __all__ = [
     'UserBonusCreateBatchOperation'
 ]
 import datetime
-from enum import Enum, unique
+from enum import unique
 from typing import Any, ClassVar
 
 from .exceptions import FailedOperation
 from .primitives.base import BaseTolokaObject
 from .util._docstrings import inherit_docstrings
+from .util._extendable_enum import ExtendableStrEnum
 
 
 @unique
-class OperationType(Enum):
+class OperationType(ExtendableStrEnum):
     PSEUDO = 'PSEUDO.PSEUDO'
     PROJECT_ARCHIVE = 'PROJECT.ARCHIVE'
     POOL_OPEN = 'POOL.OPEN'
@@ -64,7 +65,7 @@ class Operation(BaseTolokaObject, spec_enum=OperationType, spec_field='type'):
     """
 
     @unique
-    class Status(Enum):
+    class Status(ExtendableStrEnum):
         """The status of the operation:
 
         Attributes:

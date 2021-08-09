@@ -18,15 +18,16 @@ __all__ = [
     'WeightedDynamicOverlapTaskAggregatedSolutionRequest',
     'AggregatedSolution'
 ]
-from enum import Enum, unique
+from enum import unique
 from typing import Any, Dict, List
 
 from .primitives.base import BaseTolokaObject
 from .util._docstrings import inherit_docstrings
+from .util._extendable_enum import ExtendableStrEnum
 
 
 @unique
-class AggregatedSolutionType(Enum):
+class AggregatedSolutionType(ExtendableStrEnum):
     WEIGHTED_DYNAMIC_OVERLAP = 'WEIGHTED_DYNAMIC_OVERLAP'
     DAWID_SKENE = 'DAWID_SKENE'
 

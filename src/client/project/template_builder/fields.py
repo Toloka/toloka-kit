@@ -1,5 +1,6 @@
 __all__ = [
     'BaseFieldV1',
+    'AudioFieldV1',
     'ButtonRadioFieldV1',
     'GroupFieldOption',
     'ButtonRadioGroupFieldV1',
@@ -19,7 +20,7 @@ __all__ = [
     'TextAnnotationFieldV1',
     'TextareaFieldV1',
 ]
-from enum import Enum, unique
+from enum import unique
 from typing import List, Any, Dict
 
 from ...primitives.base import attribute
@@ -33,6 +34,7 @@ from .base import (
     VersionedBaseComponentMetaclass,
     base_component_or
 )
+from ...util._extendable_enum import ExtendableStrEnum
 
 
 class BaseFieldV1Metaclass(VersionedBaseComponentMetaclass):
@@ -61,6 +63,25 @@ class BaseFieldV1(BaseComponent, metaclass=BaseFieldV1Metaclass):
     """
 
     pass
+
+
+class AudioFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_AUDIO):
+    """Component for recording audio.
+
+    Works in the mobile app. In a browser, this component opens a window for uploading an audio file.
+
+    Attributes:
+        data: Data with values that will be processed or changed.
+        value_to_set: The value of the output data when the button is clicked.
+        label: Label above the component.
+        hint: Hint text.
+        multiple: Determines whether multiple audio files can be recorded (or uploaded):
+            False (default) — forbidden.
+            True — allowed.
+        validation: Validation based on condition.
+    """
+
+    multiple: base_component_or(Any) = attribute(kw_only=True)
 
 
 class ButtonRadioFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON_RADIO):
@@ -287,7 +308,7 @@ class ImageAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_IMAGE_A
         value: base_component_or(str)
 
     @unique
-    class Shape(Enum):
+    class Shape(ExtendableStrEnum):
         POINT = 'point'
         POLYGON = 'polygon'
         RECTANGLE = 'rectangle'
