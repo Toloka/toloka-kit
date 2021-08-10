@@ -79,7 +79,8 @@ def test_pipeline(requests_mock, toloka_url, toloka_client, existing_backend_ass
             _expire_active_and_close_pool(after_sec=2),
         ))))
 
-    asyncio.run(_main())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(_main())
 
     expected_saved = [item for item in backend.storage if item.get('submitted')]
     assert expected_saved == unstructure(save_submitted_here)

@@ -45,7 +45,7 @@ class Pipeline:
         >>> pipeline = Pipeline()
         >>> pipeline.register(observer_123)
         >>> pipeline.register(observer_456)
-        >>> asyncio.run(pipeline.run())
+        >>> await pipeline.run()
         ...
 
         One-liners version.
@@ -53,7 +53,7 @@ class Pipeline:
         >>> pipeline = Pipeline()
         >>> pipeline.register(AssignmentsObserver(toloka_client, pool_id='123')).on_submitted(handle_submitted)
         >>> pipeline.register(AssignmentsObserver(toloka_client, pool_id='456')).on_accepted(handle_accepted)
-        >>> asyncio.run(pipeline.run())
+        >>> await pipeline.run()
         ...
     """
 

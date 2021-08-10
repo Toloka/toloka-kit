@@ -102,7 +102,8 @@ def fetch_async(cursor):
     async def _fetch():
         return [item async for item in cursor]
 
-    return unstructure(asyncio.run(_fetch()))
+    loop = asyncio.get_event_loop()
+    return unstructure(loop.run_until_complete(_fetch()))
 
 
 @pytest.mark.parametrize('fetcher', [fetch_sync, fetch_async])
