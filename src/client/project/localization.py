@@ -1,3 +1,7 @@
+__all__ = [
+    'AdditionalLanguage',
+    'LocalizationConfig',
+]
 from enum import Enum, unique
 from typing import List
 
@@ -31,7 +35,7 @@ class AdditionalLanguage(BaseTolokaObject):
             REQUESTER = 'REQUESTER'
 
         value: str
-        source: Source=attribute(factory=lambda: AdditionalLanguage.FieldTranslation.Source.REQUESTER)
+        source: Source = attribute(factory=lambda: AdditionalLanguage.FieldTranslation.Source.REQUESTER)
 
     language: str
     public_name: FieldTranslation
