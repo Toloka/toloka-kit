@@ -6,7 +6,9 @@ from typing import (
     TypeVar
 )
 
-def inherit_docstrings(cls: Type[TypeVar('T', bound=None)]) -> Type[TypeVar('T', bound=None)]:
+T = TypeVar('T', bound=None)
+
+def inherit_docstrings(cls: Type[T]) -> Type[T]:
     """Modifies docstring parameters list of class and nested members updating it with docstring parameters from parent
     classes and parent classes members.
 
