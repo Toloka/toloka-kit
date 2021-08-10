@@ -76,7 +76,7 @@ class BaseCursor:
         if not getattr(self._request, self._time_field_gte):
             self._request = attr.evolve(self._request, **{self._time_field_gte: DATETIME_MIN})
 
-    def _get_fetcher(self) -> Callable[[...], ResponseObjectType]:
+    def _get_fetcher(self) -> Callable[..., ResponseObjectType]:
         """Return toloka_client method from here."""
         raise NotImplementedError
 
@@ -182,7 +182,7 @@ class AssignmentCursor(BaseCursor):
         factory=search_requests.AssignmentSearchRequest,
     )
 
-    def _get_fetcher(self) -> Callable[[...], search_results.AssignmentSearchResult]:
+    def _get_fetcher(self) -> Callable[..., search_results.AssignmentSearchResult]:
         return self.toloka_client.find_assignments
 
     def _get_time_field(self) -> str:
@@ -218,7 +218,7 @@ class TaskCursor(BaseCursor):
         factory=search_requests.TaskSearchRequest,
     )
 
-    def _get_fetcher(self) -> Callable[[...], search_results.TaskSearchResult]:
+    def _get_fetcher(self) -> Callable[..., search_results.TaskSearchResult]:
         return self.toloka_client.find_tasks
 
     def _get_time_field(self) -> str:
@@ -252,7 +252,7 @@ class UserBonusCursor(BaseCursor):
         factory=search_requests.UserBonusSearchRequest,
     )
 
-    def _get_fetcher(self) -> Callable[[...], search_results.UserBonusSearchResult]:
+    def _get_fetcher(self) -> Callable[..., search_results.UserBonusSearchResult]:
         return self.toloka_client.find_user_bonuses
 
     def _get_time_field(self) -> str:
@@ -288,7 +288,7 @@ class UserSkillCursor(BaseCursor):
         factory=search_requests.UserSkillSearchRequest,
     )
 
-    def _get_fetcher(self) -> Callable[[...], search_results.UserSkillSearchResult]:
+    def _get_fetcher(self) -> Callable[..., search_results.UserSkillSearchResult]:
         return self.toloka_client.find_user_skills
 
     def _get_time_field(self) -> str:
