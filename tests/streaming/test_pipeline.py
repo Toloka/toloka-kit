@@ -73,7 +73,8 @@ def test_pipeline(requests_mock, toloka_url, toloka_client, existing_backend_ass
     pool_observer.on_closed(handle_pool_close)
 
     async def _main():
-        await asyncio.wait(list(map(asyncio.create_task, (
+        loop = asyncio.get_event_loop()
+        await asyncio.wait(list(map(loop.create_task, (
             pipeline.run(),
             _add_new_assignments(after_sec=1),
             _expire_active_and_close_pool(after_sec=2),

@@ -141,9 +141,10 @@ class PoolStatusObserver(BasePoolObserver):
         current_status = pool.status
 
         if current_status != self._previous_status:
+            loop = asyncio.get_event_loop()
             if self._callbacks.get(current_status):
                 await asyncio.wait([
-                    asyncio.create_task(callback(pool))
+                    loop.create_task(callback(pool))
                     for callback in self._callbacks[current_status]
                 ])
 
@@ -261,8 +262,9 @@ class AssignmentsObserver(BasePoolObserver):
         new_events: Dict[AssignmentEvent.Type, List[AssignmentEvent]] = await self._get_events()
         logger.debug('Got assigment events count for pool %s: %d', self.pool_id, sum(map(len, new_events.values())))
 
+        loop = asyncio.get_event_loop()
         tasks = [
-            asyncio.create_task(callback(events))
+            loop.create_task(callback(events))
             for event_type, events in new_events.items()
             if events  # Don't run callback at empty events input.
             for callback in self._callbacks[event_type].callbacks

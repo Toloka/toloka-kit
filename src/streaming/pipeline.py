@@ -92,7 +92,8 @@ class Pipeline:
         for iteration in itertools.count(1):
             logger.debug('Iteration: %d', iteration)
             logger.debug('Run observers count: %d', len(self._observers))
-            await asyncio.wait([asyncio.create_task(observer()) for observer in self._observers.values()])
+            loop = asyncio.get_event_loop()
+            await asyncio.wait([loop.create_task(observer()) for observer in self._observers.values()])
 
             logger.debug('Check resume')
             may_resume_each: List[bool] = await asyncio.gather(*[
