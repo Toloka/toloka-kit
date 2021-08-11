@@ -15,12 +15,17 @@ about = {}
 with open(version_module_path) as f:
     exec(f.read(), about)
 
+with open('README.md') as f:
+    readme = f.read()
+
 setup(
     name=about['__title__'],
     package_dir={PREFIX: 'src'},
     packages=[f'{PREFIX}.{package}' for package in find_packages('src')],
     version=about['__version__'],
     description='Toloka API client',
+    long_description=readme,
+    long_description_content_type='text/markdown',
     license=about['__license__'],
     author='Vladimir Losev',
     author_email='losev@yandex-team.ru',
@@ -34,8 +39,29 @@ setup(
         'urllib3',
         'pandas',
         'simplejson',
-        'docstring-parser'
+        'docstring-parser',
     ],
     extras_require={'dev': ['requests-mock']},
     include_package_data=True,
+    project_urls={
+        'Documentation': 'https://yandex.com/dev/toloka/toloka-kit/doc/',
+        'Source': 'https://github.com/Toloka/toloka-kit',
+    },
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: Apache Software License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Topic :: Scientific/Engineering',
+        'Topic :: Software Development',
+        'Typing :: Typed',
+    ],
 )

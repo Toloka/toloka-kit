@@ -466,6 +466,10 @@ AssignmentSortItems = BaseSortItems.for_fields(
             * id - ID for issuing a set of tasks (in ascending order).
             * created - Date of issue of the set of tasks in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
             * submitted - Date of completion of the set of tasks in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
+            * accepted - Date the set of tasks was accepted in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
+            * rejected - Date the set of tasks was rejected in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
+            * skipped - Date the set of tasks was skipped in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
+            * expired - Date the set of tasks was expired in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
 
     Example:
         How to specify and use SortItems.
@@ -700,7 +704,7 @@ class UserSkillSearchRequest(BaseSearchRequest):
 
 
 UserSkillSortItems = BaseSortItems.for_fields(
-    'UserSkillSortItems', ['id', 'created'],
+    'UserSkillSortItems', ['id', 'created', 'modified'],
     # docstring
     """Parameters for sorting user skill search results
 
@@ -711,6 +715,7 @@ UserSkillSortItems = BaseSortItems.for_fields(
         items: Fields by which to sort. Possible values:
             * id - Skill ID in ascending order.
             * created - Date the skill was created in UTC in the yyyy-MM-DD format (ascending).
+            * modified - Date the skill was modified in UTC in the yyyy-MM-DD format (ascending).
 
     Example:
         How to specify and use SortItems.

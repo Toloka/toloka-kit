@@ -21,7 +21,13 @@ __all__ = [
     'ArrayUrlSpec',
     'ArrayFileSpec',
     'ArrayCoordinatesSpec',
+    'LocalizationConfig',
+    'AdditionalLanguage',
 ]
+import toloka.client.project.field_spec
+import toloka.client.project.task_spec
+import toloka.client.project.template_builder
+import toloka.client.project.view_spec
 
 from datetime import datetime
 from enum import Enum
@@ -180,7 +186,13 @@ class Project(BaseTolokaObject):
         """
         ...
 
-    def add_requester_translation(self, language: str, public_name: Optional[str] = None, public_description: Optional[str] = None, public_instructions: Optional[str] = None):
+    def add_requester_translation(
+        self,
+        language: str,
+        public_name: Optional[str] = None,
+        public_description: Optional[str] = None,
+        public_instructions: Optional[str] = None
+    ):
         """Add new translations to other language.
 
         You can call it several times for different languages.

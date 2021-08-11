@@ -2647,7 +2647,6 @@ class TolokaClient:
     def find_user_bonuses(
         self,
         user_id: Optional[str] = None,
-        assignment_id: Optional[str] = None,
         private_comment: Optional[str] = None,
         id_lt: Optional[str] = None,
         id_lte: Optional[str] = None,
@@ -3841,7 +3840,6 @@ class TolokaClient:
     def get_user_bonuses(
         self,
         user_id: Optional[str] = None,
-        assignment_id: Optional[str] = None,
         private_comment: Optional[str] = None,
         id_lt: Optional[str] = None,
         id_lte: Optional[str] = None,
