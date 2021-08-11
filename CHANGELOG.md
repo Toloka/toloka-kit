@@ -1,3 +1,16 @@
+0.1.13
+-------------------
+
+* Streaming library to build pipelines
+* Examples refactoring
+
+0.1.12
+-------------------
+
+* Added new template builder components
+* Added the ability to translate project title and description into multiple languages
+* ExtendableStrEnum class has been added for forward compatibility with new enumeration keys
+
 0.1.11
 -------------------
 
