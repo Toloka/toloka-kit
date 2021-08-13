@@ -279,7 +279,7 @@ class TolokaClient:
         timeout: Union[float, Tuple[float, float]] = ...,
         url: Optional[str] = None,
         retry_quotas: Union[List[str], str, None] = 'MIN',
-        retryer_factory: Optional[Callable[[], Retry]] = None,
+        retryer_factory: Optional[Callable[[], Retry]] = None
     ): ...
 
     def accept_assignment(
