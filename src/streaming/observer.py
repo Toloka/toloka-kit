@@ -69,10 +69,6 @@ class PoolStatusObserver(BasePoolObserver):
     """Observer for pool status change.
     For usage with Pipeline.
 
-    Attributes:
-        toloka_client: TolokaClient instance or async wrapper around it.
-        pool_id: Pool ID.
-
     Allow to register callbacks using the following methods:
         * on_open
         * on_closed
@@ -81,6 +77,10 @@ class PoolStatusObserver(BasePoolObserver):
         * on_status_change
 
     The Pool object will be passed to the triggered callbacks.
+
+    Attributes:
+        toloka_client: TolokaClient instance or async wrapper around it.
+        pool_id: Pool ID.
 
     Examples:
         Bind to the pool's close to make some aggregations.
@@ -167,10 +167,6 @@ class AssignmentsObserver(BasePoolObserver):
     """Observer for the pool's assignment events.
     For usage with Pipeline.
 
-    Attributes:
-        toloka_client: TolokaClient instance or async wrapper around it.
-        pool_id: Pool ID.
-
     Allow to register callbacks using the following methods:
         * on_created
         * on_submitted
@@ -180,6 +176,10 @@ class AssignmentsObserver(BasePoolObserver):
         * on_expired
 
     Corresponding assignment events will be passed to the triggered callbacks.
+
+    Attributes:
+        toloka_client: TolokaClient instance or async wrapper around it.
+        pool_id: Pool ID.
 
     Examples:
         Send submitted assignments for verification.
