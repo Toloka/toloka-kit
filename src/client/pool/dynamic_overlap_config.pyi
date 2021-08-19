@@ -1,8 +1,8 @@
 __all__ = [
     'DynamicOverlapConfig',
 ]
-from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -44,7 +44,7 @@ class DynamicOverlapConfig(BaseTolokaObject):
         _unexpected: Optional[Dict[str, Any]]
         name: Optional[str]
 
-    class Type(Enum):
+    class Type(ExtendableStrEnum):
         """The algorithm for dynamic overlap.
 
         Atttributes:

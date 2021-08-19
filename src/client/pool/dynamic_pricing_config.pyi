@@ -1,8 +1,8 @@
 __all__ = [
     'DynamicPricingConfig',
 ]
-from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -46,7 +46,7 @@ class DynamicPricingConfig(BaseTolokaObject):
         to: Optional[int]
         reward_per_assignment: Optional[float]
 
-    class Type(Enum):
+    class Type(ExtendableStrEnum):
         """Dynamic pricing type
         """
 

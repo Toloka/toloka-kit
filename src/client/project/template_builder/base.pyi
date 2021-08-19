@@ -11,11 +11,11 @@ __all__ = [
     'ListDirection',
     'ListSize',
 ]
-from enum import Enum
 from toloka.client.primitives.base import (
     BaseTolokaObject,
     BaseTolokaObjectMetaclass
 )
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -23,7 +23,7 @@ from typing import (
     Type
 )
 
-class ComponentType(Enum):
+class ComponentType(ExtendableStrEnum):
     """An enumeration.
     """
 
@@ -54,6 +54,7 @@ class ComponentType(Enum):
     DATA_LOCATION = '@yandex-toloka/data.location'
     DATA_OUTPUT = 'data.output'
     DATA_RELATIVE = 'data.relative'
+    FIELD_AUDIO = 'field.audio'
     FIELD_BUTTON_RADIO = 'field.button-radio'
     FIELD_BUTTON_RADIO_GROUP = 'field.button-radio-group'
     FIELD_CHECKBOX = 'field.checkbox'
@@ -188,7 +189,7 @@ class RefComponent(BaseTemplate):
     ref: Optional[str]
 
 
-class ListDirection(Enum):
+class ListDirection(ExtendableStrEnum):
     """An enumeration.
     """
 
@@ -196,7 +197,7 @@ class ListDirection(Enum):
     VERTICAL = 'vertical'
 
 
-class ListSize(Enum):
+class ListSize(ExtendableStrEnum):
     """An enumeration.
     """
 

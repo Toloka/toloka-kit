@@ -2,8 +2,8 @@ __all__ = [
     'WebhookSubscription',
 ]
 from datetime import datetime
-from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -21,7 +21,7 @@ class WebhookSubscription(BaseTolokaObject):
         created: When this pool was created. Read only field.
     """
 
-    class EventType(Enum):
+    class EventType(ExtendableStrEnum):
         """Webhook subscription event type:
 
         Attributes:

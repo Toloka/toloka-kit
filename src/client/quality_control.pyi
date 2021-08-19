@@ -1,7 +1,6 @@
 __all__ = [
     'QualityControl',
 ]
-from enum import Enum
 from toloka.client.actions import RuleAction
 from toloka.client.collectors import CollectorConfig
 from toloka.client.conditions import RuleCondition
@@ -14,8 +13,6 @@ from typing import (
     List,
     Optional
 )
-
-from enum import Enum
 
 class QualityControl(BaseTolokaObject):
     """Quality control unit settings and pool ID with training tasks

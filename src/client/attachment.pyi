@@ -3,9 +3,9 @@ __all__ = [
     'AssignmentAttachment',
 ]
 from datetime import datetime
-from enum import Enum
 from toloka.client.owner import Owner
 from toloka.client.primitives.base import BaseTolokaObject
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -50,7 +50,7 @@ class Attachment(BaseTolokaObject):
         assignment_id: Optional[str]
         pool_id: Optional[str]
 
-    class Type(Enum):
+    class Type(ExtendableStrEnum):
         """An enumeration.
         """
 

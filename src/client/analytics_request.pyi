@@ -14,8 +14,8 @@ __all__ = [
     'ActiveWorkersByFilterCountPoolAnalytics',
     'EstimatedAssignmentsCountPoolAnalytics',
 ]
-from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -31,7 +31,7 @@ class AnalyticsRequest(BaseTolokaObject):
         subject_id: ID of the object you want to get analytics about.
     """
 
-    class Subject(Enum):
+    class Subject(ExtendableStrEnum):
         """An enumeration.
         """
 
@@ -55,7 +55,7 @@ class PoolAnalyticsRequest(AnalyticsRequest):
         subject_id: ID of the object you want to get analytics about.
     """
 
-    class Subject(Enum):
+    class Subject(ExtendableStrEnum):
         """An enumeration.
         """
 

@@ -7,9 +7,9 @@ __all__ = [
     'ComparableConditionMixin',
     'StatefulComparableConditionMixin',
 ]
-from enum import Enum
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 
-class CompareOperator(Enum):
+class CompareOperator(ExtendableStrEnum):
     """An enumeration.
     """
 
@@ -21,7 +21,7 @@ class CompareOperator(Enum):
     LTE = 'LTE'
 
 
-class InclusionOperator(Enum):
+class InclusionOperator(ExtendableStrEnum):
     """An enumeration.
     """
 
@@ -29,7 +29,7 @@ class InclusionOperator(Enum):
     NOT_IN = 'NOT_IN'
 
 
-class IdentityOperator(Enum):
+class IdentityOperator(ExtendableStrEnum):
     """An enumeration.
     """
 

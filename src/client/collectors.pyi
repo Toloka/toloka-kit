@@ -12,9 +12,9 @@ __all__ = [
     'Training',
     'UsersAssessment',
 ]
-from enum import Enum
 from toloka.client.conditions import RuleCondition
 from toloka.client.util._codegen import BaseParameters
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -33,7 +33,7 @@ class CollectorConfig(BaseParameters):
             from both pools.
     """
 
-    class Type(Enum):
+    class Type(ExtendableStrEnum):
         """An enumeration.
         """
 

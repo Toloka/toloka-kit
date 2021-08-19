@@ -7,11 +7,11 @@ __all__ = [
     'SideBySideLayoutV1',
     'SidebarLayoutV1',
 ]
-from enum import Enum
 from toloka.client.project.template_builder.base import (
     BaseComponent,
     BaseTemplate
 )
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -96,7 +96,7 @@ class ColumnsLayoutV1(BaseLayoutV1):
         vertical_align: Vertical alignment of column content.
     """
 
-    class VerticalAlign(Enum):
+    class VerticalAlign(ExtendableStrEnum):
         """Vertical alignment of column content.
 
         Attributes:

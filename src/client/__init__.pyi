@@ -45,37 +45,6 @@ __all__ = [
     'Pool',
     'Project',
 ]
-import toloka.client.actions
-import toloka.client.aggregation
-import toloka.client.analytics_request
-import toloka.client.assignment
-import toloka.client.attachment
-import toloka.client.batch_create_results
-import toloka.client.clone_results
-import toloka.client.collectors
-import toloka.client.conditions
-import toloka.client.error_codes
-import toloka.client.exceptions
-import toloka.client.filter
-import toloka.client.message_thread
-import toloka.client.operation_log
-import toloka.client.operations
-import toloka.client.owner
-import toloka.client.quality_control
-import toloka.client.requester
-import toloka.client.search_requests
-import toloka.client.search_results
-import toloka.client.skill
-import toloka.client.solution
-import toloka.client.task
-import toloka.client.task_distribution_function
-import toloka.client.task_suite
-import toloka.client.training
-import toloka.client.user_bonus
-import toloka.client.user_restriction
-import toloka.client.user_skill
-import toloka.client.webhook_subscription
-
 from datetime import (
     datetime,
     timedelta
@@ -84,6 +53,38 @@ from decimal import Decimal
 from enum import Enum
 from pandas.core.frame import DataFrame
 from requests.packages.urllib3.util.retry import Retry
+from toloka.client import (
+    actions,
+    aggregation,
+    analytics_request,
+    assignment,
+    attachment,
+    batch_create_results,
+    clone_results,
+    collectors,
+    conditions,
+    error_codes,
+    exceptions,
+    filter,
+    message_thread,
+    operation_log,
+    operations,
+    owner,
+    quality_control,
+    requester,
+    search_requests,
+    search_results,
+    skill,
+    solution,
+    task,
+    task_distribution_function,
+    task_suite,
+    training,
+    user_bonus,
+    user_restriction,
+    user_skill,
+    webhook_subscription
+)
 from toloka.client.aggregation import (
     AggregatedSolution,
     AggregatedSolutionType,

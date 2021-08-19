@@ -31,7 +31,6 @@ __all__ = [
     'UserAgentVersionBugfix',
     'Rating',
 ]
-from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.primitives.operators import (
     ComparableConditionMixin,
@@ -42,6 +41,7 @@ from toloka.client.primitives.operators import (
     InclusionOperator,
     StatefulComparableConditionMixin
 )
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -126,7 +126,7 @@ class Condition(FilterCondition):
             or the minimum skill value.
     """
 
-    class Category(Enum):
+    class Category(ExtendableStrEnum):
         """An enumeration.
         """
 
@@ -163,7 +163,7 @@ class Profile(Condition):
             or the minimum skill value.
     """
 
-    class Key(Enum):
+    class Key(ExtendableStrEnum):
         """Possible criteria for filtering users by profile.
         """
 
@@ -202,7 +202,7 @@ class Computed(Condition):
             or the minimum skill value.
     """
 
-    class Key(Enum):
+    class Key(ExtendableStrEnum):
         """Possible criteria for filtering users by computed data.
         """
 
@@ -274,7 +274,7 @@ class Gender(Profile, IdentityConditionMixin):
         value: User gender.
     """
 
-    class Gender(Enum):
+    class Gender(ExtendableStrEnum):
         """User gender.
         """
 
@@ -353,7 +353,7 @@ class Education(Profile, IdentityConditionMixin):
         value: User education.
     """
 
-    class Education(Enum):
+    class Education(ExtendableStrEnum):
         """User education.
         """
 
@@ -529,7 +529,7 @@ class DeviceCategory(Computed, IdentityConditionMixin):
         value: The user's device category.
     """
 
-    class DeviceCategory(Enum):
+    class DeviceCategory(ExtendableStrEnum):
         """Device сategory.
         """
 
@@ -562,7 +562,7 @@ class ClientType(Computed, IdentityConditionMixin):
         value: Client application type.
     """
 
-    class ClientType(Enum):
+    class ClientType(ExtendableStrEnum):
         """Client application type.
         """
 
@@ -593,7 +593,7 @@ class OSFamily(Computed, IdentityConditionMixin):
         value: The operating system family.
     """
 
-    class OSFamily(Enum):
+    class OSFamily(ExtendableStrEnum):
         """The operating system family.
         """
 
@@ -734,7 +734,7 @@ class UserAgentType(Computed, IdentityConditionMixin):
         value: User agent type.
     """
 
-    class UserAgentType(Enum):
+    class UserAgentType(ExtendableStrEnum):
         """User agent type.
         """
 
@@ -766,7 +766,7 @@ class UserAgentFamily(Computed, IdentityConditionMixin):
         value: User agent family.
     """
 
-    class UserAgentFamily(Enum):
+    class UserAgentFamily(ExtendableStrEnum):
         """User agent family.
         """
 

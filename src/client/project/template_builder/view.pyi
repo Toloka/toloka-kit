@@ -17,13 +17,13 @@ __all__ = [
     'TextViewV1',
     'VideoViewV1',
 ]
-from enum import Enum
 from toloka.client.project.template_builder.base import (
     BaseComponent,
     BaseTemplate,
     ListDirection,
     ListSize
 )
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -99,7 +99,7 @@ class AlertViewV1(BaseViewV1):
         validation: Validation based on condition.
     """
 
-    class Theme(Enum):
+    class Theme(ExtendableStrEnum):
         """An enumeration
 
         Attributes:

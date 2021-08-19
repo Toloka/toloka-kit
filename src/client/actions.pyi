@@ -9,13 +9,13 @@ __all__ = [
     'RejectAllAssignments',
     'ApproveAllAssignments',
 ]
-from enum import Enum
 from toloka.client.conditions import RuleConditionKey
 from toloka.client.user_restriction import (
     DurationUnit,
     UserRestriction
 )
 from toloka.client.util._codegen import BaseParameters
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -23,7 +23,7 @@ from typing import (
     overload
 )
 
-class RuleType(Enum):
+class RuleType(ExtendableStrEnum):
     """An enumeration.
     """
 

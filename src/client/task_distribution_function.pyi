@@ -1,8 +1,8 @@
 __all__ = [
     'TaskDistributionFunction',
 ]
-from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -28,7 +28,7 @@ class TaskDistributionFunction(BaseTolokaObject):
         intervals: Interval borders and number of tasks in an interval.
     """
 
-    class Distribution(Enum):
+    class Distribution(ExtendableStrEnum):
         """An enumeration.
         """
 
@@ -60,7 +60,7 @@ class TaskDistributionFunction(BaseTolokaObject):
         to: Optional[int]
         frequency: Optional[int]
 
-    class Scope(Enum):
+    class Scope(ExtendableStrEnum):
         """An enumeration.
         """
 

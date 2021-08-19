@@ -29,7 +29,6 @@ __all__ = [
     'TotalAssignmentsCount',
     'TotalSubmittedCount',
 ]
-from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.primitives.operators import (
     ComparableConditionMixin,
@@ -37,13 +36,14 @@ from toloka.client.primitives.operators import (
     IdentityConditionMixin,
     IdentityOperator
 )
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
     Optional
 )
 
-class RuleConditionKey(Enum):
+class RuleConditionKey(ExtendableStrEnum):
     """An enumeration.
     """
 
@@ -186,7 +186,7 @@ class AssessmentEvent(IdentityRuleCondition):
         ...
     """
 
-    class Type(Enum):
+    class Type(ExtendableStrEnum):
         """An enumeration.
         """
 
@@ -422,7 +422,7 @@ class PoolAccessRevokedReason(IdentityRuleCondition):
                 majority vote, fast answers, skipped assignments, or captcha).
     """
 
-    class Type(Enum):
+    class Type(ExtendableStrEnum):
         """An enumeration.
         """
 

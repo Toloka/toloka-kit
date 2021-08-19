@@ -17,8 +17,8 @@ __all__ = [
     'ArrayFileSpec',
     'ArrayCoordinatesSpec',
 ]
-from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -26,7 +26,7 @@ from typing import (
     Optional
 )
 
-class FieldType(Enum):
+class FieldType(ExtendableStrEnum):
     """An enumeration.
     """
 

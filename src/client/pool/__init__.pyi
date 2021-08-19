@@ -8,17 +8,21 @@ __all__ = [
     'DynamicPricingConfig',
     'MixerConfig',
 ]
-
 from datetime import datetime
-from enum import Enum
 from toloka.client.filter import FilterCondition
 from toloka.client.owner import Owner
+from toloka.client.pool import (
+    dynamic_overlap_config,
+    dynamic_pricing_config,
+    mixer_config
+)
 from toloka.client.pool.dynamic_overlap_config import DynamicOverlapConfig
 from toloka.client.pool.dynamic_pricing_config import DynamicPricingConfig
 from toloka.client.pool.mixer_config import MixerConfig
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.quality_control import QualityControl
 from toloka.client.task_distribution_function import TaskDistributionFunction
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -128,7 +132,7 @@ class Pool(BaseTolokaObject):
         _unexpected: Optional[Dict[str, Any]]
         issue_task_suites_in_creation_order: Optional[bool]
 
-    class CloseReason(Enum):
+    class CloseReason(ExtendableStrEnum):
         """The reason for closing the pool the last time:
 
         Attributes:
@@ -173,7 +177,7 @@ class Pool(BaseTolokaObject):
         default_overlap_for_new_task_suites: Optional[int]
         default_overlap_for_new_tasks: Optional[int]
 
-    class Status(Enum):
+    class Status(ExtendableStrEnum):
         """Status of the pool
 
         Attributes:
@@ -197,7 +201,7 @@ class Pool(BaseTolokaObject):
         _unexpected: Optional[Dict[str, Any]]
         training_skill_ttl_days: Optional[int]
 
-    class Type(Enum):
+    class Type(ExtendableStrEnum):
         """An enumeration.
         """
 

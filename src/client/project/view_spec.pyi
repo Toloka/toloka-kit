@@ -3,10 +3,10 @@ __all__ = [
     'ClassicViewSpec',
     'TemplateBuilderViewSpec',
 ]
-from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.project.template_builder import TemplateBuilder
 from toloka.client.project.template_builder.base import BaseComponent
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -62,7 +62,7 @@ class ViewSpec(BaseTolokaObject):
         show_timer: Optional[bool]
         show_title: Optional[bool]
 
-    class Type(Enum):
+    class Type(ExtendableStrEnum):
         """A view spec type
 
         Attributes:

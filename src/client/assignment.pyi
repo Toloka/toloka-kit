@@ -5,11 +5,11 @@ __all__ = [
 ]
 from datetime import datetime
 from decimal import Decimal
-from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.primitives.parameter import Parameters
 from toloka.client.solution import Solution
 from toloka.client.task import Task
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -54,7 +54,7 @@ class Assignment(BaseTolokaObject):
         public_comment: Public comment about an assignment. Why it was accepted or rejected.
     """
 
-    class Status(Enum):
+    class Status(ExtendableStrEnum):
         """An enumeration.
         """
 
@@ -154,7 +154,7 @@ class GetAssignmentsTsvParameters(Parameters):
             are added by default.
     """
 
-    class Field(Enum):
+    class Field(ExtendableStrEnum):
         """An enumeration.
         """
 
@@ -171,7 +171,7 @@ class GetAssignmentsTsvParameters(Parameters):
         EXPIRED = 'ASSIGNMENT:expired'
         REWARD = 'ASSIGNMENT:reward'
 
-    class Status(Enum):
+    class Status(ExtendableStrEnum):
         """An enumeration.
         """
 

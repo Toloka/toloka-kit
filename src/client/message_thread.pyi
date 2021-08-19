@@ -8,9 +8,9 @@ __all__ = [
     'MessageThreadCompose',
 ]
 from datetime import datetime
-from enum import Enum
 from toloka.client.filter import FilterCondition
 from toloka.client.primitives.base import BaseTolokaObject
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -18,7 +18,7 @@ from typing import (
     Optional
 )
 
-class RecipientsSelectType(Enum):
+class RecipientsSelectType(ExtendableStrEnum):
     """Method for specifying recipients.
 
     Attributes:
@@ -32,7 +32,7 @@ class RecipientsSelectType(Enum):
     ALL = 'ALL'
 
 
-class Folder(Enum):
+class Folder(ExtendableStrEnum):
     """Folders for a thread.
     """
 
@@ -52,7 +52,7 @@ class Interlocutor(BaseTolokaObject):
         myself: Marks a sender or recipient with your ID. f the ID belongs to you, the value is specified true.
     """
 
-    class InterlocutorRole(Enum):
+    class InterlocutorRole(ExtendableStrEnum):
         """Role of the sender or recipient in Toloka.
 
         Attributes:

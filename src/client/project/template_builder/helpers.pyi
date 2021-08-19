@@ -13,11 +13,11 @@ __all__ = [
     'TranslateHelperV1',
     'YandexDiskProxyHelperV1',
 ]
-from enum import Enum
 from toloka.client.project.template_builder.base import (
     BaseComponent,
     BaseTemplate
 )
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -264,7 +264,7 @@ class SearchQueryHelperV1(BaseHelperV1):
         engine: Search engine.
     """
 
-    class Engine(Enum):
+    class Engine(ExtendableStrEnum):
         """An enumeration.
         """
 
@@ -371,7 +371,7 @@ class TextTransformHelperV1(BaseHelperV1):
         transformation: Conversion mode.
     """
 
-    class Transformation(Enum):
+    class Transformation(ExtendableStrEnum):
         """An enumeration.
         """
 

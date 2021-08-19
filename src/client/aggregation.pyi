@@ -1,10 +1,3 @@
-__all__ = [
-    'AggregatedSolutionType',
-    'PoolAggregatedSolutionRequest',
-    'TaskAggregatedSolutionRequest',
-    'WeightedDynamicOverlapTaskAggregatedSolutionRequest',
-    'AggregatedSolution',
-]
 """Module for aggregating results
 
 For example, when you need to decide whether a cat or a dog is in the picture, and you ask more than one performers.
@@ -18,8 +11,15 @@ It will allow you to:
 - perform aggregation on your side
 """
 
-from enum import Enum
+__all__ = [
+    'AggregatedSolutionType',
+    'PoolAggregatedSolutionRequest',
+    'TaskAggregatedSolutionRequest',
+    'WeightedDynamicOverlapTaskAggregatedSolutionRequest',
+    'AggregatedSolution',
+]
 from toloka.client.primitives.base import BaseTolokaObject
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -27,7 +27,7 @@ from typing import (
     Optional
 )
 
-class AggregatedSolutionType(Enum):
+class AggregatedSolutionType(ExtendableStrEnum):
     """An enumeration.
     """
 

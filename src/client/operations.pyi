@@ -19,15 +19,15 @@ __all__ = [
     'UserBonusCreateBatchOperation',
 ]
 from datetime import datetime
-from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
     Optional
 )
 
-class OperationType(Enum):
+class OperationType(ExtendableStrEnum):
     """An enumeration.
     """
 
@@ -76,7 +76,7 @@ class Operation(BaseTolokaObject):
 
         _unexpected: Optional[Dict[str, Any]]
 
-    class Status(Enum):
+    class Status(ExtendableStrEnum):
         """The status of the operation:
 
         Attributes:

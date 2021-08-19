@@ -9,12 +9,12 @@ __all__ = [
     'SetActionV1',
     'ToggleActionV1',
 ]
-from enum import Enum
 from toloka.client.project.template_builder.base import (
     BaseComponent,
     BaseTemplate,
     RefComponent
 )
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -81,7 +81,7 @@ class NotifyActionV1(BaseActionV1):
                 600 milliseconds.
         """
 
-        class Theme(Enum):
+        class Theme(ExtendableStrEnum):
             """The background color of the message.
 
             Attributes:
@@ -211,7 +211,7 @@ class RotateActionV1(BaseActionV1):
         payload: Sets the direction of rotation.
     """
 
-    class Payload(Enum):
+    class Payload(ExtendableStrEnum):
         """An enumeration.
         """
 

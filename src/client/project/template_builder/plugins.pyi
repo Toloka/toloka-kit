@@ -6,11 +6,11 @@ __all__ = [
     'TriggerPluginV1',
     'TolokaPluginV1',
 ]
-from enum import Enum
 from toloka.client.project.template_builder.base import (
     BaseComponent,
     BaseTemplate
 )
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -318,7 +318,7 @@ class TolokaPluginV1(BasePluginV1):
         """How to display task.
         """
 
-        class Kind(Enum):
+        class Kind(ExtendableStrEnum):
             """An enumeration.
 
             Attributes:

@@ -34,8 +34,10 @@ __all__ = [
     'InputData',
     'InternalData',
     'LocalData',
+    'LocationData',
     'OutputData',
     'RelativeData',
+    'AudioFieldV1',
     'ButtonRadioFieldV1',
     'GroupFieldOption',
     'ButtonRadioGroupFieldV1',
@@ -88,14 +90,25 @@ __all__ = [
     'ImageViewV1',
     'LabeledListViewV1',
     'LinkViewV1',
+    'LinkGroupViewV1',
     'ListViewV1',
     'MarkdownViewV1',
     'TextViewV1',
     'VideoViewV1',
 ]
-
 from toloka.client.primitives.base import BaseTolokaObject
 from toloka.client.project.field_spec import FieldSpec
+from toloka.client.project.template_builder import (
+    actions,
+    base,
+    conditions,
+    data,
+    fields,
+    helpers,
+    layouts,
+    plugins,
+    view
+)
 from toloka.client.project.template_builder.actions import (
     BulkActionV1,
     NotifyActionV1,
@@ -126,10 +139,12 @@ from toloka.client.project.template_builder.data import (
     InputData,
     InternalData,
     LocalData,
+    LocationData,
     OutputData,
     RelativeData
 )
 from toloka.client.project.template_builder.fields import (
+    AudioFieldV1,
     ButtonRadioFieldV1,
     ButtonRadioGroupFieldV1,
     CheckboxFieldV1,
@@ -189,6 +204,7 @@ from toloka.client.project.template_builder.view import (
     IframeViewV1,
     ImageViewV1,
     LabeledListViewV1,
+    LinkGroupViewV1,
     LinkViewV1,
     ListViewV1,
     MarkdownViewV1,

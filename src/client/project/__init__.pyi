@@ -24,14 +24,14 @@ __all__ = [
     'LocalizationConfig',
     'AdditionalLanguage',
 ]
-import toloka.client.project.field_spec
-import toloka.client.project.task_spec
-import toloka.client.project.template_builder
-import toloka.client.project.view_spec
-
 from datetime import datetime
-from enum import Enum
 from toloka.client.primitives.base import BaseTolokaObject
+from toloka.client.project import (
+    field_spec,
+    task_spec,
+    template_builder,
+    view_spec
+)
 from toloka.client.project.field_spec import (
     ArrayBooleanSpec,
     ArrayCoordinatesSpec,
@@ -59,6 +59,7 @@ from toloka.client.project.view_spec import (
     TemplateBuilderViewSpec
 )
 from toloka.client.quality_control import QualityControl
+from toloka.client.util._extendable_enum import ExtendableStrEnum
 from typing import (
     Any,
     Dict,
@@ -116,7 +117,7 @@ class Project(BaseTolokaObject):
         ...
     """
 
-    class AssignmentsIssuingType(Enum):
+    class AssignmentsIssuingType(ExtendableStrEnum):
         """How to assign tasks:
 
         Attributes:
@@ -153,7 +154,7 @@ class Project(BaseTolokaObject):
         title_template: Optional[str]
         description_template: Optional[str]
 
-    class ProjectStatus(Enum):
+    class ProjectStatus(ExtendableStrEnum):
         """Project status:
 
         Attributes:
