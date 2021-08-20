@@ -14,15 +14,12 @@ __all__ = [
     'ActiveWorkersByFilterCountPoolAnalytics',
     'EstimatedAssignmentsCountPoolAnalytics',
 ]
-from toloka.client.primitives.base import BaseTolokaObject
-from toloka.client.util._extendable_enum import ExtendableStrEnum
-from typing import (
-    Any,
-    Dict,
-    Optional
-)
+import toloka.client.primitives.base
+import toloka.client.util._extendable_enum
+import typing
 
-class AnalyticsRequest(BaseTolokaObject):
+
+class AnalyticsRequest(toloka.client.primitives.base.BaseTolokaObject):
     """Base class for all analytics requests in Toloka
 
     How to use this requests and get some useful information see in example in "TolokaClient.get_analytics".
@@ -31,7 +28,7 @@ class AnalyticsRequest(BaseTolokaObject):
         subject_id: ID of the object you want to get analytics about.
     """
 
-    class Subject(ExtendableStrEnum):
+    class Subject(toloka.client.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 
@@ -42,7 +39,7 @@ class AnalyticsRequest(BaseTolokaObject):
         """
         ...
 
-    _unexpected: Optional[Dict[str, Any]]
+    _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     subject_id: str
 
 
@@ -55,7 +52,7 @@ class PoolAnalyticsRequest(AnalyticsRequest):
         subject_id: ID of the object you want to get analytics about.
     """
 
-    class Subject(ExtendableStrEnum):
+    class Subject(toloka.client.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 
@@ -77,7 +74,7 @@ class PoolAnalyticsRequest(AnalyticsRequest):
         """
         ...
 
-    _unexpected: Optional[Dict[str, Any]]
+    _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     subject_id: str
 
 
@@ -95,7 +92,7 @@ class RealTasksCountPoolAnalytics(PoolAnalyticsRequest):
         """
         ...
 
-    _unexpected: Optional[Dict[str, Any]]
+    _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     subject_id: str
 
 
@@ -115,7 +112,7 @@ class SubmitedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
         """
         ...
 
-    _unexpected: Optional[Dict[str, Any]]
+    _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     subject_id: str
 
 
@@ -131,7 +128,7 @@ class SkippedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
         """
         ...
 
-    _unexpected: Optional[Dict[str, Any]]
+    _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     subject_id: str
 
 
@@ -147,7 +144,7 @@ class RejectedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
         """
         ...
 
-    _unexpected: Optional[Dict[str, Any]]
+    _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     subject_id: str
 
 
@@ -167,7 +164,7 @@ class ApprovedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
         """
         ...
 
-    _unexpected: Optional[Dict[str, Any]]
+    _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     subject_id: str
 
 
@@ -183,7 +180,7 @@ class CompletionPercentagePoolAnalytics(PoolAnalyticsRequest):
         """
         ...
 
-    _unexpected: Optional[Dict[str, Any]]
+    _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     subject_id: str
 
 
@@ -199,7 +196,7 @@ class AvgSubmitAssignmentMillisPoolAnalytics(PoolAnalyticsRequest):
         """
         ...
 
-    _unexpected: Optional[Dict[str, Any]]
+    _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     subject_id: str
 
 
@@ -215,7 +212,7 @@ class SpentBudgetPoolAnalytics(PoolAnalyticsRequest):
         """
         ...
 
-    _unexpected: Optional[Dict[str, Any]]
+    _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     subject_id: str
 
 
@@ -231,7 +228,7 @@ class UniqueWorkersCountPoolAnalytics(PoolAnalyticsRequest):
         """
         ...
 
-    _unexpected: Optional[Dict[str, Any]]
+    _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     subject_id: str
 
 
@@ -247,7 +244,7 @@ class UniqueSubmittersCountPoolAnalytics(PoolAnalyticsRequest):
         """
         ...
 
-    _unexpected: Optional[Dict[str, Any]]
+    _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     subject_id: str
 
 
@@ -269,7 +266,7 @@ class ActiveWorkersByFilterCountPoolAnalytics(PoolAnalyticsRequest):
         """
         ...
 
-    _unexpected: Optional[Dict[str, Any]]
+    _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     subject_id: str
     interval_hours: int
 
@@ -286,5 +283,5 @@ class EstimatedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
         """
         ...
 
-    _unexpected: Optional[Dict[str, Any]]
+    _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     subject_id: str

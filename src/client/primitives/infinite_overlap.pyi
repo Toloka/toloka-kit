@@ -1,7 +1,8 @@
 __all__ = [
     'InfiniteOverlapParametersMixin',
 ]
-from typing import Optional
+import typing
+
 
 class InfiniteOverlapParametersMixin:
     """This mixin provides `overlap` and `infinite_overlap` attributes
@@ -18,6 +19,17 @@ class InfiniteOverlapParametersMixin:
     All other states are considered invalid
     """
 
+    def unset_overlap(self):
+        """Unsets overlap
+        """
+        ...
+
+    def unstructure(self) -> typing.Optional[dict]:
+        """Ensures that if either overlap or infinite_overlap is not None, then
+        both of them are present in unstructured value.
+        """
+        ...
+
     def __init__(
         self,
         infinite_overlap=None,
@@ -27,16 +39,5 @@ class InfiniteOverlapParametersMixin:
         """
         ...
 
-    def unset_overlap(self):
-        """Unsets overlap
-        """
-        ...
-
-    def unstructure(self) -> Optional[dict]:
-        """Ensures that if either overlap or infinite_overlap is not None, then
-        both of them are present in unstructured value.
-        """
-        ...
-
-    _infinite_overlap: Optional[bool]
-    _overlap: Optional[int]
+    _infinite_overlap: typing.Optional[bool]
+    _overlap: typing.Optional[int]

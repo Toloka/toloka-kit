@@ -3,23 +3,21 @@ __all__ = [
     'ExtendableStrEnumMetaclass',
     'ExtendableStrEnum',
 ]
-from enum import (
-    Enum,
-    EnumMeta
-)
+import enum
+
 
 def extend_enum(
-    enumeration: Enum,
+    enumeration: enum.Enum,
     name: str,
     value: str
 ): ...
 
 
-class ExtendableStrEnumMetaclass(EnumMeta):
+class ExtendableStrEnumMetaclass(enum.EnumMeta):
     ...
 
 
-class ExtendableStrEnum(Enum):
+class ExtendableStrEnum(enum.Enum):
     """An enumeration.
     """
 

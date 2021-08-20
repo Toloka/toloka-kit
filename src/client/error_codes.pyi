@@ -3,9 +3,10 @@ __all__ = [
     'InternalErrorCodes',
     'ValidationErrorCodes',
 ]
-from enum import Enum
+import enum
 
-class CommonErrorCodes(Enum):
+
+class CommonErrorCodes(enum.Enum):
     """Types of error codes returned by the API
     """
 
@@ -19,7 +20,7 @@ class CommonErrorCodes(Enum):
     VALIDATION_ERROR = 'VALIDATION_ERROR'
 
 
-class InternalErrorCodes(Enum):
+class InternalErrorCodes(enum.Enum):
     """Types of internal error codes returned by the API
     """
 
@@ -89,7 +90,7 @@ class InternalErrorCodes(Enum):
     WRONG_REVISION = 'WRONG_REVISION'
 
 
-class ValidationErrorCodes(Enum):
+class ValidationErrorCodes(enum.Enum):
     """Types of validation error codes returned by the API
     """
 

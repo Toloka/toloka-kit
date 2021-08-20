@@ -1,16 +1,11 @@
 __all__ = [
     'inherit_docstrings',
 ]
-from typing import (
-    Type,
-    TypeVar
-)
+import typing
 
+T = typing.TypeVar('T')
 
-T = TypeVar('T')
-
-
-def inherit_docstrings(cls: Type[T]) -> Type[T]:
+def inherit_docstrings(cls: typing.Type[T]) -> typing.Type[T]:
     """Modifies docstring parameters list of class and nested members updating it with docstring parameters from parent
     classes and parent classes members.
 

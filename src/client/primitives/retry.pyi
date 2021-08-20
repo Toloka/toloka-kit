@@ -1,15 +1,12 @@
 __all__ = [
     'TolokaRetry',
 ]
-from requests.packages.urllib3.response import HTTPResponse
-from requests.packages.urllib3.util.retry import Retry
-from typing import (
-    List,
-    Optional,
-    Union
-)
+import requests.packages.urllib3.response
+import requests.packages.urllib3.util.retry
+import typing
 
-class TolokaRetry(Retry):
+
+class TolokaRetry(requests.packages.urllib3.util.retry.Retry):
     """Retry toloka quotas. By default only minutes quotas.
 
     Args:
@@ -27,18 +24,18 @@ class TolokaRetry(Retry):
     def __init__(
         self,
         *args,
-        retry_quotas: Union[List[str], str, None] = 'MIN',
+        retry_quotas: typing.Union[typing.List[str], str, None] = 'MIN',
         **kwargs
     ): ...
 
-    def get_retry_after(self, response: HTTPResponse) -> Optional[float]: ...
+    def new(self, **kwargs): ...
+
+    def get_retry_after(self, response: requests.packages.urllib3.response.HTTPResponse) -> typing.Optional[float]: ...
 
     def increment(
         self,
         *args,
         **kwargs
-    ) -> 'Retry': ...
+    ) -> requests.packages.urllib3.util.retry.Retry: ...
 
-    def new(self, **kwargs): ...
-
-    _retry_quotas: Union[List[str], str, None]
+    _retry_quotas: typing.Union[typing.List[str], str, None]
