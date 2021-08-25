@@ -160,7 +160,9 @@ class TemplateBuilderViewSpec(ViewSpec):
     template builder components
 
     Attributes:
-        config: A template builder config
+        view:
+        plugins:
+        vars:
         core_version: Default template components version. Most users will not need to change this parameter.
 
     Example:
