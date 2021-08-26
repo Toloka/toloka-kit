@@ -125,41 +125,54 @@ logger = logging.getLogger(__name__)
 
 
 class TolokaClient:
-    """Implements interaction with the Toloka API
+    """Class that implements interaction with [Toloka API](https://yandex.com/dev/toloka/doc/concepts/about.html).
 
-    All other objects are created or modified only in the memory of your computer.
-    Only by calling one of the TolokaClient methods, you can transfer information from these objects to Toloka.
-    For Example. If you create an instance of Project, it will not create such a project in Toloka. You need to call the
-    TolokaClient.create_project method and pass the project instance there.
-    Likewise. If you read the project using the TolokaClient.get_project method, you will get an instance of Project.
-    But if you change something in this object, it will not affect the existing project in Toloka. To apply these changes,
-    call TolokaClient.update_project and pass the changed Project there.
+    Objects of other classes are created and modified only in memory of your computer.
+    You can transfer information about these objects to Toloka only by calling one of the `TolokaClient` methods.
+
+    For example, creating an instance of `Project` class will not add a project to Toloka right away. It will create a `Project` instance in your local memory.
+    You need to call the `TolokaClient.create_project` method and pass the created project instance to it.
+    Likewise, if you read a project using the `TolokaClient.get_project` method, you will get an instance of `Project` class.
+    But if you change some parameters in this object manually in your code, it will not affect the existing project in Toloka.
+    Call `TolokaClient.update_project` and pass the `Project` to apply your changes.
 
     Args:
-        token: You OAuth token for Toloka. You can learn more about how to get it here: https://yandex.ru/dev/toloka/doc/concepts/access.html?lang=en
-        environment: There are two versions of Toloka. You need to register separately in each of them:
-            * SANDBOX: Testing version oif Toloka. You can test complex projects before the start. Nobody saw your tasks.
-            * PRODUCTION: Production version of Toloka for requesters. You spend money and get result.
-        retries: Retry policy. You can use the following types:
-            * int - The number of retries for all requests. In this case, the retry policy is created automatically.
-            * Retry - Deprecated. Use retryer_factory instead. Fully specified retry policy that will apply to all requests.
-        timeout: Same as timeout in Requests. The connect timeout is the number of seconds Requests will wait for your client
-            to establish a connection to a remote machine call on the socket.
-            * If you specify a single value for the timeout, it will be applied to both the connect and the read timeouts.
-            * Specify a tuple if you would like to set the values separately.
-            * Set the timeout value to None if you're willing to wait forever.
-        url: If you want to set a specific URL for some reason, for example, for testing.
-            You can only set one parameter, "url" or "environment", not both.
-        retry_quotas: List of quotas that must be retried. By default retries only minutes quotas. None or empty list for not retrying quotas.
-            You must set this parameter to None, then you specify the 'retries' parameter as Retry instance.
-            You can specify quotas:
-            * MIN - Retry minutes quotas.
-            * HOUR - Retry hourly quotas. This is means that the program just sleeps for an hour! Be careful.
-            * DAY - Retry daily quotas. We strongly not recommended retrying these quotas.
-        retryer_factory: Factory that creates Retry object.
+        token: Your OAuth token for Toloka. You can learn more about how to get it [here](https://yandex.com/dev/toloka/doc/concepts/access.html#access__token)
+        environment: There are two environments in Toloka:
+            * `SANDBOX` – [Testing environment](https://sandbox.toloka.yandex.com) for Toloka requesters.
+            You can test complex projects before starting them on real performers. Nobody will see your tasks, and it's free.
+            * `PRODUCTION` – [Production environment](https://toloka.yandex.com) for Toloka requesters.
+            You spend money there and get the results.
+            You need to register in each environment separately. OAuth tokens are generated in each environment separately too.
+            Default value: `None`.
+        retries: Retry policy for failed API requests.
+            Possible values:
+            * `int` – The number of retries for all requests. In this case, the retry policy is created automatically.
+            * `Retry` object – Deprecated type. Use `retryer_factory` parameter instead.
+            Default value: `3`.
+        timeout: Number of seconds that [Requests library](https://docs.python-requests.org/en/master) will wait for your client to establish connection to a remote machine.
+            Possible values:
+            * `float` – Single value for both connect and read timeouts.
+            * `Tuple[float, float]` – Tuple sets the values for connect and read timeouts separately.
+            * `None` – Set the timeout to `None` only if you are willing to wait the [Response](https://docs.python-requests.org/en/master/api/#requests.Response)
+            for unlimited number of seconds.
+            Default value: `10.0`.
+        url: Set a specific URL instead of Toloka environment. May be useful for testing purposes.
+            You can only set one parameter – either `url` or `environment`, not both of them.
+            Default value: `None`.
+        retry_quotas: List of quotas that must be retried.
+            Set `None` or pass an empty list for not retrying any quotas. If you specified the `retries` as `Retry` instance, you must set this parameter to `None`.
+            Possible values:
+            * `MIN` - Retry minutes quotas.
+            * `HOUR` - Retry hourly quotas. This means that the program just sleeps for an hour.
+            * `DAY` - Retry daily quotas. We do not recommend retrying these quotas.
+            Default value: `MIN`.
+        retryer_factory: Factory that creates `Retry` object.
+            Fully specified retry policy that will apply to all requests.
+            Default value: `None`.
 
     Example:
-        How to create TolokaClient instance and make your first request to Toloka.
+        How to create `TolokaClient` instance and make your first request to Toloka.
 
         >>> your_oauth_token = input('Enter your token:')
         >>> toloka_client = toloka.TolokaClient(your_oauth_token, 'PRODUCTION')  # Or switch to 'SANDBOX' environment
