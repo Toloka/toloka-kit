@@ -70,7 +70,7 @@ class TolokaRetry(Retry):
             logger.warning('The daily quota limit worked. The program "falls asleep" for the day.')
         return TolokaRetry.seconds_to_wait.get(interval, None)
 
-    def increment(self, *args, **kwargs) -> "Retry":
+    def increment(self, *args, **kwargs) -> Retry:
         self._last_response = None
         response = kwargs.get('response', None)
         try:

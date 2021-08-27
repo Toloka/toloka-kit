@@ -1,6 +1,7 @@
 __all__: list = []
 import datetime
 from decimal import Decimal
+import re
 import sys
 import uuid
 from typing import List, Union
@@ -33,12 +34,24 @@ converter.register_structure_hook(
     lambda data, type_: converter.structure(data, List[str] if isinstance(data, list) else str)  # type: ignore
 )
 
+MS_IN_ISO_REGEX = re.compile(r'(?<=.{19})\.\d*')
 
-# Dates are are represented as ISO 8601: YYYY-MM-DDThh:mm:ss[.sss]
+
+def str_to_datetime(str_dt: str) -> datetime.datetime:
+    # Some dirty fix for not matching miliseconds
+    # The problem is that sometimes we get here 5 digits in ms. That leads to raising an exception.
+    # drop after TOLOKA-16759
+    def fill_miliseconds(miliseconds) -> str:
+        return miliseconds.group().ljust(7 if len(miliseconds.group()) > 4 else 4, '0')
+
+    return datetime.datetime.fromisoformat(MS_IN_ISO_REGEX.sub(fill_miliseconds, str_dt))
+
+
+# Dates are represented as ISO 8601: YYYY-MM-DDThh:mm:ss[.sss]
 # and structured to datetime.datetime
 converter.register_structure_hook(
     datetime.datetime,
-    lambda data, type_: data if isinstance(data, datetime.datetime) else type_.fromisoformat(data)  # type: ignore
+    lambda data, type_: data if isinstance(data, datetime.datetime) else str_to_datetime(data)  # type: ignore
 )
 converter.register_unstructure_hook(datetime.datetime, lambda data: data.isoformat())  # type: ignore
 

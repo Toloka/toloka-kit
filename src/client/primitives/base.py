@@ -155,7 +155,9 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
 
     def __getattr__(self, item):
         try:
-            return self._unexpected[item]
+            # get _unexpected pickle-friendly
+            _unexpected = super().__getattribute__('_unexpected')
+            return _unexpected[item]
         except KeyError as exc:
             raise AttributeError(str(item)) from exc
 

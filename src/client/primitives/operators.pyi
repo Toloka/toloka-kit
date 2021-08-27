@@ -7,9 +7,10 @@ __all__ = [
     'ComparableConditionMixin',
     'StatefulComparableConditionMixin',
 ]
-from enum import Enum
+import toloka.client.util._extendable_enum
 
-class CompareOperator(Enum):
+
+class CompareOperator(toloka.client.util._extendable_enum.ExtendableStrEnum):
     """An enumeration.
     """
 
@@ -21,7 +22,7 @@ class CompareOperator(Enum):
     LTE = 'LTE'
 
 
-class InclusionOperator(Enum):
+class InclusionOperator(toloka.client.util._extendable_enum.ExtendableStrEnum):
     """An enumeration.
     """
 
@@ -29,7 +30,7 @@ class InclusionOperator(Enum):
     NOT_IN = 'NOT_IN'
 
 
-class IdentityOperator(Enum):
+class IdentityOperator(toloka.client.util._extendable_enum.ExtendableStrEnum):
     """An enumeration.
     """
 
@@ -65,14 +66,14 @@ class ComparableConditionMixin:
 
 
 class StatefulComparableConditionMixin:
-    def eq(self, value): ...
+    def lt(self, value): ...
+
+    def lte(self, value): ...
 
     def gt(self, value): ...
 
     def gte(self, value): ...
 
-    def lt(self, value): ...
-
-    def lte(self, value): ...
+    def eq(self, value): ...
 
     def ne(self, value): ...

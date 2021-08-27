@@ -1,12 +1,13 @@
 # Toloka-Kit
 
-[![GitHub Tests][github_tests_badge]][github_tests_link]
-[![GitHub Tests][github_coverage_badge]][github_coverage_link]
+[![License](https://img.shields.io/pypi/l/toloka-kit.svg)](https://github.com/toloka/toloka-kit/blob/master/LICENSE)
+[![PyPI Latest Release](https://img.shields.io/pypi/v/toloka-kit.svg)](https://pypi.org/project/toloka-kit/)
+[![Supported Versions](https://img.shields.io/pypi/pyversions/toloka-kit.svg)](https://pypi.org/project/toloka-kit)
+[![Downloads](https://pepy.tech/badge/toloka-kit/month)](https://pepy.tech/project/toloka-kit)
 
-[github_tests_badge]: https://github.com/Toloka/toloka-kit/workflows/Tests/badge.svg?branch=main
-[github_tests_link]: https://github.com/Toloka/toloka-kit/actions?query=workflow:Tests
-[github_coverage_badge]: https://codecov.io/gh/Toloka/toloka-kit/branch/main/graph/badge.svg
-[github_coverage_link]: https://codecov.io/gh/Toloka/toloka-kit
+[![Coverage](https://codecov.io/github/toloka-kit-dev/toloka-kit/coverage.svg?branch=master)](https://codecov.io/gh/toloka-kit-dev/toloka-kit)
+[![GitHub Tests](https://github.com/Toloka/toloka-kit/workflows/Tests/badge.svg?branch=main)](//github.com/Toloka/toloka-kit/actions?query=workflow:Tests)
+
 
 [**<span style="color:red">Documentation</span>**](https://yandex.com/dev/toloka/toloka-kit/doc/)
 
@@ -61,8 +62,7 @@ Useful Links
 Questions and bug reports
 --------------
 * For reporting bugs please use the [Toloka/bugreport](https://github.com/Toloka/toloka-kit/issues) page.
-* Seek prompt advice at Russian-speaking [Telegram chat](https://t.me/tolokacommunity) (Abstract questions about the platform are also welcome)
-* Seek prompt advice at English-speaking [Telegram chat](https://t.me/toloka_tech) (Mostly tech question)
+* Join our English-speaking [slack community](https://toloka.ai/community) for both tech and abstract questions.
 
 
 Contributing

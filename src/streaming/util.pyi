@@ -3,27 +3,35 @@ __all__ = [
     'AsyncMultithreadWrapper',
     'ensure_async',
 ]
-from asyncio.events import AbstractEventLoop
-from typing import (
-    Awaitable,
-    Callable,
-    Generic,
-    Optional,
-    TypeVar
-)
+import asyncio.events
+import typing
 
 
-class AsyncInterfaceWrapper(Generic):
+def ensure_async(func: typing.Callable) -> typing.Callable[..., typing.Awaitable]:
+    """Ensure given callable is async.
+
+    Note, that it doesn't provide concurrency by itself!
+    It just allow to treat sync and async callables in the same way.
+
+    Args:
+        func: Any callable: synchronous or asynchronous.
+    Returns:
+        Wrapper that return awaitable object at call.
+    """
+    ...
+
+
+class AsyncInterfaceWrapper(typing.Generic):
     """Wrap arbitrary object to be able to await any of it's methods even if it's sync.
 
     Note, that it doesn't provide concurrency by itself!
     It just allow to treat sync and async callables in the same way.
     """
 
-    def __init__(self, wrapped: TypeVar('T', bound=None)): ...
+    def __init__(self, wrapped: typing.TypeVar('T', bound=None)): ...
 
 
-class AsyncMultithreadWrapper(Generic):
+class AsyncMultithreadWrapper(typing.Generic):
     """Wrap arbitrary object to run each of it's methods in a separate thread.
 
     Examples:
@@ -41,21 +49,7 @@ class AsyncMultithreadWrapper(Generic):
 
     def __init__(
         self,
-        wrapped: TypeVar('T', bound=None),
+        wrapped: typing.TypeVar('T', bound=None),
         pool_size: int = 10,
-        loop: Optional[AbstractEventLoop] = None
+        loop: typing.Optional[asyncio.events.AbstractEventLoop] = None
     ): ...
-
-
-def ensure_async(func: Callable) -> Callable[..., Awaitable]:
-    """Ensure given callable is async.
-
-    Note, that it doesn't provide concurrency by itself!
-    It just allow to treat sync and async callables in the same way.
-
-    Args:
-        func: Any callable: synchronous or asynchronous.
-    Returns:
-        Wrapper that return awaitable object at call.
-    """
-    ...
