@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 PREFIX = 'toloka'
 
 setup_py_dir = os.path.dirname(__file__)
-version_module_path = os.path.join(setup_py_dir, 'src', 'client', '__version__.py')
+version_module_path = os.path.join(setup_py_dir, 'src', '__version__.py')
 
 about = {}
 
@@ -21,7 +21,7 @@ with open('README.md') as f:
 setup(
     name=about['__title__'],
     package_dir={PREFIX: 'src'},
-    packages=[f'{PREFIX}.{package}' for package in find_packages('src')],
+    packages=['toloka', *(f'{PREFIX}.{package}' for package in find_packages('src'))],
     version=about['__version__'],
     description='Toloka API client',
     long_description=readme,

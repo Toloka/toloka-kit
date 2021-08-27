@@ -95,7 +95,7 @@ from . import user_restriction
 from . import user_skill
 from . import webhook_subscription
 
-from .__version__ import __version__
+from ..__version__ import __version__
 from ._converter import structure, unstructure
 from .aggregation import AggregatedSolution
 from .analytics_request import AnalyticsRequest

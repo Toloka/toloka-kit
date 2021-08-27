@@ -1,3 +1,10 @@
+0.1.14
+-------------------
+
+* `toloka.client` objects are not serializable
+* Metrics are introduced
+
+
 0.1.13
 -------------------
 
