@@ -103,6 +103,41 @@ def simple_answer_map():
     }
 
 
+@pytest.fixture
+def success_answer_map():
+    return {
+        'id': '8ee7e276-53bb-4220-823e-05f578392915',
+        'type': 'ANALYTICS',
+        'status': 'SUCCESS',
+        'submitted': '2021-08-24T06:30:08.394',
+        'started': '2021-08-24T06:30:08.51',  # 2 ms digits
+        'finished': '2021-08-24T06:30:11.99999',  # 5 ms digits
+        'progress': 100, 'parameters':
+        {
+            'value':
+            [
+                {'name': 'submitted_assignments_count', 'subject': 'POOL', 'subject_id': '26807107'},
+            ]
+        },
+        'details':
+        {
+            'value':
+            [
+                {
+                    'result': 75,
+                    'request':
+                    {
+                        'name': 'submitted_assignments_count',
+                        'subject': 'POOL',
+                        'subject_id': '26807107'
+                    },
+                    'finished': '2021-08-24T06:30:08.923461'
+                },
+            ]
+        }
+    }
+
+
 def test_send_analytics_request(requests_mock, toloka_client, toloka_api_url,
                                       full_tasks_request_map, simple_answer_map):
 
@@ -129,3 +164,16 @@ def test_send_analytics_request(requests_mock, toloka_client, toloka_api_url,
 
     operation = toloka_client.get_analytics(stat_requests)
     assert simple_answer_map == client.unstructure(operation)
+
+
+def test_less_ms_digits(requests_mock, toloka_client, toloka_api_url, success_answer_map):
+    real_result = {
+        **success_answer_map,
+        'submitted': '2021-08-24T06:30:08.394000',  # 6 ms digits
+        'started': '2021-08-24T06:30:08.510000',    # 6 ms digits
+        'finished': '2021-08-24T06:30:11.999990',   # 6 ms digits
+    }
+
+    requests_mock.post(f'{toloka_api_url}/staging/analytics-2', json=success_answer_map)
+    operation = toloka_client.get_analytics([SubmitedAssignmentsCountPoolAnalytics(subject_id='123')])
+    assert real_result == client.unstructure(operation)
