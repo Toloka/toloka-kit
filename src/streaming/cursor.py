@@ -12,7 +12,7 @@ import attr
 import functools
 import logging
 from datetime import datetime
-from typing import Any, AsyncIterator, Callable, Iterator, Optional, TypeVar, Union
+from typing import Any, AsyncIterator, Awaitable, Callable, Iterator, List, Optional, Tuple, TypeVar, Union
 
 from ..client import (
     Assignment,
@@ -71,6 +71,46 @@ class BaseCursor:
     toloka_client: TolokaClientSyncOrAsyncType = attr.ib()
     _request: RequestObjectType = attr.ib()
     _prev_response: Optional[ResponseObjectType] = attr.ib(default=None, init=False)
+
+    @attr.s
+    class _CursorFetchContext:
+        """Context manager to return from `BaseCursor.try_fetch_all method`.
+        Commit cursor state only if no error occured.
+        """
+        _cursor: 'BaseCursor' = attr.ib()
+        _start_state: Optional[Tuple] = attr.ib(default=None, init=False)
+        _finish_state: Optional[Tuple] = attr.ib(default=None, init=False)
+
+        def __enter__(self) -> List[BaseEvent]:
+            self._start_state = self._cursor._get_state()
+            res = [item for item in self._cursor]
+            self._finish_state = self._cursor._get_state()
+            self._cursor._set_state(self._start_state)
+            return res
+
+        async def __aenter__(self) -> List[BaseEvent]:
+            self._start_state = self._cursor._get_state()
+            res = [item async for item in self._cursor]
+            self._finish_state = self._cursor._get_state()
+            self._cursor._set_state(self._start_state)
+            return res
+
+        def __exit__(self, exc_type, exc_value, traceback) -> None:
+            if exc_type is None:
+                self._cursor._set_state(self._finish_state)
+
+        async def __aexit__(self, exc_type, exc_value, traceback) -> Awaitable[None]:
+            if exc_type is None:
+                self._cursor._set_state(self._finish_state)
+
+    def _get_state(self) -> Tuple[RequestObjectType, Optional[ResponseObjectType]]:
+        return self._request, self._prev_response
+
+    def _set_state(self, state: Tuple[RequestObjectType, Optional[ResponseObjectType]]) -> None:
+        self._request, self._prev_response = state
+
+    def try_fetch_all(self) -> '_CursorFetchContext':
+        return self._CursorFetchContext(self)
 
     def __attrs_post_init__(self):
         if not getattr(self._request, self._time_field_gte):
@@ -240,7 +280,7 @@ class UserBonusCursor(BaseCursor):
     Examples:
         Iterate over user bonuses.
 
-        >>> it = UserBonusCursortoloka_client=toloka_client)
+        >>> it = UserBonusCursor(toloka_client=toloka_client)
         >>> current_bonuses = list(it)
         >>> # ... new user bonuses could appear ...
         >>> new_bonuses = list(it)  # Contains only new user bonuses, appeared since the previous call.
@@ -275,7 +315,7 @@ class UserSkillCursor(BaseCursor):
     Examples:
         Iterate over user skills acceptances events.
 
-        >>> it = UserSkillCursorevent_type='MODIFIED', toloka_client=toloka_client)
+        >>> it = UserSkillCursor(event_type='MODIFIED', toloka_client=toloka_client)
         >>> current_events = list(it)
         >>> # ... new user skills could be set ...
         >>> new_events = list(it)  # Contains only new events, occured since the previous call.

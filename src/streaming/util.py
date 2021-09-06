@@ -1,13 +1,49 @@
 __all__ = [
     'AsyncInterfaceWrapper',
     'AsyncMultithreadWrapper',
+    'ComplexException',
     'ensure_async',
+    'get_task_traceback',
 ]
 
 import asyncio
+import attr
 import functools
 from concurrent import futures
-from typing import Awaitable, Callable, Generic, Optional, TypeVar
+from io import StringIO
+from typing import Awaitable, Callable, Dict, Generic, List, Optional, Type, TypeVar
+
+
+@attr.s
+class ComplexException(Exception):
+    """Exception to aggregate multiple exceptions occured.
+    Unnderlying exceptions are stored in the `exceptions` attribute.
+
+    Attributes:
+        exceptions: List of underlying exceptions.
+    """
+    exceptions: List[Exception] = attr.ib()
+
+    def __attrs_post_init__(self) -> None:
+        aggregated_by_type: Dict[Type, ComplexException] = {}
+        flat: List[Exception] = []
+
+        self_class = type(self)
+        for exc in self.exceptions:
+            exc_class = type(exc)
+            if exc_class is self_class:
+                flat.extend(exc.exceptions)
+            elif isinstance(exc, ComplexException):
+                if exc_class in aggregated_by_type:
+                    aggregated_by_type[exc_class].exceptions.extend(exc.exceptions)
+                else:
+                    aggregated_by_type[exc_class] = exc
+            else:
+                flat.append(exc)
+
+        self.exceptions = list(aggregated_by_type.values()) + flat
+
+        raise self
 
 
 def ensure_async(func: Callable) -> Callable[..., Awaitable]:
@@ -84,3 +120,16 @@ class AsyncMultithreadWrapper(Generic[T]):
             return await self._loop.run_in_executor(self.__executor, functools.partial(attribute, *args, **kwargs))
 
         return _wrapper
+
+
+def get_task_traceback(task: asyncio.Task) -> Optional[str]:
+    """Get traceback for given task as string.
+    Return traceback as string if exists. Or None if there was no error.
+    """
+    if task.exception() is None:
+        return None
+    with StringIO() as stream:
+        task.print_stack(file=stream)
+        stream.flush()
+        stream.seek(0)
+        return stream.read()
