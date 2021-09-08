@@ -215,7 +215,7 @@ class Project(toloka.client.primitives.base.BaseTolokaObject):
         public_name: typing.Optional[str] = None,
         public_description: typing.Optional[str] = None,
         task_spec: typing.Optional[toloka.client.project.task_spec.TaskSpec] = None,
-        assignments_issuing_type: AssignmentsIssuingType = Project.AssignmentsIssuingType.AUTOMATED,
+        assignments_issuing_type: typing.Union[AssignmentsIssuingType, str] = AssignmentsIssuingType.AUTOMATED,
         assignments_issuing_view_config: typing.Optional[AssignmentsIssuingViewConfig] = None,
         assignments_automerge_enabled: typing.Optional[bool] = None,
         max_active_assignments_count: typing.Optional[int] = None,

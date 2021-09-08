@@ -23,7 +23,7 @@ from enum import unique
 from typing import Any, ClassVar
 
 from .exceptions import FailedOperation
-from .primitives.base import BaseTolokaObject
+from .primitives.base import BaseTolokaObject, attribute
 from .util._docstrings import inherit_docstrings
 from .util._extendable_enum import ExtendableStrEnum
 
@@ -96,7 +96,7 @@ class Operation(BaseTolokaObject, spec_enum=OperationType, spec_field='type'):
     DEFAULT_PSEUDO_OPERATION_TYPE: ClassVar[OperationType] = OperationType.PSEUDO
 
     id: str
-    status: Status
+    status: Status = attribute(autocast=True)
     submitted: datetime.datetime
     parameters: Parameters
     started: datetime.datetime

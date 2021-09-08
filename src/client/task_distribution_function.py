@@ -47,7 +47,7 @@ class TaskDistributionFunction(BaseTolokaObject):
         to: int
         frequency: int
 
-    scope: Scope
-    distribution: Distribution
+    scope: Scope = attribute(autocast=True)
+    distribution: Distribution = attribute(autocast=True)
     window_days: int
     intervals: List[Interval]

@@ -35,6 +35,6 @@ class DynamicPricingConfig(BaseTolokaObject, kw_only=False):
         to: int
         reward_per_assignment: float
 
-    type: Type
+    type: Type = attribute(autocast=True)
     skill_id: str
     intervals: List[Interval]

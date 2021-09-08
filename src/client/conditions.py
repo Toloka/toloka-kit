@@ -32,7 +32,7 @@ __all__ = [
 from enum import unique
 from typing import Any
 
-from .primitives.base import BaseTolokaObject
+from .primitives.base import BaseTolokaObject, attribute
 from .primitives.operators import IdentityConditionMixin, ComparableConditionMixin
 from .util._extendable_enum import ExtendableStrEnum
 
@@ -131,7 +131,7 @@ class AssessmentEvent(IdentityRuleCondition, spec_value=RuleConditionKey.ASSESSM
     ACCEPT_AFTER_REJECT = Type.ACCEPT_AFTER_REJECT
     REJECT = Type.REJECT
 
-    value: Type
+    value: Type = attribute(autocast=True)
 
 
 class AssignmentsAcceptedCount(ComparableRuleCondition, spec_value=RuleConditionKey.ASSIGNMENTS_ACCEPTED_COUNT):
@@ -235,7 +235,7 @@ class PoolAccessRevokedReason(IdentityRuleCondition, spec_value=RuleConditionKey
     SKILL_CHANGE = Type.SKILL_CHANGE
     RESTRICTION = Type.RESTRICTION
 
-    value: Type
+    value: Type = attribute(autocast=True)
 
 
 class RejectedAssignmentsCount(ComparableRuleCondition, spec_value=RuleConditionKey.REJECTED_ASSIGNMENTS_COUNT):

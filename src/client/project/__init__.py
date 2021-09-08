@@ -155,7 +155,9 @@ class Project(BaseTolokaObject):
     public_name: str  # public
     public_description: str  # public
     task_spec: TaskSpec  # public
-    assignments_issuing_type: AssignmentsIssuingType = attribute(default=AssignmentsIssuingType.AUTOMATED, required=True)  # AssignmentsIssuingType  # public
+    assignments_issuing_type: AssignmentsIssuingType = attribute(default=AssignmentsIssuingType.AUTOMATED,
+                                                                 required=True,
+                                                                 autocast=True)  # AssignmentsIssuingType  # public
 
     assignments_issuing_view_config: AssignmentsIssuingViewConfig
     assignments_automerge_enabled: bool

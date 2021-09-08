@@ -80,6 +80,10 @@ class AcceptanceRate(CollectorConfig, spec_value=CollectorConfig.Type.ACCEPTANCE
     * SetSkill - Set perfmer skill value.
     * SetSkillFromOutputField - Set performer skill value from source.
 
+    Attributes:
+        parameters.history_size: The maximum number of recent tasks that the user completed in the project to use for the calculation.
+            If this field is omitted, the calculation is based on all the tasks that the user completed in the pool.
+
     Example:
         How to ban a performer in this project if he makes mistakes.
 
@@ -105,6 +109,9 @@ class AcceptanceRate(CollectorConfig, spec_value=CollectorConfig.Type.ACCEPTANCE
         RuleConditionKey.ACCEPTED_ASSIGNMENTS_RATE,
         RuleConditionKey.REJECTED_ASSIGNMENTS_RATE,
     ])
+
+    class Parameters(CollectorConfig.Parameters):
+        history_size: Optional[int] = None
 
 
 @inherit_docstrings

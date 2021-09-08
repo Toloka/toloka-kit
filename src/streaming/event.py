@@ -9,7 +9,7 @@ __all__ = [
 from enum import Enum, unique
 from datetime import datetime
 from ..client import Assignment, Task, UserBonus, UserSkill
-from ..client.primitives.base import BaseTolokaObject
+from ..client.primitives.base import BaseTolokaObject, attribute
 
 
 class BaseEventTypeEnum(Enum):
@@ -46,7 +46,7 @@ class AssignmentEvent(BaseEvent):
         SKIPPED = 'SKIPPED'
         EXPIRED = 'EXPIRED'
 
-    event_type: Type
+    event_type: Type = attribute(autocast=True)
     assignment: Assignment
 
 
@@ -86,5 +86,5 @@ class UserSkillEvent(BaseEvent):
         CREATED = 'CREATED'
         MODIFIED = 'MODIFIED'
 
-    event_type: Type
+    event_type: Type = attribute(autocast=True)
     user_skill: UserSkill

@@ -45,7 +45,7 @@ class WebhookSubscription(toloka.client.primitives.base.BaseTolokaObject):
         self,
         *,
         webhook_url: typing.Optional[str] = None,
-        event_type: typing.Optional[EventType] = None,
+        event_type: typing.Union[EventType, str, None] = None,
         pool_id: typing.Optional[str] = None,
         secret_key: typing.Optional[str] = None,
         id: typing.Optional[str] = None,

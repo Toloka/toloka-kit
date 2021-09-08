@@ -29,6 +29,7 @@ def attribute(
     required: bool = False,
     origin: typing.Optional[str] = None,
     readonly: bool = False,
+    autocast: bool = False,
     **kwargs
 ):
     """Proxy for attr.attrib(...). Adds several keywords.
@@ -38,6 +39,7 @@ def attribute(
         required: If True makes attribute not Optional. All other attributes are optional by default. Defaults to False.
         origin: Sets field name in dict for attribute, when structuring/unstructuring from dict. Defaults to None.
         readonly: Affects only when the class 'expanding' as a parameter in some function. If True, drops this attribute from expanded parameters. Defaults to None.
+        autocast: If True then converter.structure will be used to convert input value
         **kwargs: All keyword arguments from attr.attrib
     """
     ...

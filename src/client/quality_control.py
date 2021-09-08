@@ -123,7 +123,7 @@ class QualityControl(BaseTolokaObject):
         collector_config: CollectorConfig
 
     training_requirement: TrainingRequirement
-    captcha_frequency: CaptchaFrequency
+    captcha_frequency: CaptchaFrequency = attribute(autocast=True)
     configs: List[QualityControlConfig] = attribute(factory=list)
     checkpoints_config: CheckpointsConfig
 

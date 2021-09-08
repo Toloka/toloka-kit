@@ -21,7 +21,7 @@ __all__ = [
 from enum import unique
 from typing import Any, Dict, List
 
-from .primitives.base import BaseTolokaObject
+from .primitives.base import BaseTolokaObject, attribute
 from .util._docstrings import inherit_docstrings
 from .util._extendable_enum import ExtendableStrEnum
 
@@ -55,7 +55,7 @@ class PoolAggregatedSolutionRequest(BaseTolokaObject):
     class Field(BaseTolokaObject):
         name: str
 
-    type: AggregatedSolutionType
+    type: AggregatedSolutionType = attribute(autocast=True)
     pool_id: str
     answer_weight_skill_id: str
     fields: List[Field]

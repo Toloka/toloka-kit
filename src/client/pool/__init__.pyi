@@ -336,7 +336,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
     @typing.overload
     def set_dynamic_pricing_config(
         self,
-        type: typing.Optional[toloka.client.pool.dynamic_pricing_config.DynamicPricingConfig.Type] = None,
+        type: typing.Union[toloka.client.pool.dynamic_pricing_config.DynamicPricingConfig.Type, str, None] = None,
         skill_id: typing.Optional[str] = None,
         intervals: typing.Optional[typing.List[toloka.client.pool.dynamic_pricing_config.DynamicPricingConfig.Interval]] = None
     ):
@@ -379,7 +379,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
         self,
         *,
         training_requirement: typing.Optional[toloka.client.quality_control.QualityControl.TrainingRequirement] = None,
-        captcha_frequency: typing.Optional[toloka.client.quality_control.QualityControl.CaptchaFrequency] = None,
+        captcha_frequency: typing.Union[toloka.client.quality_control.QualityControl.CaptchaFrequency, str, None] = None,
         configs: typing.Optional[typing.List[toloka.client.quality_control.QualityControl.QualityControlConfig]] = ...,
         checkpoints_config: typing.Optional[toloka.client.quality_control.QualityControl.CheckpointsConfig] = None
     ):
@@ -397,7 +397,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
     def set_dynamic_overlap_config(
         self,
         *,
-        type: typing.Optional[toloka.client.pool.dynamic_overlap_config.DynamicOverlapConfig.Type] = None,
+        type: typing.Union[toloka.client.pool.dynamic_overlap_config.DynamicOverlapConfig.Type, str, None] = None,
         max_overlap: typing.Optional[int] = None,
         min_confidence: typing.Optional[float] = None,
         answer_weight_skill_id: typing.Optional[str] = None,

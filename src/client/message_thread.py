@@ -69,7 +69,7 @@ class Interlocutor(BaseTolokaObject):
         SYSTEM = 'SYSTEM'
 
     id: str
-    role: InterlocutorRole
+    role: InterlocutorRole = attribute(autocast=True)
     myself: bool
 
 
@@ -108,7 +108,7 @@ class MessageThread(BaseTolokaObject):
             recipients_filter: Condition to filter recipients.
         """
 
-        recipients_select_type: RecipientsSelectType
+        recipients_select_type: RecipientsSelectType = attribute(autocast=True)
         recipients_ids: List[str]
         recipients_filter: FilterCondition
 
@@ -183,7 +183,7 @@ class MessageThreadCompose(BaseTolokaObject):
         recipients_filter: Filter to select recipients.
     """
 
-    recipients_select_type: RecipientsSelectType
+    recipients_select_type: RecipientsSelectType = attribute(autocast=True)
     topic: Dict[str, str]
     text: Dict[str, str]
     answerable: bool
