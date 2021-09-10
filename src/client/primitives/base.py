@@ -1,6 +1,7 @@
 __all__ = [
     'VariantRegistry',
     'attribute',
+    'fix_attrs_converters',
     'BaseTolokaObjectMetaclass',
     'BaseTolokaObject'
 ]
@@ -99,15 +100,31 @@ def enum_type_to_union(cur_type):
 
 
 def fix_attrs_converters(cls):
+    """
+    Due to https://github.com/Toloka/toloka-kit/issues/37 we have to support attrs>=20.3.0.
+    This version lacks a feature that uses converters' annotations in class's __init__
+    (see https://github.com/python-attrs/attrs/pull/710)). This decorator brings this feature
+    to older attrs versions.
+    """
+
     if attr.__version__ < '21.0.3':
         fields_dict = attr.fields_dict(cls)
 
         def update_param_from_converter(param):
+
+            # Trying to figure out which attribute this parameter is responsible for.
+            # Note that attr stips leading underscores from attribute names, so we
+            # check both name and _name.
             attribute = fields_dict.get(param.name) or fields_dict.get('_' + param.name)
+
+            # Only process attributes with converter
             if attribute is not None and attribute.converter:
+                # Retrieving converter's first (and only) parameter
                 converter_sig = inspect.signature(attribute.converter)
-                converter_annotation = next(iter(converter_sig.parameters.values())).annotation
-                param = param.replace(annotation=converter_annotation)
+                converter_param = next(iter(converter_sig.parameters.values()))
+                # And use this parameter's annotation for our own
+                param = param.replace(annotation=converter_param.annotation)
+
             return param
 
         init_sig = inspect.signature(cls.__init__)
