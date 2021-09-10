@@ -98,6 +98,27 @@ def enum_type_to_union(cur_type):
         return cur_type
 
 
+def fix_attrs_converters(cls):
+    if attr.__version__ < '21.0.3':
+        fields_dict = attr.fields_dict(cls)
+
+        def update_param_from_converter(param):
+            attribute = fields_dict.get(param.name) or fields_dict.get('_' + param.name)
+            if attribute is not None and attribute.converter:
+                converter_sig = inspect.signature(attribute.converter)
+                converter_annotation = next(iter(converter_sig.parameters.values())).annotation
+                param = param.replace(annotation=converter_annotation)
+            return param
+
+        init_sig = inspect.signature(cls.__init__)
+        new_params = [update_param_from_converter(param) for param in init_sig.parameters.values()]
+        new_annotations = {param.name: param.annotation for param in new_params if param.annotation}
+        cls.__init__.__signature__ = init_sig.replace(parameters=new_params)
+        cls.__init__.__annotations__ = new_annotations
+
+    return cls
+
+
 class BaseTolokaObjectMetaclass(type):
 
     def __new__(mcs, name, bases, namespace, auto_attribs=True, kw_only=True, frozen=False, order=True, eq=True,
@@ -112,6 +133,8 @@ class BaseTolokaObjectMetaclass(type):
             str=True,
             collect_by_mro=True,
         )(super().__new__(mcs, name, bases, namespace, **kwargs))
+
+        cls = fix_attrs_converters(cls)
 
         # Transformer's change in field type does not affect created
         # class's annotations. So we synchronize them manually

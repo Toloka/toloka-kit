@@ -25,6 +25,7 @@ from ..client import (
     search_results,
     structure,
 )
+from ..client.primitives.base import fix_attrs_converters
 from .event import AssignmentEvent, BaseEvent, TaskEvent, UserBonusEvent, UserSkillEvent
 from .util import AsyncMultithreadWrapper, ensure_async
 
@@ -197,6 +198,7 @@ class BaseCursor:
 
 
 @expand('request')
+@fix_attrs_converters
 @attr.s
 class AssignmentCursor(BaseCursor):
     """Iterator over Assignment objects of seleted AssignmentEventType.
@@ -235,6 +237,7 @@ class AssignmentCursor(BaseCursor):
 
 
 @expand('request')
+@fix_attrs_converters
 @attr.s
 class TaskCursor(BaseCursor):
     """Iterator over tasks by create time.
@@ -269,6 +272,7 @@ class TaskCursor(BaseCursor):
 
 
 @expand('request')
+@fix_attrs_converters
 @attr.s
 class UserBonusCursor(BaseCursor):
     """Iterator over user bonuses by create time.
@@ -303,6 +307,7 @@ class UserBonusCursor(BaseCursor):
 
 
 @expand('request')
+@fix_attrs_converters
 @attr.s
 class UserSkillCursor(BaseCursor):
     """Iterator over UserSkillEvent objects of seleted event_type.
