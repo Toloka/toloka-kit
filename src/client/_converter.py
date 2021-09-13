@@ -61,16 +61,10 @@ converter.register_structure_hook(
     lambda data, type_: Decimal(data)  # type: ignore
 )
 
-# We need to redefine structure/unstructure hook for ExtendableStrEnum because hasattr(type_, 'structure') works incorrect in that case
-converter.register_unstructure_hook(  # type: ignore
-    ExtendableStrEnum,
-    lambda obj: converter._unstructure_enum(obj)  # type: ignore
-)
-
-converter.register_structure_hook(  # type: ignore
-    ExtendableStrEnum,
-    lambda data, type_: converter._structure_call(data, type_)   # type: ignore
-)
+# We need to redefine structure/unstructure hook for ExtendableStrEnum because hasattr(type_, 'structure') works
+# incorrect in that case
+converter.register_unstructure_hook(ExtendableStrEnum, converter._unstructure_enum)
+converter.register_structure_hook(ExtendableStrEnum, converter._structure_call)
 
 
 structure = converter.structure

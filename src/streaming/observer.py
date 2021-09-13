@@ -9,14 +9,14 @@ import attr
 import datetime
 import logging
 
-from typing import AsyncIterable, Awaitable, Callable, Dict, List, Optional, Union
+from typing import Awaitable, Callable, Dict, List, Optional, Union
 
 from ..client import structure
 from ..client.assignment import Assignment
 from ..client.pool import Pool
 from .cursor import AssignmentCursor, TolokaClientSyncOrAsyncType
 from .event import AssignmentEvent
-from .util import AsyncInterfaceWrapper, ensure_async
+from .util import AsyncInterfaceWrapper, ComplexException, ensure_async, get_task_traceback
 
 logger = logging.getLogger(__name__)
 
@@ -47,15 +47,15 @@ class BasePoolObserver(BaseObserver):
     pool_id: str = attr.ib()
 
     async def should_resume(self) -> bool:
-        logger.debug('Check resume by pool status: %s', self.pool_id)
+        logger.info('Check resume by pool status: %s', self.pool_id)
         pool = await self.toloka_client.get_pool(self.pool_id)
-        logger.debug('Pool status for %s: %s', self.pool_id, pool.status)
+        logger.info('Pool status for %s: %s', self.pool_id, pool.status)
         if pool.is_open():
             return True
 
-        logger.debug('Check resume by pool active assignments: %s', self.pool_id)
+        logger.info('Check resume by pool active assignments: %s', self.pool_id)
         response = await self.toloka_client.find_assignments(pool_id=self.pool_id, status=[Assignment.ACTIVE], limit=1)
-        logger.debug('Pool %s has active assignments: %s', self.pool_id, bool(response.items))
+        logger.info('Pool %s has active assignments: %s', self.pool_id, bool(response.items))
         return bool(response.items)
 
 
@@ -102,7 +102,11 @@ class PoolStatusObserver(BasePoolObserver):
     _callbacks: Dict[Pool.Status, List[CallbackForPoolAsyncType]] = attr.ib(factory=dict, init=False)
     _previous_status: Optional[Pool.Status] = attr.ib(default=None, init=False)
 
-    def register_callback(self, callback: CallbackForPoolType, changed_to: Union[Pool.Status, str]) -> CallbackForPoolType:
+    def register_callback(
+        self,
+        callback: CallbackForPoolType,
+        changed_to: Union[Pool.Status, str]
+    ) -> CallbackForPoolType:
         """Register given callable for pool status change to given value.
 
         Args:
@@ -141,12 +145,17 @@ class PoolStatusObserver(BasePoolObserver):
         current_status = pool.status
 
         if current_status != self._previous_status:
-            loop = asyncio.get_event_loop()
+            logger.info('Pool %s status change: %s -> %s', self.pool_id, self._previous_status, current_status)
             if self._callbacks.get(current_status):
-                await asyncio.wait([
-                    loop.create_task(callback(pool))
-                    for callback in self._callbacks[current_status]
-                ])
+                loop = asyncio.get_event_loop()
+                done, _ = await asyncio.wait([loop.create_task(callback(pool))
+                                              for callback in self._callbacks[current_status]])
+                errored = [task for task in done if task.exception() is not None]
+                if errored:
+                    for task in errored:
+                        logger.error('Got error while handling pool %s status change to: %s\n%s',
+                                     self.pool_id, current_status, get_task_traceback(task))
+                    raise ComplexException([task.exception() for task in errored])
 
         self._previous_status = current_status
 
@@ -157,9 +166,31 @@ CallbackForAssignmentEventsType = Union[CallbackForAssignmentEventsSyncType, Cal
 
 
 @attr.s
-class _CursorAndCallbacks:
+class _CallbacksCursorConsumer:
+    """Store cursor and related callbacks.
+    Allow to run callbacks at fetched data and move the cursor in case of success.
+    """
     cursor: AssignmentCursor = attr.ib()
-    callbacks: List[CallbackForAssignmentEventsType] = attr.ib(factory=list, init=False)
+    callbacks: List[CallbackForAssignmentEventsAsyncType] = attr.ib(factory=list, init=False)
+
+    def add_callback(self, callback: CallbackForAssignmentEventsType) -> None:
+        self.callbacks.append(ensure_async(callback))
+
+    async def __call__(self, pool_id: str) -> None:
+        async with self.cursor.try_fetch_all() as fetched:
+            if not fetched:
+                return
+
+            logger.info('Got pool %s events count of type %s: %d', pool_id, fetched[0].event_type, len(fetched))
+            loop = asyncio.get_event_loop()
+            callback_by_task = {loop.create_task(callback(fetched)): callback
+                                for callback in self.callbacks}
+            done, _ = await asyncio.wait(callback_by_task)
+            errored = [task for task in done if task.exception() is not None]
+            if errored:
+                for task in errored:
+                    logger.error('Got error in callback: %s\n%s', callback_by_task[task], get_task_traceback(task))
+                raise ComplexException([task.exception() for task in errored])
 
 
 @attr.s
@@ -193,7 +224,7 @@ class AssignmentsObserver(BasePoolObserver):
         ...
     """
 
-    _callbacks: Dict[AssignmentEvent.Type, _CursorAndCallbacks] = attr.ib(factory=dict, init=False)
+    _callbacks: Dict[AssignmentEvent.Type, _CallbacksCursorConsumer] = attr.ib(factory=dict, init=False)
 
     # Setup section.
 
@@ -215,8 +246,8 @@ class AssignmentsObserver(BasePoolObserver):
         event_type = structure(event_type, AssignmentEvent.Type)  # TODO: Autoconvert using TOLOKAKIT-83.
         if event_type not in self._callbacks:
             cursor = AssignmentCursor(pool_id=self.pool_id, event_type=event_type, toloka_client=self.toloka_client)
-            self._callbacks[event_type] = _CursorAndCallbacks(cursor)
-        self._callbacks[event_type].callbacks.append(ensure_async(callback))
+            self._callbacks[event_type] = _CallbacksCursorConsumer(cursor)
+        self._callbacks[event_type].add_callback(callback)
         return callback
 
     def on_any_event(self, callback: CallbackForAssignmentEventsType) -> CallbackForAssignmentEventsType:
@@ -244,31 +275,20 @@ class AssignmentsObserver(BasePoolObserver):
 
     # Run section.
 
-    async def _get_events(self) -> Dict[AssignmentEvent.Type, List[AssignmentEvent]]:
-
-        async def _fetch(event_type: AssignmentEvent.Type, cursor: AsyncIterable[AssignmentEvent]):
-            return event_type, [assignment async for assignment in cursor]  # TODO: Don't wait for reading all.
-
-        return dict(await asyncio.gather(*(
-            _fetch(event_type, input_to_callbacks.cursor)
-            for event_type, input_to_callbacks in self._callbacks.items()
-        )))
-
     async def __call__(self) -> None:
         if not self._callbacks:
             return
 
-        logger.debug('Load assigment events for pool: %s', self.pool_id)
-        new_events: Dict[AssignmentEvent.Type, List[AssignmentEvent]] = await self._get_events()
-        logger.debug('Got assigment events count for pool %s: %d', self.pool_id, sum(map(len, new_events.values())))
-
         loop = asyncio.get_event_loop()
-        tasks = [
-            loop.create_task(callback(events))
-            for event_type, events in new_events.items()
-            if events  # Don't run callback at empty events input.
-            for callback in self._callbacks[event_type].callbacks
-        ]
-        if tasks:
-            logger.debug('Run callbacks for assigment events in pool: %s', self.pool_id)
-            await asyncio.wait(tasks)
+        event_type_by_task = {loop.create_task(cursor_and_callbacks(self.pool_id)): event_type
+                              for event_type, cursor_and_callbacks in self._callbacks.items()
+                              if cursor_and_callbacks.callbacks}
+        logger.info('Gathering pool %s event of types: %s', self.pool_id, list(event_type_by_task.values()))
+
+        done, _ = await asyncio.wait(event_type_by_task)
+        errored = [task for task in done if task.exception() is not None]
+        if errored:
+            for task in errored:
+                logger.error('Got error while handling pool %s assignment events of type: %s',
+                             self.pool_id, event_type_by_task[task])
+            raise ComplexException([task.exception() for task in errored])

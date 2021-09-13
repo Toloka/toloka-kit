@@ -63,7 +63,7 @@ class PoolAggregatedSolutionRequest(toloka.client.primitives.base.BaseTolokaObje
     def __init__(
         self,
         *,
-        type: typing.Optional[AggregatedSolutionType] = None,
+        type: typing.Union[AggregatedSolutionType, str, None] = None,
         pool_id: typing.Optional[str] = None,
         answer_weight_skill_id: typing.Optional[str] = None,
         fields: typing.Optional[typing.List[Field]] = None

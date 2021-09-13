@@ -66,8 +66,8 @@ class TaskDistributionFunction(toloka.client.primitives.base.BaseTolokaObject):
     def __init__(
         self,
         *,
-        scope: typing.Optional[Scope] = None,
-        distribution: typing.Optional[Distribution] = None,
+        scope: typing.Union[Scope, str, None] = None,
+        distribution: typing.Union[Distribution, str, None] = None,
         window_days: typing.Optional[int] = None,
         intervals: typing.Optional[typing.List[Interval]] = None
     ) -> None:

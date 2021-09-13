@@ -3,6 +3,7 @@ import datetime
 import pytest
 
 from toloka.client import unstructure
+from toloka.streaming.observer import ComplexException
 from toloka.streaming import AssignmentsObserver, AsyncMultithreadWrapper, PoolStatusObserver, Pipeline
 
 from ..testutils.backend_mock import BackendSearchMock
@@ -31,6 +32,42 @@ def new_backend_assignments():
     ]
 
 
+def test_pipeline_errored_callback(requests_mock, toloka_url, toloka_client, existing_backend_assignments):
+    storage = [item for item in existing_backend_assignments if item['status'] != 'ACTIVE']  # Make sure it stops.
+    assert storage  # Check this test uses correct data.
+
+    backend = BackendSearchMock(storage, limit=3)  # Chunk size doesn't make sense here.
+    requests_mock.get(f'{toloka_url}/assignments', json=backend)
+    requests_mock.get(f'{toloka_url}/pools/100', json={'id': '100', 'status': 'CLOSED'})
+
+    class HandlerRaiseSometimes:
+        def __init__(self):
+            self.calls_count = 0
+            self.received = []
+
+        def __call__(self, events):
+            self.calls_count += 1
+            if self.calls_count % 2:
+                raise ValueError('Raised from callback')
+            self.received.extend(events)
+
+    pipeline = Pipeline(datetime.timedelta(milliseconds=100))
+    observer = pipeline.register(AssignmentsObserver(toloka_client, pool_id='100'))
+    handler = observer.on_submitted(HandlerRaiseSometimes())
+
+    with pytest.raises(ComplexException) as exc:
+        asyncio.get_event_loop().run_until_complete(pipeline.run())
+    assert 'Raised from callback' in str(exc)
+    assert 1 == handler.calls_count
+    assert [] == handler.received
+
+    asyncio.get_event_loop().run_until_complete(pipeline.run())
+    assert 2 == handler.calls_count
+    events_expected = [{'assignment': item, 'event_type': 'SUBMITTED', 'event_time': item['submitted']}
+                       for item in storage]
+    assert events_expected == unstructure(handler.received)
+
+
 @pytest.mark.parametrize('use_async', [False, True])
 def test_pipeline(requests_mock, toloka_url, toloka_client, existing_backend_assignments, new_backend_assignments, use_async):
     pool_mock = {'id': '100', 'status': 'OPEN'}
@@ -49,7 +86,7 @@ def test_pipeline(requests_mock, toloka_url, toloka_client, existing_backend_ass
         active_count = len(list(toloka_client.get_assignments(pool_id=pool.id, status='ACTIVE')))
         save_pool_info_here.append(f'pool open with active tasks count: {active_count}')
 
-    def handle_pool_close(pool):
+    async def handle_pool_close(pool):
         save_pool_info_here.append(f'pool closed with reason: {pool.last_close_reason.value}')
 
     async def _add_new_assignments(after_sec):

@@ -97,3 +97,12 @@ def test_variant_type():
     assert converter.structure({'type': 'cat'}, Animal) == Cat()
     assert Dog().unstructure() == {'type': 'dog'}
     assert Cat().unstructure() == {'type': 'cat'}
+
+
+def test_empty_structure(test_enum, test_extendable_enum):
+
+    class MyClass(BaseTolokaObject):
+        enum_field: test_enum
+        extendable_enum_field: test_extendable_enum
+
+    assert MyClass.structure({}) == MyClass()

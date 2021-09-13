@@ -201,7 +201,7 @@ class QualityControl(toloka.client.primitives.base.BaseTolokaObject):
         self,
         *,
         training_requirement: typing.Optional[TrainingRequirement] = None,
-        captcha_frequency: typing.Optional[CaptchaFrequency] = None,
+        captcha_frequency: typing.Union[CaptchaFrequency, str, None] = None,
         configs: typing.Optional[typing.List[QualityControlConfig]] = ...,
         checkpoints_config: typing.Optional[CheckpointsConfig] = None
     ) -> None:

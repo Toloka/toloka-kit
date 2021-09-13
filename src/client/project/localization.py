@@ -35,7 +35,8 @@ class AdditionalLanguage(BaseTolokaObject):
             REQUESTER = 'REQUESTER'
 
         value: str
-        source: Source = attribute(factory=lambda: AdditionalLanguage.FieldTranslation.Source.REQUESTER)
+        source: Source = attribute(factory=lambda: AdditionalLanguage.FieldTranslation.Source.REQUESTER,
+                                   autocast=True)
 
     language: str
     public_name: FieldTranslation

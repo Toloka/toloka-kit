@@ -1,9 +1,13 @@
 __all__ = [
     'VariantRegistry',
     'attribute',
+    'fix_attrs_converters',
     'BaseTolokaObjectMetaclass',
     'BaseTolokaObject'
 ]
+
+import inspect
+import typing
 from copy import copy
 from enum import Enum
 from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union
@@ -16,6 +20,7 @@ from ..exceptions import SpecClassIdentificationError
 REQUIRED_KEY = 'toloka_field_required'
 ORIGIN_KEY = 'toloka_field_origin'
 READONLY_KEY = 'toloka_field_readonly'
+AUTOCAST_KEY = 'toloka_field_autocast'
 
 E = TypeVar('E', bound=Enum)
 
@@ -44,7 +49,8 @@ class VariantRegistry:
         return self.registered_classes[value]
 
 
-def attribute(*args, required: bool = False, origin: Optional[str] = None, readonly: bool = False, **kwargs):
+def attribute(*args, required: bool = False, origin: Optional[str] = None, readonly: bool = False,
+              autocast: bool = False, **kwargs):
     """Proxy for attr.attrib(...). Adds several keywords.
 
     Args:
@@ -52,6 +58,7 @@ def attribute(*args, required: bool = False, origin: Optional[str] = None, reado
         required: If True makes attribute not Optional. All other attributes are optional by default. Defaults to False.
         origin: Sets field name in dict for attribute, when structuring/unstructuring from dict. Defaults to None.
         readonly: Affects only when the class 'expanding' as a parameter in some function. If True, drops this attribute from expanded parameters. Defaults to None.
+        autocast: If True then converter.structure will be used to convert input value
         **kwargs: All keyword arguments from attr.attrib
     """
     metadata = {}
@@ -61,13 +68,78 @@ def attribute(*args, required: bool = False, origin: Optional[str] = None, reado
         metadata[ORIGIN_KEY] = origin
     if readonly:
         metadata[READONLY_KEY] = True
-
+    if autocast:
+        metadata[AUTOCAST_KEY] = True
     return attr.attrib(*args, metadata=metadata, **kwargs)
+
+
+def get_autocast_converter(type_):
+    def autocast_converter(value: enum_type_to_union(type_)):
+        return converter.structure(value, type_)
+
+    return autocast_converter
+
+
+def enum_type_to_union(cur_type):
+    if cur_type.__module__ == 'typing':
+        if not hasattr(cur_type, '__args__') or not hasattr(cur_type, '__origin__'):
+            return cur_type
+
+        origin = cur_type.__origin__
+        # starting from python 3.7 origin of generic types returns true type instead of typing generic (i.e.
+        # typing.List[int].__origin__ == list) but using types as type hints directly supported only in python >= 3.9
+        if origin.__module__ != 'typing':
+            origin = getattr(typing, origin.__name__.title())
+
+        return origin[tuple(map(enum_type_to_union, cur_type.__args__))]
+    elif inspect.isclass(cur_type) and issubclass(cur_type, Enum):
+        possible_types = set(type(item.value) for item in cur_type)
+        return typing.Union[(cur_type, *possible_types)] if possible_types else cur_type
+    else:
+        return cur_type
+
+
+def fix_attrs_converters(cls):
+    """
+    Due to https://github.com/Toloka/toloka-kit/issues/37 we have to support attrs>=20.3.0.
+    This version lacks a feature that uses converters' annotations in class's __init__
+    (see https://github.com/python-attrs/attrs/pull/710)). This decorator brings this feature
+    to older attrs versions.
+    """
+
+    if attr.__version__ < '21.0.3':
+        fields_dict = attr.fields_dict(cls)
+
+        def update_param_from_converter(param):
+
+            # Trying to figure out which attribute this parameter is responsible for.
+            # Note that attr stips leading underscores from attribute names, so we
+            # check both name and _name.
+            attribute = fields_dict.get(param.name) or fields_dict.get('_' + param.name)
+
+            # Only process attributes with converter
+            if attribute is not None and attribute.converter:
+                # Retrieving converter's first (and only) parameter
+                converter_sig = inspect.signature(attribute.converter)
+                converter_param = next(iter(converter_sig.parameters.values()))
+                # And use this parameter's annotation for our own
+                param = param.replace(annotation=converter_param.annotation)
+
+            return param
+
+        init_sig = inspect.signature(cls.__init__)
+        new_params = [update_param_from_converter(param) for param in init_sig.parameters.values()]
+        new_annotations = {param.name: param.annotation for param in new_params if param.annotation}
+        cls.__init__.__signature__ = init_sig.replace(parameters=new_params)
+        cls.__init__.__annotations__ = new_annotations
+
+    return cls
 
 
 class BaseTolokaObjectMetaclass(type):
 
-    def __new__(mcs, name, bases, namespace, auto_attribs=True, kw_only=True, frozen=False, order=True, eq=True, **kwargs):
+    def __new__(mcs, name, bases, namespace, auto_attribs=True, kw_only=True, frozen=False, order=True, eq=True,
+                **kwargs):
         cls = attr.attrs(
             auto_attribs=auto_attribs,
             kw_only=kw_only,
@@ -78,6 +150,8 @@ class BaseTolokaObjectMetaclass(type):
             str=True,
             collect_by_mro=True,
         )(super().__new__(mcs, name, bases, namespace, **kwargs))
+
+        cls = fix_attrs_converters(cls)
 
         # Transformer's change in field type does not affect created
         # class's annotations. So we synchronize them manually
@@ -99,6 +173,12 @@ class BaseTolokaObjectMetaclass(type):
                 field = field.evolve(
                     type=Optional[field.type] if field.type else field.type,
                     default=None if field.default is attr.NOTHING else field.default,
+                )
+
+            if field.metadata.get(AUTOCAST_KEY):
+                field = field.evolve(
+                    converter=get_autocast_converter(field.type),
+                    on_setattr=lambda self, attrib, value, type_=field.type: converter.structure(value, type_),
                 )
 
             transformed_fields.append(field)

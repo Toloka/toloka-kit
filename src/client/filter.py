@@ -239,7 +239,7 @@ class Gender(Profile, IdentityConditionMixin, spec_value=Profile.Key.GENDER):
     MALE = Gender.MALE
     FEMALE = Gender.FEMALE
 
-    value: Gender = attribute(required=True)
+    value: Gender = attribute(required=True, autocast=True)
 
 
 @inherit_docstrings
@@ -285,7 +285,7 @@ class Education(Profile, IdentityConditionMixin, spec_value=Profile.Key.EDUCATIO
     MIDDLE = Education.MIDDLE
     HIGH = Education.HIGH
 
-    value: Education = attribute(required=True)
+    value: Education = attribute(required=True, autocast=True)
 
 
 @inherit_docstrings
@@ -377,7 +377,7 @@ class DeviceCategory(Computed, IdentityConditionMixin, spec_value=Computed.Key.D
     TABLET = DeviceCategory.TABLET
     WEARABLE_COMPUTER = DeviceCategory.WEARABLE_COMPUTER
 
-    value: DeviceCategory = attribute(required=True)
+    value: DeviceCategory = attribute(required=True, autocast=True)
 
 
 @inherit_docstrings
@@ -396,7 +396,7 @@ class ClientType(Computed, IdentityConditionMixin, spec_value=Computed.Key.CLIEN
         BROWSER = 'BROWSER'
         TOLOKA_APP = 'TOLOKA_APP'
 
-    value: ClientType = attribute(required=True)
+    value: ClientType = attribute(required=True, autocast=True)
 
 
 @inherit_docstrings
@@ -430,7 +430,7 @@ class OSFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.OS_FAMI
     IOS = OSFamily.IOS
     BLACKBERRY = OSFamily.BLACKBERRY
 
-    value: OSFamily = attribute(required=True)
+    value: OSFamily = attribute(required=True, autocast=True)
 
 
 @inherit_docstrings
@@ -502,7 +502,7 @@ class UserAgentType(Computed, IdentityConditionMixin, spec_value=Computed.Key.US
     MOBILE_BROWSER = UserAgentType.MOBILE_BROWSER
     OTHER = UserAgentType.OTHER
 
-    value: UserAgentType = attribute(required=True)
+    value: UserAgentType = attribute(required=True, autocast=True)
 
 
 @inherit_docstrings
@@ -542,7 +542,7 @@ class UserAgentFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.
     MOBILE_FIREFOX = UserAgentFamily.MOBILE_FIREFOX
     MOBILE_SAFARI = UserAgentFamily.MOBILE_SAFARI
 
-    value: UserAgentFamily = attribute(required=True)
+    value: UserAgentFamily = attribute(required=True, autocast=True)
 
 
 @inherit_docstrings

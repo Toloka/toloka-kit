@@ -44,7 +44,7 @@ class WebhookSubscription(BaseTolokaObject):
         ASSIGNMENT_REJECTED = 'ASSIGNMENT_REJECTED'
 
     webhook_url: str
-    event_type: EventType
+    event_type: EventType = attribute(autocast=True)
     pool_id: str
     secret_key: str
 

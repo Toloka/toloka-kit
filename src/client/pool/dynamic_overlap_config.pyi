@@ -56,7 +56,7 @@ class DynamicOverlapConfig(toloka.client.primitives.base.BaseTolokaObject):
     def __init__(
         self,
         *,
-        type: typing.Optional[Type] = None,
+        type: typing.Union[Type, str, None] = None,
         max_overlap: typing.Optional[int] = None,
         min_confidence: typing.Optional[float] = None,
         answer_weight_skill_id: typing.Optional[str] = None,

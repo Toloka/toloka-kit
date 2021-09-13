@@ -68,7 +68,7 @@ class Assignment(toloka.client.primitives.base.BaseTolokaObject):
         task_suite_id: typing.Optional[str] = None,
         pool_id: typing.Optional[str] = None,
         user_id: typing.Optional[str] = None,
-        status: typing.Optional[Status] = None,
+        status: typing.Union[Status, str, None] = None,
         reward: typing.Optional[decimal.Decimal] = None,
         tasks: typing.Optional[typing.List[toloka.client.task.Task]] = None,
         automerged: typing.Optional[bool] = None,

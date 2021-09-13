@@ -11,6 +11,7 @@ import logging
 from typing import Dict, List
 
 from .observer import BaseObserver
+from .util import ComplexException
 
 logger = logging.getLogger(__name__)
 
@@ -93,7 +94,12 @@ class Pipeline:
             logger.debug('Iteration: %d', iteration)
             logger.debug('Run observers count: %d', len(self._observers))
             loop = asyncio.get_event_loop()
-            await asyncio.wait([loop.create_task(observer()) for observer in self._observers.values()])
+            done, _ = await asyncio.wait([loop.create_task(observer()) for observer in self._observers.values()])
+            errored = [task for task in done if task.exception() is not None]
+            if errored:
+                for task in errored:
+                    logger.error('Got error in: %s', task)
+                raise ComplexException([task.exception() for task in errored])
 
             logger.debug('Check resume')
             may_resume_each: List[bool] = await asyncio.gather(*[

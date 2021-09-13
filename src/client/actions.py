@@ -12,6 +12,7 @@ __all__ = [
 from enum import unique
 
 from .conditions import RuleConditionKey
+from .primitives.base import attribute
 from .user_restriction import DurationUnit, UserRestriction
 from .util._codegen import BaseParameters
 from .util._extendable_enum import ExtendableStrEnum
@@ -50,7 +51,7 @@ class Restriction(RuleAction, spec_value=RuleType.RESTRICTION):
     """
 
     class Parameters(RuleAction.Parameters):
-        scope: UserRestriction.Scope
+        scope: UserRestriction.Scope = attribute(autocast=True)
         duration_days: int
         private_comment: str
 
@@ -89,9 +90,9 @@ class RestrictionV2(RuleAction, spec_value=RuleType.RESTRICTION_V2):
     """
 
     class Parameters(RuleAction.Parameters):
-        scope: UserRestriction.Scope
+        scope: UserRestriction.Scope = attribute(autocast=True)
         duration: int
-        duration_unit: DurationUnit
+        duration_unit: DurationUnit = attribute(autocast=True)
         private_comment: str
 
 
@@ -125,7 +126,7 @@ class SetSkillFromOutputField(RuleAction, spec_value=RuleType.SET_SKILL_FROM_OUT
 
     class Parameters(RuleAction.Parameters):
         skill_id: str
-        from_field: RuleConditionKey
+        from_field: RuleConditionKey = attribute(autocast=True)
 
 
 class ChangeOverlap(RuleAction, spec_value=RuleType.CHANGE_OVERLAP):

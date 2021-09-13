@@ -73,7 +73,7 @@ class Assignment(BaseTolokaObject):
     task_suite_id: str
     pool_id: str
     user_id: str
-    status: Status
+    status: Status = attribute(autocast=True)
     reward: Decimal = attribute(validator=optional(instance_of(Decimal)))
     tasks: List[Task]
     automerged: bool
