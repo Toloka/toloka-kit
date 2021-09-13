@@ -1,6 +1,7 @@
 __all__ = [
     'VariantRegistry',
     'attribute',
+    'fix_attrs_converters',
     'BaseTolokaObjectMetaclass',
     'BaseTolokaObject'
 ]
@@ -98,6 +99,43 @@ def enum_type_to_union(cur_type):
         return cur_type
 
 
+def fix_attrs_converters(cls):
+    """
+    Due to https://github.com/Toloka/toloka-kit/issues/37 we have to support attrs>=20.3.0.
+    This version lacks a feature that uses converters' annotations in class's __init__
+    (see https://github.com/python-attrs/attrs/pull/710)). This decorator brings this feature
+    to older attrs versions.
+    """
+
+    if attr.__version__ < '21.0.3':
+        fields_dict = attr.fields_dict(cls)
+
+        def update_param_from_converter(param):
+
+            # Trying to figure out which attribute this parameter is responsible for.
+            # Note that attr stips leading underscores from attribute names, so we
+            # check both name and _name.
+            attribute = fields_dict.get(param.name) or fields_dict.get('_' + param.name)
+
+            # Only process attributes with converter
+            if attribute is not None and attribute.converter:
+                # Retrieving converter's first (and only) parameter
+                converter_sig = inspect.signature(attribute.converter)
+                converter_param = next(iter(converter_sig.parameters.values()))
+                # And use this parameter's annotation for our own
+                param = param.replace(annotation=converter_param.annotation)
+
+            return param
+
+        init_sig = inspect.signature(cls.__init__)
+        new_params = [update_param_from_converter(param) for param in init_sig.parameters.values()]
+        new_annotations = {param.name: param.annotation for param in new_params if param.annotation}
+        cls.__init__.__signature__ = init_sig.replace(parameters=new_params)
+        cls.__init__.__annotations__ = new_annotations
+
+    return cls
+
+
 class BaseTolokaObjectMetaclass(type):
 
     def __new__(mcs, name, bases, namespace, auto_attribs=True, kw_only=True, frozen=False, order=True, eq=True,
@@ -112,6 +150,8 @@ class BaseTolokaObjectMetaclass(type):
             str=True,
             collect_by_mro=True,
         )(super().__new__(mcs, name, bases, namespace, **kwargs))
+
+        cls = fix_attrs_converters(cls)
 
         # Transformer's change in field type does not affect created
         # class's annotations. So we synchronize them manually

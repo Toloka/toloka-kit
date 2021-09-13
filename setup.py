@@ -31,7 +31,7 @@ setup(
     author_email='losev@yandex-team.ru',
     python_requires='>=3.6.0',
     install_requires=[
-        'attrs >= 21.2.0',
+        'attrs >= 20.3.0',
         'cattrs == 1.0.0 ; python_version < "3.7.0"',
         'cattrs >= 1.1.1; python_version >= "3.7.0"',
         'backports-datetime-fromisoformat; python_version < "3.7.0"',
