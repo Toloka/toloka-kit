@@ -1,3 +1,9 @@
+0.1.15
+-------------------
+* Downgraded attrs dependency from  `attrs>=21.2.0` to `attrs>=20.3.0`. See https://github.com/Toloka/toloka-kit/issues/37
+* Cursor states are now updated after all callbecks are run successfully (toloka.straming)
+* String values passed for Enum-annotated arguments are now automatically converted to Enums
+
 0.1.14
 -------------------
 
