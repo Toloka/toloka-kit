@@ -4,9 +4,11 @@ __all__ = [
     'Balance',
     'AssignmentEventsInPool',
     'AssignmentsInPool',
+    'bind_client'
 ]
 
 from .metrics import (
+    bind_client,
     BaseMetric,
     Balance,
     AssignmentEventsInPool,
