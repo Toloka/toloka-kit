@@ -51,6 +51,11 @@ toloka_client = toloka.TolokaClient(input("Enter your token:"), 'PRODUCTION')
 print(toloka_client.get_requester())
 ```
 
+Free trial
+--------------
+To get acquainted with Toloka tools for free, you can use the promo code **TOLOKAKIT1** on $20 on your [profile page](https://toloka.yandex.com/requester/profile) after registration.
+
+
 Useful Links
 --------------
 - [Toloka homepage.](https://toloka.ai/)
