@@ -25,9 +25,9 @@ from ..client import (
     search_results,
     structure,
 )
-from ..client.primitives.base import fix_attrs_converters
+from ..util._codegen import fix_attrs_converters
 from .event import AssignmentEvent, BaseEvent, TaskEvent, UserBonusEvent, UserSkillEvent
-from .util import AsyncMultithreadWrapper, ensure_async
+from ..util.async_utils import AsyncMultithreadWrapper, ensure_async
 
 
 RequestObjectType = TypeVar('RequestObjectType')
@@ -74,7 +74,7 @@ class BaseCursor:
     _prev_response: Optional[ResponseObjectType] = attr.ib(default=None, init=False)
 
     @attr.s
-    class _CursorFetchContext:
+    class CursorFetchContext:
         """Context manager to return from `BaseCursor.try_fetch_all method`.
         Commit cursor state only if no error occured.
         """
@@ -110,8 +110,8 @@ class BaseCursor:
     def _set_state(self, state: Tuple[RequestObjectType, Optional[ResponseObjectType]]) -> None:
         self._request, self._prev_response = state
 
-    def try_fetch_all(self) -> '_CursorFetchContext':
-        return self._CursorFetchContext(self)
+    def try_fetch_all(self) -> CursorFetchContext:
+        return self.CursorFetchContext(self)
 
     def __attrs_post_init__(self):
         if not getattr(self._request, self._time_field_gte):
@@ -220,7 +220,6 @@ class AssignmentCursor(BaseCursor):
 
     _event_type: AssignmentEvent.Type = attr.ib(converter=functools.partial(structure, cl=AssignmentEvent.Type))
     _request: search_requests.AssignmentSearchRequest = attr.ib(
-        converter=search_requests.AssignmentSearchRequest.structure,
         factory=search_requests.AssignmentSearchRequest,
     )
 
@@ -257,7 +256,6 @@ class TaskCursor(BaseCursor):
     """
 
     _request: search_requests.TaskSearchRequest = attr.ib(
-        converter=search_requests.TaskSearchRequest.structure,
         factory=search_requests.TaskSearchRequest,
     )
 
@@ -292,7 +290,6 @@ class UserBonusCursor(BaseCursor):
     """
 
     _request: search_requests.UserBonusSearchRequest = attr.ib(
-        converter=search_requests.UserBonusSearchRequest.structure,
         factory=search_requests.UserBonusSearchRequest,
     )
 
@@ -329,7 +326,6 @@ class UserSkillCursor(BaseCursor):
 
     _event_type: UserSkillEvent.Type = attr.ib(converter=functools.partial(structure, cl=UserSkillEvent.Type))
     _request: search_requests.UserSkillSearchRequest = attr.ib(
-        converter=search_requests.UserSkillSearchRequest.structure,
         factory=search_requests.UserSkillSearchRequest,
     )
 

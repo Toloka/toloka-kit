@@ -11,10 +11,11 @@ import datetime
 from typing import Any, Dict, List
 from uuid import UUID
 
-from .primitives.base import attribute, BaseTolokaObject
+from .primitives.base import BaseTolokaObject
 from .primitives.infinite_overlap import InfiniteOverlapParametersMixin
 from .primitives.parameter import Parameters
-from .util._docstrings import inherit_docstrings
+from ..util._codegen import attribute
+from ..util._docstrings import inherit_docstrings
 
 
 class BaseTask(BaseTolokaObject):

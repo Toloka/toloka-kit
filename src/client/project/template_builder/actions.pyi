@@ -10,7 +10,7 @@ __all__ = [
     'ToggleActionV1',
 ]
 import toloka.client.project.template_builder.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -72,7 +72,7 @@ class NotifyActionV1(BaseActionV1):
                 600 milliseconds.
         """
 
-        class Theme(toloka.client.util._extendable_enum.ExtendableStrEnum):
+        class Theme(toloka.util._extendable_enum.ExtendableStrEnum):
             """The background color of the message.
 
             Attributes:
@@ -202,7 +202,7 @@ class RotateActionV1(BaseActionV1):
         payload: Sets the direction of rotation.
     """
 
-    class Payload(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Payload(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 

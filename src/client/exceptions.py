@@ -19,7 +19,7 @@ import requests
 import attr
 
 from .error_codes import CommonErrorCodes, InternalErrorCodes
-from .util._docstrings import inherit_docstrings
+from ..util._docstrings import inherit_docstrings
 
 
 # Client errors

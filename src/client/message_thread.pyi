@@ -10,11 +10,11 @@ __all__ = [
 import datetime
 import toloka.client.filter
 import toloka.client.primitives.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
-class RecipientsSelectType(toloka.client.util._extendable_enum.ExtendableStrEnum):
+class RecipientsSelectType(toloka.util._extendable_enum.ExtendableStrEnum):
     """Method for specifying recipients.
 
     Attributes:
@@ -28,7 +28,7 @@ class RecipientsSelectType(toloka.client.util._extendable_enum.ExtendableStrEnum
     ALL = 'ALL'
 
 
-class Folder(toloka.client.util._extendable_enum.ExtendableStrEnum):
+class Folder(toloka.util._extendable_enum.ExtendableStrEnum):
     """Folders for a thread.
     """
 
@@ -48,7 +48,7 @@ class Interlocutor(toloka.client.primitives.base.BaseTolokaObject):
         myself: Marks a sender or recipient with your ID. f the ID belongs to you, the value is specified true.
     """
 
-    class InterlocutorRole(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class InterlocutorRole(toloka.util._extendable_enum.ExtendableStrEnum):
         """Role of the sender or recipient in Toloka.
 
         Attributes:

@@ -4,7 +4,7 @@ __all__ = [
 import datetime
 import toloka.client.owner
 import toloka.client.primitives.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -45,7 +45,7 @@ class Training(toloka.client.primitives.base.BaseTolokaObject):
         last_stopped: UTC date and time of the last stop of the training pool in ISO 8601 format. Read only.
     """
 
-    class CloseReason(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class CloseReason(toloka.util._extendable_enum.ExtendableStrEnum):
         """The reason for closing the pool the last time:
 
         Attributes:
@@ -66,7 +66,7 @@ class Training(toloka.client.primitives.base.BaseTolokaObject):
         BLOCKED = 'BLOCKED'
         FOR_UPDATE = 'FOR_UPDATE'
 
-    class Status(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Status(toloka.util._extendable_enum.ExtendableStrEnum):
         """Status of the training pool
 
         Attributes:

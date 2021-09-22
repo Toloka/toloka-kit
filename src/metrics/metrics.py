@@ -1,7 +1,8 @@
 __all__ = [
-    'Balance',
     'AssignmentEventsInPool',
     'AssignmentsInPool',
+    'Balance',
+    'bind_client',
 ]
 
 import datetime
@@ -177,7 +178,7 @@ class AssignmentEventsInPool(BasePoolMetric):
     def get_lines(self) -> Dict[str, List[Tuple[Any, Any]]]:
         result = {}
         for metric_name, it in self._cursors.items():
-            if self.join_events:
+            if self._join_events:
                 event = None
                 count = sum(1 for event in it)
                 result[metric_name] = [(event.event_time, count)] if count else [(datetime.datetime.utcnow(), 0)]

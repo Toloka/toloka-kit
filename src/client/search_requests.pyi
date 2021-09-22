@@ -50,7 +50,6 @@ import typing
 
 
 SortItemSelf = typing.TypeVar('SortItemSelf', bound='BaseSortItem')
-
 SortItemsSelf = typing.TypeVar('SortItemsSelf', bound='BaseSortItems')
 
 class SortOrder(enum.Enum):

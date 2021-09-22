@@ -1,7 +1,8 @@
 __all__ = ['MixerConfig']
 
-from ..primitives.base import attribute, BaseTolokaObject
+from ..primitives.base import BaseTolokaObject
 from ..task_distribution_function import TaskDistributionFunction
+from ...util._codegen import attribute
 
 
 class MixerConfig(BaseTolokaObject):

@@ -2,7 +2,7 @@ __all__ = [
     'DynamicPricingConfig',
 ]
 import toloka.client.primitives.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -17,7 +17,7 @@ class DynamicPricingConfig(toloka.client.primitives.base.BaseTolokaObject):
             price for a task suite.
     """
 
-    class Type(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Type(toloka.util._extendable_enum.ExtendableStrEnum):
         """Dynamic pricing type
         """
 

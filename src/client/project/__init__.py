@@ -35,7 +35,7 @@ from . import task_spec
 from . import template_builder
 from . import view_spec
 
-from ..primitives.base import attribute, BaseTolokaObject
+from ..primitives.base import BaseTolokaObject
 from ..project.field_spec import (
     BooleanSpec,
     StringSpec,
@@ -57,7 +57,8 @@ from ..project.localization import LocalizationConfig, AdditionalLanguage
 from ..project.view_spec import ClassicViewSpec, TemplateBuilderViewSpec
 from ..project.task_spec import TaskSpec
 from ..quality_control import QualityControl
-from ..util._extendable_enum import ExtendableStrEnum
+from ...util._codegen import attribute
+from ...util._extendable_enum import ExtendableStrEnum
 
 
 class Project(BaseTolokaObject):

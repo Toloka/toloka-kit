@@ -33,7 +33,7 @@ __all__ = [
 ]
 import toloka.client.primitives.base
 import toloka.client.primitives.operators
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -113,7 +113,7 @@ class Condition(FilterCondition):
             or the minimum skill value.
     """
 
-    class Category(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Category(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 
@@ -150,7 +150,7 @@ class Profile(Condition):
             or the minimum skill value.
     """
 
-    class Key(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Key(toloka.util._extendable_enum.ExtendableStrEnum):
         """Possible criteria for filtering users by profile.
         """
 
@@ -189,7 +189,7 @@ class Computed(Condition):
             or the minimum skill value.
     """
 
-    class Key(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Key(toloka.util._extendable_enum.ExtendableStrEnum):
         """Possible criteria for filtering users by computed data.
         """
 
@@ -261,7 +261,7 @@ class Gender(Profile, toloka.client.primitives.operators.IdentityConditionMixin)
         value: User gender.
     """
 
-    class Gender(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Gender(toloka.util._extendable_enum.ExtendableStrEnum):
         """User gender.
         """
 
@@ -340,7 +340,7 @@ class Education(Profile, toloka.client.primitives.operators.IdentityConditionMix
         value: User education.
     """
 
-    class Education(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Education(toloka.util._extendable_enum.ExtendableStrEnum):
         """User education.
         """
 
@@ -516,7 +516,7 @@ class DeviceCategory(Computed, toloka.client.primitives.operators.IdentityCondit
         value: The user's device category.
     """
 
-    class DeviceCategory(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class DeviceCategory(toloka.util._extendable_enum.ExtendableStrEnum):
         """Device сategory.
         """
 
@@ -549,7 +549,7 @@ class ClientType(Computed, toloka.client.primitives.operators.IdentityConditionM
         value: Client application type.
     """
 
-    class ClientType(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class ClientType(toloka.util._extendable_enum.ExtendableStrEnum):
         """Client application type.
         """
 
@@ -580,7 +580,7 @@ class OSFamily(Computed, toloka.client.primitives.operators.IdentityConditionMix
         value: The operating system family.
     """
 
-    class OSFamily(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class OSFamily(toloka.util._extendable_enum.ExtendableStrEnum):
         """The operating system family.
         """
 
@@ -721,7 +721,7 @@ class UserAgentType(Computed, toloka.client.primitives.operators.IdentityConditi
         value: User agent type.
     """
 
-    class UserAgentType(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class UserAgentType(toloka.util._extendable_enum.ExtendableStrEnum):
         """User agent type.
         """
 
@@ -753,7 +753,7 @@ class UserAgentFamily(Computed, toloka.client.primitives.operators.IdentityCondi
         value: User agent family.
     """
 
-    class UserAgentFamily(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class UserAgentFamily(toloka.util._extendable_enum.ExtendableStrEnum):
         """User agent family.
         """
 

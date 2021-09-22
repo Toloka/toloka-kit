@@ -14,9 +14,9 @@ from typing import Awaitable, Callable, Dict, List, Optional, Union
 from ..client import structure
 from ..client.assignment import Assignment
 from ..client.pool import Pool
+from ..util.async_utils import AsyncInterfaceWrapper, ComplexException, ensure_async, get_task_traceback
 from .cursor import AssignmentCursor, TolokaClientSyncOrAsyncType
 from .event import AssignmentEvent
-from .util import AsyncInterfaceWrapper, ComplexException, ensure_async, get_task_traceback
 
 logger = logging.getLogger(__name__)
 

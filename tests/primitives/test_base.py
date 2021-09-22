@@ -1,7 +1,8 @@
 import pytest
 import pickle
 import inspect
-from toloka.client.primitives.base import BaseTolokaObject, attribute
+from toloka.client.primitives.base import BaseTolokaObject
+from toloka.util._codegen import attribute
 from ..utils.test_extendable_enum import test_enum, test_extendable_enum  # noqa: F401
 from typing import Optional, List, Union
 

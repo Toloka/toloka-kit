@@ -2,7 +2,7 @@ import pytest
 from enum import Enum
 
 from toloka.client._converter import converter
-from toloka.client.util._extendable_enum import extend_enum, ExtendableStrEnum
+from toloka.util._extendable_enum import extend_enum, ExtendableStrEnum
 from toloka.client.primitives.base import BaseTolokaObject
 
 

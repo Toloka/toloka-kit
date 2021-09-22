@@ -7,8 +7,9 @@ import datetime
 from decimal import Decimal
 from typing import Any
 
-from .primitives.base import attribute, BaseTolokaObject
+from .primitives.base import BaseTolokaObject
 from .primitives.parameter import Parameters
+from ..util._codegen import attribute
 
 
 class UserBonus(BaseTolokaObject):

@@ -11,10 +11,9 @@ __all__ = [
 from enum import unique
 from typing import List
 
-from ...primitives.base import attribute
-
 from .base import BaseComponent, ComponentType, VersionedBaseComponentMetaclass, base_component_or, BaseTemplate
-from ...util._extendable_enum import ExtendableStrEnum
+from ....util._codegen import attribute
+from ....util._extendable_enum import ExtendableStrEnum
 
 
 class BaseLayoutV1Metaclass(VersionedBaseComponentMetaclass):

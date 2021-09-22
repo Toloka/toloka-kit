@@ -11,7 +11,7 @@ import logging
 from typing import Dict, List
 
 from .observer import BaseObserver
-from .util import ComplexException
+from ..util.async_utils import ComplexException
 
 logger = logging.getLogger(__name__)
 

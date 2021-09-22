@@ -1,7 +1,7 @@
 import pytest
 import docstring_parser
 
-from toloka.client.util._docstrings import inherit_docstrings
+from toloka.util._docstrings import inherit_docstrings
 
 
 @pytest.fixture

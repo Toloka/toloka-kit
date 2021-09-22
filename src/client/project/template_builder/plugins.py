@@ -10,11 +10,10 @@ __all__ = [
 from enum import unique
 from typing import List, Any
 
-from ...primitives.base import attribute
-from ...util._codegen import expand
 
 from .base import VersionedBaseComponentMetaclass, BaseComponent, ComponentType, BaseTemplate, base_component_or
-from ...util._extendable_enum import ExtendableStrEnum
+from ....util._codegen import attribute, expand
+from ....util._extendable_enum import ExtendableStrEnum
 
 
 class BasePluginV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):

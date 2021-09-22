@@ -9,8 +9,8 @@ __all__ = [
 ]
 from typing import Any
 
-from ...primitives.base import attribute
 from .base import BaseComponent, ComponentType, base_component_or, BaseTemplateMetaclass
+from ....util._codegen import attribute
 
 
 class BaseDataMetaclass(BaseTemplateMetaclass):

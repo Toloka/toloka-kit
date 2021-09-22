@@ -22,9 +22,9 @@ from uuid import UUID
 
 from .conditions import RuleCondition
 from .conditions import RuleConditionKey
-from .util._codegen import BaseParameters
-from .util._docstrings import inherit_docstrings
-from .util._extendable_enum import ExtendableStrEnum
+from .primitives.base import BaseParameters
+from ..util._docstrings import inherit_docstrings
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 class CollectorConfig(BaseParameters, spec_enum='Type', spec_field='type'):

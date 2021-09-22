@@ -11,10 +11,10 @@ from enum import unique
 from typing import List
 
 from .template_builder import TemplateBuilder
-from ..primitives.base import attribute, BaseTolokaObject
-from ..util import traverse_dicts_recursively
-from ..util._codegen import expand
-from ..util._extendable_enum import ExtendableStrEnum
+from ..primitives.base import BaseTolokaObject
+from ...util import traverse_dicts_recursively
+from ...util._codegen import attribute, expand
+from ...util._extendable_enum import ExtendableStrEnum
 
 
 class ViewSpec(BaseTolokaObject, spec_enum='Type', spec_field='type'):

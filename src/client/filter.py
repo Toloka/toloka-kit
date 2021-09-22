@@ -34,7 +34,7 @@ __all__ = [
 from enum import unique
 from typing import Any, List, Optional, Union
 
-from .primitives.base import attribute, BaseTolokaObject
+from .primitives.base import BaseTolokaObject
 from .primitives.operators import (
     CompareOperator,
     StatefulComparableConditionMixin,
@@ -42,8 +42,9 @@ from .primitives.operators import (
     ComparableConditionMixin,
     InclusionConditionMixin,
 )
-from .util._docstrings import inherit_docstrings
-from .util._extendable_enum import ExtendableStrEnum
+from ..util._codegen import attribute
+from ..util._docstrings import inherit_docstrings
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 class FilterCondition(BaseTolokaObject):

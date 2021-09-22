@@ -118,7 +118,7 @@ from .task_suite import TaskSuite
 from .user_bonus import UserBonus, UserBonusCreateRequestParameters
 from .user_restriction import UserRestriction
 from .user_skill import SetUserSkillRequest, UserSkill
-from .util._codegen import expand
+from ..util._codegen import expand
 from .webhook_subscription import WebhookSubscription
 
 logger = logging.getLogger(__name__)

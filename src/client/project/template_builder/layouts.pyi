@@ -8,7 +8,7 @@ __all__ = [
     'SidebarLayoutV1',
 ]
 import toloka.client.project.template_builder.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -88,7 +88,7 @@ class ColumnsLayoutV1(BaseLayoutV1):
         vertical_align: Vertical alignment of column content.
     """
 
-    class VerticalAlign(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class VerticalAlign(toloka.util._extendable_enum.ExtendableStrEnum):
         """Vertical alignment of column content.
 
         Attributes:

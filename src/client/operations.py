@@ -23,9 +23,10 @@ from enum import unique
 from typing import Any, ClassVar
 
 from .exceptions import FailedOperation
-from .primitives.base import BaseTolokaObject, attribute
-from .util._docstrings import inherit_docstrings
-from .util._extendable_enum import ExtendableStrEnum
+from .primitives.base import BaseTolokaObject
+from ..util._codegen import attribute
+from ..util._docstrings import inherit_docstrings
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 @unique

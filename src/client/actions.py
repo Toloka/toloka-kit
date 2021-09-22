@@ -12,10 +12,10 @@ __all__ = [
 from enum import unique
 
 from .conditions import RuleConditionKey
-from .primitives.base import attribute
+from .primitives.base import BaseParameters
 from .user_restriction import DurationUnit, UserRestriction
-from .util._codegen import BaseParameters
-from .util._extendable_enum import ExtendableStrEnum
+from ..util._codegen import attribute
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 @unique

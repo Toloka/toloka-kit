@@ -5,9 +5,10 @@ from typing import List
 from .actions import RuleAction
 from .collectors import CollectorConfig
 from .conditions import RuleCondition
-from .primitives.base import attribute, BaseTolokaObject
+from .primitives.base import BaseTolokaObject
 from .task_distribution_function import TaskDistributionFunction
-from .util._extendable_enum import ExtendableStrEnum
+from ..util._codegen import attribute
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 class QualityControl(BaseTolokaObject):

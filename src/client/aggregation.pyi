@@ -19,11 +19,11 @@ __all__ = [
     'AggregatedSolution',
 ]
 import toloka.client.primitives.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
-class AggregatedSolutionType(toloka.client.util._extendable_enum.ExtendableStrEnum):
+class AggregatedSolutionType(toloka.util._extendable_enum.ExtendableStrEnum):
     """An enumeration.
     """
 

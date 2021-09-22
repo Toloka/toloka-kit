@@ -215,7 +215,7 @@ from .view import (
 from .base import ComponentType, BaseComponent, base_component_or
 from ..field_spec import FieldSpec, JsonSpec
 from ...primitives.base import BaseTolokaObject
-from ...util import traverse_dicts_recursively
+from ....util import traverse_dicts_recursively
 
 
 class TemplateBuilder(BaseTolokaObject):

@@ -5,7 +5,8 @@ __all__ = [
 from enum import Enum, unique
 from typing import List
 
-from ..primitives.base import attribute, BaseTolokaObject
+from ..primitives.base import BaseTolokaObject
+from ...util._codegen import attribute
 
 
 class AdditionalLanguage(BaseTolokaObject):

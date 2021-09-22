@@ -1,9 +1,8 @@
 __all__ = [
     'VariantRegistry',
-    'attribute',
-    'fix_attrs_converters',
     'BaseTolokaObjectMetaclass',
-    'BaseTolokaObject'
+    'BaseTolokaObject',
+    'BaseParameters',
 ]
 
 import inspect
@@ -16,11 +15,7 @@ import attr
 
 from .._converter import converter
 from ..exceptions import SpecClassIdentificationError
-
-REQUIRED_KEY = 'toloka_field_required'
-ORIGIN_KEY = 'toloka_field_origin'
-READONLY_KEY = 'toloka_field_readonly'
-AUTOCAST_KEY = 'toloka_field_autocast'
+from ...util._codegen import attribute, expand, fix_attrs_converters, REQUIRED_KEY, ORIGIN_KEY, AUTOCAST_KEY
 
 E = TypeVar('E', bound=Enum)
 
@@ -49,30 +44,6 @@ class VariantRegistry:
         return self.registered_classes[value]
 
 
-def attribute(*args, required: bool = False, origin: Optional[str] = None, readonly: bool = False,
-              autocast: bool = False, **kwargs):
-    """Proxy for attr.attrib(...). Adds several keywords.
-
-    Args:
-        *args: All positional arguments from attr.attrib
-        required: If True makes attribute not Optional. All other attributes are optional by default. Defaults to False.
-        origin: Sets field name in dict for attribute, when structuring/unstructuring from dict. Defaults to None.
-        readonly: Affects only when the class 'expanding' as a parameter in some function. If True, drops this attribute from expanded parameters. Defaults to None.
-        autocast: If True then converter.structure will be used to convert input value
-        **kwargs: All keyword arguments from attr.attrib
-    """
-    metadata = {}
-    if required:
-        metadata[REQUIRED_KEY] = True
-    if origin:
-        metadata[ORIGIN_KEY] = origin
-    if readonly:
-        metadata[READONLY_KEY] = True
-    if autocast:
-        metadata[AUTOCAST_KEY] = True
-    return attr.attrib(*args, metadata=metadata, **kwargs)
-
-
 def get_autocast_converter(type_):
     def autocast_converter(value: enum_type_to_union(type_)):
         return converter.structure(value, type_)
@@ -97,43 +68,6 @@ def enum_type_to_union(cur_type):
         return typing.Union[(cur_type, *possible_types)] if possible_types else cur_type
     else:
         return cur_type
-
-
-def fix_attrs_converters(cls):
-    """
-    Due to https://github.com/Toloka/toloka-kit/issues/37 we have to support attrs>=20.3.0.
-    This version lacks a feature that uses converters' annotations in class's __init__
-    (see https://github.com/python-attrs/attrs/pull/710)). This decorator brings this feature
-    to older attrs versions.
-    """
-
-    if attr.__version__ < '21.0.3':
-        fields_dict = attr.fields_dict(cls)
-
-        def update_param_from_converter(param):
-
-            # Trying to figure out which attribute this parameter is responsible for.
-            # Note that attr stips leading underscores from attribute names, so we
-            # check both name and _name.
-            attribute = fields_dict.get(param.name) or fields_dict.get('_' + param.name)
-
-            # Only process attributes with converter
-            if attribute is not None and attribute.converter:
-                # Retrieving converter's first (and only) parameter
-                converter_sig = inspect.signature(attribute.converter)
-                converter_param = next(iter(converter_sig.parameters.values()))
-                # And use this parameter's annotation for our own
-                param = param.replace(annotation=converter_param.annotation)
-
-            return param
-
-        init_sig = inspect.signature(cls.__init__)
-        new_params = [update_param_from_converter(param) for param in init_sig.parameters.values()]
-        new_annotations = {param.name: param.annotation for param in new_params if param.annotation}
-        cls.__init__.__signature__ = init_sig.replace(parameters=new_params)
-        cls.__init__.__annotations__ = new_annotations
-
-    return cls
 
 
 class BaseTolokaObjectMetaclass(type):
@@ -327,3 +261,19 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
         obj = cls(**kwargs)
         obj._unexpected = data
         return obj
+
+
+class ExpandParametersMetaclass(BaseTolokaObjectMetaclass):
+
+    def __new__(mcs, name, bases, namespace, **kwargs):
+        if 'Parameters' in namespace:
+            namespace.setdefault('__annotations__', {})['parameters'] = namespace['Parameters']
+        cls = super().__new__(mcs, name, bases, namespace, **kwargs)
+        cls.__init__ = expand('parameters')(cls.__init__)
+
+        return cls
+
+
+class BaseParameters(BaseTolokaObject, metaclass=ExpandParametersMetaclass):
+    class Parameters(BaseTolokaObject):
+        pass

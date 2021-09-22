@@ -29,7 +29,7 @@ import toloka.client.primitives.base
 import toloka.client.project.localization
 import toloka.client.project.task_spec
 import toloka.client.quality_control
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 from toloka.client.project import (
@@ -115,7 +115,7 @@ class Project(toloka.client.primitives.base.BaseTolokaObject):
         ...
     """
 
-    class AssignmentsIssuingType(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class AssignmentsIssuingType(toloka.util._extendable_enum.ExtendableStrEnum):
         """How to assign tasks:
 
         Attributes:
@@ -128,7 +128,7 @@ class Project(toloka.client.primitives.base.BaseTolokaObject):
         AUTOMATED = 'AUTOMATED'
         MAP_SELECTOR = 'MAP_SELECTOR'
 
-    class ProjectStatus(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class ProjectStatus(toloka.util._extendable_enum.ExtendableStrEnum):
         """Project status:
 
         Attributes:
@@ -215,7 +215,7 @@ class Project(toloka.client.primitives.base.BaseTolokaObject):
         public_name: typing.Optional[str] = None,
         public_description: typing.Optional[str] = None,
         task_spec: typing.Optional[toloka.client.project.task_spec.TaskSpec] = None,
-        assignments_issuing_type: typing.Union[AssignmentsIssuingType, str] = AssignmentsIssuingType.AUTOMATED,
+        assignments_issuing_type: typing.Union[AssignmentsIssuingType, str] = Project.AssignmentsIssuingType.AUTOMATED,
         assignments_issuing_view_config: typing.Optional[AssignmentsIssuingViewConfig] = None,
         assignments_automerge_enabled: typing.Optional[bool] = None,
         max_active_assignments_count: typing.Optional[int] = None,

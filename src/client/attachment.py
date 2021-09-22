@@ -8,8 +8,8 @@ from enum import unique
 
 from .owner import Owner
 from .primitives.base import BaseTolokaObject
-from .util._docstrings import inherit_docstrings
-from .util._extendable_enum import ExtendableStrEnum
+from ..util._docstrings import inherit_docstrings
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 class Attachment(BaseTolokaObject, spec_enum='Type', spec_field='attachment_type'):

@@ -2,7 +2,8 @@ __all__ = ['Skill']
 import datetime
 from typing import Dict
 
-from .primitives.base import attribute, BaseTolokaObject
+from .primitives.base import BaseTolokaObject
+from ..util._codegen import attribute
 
 LangIso639 = str
 

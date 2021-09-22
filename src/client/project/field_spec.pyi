@@ -18,11 +18,11 @@ __all__ = [
     'ArrayCoordinatesSpec',
 ]
 import toloka.client.primitives.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
-class FieldType(toloka.client.util._extendable_enum.ExtendableStrEnum):
+class FieldType(toloka.util._extendable_enum.ExtendableStrEnum):
     """An enumeration.
     """
 
