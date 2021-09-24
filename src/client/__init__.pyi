@@ -945,7 +945,7 @@ class TolokaClient:
     def add_message_thread_to_folders(
         self,
         message_thread_id: str,
-        folders: typing.Union[typing.List[toloka.client.message_thread.Folder], toloka.client.message_thread.MessageThreadFolders]
+        folders: typing.Union[typing.List[typing.Union[str, toloka.client.message_thread.Folder]], toloka.client.message_thread.MessageThreadFolders]
     ) -> toloka.client.message_thread.MessageThread:
         """Adds a message chain to one or more folders ("unread", "important" etc.)
 
@@ -1176,7 +1176,7 @@ class TolokaClient:
     def remove_message_thread_from_folders(
         self,
         message_thread_id: str,
-        folders: typing.Union[typing.List[toloka.client.message_thread.Folder], toloka.client.message_thread.MessageThreadFolders]
+        folders: typing.Union[typing.List[typing.Union[str, toloka.client.message_thread.Folder]], toloka.client.message_thread.MessageThreadFolders]
     ) -> toloka.client.message_thread.MessageThread:
         """Deletes a message chain from one or more folders ("unread", "important" etc.)
 

@@ -109,6 +109,7 @@ from .message_thread import (
 from .operation_log import OperationLogItem
 from .pool import Pool, PoolPatchRequest
 from .primitives.retry import TolokaRetry
+from .primitives.base import autocast_to_enum
 from .project import Project
 from .training import Training
 from .requester import Requester
@@ -699,7 +700,11 @@ class TolokaClient:
 
     # Message section
 
-    def add_message_thread_to_folders(self, message_thread_id: str, folders: Union[List[Folder], MessageThreadFolders]) -> MessageThread:
+    @autocast_to_enum
+    def add_message_thread_to_folders(
+        self,
+        message_thread_id: str, folders: Union[List[Folder], MessageThreadFolders]
+    ) -> MessageThread:
         """Adds a message chain to one or more folders ("unread", "important" etc.)
 
         Args:
@@ -817,6 +822,7 @@ class TolokaClient:
         """
         return self._find_all(self.find_message_threads, request)
 
+    @autocast_to_enum
     def remove_message_thread_from_folders(self, message_thread_id: str, folders: Union[List[Folder], MessageThreadFolders]) -> MessageThread:
         """Deletes a message chain from one or more folders ("unread", "important" etc.)
 

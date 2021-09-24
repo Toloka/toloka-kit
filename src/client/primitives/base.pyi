@@ -1,5 +1,7 @@
 __all__ = [
     'VariantRegistry',
+    'autocast_to_enum',
+    'fix_attrs_converters',
     'BaseTolokaObjectMetaclass',
     'BaseTolokaObject',
     'BaseParameters',
@@ -8,19 +10,18 @@ import attr._make
 import enum
 import typing
 
-E = typing.TypeVar('E', bound=enum.Enum)
 
 class VariantRegistry:
     def __init__(
         self,
         field: str,
-        enum: typing.Type[E]
+        enum: typing.Type[typing.TypeVar('E', bound=enum.Enum)]
     ): ...
 
     def register(
         self,
         type_: type,
-        value: E
+        value: typing.TypeVar('E', bound=enum.Enum)
     ) -> type: ...
 
 
@@ -53,7 +54,7 @@ class BaseTolokaObject:
     def get_variant_specs(cls) -> dict: ...
 
     @classmethod
-    def get_spec_subclass_for_value(cls, spec_value: typing.Union[str, E] = None) -> type: ...
+    def get_spec_subclass_for_value(cls, spec_value: typing.Union[str, typing.TypeVar('E', bound=enum.Enum)] = None) -> type: ...
 
     def unstructure(self) -> typing.Optional[dict]: ...
 
@@ -66,6 +67,15 @@ class BaseTolokaObject:
         ...
 
     _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
+
+
+def autocast_to_enum(func: typing.Callable) -> typing.Callable:
+    """Function decorator that performs str -> Enum conversion when decorated function is called
+
+    This decorator modifies function so that every argument annotated with any subclass of Enum type (including Enum
+    itself) can be passed a value of str (or any )
+    """
+    ...
 
 
 class BaseParameters(BaseTolokaObject):

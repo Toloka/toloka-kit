@@ -1,6 +1,7 @@
 __all__: list = []
 import datetime
 from decimal import Decimal
+import typing
 import re
 import sys
 import uuid
@@ -64,7 +65,50 @@ converter.register_structure_hook(
 # We need to redefine structure/unstructure hook for ExtendableStrEnum because hasattr(type_, 'structure') works
 # incorrect in that case
 converter.register_unstructure_hook(ExtendableStrEnum, converter._unstructure_enum)
-converter.register_structure_hook(ExtendableStrEnum, converter._structure_call)
+
+
+def _try_to_structure_to_extendable_enum(data, type_):
+    possible_types = set(type(item.value) for item in type_)
+    if not isinstance(data, (*possible_types, type_)):
+        raise ValueError
+    return converter._structure_call(data, type_)
+
+
+converter.register_structure_hook(  # type: ignore
+    ExtendableStrEnum,
+    _try_to_structure_to_extendable_enum
+)
+
+
+def _is_union_of_any(type_):
+    """Checks if type_ is Union[from_type, Any] or Union[from_type, Any, None]
+    """
+
+    if type_ == typing.Optional[typing.Any] or\
+            getattr(type_, '__origin__', None) is not typing.Union or\
+            typing.Any not in type_.__args__:
+        return False
+    return len(type_.__args__) == 2 or len(type_.__args__) == 3 and type(None) in type_.__args__
+
+
+def _try_to_structure_union_of_any(data: typing.Any, type_: typing.Type) -> typing.Any:
+    args = type_.__args__
+    is_optional = type(None) in args
+    args = [arg for arg in args if arg is not type(None) and arg is not typing.Any]  # noqa: E721
+    nested_type = args[0]
+    try:
+        return converter.structure(data, nested_type if not is_optional else typing.Optional[nested_type])
+    except (ValueError, TypeError):
+        # no conversion found, consider data being type Any
+        return data
+
+
+# Supports Union[from_type, Any] -> Union[to_type, Any] conversion (from_type is supposed to be structured to to_type).
+# This conversion is primarily used during autocasts (see toloka.client.primitives.base).
+converter.register_structure_hook_func(
+    _is_union_of_any,
+    _try_to_structure_union_of_any
+)
 
 
 structure = converter.structure

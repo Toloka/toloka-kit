@@ -4,13 +4,12 @@ __all__ = [
     'PoolStatusObserver',
 ]
 import datetime
-from src.streaming import event
-from src import client
 import toloka.client
 import toloka.client.pool
 import toloka.streaming.cursor
 import toloka.streaming.event
 import typing
+
 
 class BaseObserver:
     def should_resume(self) -> bool: ...
