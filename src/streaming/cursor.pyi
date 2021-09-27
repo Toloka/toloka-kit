@@ -48,8 +48,8 @@ class BaseCursor:
         ...
 
     toloka_client: TolokaClientSyncOrAsyncType
-    _request: RequestObjectType
-    _prev_response: ResponseObjectType
+    _request: typing.Any
+    _prev_response: typing.Any
 
 
 class AssignmentCursor(BaseCursor):
@@ -126,7 +126,7 @@ class AssignmentCursor(BaseCursor):
 
     toloka_client: TolokaClientSyncOrAsyncType
     _request: toloka.client.search_requests.AssignmentSearchRequest
-    _prev_response: ResponseObjectType
+    _prev_response: typing.Any
     _event_type: toloka.streaming.event.AssignmentEvent.Type
 
 
@@ -182,7 +182,7 @@ class TaskCursor(BaseCursor):
 
     toloka_client: TolokaClientSyncOrAsyncType
     _request: toloka.client.search_requests.TaskSearchRequest
-    _prev_response: ResponseObjectType
+    _prev_response: typing.Any
 
 
 class UserBonusCursor(BaseCursor):
@@ -233,7 +233,7 @@ class UserBonusCursor(BaseCursor):
 
     toloka_client: TolokaClientSyncOrAsyncType
     _request: toloka.client.search_requests.UserBonusSearchRequest
-    _prev_response: typing.Optional[ResponseObjectType]
+    _prev_response: typing.Optional[typing.Any]
 
 
 class UserSkillCursor(BaseCursor):
@@ -291,5 +291,5 @@ class UserSkillCursor(BaseCursor):
 
     toloka_client: TolokaClientSyncOrAsyncType
     _request: toloka.client.search_requests.UserSkillSearchRequest
-    _prev_response: typing.Optional[ResponseObjectType]
+    _prev_response: typing.Optional[typing.Any]
     _event_type: toloka.streaming.event.UserSkillEvent.Type

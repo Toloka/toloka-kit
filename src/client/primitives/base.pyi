@@ -10,18 +10,19 @@ import attr._make
 import enum
 import typing
 
+E = typing.TypeVar('E', bound=enum.Enum)
 
 class VariantRegistry:
     def __init__(
         self,
         field: str,
-        enum: typing.Type[typing.TypeVar('E', bound=enum.Enum)]
+        enum: typing.Type[E]
     ): ...
 
     def register(
         self,
         type_: type,
-        value: typing.TypeVar('E', bound=enum.Enum)
+        value: E
     ) -> type: ...
 
 
@@ -54,7 +55,7 @@ class BaseTolokaObject:
     def get_variant_specs(cls) -> dict: ...
 
     @classmethod
-    def get_spec_subclass_for_value(cls, spec_value: typing.Union[str, typing.TypeVar('E', bound=enum.Enum)] = None) -> type: ...
+    def get_spec_subclass_for_value(cls, spec_value: typing.Union[str, E] = None) -> type: ...
 
     def unstructure(self) -> typing.Optional[dict]: ...
 
