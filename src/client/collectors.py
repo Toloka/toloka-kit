@@ -405,7 +405,7 @@ class MajorityVote(CollectorConfig, spec_value=CollectorConfig.Type.MAJORITY_VOT
             responses in the pool.
 
     Example:
-        How to ban a performer in this project if he made enough answers.
+        How to ban a performer in this project if he made enough answers (only for pools with post acceptance).
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(

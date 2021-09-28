@@ -4,7 +4,8 @@ __all__ = [
     'Balance',
     'AssignmentEventsInPool',
     'AssignmentsInPool',
-    'bind_client'
+    'bind_client',
+    'PoolCompletedPercentage',
 ]
 
 from .metrics import (
@@ -13,5 +14,6 @@ from .metrics import (
     Balance,
     AssignmentEventsInPool,
     AssignmentsInPool,
+    PoolCompletedPercentage,
 )
 from .collector import MetricCollector
