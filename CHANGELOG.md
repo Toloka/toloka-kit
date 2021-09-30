@@ -1,3 +1,8 @@
+0.1.17
+-------------------
+* Fix `PreloadingHTTPAdapter`
+* Fix `get_app_items()` signature
+
 0.1.16
 -------------------
 * Add methods to use toloka apps
