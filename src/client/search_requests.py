@@ -33,7 +33,15 @@ __all__ = [
     'MessageThreadSearchRequest',
     'MessageThreadSortItems',
     'WebhookSubscriptionSearchRequest',
-    'WebhookSubscriptionSortItems'
+    'WebhookSubscriptionSortItems',
+    'AppProjectSearchRequest',
+    'AppProjectSortItems',
+    'AppSearchRequest',
+    'AppSortItems',
+    'AppItemSearchRequest',
+    'AppItemSortItems',
+    'AppBatchSearchRequest',
+    'AppBatchSortItems',
 ]
 import datetime
 from enum import Enum, unique, auto
@@ -42,6 +50,7 @@ from typing import Optional, TypeVar, Type, Union, List, get_type_hints, cast
 import attr
 
 from ._converter import converter, structure, unstructure
+from .app import AppItem, AppProject, AppBatch
 from .assignment import Assignment
 from .attachment import Attachment
 from .message_thread import Folder
@@ -933,4 +942,85 @@ WebhookSubscriptionSortItems = BaseSortItems.for_fields(
         >>> result = toloka_client.find_webhook_subscriptions(event_type=some_event_type, pool_id=my_pretty_pool_id, sort=sort, limit=10)
         ...
     """
+)
+
+
+class AppProjectSearchRequest(BaseSearchRequest):
+
+    @unique
+    class Scope(Enum):
+        MY = 'MY'
+        COMPANY = 'COMPANY'
+        REQUESTER_LIST = 'REQUESTER_LIST'
+
+    class CompareFields:
+        id: str
+        name: str
+        created: datetime.datetime
+
+    def _list_converter(value: Union[str, List[str]]):
+        if isinstance(value, str):
+            value = value.split(',')
+            value = [item.strip() for item in value]
+        return value
+
+    def _list_setter(self, attribute, value):
+        return AppProjectSearchRequest._list_converter(value)
+
+    app_id: str
+    parent_app_project_id: str
+    status: AppProject.Status
+    after_id: str
+    scope: Scope
+    requester_ids: List[str] = attr.attrib(converter=_list_converter, on_setattr=_list_setter)
+
+
+AppProjectSortItems = BaseSortItems.for_fields(
+    'AppProjectSortItems', ['id', 'name', 'created']
+)
+
+
+class AppSearchRequest(BaseSearchRequest):
+
+    class CompareFields:
+        id: str
+        name: str
+
+    after_id: str
+
+
+AppSortItems = BaseSortItems.for_fields(
+    'AppSortItems', ['id', 'name']
+)
+
+
+class AppItemSearchRequest(BaseSearchRequest):
+
+    class CompareFields:
+        id: str
+        created: datetime.datetime
+
+    after_id: str
+    batch_id: str
+    status: AppItem.Status
+
+
+AppItemSortItems = BaseSortItems.for_fields(
+    'AppItemSortItems', ['id', 'created']
+)
+
+
+class AppBatchSearchRequest(BaseSearchRequest):
+
+    class CompareFields:
+        id: str
+        name: str
+        created: datetime.datetime
+
+    after_id: str
+    status: AppBatch.Status
+
+
+AppBatchSortItems = BaseSortItems.for_fields(
+    'AppBatchSortItems', ['id', 'name', 'created']
 )

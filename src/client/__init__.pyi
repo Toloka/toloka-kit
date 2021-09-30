@@ -2,6 +2,7 @@ __all__ = [
     'actions',
     'aggregation',
     'analytics_request',
+    'app',
     'assignment',
     'attachment',
     'batch_create_results',
@@ -44,6 +45,12 @@ __all__ = [
     'UserBonus',
     'Pool',
     'Project',
+    'AppProject',
+    'App',
+    'AppItem',
+    'AppItemsCreateRequest',
+    'AppBatch',
+    'AppBatchCreateRequest',
 ]
 import datetime
 import decimal
@@ -52,6 +59,7 @@ import pandas.core.frame
 import requests.packages.urllib3.util.retry
 import toloka.client.aggregation
 import toloka.client.analytics_request
+import toloka.client.app
 import toloka.client.assignment
 import toloka.client.attachment
 import toloka.client.batch_create_results
@@ -80,6 +88,7 @@ from toloka.client import (
     actions,
     aggregation,
     analytics_request,
+    app,
     assignment,
     attachment,
     batch_create_results,
@@ -107,6 +116,14 @@ from toloka.client import (
     user_restriction,
     user_skill,
     webhook_subscription
+)
+from toloka.client.app import (
+    App,
+    AppBatch,
+    AppBatchCreateRequest,
+    AppItem,
+    AppItemsCreateRequest,
+    AppProject
 )
 from toloka.client.assignment import Assignment
 from toloka.client.attachment import Attachment
@@ -4608,3 +4625,285 @@ class TolokaClient:
             ...
         """
         ...
+
+    @typing.overload
+    def find_app_projects(
+        self,
+        request: toloka.client.search_requests.AppProjectSearchRequest,
+        sort: typing.Union[typing.List[str], toloka.client.search_requests.AppProjectSortItems, None] = None,
+        limit: typing.Optional[int] = None
+    ) -> toloka.client.search_results.AppProjectSearchResult: ...
+
+    @typing.overload
+    def find_app_projects(
+        self,
+        app_id: typing.Optional[str] = None,
+        parent_app_project_id: typing.Optional[str] = None,
+        status: typing.Optional[toloka.client.app.AppProject.Status] = None,
+        after_id: typing.Optional[str] = None,
+        scope: typing.Optional[toloka.client.search_requests.AppProjectSearchRequest.Scope] = None,
+        requester_ids: typing.Union[str, typing.List[str]] = None,
+        id_lt: typing.Optional[str] = None,
+        id_lte: typing.Optional[str] = None,
+        id_gt: typing.Optional[str] = None,
+        id_gte: typing.Optional[str] = None,
+        name_lt: typing.Optional[str] = None,
+        name_lte: typing.Optional[str] = None,
+        name_gt: typing.Optional[str] = None,
+        name_gte: typing.Optional[str] = None,
+        created_lt: typing.Optional[datetime.datetime] = None,
+        created_lte: typing.Optional[datetime.datetime] = None,
+        created_gt: typing.Optional[datetime.datetime] = None,
+        created_gte: typing.Optional[datetime.datetime] = None,
+        sort: typing.Union[typing.List[str], toloka.client.search_requests.AppProjectSortItems, None] = None,
+        limit: typing.Optional[int] = None
+    ) -> toloka.client.search_results.AppProjectSearchResult: ...
+
+    @typing.overload
+    def get_app_projects(self, request: toloka.client.search_requests.AppProjectSearchRequest) -> typing.Generator[toloka.client.app.AppProject, None, None]: ...
+
+    @typing.overload
+    def get_app_projects(
+        self,
+        app_id: typing.Optional[str] = None,
+        parent_app_project_id: typing.Optional[str] = None,
+        status: typing.Optional[toloka.client.app.AppProject.Status] = None,
+        after_id: typing.Optional[str] = None,
+        scope: typing.Optional[toloka.client.search_requests.AppProjectSearchRequest.Scope] = None,
+        requester_ids: typing.Union[str, typing.List[str]] = None,
+        id_lt: typing.Optional[str] = None,
+        id_lte: typing.Optional[str] = None,
+        id_gt: typing.Optional[str] = None,
+        id_gte: typing.Optional[str] = None,
+        name_lt: typing.Optional[str] = None,
+        name_lte: typing.Optional[str] = None,
+        name_gt: typing.Optional[str] = None,
+        name_gte: typing.Optional[str] = None,
+        created_lt: typing.Optional[datetime.datetime] = None,
+        created_lte: typing.Optional[datetime.datetime] = None,
+        created_gt: typing.Optional[datetime.datetime] = None,
+        created_gte: typing.Optional[datetime.datetime] = None
+    ) -> typing.Generator[toloka.client.app.AppProject, None, None]: ...
+
+    def create_app_project(self, app_project: toloka.client.app.AppProject) -> toloka.client.app.AppProject: ...
+
+    def get_app_project(self, app_project_id: str) -> toloka.client.app.AppProject: ...
+
+    def archive_app_project(self, app_project_id: str) -> toloka.client.app.AppProject: ...
+
+    def unarchive_app_project(self, app_project_id: str) -> toloka.client.app.AppProject: ...
+
+    @typing.overload
+    def find_apps(
+        self,
+        request: toloka.client.search_requests.AppSearchRequest,
+        sort: typing.Union[typing.List[str], toloka.client.search_requests.AppSortItems, None] = None,
+        limit: typing.Optional[int] = None
+    ) -> toloka.client.search_results.AppSearchResult: ...
+
+    @typing.overload
+    def find_apps(
+        self,
+        after_id: typing.Optional[str] = None,
+        id_lt: typing.Optional[str] = None,
+        id_lte: typing.Optional[str] = None,
+        id_gt: typing.Optional[str] = None,
+        id_gte: typing.Optional[str] = None,
+        name_lt: typing.Optional[str] = None,
+        name_lte: typing.Optional[str] = None,
+        name_gt: typing.Optional[str] = None,
+        name_gte: typing.Optional[str] = None,
+        sort: typing.Union[typing.List[str], toloka.client.search_requests.AppSortItems, None] = None,
+        limit: typing.Optional[int] = None
+    ) -> toloka.client.search_results.AppSearchResult: ...
+
+    @typing.overload
+    def get_apps(self, request: toloka.client.search_requests.AppSearchRequest) -> typing.Generator[toloka.client.app.App, None, None]: ...
+
+    @typing.overload
+    def get_apps(
+        self,
+        after_id: typing.Optional[str] = None,
+        id_lt: typing.Optional[str] = None,
+        id_lte: typing.Optional[str] = None,
+        id_gt: typing.Optional[str] = None,
+        id_gte: typing.Optional[str] = None,
+        name_lt: typing.Optional[str] = None,
+        name_lte: typing.Optional[str] = None,
+        name_gt: typing.Optional[str] = None,
+        name_gte: typing.Optional[str] = None
+    ) -> typing.Generator[toloka.client.app.App, None, None]: ...
+
+    def get_app(self, app_id: str) -> toloka.client.app.App: ...
+
+    @typing.overload
+    def find_app_items(
+        self,
+        app_project_id: str,
+        request: toloka.client.search_requests.AppItemSearchRequest,
+        sort: typing.Union[typing.List[str], toloka.client.search_requests.AppItemSortItems, None] = None,
+        limit: typing.Optional[int] = None
+    ) -> toloka.client.search_results.AppItemSearchResult: ...
+
+    @typing.overload
+    def find_app_items(
+        self,
+        app_project_id: str,
+        after_id: typing.Optional[str] = None,
+        batch_id: typing.Optional[str] = None,
+        status: typing.Optional[toloka.client.app.AppItem.Status] = None,
+        id_lt: typing.Optional[str] = None,
+        id_lte: typing.Optional[str] = None,
+        id_gt: typing.Optional[str] = None,
+        id_gte: typing.Optional[str] = None,
+        created_lt: typing.Optional[datetime.datetime] = None,
+        created_lte: typing.Optional[datetime.datetime] = None,
+        created_gt: typing.Optional[datetime.datetime] = None,
+        created_gte: typing.Optional[datetime.datetime] = None,
+        sort: typing.Union[typing.List[str], toloka.client.search_requests.AppItemSortItems, None] = None,
+        limit: typing.Optional[int] = None
+    ) -> toloka.client.search_results.AppItemSearchResult: ...
+
+    @typing.overload
+    def get_app_items(
+        self,
+        app_project_id: str,
+        request: toloka.client.search_requests.AppProjectSearchRequest
+    ) -> typing.Generator[toloka.client.app.AppItem, None, None]: ...
+
+    @typing.overload
+    def get_app_items(
+        self,
+        app_project_id: str,
+        app_id: typing.Optional[str] = None,
+        parent_app_project_id: typing.Optional[str] = None,
+        status: typing.Optional[toloka.client.app.AppProject.Status] = None,
+        after_id: typing.Optional[str] = None,
+        scope: typing.Optional[toloka.client.search_requests.AppProjectSearchRequest.Scope] = None,
+        requester_ids: typing.Union[str, typing.List[str]] = None,
+        id_lt: typing.Optional[str] = None,
+        id_lte: typing.Optional[str] = None,
+        id_gt: typing.Optional[str] = None,
+        id_gte: typing.Optional[str] = None,
+        name_lt: typing.Optional[str] = None,
+        name_lte: typing.Optional[str] = None,
+        name_gt: typing.Optional[str] = None,
+        name_gte: typing.Optional[str] = None,
+        created_lt: typing.Optional[datetime.datetime] = None,
+        created_lte: typing.Optional[datetime.datetime] = None,
+        created_gt: typing.Optional[datetime.datetime] = None,
+        created_gte: typing.Optional[datetime.datetime] = None
+    ) -> typing.Generator[toloka.client.app.AppItem, None, None]: ...
+
+    def create_app_item(
+        self,
+        app_project_id: str,
+        app_item: toloka.client.app.AppItem
+    ) -> toloka.client.app.AppItem: ...
+
+    @typing.overload
+    def create_app_items(
+        self,
+        app_project_id: str,
+        request: toloka.client.app.AppItemsCreateRequest
+    ): ...
+
+    @typing.overload
+    def create_app_items(
+        self,
+        app_project_id: str,
+        *,
+        batch_id: typing.Optional[str] = None,
+        items: typing.Optional[typing.List[typing.Dict[str, typing.Any]]] = None
+    ): ...
+
+    def get_app_item(
+        self,
+        app_project_id: str,
+        app_item_id: str
+    ) -> toloka.client.app.AppItem: ...
+
+    @typing.overload
+    def find_app_batches(
+        self,
+        app_project_id: str,
+        request: toloka.client.search_requests.AppBatchSearchRequest,
+        sort: typing.Union[typing.List[str], toloka.client.search_requests.AppBatchSortItems, None] = None,
+        limit: typing.Optional[int] = None
+    ) -> toloka.client.search_results.AppBatchSearchResult: ...
+
+    @typing.overload
+    def find_app_batches(
+        self,
+        app_project_id: str,
+        after_id: typing.Optional[str] = None,
+        status: typing.Optional[toloka.client.app.AppBatch.Status] = None,
+        id_lt: typing.Optional[str] = None,
+        id_lte: typing.Optional[str] = None,
+        id_gt: typing.Optional[str] = None,
+        id_gte: typing.Optional[str] = None,
+        name_lt: typing.Optional[str] = None,
+        name_lte: typing.Optional[str] = None,
+        name_gt: typing.Optional[str] = None,
+        name_gte: typing.Optional[str] = None,
+        created_lt: typing.Optional[datetime.datetime] = None,
+        created_lte: typing.Optional[datetime.datetime] = None,
+        created_gt: typing.Optional[datetime.datetime] = None,
+        created_gte: typing.Optional[datetime.datetime] = None,
+        sort: typing.Union[typing.List[str], toloka.client.search_requests.AppBatchSortItems, None] = None,
+        limit: typing.Optional[int] = None
+    ) -> toloka.client.search_results.AppBatchSearchResult: ...
+
+    @typing.overload
+    def get_app_batches(
+        self,
+        app_project_id: str,
+        request: toloka.client.search_requests.AppBatchSearchRequest
+    ) -> typing.Generator[toloka.client.app.AppBatch, None, None]: ...
+
+    @typing.overload
+    def get_app_batches(
+        self,
+        app_project_id: str,
+        after_id: typing.Optional[str] = None,
+        status: typing.Optional[toloka.client.app.AppBatch.Status] = None,
+        id_lt: typing.Optional[str] = None,
+        id_lte: typing.Optional[str] = None,
+        id_gt: typing.Optional[str] = None,
+        id_gte: typing.Optional[str] = None,
+        name_lt: typing.Optional[str] = None,
+        name_lte: typing.Optional[str] = None,
+        name_gt: typing.Optional[str] = None,
+        name_gte: typing.Optional[str] = None,
+        created_lt: typing.Optional[datetime.datetime] = None,
+        created_lte: typing.Optional[datetime.datetime] = None,
+        created_gt: typing.Optional[datetime.datetime] = None,
+        created_gte: typing.Optional[datetime.datetime] = None
+    ) -> typing.Generator[toloka.client.app.AppBatch, None, None]: ...
+
+    @typing.overload
+    def create_app_batch(
+        self,
+        app_project_id: str,
+        request: toloka.client.app.AppBatchCreateRequest
+    ) -> toloka.client.app.AppBatch: ...
+
+    @typing.overload
+    def create_app_batch(
+        self,
+        app_project_id: str,
+        *,
+        items: typing.Optional[typing.List[typing.Dict[str, typing.Any]]] = None
+    ) -> toloka.client.app.AppBatch: ...
+
+    def get_app_batch(
+        self,
+        app_project_id: str,
+        app_batch_id: str
+    ) -> toloka.client.app.AppBatch: ...
+
+    def start_app_batch(
+        self,
+        app_project_id: str,
+        app_batch_id: str
+    ): ...
