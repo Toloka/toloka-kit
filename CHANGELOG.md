@@ -1,3 +1,7 @@
+0.1.16
+-------------------
+* Add methods to use toloka apps
+
 0.1.15
 -------------------
 * Downgraded attrs dependency from  `attrs>=21.2.0` to `attrs>=20.3.0`. See https://github.com/Toloka/toloka-kit/issues/37

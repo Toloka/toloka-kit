@@ -74,7 +74,7 @@ class BaseSortItem(toloka.client.primitives.base.BaseTolokaObject):
     def unstructure(self): ...
 
     @classmethod
-    def structure(cls: Type[SortItemSelf], value: Union[SortItemSelf, str]) -> SortItemSelf:
+    def structure(cls: typing.Type[SortItemSelf], value: typing.Union[SortItemSelf, str]) -> SortItemSelf: ... # type: ignore
 
     @classmethod
     def for_fields(cls, sort_fields: typing.List[str]): ...
