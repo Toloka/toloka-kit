@@ -15,9 +15,10 @@ from enum import unique
 from typing import ClassVar, Type, Optional, Any, Union
 
 from ..._converter import converter
-from ...primitives.base import attribute, BaseTolokaObject, BaseTolokaObjectMetaclass
+from ...primitives.base import BaseTolokaObject, BaseTolokaObjectMetaclass
 from ...exceptions import SpecClassIdentificationError
-from ...util._extendable_enum import ExtendableStrEnum
+from ....util._codegen import attribute
+from ....util._extendable_enum import ExtendableStrEnum
 
 
 # TODO: split into several enums

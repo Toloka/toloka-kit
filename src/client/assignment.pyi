@@ -9,7 +9,7 @@ import toloka.client.primitives.base
 import toloka.client.primitives.parameter
 import toloka.client.solution
 import toloka.client.task
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -50,7 +50,7 @@ class Assignment(toloka.client.primitives.base.BaseTolokaObject):
         public_comment: Public comment about an assignment. Why it was accepted or rejected.
     """
 
-    class Status(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Status(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 
@@ -150,7 +150,7 @@ class GetAssignmentsTsvParameters(toloka.client.primitives.parameter.Parameters)
             are added by default.
     """
 
-    class Status(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Status(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 
@@ -161,7 +161,7 @@ class GetAssignmentsTsvParameters(toloka.client.primitives.parameter.Parameters)
         SKIPPED = 'SKIPPED'
         EXPIRED = 'EXPIRED'
 
-    class Field(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Field(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 

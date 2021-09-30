@@ -11,12 +11,12 @@ import logging
 
 from typing import Awaitable, Callable, Dict, List, Optional, Union
 
-from ..client import structure
+from ..client.primitives.base import autocast_to_enum
 from ..client.assignment import Assignment
 from ..client.pool import Pool
+from ..util.async_utils import AsyncInterfaceWrapper, ComplexException, ensure_async, get_task_traceback
 from .cursor import AssignmentCursor, TolokaClientSyncOrAsyncType
 from .event import AssignmentEvent
-from .util import AsyncInterfaceWrapper, ComplexException, ensure_async, get_task_traceback
 
 logger = logging.getLogger(__name__)
 
@@ -102,10 +102,11 @@ class PoolStatusObserver(BasePoolObserver):
     _callbacks: Dict[Pool.Status, List[CallbackForPoolAsyncType]] = attr.ib(factory=dict, init=False)
     _previous_status: Optional[Pool.Status] = attr.ib(default=None, init=False)
 
+    @autocast_to_enum
     def register_callback(
         self,
         callback: CallbackForPoolType,
-        changed_to: Union[Pool.Status, str]
+        changed_to: Pool.Status
     ) -> CallbackForPoolType:
         """Register given callable for pool status change to given value.
 
@@ -116,7 +117,7 @@ class PoolStatusObserver(BasePoolObserver):
         Returns:
             The same callable passed as callback.
         """
-        changed_to = structure(changed_to, Pool.Status)  # TODO: Autoconvert using TOLOKAKIT-83.
+
         self._callbacks.setdefault(changed_to, []).append(ensure_async(callback))
         return callback
 
@@ -228,10 +229,11 @@ class AssignmentsObserver(BasePoolObserver):
 
     # Setup section.
 
+    @autocast_to_enum
     def register_callback(
         self,
         callback: CallbackForAssignmentEventsType,
-        event_type: Union[AssignmentEvent.Type, str],
+        event_type: AssignmentEvent.Type,
     ) -> CallbackForAssignmentEventsType:
         """Register given callable for given event type.
         Callback will be called multiple times if it has been registered for multiple event types.
@@ -243,7 +245,6 @@ class AssignmentsObserver(BasePoolObserver):
         Returns:
             The same callable passed as callback.
         """
-        event_type = structure(event_type, AssignmentEvent.Type)  # TODO: Autoconvert using TOLOKAKIT-83.
         if event_type not in self._callbacks:
             cursor = AssignmentCursor(pool_id=self.pool_id, event_type=event_type, toloka_client=self.toloka_client)
             self._callbacks[event_type] = _CallbacksCursorConsumer(cursor)

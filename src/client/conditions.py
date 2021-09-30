@@ -32,9 +32,10 @@ __all__ = [
 from enum import unique
 from typing import Any
 
-from .primitives.base import BaseTolokaObject, attribute
+from .primitives.base import BaseTolokaObject
 from .primitives.operators import IdentityConditionMixin, ComparableConditionMixin
-from .util._extendable_enum import ExtendableStrEnum
+from ..util._codegen import attribute
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 @unique

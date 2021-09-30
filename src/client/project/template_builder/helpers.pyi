@@ -14,7 +14,7 @@ __all__ = [
     'YandexDiskProxyHelperV1',
 ]
 import toloka.client.project.template_builder.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -256,7 +256,7 @@ class SearchQueryHelperV1(BaseHelperV1):
         engine: Search engine.
     """
 
-    class Engine(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Engine(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 
@@ -363,7 +363,7 @@ class TextTransformHelperV1(BaseHelperV1):
         transformation: Conversion mode.
     """
 
-    class Transformation(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Transformation(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 

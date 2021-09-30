@@ -3,7 +3,7 @@ import traceback
 from inspect import signature
 
 import pytest
-from toloka.client.util._codegen import expand_func_by_argument
+from toloka.util._codegen import expand_func_by_argument
 
 
 @pytest.fixture

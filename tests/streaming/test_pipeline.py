@@ -3,8 +3,8 @@ import datetime
 import pytest
 
 from toloka.client import unstructure
-from toloka.streaming.observer import ComplexException
-from toloka.streaming import AssignmentsObserver, AsyncMultithreadWrapper, PoolStatusObserver, Pipeline
+from toloka.util.async_utils import ComplexException, AsyncMultithreadWrapper
+from toloka.streaming import AssignmentsObserver, PoolStatusObserver, Pipeline
 
 from ..testutils.backend_mock import BackendSearchMock
 

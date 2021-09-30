@@ -25,10 +25,10 @@ from .mixer_config import MixerConfig
 from .._converter import unstructure
 from ..filter import FilterCondition, FilterOr, FilterAnd
 from ..owner import Owner
-from ..primitives.base import attribute, BaseTolokaObject
+from ..primitives.base import BaseTolokaObject
 from ..quality_control import QualityControl
-from ..util._codegen import codegen_attr_attributes_setters, create_setter, expand
-from ..util._extendable_enum import ExtendableStrEnum
+from ...util._codegen import attribute, codegen_attr_attributes_setters, create_setter, expand
+from ...util._extendable_enum import ExtendableStrEnum
 
 
 @codegen_attr_attributes_setters

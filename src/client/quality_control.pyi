@@ -6,7 +6,7 @@ import toloka.client.collectors
 import toloka.client.conditions
 import toloka.client.primitives.base
 import toloka.client.task_distribution_function
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -64,7 +64,7 @@ class QualityControl(toloka.client.primitives.base.BaseTolokaObject):
         training_pool_id: typing.Optional[str]
         training_passing_skill_value: typing.Optional[int]
 
-    class CaptchaFrequency(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class CaptchaFrequency(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 

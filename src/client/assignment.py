@@ -9,11 +9,12 @@ from decimal import Decimal
 from enum import unique
 from typing import List, Optional
 
-from .primitives.base import attribute, BaseTolokaObject
+from .primitives.base import BaseTolokaObject
 from .primitives.parameter import Parameters
 from .solution import Solution
 from .task import Task
-from .util._extendable_enum import ExtendableStrEnum
+from ..util._codegen import attribute
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 class Assignment(BaseTolokaObject):

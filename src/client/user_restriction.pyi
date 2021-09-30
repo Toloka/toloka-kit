@@ -9,7 +9,7 @@ __all__ = [
 import datetime
 import enum
 import toloka.client.primitives.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -55,7 +55,7 @@ class UserRestriction(toloka.client.primitives.base.BaseTolokaObject):
         ...
     """
 
-    class Scope(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Scope(toloka.util._extendable_enum.ExtendableStrEnum):
         """Restriction scope
 
         * ALL_PROJECTS - All the requester's projects.

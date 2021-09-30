@@ -6,7 +6,7 @@ __all__ = [
 import toloka.client.primitives.base
 import toloka.client.project.template_builder
 import toloka.client.project.template_builder.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -14,7 +14,7 @@ class ViewSpec(toloka.client.primitives.base.BaseTolokaObject):
     """Description of the task interface
     """
 
-    class Type(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Type(toloka.util._extendable_enum.ExtendableStrEnum):
         """A view spec type
 
         Attributes:

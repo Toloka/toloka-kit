@@ -14,8 +14,9 @@ from typing import Type
 import attr
 import sys
 
-from .base import attribute, BaseTolokaObjectMetaclass
-from ..util._extendable_enum import ExtendableStrEnum
+from .base import BaseTolokaObjectMetaclass
+from ...util._codegen import attribute
+from ...util._extendable_enum import ExtendableStrEnum
 
 
 @unique

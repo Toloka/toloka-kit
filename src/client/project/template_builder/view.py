@@ -20,8 +20,6 @@ __all__ = [
 from enum import unique
 from typing import List, Any
 
-from ...primitives.base import attribute
-
 from .base import (
     BaseTemplate,
     BaseComponent,
@@ -31,7 +29,8 @@ from .base import (
     VersionedBaseComponentMetaclass,
     base_component_or
 )
-from ...util._extendable_enum import ExtendableStrEnum
+from ....util._codegen import attribute
+from ....util._extendable_enum import ExtendableStrEnum
 
 
 class BaseViewV1Metaclass(VersionedBaseComponentMetaclass):

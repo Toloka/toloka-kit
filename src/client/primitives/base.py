@@ -1,26 +1,24 @@
 __all__ = [
     'VariantRegistry',
-    'attribute',
+    'autocast_to_enum',
     'fix_attrs_converters',
     'BaseTolokaObjectMetaclass',
-    'BaseTolokaObject'
+    'BaseTolokaObject',
+    'BaseParameters',
 ]
 
 import inspect
 import typing
 from copy import copy
 from enum import Enum
-from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union
+from functools import update_wrapper, partial
+from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union, Tuple
 
 import attr
 
 from .._converter import converter
 from ..exceptions import SpecClassIdentificationError
-
-REQUIRED_KEY = 'toloka_field_required'
-ORIGIN_KEY = 'toloka_field_origin'
-READONLY_KEY = 'toloka_field_readonly'
-AUTOCAST_KEY = 'toloka_field_autocast'
+from ...util._codegen import attribute, expand, fix_attrs_converters, REQUIRED_KEY, ORIGIN_KEY, AUTOCAST_KEY
 
 E = TypeVar('E', bound=Enum)
 
@@ -49,41 +47,19 @@ class VariantRegistry:
         return self.registered_classes[value]
 
 
-def attribute(*args, required: bool = False, origin: Optional[str] = None, readonly: bool = False,
-              autocast: bool = False, **kwargs):
-    """Proxy for attr.attrib(...). Adds several keywords.
-
-    Args:
-        *args: All positional arguments from attr.attrib
-        required: If True makes attribute not Optional. All other attributes are optional by default. Defaults to False.
-        origin: Sets field name in dict for attribute, when structuring/unstructuring from dict. Defaults to None.
-        readonly: Affects only when the class 'expanding' as a parameter in some function. If True, drops this attribute from expanded parameters. Defaults to None.
-        autocast: If True then converter.structure will be used to convert input value
-        **kwargs: All keyword arguments from attr.attrib
-    """
-    metadata = {}
-    if required:
-        metadata[REQUIRED_KEY] = True
-    if origin:
-        metadata[ORIGIN_KEY] = origin
-    if readonly:
-        metadata[READONLY_KEY] = True
-    if autocast:
-        metadata[AUTOCAST_KEY] = True
-    return attr.attrib(*args, metadata=metadata, **kwargs)
-
-
 def get_autocast_converter(type_):
-    def autocast_converter(value: enum_type_to_union(type_)):
-        return converter.structure(value, type_)
+    structure_type = convert_type_recursively(type_, partial(replace_with_any_if_not_whitelisted, types_whitelist=(Enum,)))
+
+    def autocast_converter(value: convert_type_recursively(type_, enum_type_to_union)):
+        return converter.structure(value, structure_type)
 
     return autocast_converter
 
 
-def enum_type_to_union(cur_type):
+def convert_type_recursively(cur_type, type_converter):
     if cur_type.__module__ == 'typing':
         if not hasattr(cur_type, '__args__') or not hasattr(cur_type, '__origin__'):
-            return cur_type
+            return type_converter(cur_type)
 
         origin = cur_type.__origin__
         # starting from python 3.7 origin of generic types returns true type instead of typing generic (i.e.
@@ -91,49 +67,29 @@ def enum_type_to_union(cur_type):
         if origin.__module__ != 'typing':
             origin = getattr(typing, origin.__name__.title())
 
-        return origin[tuple(map(enum_type_to_union, cur_type.__args__))]
-    elif inspect.isclass(cur_type) and issubclass(cur_type, Enum):
+        # Callables are unsupported
+        if origin is typing.Callable:
+            return type_converter(cur_type)
+
+        new_args = tuple(convert_type_recursively(arg, type_converter=type_converter) for arg in cur_type.__args__)
+        # Python3.6 distinguish between generic types initialized with singleton tuple of type and type itself in some
+        # cases (i.e. List[Union[int, str]] != List[tuple(Union[int, str]])).
+        return origin[new_args] if len(new_args) > 1 else origin[new_args[0]]
+
+    return type_converter(cur_type)
+
+
+def enum_type_to_union(cur_type):
+    if inspect.isclass(cur_type) and issubclass(cur_type, Enum):
         possible_types = set(type(item.value) for item in cur_type)
         return typing.Union[(cur_type, *possible_types)] if possible_types else cur_type
-    else:
+    return cur_type
+
+
+def replace_with_any_if_not_whitelisted(cur_type, types_whitelist: Tuple[Type]):
+    if inspect.isclass(cur_type) and issubclass(cur_type, types_whitelist):
         return cur_type
-
-
-def fix_attrs_converters(cls):
-    """
-    Due to https://github.com/Toloka/toloka-kit/issues/37 we have to support attrs>=20.3.0.
-    This version lacks a feature that uses converters' annotations in class's __init__
-    (see https://github.com/python-attrs/attrs/pull/710)). This decorator brings this feature
-    to older attrs versions.
-    """
-
-    if attr.__version__ < '21.0.3':
-        fields_dict = attr.fields_dict(cls)
-
-        def update_param_from_converter(param):
-
-            # Trying to figure out which attribute this parameter is responsible for.
-            # Note that attr stips leading underscores from attribute names, so we
-            # check both name and _name.
-            attribute = fields_dict.get(param.name) or fields_dict.get('_' + param.name)
-
-            # Only process attributes with converter
-            if attribute is not None and attribute.converter:
-                # Retrieving converter's first (and only) parameter
-                converter_sig = inspect.signature(attribute.converter)
-                converter_param = next(iter(converter_sig.parameters.values()))
-                # And use this parameter's annotation for our own
-                param = param.replace(annotation=converter_param.annotation)
-
-            return param
-
-        init_sig = inspect.signature(cls.__init__)
-        new_params = [update_param_from_converter(param) for param in init_sig.parameters.values()]
-        new_annotations = {param.name: param.annotation for param in new_params if param.annotation}
-        cls.__init__.__signature__ = init_sig.replace(parameters=new_params)
-        cls.__init__.__annotations__ = new_annotations
-
-    return cls
+    return Any
 
 
 class BaseTolokaObjectMetaclass(type):
@@ -176,9 +132,12 @@ class BaseTolokaObjectMetaclass(type):
                 )
 
             if field.metadata.get(AUTOCAST_KEY):
+                def on_setattr(self, attrib, value, f=get_autocast_converter(field.type)):
+                    return f(value)
+
                 field = field.evolve(
                     converter=get_autocast_converter(field.type),
-                    on_setattr=lambda self, attrib, value, type_=field.type: converter.structure(value, type_),
+                    on_setattr=on_setattr,
                 )
 
             transformed_fields.append(field)
@@ -327,3 +286,55 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
         obj = cls(**kwargs)
         obj._unexpected = data
         return obj
+
+
+def autocast_to_enum(func: typing.Callable) -> typing.Callable:
+    """Function decorator that performs str -> Enum conversion when decorated function is called
+
+    This decorator modifies function so that every argument annotated with any subclass of Enum type (including Enum
+    itself) can be passed a value of str (or any )
+    """
+    signature = inspect.signature(func)
+    new_params = []
+    # cattr supports structuring of generic types (i.e. List, Dict) instances. We want to perform only str -> Enum
+    # structuring conversion. It is possible to achieve this behaviour by replacing any other than Enum types with
+    # Any type hint (cattr structures data to Any type simply by passing through data without any conversion). Special
+    # case is Union[Enum, Any] which is supported in _converter.py.
+    casting_types = []
+    casting_converter = partial(replace_with_any_if_not_whitelisted, types_whitelist=(Enum,))
+    for param in signature.parameters.values():
+        new_params.append(param.replace(annotation=convert_type_recursively(param.annotation, enum_type_to_union)))
+        casting_types.append(convert_type_recursively(param.annotation, casting_converter))
+
+    signature = signature.replace(parameters=new_params)
+
+    def wrapper(*args, **kwargs):
+        bound_arguments = signature.bind(*args, **kwargs)
+        new_args = {}
+        for (argument_name, argument_value), casting_type, parameter in zip(bound_arguments.arguments.items(),
+                                                                            casting_types,
+                                                                            signature.parameters.values()):
+            new_args[argument_name] = converter.structure(argument_value, casting_type)
+        return func(**new_args)
+
+    update_wrapper(wrapper, func)
+    wrapper.__signature__ = signature
+    wrapper.__casting_types = casting_types
+
+    return wrapper
+
+
+class ExpandParametersMetaclass(BaseTolokaObjectMetaclass):
+
+    def __new__(mcs, name, bases, namespace, **kwargs):
+        if 'Parameters' in namespace:
+            namespace.setdefault('__annotations__', {})['parameters'] = namespace['Parameters']
+        cls = super().__new__(mcs, name, bases, namespace, **kwargs)
+        cls.__init__ = expand('parameters')(cls.__init__)
+
+        return cls
+
+
+class BaseParameters(BaseTolokaObject, metaclass=ExpandParametersMetaclass):
+    class Parameters(BaseTolokaObject):
+        pass

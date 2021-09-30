@@ -1,10 +1,10 @@
+import unittest.mock as mock
+
 import pytest
 import requests
-import unittest.mock as mock
 import urllib3
-from urllib3.util.retry import Retry
-
 from toloka.client import TolokaClient
+from urllib3.util import Retry
 
 
 def urllib_request_mock(self, *args, **kwargs):
@@ -36,3 +36,33 @@ def test_retries_from_class():
         with pytest.raises(requests.exceptions.ConnectionError):
             toloka_client.get_requester()
         assert request_mock.call_count == 3
+
+
+def test_socket_timeout_is_retried(reset_sleepy_server, server_port, server_url, fake_requester):
+    sleepy_server_url, retries_before_response = reset_sleepy_server
+
+    toloka_client = TolokaClient(
+        'fake-token',
+        url=sleepy_server_url,
+        timeout=0.1,
+        retryer_factory=lambda: Retry(retries_before_response, backoff_factor=0)
+    )
+
+    assert toloka_client.get_requester() == fake_requester
+
+
+def test_socket_connection_error_when_not_retried_enough(reset_sleepy_server, server_port, server_url, fake_requester):
+    sleepy_server_url, retries_before_response = reset_sleepy_server
+
+    toloka_client = TolokaClient(
+        'fake-token',
+        url=sleepy_server_url,
+        timeout=0.1,
+        retryer_factory=lambda: Retry(retries_before_response - 1, backoff_factor=0)
+    )
+
+    with pytest.raises(requests.exceptions.ConnectionError):
+        toloka_client.get_requester()
+
+    retries_left = int(requests.get(f'{sleepy_server_url}/retries_before_response').text)
+    assert retries_left == 0

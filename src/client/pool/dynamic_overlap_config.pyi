@@ -2,7 +2,7 @@ __all__ = [
     'DynamicOverlapConfig',
 ]
 import toloka.client.primitives.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -22,7 +22,7 @@ class DynamicOverlapConfig(toloka.client.primitives.base.BaseTolokaObject):
         fields: Output data fields to use for aggregating responses.
     """
 
-    class Type(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Type(toloka.util._extendable_enum.ExtendableStrEnum):
         """The algorithm for dynamic overlap.
 
         Atttributes:

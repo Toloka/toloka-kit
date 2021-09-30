@@ -3,7 +3,7 @@ __all__ = [
 ]
 import datetime
 import toloka.client.primitives.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -18,7 +18,7 @@ class WebhookSubscription(toloka.client.primitives.base.BaseTolokaObject):
         created: When this pool was created. Read only field.
     """
 
-    class EventType(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class EventType(toloka.util._extendable_enum.ExtendableStrEnum):
         """Webhook subscription event type:
 
         Attributes:

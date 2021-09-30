@@ -2,7 +2,7 @@ __all__ = [
     'TaskDistributionFunction',
 ]
 import toloka.client.primitives.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -24,14 +24,14 @@ class TaskDistributionFunction(toloka.client.primitives.base.BaseTolokaObject):
         intervals: Interval borders and number of tasks in an interval.
     """
 
-    class Scope(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Scope(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 
         PROJECT = 'PROJECT'
         POOL = 'POOL'
 
-    class Distribution(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Distribution(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 

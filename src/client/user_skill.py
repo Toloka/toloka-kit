@@ -6,7 +6,8 @@ from attr.validators import optional, instance_of
 import datetime
 from decimal import Decimal
 
-from .primitives.base import attribute, BaseTolokaObject
+from .primitives.base import BaseTolokaObject
+from ..util._codegen import attribute
 
 
 class SetUserSkillRequest(BaseTolokaObject):

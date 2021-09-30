@@ -15,7 +15,7 @@ __all__ = [
     'EstimatedAssignmentsCountPoolAnalytics',
 ]
 import toloka.client.primitives.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -28,7 +28,7 @@ class AnalyticsRequest(toloka.client.primitives.base.BaseTolokaObject):
         subject_id: ID of the object you want to get analytics about.
     """
 
-    class Subject(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Subject(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 
@@ -52,7 +52,7 @@ class PoolAnalyticsRequest(AnalyticsRequest):
         subject_id: ID of the object you want to get analytics about.
     """
 
-    class Subject(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Subject(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 

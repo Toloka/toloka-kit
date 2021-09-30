@@ -12,10 +12,15 @@ __all__ = [
     'UserBonusSearchResult',
     'UserRestrictionSearchResult',
     'UserSkillSearchResult',
-    'WebhookSubscriptionSearchResult'
+    'WebhookSubscriptionSearchResult',
+    'AppProjectSearchResult',
+    'AppSearchResult',
+    'AppItemSearchResult',
+    'AppBatchSearchResult'
 ]
 from typing import Type, List, Optional
 from .aggregation import AggregatedSolution
+from .app import App, AppItem, AppProject, AppBatch
 from .assignment import Assignment
 from .attachment import Attachment
 from .message_thread import MessageThread
@@ -32,11 +37,11 @@ from .user_skill import UserSkill
 from .webhook_subscription import WebhookSubscription
 
 
-def _create_search_result_class_for(type_: Type, docstring: Optional[str] = None):
+def _create_search_result_class_for(type_: Type, docstring: Optional[str] = None, items_field: str = 'items'):
     cls = BaseTolokaObjectMetaclass(
         f'{type_.__name__}SearchResult',
         (BaseTolokaObject,),
-        {'__annotations__': {'items': List[type_], 'has_more': bool}},
+        {'__annotations__': {items_field: List[type_], 'has_more': bool}},
     )
     cls.__module__ = __name__
     cls.__doc__ = docstring
@@ -223,4 +228,20 @@ WebhookSubscriptionSearchResult = _create_search_result_class_for(
             * True - Not all elements are included in the output due to restrictions in the limit parameter.
             * False - The output lists all the items.
     """
+)
+AppProjectSearchResult = _create_search_result_class_for(
+    AppProject,
+    items_field='content'
+)
+AppSearchResult = _create_search_result_class_for(
+    App,
+    items_field='content'
+)
+AppItemSearchResult = _create_search_result_class_for(
+    AppItem,
+    items_field='content'
+)
+AppBatchSearchResult = _create_search_result_class_for(
+    AppBatch,
+    items_field='content'
 )

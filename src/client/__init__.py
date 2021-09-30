@@ -2,6 +2,7 @@ __all__ = [
     'actions',
     'aggregation',
     'analytics_request',
+    'app',
     'assignment',
     'attachment',
     'batch_create_results',
@@ -45,6 +46,12 @@ __all__ = [
     'UserBonus',
     'Pool',
     'Project',
+    'AppProject',
+    'App',
+    'AppItem',
+    'AppItemsCreateRequest',
+    'AppBatch',
+    'AppBatchCreateRequest',
 ]
 
 import attr
@@ -60,13 +67,13 @@ import uuid
 
 from decimal import Decimal
 from enum import Enum, unique
-from requests.adapters import HTTPAdapter
 from typing import BinaryIO, Callable, Generator, List, Optional, Tuple, Union
 from urllib3.util.retry import Retry
 
 from . import actions
 from . import aggregation
 from . import analytics_request
+from . import app
 from . import assignment
 from . import attachment
 from . import batch_create_results
@@ -99,6 +106,7 @@ from ..__version__ import __version__
 from ._converter import structure, unstructure
 from .aggregation import AggregatedSolution
 from .analytics_request import AnalyticsRequest
+from .app import App, AppItem, AppProject, AppBatch, AppBatchCreateRequest, AppItemsCreateRequest
 from .assignment import Assignment, AssignmentPatch, GetAssignmentsTsvParameters
 from .attachment import Attachment
 from .clone_results import CloneResults
@@ -108,7 +116,8 @@ from .message_thread import (
 )
 from .operation_log import OperationLogItem
 from .pool import Pool, PoolPatchRequest
-from .primitives.retry import TolokaRetry
+from .primitives.retry import TolokaRetry, PreloadingHTTPAdapter
+from .primitives.base import autocast_to_enum
 from .project import Project
 from .training import Training
 from .requester import Requester
@@ -118,7 +127,7 @@ from .task_suite import TaskSuite
 from .user_bonus import UserBonus, UserBonusCreateRequestParameters
 from .user_restriction import UserRestriction
 from .user_skill import SetUserSkillRequest, UserSkill
-from .util._codegen import expand
+from ..util._codegen import expand
 from .webhook_subscription import WebhookSubscription
 
 logger = logging.getLogger(__name__)
@@ -237,7 +246,7 @@ class TolokaClient:
 
     @functools.lru_cache(maxsize=128)
     def _session_for_thread(self, thread_id: int) -> requests.Session:
-        adapter = HTTPAdapter(max_retries=self.retryer_factory())
+        adapter = PreloadingHTTPAdapter(max_retries=self.retryer_factory())
         session = requests.Session()
         session.mount(self.url, adapter)
         session.headers.update(
@@ -277,14 +286,16 @@ class TolokaClient:
             params['limit'] = limit
         return self._request(method, path, params=params)
 
-    def _find_all(self, find_function, request, sort_field: str = 'id'):
+    def _find_all(self, find_function, request, sort_field: str = 'id', items_field: str = 'items'):
         result = find_function(request, sort=[sort_field])
+        items = getattr(result, items_field)
         while result.has_more:
-            request = attr.evolve(request, **{f'{sort_field}_gt': getattr(result.items[-1], sort_field)})
-            yield from result.items
+            request = attr.evolve(request, **{f'{sort_field}_gt': getattr(items[-1], sort_field)})
+            yield from items
             result = find_function(request, sort=[sort_field])
+            items = getattr(result, items_field)
 
-        yield from result.items
+        yield from items
 
     def _sync_via_async(self, objects, parameters, url, result_type, operation_type, output_id_field, get_method):
         if not parameters.async_mode:
@@ -699,7 +710,11 @@ class TolokaClient:
 
     # Message section
 
-    def add_message_thread_to_folders(self, message_thread_id: str, folders: Union[List[Folder], MessageThreadFolders]) -> MessageThread:
+    @autocast_to_enum
+    def add_message_thread_to_folders(
+        self,
+        message_thread_id: str, folders: Union[List[Folder], MessageThreadFolders]
+    ) -> MessageThread:
         """Adds a message chain to one or more folders ("unread", "important" etc.)
 
         Args:
@@ -817,6 +832,7 @@ class TolokaClient:
         """
         return self._find_all(self.find_message_threads, request)
 
+    @autocast_to_enum
     def remove_message_thread_from_folders(self, message_thread_id: str, folders: Union[List[Folder], MessageThreadFolders]) -> MessageThread:
         """Deletes a message chain from one or more folders ("unread", "important" etc.)
 
@@ -2967,3 +2983,183 @@ class TolokaClient:
         response = self._raw_request('get', f'/new/requester/pools/{pool_id}/assignments.tsv',
                                      params=unstructure(parameters))
         return pd.read_csv(io.StringIO(response.text), delimiter='\t')
+
+    # toloka apps
+
+    @expand('request')
+    def find_app_projects(self, request: search_requests.AppProjectSearchRequest,
+                          sort: Union[List[str], search_requests.AppProjectSortItems, None] = None,
+                          limit: Optional[int] = None) -> search_results.AppProjectSearchResult:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        sort = None if sort is None else structure(sort, search_requests.AppProjectSortItems)
+        response = self._search_request('get', '/app/v0/app-projects', request, sort, limit)
+        return structure(response, search_results.AppProjectSearchResult)
+
+    @expand('request')
+    def get_app_projects(self, request: search_requests.AppProjectSearchRequest) -> Generator[AppProject, None, None]:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        return self._find_all(self.find_app_projects, request, sort_field='created', items_field='content')
+
+    def create_app_project(self, app_project: AppProject) -> AppProject:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        response = self._request('post', '/app/v0/app-projects', json=unstructure(app_project))
+        return structure(response, AppProject)
+
+    def get_app_project(self, app_project_id: str) -> AppProject:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        response = self._request('get', f'/app/v0/app-projects/{app_project_id}')
+        return structure(response, AppProject)
+
+    def archive_app_project(self, app_project_id: str) -> AppProject:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/archive')
+        return self.get_app_project(app_project_id)
+
+    def unarchive_app_project(self, app_project_id: str) -> AppProject:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/unarchive')
+        return self.get_app_project(app_project_id)
+
+    @expand('request')
+    def find_apps(self, request: search_requests.AppSearchRequest,
+                          sort: Union[List[str], search_requests.AppSortItems, None] = None,
+                          limit: Optional[int] = None) -> search_results.AppSearchResult:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        sort = None if sort is None else structure(sort, search_requests.AppSearchRequest)
+        response = self._search_request('get', '/app/v0/apps', request, sort, limit)
+        return structure(response, search_results.AppSearchResult)
+
+    @expand('request')
+    def get_apps(self, request: search_requests.AppSearchRequest) -> Generator[App, None, None]:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        return self._find_all(self.find_apps, request, sort_field='name', items_field='content')
+
+    def get_app(self, app_id: str) -> App:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        response = self._request('get', f'/app/v0/apps/{app_id}')
+        return structure(response, App)
+
+    @expand('request')
+    def find_app_items(self, app_project_id: str,
+                          request: search_requests.AppItemSearchRequest,
+                          sort: Union[List[str], search_requests.AppItemSortItems, None] = None,
+                          limit: Optional[int] = None) -> search_results.AppItemSearchResult:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        sort = None if sort is None else structure(sort, search_requests.AppItemSortItems)
+        response = self._search_request('get', f'/app/v0/app-projects/{app_project_id}/items', request, sort, limit)
+        return structure(response, search_results.AppItemSearchResult)
+
+    @expand('request')
+    def get_app_items(self,
+                      app_project_id: str,
+                      request: search_requests.AppProjectSearchRequest) -> Generator[AppItem, None, None]:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        find_function = functools.partial(self.find_app_items, app_project_id)
+        return self._find_all(find_function, request, sort_field='created', items_field='content')
+
+    def create_app_item(self, app_project_id: str, app_item: AppItem) -> AppItem:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        response = self._request('post', f'/app/v0/app-projects{app_project_id}/items', json=unstructure(app_item))
+        return structure(response, AppItem)
+
+    @expand('request')
+    def create_app_items(self, app_project_id: str, request: AppItemsCreateRequest):
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/items/bulk', json=unstructure(request))
+        return
+
+    def get_app_item(self, app_project_id: str, app_item_id: str) -> AppItem:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        response = self._request('get', f'/app/v0/app-projects/{app_project_id}/items/{app_item_id}')
+        return structure(response, AppItem)
+
+    @expand('request')
+    def find_app_batches(self, app_project_id: str,
+                         request: search_requests.AppBatchSearchRequest,
+                         sort: Union[List[str], search_requests.AppBatchSortItems, None] = None,
+                         limit: Optional[int] = None) -> search_results.AppBatchSearchResult:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        sort = None if sort is None else structure(sort, search_requests.AppBatchSearchRequest)
+        response = self._search_request('get', f'/app/v0/app-projects/{app_project_id}/batches', request, sort, limit)
+        return structure(response, search_results.AppBatchSearchResult)
+
+    @expand('request')
+    def get_app_batches(self,
+                        app_project_id: str,
+                        request: search_requests.AppBatchSearchRequest) -> Generator[AppBatch, None, None]:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        find_function = functools.partial(self.find_app_items, app_project_id)
+        return self._find_all(find_function, request, sort_field='created', items_field='content')
+
+    @expand('request')
+    def create_app_batch(self, app_project_id: str, request: AppBatchCreateRequest) -> AppBatch:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        response = self._request('post', f'/app/v0/app-projects/{app_project_id}/batches', json=unstructure(request))
+        return structure(response, AppBatch)
+
+    def get_app_batch(self, app_project_id: str, app_batch_id: str) -> AppBatch:
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        response = self._request('get', f'/app/v0/app-projects/{app_project_id}/batches/{app_batch_id}')
+        return structure(response, AppBatch)
+
+    def start_app_batch(self, app_project_id: str, app_batch_id: str):
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/batches/{app_batch_id}/start')
+        return

@@ -7,7 +7,7 @@ __all__ = [
     'TolokaPluginV1',
 ]
 import toloka.client.project.template_builder.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -309,7 +309,7 @@ class TolokaPluginV1(BasePluginV1):
         """How to display task.
         """
 
-        class Kind(toloka.client.util._extendable_enum.ExtendableStrEnum):
+        class Kind(toloka.util._extendable_enum.ExtendableStrEnum):
             """An enumeration.
 
             Attributes:

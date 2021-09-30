@@ -12,11 +12,11 @@ __all__ = [
     'ListSize',
 ]
 import toloka.client.primitives.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
-class ComponentType(toloka.client.util._extendable_enum.ExtendableStrEnum):
+class ComponentType(toloka.util._extendable_enum.ExtendableStrEnum):
     """An enumeration.
     """
 
@@ -182,7 +182,7 @@ class RefComponent(BaseTemplate):
     ref: typing.Optional[str]
 
 
-class ListDirection(toloka.client.util._extendable_enum.ExtendableStrEnum):
+class ListDirection(toloka.util._extendable_enum.ExtendableStrEnum):
     """An enumeration.
     """
 
@@ -190,7 +190,7 @@ class ListDirection(toloka.client.util._extendable_enum.ExtendableStrEnum):
     VERTICAL = 'vertical'
 
 
-class ListSize(toloka.client.util._extendable_enum.ExtendableStrEnum):
+class ListSize(toloka.util._extendable_enum.ExtendableStrEnum):
     """An enumeration.
     """
 

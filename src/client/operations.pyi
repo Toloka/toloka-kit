@@ -20,11 +20,11 @@ __all__ = [
 ]
 import datetime
 import toloka.client.primitives.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
-class OperationType(toloka.client.util._extendable_enum.ExtendableStrEnum):
+class OperationType(toloka.util._extendable_enum.ExtendableStrEnum):
     """An enumeration.
     """
 
@@ -62,7 +62,7 @@ class Operation(toloka.client.primitives.base.BaseTolokaObject):
         details: Details of the operation completion.
     """
 
-    class Status(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Status(toloka.util._extendable_enum.ExtendableStrEnum):
         """The status of the operation:
 
         Attributes:

@@ -22,9 +22,9 @@ from uuid import UUID
 
 from .conditions import RuleCondition
 from .conditions import RuleConditionKey
-from .util._codegen import BaseParameters
-from .util._docstrings import inherit_docstrings
-from .util._extendable_enum import ExtendableStrEnum
+from .primitives.base import BaseParameters
+from ..util._docstrings import inherit_docstrings
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 class CollectorConfig(BaseParameters, spec_enum='Type', spec_field='type'):
@@ -405,7 +405,7 @@ class MajorityVote(CollectorConfig, spec_value=CollectorConfig.Type.MAJORITY_VOT
             responses in the pool.
 
     Example:
-        How to ban a performer in this project if he made enough answers.
+        How to ban a performer in this project if he made enough answers (only for pools with post acceptance).
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(

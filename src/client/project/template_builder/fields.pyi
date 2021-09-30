@@ -21,7 +21,7 @@ __all__ = [
     'TextareaFieldV1',
 ]
 import toloka.client.project.template_builder.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -479,7 +479,7 @@ class ImageAnnotationFieldV1(BaseFieldV1):
         label: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, str]]
         value: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, str]]
 
-    class Shape(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Shape(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 

@@ -17,7 +17,7 @@ import toloka.client.pool.mixer_config
 import toloka.client.primitives.base
 import toloka.client.quality_control
 import toloka.client.task_distribution_function
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 from toloka.client.pool import (
@@ -130,7 +130,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
         _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
         issue_task_suites_in_creation_order: typing.Optional[bool]
 
-    class CloseReason(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class CloseReason(toloka.util._extendable_enum.ExtendableStrEnum):
         """The reason for closing the pool the last time:
 
         Attributes:
@@ -175,7 +175,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
         default_overlap_for_new_task_suites: typing.Optional[int]
         default_overlap_for_new_tasks: typing.Optional[int]
 
-    class Status(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Status(toloka.util._extendable_enum.ExtendableStrEnum):
         """Status of the pool
 
         Attributes:
@@ -199,7 +199,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
         _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
         training_skill_ttl_days: typing.Optional[int]
 
-    class Type(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Type(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 

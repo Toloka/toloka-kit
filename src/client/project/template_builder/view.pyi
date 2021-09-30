@@ -18,7 +18,7 @@ __all__ = [
     'VideoViewV1',
 ]
 import toloka.client.project.template_builder.base
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
@@ -89,7 +89,7 @@ class AlertViewV1(BaseViewV1):
         validation: Validation based on condition.
     """
 
-    class Theme(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Theme(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration
 
         Attributes:

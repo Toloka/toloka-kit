@@ -1,15 +1,22 @@
-__all__: list = ['BaseParameters']
+__all__: list = [
+    'attribute',
+    'fix_attrs_converters',
+]
 import functools
 import linecache
 import uuid
-from inspect import signature, Signature, Parameter, BoundArguments
+from inspect import isclass, signature, Signature, Parameter, BoundArguments
 from textwrap import dedent, indent
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type
 
 import attr
 
-from ..primitives.base import BaseTolokaObject, BaseTolokaObjectMetaclass, READONLY_KEY
 from ..util._typing import is_optional_of
+
+REQUIRED_KEY = 'toloka_field_required'
+ORIGIN_KEY = 'toloka_field_origin'
+READONLY_KEY = 'toloka_field_readonly'
+AUTOCAST_KEY = 'toloka_field_autocast'
 
 
 def _get_signature(func: Callable) -> Signature:
@@ -202,12 +209,18 @@ def _check_arg_type_compatibility(func_sig: Signature, arg_name: str, arg_type: 
 def expand(arg_name: str, arg_type: Optional[Type] = None, check_type: bool = True) -> Callable:
     """Allows you to call function also via passing values for creating "arg_name", not only via passing an instance of "arg_name"
 
+    If used on class, expands some argument in __init__
+
     Args:
         arg_name: Parameter that will be expanded.
         arg_type: Specify the type of this parameter. Defaults to None and calc it themselves.
         check_type: If True, check that one argument has a compatible type for none expanded version. If not, calls an expanded version. Defaults to True.
     """
     def wrapper(func):
+        if isclass(func):
+            func.__init__ = expand(arg_name, arg_type, check_type)(func.__init__)
+            return func
+
         func_sig: Signature = _get_signature(func)
         expanded_func: Callable = expand_func_by_argument(func, arg_name, arg_type)
         expanded_func_sig: Signature = _get_signature(expanded_func)
@@ -238,17 +251,62 @@ def expand(arg_name: str, arg_type: Optional[Type] = None, check_type: bool = Tr
     return wrapper
 
 
-class ExpandParametersMetaclass(BaseTolokaObjectMetaclass):
+def attribute(*args, required: bool = False, origin: Optional[str] = None, readonly: bool = False,
+              autocast: bool = False, **kwargs):
+    """Proxy for attr.attrib(...). Adds several keywords.
 
-    def __new__(mcs, name, bases, namespace, **kwargs):
-        if 'Parameters' in namespace:
-            namespace.setdefault('__annotations__', {})['parameters'] = namespace['Parameters']
-        cls = super().__new__(mcs, name, bases, namespace, **kwargs)
-        cls.__init__ = expand('parameters')(cls.__init__)
+    Args:
+        *args: All positional arguments from attr.attrib
+        required: If True makes attribute not Optional. All other attributes are optional by default. Defaults to False.
+        origin: Sets field name in dict for attribute, when structuring/unstructuring from dict. Defaults to None.
+        readonly: Affects only when the class 'expanding' as a parameter in some function. If True, drops this attribute from expanded parameters. Defaults to None.
+        autocast: If True then converter.structure will be used to convert input value
+        **kwargs: All keyword arguments from attr.attrib
+    """
+    metadata = {}
+    if required:
+        metadata[REQUIRED_KEY] = True
+    if origin:
+        metadata[ORIGIN_KEY] = origin
+    if readonly:
+        metadata[READONLY_KEY] = True
+    if autocast:
+        metadata[AUTOCAST_KEY] = True
+    return attr.attrib(*args, metadata=metadata, **kwargs)
 
-        return cls
 
+def fix_attrs_converters(cls):
+    """
+    Due to https://github.com/Toloka/toloka-kit/issues/37 we have to support attrs>=20.3.0.
+    This version lacks a feature that uses converters' annotations in class's __init__
+    (see https://github.com/python-attrs/attrs/pull/710)). This decorator brings this feature
+    to older attrs versions.
+    """
 
-class BaseParameters(BaseTolokaObject, metaclass=ExpandParametersMetaclass):
-    class Parameters(BaseTolokaObject):
-        pass
+    if attr.__version__ < '21.0.3':
+        fields_dict = attr.fields_dict(cls)
+
+        def update_param_from_converter(param):
+
+            # Trying to figure out which attribute this parameter is responsible for.
+            # Note that attr stips leading underscores from attribute names, so we
+            # check both name and _name.
+            attribute = fields_dict.get(param.name) or fields_dict.get('_' + param.name)
+
+            # Only process attributes with converter
+            if attribute is not None and attribute.converter:
+                # Retrieving converter's first (and only) parameter
+                converter_sig = signature(attribute.converter)
+                converter_param = next(iter(converter_sig.parameters.values()))
+                # And use this parameter's annotation for our own
+                param = param.replace(annotation=converter_param.annotation)
+
+            return param
+
+        init_sig = signature(cls.__init__)
+        new_params = [update_param_from_converter(param) for param in init_sig.parameters.values()]
+        new_annotations = {param.name: param.annotation for param in new_params if param.annotation}
+        cls.__init__.__signature__ = init_sig.replace(parameters=new_params)
+        cls.__init__.__annotations__ = new_annotations
+
+    return cls

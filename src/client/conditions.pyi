@@ -31,11 +31,11 @@ __all__ = [
 ]
 import toloka.client.primitives.base
 import toloka.client.primitives.operators
-import toloka.client.util._extendable_enum
+import toloka.util._extendable_enum
 import typing
 
 
-class RuleConditionKey(toloka.client.util._extendable_enum.ExtendableStrEnum):
+class RuleConditionKey(toloka.util._extendable_enum.ExtendableStrEnum):
     """An enumeration.
     """
 
@@ -178,7 +178,7 @@ class AssessmentEvent(IdentityRuleCondition):
         ...
     """
 
-    class Type(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Type(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 
@@ -414,7 +414,7 @@ class PoolAccessRevokedReason(IdentityRuleCondition):
                 majority vote, fast answers, skipped assignments, or captcha).
     """
 
-    class Type(toloka.client.util._extendable_enum.ExtendableStrEnum):
+    class Type(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
 

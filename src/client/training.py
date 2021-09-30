@@ -4,9 +4,9 @@ from enum import unique
 from typing import Dict, List
 
 from .owner import Owner
-from .primitives.base import attribute, BaseTolokaObject
-from .util._codegen import codegen_attr_attributes_setters
-from .util._extendable_enum import ExtendableStrEnum
+from .primitives.base import BaseTolokaObject
+from ..util._codegen import attribute, codegen_attr_attributes_setters
+from ..util._extendable_enum import ExtendableStrEnum
 
 
 @codegen_attr_attributes_setters

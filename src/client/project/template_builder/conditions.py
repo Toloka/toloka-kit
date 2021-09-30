@@ -17,7 +17,7 @@ __all__ = [
 ]
 from typing import List, Any, Dict
 
-from ...primitives.base import attribute
+from ....util._codegen import attribute
 
 from .base import BaseComponent, ComponentType, VersionedBaseComponentMetaclass, base_component_or
 

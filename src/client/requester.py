@@ -3,7 +3,8 @@ from attr.validators import optional, instance_of
 from decimal import Decimal
 from typing import Dict
 
-from .primitives.base import attribute, BaseTolokaObject
+from .primitives.base import BaseTolokaObject
+from ..util._codegen import attribute
 
 
 class Requester(BaseTolokaObject):
