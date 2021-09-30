@@ -1,13 +1,14 @@
 __all__ = [
-    'TolokaRetry',
+    'TolokaRetry', 'PreloadingHTTPAdapter'
 ]
 
 import json
 import logging
+from functools import wraps
+from requests.adapters import HTTPAdapter
 from typing import Optional, List, Union
 from urllib3.response import HTTPResponse  # type: ignore
 from urllib3.util.retry import Retry  # type: ignore
-
 
 logger = logging.getLogger(__name__)
 
@@ -81,3 +82,36 @@ class TolokaRetry(Retry):
         except json.JSONDecodeError:
             pass
         return super(TolokaRetry, self).increment(*args, **kwargs)
+
+
+class PreloadingHTTPAdapter(HTTPAdapter):
+    """HTTPAdapter subclass that forces preload_content=True during requests
+
+    As for current version (2.26.0) requests supports body preloading with stream=False, but this behaviour is
+    implemented by calling response.content in the end of request process. Such implementation does not support
+    retries in case of headers being correctly received by client but body being loaded incorrectly (i.e. when server
+    uses chunked transfer encoding and fails during body transmission). Retries are handled on urllib3 level and
+    retrying failed body read can be achieved by passing preload_content=False to urllib3.response.HTTPResponse. To do
+    this using HTTPAdapter we need to use HTTP(S)ConnectionPool.urlopen with preload_content=True during send method and
+    override build_response method to populate requests Response wrapper with content.
+    """
+
+    @staticmethod
+    def _override_preload_content(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            kwargs['preload_content'] = True
+            resp = func(*args, **kwargs)
+            return resp
+
+        return wrapper
+
+    def build_response(self, req, resp):
+        response = super().build_response(req, resp)
+        response._content = resp.data
+        return response
+
+    def get_connection(self, *args, **kwargs):
+        connection = super().get_connection(*args, **kwargs)
+        connection.urlopen = self._override_preload_content(connection.urlopen)
+        return connection

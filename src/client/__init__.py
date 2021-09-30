@@ -60,7 +60,6 @@ import uuid
 
 from decimal import Decimal
 from enum import Enum, unique
-from requests.adapters import HTTPAdapter
 from typing import BinaryIO, Callable, Generator, List, Optional, Tuple, Union
 from urllib3.util.retry import Retry
 
@@ -108,7 +107,7 @@ from .message_thread import (
 )
 from .operation_log import OperationLogItem
 from .pool import Pool, PoolPatchRequest
-from .primitives.retry import TolokaRetry
+from .primitives.retry import TolokaRetry, PreloadingHTTPAdapter
 from .primitives.base import autocast_to_enum
 from .project import Project
 from .training import Training
@@ -238,7 +237,7 @@ class TolokaClient:
 
     @functools.lru_cache(maxsize=128)
     def _session_for_thread(self, thread_id: int) -> requests.Session:
-        adapter = HTTPAdapter(max_retries=self.retryer_factory())
+        adapter = PreloadingHTTPAdapter(max_retries=self.retryer_factory())
         session = requests.Session()
         session.mount(self.url, adapter)
         session.headers.update(
