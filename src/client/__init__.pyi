@@ -4768,27 +4768,20 @@ class TolokaClient:
     def get_app_items(
         self,
         app_project_id: str,
-        request: toloka.client.search_requests.AppProjectSearchRequest
+        request: toloka.client.search_requests.AppItemSearchRequest
     ) -> typing.Generator[toloka.client.app.AppItem, None, None]: ...
 
     @typing.overload
     def get_app_items(
         self,
         app_project_id: str,
-        app_id: typing.Optional[str] = None,
-        parent_app_project_id: typing.Optional[str] = None,
-        status: typing.Optional[toloka.client.app.AppProject.Status] = None,
         after_id: typing.Optional[str] = None,
-        scope: typing.Optional[toloka.client.search_requests.AppProjectSearchRequest.Scope] = None,
-        requester_ids: typing.Union[str, typing.List[str]] = None,
+        batch_id: typing.Optional[str] = None,
+        status: typing.Optional[toloka.client.app.AppItem.Status] = None,
         id_lt: typing.Optional[str] = None,
         id_lte: typing.Optional[str] = None,
         id_gt: typing.Optional[str] = None,
         id_gte: typing.Optional[str] = None,
-        name_lt: typing.Optional[str] = None,
-        name_lte: typing.Optional[str] = None,
-        name_gt: typing.Optional[str] = None,
-        name_gte: typing.Optional[str] = None,
         created_lt: typing.Optional[datetime.datetime] = None,
         created_lte: typing.Optional[datetime.datetime] = None,
         created_gt: typing.Optional[datetime.datetime] = None,

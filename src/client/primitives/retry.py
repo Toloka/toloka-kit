@@ -101,6 +101,7 @@ class PreloadingHTTPAdapter(HTTPAdapter):
         @wraps(func)
         def wrapper(*args, **kwargs):
             kwargs['preload_content'] = True
+            kwargs['decode_content'] = True
             resp = func(*args, **kwargs)
             return resp
 
