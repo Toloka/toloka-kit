@@ -39,6 +39,22 @@ def training_map_with_readonly(training_map):
     }
 
 
+@pytest.fixture
+def open_training_map_with_readonly(training_map_with_readonly):
+    return {
+        **training_map_with_readonly,
+        'status': 'OPEN'
+    }
+
+
+@pytest.fixture
+def archived_training_map_with_readonly(training_map_with_readonly):
+    return {
+        **training_map_with_readonly,
+        'status': 'ARCHIVED'
+    }
+
+
 def test_find_trainings(requests_mock, toloka_client, toloka_url, training_map_with_readonly):
     raw_result = {'items': [training_map_with_readonly], 'has_more': False}
 
@@ -200,6 +216,15 @@ def test_open_training(requests_mock, toloka_client, toloka_url,
 
 
 @pytest.fixture
+def test_open_training_already_opened(requests_mock, toloka_client, toloka_url, open_training_map_with_readonly):
+    requests_mock.post(f'{toloka_url}/trainings/21/open', [{'status_code': 204}])
+    requests_mock.get(f'{toloka_url}/pools/21', json=open_training_map_with_readonly)
+    assert toloka_client.open_training_async('21') is None
+    result = toloka_client.open_training('21')
+    assert open_training_map_with_readonly == client.unstructure(result)
+
+
+@pytest.fixture
 def close_operation_map():
     return {
         'id': 'close-training-op1id',
@@ -237,6 +262,14 @@ def test_close_training(requests_mock, toloka_client, toloka_url,
     )
     requests_mock.get(f'{toloka_url}/trainings/21', json=training_map_with_readonly, status_code=200)
 
+    result = toloka_client.close_training('21')
+    assert training_map_with_readonly == client.unstructure(result)
+
+
+def test_close_training_already_closed(requests_mock, toloka_client, toloka_url, training_map_with_readonly):
+    requests_mock.post(f'{toloka_url}/trainings/21/close', [{'status_code': 204}])
+    requests_mock.get(f'{toloka_url}/trainings/21', json=training_map_with_readonly)
+    assert toloka_client.close_training_async('21') is None
     result = toloka_client.close_training('21')
     assert training_map_with_readonly == client.unstructure(result)
 
@@ -281,6 +314,15 @@ def test_archive_training(requests_mock, toloka_client, toloka_url,
 
     result = toloka_client.archive_training('21')
     assert training_map_with_readonly == client.unstructure(result)
+
+
+def test_close_archive_training_already_archived(requests_mock, toloka_client, toloka_url,
+                                                 archived_training_map_with_readonly):
+    requests_mock.post(f'{toloka_url}/trainings/21/archive', [{'status_code': 204}])
+    requests_mock.get(f'{toloka_url}/trainings/21', json=archived_training_map_with_readonly)
+    assert toloka_client.archive_training_async('21') is None
+    result = toloka_client.archive_training('21')
+    assert archived_training_map_with_readonly == client.unstructure(result)
 
 
 @pytest.fixture

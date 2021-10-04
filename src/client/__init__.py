@@ -1112,10 +1112,12 @@ class TolokaClient:
             ...
         """
         operation = self.archive_pool_async(pool_id)
-        operation = self.wait_operation(operation)
-        return self.get_pool(operation.parameters.pool_id)
+        if operation:
+            operation = self.wait_operation(operation)
+            operation.raise_on_fail()
+        return self.get_pool(pool_id)
 
-    def archive_pool_async(self, pool_id: str) -> operations.PoolArchiveOperation:
+    def archive_pool_async(self, pool_id: str) -> Optional[operations.PoolArchiveOperation]:
         """Sends pool to archive, asynchronous version
 
         The pool must be in the status "closed".
@@ -1125,7 +1127,8 @@ class TolokaClient:
             pool_id: ID of pool that will be archived.
 
         Returns:
-            PoolArchiveOperation: An operation upon completion of which you can get the pool with updated status.
+            PoolArchiveOperation: An operation upon completion of which you can get the pool with updated status. If
+                pool is already archived then None is returned
 
         Example:
             >>> closed_pool = next(toloka_client.get_pools(status='CLOSED'))
@@ -1133,8 +1136,11 @@ class TolokaClient:
             >>> toloka_client.wait_operation(archive_op)
             ...
         """
-        response = self._request('post', f'/v1/pools/{pool_id}/archive')
-        return structure(response, operations.PoolArchiveOperation)
+        response = self._raw_request('post', f'/v1/pools/{pool_id}/archive')
+        # is pool already archived?
+        if response.status_code == 204:
+            return
+        return structure(response.json(), operations.PoolArchiveOperation)
 
     def close_pool(self, pool_id: str) -> Pool:
         """Stops distributing tasks from the pool
@@ -1152,15 +1158,14 @@ class TolokaClient:
             >>> toloka_client.close_pool(pool_id=open_pool.id)
             ...
         """
-        response = self._raw_request('post', f'/v1/pools/{pool_id}/close')
-        if response.status_code != 204:
-            operation = structure(response.json(parse_float=Decimal), operations.PoolCloseOperation)
+        operation = self.close_pool_async(pool_id)
+        if operation:
             operation = self.wait_operation(operation)
             operation.raise_on_fail()
 
         return self.get_pool(pool_id)
 
-    def close_pool_async(self, pool_id: str) -> operations.PoolCloseOperation:
+    def close_pool_async(self, pool_id: str) -> Optional[operations.PoolCloseOperation]:
         """Stops distributing tasks from the pool, asynchronous version
 
         If all tasks done, the pool will be closed automatically.
@@ -1169,7 +1174,8 @@ class TolokaClient:
             pool_id: ID of the pool that will be closed.
 
         Returns:
-            PoolCloseOperation: An operation upon completion of which you can get the pool with updated status.
+            Optional[PoolCloseOperation]: An operation upon completion of which you can get the pool with updated
+                status. If pool is already closed then None is returned.
 
         Example:
             >>> open_pool = next(toloka_client.get_pools(status='OPEN'))
@@ -1177,30 +1183,51 @@ class TolokaClient:
             >>> toloka_client.wait_operation(close_op)
             ...
         """
-        response = self._request('post', f'/v1/pools/{pool_id}/close')
-        return structure(response, operations.PoolCloseOperation)
+        response = self._raw_request('post', f'/v1/pools/{pool_id}/close')
+        # is pool already closed?
+        if response.status_code == 204:
+            return None
+        return structure(response.json(), operations.PoolCloseOperation)
 
     def close_pool_for_update(self, pool_id: str) -> Pool:
         """Closes pool for update
+
+        Args:
+            pool_id: ID of the pool that will be closed for update.
+
+        Returns:
+            Pool: Pool object with new status.
 
         Example:
             >>> toloka_client.close_pool_for_update(pool_id='1')
             ...
         """
         operation = self.close_pool_for_update_async(pool_id)
-        operation = self.wait_operation(operation)
-        return self.get_pool(operation.parameters.pool_id)
+        if operation:
+            operation = self.wait_operation(operation)
+            operation.raise_on_fail()
+        return self.get_pool(pool_id)
 
-    def close_pool_for_update_async(self, pool_id: str) -> operations.PoolCloseOperation:
+    def close_pool_for_update_async(self, pool_id: str) -> Optional[operations.PoolCloseOperation]:
         """Closes pool for update, asynchronous version
+
+        Args:
+            pool_id: ID of the pool that will be closed for update.
+
+        Returns:
+            Optional[PoolCloseOperation]: An operation upon completion of which you can get the pool with updated
+                status. If pool is already closed for update then None is returned.
 
         Example:
             >>> close_op = toloka_client.close_pool_for_update_async(pool_id='1')
             >>> toloka_client.wait_operation(close_op)
             ...
         """
-        response = self._request('post', f'/v1/pools/{pool_id}/close-for-update')
-        return structure(response, operations.PoolCloseOperation)
+        response = self._raw_request('post', f'/v1/pools/{pool_id}/close-for-update')
+        # is pool already closed for update?
+        if response.status_code == 204:
+            return None
+        return structure(response.json(), operations.PoolCloseOperation)
 
     def clone_pool(self, pool_id: str) -> Pool:
         """Duplicates existing pool
@@ -1384,15 +1411,14 @@ class TolokaClient:
             >>> toloka_client.open_pool(pool_id='1')
             ...
         """
-        response = self._raw_request('post', f'/v1/pools/{pool_id}/open')
-        if response.status_code != 204:
-            operation = structure(response.json(parse_float=Decimal), operations.PoolOpenOperation)
+        operation = self.open_pool_async(pool_id)
+        if operation:
             operation = self.wait_operation(operation)
             operation.raise_on_fail()
 
         return self.get_pool(pool_id)
 
-    def open_pool_async(self, pool_id: str) -> operations.PoolOpenOperation:
+    def open_pool_async(self, pool_id: str) -> Optional[operations.PoolOpenOperation]:
         """Starts distributing tasks from the pool, asynchronous version
 
         Performers will see your tasks only after that call.
@@ -1401,7 +1427,8 @@ class TolokaClient:
             pool_id: ID of the pool that will be started.
 
         Returns:
-            PoolOpenOperation: An operation upon completion of which you can get the pool with new status.
+            PoolOpenOperation: An operation upon completion of which you can get the pool with new status. If pool is
+                already opened then None is returned.
 
         Example:
             Open the pool for performers.
@@ -1410,8 +1437,11 @@ class TolokaClient:
             >>> toloka_client.wait_operation(open_pool)
             ...
         """
-        response = self._request('post', f'/v1/pools/{pool_id}/open')
-        return structure(response, operations.PoolOpenOperation)
+        response = self._raw_request('post', f'/v1/pools/{pool_id}/open')
+        # is pool already opened?
+        if response.status_code == 204:
+            return None
+        return structure(response.json(), operations.PoolOpenOperation)
 
     @expand('request')
     def patch_pool(self, pool_id: str, request: PoolPatchRequest) -> Pool:
@@ -1472,10 +1502,12 @@ class TolokaClient:
             ...
         """
         operation = self.archive_training_async(training_id)
-        operation = self.wait_operation(operation)
-        return self.get_training(operation.parameters.training_id)
+        if operation:
+            operation = self.wait_operation(operation)
+            operation.raise_on_fail()
+        return self.get_training(training_id)
 
-    def archive_training_async(self, training_id: str) -> operations.TrainingArchiveOperation:
+    def archive_training_async(self, training_id: str) -> Optional[operations.TrainingArchiveOperation]:
         """Sends training to archive, asynchronous version
 
         The training must be in the status "closed".
@@ -1485,7 +1517,8 @@ class TolokaClient:
             training_id: ID of training that will be archived.
 
         Returns:
-            TrainingArchiveOperation: An operation upon completion of which you can get the training with updated status.
+            TrainingArchiveOperation: An operation upon completion of which you can get the training with updated
+                status. If pool is already archived then None is returned.
 
         Example:
             >>> closed_training = next(toloka_client.find_trainings(status='CLOSED'))
@@ -1493,8 +1526,11 @@ class TolokaClient:
             >>> toloka_client.wait_operation(archive_op)
             ...
         """
-        response = self._request('post', f'/v1/trainings/{training_id}/archive')
-        return structure(response, operations.TrainingArchiveOperation)
+        response = self._raw_request('post', f'/v1/trainings/{training_id}/archive')
+        # is training already archived?
+        if response.status_code == 204:
+            return
+        return structure(response.json(), operations.TrainingArchiveOperation)
 
     def close_training(self, training_id: str) -> Training:
         """Stops distributing tasks from the training
@@ -1511,10 +1547,12 @@ class TolokaClient:
             ...
         """
         operation = self.close_training_async(training_id)
-        operation = self.wait_operation(operation)
-        return self.get_training(operation.parameters.training_id)
+        if operation:
+            operation = self.wait_operation(operation)
+            operation.raise_on_fail()
+        return self.get_training(training_id)
 
-    def close_training_async(self, training_id: str) -> operations.TrainingCloseOperation:
+    def close_training_async(self, training_id: str) -> Optional[operations.TrainingCloseOperation]:
         """Stops distributing tasks from the training, asynchronous version
 
         Args:
@@ -1522,6 +1560,7 @@ class TolokaClient:
 
         Returns:
             TrainingCloseOperation: An operation upon completion of which you can get the training with updated status.
+                If training is already closed then None is returned.
 
         Example:
             >>> open_training = next(toloka_client.get_trainings(status='OPEN'))
@@ -1529,8 +1568,11 @@ class TolokaClient:
             >>> toloka_client.wait_operation(close_training)
             ...
         """
-        response = self._request('post', f'/v1/trainings/{training_id}/close')
-        return structure(response, operations.TrainingCloseOperation)
+        response = self._raw_request('post', f'/v1/trainings/{training_id}/close')
+        # is training already closed?
+        if response.status_code == 204:
+            return None
+        return structure(response.json(), operations.TrainingCloseOperation)
 
     def clone_training(self, training_id: str) -> Training:
         """Duplicates existing training
@@ -1703,17 +1745,20 @@ class TolokaClient:
             ...
         """
         operation = self.open_training_async(training_id)
-        operation = self.wait_operation(operation)
-        return self.get_training(operation.parameters.training_id)
+        if operation:
+            operation = self.wait_operation(operation)
+            operation.raise_on_fail()
+        return self.get_training(training_id)
 
-    def open_training_async(self, training_id: str) -> operations.TrainingOpenOperation:
+    def open_training_async(self, training_id: str) -> Optional[operations.TrainingOpenOperation]:
         """Starts distributing tasks from the training, asynchronous version
 
         Args:
             training_id: ID of the training that will be started.
 
         Returns:
-            TrainingOpenOperation: An operation upon completion of which you can get the training with new status.
+            TrainingOpenOperation: An operation upon completion of which you can get the training with new status. If
+                training is already opened then None is returned.
 
         Example:
             Open the training for performers.
@@ -1722,8 +1767,11 @@ class TolokaClient:
             >>> toloka_client.wait_operation(open_training)
             ...
         """
-        response = self._request('post', f'/v1/trainings/{training_id}/open')
-        return structure(response, operations.TrainingOpenOperation)
+        response = self._raw_request('post', f'/v1/trainings/{training_id}/open')
+        # is training already opened?
+        if response.status_code == 204:
+            return None
+        return structure(response.json(), operations.TrainingOpenOperation)
 
     def update_training(self, training_id: str, training: Training) -> Training:
         """Makes changes to the training

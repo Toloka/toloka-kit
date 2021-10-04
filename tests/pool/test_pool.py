@@ -368,12 +368,12 @@ def test_open_pool_exception(requests_mock, toloka_client, toloka_url, empty_poo
         toloka_client.open_pool('21')
 
 
-@pytest.mark.xfail(reason='Pseudo operations are not supported yet')
-def test_open_pool_already_open(requests_mock, toloka_client, toloka_url):
+def test_open_pool_already_open(requests_mock, toloka_client, toloka_url, open_pool_map_with_readonly):
     requests_mock.post(f'{toloka_url}/pools/21/open', [{'status_code': 204}])
-    result = toloka_client.wait_operation(toloka_client.open_pool_async('21'))
-    result.is_completed()
-    result.is_pseudo()
+    requests_mock.get(f'{toloka_url}/pools/21', json=open_pool_map_with_readonly)
+    assert toloka_client.open_pool_async('21') is None
+    result = toloka_client.open_pool('21')
+    assert open_pool_map_with_readonly == client.unstructure(result)
 
 
 @pytest.fixture
@@ -409,6 +409,14 @@ def test_close_pool(requests_mock, toloka_client, toloka_url,
     requests_mock.get(f'{toloka_url}/operations/{close_pool_operation_map["id"]}', json=complete_close_pool_operation_map, status_code=200)
     requests_mock.get(f'{toloka_url}/pools/21', json=pool_map_with_readonly, status_code=200)
 
+    result = toloka_client.close_pool('21')
+    assert pool_map_with_readonly == client.unstructure(result)
+
+
+def test_close_pool_already_closed(requests_mock, toloka_client, toloka_url, pool_map_with_readonly):
+    requests_mock.post(f'{toloka_url}/pools/21/close', [{'status_code': 204}])
+    requests_mock.get(f'{toloka_url}/pools/21', json=pool_map_with_readonly)
+    assert toloka_client.close_pool_async('21') is None
     result = toloka_client.close_pool('21')
     assert pool_map_with_readonly == client.unstructure(result)
 
@@ -464,6 +472,15 @@ def test_close_pool_for_update(requests_mock, toloka_client, toloka_url,
     assert pool_map_with_readonly == client.unstructure(result)
 
 
+def test_close_pool_for_update_already_closed_for_update(requests_mock, toloka_client, toloka_url,
+                                                         pool_map_with_readonly):
+    requests_mock.post(f'{toloka_url}/pools/21/close-for-update', [{'status_code': 204}])
+    requests_mock.get(f'{toloka_url}/pools/21', json=pool_map_with_readonly)
+    assert toloka_client.close_pool_for_update_async('21') is None
+    result = toloka_client.close_pool_for_update('21')
+    assert pool_map_with_readonly == client.unstructure(result)
+
+
 @pytest.fixture
 def archive_pool_operation_map():
     return {
@@ -503,6 +520,14 @@ def test_archive_pool(requests_mock, toloka_client, toloka_url,
 
     result = toloka_client.archive_pool('21')
     assert pool_map_with_readonly == client.unstructure(result)
+
+
+def test_archive_pool_already_archived(requests_mock, toloka_client, toloka_url, archived_pool_map_with_readonly):
+    requests_mock.post(f'{toloka_url}/pools/21/archive', [{'status_code': 204}])
+    requests_mock.get(f'{toloka_url}/pools/21', json=archived_pool_map_with_readonly)
+    assert toloka_client.archive_pool_async('21') is None
+    result = toloka_client.archive_pool('21')
+    assert archived_pool_map_with_readonly == client.unstructure(result)
 
 
 @pytest.fixture
