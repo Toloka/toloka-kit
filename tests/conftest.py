@@ -9,7 +9,6 @@ import uuid
 from aiohttp import web
 from aiohttp.test_utils import unused_port
 from copy import copy
-from decimal import Decimal
 from multiprocessing import Process
 from toloka.client import TolokaClient
 from toloka.client.requester import Requester
@@ -21,6 +20,11 @@ def toloka_client() -> TolokaClient:
 
 
 @pytest.fixture
+def toloka_client_prod() -> TolokaClient:
+    return TolokaClient('fake-token', 'PRODUCTION')
+
+
+@pytest.fixture
 def toloka_api_url(toloka_client) -> str:
     return f'{toloka_client.url}/api'
 
@@ -28,6 +32,11 @@ def toloka_api_url(toloka_client) -> str:
 @pytest.fixture
 def toloka_url(toloka_api_url) -> str:
     return f'{toloka_api_url}/v1'
+
+
+@pytest.fixture
+def toloka_app_url(toloka_client_prod) -> str:
+    return f'{toloka_client_prod.url}/api/app/v0'
 
 
 @pytest.fixture

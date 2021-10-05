@@ -3053,7 +3053,7 @@ class TolokaClient:
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
 
-        return self._find_all(self.find_app_projects, request, sort_field='created', items_field='content')
+        return self._find_all(self.find_app_projects, request, items_field='content')
 
     def create_app_project(self, app_project: AppProject) -> AppProject:
 
@@ -3095,7 +3095,7 @@ class TolokaClient:
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
 
-        sort = None if sort is None else structure(sort, search_requests.AppSearchRequest)
+        sort = None if sort is None else structure(sort, search_requests.AppSortItems)
         response = self._search_request('get', '/app/v0/apps', request, sort, limit)
         return structure(response, search_results.AppSearchResult)
 
@@ -3105,7 +3105,7 @@ class TolokaClient:
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
 
-        return self._find_all(self.find_apps, request, sort_field='name', items_field='content')
+        return self._find_all(self.find_apps, request, items_field='content')
 
     def get_app(self, app_id: str) -> App:
 
@@ -3137,14 +3137,14 @@ class TolokaClient:
             raise RuntimeError('this method supports only production environment')
 
         find_function = functools.partial(self.find_app_items, app_project_id)
-        return self._find_all(find_function, request, sort_field='created', items_field='content')
+        return self._find_all(find_function, request, items_field='content')
 
     def create_app_item(self, app_project_id: str, app_item: AppItem) -> AppItem:
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
 
-        response = self._request('post', f'/app/v0/app-projects{app_project_id}/items', json=unstructure(app_item))
+        response = self._request('post', f'/app/v0/app-projects/{app_project_id}/items', json=unstructure(app_item))
         return structure(response, AppItem)
 
     @expand('request')
@@ -3173,7 +3173,7 @@ class TolokaClient:
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
 
-        sort = None if sort is None else structure(sort, search_requests.AppBatchSearchRequest)
+        sort = None if sort is None else structure(sort, search_requests.AppBatchSortItems)
         response = self._search_request('get', f'/app/v0/app-projects/{app_project_id}/batches', request, sort, limit)
         return structure(response, search_results.AppBatchSearchResult)
 
@@ -3185,8 +3185,8 @@ class TolokaClient:
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
 
-        find_function = functools.partial(self.find_app_items, app_project_id)
-        return self._find_all(find_function, request, sort_field='created', items_field='content')
+        find_function = functools.partial(self.find_app_batches, app_project_id)
+        return self._find_all(find_function, request, items_field='content')
 
     @expand('request')
     def create_app_batch(self, app_project_id: str, request: AppBatchCreateRequest) -> AppBatch:
