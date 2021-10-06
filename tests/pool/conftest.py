@@ -160,6 +160,14 @@ def open_pool_map_with_readonly(pool_map_with_readonly):
 
 
 @pytest.fixture
+def archived_pool_map_with_readonly(pool_map_with_readonly):
+    return {
+        **pool_map_with_readonly,
+        'status': 'ARCHIVED',
+    }
+
+
+@pytest.fixture
 def training_pool_map():
     return {
         'id': '22',

@@ -1502,7 +1502,7 @@ class TolokaClient:
         """
         ...
 
-    def archive_pool_async(self, pool_id: str) -> toloka.client.operations.PoolArchiveOperation:
+    def archive_pool_async(self, pool_id: str) -> typing.Optional[toloka.client.operations.PoolArchiveOperation]:
         """Sends pool to archive, asynchronous version
 
         The pool must be in the status "closed".
@@ -1512,7 +1512,8 @@ class TolokaClient:
             pool_id: ID of pool that will be archived.
 
         Returns:
-            PoolArchiveOperation: An operation upon completion of which you can get the pool with updated status.
+            PoolArchiveOperation: An operation upon completion of which you can get the pool with updated status. If
+                pool is already archived then None is returned
 
         Example:
             >>> closed_pool = next(toloka_client.get_pools(status='CLOSED'))
@@ -1540,7 +1541,7 @@ class TolokaClient:
         """
         ...
 
-    def close_pool_async(self, pool_id: str) -> toloka.client.operations.PoolCloseOperation:
+    def close_pool_async(self, pool_id: str) -> typing.Optional[toloka.client.operations.PoolCloseOperation]:
         """Stops distributing tasks from the pool, asynchronous version
 
         If all tasks done, the pool will be closed automatically.
@@ -1549,7 +1550,8 @@ class TolokaClient:
             pool_id: ID of the pool that will be closed.
 
         Returns:
-            PoolCloseOperation: An operation upon completion of which you can get the pool with updated status.
+            Optional[PoolCloseOperation]: An operation upon completion of which you can get the pool with updated
+                status. If pool is already closed then None is returned.
 
         Example:
             >>> open_pool = next(toloka_client.get_pools(status='OPEN'))
@@ -1562,14 +1564,27 @@ class TolokaClient:
     def close_pool_for_update(self, pool_id: str) -> toloka.client.pool.Pool:
         """Closes pool for update
 
+        Args:
+            pool_id: ID of the pool that will be closed for update.
+
+        Returns:
+            Pool: Pool object with new status.
+
         Example:
             >>> toloka_client.close_pool_for_update(pool_id='1')
             ...
         """
         ...
 
-    def close_pool_for_update_async(self, pool_id: str) -> toloka.client.operations.PoolCloseOperation:
+    def close_pool_for_update_async(self, pool_id: str) -> typing.Optional[toloka.client.operations.PoolCloseOperation]:
         """Closes pool for update, asynchronous version
+
+        Args:
+            pool_id: ID of the pool that will be closed for update.
+
+        Returns:
+            Optional[PoolCloseOperation]: An operation upon completion of which you can get the pool with updated
+                status. If pool is already closed for update then None is returned.
 
         Example:
             >>> close_op = toloka_client.close_pool_for_update_async(pool_id='1')
@@ -1850,7 +1865,7 @@ class TolokaClient:
         """
         ...
 
-    def open_pool_async(self, pool_id: str) -> toloka.client.operations.PoolOpenOperation:
+    def open_pool_async(self, pool_id: str) -> typing.Optional[toloka.client.operations.PoolOpenOperation]:
         """Starts distributing tasks from the pool, asynchronous version
 
         Performers will see your tasks only after that call.
@@ -1859,7 +1874,8 @@ class TolokaClient:
             pool_id: ID of the pool that will be started.
 
         Returns:
-            PoolOpenOperation: An operation upon completion of which you can get the pool with new status.
+            PoolOpenOperation: An operation upon completion of which you can get the pool with new status. If pool is
+                already opened then None is returned.
 
         Example:
             Open the pool for performers.
@@ -1955,7 +1971,7 @@ class TolokaClient:
         """
         ...
 
-    def archive_training_async(self, training_id: str) -> toloka.client.operations.TrainingArchiveOperation:
+    def archive_training_async(self, training_id: str) -> typing.Optional[toloka.client.operations.TrainingArchiveOperation]:
         """Sends training to archive, asynchronous version
 
         The training must be in the status "closed".
@@ -1965,7 +1981,8 @@ class TolokaClient:
             training_id: ID of training that will be archived.
 
         Returns:
-            TrainingArchiveOperation: An operation upon completion of which you can get the training with updated status.
+            TrainingArchiveOperation: An operation upon completion of which you can get the training with updated
+                status. If pool is already archived then None is returned.
 
         Example:
             >>> closed_training = next(toloka_client.find_trainings(status='CLOSED'))
@@ -1991,7 +2008,7 @@ class TolokaClient:
         """
         ...
 
-    def close_training_async(self, training_id: str) -> toloka.client.operations.TrainingCloseOperation:
+    def close_training_async(self, training_id: str) -> typing.Optional[toloka.client.operations.TrainingCloseOperation]:
         """Stops distributing tasks from the training, asynchronous version
 
         Args:
@@ -1999,6 +2016,7 @@ class TolokaClient:
 
         Returns:
             TrainingCloseOperation: An operation upon completion of which you can get the training with updated status.
+                If training is already closed then None is returned.
 
         Example:
             >>> open_training = next(toloka_client.get_trainings(status='OPEN'))
@@ -2265,14 +2283,15 @@ class TolokaClient:
         """
         ...
 
-    def open_training_async(self, training_id: str) -> toloka.client.operations.TrainingOpenOperation:
+    def open_training_async(self, training_id: str) -> typing.Optional[toloka.client.operations.TrainingOpenOperation]:
         """Starts distributing tasks from the training, asynchronous version
 
         Args:
             training_id: ID of the training that will be started.
 
         Returns:
-            TrainingOpenOperation: An operation upon completion of which you can get the training with new status.
+            TrainingOpenOperation: An operation upon completion of which you can get the training with new status. If
+                training is already opened then None is returned.
 
         Example:
             Open the training for performers.

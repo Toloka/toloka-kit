@@ -998,7 +998,7 @@ class AppItemSearchRequest(BaseSearchRequest):
 
     class CompareFields:
         id: str
-        created: datetime.datetime
+        created_at: datetime.datetime
 
     after_id: str
     batch_id: str
@@ -1006,7 +1006,7 @@ class AppItemSearchRequest(BaseSearchRequest):
 
 
 AppItemSortItems = BaseSortItems.for_fields(
-    'AppItemSortItems', ['id', 'created']
+    'AppItemSortItems', ['id', 'created_at']
 )
 
 
@@ -1015,12 +1015,12 @@ class AppBatchSearchRequest(BaseSearchRequest):
     class CompareFields:
         id: str
         name: str
-        created: datetime.datetime
+        created_at: datetime.datetime
 
     after_id: str
     status: AppBatch.Status
 
 
 AppBatchSortItems = BaseSortItems.for_fields(
-    'AppBatchSortItems', ['id', 'name', 'created']
+    'AppBatchSortItems', ['id', 'name', 'created_at']
 )
