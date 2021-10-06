@@ -1,11 +1,17 @@
+0.1.18
+-------------------
+* Fixed an exceptions caused by returning status 204 with an empty body from API
+* Fixed several bugs in toloka apps methods
+
 0.1.17
 -------------------
-* Fix `PreloadingHTTPAdapter`
-* Fix `get_app_items()` signature
+* Reverted from `PreloadingHTTPAdapter` to `HTTPAdapter`
+* Fixed `get_app_items()` signature
 
 0.1.16
 -------------------
-* Add methods to use toloka apps
+* Added methods to use toloka apps
+* Used `PreloadingHTTPAdapter` instead of `HTTPAdapter`
 
 0.1.15
 -------------------
