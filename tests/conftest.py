@@ -9,6 +9,7 @@ import uuid
 from aiohttp import web
 from aiohttp.test_utils import unused_port
 from copy import copy
+from decimal import Decimal
 from multiprocessing import Process
 from toloka.client import TolokaClient
 from toloka.client.requester import Requester
