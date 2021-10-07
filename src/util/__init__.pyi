@@ -1,4 +1,4 @@
-__all__: list = [
-    'AsyncMultithreadWrapper'
+__all__ = [
+    'AsyncMultithreadWrapper',
 ]
 from toloka.util.async_utils import AsyncMultithreadWrapper

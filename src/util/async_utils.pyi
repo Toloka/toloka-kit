@@ -5,6 +5,7 @@ __all__ = [
     'ensure_async',
     'get_task_traceback',
 ]
+import asyncio
 import asyncio.events
 import typing
 
@@ -38,6 +39,7 @@ def ensure_async(func: typing.Callable) -> typing.Callable[..., typing.Awaitable
     """
     ...
 
+
 T = typing.TypeVar('T')
 
 class AsyncInterfaceWrapper(typing.Generic[T]):
@@ -47,7 +49,7 @@ class AsyncInterfaceWrapper(typing.Generic[T]):
     It just allow to treat sync and async callables in the same way.
     """
 
-    def __init__(self, wrapped:T): ...
+    def __init__(self, wrapped: T): ...
 
 
 class AsyncMultithreadWrapper(typing.Generic[T]):

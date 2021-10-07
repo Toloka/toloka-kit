@@ -5,6 +5,7 @@ __all__ = [
     'AssignmentEventsInPool',
     'AssignmentsInPool',
     'bind_client',
+    'PoolCompletedPercentage',
 ]
 from toloka.metrics.collector import MetricCollector
 from toloka.metrics.metrics import (
@@ -12,5 +13,6 @@ from toloka.metrics.metrics import (
     AssignmentsInPool,
     Balance,
     BaseMetric,
+    PoolCompletedPercentage,
     bind_client
 )

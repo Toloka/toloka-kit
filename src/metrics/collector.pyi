@@ -16,17 +16,17 @@ class MetricCollector:
         How to gather metrics and sends it to zabbix:
 
         >>> import toloka.client as toloka
-        >>> from toloka.metrics import MetricCollector, Balance, Delta, AssignmentsInPool, MessagesInPool
+        >>> from toloka.metrics import AssignmentsInPool, Balance, bind_client, MetricCollector
         >>>
         >>> toloka_client = toloka.TolokaClient(auth_token, 'PRODUCTION')
         >>>
         >>> collector = MetricCollector(
-        >>>     toloka_client,
         >>>     [
         >>>         Balance(),
         >>>         AssignmentsInPool(pool_id),
         >>>     ],
         >>> )
+        >>> bind_client(collector.metrics, toloka_client)
         >>>
         >>> while True:
         >>>     metric_dict = collector.get_lines()

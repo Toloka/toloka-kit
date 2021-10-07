@@ -40,10 +40,15 @@ class BaseObserver:
                 return
 
 
+def _wrap_client_to_async_converter(client: TolokaClientSyncOrAsyncType):
+    """Simple converter that is needed to specify annotation"""
+    return AsyncInterfaceWrapper(client)
+
+
 @attr.s
 class BasePoolObserver(BaseObserver):
 
-    toloka_client: TolokaClientSyncOrAsyncType = attr.ib(converter=AsyncInterfaceWrapper)
+    toloka_client: AsyncInterfaceWrapper[TolokaClientSyncOrAsyncType] = attr.ib(converter=_wrap_client_to_async_converter)
     pool_id: str = attr.ib()
 
     async def should_resume(self) -> bool:

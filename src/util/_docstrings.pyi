@@ -3,6 +3,7 @@ __all__ = [
 ]
 import typing
 
+
 T = typing.TypeVar('T')
 
 def inherit_docstrings(cls: typing.Type[T]) -> typing.Type[T]:
