@@ -12,11 +12,13 @@ import toloka.client
 import toloka.client.assignment
 import toloka.client.search_requests
 import toloka.streaming.event
-import toloka.util.async_utils
 import typing
 
+
 RequestObjectType = typing.TypeVar('RequestObjectType')
+
 ResponseObjectType = typing.TypeVar('ResponseObjectType')
+
 TolokaClientSyncOrAsyncType = typing.Union[toloka.client.TolokaClient, toloka.util.async_utils.AsyncMultithreadWrapper[toloka.client.TolokaClient]]
 
 DATETIME_MIN = ...
@@ -233,7 +235,7 @@ class UserBonusCursor(BaseCursor):
 
     toloka_client: TolokaClientSyncOrAsyncType
     _request: toloka.client.search_requests.UserBonusSearchRequest
-    _prev_response: typing.Optional[typing.Any]
+    _prev_response: typing.Any
 
 
 class UserSkillCursor(BaseCursor):
@@ -291,5 +293,5 @@ class UserSkillCursor(BaseCursor):
 
     toloka_client: TolokaClientSyncOrAsyncType
     _request: toloka.client.search_requests.UserSkillSearchRequest
-    _prev_response: typing.Optional[typing.Any]
+    _prev_response: typing.Any
     _event_type: toloka.streaming.event.UserSkillEvent.Type

@@ -350,7 +350,7 @@ class SetSkill(RuleAction):
 
 
 class RejectAllAssignments(RuleAction):
-    """Reject all replies from the performer
+    """Reject all replies from the performer. Only for pools with post acceptance.
 
     The performer is not explicitly installed, the rejection occurs on the performer on which the rule will be triggered.
 
@@ -358,7 +358,7 @@ class RejectAllAssignments(RuleAction):
         parameters.public_comment: Describes why you reject all assignments from this performer.
 
     Example:
-        How to reject all assignments if performer sends answers too fast.
+        How to reject all assignments if performer sends answers too fast (only for pools with post acceptance).
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(

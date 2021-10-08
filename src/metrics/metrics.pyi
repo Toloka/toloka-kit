@@ -173,7 +173,7 @@ class PoolCompletedPercentage(BasePoolMetric):
         toloka_client: Client for connection to Toloka. You can set toloka_client for several vetrics via "bind_client" function.
 
     Example:
-        How to collect this metrics:
+        How to collect this metric:
         >>> collector = MetricCollector(PoolCompletedPercentage(pool_id, toloka_client=toloka_client))
         >>> metric_dict = collector.get_lines()
         {
