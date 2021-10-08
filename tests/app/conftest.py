@@ -1,6 +1,7 @@
 import pytest
 from decimal import Decimal
 
+
 @pytest.fixture
 def app_map():
     return {

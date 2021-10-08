@@ -62,7 +62,10 @@ def ensure_async(func: Callable) -> Callable[..., Awaitable]:
     async def _async_wrapper(*args, **kwargs):
         return func(*args, **kwargs)
 
-    return func if asyncio.iscoroutinefunction(func) else _async_wrapper
+    if asyncio.iscoroutinefunction(func) or asyncio.iscoroutinefunction(getattr(func, '__call__', None)):
+        return func
+
+    return _async_wrapper
 
 
 T = TypeVar('T')

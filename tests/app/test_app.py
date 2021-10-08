@@ -312,7 +312,6 @@ def test_create_app_items(requests_mock, toloka_client_prod, toloka_app_url, app
     toloka_client_prod.create_app_items('123', app_item)
 
 
-
 def test_find_app_batches(requests_mock, toloka_client_prod, toloka_app_url, app_batch_map):
     raw_result = {'content': [app_batch_map], 'has_more': False}
 
@@ -418,4 +417,3 @@ def test_create_app_batch(requests_mock, toloka_client_prod, toloka_app_url, app
 def test_start_app_batch(requests_mock, toloka_client_prod, toloka_app_url):
     requests_mock.post(f'{toloka_app_url}/app-projects/123/batches/321/start', status_code=201)
     toloka_client_prod.start_app_batch('123', '321')
-

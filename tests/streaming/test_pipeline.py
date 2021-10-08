@@ -82,12 +82,13 @@ def test_pipeline(requests_mock, toloka_url, toloka_client, existing_backend_ass
     def handle_submitted(events):
         save_submitted_here.extend(event.assignment for event in events)
 
-    def handle_pool_open(pool):
+    async def handle_pool_open(pool):
         active_count = len(list(toloka_client.get_assignments(pool_id=pool.id, status='ACTIVE')))
         save_pool_info_here.append(f'pool open with active tasks count: {active_count}')
 
-    async def handle_pool_close(pool):
-        save_pool_info_here.append(f'pool closed with reason: {pool.last_close_reason.value}')
+    class HandlePoolClose:
+        async def __call__(self, pool):
+            save_pool_info_here.append(f'pool closed with reason: {pool.last_close_reason.value}')
 
     async def _add_new_assignments(after_sec):
         await asyncio.sleep(after_sec)
@@ -107,7 +108,7 @@ def test_pipeline(requests_mock, toloka_url, toloka_client, existing_backend_ass
     pipeline.register(AssignmentsObserver(_toloka_client, pool_id='100')).on_submitted(handle_submitted)
     pool_observer = pipeline.register(PoolStatusObserver(_toloka_client, pool_id='100'))
     pool_observer.on_open(handle_pool_open)
-    pool_observer.on_closed(handle_pool_close)
+    pool_observer.on_closed(HandlePoolClose())
 
     async def _main():
         loop = asyncio.get_event_loop()
