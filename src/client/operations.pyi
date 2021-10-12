@@ -173,11 +173,11 @@ class PoolOperation(Operation):
         id: Operation ID.
         status: The status of the operation.
         submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
         started: The UTC date and time the operation started.
         finished: The UTC date and time the operation finished.
         progress: The percentage of the operation completed.
         details: Details of the operation completion.
+        parameters: Operation parameters (depending on the operation type).
         parameters.pool_id: On which pool operation is performed.
     """
 
@@ -224,11 +224,11 @@ class PoolArchiveOperation(PoolOperation):
         id: Operation ID.
         status: The status of the operation.
         submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
         started: The UTC date and time the operation started.
         finished: The UTC date and time the operation finished.
         progress: The percentage of the operation completed.
         details: Details of the operation completion.
+        parameters: Operation parameters (depending on the operation type).
         parameters.pool_id: On which pool operation is performed.
     """
 
@@ -270,10 +270,10 @@ class PoolCloneOperation(PoolOperation):
         id: Operation ID.
         status: The status of the operation.
         submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
         started: The UTC date and time the operation started.
         finished: The UTC date and time the operation finished.
         progress: The percentage of the operation completed.
+        parameters: Operation parameters (depending on the operation type).
         details: Details of the operation completion.
         parameters.pool_id: On which pool operation is performed.
         details.pool_id: New pool id created after cloning.
@@ -322,11 +322,11 @@ class PoolCloseOperation(PoolOperation):
         id: Operation ID.
         status: The status of the operation.
         submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
         started: The UTC date and time the operation started.
         finished: The UTC date and time the operation finished.
         progress: The percentage of the operation completed.
         details: Details of the operation completion.
+        parameters: Operation parameters (depending on the operation type).
         parameters.pool_id: On which pool operation is performed.
     """
 
@@ -364,11 +364,11 @@ class PoolOpenOperation(PoolOperation):
         id: Operation ID.
         status: The status of the operation.
         submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
         started: The UTC date and time the operation started.
         finished: The UTC date and time the operation finished.
         progress: The percentage of the operation completed.
         details: Details of the operation completion.
+        parameters: Operation parameters (depending on the operation type).
         parameters.pool_id: On which pool operation is performed.
     """
 
@@ -406,11 +406,11 @@ class TrainingOperation(Operation):
         id: Operation ID.
         status: The status of the operation.
         submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
         started: The UTC date and time the operation started.
         finished: The UTC date and time the operation finished.
         progress: The percentage of the operation completed.
         details: Details of the operation completion.
+        parameters: Operation parameters (depending on the operation type).
         parameters.training_id: On which training pool operation is performed.
     """
 
@@ -457,11 +457,11 @@ class TrainingArchiveOperation(TrainingOperation):
         id: Operation ID.
         status: The status of the operation.
         submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
         started: The UTC date and time the operation started.
         finished: The UTC date and time the operation finished.
         progress: The percentage of the operation completed.
         details: Details of the operation completion.
+        parameters: Operation parameters (depending on the operation type).
         parameters.training_id: On which training pool operation is performed.
     """
 
@@ -503,10 +503,10 @@ class TrainingCloneOperation(TrainingOperation):
         id: Operation ID.
         status: The status of the operation.
         submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
         started: The UTC date and time the operation started.
         finished: The UTC date and time the operation finished.
         progress: The percentage of the operation completed.
+        parameters: Operation parameters (depending on the operation type).
         details: Details of the operation completion.
         parameters.training_id: On which training pool operation is performed.
         details.pool_id: New training pool id created after cloning.
@@ -555,11 +555,11 @@ class TrainingCloseOperation(TrainingOperation):
         id: Operation ID.
         status: The status of the operation.
         submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
         started: The UTC date and time the operation started.
         finished: The UTC date and time the operation finished.
         progress: The percentage of the operation completed.
         details: Details of the operation completion.
+        parameters: Operation parameters (depending on the operation type).
         parameters.training_id: On which training pool operation is performed.
     """
 
@@ -597,11 +597,11 @@ class TrainingOpenOperation(TrainingOperation):
         id: Operation ID.
         status: The status of the operation.
         submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
         started: The UTC date and time the operation started.
         finished: The UTC date and time the operation finished.
         progress: The percentage of the operation completed.
         details: Details of the operation completion.
+        parameters: Operation parameters (depending on the operation type).
         parameters.training_id: On which training pool operation is performed.
     """
 
@@ -639,11 +639,11 @@ class ProjectArchiveOperation(Operation):
         id: Operation ID.
         status: The status of the operation.
         submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
         started: The UTC date and time the operation started.
         finished: The UTC date and time the operation finished.
         progress: The percentage of the operation completed.
         details: Details of the operation completion.
+        parameters: Operation parameters (depending on the operation type).
         parameters.project_id: On which project operation is performed.
     """
 
@@ -692,10 +692,10 @@ class TasksCreateOperation(Operation):
         id: Operation ID.
         status: The status of the operation.
         submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
         started: The UTC date and time the operation started.
-        finished: The UTC date and time the operation finished.
         progress: The percentage of the operation completed.
+        parameters: Operation parameters (depending on the operation type).
+        finished: The UTC date and time the operation finished.
         details: Details of the operation completion.
         parameters.skip_invalid_items: Validation parameters for JSON objects:
             * True - Create the tasks that passed validation. Skip the rest of the tasks.
@@ -761,10 +761,10 @@ class TaskSuiteCreateBatchOperation(Operation):
         id: Operation ID.
         status: The status of the operation.
         submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
         started: The UTC date and time the operation started.
-        finished: The UTC date and time the operation finished.
         progress: The percentage of the operation completed.
+        parameters: Operation parameters (depending on the operation type).
+        finished: The UTC date and time the operation finished.
         details: Details of the operation completion.
         parameters.skip_invalid_items: Validation parameters for JSON objects:
             * True - Create the task suites that passed validation. Skip the rest of the task suites.
@@ -827,11 +827,11 @@ class AggregatedSolutionOperation(Operation):
         id: Operation ID.
         status: The status of the operation.
         submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
         started: The UTC date and time the operation started.
         finished: The UTC date and time the operation finished.
         progress: The percentage of the operation completed.
         details: Details of the operation completion.
+        parameters: Operation parameters (depending on the operation type).
         parameters.pool_id: In which pool the responses are aggregated.
     """
 
@@ -880,10 +880,10 @@ class UserBonusCreateBatchOperation(Operation):
         id: Operation ID.
         status: The status of the operation.
         submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
         started: The UTC date and time the operation started.
         finished: The UTC date and time the operation finished.
         progress: The percentage of the operation completed.
+        parameters: Operation parameters (depending on the operation type).
         details: Details of the operation completion.
         parameters.skip_invalid_items: Validation parameters for JSON objects:
             * True - Create the user bonuses that passed validation. Skip the rest of the user bonuses.

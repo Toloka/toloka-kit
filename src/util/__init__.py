@@ -1,7 +1,9 @@
 __all__: list = [
     'AsyncMultithreadWrapper',
+    'get_signature'
 ]
-from typing import Dict, Iterator, Any
+from typing import Dict, Iterator, Any, Callable
+from inspect import signature, Signature
 from .async_utils import AsyncMultithreadWrapper
 
 
@@ -40,3 +42,15 @@ def traverse_dicts_recursively(obj: Any) -> Iterator[dict]:
     elif isinstance(obj, list):
         for value in obj:
             yield from traverse_dicts_recursively(value)
+
+
+def get_signature(func: Callable) -> Signature:
+    """
+    Correctly processes a signature for a callable. Correctly processes
+    classes
+    """
+    if isinstance(func, type):
+        sig = signature(func.__init__)  # type: ignore
+        params = list(sig.parameters.values())
+        return sig.replace(parameters=params[1:])
+    return signature(func)

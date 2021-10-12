@@ -20,6 +20,7 @@ from typing import List, Any, Dict
 from ....util._codegen import attribute
 
 from .base import BaseComponent, ComponentType, VersionedBaseComponentMetaclass, base_component_or
+from ....util._docstrings import inherit_docstrings
 
 
 class BaseConditionV1Metaclass(VersionedBaseComponentMetaclass):
@@ -34,11 +35,15 @@ class BaseConditionV1(BaseComponent, metaclass=BaseConditionV1Metaclass):
     """Check an expression against a condition.
 
     For example, you can check that a text field is filled in.
+
+    Attributes:
+        hint: Validation error message that the user will see.
     """
 
     pass
 
 
+@inherit_docstrings
 class AllConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ALL):
     """Checks that all child conditions are met.
 
@@ -48,7 +53,6 @@ class AllConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ALL):
     these components.
     Attributes:
         conditions: A set of conditions that must be met.
-        hint: Validation error message that the user will see.
 
     Example:
         How to check several conditions.
@@ -73,6 +77,7 @@ class AllConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ALL):
     conditions: base_component_or(List[BaseComponent], 'ListBaseComponent')
 
 
+@inherit_docstrings
 class AnyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ANY):
     """Checks that at least one of the child conditions is met.
 
@@ -81,12 +86,12 @@ class AnyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ANY):
     If you need all conditions to be met, use the condition.all component. You can also combine these components.
     Attributes:
         conditions: A set of conditions, at least one of which must be met.
-        hint: Validation error message that the user will see.
     """
 
     conditions: base_component_or(List[BaseComponent], 'ListBaseComponent')
 
 
+@inherit_docstrings
 class DistanceConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_YANDEX_DISTANCE):
     """This component checks whether the sent coordinates match the ones that you specified
 
@@ -97,7 +102,6 @@ class DistanceConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_YA
         from_: First point.
         to_: Second point.
         max: The distance in meters by which the X and Y coordinates may differ.
-        hint: Validation error message that the user will see.
 
     Example:
         How to check that performer is in the right place.
@@ -116,6 +120,7 @@ class DistanceConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_YA
     max: base_component_or(float)
 
 
+@inherit_docstrings
 class EmptyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_EMPTY):
     """Checks that the data is empty (undefined).
 
@@ -126,12 +131,12 @@ class EmptyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_EMPTY
         Data for the input field (field.*) that contains condition.empty.
     Attributes:
         data: Data to check. If not specified, data is checked in the component that contains condition.empty.
-        hint: Validation error message that the user will see.
     """
 
     data: base_component_or(Any)
 
 
+@inherit_docstrings
 class EqualsConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_EQUALS):
     """Checks whether the original value is equal to the specified value.
 
@@ -153,13 +158,13 @@ class EqualsConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_EQUA
                 * Get the value from your data.
                 * Refer to another element using $ref.
                 * Use helpers and conditions to get the value.
-        hint: Validation error message that the user will see.
     """
 
     to: base_component_or(Any)
     data: base_component_or(Any)
 
 
+@inherit_docstrings
 class LinkOpenedConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_LINK_OPENED):
     """Checks that the user clicked the link.
 
@@ -169,48 +174,46 @@ class LinkOpenedConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_
     This condition can be used in the view.link component and also anywhere you can use (conditions).
     Attributes:
         url: The link that must be clicked.
-        hint: Validation error message that the user will see.
     """
 
     url: base_component_or(Any)
 
 
+@inherit_docstrings
 class NotConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_NOT):
     """Returns the inverse of the specified condition.
 
     For example, if the specified condition is met (returns true), then condition.not will return false.
     Attributes:
         condition: The condition for which the inverse is returned.
-        hint: Validation error message that the user will see.
     """
 
     condition: BaseComponent
 
 
+@inherit_docstrings
 class PlayedConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_PLAYED):
     """Checks the start of playback.
 
     Validation will be passed if playback is started. To play media with the condition.played check, you can use
     view.audio and view.video. The condition.played check only works in the player's validation property.
-    Attributes:
-        hint: Validation error message that the user will see.
     """
 
     pass
 
 
+@inherit_docstrings
 class PlayedFullyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_PLAYED_FULLY):
     """This component checks for the end of playback.
 
     Validation is passed if playback is finished. To play media with the condition.played-fully check, you can use
     view.audio and view.video. The condition.played-fully check only works in the player's validation property.
-    Attributes:
-        hint: Validation error message that the user will see.
     """
 
     pass
 
 
+@inherit_docstrings
 class RequiredConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_REQUIRED):
     """Checks that the data is filled in. This way you can get the user to answer all the required questions.
 
@@ -219,7 +222,6 @@ class RequiredConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_RE
     Attributes:
         data: Data to be filled in. If the property is not specified, the data of the parent component (the one that
             contains condition.required) is used.
-        hint: Validation error message that the user will see.
 
     Example:
         How to check that image is uploaded.
@@ -235,6 +237,7 @@ class RequiredConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_RE
     data: base_component_or(Any)
 
 
+@inherit_docstrings
 class SameDomainConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_SAME_DOMAIN):
     """Checks if the link that you entered belongs to a specific site. If it does, returns true, otherwise, false.
 
@@ -254,13 +257,13 @@ class SameDomainConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_
         data: The link address to be checked. If you don't specify it, the value returned by the parent component
             (the one that contains condition.same-domain) is used.
         original: The link address that your link is compared to.
-        hint: Validation error message that the user will see
     """
 
     data: base_component_or(Any)
     original: base_component_or(Any)
 
 
+@inherit_docstrings
 class SchemaConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_SCHEMA):
     """Allows validating data using JSON Schema. This is a special format for describing data in JSON format.
 
@@ -273,20 +276,19 @@ class SchemaConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_SCHE
     Attributes:
         data: Data that should be checked.
         schema: The schema for validating data.
-        hint: Validation error message that the user will see.
     """
 
     data: base_component_or(Any)
     schema: Dict  # TODO: support base_component_or(Dict)
 
 
+@inherit_docstrings
 class SubArrayConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_SUB_ARRAY):
     """Checks that the array in data is a subarray for parent.
 
     Attributes:
         data: Subarray that is checked for in parent.
         parent: The array where data is searched for.
-        hint: Validation error message that the user will see.
     """
 
     data: base_component_or(Any)

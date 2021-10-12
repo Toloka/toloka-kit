@@ -1839,7 +1839,7 @@ class AppSortItems(BaseSortItems):
 class AppItemSearchRequest(BaseSearchRequest):
     class CompareFields:
         id: str
-        created: datetime.datetime
+        created_at: datetime.datetime
 
     def __init__(
         self,
@@ -1908,7 +1908,7 @@ class AppBatchSearchRequest(BaseSearchRequest):
     class CompareFields:
         id: str
         name: str
-        created: datetime.datetime
+        created_at: datetime.datetime
 
     def __init__(
         self,

@@ -22,6 +22,9 @@ class BaseConditionV1(toloka.client.project.template_builder.base.BaseComponent)
     """Check an expression against a condition.
 
     For example, you can check that a text field is filled in.
+
+    Attributes:
+        hint: Validation error message that the user will see.
     """
 
     def __init__(
@@ -46,11 +49,12 @@ class AllConditionV1(BaseConditionV1):
 
     If you only need one out of several conditions to be met, use the condition.any component. You can also combine
     these components.
+
     Attributes:
         conditions: A set of conditions that must be met.
         hint: Validation error message that the user will see.
 
-    Example:
+    Examples:
         How to check several conditions.
 
         >>> coordinates_validation = tb.conditions.AllConditionV1(
@@ -93,6 +97,7 @@ class AnyConditionV1(BaseConditionV1):
     If none of the conditions is met, the component returns false.
 
     If you need all conditions to be met, use the condition.all component. You can also combine these components.
+
     Attributes:
         conditions: A set of conditions, at least one of which must be met.
         hint: Validation error message that the user will see.
@@ -127,7 +132,7 @@ class DistanceConditionV1(BaseConditionV1):
         max: The distance in meters by which the X and Y coordinates may differ.
         hint: Validation error message that the user will see.
 
-    Example:
+    Examples:
         How to check that performer is in the right place.
 
         >>> distance_condition = tb.conditions.DistanceConditionV1(
@@ -168,6 +173,7 @@ class EmptyConditionV1(BaseConditionV1):
     You can check:
         Template data (data.*).
         Data for the input field (field.*) that contains condition.empty.
+
     Attributes:
         data: Data to check. If not specified, data is checked in the component that contains condition.empty.
         hint: Validation error message that the user will see.
@@ -197,6 +203,7 @@ class EqualsConditionV1(BaseConditionV1):
 
     When substituting values, you can refer to data.* or another element using $ref. You can also use helpers and
     conditions to get the value.
+
     Attributes:
         to: The value to compare with the original.
             How to pass a value:
@@ -240,6 +247,7 @@ class LinkOpenedConditionV1(BaseConditionV1):
     this option. The condition will not work if the user opens the link from the browser address bar.
 
     This condition can be used in the view.link component and also anywhere you can use (conditions).
+
     Attributes:
         url: The link that must be clicked.
         hint: Validation error message that the user will see.
@@ -266,6 +274,7 @@ class NotConditionV1(BaseConditionV1):
     """Returns the inverse of the specified condition.
 
     For example, if the specified condition is met (returns true), then condition.not will return false.
+
     Attributes:
         condition: The condition for which the inverse is returned.
         hint: Validation error message that the user will see.
@@ -293,6 +302,7 @@ class PlayedConditionV1(BaseConditionV1):
 
     Validation will be passed if playback is started. To play media with the condition.played check, you can use
     view.audio and view.video. The condition.played check only works in the player's validation property.
+
     Attributes:
         hint: Validation error message that the user will see.
     """
@@ -317,6 +327,7 @@ class PlayedFullyConditionV1(BaseConditionV1):
 
     Validation is passed if playback is finished. To play media with the condition.played-fully check, you can use
     view.audio and view.video. The condition.played-fully check only works in the player's validation property.
+
     Attributes:
         hint: Validation error message that the user will see.
     """
@@ -341,12 +352,13 @@ class RequiredConditionV1(BaseConditionV1):
 
     If used inside the validation property, you can omit the data property and the same property will be used from the
     parent component field (the one that contains the condition.required component).
+
     Attributes:
         data: Data to be filled in. If the property is not specified, the data of the parent component (the one that
             contains condition.required) is used.
         hint: Validation error message that the user will see.
 
-    Example:
+    Examples:
         How to check that image is uploaded.
 
         >>> image = tb.fields.MediaFileFieldV1(
@@ -393,7 +405,7 @@ class SameDomainConditionV1(BaseConditionV1):
         data: The link address to be checked. If you don't specify it, the value returned by the parent component
             (the one that contains condition.same-domain) is used.
         original: The link address that your link is compared to.
-        hint: Validation error message that the user will see
+        hint: Validation error message that the user will see.
     """
 
     def __init__(
@@ -424,6 +436,7 @@ class SchemaConditionV1(BaseConditionV1):
     This component is useful in the following cases:
         * If available components don't provide everything you need to configure validation.
         * If you already have a prepared JSON Schema configuration for the check and you want to use it.
+
     Attributes:
         data: Data that should be checked.
         schema: The schema for validating data.

@@ -4775,10 +4775,10 @@ class TolokaClient:
         id_lte: typing.Optional[str] = None,
         id_gt: typing.Optional[str] = None,
         id_gte: typing.Optional[str] = None,
-        created_lt: typing.Optional[datetime.datetime] = None,
-        created_lte: typing.Optional[datetime.datetime] = None,
-        created_gt: typing.Optional[datetime.datetime] = None,
-        created_gte: typing.Optional[datetime.datetime] = None,
+        created_at_lt: typing.Optional[datetime.datetime] = None,
+        created_at_lte: typing.Optional[datetime.datetime] = None,
+        created_at_gt: typing.Optional[datetime.datetime] = None,
+        created_at_gte: typing.Optional[datetime.datetime] = None,
         sort: typing.Union[typing.List[str], toloka.client.search_requests.AppItemSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.AppItemSearchResult: ...
@@ -4801,10 +4801,10 @@ class TolokaClient:
         id_lte: typing.Optional[str] = None,
         id_gt: typing.Optional[str] = None,
         id_gte: typing.Optional[str] = None,
-        created_lt: typing.Optional[datetime.datetime] = None,
-        created_lte: typing.Optional[datetime.datetime] = None,
-        created_gt: typing.Optional[datetime.datetime] = None,
-        created_gte: typing.Optional[datetime.datetime] = None
+        created_at_lt: typing.Optional[datetime.datetime] = None,
+        created_at_lte: typing.Optional[datetime.datetime] = None,
+        created_at_gt: typing.Optional[datetime.datetime] = None,
+        created_at_gte: typing.Optional[datetime.datetime] = None
     ) -> typing.Generator[toloka.client.app.AppItem, None, None]: ...
 
     def create_app_item(
@@ -4858,10 +4858,10 @@ class TolokaClient:
         name_lte: typing.Optional[str] = None,
         name_gt: typing.Optional[str] = None,
         name_gte: typing.Optional[str] = None,
-        created_lt: typing.Optional[datetime.datetime] = None,
-        created_lte: typing.Optional[datetime.datetime] = None,
-        created_gt: typing.Optional[datetime.datetime] = None,
-        created_gte: typing.Optional[datetime.datetime] = None,
+        created_at_lt: typing.Optional[datetime.datetime] = None,
+        created_at_lte: typing.Optional[datetime.datetime] = None,
+        created_at_gt: typing.Optional[datetime.datetime] = None,
+        created_at_gte: typing.Optional[datetime.datetime] = None,
         sort: typing.Union[typing.List[str], toloka.client.search_requests.AppBatchSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.AppBatchSearchResult: ...
@@ -4887,10 +4887,10 @@ class TolokaClient:
         name_lte: typing.Optional[str] = None,
         name_gt: typing.Optional[str] = None,
         name_gte: typing.Optional[str] = None,
-        created_lt: typing.Optional[datetime.datetime] = None,
-        created_lte: typing.Optional[datetime.datetime] = None,
-        created_gt: typing.Optional[datetime.datetime] = None,
-        created_gte: typing.Optional[datetime.datetime] = None
+        created_at_lt: typing.Optional[datetime.datetime] = None,
+        created_at_lte: typing.Optional[datetime.datetime] = None,
+        created_at_gt: typing.Optional[datetime.datetime] = None,
+        created_at_gte: typing.Optional[datetime.datetime] = None
     ) -> typing.Generator[toloka.client.app.AppBatch, None, None]: ...
 
     @typing.overload
