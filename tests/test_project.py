@@ -4,7 +4,7 @@ from textwrap import dedent
 from urllib.parse import urlparse, parse_qs
 
 import io
-import json
+import simplejson as json
 import logging
 import pandas as pd
 import pytest
@@ -447,6 +447,20 @@ def test_project_update(requests_mock, toloka_client, toloka_url):
 
     result = toloka_client.update_project('10', update_to_project)
     assert result == project
+
+
+def test_project_from_json(project_map):
+    project = client.structure(project_map, client.project.Project)
+    project_json = json.dumps(project_map, use_decimal=True, ensure_ascii=False)
+    project_from_json = client.project.Project.from_json(project_json)
+    assert project == project_from_json
+
+
+def test_project_to_json(project_map):
+    project = client.structure(project_map, client.project.Project)
+    project_json = project.to_json()
+    project_json_basic = json.dumps(project_map, use_decimal=True, ensure_ascii=False)
+    assert json.loads(project_json) == json.loads(project_json_basic)
 
 
 @pytest.fixture

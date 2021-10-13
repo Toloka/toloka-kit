@@ -1,6 +1,7 @@
 import datetime
 from operator import itemgetter
 import logging
+import simplejson as json
 from urllib.parse import urlparse, parse_qs
 
 import pytest
@@ -263,6 +264,20 @@ def test_unstructure_pool_filter_after_init():
     unstructed_pool = client.unstructure(pool)
     assert 'filter' in unstructed_pool
     assert filter_map == unstructed_pool['filter']
+
+
+def test_pool_from_json(pool_map):
+    pool = client.structure(pool_map, client.pool.Pool)
+    pool_json = json.dumps(pool_map, use_decimal=True, ensure_ascii=False)
+    pool_from_json = client.pool.Pool.from_json(pool_json)
+    assert pool == pool_from_json
+
+
+def test_pool_to_json(pool_map):
+    pool = client.structure(pool_map, client.pool.Pool)
+    pool_json = pool.to_json()
+    pool_json_basic = json.dumps(pool_map, use_decimal=True, ensure_ascii=False)
+    assert json.loads(pool_json) == json.loads(pool_json_basic)
 
 
 def test_update_pool(requests_mock, toloka_client, toloka_url, pool_map_with_readonly):
