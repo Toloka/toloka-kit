@@ -415,6 +415,18 @@ class WebhookSubscriptionSearchResult(toloka.client.primitives.base.BaseTolokaOb
 
 
 class AppProjectSearchResult(toloka.client.primitives.base.BaseTolokaObject):
+    """The list of found App projects and whether there is something else on the original request.
+
+    It's better to use TolokaClient.get_app_projects(),
+    which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found App projects.
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
+
     def __init__(
         self,
         *,
@@ -431,6 +443,18 @@ class AppProjectSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppSearchResult(toloka.client.primitives.base.BaseTolokaObject):
+    """The list of found Apps and whether there is something else on the original request.
+
+    It's better to use TolokaClient.get_apps(),
+    which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found Apps.
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
+
     def __init__(
         self,
         *,
@@ -447,6 +471,18 @@ class AppSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppItemSearchResult(toloka.client.primitives.base.BaseTolokaObject):
+    """The list of found work items in the App project and whether there is something else on the original request.
+
+    It's better to use TolokaClient.get_app_items(),
+    which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found work items in the App project.
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
+
     def __init__(
         self,
         *,
@@ -463,6 +499,18 @@ class AppItemSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppBatchSearchResult(toloka.client.primitives.base.BaseTolokaObject):
+    """The list of found batches in the App project and whether there is something else on the original request.
+
+    It's better to use TolokaClient.get_app_batches(),
+    which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found batches in the App project.
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
+
     def __init__(
         self,
         *,

@@ -15,6 +15,12 @@ import typing
 
 
 class _AppError(toloka.client.primitives.base.BaseTolokaObject):
+    """Attributes:
+        code: String error code.
+        message: Detailed description of the error.
+        payload: Additional information about the error. May have different structure for different errors.
+    """
+
     def __init__(
         self,
         *,
@@ -33,6 +39,26 @@ class _AppError(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppProject(toloka.client.primitives.base.BaseTolokaObject):
+    """An App project with the parameters that you specify when creating it. It will have the interface and quality
+    control already pre-configured, decomposition done, and everything ready to use: all you need is to upload batches
+    and send them for labeling.
+
+    Attributes:
+        app_id:
+        parent_app_project_id:
+        name:
+        parameters:
+        id:
+        status: Project statuses for asynchronous creation. Allowed values:
+            * CREATING
+            * READY
+            * ARCHIVE
+            * ERROR
+        created:
+        item_price:
+        errors:
+    """
+
     class Status(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
@@ -72,6 +98,22 @@ class AppProject(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class App(toloka.client.primitives.base.BaseTolokaObject):
+    """An example of a standard task that you want to solve using Toloka. Unlike project templates, you don't have to
+    set up everything yourself.
+
+    Attributes:
+        id: ID of the App.
+        name:
+        image: Image.
+        description: Overview.
+        constraints_description: Description of limitations.
+        default_item_price: Default processing cost per work item.
+        param_spec: Specification of parameters for creating a project.
+        input_spec: Schema of input data in Toloka format.
+        output_spec: Schema of output data in Toloka format.
+        examples: Task examples.
+    """
+
     def __init__(
         self,
         *,
@@ -104,6 +146,32 @@ class App(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppItem(toloka.client.primitives.base.BaseTolokaObject):
+    """A work item with data. It's uploaded into the batch with other items to be collectively sent for labeling.
+    In a TSV file with tasks, each line is a work item.
+
+    Attributes:
+        batch_id: ID of the batch that includes the item.
+        input_data: The item data following the App schema.
+        id: Item ID.
+        app_project_id: ID of the app project that includes the batch with this item.
+        created:
+        updated:
+        status: Processing status. If the item has the NEW status, it can be edited. In other statuses, the item is
+            immutable. Allowed values:
+            * NEW - new;
+            * PROCESSING - being processed;
+            * COMPLETED - processing complete;
+            * ERROR - error during processing;
+            * CANCELLED - processing canceled;
+            * ARCHIVE - item has been archived;
+            * NO_MONEY - not enough money for processing.
+        output_data: Processing result.
+        errors:
+        created_at: Date and time when the item was created.
+        started_at: Date and time when the item processing started.
+        finished_at: Date and time when the item processing was completed.
+    """
+
     class Status(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
@@ -124,7 +192,7 @@ class AppItem(toloka.client.primitives.base.BaseTolokaObject):
         id: typing.Optional[str] = None,
         app_project_id: typing.Optional[str] = None,
         created: typing.Optional[datetime.datetime] = None,
-        update: typing.Optional[datetime.datetime] = None,
+        updated: typing.Optional[datetime.datetime] = None,
         status: typing.Union[Status, str, None] = None,
         output_data: typing.Optional[typing.Dict[str, typing.Any]] = None,
         errors: typing.Optional[_AppError] = None,
@@ -142,7 +210,7 @@ class AppItem(toloka.client.primitives.base.BaseTolokaObject):
     id: typing.Optional[str]
     app_project_id: typing.Optional[str]
     created: typing.Optional[datetime.datetime]
-    update: typing.Optional[datetime.datetime]
+    updated: typing.Optional[datetime.datetime]
     status: typing.Optional[Status]
     output_data: typing.Optional[typing.Dict[str, typing.Any]]
     errors: typing.Optional[_AppError]
@@ -152,6 +220,13 @@ class AppItem(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppItemsCreateRequest(toloka.client.primitives.base.BaseTolokaObject):
+    """Request Body.
+
+    Attributes:
+        batch_id: Batch ID.
+        items: list of items.
+    """
+
     def __init__(
         self,
         *,
@@ -168,6 +243,28 @@ class AppItemsCreateRequest(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppBatch(toloka.client.primitives.base.BaseTolokaObject):
+    """A batch of data that you send for labeling at a time. The batch consists of work items.
+
+    Attributes:
+        id: Batch ID.
+        app_project_id: Project ID.
+        name:
+        status: The state of the batch, calculated based on the states of items comprising it. Allowed values:
+            * NEW
+            * PROCESSING
+            * COMPLETED
+            * ERROR
+            * CANCELLED
+            * ARCHIVE
+            * NO_MONEY
+        items_count: Number of items in the batch.
+        item_price: The cost of processing per item in a batch.
+        cost: The cost of processing per batch.
+        created_at: Date and time when the batch was created.
+        started_at: Date and time when batch processing started.
+        finished_at: Date and time when batch processing was completed.
+    """
+
     class Status(toloka.util._extendable_enum.ExtendableStrEnum):
         """An enumeration.
         """
@@ -212,6 +309,12 @@ class AppBatch(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppBatchCreateRequest(toloka.client.primitives.base.BaseTolokaObject):
+    """Request Body.
+
+    Attributes:
+        items: The item data following the App schema.
+    """
+
     def __init__(self, *, items: typing.Optional[typing.List[typing.Dict[str, typing.Any]]] = None) -> None:
         """Method generated by attrs for class AppBatchCreateRequest.
         """
