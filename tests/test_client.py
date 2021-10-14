@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+import pickle
 import pytest
 import simplejson
 
@@ -17,6 +18,13 @@ def test_client_create_exceptions(random_url):
         TolokaClient('fake-token', 'SANDBOX', url=random_url)
     with pytest.raises(ValueError):
         TolokaClient('fake-token')
+
+
+def test_client_pickleable(random_url):
+    toloka_client = TolokaClient('fake-token', 'SANDBOX')
+    dumped = pickle.dumps(toloka_client)  # Check that it's possible.
+    loaded = pickle.loads(dumped)
+    assert loaded
 
 
 def test_different_urls(requests_mock, random_url):

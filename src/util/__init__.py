@@ -1,8 +1,9 @@
 __all__: list = [
     'AsyncMultithreadWrapper',
-    'get_signature'
+    'get_signature',
+    'identity'
 ]
-from typing import Dict, Iterator, Any, Callable
+from typing import Any, Callable, Dict, Iterator
 from inspect import signature, Signature
 from .async_utils import AsyncMultithreadWrapper
 
@@ -54,3 +55,7 @@ def get_signature(func: Callable) -> Signature:
         params = list(sig.parameters.values())
         return sig.replace(parameters=params[1:])
     return signature(func)
+
+
+def identity(arg: Any) -> Any:
+    return arg

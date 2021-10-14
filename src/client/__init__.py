@@ -128,6 +128,7 @@ from .task_suite import TaskSuite
 from .user_bonus import UserBonus, UserBonusCreateRequestParameters
 from .user_restriction import UserRestriction
 from .user_skill import SetUserSkillRequest, UserSkill
+from ..util import identity
 from ..util._codegen import expand
 from .webhook_subscription import WebhookSubscription
 
@@ -223,27 +224,28 @@ class TolokaClient:
         # How long to wait for the server to send data before giving up,
         # If None - wait forever for a response/
         self.default_timeout = timeout
-        status_list = [status_code for status_code in requests.status_codes._codes if status_code >= 411 or status_code == 408]
-
-        def _default_retryer_factory() -> Retry:
-            return TolokaRetry(
-                retry_quotas=retry_quotas,
-                total=retries,
-                status_forcelist=status_list,
-                method_whitelist=['HEAD', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'POST', 'PATCH'],
-                backoff_factor=2,  # summary retry time more than 10 seconds
-            )
-
-        def _retry_instance() -> Retry:
-            return retries
 
         if isinstance(retries, Retry):
-            logging.warning("Retry instance usage isn't thread-safe and is deprecated. Use retryer_factory instead.")
-            self.retryer_factory = _retry_instance
+            logger.warning("Retry instance usage isn't thread-safe and is deprecated. Use retryer_factory instead.")
+            self.retryer_factory = functools.partial(identity, retries)
         elif retryer_factory:
             self.retryer_factory = retryer_factory
         else:
-            self.retryer_factory = _default_retryer_factory
+            self.retryer_factory = functools.partial(self._default_retryer_factory, retries, retry_quotas)
+
+    @staticmethod
+    def _default_retryer_factory(
+        retries: int,
+        retry_quotas: Union[List[str], str, None],
+        status_list: Tuple[int] = tuple(code for code in requests.status_codes._codes if code >= 411 or code == 408),
+    ) -> Retry:
+        return TolokaRetry(
+            retry_quotas=retry_quotas,
+            total=retries,
+            status_forcelist=list(status_list),
+            method_whitelist=['HEAD', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'POST', 'PATCH'],
+            backoff_factor=2,  # summary retry time more than 10 seconds
+        )
 
     @functools.lru_cache(maxsize=128)
     def _session_for_thread(self, thread_id: int) -> requests.Session:
