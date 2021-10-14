@@ -188,7 +188,7 @@ class DashBoard:
     def __init__(
         self,
         metrics: List[Union[BaseMetric, Chart]],
-        header='Toloka metrics dashboard',
+        header: str = 'Toloka metrics dashboard',
         update_seconds: int = 10,
         min_time_range: datetime.timedelta = datetime.timedelta(minutes=1),
         max_time_range: datetime.timedelta = datetime.timedelta(hours=4),
@@ -244,7 +244,7 @@ class DashBoard:
             res_list = res_list + chart.metrics
         return res_list
 
-    def update_charts(self, n_intervals: int):
+    def update_charts(self, n_intervals: int) -> Union[go.Figure, List[go.Figure]]:
         """Redraws all charts on each iteration
 
         Args:
@@ -276,7 +276,7 @@ class DashBoard:
             figures.append(new_figure)
         return figures if len(figures) > 1 else figures[0]
 
-    def run_dash(self, mode='inline', height=None, host='127.0.0.1', port='8050'):
+    def run_dash(self, mode: str = 'inline', height: int =None, host: str = '127.0.0.1', port: str = '8050'):
         """Starts dashboard. Starts server for online updating charts.
 
         You can stop it, by calling 'stop_dash()' for the same dashboard instance.
