@@ -9,10 +9,10 @@ __all__ = [
 ]
 
 import attr
+import copy
 import functools
-import logging
 from datetime import datetime
-from typing import Any, AsyncIterator, Awaitable, Callable, Iterator, List, Optional, Tuple, TypeVar, Union
+from typing import Any, AsyncIterator, Awaitable, Callable, Iterator, List, Optional, Set, Tuple, TypeVar, Union
 
 from ..client import (
     Assignment,
@@ -35,9 +35,6 @@ ResponseObjectType = TypeVar('ResponseObjectType')
 TolokaClientSyncOrAsyncType = Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]]
 
 DATETIME_MIN = datetime.fromtimestamp(0)
-
-
-logger = logging.getLogger(__name__)
 
 
 @attr.s
@@ -72,6 +69,7 @@ class BaseCursor:
     toloka_client: TolokaClientSyncOrAsyncType = attr.ib()
     _request: RequestObjectType = attr.ib()
     _prev_response: Optional[ResponseObjectType] = attr.ib(default=None, init=False)
+    _seen_ids: Set[str] = attr.ib(factory=set, init=False)
 
     @attr.s
     class CursorFetchContext:
@@ -83,14 +81,14 @@ class BaseCursor:
         _finish_state: Optional[Tuple] = attr.ib(default=None, init=False)
 
         def __enter__(self) -> List[BaseEvent]:
-            self._start_state = self._cursor._get_state()
+            self._start_state = copy.deepcopy(self._cursor._get_state())
             res = [item for item in self._cursor]
             self._finish_state = self._cursor._get_state()
             self._cursor._set_state(self._start_state)
             return res
 
         async def __aenter__(self) -> List[BaseEvent]:
-            self._start_state = self._cursor._get_state()
+            self._start_state = copy.deepcopy(self._cursor._get_state())
             res = [item async for item in self._cursor]
             self._finish_state = self._cursor._get_state()
             self._cursor._set_state(self._start_state)
@@ -104,11 +102,11 @@ class BaseCursor:
             if exc_type is None:
                 self._cursor._set_state(self._finish_state)
 
-    def _get_state(self) -> Tuple[RequestObjectType, Optional[ResponseObjectType]]:
-        return self._request, self._prev_response
+    def _get_state(self) -> Tuple:
+        return self._request, self._prev_response, self._seen_ids
 
-    def _set_state(self, state: Tuple[RequestObjectType, Optional[ResponseObjectType]]) -> None:
-        self._request, self._prev_response = state
+    def _set_state(self, state: Tuple) -> None:
+        self._request, self._prev_response, self._seen_ids = state
 
     def try_fetch_all(self) -> CursorFetchContext:
         return self.CursorFetchContext(self)
@@ -150,23 +148,26 @@ class BaseCursor:
             response = fetcher(self._request, sort=self._get_time_field())  # Diff between sync and async.
             if response.items:
                 max_time = self._get_time(response.items[-1])
-                self._request = attr.evolve(self._request, **{self._time_field_gte: max_time})
-                seen_ids = frozenset(item.id for item in self._prev_response.items) if self._prev_response else ()
+                self._prev_response = response
                 for item in response.items:
-                    if item.id not in seen_ids:
+                    if item.id not in self._seen_ids:
+                        self._request = attr.evolve(self._request, **{self._time_field_gte: self._get_time(item)})
+                        self._seen_ids.add(item.id)
                         yield self._construct_event(item)
 
-                self._prev_response = response
                 if not response.has_more:
                     return
 
                 if self._get_time(response.items[0]) == max_time:
                     fixed_time_request = attr.evolve(self._request, **{self._time_field_lte: max_time})
-                    seen_ids = frozenset(item.id for item in response.items)
                     for item in _ByIdCursor(fetcher, fixed_time_request):  # Diff between sync and async.
-                        if item.id not in seen_ids:
+                        if item.id not in self._seen_ids:
+                            self._seen_ids.add(item.id)
                             yield self._construct_event(item)
                     self._request = attr.evolve(self._request, **{self._time_field_gt: max_time})
+
+                # Strip it to the current response size.
+                self._seen_ids = {item.id for item in response.items}
             else:
                 return
 
@@ -176,23 +177,26 @@ class BaseCursor:
             response = await ensure_async(fetcher)(self._request, sort=self._get_time_field())  # Diff between sync and async.
             if response.items:
                 max_time = self._get_time(response.items[-1])
-                self._request = attr.evolve(self._request, **{self._time_field_gte: max_time})
-                seen_ids = frozenset(item.id for item in self._prev_response.items) if self._prev_response else ()
+                self._prev_response = response
                 for item in response.items:
-                    if item.id not in seen_ids:
+                    if item.id not in self._seen_ids:
+                        self._request = attr.evolve(self._request, **{self._time_field_gte: self._get_time(item)})
+                        self._seen_ids.add(item.id)
                         yield self._construct_event(item)
 
-                self._prev_response = response
                 if not response.has_more:
                     return
 
                 if self._get_time(response.items[0]) == max_time:
                     fixed_time_request = attr.evolve(self._request, **{self._time_field_lte: max_time})
-                    seen_ids = frozenset(item.id for item in response.items)
                     async for item in _ByIdCursor(fetcher, fixed_time_request):  # Diff between sync and async.
-                        if item.id not in seen_ids:
+                        if item.id not in self._seen_ids:
+                            self._seen_ids.add(item.id)
                             yield self._construct_event(item)
                     self._request = attr.evolve(self._request, **{self._time_field_gt: max_time})
+
+                # Strip it to the current response size.
+                self._seen_ids = {item.id for item in response.items}
             else:
                 return
 

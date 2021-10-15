@@ -52,6 +52,7 @@ class BaseCursor:
     toloka_client: TolokaClientSyncOrAsyncType
     _request: typing.Any
     _prev_response: typing.Any
+    _seen_ids: typing.Set
 
 
 class AssignmentCursor(BaseCursor):
@@ -129,6 +130,7 @@ class AssignmentCursor(BaseCursor):
     toloka_client: TolokaClientSyncOrAsyncType
     _request: toloka.client.search_requests.AssignmentSearchRequest
     _prev_response: typing.Any
+    _seen_ids: typing.Set
     _event_type: toloka.streaming.event.AssignmentEvent.Type
 
 
@@ -185,6 +187,7 @@ class TaskCursor(BaseCursor):
     toloka_client: TolokaClientSyncOrAsyncType
     _request: toloka.client.search_requests.TaskSearchRequest
     _prev_response: typing.Any
+    _seen_ids: typing.Set
 
 
 class UserBonusCursor(BaseCursor):
@@ -236,6 +239,7 @@ class UserBonusCursor(BaseCursor):
     toloka_client: TolokaClientSyncOrAsyncType
     _request: toloka.client.search_requests.UserBonusSearchRequest
     _prev_response: typing.Any
+    _seen_ids: typing.Set
 
 
 class UserSkillCursor(BaseCursor):
@@ -294,4 +298,5 @@ class UserSkillCursor(BaseCursor):
     toloka_client: TolokaClientSyncOrAsyncType
     _request: toloka.client.search_requests.UserSkillSearchRequest
     _prev_response: typing.Any
+    _seen_ids: typing.Set
     _event_type: toloka.streaming.event.UserSkillEvent.Type

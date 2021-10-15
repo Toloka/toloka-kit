@@ -168,6 +168,26 @@ def test_cursor_iter_different_chunk_size(toloka_client, mocked_backend_for_user
     ], key=str) == sorted(unstructure(list(cursor)), key=str)
 
 
+@pytest.mark.parametrize('chunk_size', range(1, 9))
+def test_cursor_iter_by_one(toloka_client, mocked_backend_for_user_bonus, user_bonus_existing, chunk_size):
+    mocked_backend_for_user_bonus.storage.extend(user_bonus_existing)
+    mocked_backend_for_user_bonus.limit = chunk_size
+    cursor = UserBonusCursor(toloka_client=toloka_client)
+
+    result = []
+    for _ in range(len(user_bonus_existing) + 1):  # Iterate one more time to check no more items fetched.
+        item = next(iter(cursor), None)
+        if item and len(result) <= len(user_bonus_existing):
+            result.append(item)
+        else:
+            break
+
+    assert sorted([
+        {'user_bonus': item, 'event_time': item['created']}
+        for item in user_bonus_existing
+    ], key=str) == sorted(unstructure(result), key=str)
+
+
 def test_assignment_cursor(requests_mock, toloka_url, toloka_client):
     backend_data = [
         {'pool_id': '100', 'id': 'A', 'submitted': '2020-01-01T01:01:01'},
