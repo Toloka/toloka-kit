@@ -99,16 +99,16 @@ class Task(toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMi
             in the validation, all combinations of the correct response must be specified.
         message_on_unknown_solution: Hint for the task (for training tasks).
         id: Task ID.
-        origin_task_id: ID of the task it was copied from.
         pool_id: The ID of the pool that the task is uploaded to.
+        remaining_overlap: How many times will this task be issued to performers. Read Only field.
         reserved_for: IDs of users who will have access to the task.
         unavailable_for: IDs of users who shouldn't have access to the task.
         traits_all_of: 
         traits_any_of: 
         traits_none_of_any: 
+        origin_task_id: ID of the task it was copied from.
         created: The UTC date and time when the task was created.
         baseline_solutions: 
-        remaining_overlap: How many times will this task be issued to performers. Read Only field.
 
     Examples:
         How to create tasks.

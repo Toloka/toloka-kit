@@ -1681,6 +1681,37 @@ class WebhookSubscriptionSortItems(BaseSortItems):
 
 
 class AppProjectSearchRequest(BaseSearchRequest):
+    """Parameters for searching App projects.
+
+    Attributes:
+        app_id: App ID that the projects belong to.
+        parent_app_project_id: ID of the App project used for cloning. It's specified only if you created an App project
+            by cloning another App project. You can clone projects in the web version of Toloka.
+        status: project status.
+        after_id: ID of the project used for cursor pagination.
+        scope: projects created by a specified range of requesters:
+            * MY - Only by me;
+            * COMPANY - By anyone from the company;
+            * REQUESTER_LIST - By requesters with the specified IDs.
+        requester_ids: List of requester IDs separated by a comma, for scope = REQUESTER_LIST.
+        id_gt: projects with an ID greater than the specified value.
+        id_gte: projects with an ID greater than or equal to the specified value.
+        id_lt: projects with an ID less than the specified value.
+        id_lte: projects with an ID less than or equal to the specified value.
+        name_gt: projects with a name lexicographically greater than the specified value.
+        name_gte: projects with a name lexicographically greater than or equal to the specified value.
+        name_lt: projects with a name lexicographically less than the specified value.
+        name_lte: projects with a name lexicographically less than or equal to the specified value.
+        created_gt: projects created after the specified date. The date is specified in UTC in ISO 8601 format:
+            YYYY-MM-DDThh:mm:ss[.sss].
+        created_gte: projects created after or on the specified date. The date is specified in UTC in ISO 8601 format:
+            YYYY-MM-DDThh:mm:ss[.sss].
+        created_lt: projects created before the specified date. The date is specified in UTC in ISO 8601 format:
+            YYYY-MM-DDThh:mm:ss[.sss].
+        created_lte: projects created before or on the specified date. The date is specified in UTC in ISO 8601 format:
+            YYYY-MM-DDThh:mm:ss[.sss].
+    """
+
     class Scope(enum.Enum):
         """An enumeration.
         """
@@ -1741,6 +1772,18 @@ class AppProjectSearchRequest(BaseSearchRequest):
 
 
 class AppProjectSortItems(BaseSortItems):
+    """Parameters for sorting App projects search results.
+
+    You can specify multiple parameters separated by a comma. To change the sorting direction to descending, add the
+    minus sign before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: The order and direction of sorting the results. Available parameters:
+            * id - by id;
+            * name - by name;
+            * created — by the creation date. The date is specified in UTC in the YYYY-MM-DD format.
+    """
+
     class SortItem(BaseSortItem):
         class SortField(enum.Enum):
             """An enumeration.
@@ -1773,6 +1816,20 @@ class AppProjectSortItems(BaseSortItems):
 
 
 class AppSearchRequest(BaseSearchRequest):
+    """Parameters for searching Apps.
+
+    Attributes:
+        after_id: The ID of the App used for cursor pagination.
+        id_gt: only with an ID greater than the specified value.
+        id_gte: only with an ID greater than or equal to the specified value.
+        id_lt: only with an ID less than the specified value.
+        id_lte: only with an ID less than or equal to the specified value.
+        name_gt: only with a name lexicographically greater than the specified value.
+        name_gte: only with a name lexicographically greater than or equal to the specified value.
+        name_lt: only with a name lexicographically less than the specified value.
+        name_lte: only with a name lexicographically less than or equal to the specified value.
+    """
+
     class CompareFields:
         id: str
         name: str
@@ -1806,6 +1863,17 @@ class AppSearchRequest(BaseSearchRequest):
 
 
 class AppSortItems(BaseSortItems):
+    """Parameters for sorting Apps search results.
+
+    You can specify multiple parameters separated by a comma. To change the sorting direction to descending, add the
+    minus sign before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: The order and direction of sorting the results. Available parameters:
+            * id - by id;
+            * name - by name;
+    """
+
     class SortItem(BaseSortItem):
         class SortField(enum.Enum):
             """An enumeration.
@@ -1837,9 +1905,29 @@ class AppSortItems(BaseSortItems):
 
 
 class AppItemSearchRequest(BaseSearchRequest):
+    """Parameters for searching App items.
+
+    Attributes:
+        after_id: ID of the item used for cursor pagination.
+        batch_id: Batch ID.
+        status: items in this status.
+        id_gt: items with an ID greater than the specified value.
+        id_gte: items with an ID greater than or equal to the specified value.
+        id_lt: items with an ID less than the specified value.
+        id_lte: items with an ID less than or equal to the specified value.
+        created_gt: items created after the specified date. The date is specified in UTC in ISO 8601 format:
+            YYYY-MM-DDThh:mm:ss[.sss].
+        created_gte: items created after the specified date, inclusive. The date is specified in UTC in ISO 8601 format:
+            YYYY-MM-DDThh:mm:ss[.sss].
+        created_lt: items created before the specified date. The date is specified in UTC in ISO 8601 format:
+            YYYY-MM-DDThh:mm:ss[.sss].
+        created_lte: items created before the specified date, inclusive. The date is specified in UTC in ISO 8601
+            format: YYYY-MM-DDThh:mm:ss[.sss].
+    """
+
     class CompareFields:
         id: str
-        created: datetime.datetime
+        created_at: datetime.datetime
 
     def __init__(
         self,
@@ -1874,6 +1962,17 @@ class AppItemSearchRequest(BaseSearchRequest):
 
 
 class AppItemSortItems(BaseSortItems):
+    """Parameters for sorting App items search results.
+
+    You can specify multiple parameters separated by a comma. To change the sorting direction to descending, add the
+    minus sign before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: The order and direction of sorting the results. Available parameters:
+            * id - by id;
+            * created — by creation date. The date is specified in UTC in the YYYY-MM-DD format.
+    """
+
     class SortItem(BaseSortItem):
         class SortField(enum.Enum):
             """An enumeration.
@@ -1905,10 +2004,33 @@ class AppItemSortItems(BaseSortItems):
 
 
 class AppBatchSearchRequest(BaseSearchRequest):
+    """Parameters for searching batches in the App project.
+
+    Attributes:
+        after_id: ID of the batch used for cursor pagination
+        status: batches with this status.
+        id_gt: batches with an ID greater than the specified value.
+        id_gte: batches with an ID greater than or equal to the specified value.
+        id_lt: batches with an ID less than the specified value.
+        id_lte: batches with an ID less than or equal to the specified value.
+        name_gt: batches with the name lexicographically greater than the specified value.
+        name_gte: batches with a name lexicographically greater than or equal to the specified value.
+        name_lt: batches with a name lexicographically less than the specified value.
+        name_lte: batches with a name lexicographically less than or equal to the specified value.
+        created_gt: batches created after the specified date. The date is specified in UTC in ISO 8601 format:
+            YYYY-MM-DDThh:mm:ss[.sss].
+        created_gte: batches created after the specified date, inclusive. The date is specified in UTC in ISO 8601
+            format: YYYY-MM-DDThh:mm:ss[.sss].
+        created_lt: batches created before the specified date. The date is specified in UTC in ISO 8601 format:
+            YYYY-MM-DDThh:mm:ss[.sss].
+        created_lte: batches created before the specified date, inclusive. The date is specified in UTC in ISO 8601
+            format: YYYY-MM-DDThh:mm:ss[.sss].
+    """
+
     class CompareFields:
         id: str
         name: str
-        created: datetime.datetime
+        created_at: datetime.datetime
 
     def __init__(
         self,
@@ -1949,6 +2071,18 @@ class AppBatchSearchRequest(BaseSearchRequest):
 
 
 class AppBatchSortItems(BaseSortItems):
+    """Parameters for sorting App batch search results.
+
+    You can specify multiple parameters separated by a comma. To change the sorting direction to descending, add the
+    minus sign before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: The order and direction of sorting the results. Available parameters:
+            * id - by id;
+            * name - by name;
+            * created — by creation date. The date is specified in UTC in the YYYY-MM-DD format.
+    """
+
     class SortItem(BaseSortItem):
         class SortField(enum.Enum):
             """An enumeration.

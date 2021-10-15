@@ -24,6 +24,11 @@ import typing
 
 class BaseViewV1(toloka.client.project.template_builder.base.BaseComponent):
     """Elements displayed in the interface, such as text, list, audio player, or image.
+
+    Attributes:
+        label: Label above the component.
+        hint: Hint text.
+        validation: Validation based on condition.
     """
 
     def __init__(
@@ -49,10 +54,11 @@ class ActionButtonViewV1(BaseViewV1):
     """Button that calls an action.
 
     When clicking the button, an action specified in the action property is called.
+
     Attributes:
         action: Action called when clicking the button.
-        label: Button text.
         hint: Hint text.
+        label: Button text.
         validation: Validation based on condition.
     """
 
@@ -81,11 +87,12 @@ class AlertViewV1(BaseViewV1):
     """The component creates a color block to highlight important information.
 
     You can use both plain text and other visual components inside it.
+
     Attributes:
         content: Content of the block with important information.
-        label: Label above the component.
-        hint: Hint text.
         theme: Determines the block color.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -131,11 +138,12 @@ class AudioViewV1(BaseViewV1):
     """The component plays audio.
 
     Format support depends on the user's browser, OS, and device. We recommend using MP3.
+
     Attributes:
         url: Audio link.
-        label: Label above the component.
-        hint: Hint text.
         loop: Automatically replay audio.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -170,9 +178,10 @@ class CollapseViewV1(BaseViewV1):
     The block heading is always visible.
 
     If you set the defaultOpened property to true, the block is expanded immediately, but it can be collapsed.
+
     Attributes:
-        label: Block heading.
         content: Content hidden in the block.
+        label: Block heading.
         default_opened: If true, the block is immediately displayed in expanded form. By default, false (the block is
             collapsed).
         hint: Hint text.
@@ -206,16 +215,17 @@ class DeviceFrameViewV1(BaseViewV1):
     """Wraps the content of a component in a frame that is similar to a mobile phone.
 
     You can place other components inside the frame.
+
     Attributes:
         content: Content inside the frame.
-        label: Label above the component.
         full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
             of 400 pixels.
-        hint: Hint text.
         max_width: Maximum width of the element in pixels, must be greater than min_width.
         min_width: Minimum width of the element in pixels. Takes priority over max_width.
         ratio: An array of two numbers that sets the relative dimensions of the sides: width (first number) to
             height (second number). Not valid if full_height=true.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -252,9 +262,10 @@ class DividerViewV1(BaseViewV1):
     """Horizontal delimiter.
 
     You can place extra elements in the center of the delimiter, like a popup hint and label.
+
     Attributes:
-        label: A label in the center of the delimiter. Line breaks are not supported.
         hint: Hint text.
+        label: A label in the center of the delimiter. Line breaks are not supported.
         validation: Validation based on condition.
     """
 
@@ -282,9 +293,9 @@ class GroupViewV1(BaseViewV1):
 
     Attributes:
         content: Content of a group block.
-        label: Group heading.
         hint: Explanation of the group heading. To insert a new line, use
             .
+        label: Group heading.
         validation: Validation based on condition.
     """
 
@@ -314,14 +325,14 @@ class IframeViewV1(BaseViewV1):
 
     Attributes:
         url: URL of the web page.
-        label: Label above the component.
         full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
             of 400 pixels.
-        hint: Hint text.
         max_width: Maximum width of the element in pixels, must be greater than min_width.
         min_width: Minimum width of the element in pixels. Takes priority over max_width.
         ratio: An array of two numbers that sets the relative dimensions of the sides: width (first number) to
             height (second number). Not valid if full_height=true.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -359,10 +370,8 @@ class ImageViewV1(BaseViewV1):
 
     Attributes:
         url: Image link.
-        label: Label above the component.
         full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
             of 400 pixels.
-        hint: Hint text.
         max_width: Maximum width of the element in pixels, must be greater than min_width.
         min_width: Minimum width of the element in pixels. Takes priority over max_width.
         no_border: Controls the display of a frame around an image. By default, true (the frame is hidden). Set false
@@ -377,6 +386,8 @@ class ImageViewV1(BaseViewV1):
             If false, the image fits in the parent element and, when clicked, opens in its original size in the module
             window.
             Images in SVG format with no size specified always fit in their parent elements.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -423,12 +434,13 @@ class LabeledListViewV1(BaseViewV1):
     """Displaying components as a list with labels placed on the left.
 
     If you don't need labels, use view.list.
+
     Attributes:
         items: List items.
-        label: Label above the component.
-        hint: Hint text.
         min_width: The minimum width of list content. If the component width is less than the specified value, it
             switches to compact mode.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -495,11 +507,12 @@ class LinkViewV1(BaseViewV1):
     If you want to insert a button that will open the link, use the view.action-button and action.open-link components.
 
     To insert a link with a search query, use helper.search-query.
+
     Attributes:
         url: Link URL.
-        label: Label above the component.
         content: Link text displayed to the user.
         hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -534,11 +547,11 @@ class LinkGroupViewV1(BaseViewV1):
 
     Attributes:
         links: Array of links that make up a group.
-        label: Label above the component.
         hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
 
-    Example:
+    Examples:
         How to add several links.
 
         >>> links = tb.view.LinkGroupViewV1(
@@ -607,11 +620,11 @@ class ListViewV1(BaseViewV1):
 
     Attributes:
         items:  Array of list items.
-        label: Label above the component.
         direction: Determines the direction of the list.
-        hint: Hint text.
         size: Specifies the size of the margins between elements. Acceptable values in ascending order: s, m (default
             value).
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -643,7 +656,7 @@ class ListViewV1(BaseViewV1):
 class MarkdownViewV1(BaseViewV1):
     """Block for displaying text in Markdown.
 
-        The contents of the block are written to the content property in a single line. To insert line breaks, use \n
+    The contents of the block are written to the content property in a single line. To insert line breaks, use \n
         Straight quotation marks (") must be escaped like this: \".
 
         Note that the view.markdown component is resource-intensive and might overload weak user devices.
@@ -654,9 +667,6 @@ class MarkdownViewV1(BaseViewV1):
 
         Attributes:
             content: Text in Markdown.
-            label: Label above the component.
-            hint: Hint text.
-            validation: Validation based on condition.
 
         Example:
             How to add a title and description on the task interface.
@@ -665,6 +675,11 @@ class MarkdownViewV1(BaseViewV1):
     ---
     Some detailed description')
             ...
+
+    Attributes:
+        hint: Hint text.
+        label: Label above the component.
+        validation: Validation based on condition.
     """
 
     def __init__(
@@ -692,14 +707,14 @@ class TextViewV1(BaseViewV1):
     """Block for displaying text.
 
     If you need formatted text, use view.markdown.
+
     Attributes:
         content: The text displayed in the block. To insert a new line, use 
-
-        label: Label above the component.
         hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
 
-    Example:
+    Examples:
         How to show labeled field from the task inputs.
 
         >>> text_view = tb.view.TextViewV1(tb.data.InputData('input_field_name'), label='My label:')
@@ -735,17 +750,18 @@ class VideoViewV1(BaseViewV1):
 
     The video resolution does not affect the size of the block — the video will fit into the block and will not be
     cropped.
+
     Attributes:
         url: Link to the video file.
-        label: Label above the component.
         full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
             of 400 pixels.
-        hint: Hint text.
         max_width: Maximum width of the element in pixels, must be greater than min_width.
         min_width: Minimum width of the element in pixels. Takes priority over max_width.
+        hint: Hint text.
+        label: Label above the component.
+        validation: Validation based on condition.
         ratio: The aspect ratio of the video block. An array of two numbers: the first sets the width of the block and
             the second sets the height.
-        validation: Validation based on condition.
     """
 
     def __init__(

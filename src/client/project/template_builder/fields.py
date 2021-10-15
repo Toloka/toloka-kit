@@ -34,6 +34,7 @@ from .base import (
 )
 from ....util._codegen import attribute
 from ....util._extendable_enum import ExtendableStrEnum
+from ....util._docstrings import inherit_docstrings
 
 
 class BaseFieldV1Metaclass(VersionedBaseComponentMetaclass):
@@ -59,30 +60,32 @@ class BaseFieldV1Metaclass(VersionedBaseComponentMetaclass):
 class BaseFieldV1(BaseComponent, metaclass=BaseFieldV1Metaclass):
     """Fields for entering data, such as a text field or drop-down list.
 
+    Attributes:
+        data: Data with values that will be processed or changed.
+        label: Label above the component.
+        hint: Hint text.
+        validation: Validation based on condition.
     """
 
     pass
 
 
+@inherit_docstrings
 class AudioFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_AUDIO):
     """Component for recording audio.
 
     Works in the mobile app. In a browser, this component opens a window for uploading an audio file.
 
     Attributes:
-        data: Data with values that will be processed or changed.
-        value_to_set: The value of the output data when the button is clicked.
-        label: Label above the component.
-        hint: Hint text.
         multiple: Determines whether multiple audio files can be recorded (or uploaded):
             False (default) — forbidden.
             True — allowed.
-        validation: Validation based on condition.
     """
 
     multiple: base_component_or(Any) = attribute(kw_only=True)
 
 
+@inherit_docstrings
 class ButtonRadioFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON_RADIO):
     """A component in the form of a button.
 
@@ -90,11 +93,7 @@ class ButtonRadioFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON_RADI
 
     The size of the button depends on the size of the label.
     Attributes:
-        data: Data with values that will be processed or changed.
         value_to_set: The value of the output data when the button is clicked.
-        label: Label above the component.
-        hint: Hint text.
-        validation: Validation based on condition.
     """
 
     value_to_set: base_component_or(Any) = attribute(origin='valueToSet')
@@ -114,6 +113,7 @@ class GroupFieldOption(BaseTemplate):
     hint: base_component_or(Any) = attribute(kw_only=True)
 
 
+@inherit_docstrings
 class ButtonRadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON_RADIO_GROUP):
     """A component with buttons that allow the user to choose between the specified values.
 
@@ -121,11 +121,7 @@ class ButtonRadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON
 
     The size of the button is determined by the length of the text on it.
     Attributes:
-        data: Data with values that will be processed or changed.
         options: Array of information about the buttons.
-        label: Label above the component.
-        hint: Hint text.
-        validation: Validation based on condition.
 
     Example:
         How to add buttons for classification task.
@@ -144,37 +140,31 @@ class ButtonRadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON
     options: base_component_or(List[base_component_or(GroupFieldOption)], 'ListBaseComponentOrGroupFieldOption')
 
 
+@inherit_docstrings
 class CheckboxFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_CHECKBOX):
     """Checkbox.
 
     Attributes:
-        data: Data with values that will be processed or changed.
-        label: Label above the component.
         disabled: Property that disables the component. If true, the component will not be unavailable.
-        hint: Hint text.
         preserve_false: Property that specifies whether to return false values in the results. By default, if the
             component returns false, this result will not be added to the output. To add false to the results, specify
             "preserveFalse": true.
-        validation: Validation based on condition.
     """
 
     disabled: base_component_or(bool) = attribute(kw_only=True)
     preserve_false: base_component_or(bool) = attribute(origin='preserveFalse', kw_only=True)
 
 
+@inherit_docstrings
 class CheckboxGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_CHECKBOX_GROUP):
     """A group of options for selecting one or more responses.
 
     Attributes:
-        data: Data with values that will be processed or changed.
         options: Options, where value is the key that the option controls, and label is the text near the option.
-        label: Label above the component.
         disabled: If `true', the options are inactive.
-        hint: Hint text.
         preserve_false: Property that specifies whether to return false values in the results. By default, if the
             component returns false, this result will not be added to the output. To add false to the results, specify
             "preserveFalse": true.
-        validation: Validation based on condition.
     """
 
     options: base_component_or(List[base_component_or(GroupFieldOption)], 'ListBaseComponentOrGroupFieldOption')
@@ -182,6 +172,7 @@ class CheckboxGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_CHECKBOX_
     preserve_false: base_component_or(bool) = attribute(origin='preserveFalse', kw_only=True)
 
 
+@inherit_docstrings
 class DateFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_DATE):
     """A component for entering the date and time in the desired format and range.
 
@@ -221,21 +212,19 @@ class DateFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_DATE):
     placeholder: base_component_or(Any) = attribute(kw_only=True)
 
 
+@inherit_docstrings
 class EmailFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_EMAIL):
     """Creates a field for entering an email address.
 
     Checks that the text contains the @ character. You can set other conditions yourself.
     Attributes:
-        data: Data with values that will be processed or changed.
-        label: Label above the component.
-        hint: Hint text.
         placeholder: A semi-transparent label that is shown in an empty field.
-        validation: Validation based on condition.
     """
 
     placeholder: Any = attribute(kw_only=True)
 
 
+@inherit_docstrings
 class FileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_FILE):
     """This component can be used for uploading files. It's displayed in the interface as an upload button.
 
@@ -245,22 +234,19 @@ class FileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_FILE):
     If a user logs in from a mobile device, it's more convenient to use field.media-file — it's adapted for mobile
     devices and makes it easier to upload photos and videos.
     Attributes:
-        data: Data with values that will be processed or changed.
         accept: A list of file types that can be uploaded. By default, you can upload any files.
             Specify the types in the format (https://developer.mozilla.org/en-US/docs/Web/HTTP/BasicsofHTTP/MIME_types).
             For example, you can allow only images to be uploaded by adding the image/jpeg and image/png types.
-        label: Label above the component.
-        hint: Hint text.
         multiple: Determines whether multiple files can be uploaded:
             * false (default) — forbidden.
             * true — allowed.
-        validation: Validation based on condition.
     """
 
     accept: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrStr')
     multiple: base_component_or(bool) = attribute(kw_only=True)
 
 
+@inherit_docstrings
 class ImageAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_IMAGE_ANNOTATION):
     """Adds an interface for selecting areas in images.
 
@@ -269,9 +255,7 @@ class ImageAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_IMAGE_A
     You can select areas using points, polygons, and rectangles. In the shapes property, you can keep some of the
     selection modes and hide the rest.
     Attributes:
-        data: Data with values that will be processed or changed.
         image: The image you want to select areas in.
-        label: Label above the component.
         disabled: Determines whether adding and deleting areas is allowed:
             * false (default) — Allowed.
             * true — Not allowed.
@@ -279,7 +263,6 @@ class ImageAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_IMAGE_A
              or if you need to allow selection only when a certain condition is met.
         full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
             of 400 pixels.
-        hint: Hint text.
         labels: Used to classify areas.
             You can add several area types. When adding an area type, a button to select it appears in the interface,
             and when setting a new value, a new area selection color is added.
@@ -291,7 +274,6 @@ class ImageAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_IMAGE_A
         shapes: Used to add and hide selection modes: points, polygons, and rectangles. All three modes are available
             by default.
             Use this property if you only need to keep certain modes. Modes with the true value are available.
-        validation: Validation based on condition.
     """
 
     class Label(BaseTemplate):
@@ -322,6 +304,7 @@ class ImageAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_IMAGE_A
                               'DictBaseComponentOrShapeBaseComponentOrBool') = attribute(kw_only=True)
 
 
+@inherit_docstrings
 class ListFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_LIST):
     """A component that allows the user to add and remove list items, such as text fields to fill in.
 
@@ -336,19 +319,15 @@ class ListFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_LIST):
     To prevent the user from adding too many list items, set the maximum list length. You can also use the editable
     property to block users from changing a component, like when a certain event occurs.
     Attributes:
-        data: Data with values that will be processed or changed.
         render: Interface template for list items, such as a text field.
             In nested field.* components, use data.relative for recording responses, otherwise all the list items will
             have the same value.
-        label: Label above the component.
         button_label: Text on the button for adding list items.
         direction: The direction of the list.
         editable: A property that indicates whether adding and removing list items is allowed. Set false to disable.
             By default it is true (allowed).
-        hint: Hint text.
         max_length: Maximum number of list items.
         size: The distance between list items. Acceptable values in ascending order: s, m (default).
-        validation: Validation based on condition.
     """
 
     render: BaseComponent
@@ -359,6 +338,7 @@ class ListFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_LIST):
     size: base_component_or(ListSize) = attribute(kw_only=True)
 
 
+@inherit_docstrings
 class MediaFileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_MEDIA_FILE):
     """Adds buttons for different types of uploads: uploading photos or videos, selecting files from the file manager or choosing from the gallery. In the accept property, select which buttons you need.
 
@@ -367,13 +347,9 @@ class MediaFileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_MEDIA_FILE):
     This component is convenient when using mobile devices. To upload files from a computer, it's better to use
     field.file for a more flexible configuration of the file types.
     Attributes:
-        data: Data with values that will be processed or changed.
         accept: Adds different buttons for four types of uploads. Pass the true value for the ones that you need.
             For example, if you need a button for uploading files from the gallery, add the "gallery": true property
-        label: Label above the component.
-        hint: Hint text.
         multiple: Determines whether multiple files can be uploaded:
-        validation: Validation based on condition.
 
     Example:
         How to allow performers to upload images and make photos.
@@ -407,6 +383,7 @@ class MediaFileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_MEDIA_FILE):
     multiple: base_component_or(bool) = attribute(kw_only=True)
 
 
+@inherit_docstrings
 class NumberFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_NUMBER):
     """A component that allows you to enter a number.
 
@@ -419,13 +396,9 @@ class NumberFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_NUMBER):
     Negative numbers are allowed by default. To disable them, use the validation property. Pressing the up or down arrow
     keys will increase or decrease the number by one.
     Attributes:
-        data: Data with values that will be processed or changed.
-        label: Label above the component.
-        hint: Hint text.
         maximum: Maximum number that can be entered.
         minimum: Minimum number that can be entered.
         placeholder: A semi-transparent label that is shown in the box when it is empty.
-        validation: Validation based on condition.
     """
 
     maximum: base_component_or(int) = attribute(kw_only=True)
@@ -433,22 +406,20 @@ class NumberFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_NUMBER):
     placeholder: base_component_or(Any) = attribute(kw_only=True)
 
 
+@inherit_docstrings
 class PhoneNumberFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_PHONE_NUMBER):
     """Creates a field for entering a phone number.
 
     Allows entering numbers, spaces, and the +, ( ), - characters. Only numbers and the + character at the beginning
     will remain in the data. For example, if you enter +7 (012) 345-67-89, the data gets the +70123456789 value.
     Attributes:
-        data: Data with values that will be processed or changed.
-        label: Label above the component.
-        hint: Hint text.
         placeholder: A semi-transparent label that is shown in an empty field.
-        validation: Validation based on condition.
     """
 
     placeholder: base_component_or(str) = attribute(kw_only=True)
 
 
+@inherit_docstrings
 class RadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_RADIO_GROUP):
     """A component for selecting one value out of several options. It is designed as a group of circles arranged vertically.
 
@@ -456,13 +427,9 @@ class RadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_RADIO_GROUP)
 
     The minimum number of buttons is one. Any type of data can be returned.
     Attributes:
-        data: Data with values that will be processed or changed.
         options: List of options to choose from
-        label: Label above the component.
         disabled: This property prevents clicking the button. If the value is true, the button is not active (the user
             will not be able to click it).
-        hint: Hint text.
-        validation: Validation based on condition.
 
     Example:
         How to add label selector to interface.
@@ -482,6 +449,7 @@ class RadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_RADIO_GROUP)
     disabled: base_component_or(bool) = attribute(kw_only=True)
 
 
+@inherit_docstrings
 class SelectFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_SELECT):
     """Button for selecting from a drop-down list.
 
@@ -492,12 +460,8 @@ class SelectFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_SELECT):
 
     To allow selecting multiple options, use the field.checkbox-group component.
     Attributes:
-        data: Data with values that will be processed or changed.
         options: Options to choose from.
-        label: Label above the component.
-        hint: Hint text.
         placeholder: The text that will be displayed if none of the options is selected.
-        validation: Validation based on condition.
     """
 
     class Option(BaseTemplate):
@@ -515,22 +479,20 @@ class SelectFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_SELECT):
     placeholder: base_component_or(Any) = attribute(kw_only=True)
 
 
+@inherit_docstrings
 class TextFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXT):
     """A component that allows entering a single line of text.
 
     Attributes:
-        data: Data with values that will be processed or changed.
-        label: Label above the component.
         disabled: If true, editing is not available.
-        hint: Hint text.
         placeholder: A semi-transparent label that is shown in the box when it is empty.
-        validation: Validation based on condition.
     """
 
     disabled: base_component_or(bool) = attribute(kw_only=True)
     placeholder: base_component_or(Any) = attribute(kw_only=True)
 
 
+@inherit_docstrings
 class TextAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXT_ANNOTATION):
     """A component for text segmentation.
 
@@ -540,16 +502,12 @@ class TextAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXT_ANN
     You can use plugin.field.text-annotation.hotkeys to assign keyboard shortcuts for selecting categories.
 
     Attributes:
-        data: Data with values that will be processed or changed.
-        label: Label above the component.
         adjust: If the property value is set to words, only words can be selected in the text. If you don't use this
             property, any part of a line can be selected.
         content: The text where the performer has to select part of a line.
         disabled: This property blocks the component. If true, the component is unavailable to the performer. The
             default value is false.
-        hint: Hint text.
         labels: A category.
-        validation: Validation based on condition.
     """
 
     class Label(BaseTemplate):
@@ -568,6 +526,7 @@ class TextAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXT_ANN
     labels: base_component_or(List[base_component_or(Label)], 'ListBaseComponentOrLabel') = attribute(kw_only=True)
 
 
+@inherit_docstrings
 class TextareaFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXTAREA):
     """Box for entering multi-line text.
 
@@ -578,10 +537,7 @@ class TextareaFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXTAREA):
 
     Note that formatting is not available in the text box.
     Attributes:
-        data: Data with values that will be processed or changed.
-        label: Label above the component.
         disabled: If true, editing is not available.
-        hint: Hint text.
         placeholder: A semi-transparent label that is shown when the box is empty. Use it to provide an example or a
             hint for the response.
         resizable: Changing the box size. When set to true (the default value), the user can change the height. To

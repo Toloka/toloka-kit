@@ -14,6 +14,7 @@ from typing import List
 from .base import BaseComponent, ComponentType, VersionedBaseComponentMetaclass, base_component_or, BaseTemplate
 from ....util._codegen import attribute
 from ....util._extendable_enum import ExtendableStrEnum
+from ....util._docstrings import inherit_docstrings
 
 
 class BaseLayoutV1Metaclass(VersionedBaseComponentMetaclass):
@@ -28,11 +29,15 @@ class BaseLayoutV1(BaseComponent, metaclass=BaseLayoutV1Metaclass):
     """Options for positioning elements in the interface, such as in columns or side-by-side.
 
     If you have more than one element in the interface, these components will help you arrange them the way you want.
+
+    Attributes:
+        validation: Validation based on condition.
     """
 
     pass
 
 
+@inherit_docstrings
 class BarsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_BARS):
     """A component that adds top and bottom bars to the content.
 
@@ -44,7 +49,6 @@ class BarsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_BARS):
         content: The main content.
         bar_after: The bar displayed at the bottom edge of the component.
         bar_before: The bar displayed at the top edge of the component.
-        validation: Validation based on condition.
     """
 
     content: BaseComponent
@@ -52,6 +56,7 @@ class BarsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_BARS):
     bar_before: BaseComponent = attribute(origin='barBefore', kw_only=True)
 
 
+@inherit_docstrings
 class ColumnsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COLUMNS):
     """A component for placing content in columns.
 
@@ -68,7 +73,6 @@ class ColumnsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COLUMNS):
             example, if you have 4 columns and the ratio is set to [1,2], the result is the same as for [1,2,1,2].
             If the number of columns is less than the number of values in the ratio property, extra values are simply
             ignored.
-        validation: Validation based on condition.
         vertical_align: Vertical alignment of column content.
     """
 
@@ -106,6 +110,7 @@ class CompareLayoutItem(BaseTemplate):
     controls: BaseComponent
 
 
+@inherit_docstrings
 class CompareLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COMPARE):
     """Use it to arrange interface elements for comparing them. For example, you can compare several photos.
 
@@ -123,7 +128,6 @@ class CompareLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COMPARE):
             elements being compared.
         items: An array with properties of the elements being compared. Set the appearance of the component blocks.
         min_width: Minimum width of the element in pixels. Default: 400 pixels.
-        validation: Validation based on condition.
         wide_common_controls: This property increases the common field size of the elements being compared.
             It's set to false by default: the common fields are displayed in the center, not stretched. If true,
             the fields are wider than with the default value.
@@ -135,6 +139,7 @@ class CompareLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COMPARE):
     wide_common_controls: base_component_or(bool) = attribute(origin='wideCommonControls', kw_only=True)
 
 
+@inherit_docstrings
 class SideBySideLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_SIDE_BY_SIDE):
     """The component displays several data blocks of the same width on a single horizontal panel.
 
@@ -146,7 +151,6 @@ class SideBySideLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_SIDE_BY_S
             For example: field.checkbox-group or field.button-radio-group.
         items: An array of data blocks.
         min_item_width: The minimum width of a data block, at least 400 pixels.
-        validation: Validation based on condition.
     """
 
     controls: BaseComponent
@@ -154,6 +158,7 @@ class SideBySideLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_SIDE_BY_S
     min_item_width: base_component_or(float) = attribute(origin='minItemWidth', kw_only=True)
 
 
+@inherit_docstrings
 class SidebarLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_SIDEBAR):
     """An option for placing (layout) items, which lets you arrange on a page:
 
@@ -176,7 +181,6 @@ class SidebarLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_SIDEBAR):
         extra_controls: An additional panel with controls. Located below the main panel.
         min_width: The minimum width, in pixels, for widescreen mode. If the component width becomes less than the
             specified value, the interface switches to compact mode. Default: 400 pixels.
-        validation: Validation based on condition.
     """
 
     content: BaseComponent

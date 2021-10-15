@@ -23,8 +23,8 @@ def assignment_map():
         'submitted': '2015-12-15T15:10:00',
         'accepted': '2015-12-15T20:00:00',
         'tasks': [{'pool_id': '21', 'input_values': {'image': 'http://images.com/1.png'}, 'origin_task_id': '42'}],
-        'first_declined_solution_attempt': [{'output_values': {'color': 'black', 'comment': 'So white'}}],
-        'solutions': [{'output_values': {'color' : 'white', 'comment': 'So white'}}],
+        'first_declined_solution_attempt': [{'output_values': {'color': 'black', 'comment': 'So белый'}}],
+        'solutions': [{'output_values': {'color': 'white', 'comment': 'So белый'}}],
     }
 
 
@@ -118,6 +118,20 @@ def test_get_assignments(requests_mock, toloka_client, toloka_url, assignment_ma
         created_lt=datetime(2016, 6, 1),
     )
     assert assignments == client.unstructure(list(result))
+
+
+def test_assignment_from_json(assignment_map):
+    assignment = client.structure(assignment_map, client.assignment.Assignment)
+    assignment_json = simplejson.dumps(assignment_map, use_decimal=True, ensure_ascii=True)
+    assignment_from_json = client.assignment.Assignment.from_json(assignment_json)
+    assert assignment == assignment_from_json
+
+
+def test_project_to_json(assignment_map):
+    assignment = client.structure(assignment_map, client.assignment.Assignment)
+    assignment_json = assignment.to_json()
+    assignment_json_basic = simplejson.dumps(assignment_map, use_decimal=True, ensure_ascii=True)
+    assert simplejson.loads(assignment_json) == simplejson.loads(assignment_json_basic)
 
 
 @pytest.mark.parametrize(

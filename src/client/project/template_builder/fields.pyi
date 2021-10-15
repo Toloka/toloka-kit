@@ -27,6 +27,12 @@ import typing
 
 class BaseFieldV1(toloka.client.project.template_builder.base.BaseComponent):
     """Fields for entering data, such as a text field or drop-down list.
+
+    Attributes:
+        data: Data with values that will be processed or changed.
+        label: Label above the component.
+        hint: Hint text.
+        validation: Validation based on condition.
     """
 
     def __init__(
@@ -57,12 +63,11 @@ class AudioFieldV1(BaseFieldV1):
 
     Attributes:
         data: Data with values that will be processed or changed.
-        value_to_set: The value of the output data when the button is clicked.
-        label: Label above the component.
-        hint: Hint text.
         multiple: Determines whether multiple audio files can be recorded (or uploaded):
             False (default) — forbidden.
             True — allowed.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -95,11 +100,12 @@ class ButtonRadioFieldV1(BaseFieldV1):
     The user makes a choice by clicking on it.
 
     The size of the button depends on the size of the label.
+
     Attributes:
         data: Data with values that will be processed or changed.
         value_to_set: The value of the output data when the button is clicked.
-        label: Label above the component.
         hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -158,14 +164,15 @@ class ButtonRadioGroupFieldV1(BaseFieldV1):
     The minimum number of elements is one. Any type of data can be returned.
 
     The size of the button is determined by the length of the text on it.
+
     Attributes:
         data: Data with values that will be processed or changed.
         options: Array of information about the buttons.
-        label: Label above the component.
         hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
 
-    Example:
+    Examples:
         How to add buttons for classification task.
 
         >>> classification_buttons = tb.fields.ButtonRadioGroupFieldV1(
@@ -207,12 +214,12 @@ class CheckboxFieldV1(BaseFieldV1):
 
     Attributes:
         data: Data with values that will be processed or changed.
-        label: Label above the component.
         disabled: Property that disables the component. If true, the component will not be unavailable.
-        hint: Hint text.
         preserve_false: Property that specifies whether to return false values in the results. By default, if the
             component returns false, this result will not be added to the output. To add false to the results, specify
             "preserveFalse": true.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -247,12 +254,12 @@ class CheckboxGroupFieldV1(BaseFieldV1):
     Attributes:
         data: Data with values that will be processed or changed.
         options: Options, where value is the key that the option controls, and label is the text near the option.
-        label: Label above the component.
         disabled: If `true', the options are inactive.
-        hint: Hint text.
         preserve_false: Property that specifies whether to return false values in the results. By default, if the
             component returns false, this result will not be added to the output. To add false to the results, specify
             "preserveFalse": true.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -287,15 +294,14 @@ class DateFieldV1(BaseFieldV1):
     """A component for entering the date and time in the desired format and range.
 
     You can set a list of dates that the user cannot select.
+
     Attributes:
         data: Data with values that will be processed or changed.
         format: Format of the date entered by the user:
             * date-time — date and time.
             * date — date only.
-        label: Label above the component.
         block_list: List of dates that the user cannot select.
             * block_list[]: Date that the user cannot select.
-        hint: Hint text.
         max: The latest date and time in the YYYY-MM-DD hh:mm format that the user can select. Where:
             * YYYY is the year.
             * MM is the month.
@@ -309,6 +315,8 @@ class DateFieldV1(BaseFieldV1):
             * hh is the time in hours.
             * mm is the time in minutes.
         placeholder: A semi-transparent label that is shown in the box when it is empty.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -347,11 +355,12 @@ class EmailFieldV1(BaseFieldV1):
     """Creates a field for entering an email address.
 
     Checks that the text contains the @ character. You can set other conditions yourself.
+
     Attributes:
         data: Data with values that will be processed or changed.
-        label: Label above the component.
-        hint: Hint text.
         placeholder: A semi-transparent label that is shown in an empty field.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -386,16 +395,17 @@ class FileFieldV1(BaseFieldV1):
 
     If a user logs in from a mobile device, it's more convenient to use field.media-file — it's adapted for mobile
     devices and makes it easier to upload photos and videos.
+
     Attributes:
         data: Data with values that will be processed or changed.
         accept: A list of file types that can be uploaded. By default, you can upload any files.
             Specify the types in the format (https://developer.mozilla.org/en-US/docs/Web/HTTP/BasicsofHTTP/MIME_types).
             For example, you can allow only images to be uploaded by adding the image/jpeg and image/png types.
-        label: Label above the component.
-        hint: Hint text.
         multiple: Determines whether multiple files can be uploaded:
             * false (default) — forbidden.
             * true — allowed.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -431,10 +441,10 @@ class ImageAnnotationFieldV1(BaseFieldV1):
 
     You can select areas using points, polygons, and rectangles. In the shapes property, you can keep some of the
     selection modes and hide the rest.
+
     Attributes:
         data: Data with values that will be processed or changed.
         image: The image you want to select areas in.
-        label: Label above the component.
         disabled: Determines whether adding and deleting areas is allowed:
             * false (default) — Allowed.
             * true — Not allowed.
@@ -442,7 +452,6 @@ class ImageAnnotationFieldV1(BaseFieldV1):
              or if you need to allow selection only when a certain condition is met.
         full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
             of 400 pixels.
-        hint: Hint text.
         labels: Used to classify areas.
             You can add several area types. When adding an area type, a button to select it appears in the interface,
             and when setting a new value, a new area selection color is added.
@@ -454,6 +463,8 @@ class ImageAnnotationFieldV1(BaseFieldV1):
         shapes: Used to add and hide selection modes: points, polygons, and rectangles. All three modes are available
             by default.
             Use this property if you only need to keep certain modes. Modes with the true value are available.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -535,19 +546,20 @@ class ListFieldV1(BaseFieldV1):
 
     To prevent the user from adding too many list items, set the maximum list length. You can also use the editable
     property to block users from changing a component, like when a certain event occurs.
+
     Attributes:
         data: Data with values that will be processed or changed.
         render: Interface template for list items, such as a text field.
             In nested field.* components, use data.relative for recording responses, otherwise all the list items will
             have the same value.
-        label: Label above the component.
         button_label: Text on the button for adding list items.
         direction: The direction of the list.
         editable: A property that indicates whether adding and removing list items is allowed. Set false to disable.
             By default it is true (allowed).
-        hint: Hint text.
         max_length: Maximum number of list items.
         size: The distance between list items. Acceptable values in ascending order: s, m (default).
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -591,16 +603,17 @@ class MediaFileFieldV1(BaseFieldV1):
 
     This component is convenient when using mobile devices. To upload files from a computer, it's better to use
     field.file for a more flexible configuration of the file types.
+
     Attributes:
         data: Data with values that will be processed or changed.
         accept: Adds different buttons for four types of uploads. Pass the true value for the ones that you need.
             For example, if you need a button for uploading files from the gallery, add the "gallery": true property
-        label: Label above the component.
-        hint: Hint text.
         multiple: Determines whether multiple files can be uploaded:
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
 
-    Example:
+    Examples:
         How to allow performers to upload images and make photos.
 
         >>> image_loader = tb.fields.MediaFileFieldV1(
@@ -677,13 +690,14 @@ class NumberFieldV1(BaseFieldV1):
 
     Negative numbers are allowed by default. To disable them, use the validation property. Pressing the up or down arrow
     keys will increase or decrease the number by one.
+
     Attributes:
         data: Data with values that will be processed or changed.
-        label: Label above the component.
-        hint: Hint text.
         maximum: Maximum number that can be entered.
         minimum: Minimum number that can be entered.
         placeholder: A semi-transparent label that is shown in the box when it is empty.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -719,11 +733,12 @@ class PhoneNumberFieldV1(BaseFieldV1):
 
     Allows entering numbers, spaces, and the +, ( ), - characters. Only numbers and the + character at the beginning
     will remain in the data. For example, if you enter +7 (012) 345-67-89, the data gets the +70123456789 value.
+
     Attributes:
         data: Data with values that will be processed or changed.
-        label: Label above the component.
-        hint: Hint text.
         placeholder: A semi-transparent label that is shown in an empty field.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -756,16 +771,17 @@ class RadioGroupFieldV1(BaseFieldV1):
     If you want it to look like normal buttons, use field.button-radio-group.
 
     The minimum number of buttons is one. Any type of data can be returned.
+
     Attributes:
         data: Data with values that will be processed or changed.
         options: List of options to choose from
-        label: Label above the component.
         disabled: This property prevents clicking the button. If the value is true, the button is not active (the user
             will not be able to click it).
         hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
 
-    Example:
+    Examples:
         How to add label selector to interface.
 
         >>> radio_group_field = tb.fields.RadioGroupFieldV1(
@@ -813,12 +829,13 @@ class SelectFieldV1(BaseFieldV1):
     options are visible at once.
 
     To allow selecting multiple options, use the field.checkbox-group component.
+
     Attributes:
         data: Data with values that will be processed or changed.
         options: Options to choose from.
-        label: Label above the component.
-        hint: Hint text.
         placeholder: The text that will be displayed if none of the options is selected.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -873,10 +890,10 @@ class TextFieldV1(BaseFieldV1):
 
     Attributes:
         data: Data with values that will be processed or changed.
-        label: Label above the component.
         disabled: If true, editing is not available.
-        hint: Hint text.
         placeholder: A semi-transparent label that is shown in the box when it is empty.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -915,14 +932,14 @@ class TextAnnotationFieldV1(BaseFieldV1):
 
     Attributes:
         data: Data with values that will be processed or changed.
-        label: Label above the component.
         adjust: If the property value is set to words, only words can be selected in the text. If you don't use this
             property, any part of a line can be selected.
         content: The text where the performer has to select part of a line.
         disabled: This property blocks the component. If true, the component is unavailable to the performer. The
             default value is false.
-        hint: Hint text.
         labels: A category.
+        hint: Hint text.
+        label: Label above the component.
         validation: Validation based on condition.
     """
 
@@ -983,16 +1000,18 @@ class TextareaFieldV1(BaseFieldV1):
     dragging the lower-right corner. To change the default size of the box, use the rows property.
 
     Note that formatting is not available in the text box.
+
     Attributes:
         data: Data with values that will be processed or changed.
-        label: Label above the component.
         disabled: If true, editing is not available.
-        hint: Hint text.
         placeholder: A semi-transparent label that is shown when the box is empty. Use it to provide an example or a
             hint for the response.
         resizable: Changing the box size. When set to true (the default value), the user can change the height. To
             prevent resizing, set the value to false.
         rows: The height of the text box in lines.
+        hint: Hint text.
+        label: Label above the component.
+        validation: Validation based on condition.
     """
 
     def __init__(

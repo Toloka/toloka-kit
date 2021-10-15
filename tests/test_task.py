@@ -4,6 +4,7 @@ from urllib.parse import urlparse, parse_qs
 from uuid import uuid4
 
 import pytest
+import simplejson as json
 import toloka.client as client
 
 
@@ -42,6 +43,20 @@ def task_map():
         'traits_any_of': ['trait-2'],
         'traits_none_of_any': ['trait-3'],
     }
+
+
+def test_task_from_json(task_map):
+    task = client.structure(task_map, client.task.Task)
+    task_json = json.dumps(task_map, use_decimal=True, ensure_ascii=False)
+    task_from_json = client.task.Task.from_json(task_json)
+    assert task == task_from_json
+
+
+def test_project_to_json(task_map):
+    task = client.structure(task_map, client.task.Task)
+    task_json = task.to_json()
+    task_json_basic = json.dumps(task_map, use_decimal=True, ensure_ascii=False)
+    assert json.loads(task_json) == json.loads(task_json_basic)
 
 
 @pytest.fixture

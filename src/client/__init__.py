@@ -128,6 +128,7 @@ from .task_suite import TaskSuite
 from .user_bonus import UserBonus, UserBonusCreateRequestParameters
 from .user_restriction import UserRestriction
 from .user_skill import SetUserSkillRequest, UserSkill
+from ..util import identity
 from ..util._codegen import expand
 from .webhook_subscription import WebhookSubscription
 
@@ -223,27 +224,28 @@ class TolokaClient:
         # How long to wait for the server to send data before giving up,
         # If None - wait forever for a response/
         self.default_timeout = timeout
-        status_list = [status_code for status_code in requests.status_codes._codes if status_code >= 411 or status_code == 408]
-
-        def _default_retryer_factory() -> Retry:
-            return TolokaRetry(
-                retry_quotas=retry_quotas,
-                total=retries,
-                status_forcelist=status_list,
-                method_whitelist=['HEAD', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'POST', 'PATCH'],
-                backoff_factor=2,  # summary retry time more than 10 seconds
-            )
-
-        def _retry_instance() -> Retry:
-            return retries
 
         if isinstance(retries, Retry):
-            logging.warning("Retry instance usage isn't thread-safe and is deprecated. Use retryer_factory instead.")
-            self.retryer_factory = _retry_instance
+            logger.warning("Retry instance usage isn't thread-safe and is deprecated. Use retryer_factory instead.")
+            self.retryer_factory = functools.partial(identity, retries)
         elif retryer_factory:
             self.retryer_factory = retryer_factory
         else:
-            self.retryer_factory = _default_retryer_factory
+            self.retryer_factory = functools.partial(self._default_retryer_factory, retries, retry_quotas)
+
+    @staticmethod
+    def _default_retryer_factory(
+        retries: int,
+        retry_quotas: Union[List[str], str, None],
+        status_list: Tuple[int] = tuple(code for code in requests.status_codes._codes if code >= 411 or code == 408),
+    ) -> Retry:
+        return TolokaRetry(
+            retry_quotas=retry_quotas,
+            total=retries,
+            status_forcelist=list(status_list),
+            method_whitelist=['HEAD', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'POST', 'PATCH'],
+            backoff_factor=2,  # summary retry time more than 10 seconds
+        )
 
     @functools.lru_cache(maxsize=128)
     def _session_for_thread(self, thread_id: int) -> requests.Session:
@@ -3039,6 +3041,21 @@ class TolokaClient:
     def find_app_projects(self, request: search_requests.AppProjectSearchRequest,
                           sort: Union[List[str], search_requests.AppProjectSortItems, None] = None,
                           limit: Optional[int] = None) -> search_results.AppProjectSearchResult:
+        """Finds all App projects that match certain rules.
+
+        As a result, it returns an object that contains the first part of the found App projects and whether there
+        are any more results.
+        It is better to use the "get_app_projects" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search app projects.
+            sort: The order and direction of sorting the results.
+            limit: number of objects per page.
+
+        Returns:
+            AppProjectSearchResult: The first `limit` App projects in `content`. And a mark that there is more.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3049,6 +3066,17 @@ class TolokaClient:
 
     @expand('request')
     def get_app_projects(self, request: search_requests.AppProjectSearchRequest) -> Generator[AppProject, None, None]:
+        """Finds all App projects that match certain rules and returns them in an iterable object.
+
+        Unlike find_app_projects, returns generator. Does not sort App projects.
+        While iterating over the result, several requests to the Toloka server is possible.
+
+        Args:
+            request: How to search app projects.
+
+        Yields:
+            AppProject: The next object corresponding to the request parameters.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3056,6 +3084,14 @@ class TolokaClient:
         return self._find_all(self.find_app_projects, request, items_field='content')
 
     def create_app_project(self, app_project: AppProject) -> AppProject:
+        """Creating a new App project.
+
+        Args:
+            app_project: New AppProject with setted parameters.
+
+        Returns:
+            UserBonusBatchCreateResult: Created AppProject.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3064,6 +3100,14 @@ class TolokaClient:
         return structure(response, AppProject)
 
     def get_app_project(self, app_project_id: str) -> AppProject:
+        """Project information.
+
+        Args:
+            app_project_id: Project ID.
+
+        Returns:
+            AppProject: the AppProject.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3072,6 +3116,16 @@ class TolokaClient:
         return structure(response, AppProject)
 
     def archive_app_project(self, app_project_id: str) -> AppProject:
+        """Archiving the project.
+
+        The project changes its status to ARCHIVE.
+
+        Args:
+            app_project_id: Project ID.
+
+        Returns:
+            AppProject: Object with updated status.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3080,6 +3134,16 @@ class TolokaClient:
         return self.get_app_project(app_project_id)
 
     def unarchive_app_project(self, app_project_id: str) -> AppProject:
+        """Unarchiving the project.
+
+        The project changes its status to the last one it had before archiving.
+
+        Args:
+            app_project_id: Project ID.
+
+        Returns:
+            AppProject: Object with updated status.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3091,6 +3155,21 @@ class TolokaClient:
     def find_apps(self, request: search_requests.AppSearchRequest,
                           sort: Union[List[str], search_requests.AppSortItems, None] = None,
                           limit: Optional[int] = None) -> search_results.AppSearchResult:
+        """Finds all Apps that match certain rules.
+
+        As a result, it returns an object that contains the first part of the found Apps and whether there
+        are any more results.
+        It is better to use the "get_apps" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            request: How to search Apps.
+            sort: The order and direction of sorting the results.
+            limit: number of objects per page.
+
+        Returns:
+            AppSearchResult: The first `limit` Apps in `content`. And a mark that there is more.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3101,6 +3180,17 @@ class TolokaClient:
 
     @expand('request')
     def get_apps(self, request: search_requests.AppSearchRequest) -> Generator[App, None, None]:
+        """Finds all Apps that match certain rules and returns them in an iterable object.
+
+        Unlike find_apps, returns generator. Does not sort Apps.
+        While iterating over the result, several requests to the Toloka server is possible.
+
+        Args:
+            request: How to search Apps.
+
+        Yields:
+            App: The next object corresponding to the request parameters.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3108,6 +3198,14 @@ class TolokaClient:
         return self._find_all(self.find_apps, request, items_field='content')
 
     def get_app(self, app_id: str) -> App:
+        """Information about the App.
+
+        Args:
+            app_id: App ID.
+
+        Returns:
+            App: the App.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3120,6 +3218,22 @@ class TolokaClient:
                           request: search_requests.AppItemSearchRequest,
                           sort: Union[List[str], search_requests.AppItemSortItems, None] = None,
                           limit: Optional[int] = None) -> search_results.AppItemSearchResult:
+        """Finds all work items in the App project that match certain rules.
+
+        As a result, it returns an object that contains the first part of the found work items in the App project
+        and whether there are any more results.
+        It is better to use the "get_app_items" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            app_project_id: Project ID.
+            request: How to search App items.
+            sort: The order and direction of sorting the results.
+            limit: number of objects per page.
+
+        Returns:
+            AppItemSearchResult: The first `limit` App items in `content`. And a mark that there is more.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3132,6 +3246,17 @@ class TolokaClient:
     def get_app_items(self,
                       app_project_id: str,
                       request: search_requests.AppItemSearchRequest) -> Generator[AppItem, None, None]:
+        """Finds all work items in the App project that match certain rules and returns them in an iterable object.
+
+        Unlike find_app_items, returns generator. Does not sort work items in the App project.
+        While iterating over the result, several requests to the Toloka server is possible.
+
+        Args:
+            request: How to search App items.
+
+        Yields:
+            AppItem: The next object corresponding to the request parameters.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3140,6 +3265,15 @@ class TolokaClient:
         return self._find_all(find_function, request, items_field='content')
 
     def create_app_item(self, app_project_id: str, app_item: AppItem) -> AppItem:
+        """Adding a new work item.
+
+        Args:
+            app_project_id: Project ID.
+            app_item: New AppItem with setted parameters.
+
+        Returns:
+            UserBonusBatchCreateResult: Created AppItem.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3149,6 +3283,12 @@ class TolokaClient:
 
     @expand('request')
     def create_app_items(self, app_project_id: str, request: AppItemsCreateRequest):
+        """Creating a batch of new items.
+
+        Args:
+            app_project_id: Project ID.
+            request: request for App items creation controlling.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3157,6 +3297,15 @@ class TolokaClient:
         return
 
     def get_app_item(self, app_project_id: str, app_item_id: str) -> AppItem:
+        """Information about one work item.
+
+        Args:
+            app_project_id: Project ID.
+            app_item_id: Item ID
+
+        Returns:
+            AppItem: the AppItem.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3169,6 +3318,22 @@ class TolokaClient:
                          request: search_requests.AppBatchSearchRequest,
                          sort: Union[List[str], search_requests.AppBatchSortItems, None] = None,
                          limit: Optional[int] = None) -> search_results.AppBatchSearchResult:
+        """Finds all batches in the App project that match certain rules.
+
+        As a result, it returns an object that contains the first part of the found batches in the App project
+        and whether there are any more results.
+        It is better to use the "get_app_batches" method, they allow to iterate trought all results
+        and not just the first output.
+
+        Args:
+            app_project_id: Project ID.
+            request: How to search batches.
+            sort: The order and direction of sorting the results.
+            limit: number of objects per page.
+
+        Returns:
+            AppBatchSearchResult: The first `limit` batches in `content`. And a mark that there is more.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3181,6 +3346,17 @@ class TolokaClient:
     def get_app_batches(self,
                         app_project_id: str,
                         request: search_requests.AppBatchSearchRequest) -> Generator[AppBatch, None, None]:
+        """Finds all batches in the App project that match certain rules and returns them in an iterable object.
+
+        Unlike find_app_batches, returns generator. Does not sort batches in the App project.
+        While iterating over the result, several requests to the Toloka server is possible.
+
+        Args:
+            request: How to search batches.
+
+        Yields:
+            AppBatch: The next object corresponding to the request parameters.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3190,6 +3366,15 @@ class TolokaClient:
 
     @expand('request')
     def create_app_batch(self, app_project_id: str, request: AppBatchCreateRequest) -> AppBatch:
+        """Creating a new batch.
+
+        Args:
+            app_project_id: Project ID.
+            request: request for AppBatch creation controlling.
+
+        Returns:
+            UserBonusBatchCreateResult: Created AppItem.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3198,6 +3383,15 @@ class TolokaClient:
         return structure(response, AppBatch)
 
     def get_app_batch(self, app_project_id: str, app_batch_id: str) -> AppBatch:
+        """Batch information.
+
+        Args:
+            app_project_id: Project ID.
+            app_batch_id: Batch ID
+
+        Returns:
+            AppBatch: the AppBatch.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
@@ -3206,6 +3400,14 @@ class TolokaClient:
         return structure(response, AppBatch)
 
     def start_app_batch(self, app_project_id: str, app_batch_id: str):
+        """Start processing the batch.
+
+        Starts asynchronously.
+
+        Args:
+            app_project_id: Project ID.
+            app_batch_id: Batch ID.
+        """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')

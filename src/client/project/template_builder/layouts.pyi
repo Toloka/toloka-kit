@@ -16,6 +16,9 @@ class BaseLayoutV1(toloka.client.project.template_builder.base.BaseComponent):
     """Options for positioning elements in the interface, such as in columns or side-by-side.
 
     If you have more than one element in the interface, these components will help you arrange them the way you want.
+
+    Attributes:
+        validation: Validation based on condition.
     """
 
     def __init__(
@@ -40,6 +43,7 @@ class BarsLayoutV1(BaseLayoutV1):
 
     The top bar is located at the top edge of the component, and the bottom one is at the bottom edge. The content is
     placed between the bars and takes up all available space.
+
     Attributes:
         content: The main content.
         bar_after: The bar displayed at the bottom edge of the component.
@@ -72,6 +76,7 @@ class ColumnsLayoutV1(BaseLayoutV1):
     """A component for placing content in columns.
 
     Use it to customize the display of content: set the column width and adjust the vertical alignment of content.
+
     Attributes:
         items: Columns to divide the interface into.
         full_height: Switches the component to column mode at full height and with individual scrolling. Otherwise, the
@@ -84,8 +89,8 @@ class ColumnsLayoutV1(BaseLayoutV1):
             example, if you have 4 columns and the ratio is set to [1,2], the result is the same as for [1,2,1,2].
             If the number of columns is less than the number of values in the ratio property, extra values are simply
             ignored.
-        validation: Validation based on condition.
         vertical_align: Vertical alignment of column content.
+        validation: Validation based on condition.
     """
 
     class VerticalAlign(toloka.util._extendable_enum.ExtendableStrEnum):
@@ -166,10 +171,10 @@ class CompareLayoutV1(BaseLayoutV1):
             elements being compared.
         items: An array with properties of the elements being compared. Set the appearance of the component blocks.
         min_width: Minimum width of the element in pixels. Default: 400 pixels.
-        validation: Validation based on condition.
         wide_common_controls: This property increases the common field size of the elements being compared.
             It's set to false by default: the common fields are displayed in the center, not stretched. If true,
             the fields are wider than with the default value.
+        validation: Validation based on condition.
     """
 
     def __init__(
@@ -201,6 +206,7 @@ class SideBySideLayoutV1(BaseLayoutV1):
     For example, you can use this to compare several photos.
 
     You can set the minimum width for data blocks.
+
     Attributes:
         controls: Components that let users perform the required actions.
             For example: field.checkbox-group or field.button-radio-group.
@@ -244,6 +250,7 @@ class SidebarLayoutV1(BaseLayoutV1):
     In compact mode, controls stretch to the entire width and are located under each other.
 
     To add an extra panel with controls, use the extraControls property.
+
     Attributes:
         content: Content placed in the main area.
         controls: Content of the control panel.

@@ -15,6 +15,7 @@ from functools import update_wrapper, partial
 from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union, Tuple
 
 import attr
+import simplejson as json
 
 from .._converter import converter
 from ..exceptions import SpecClassIdentificationError
@@ -286,6 +287,20 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
         obj = cls(**kwargs)
         obj._unexpected = data
         return obj
+
+    def to_json(self, pretty: bool = False) -> str:
+        basic_config = {
+            'use_decimal': True,
+            'ensure_ascii': False
+        }
+        if pretty:
+            return json.dumps(self.unstructure(), sort_keys=True, indent=4, **basic_config)
+        else:
+            return json.dumps(self.unstructure(), separators=(',', ':'), **basic_config)
+
+    @classmethod
+    def from_json(cls, json_str: str):
+        return cls.structure(json.loads(json_str, use_decimal=True))
 
 
 def autocast_to_enum(func: typing.Callable) -> typing.Callable:

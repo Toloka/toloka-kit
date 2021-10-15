@@ -11,24 +11,13 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Type
 
 import attr
 
+from ..util import get_signature
 from ..util._typing import is_optional_of
 
 REQUIRED_KEY = 'toloka_field_required'
 ORIGIN_KEY = 'toloka_field_origin'
 READONLY_KEY = 'toloka_field_readonly'
 AUTOCAST_KEY = 'toloka_field_autocast'
-
-
-def _get_signature(func: Callable) -> Signature:
-    """
-    Correctly processes a signature for a callable. Correctly processes
-    classes
-    """
-    if isinstance(func, type):
-        sig = signature(func.__init__)  # type: ignore
-        params = list(sig.parameters.values())
-        return sig.replace(parameters=params[1:])
-    return signature(func)
 
 
 def _remove_annotations_from_signature(sig: Signature) -> Signature:
@@ -159,14 +148,14 @@ def codegen_attr_attributes_setters(cls):
 
 
 def expand_func_by_argument(func: Callable, arg_name: str, arg_type: Optional[Type] = None) -> Callable:
-    func_sig: Signature = _get_signature(func)
+    func_sig: Signature = get_signature(func)
     func_params: List[Parameter] = list(func_sig.parameters.values())
 
     arg_param: Parameter = func_sig.parameters[arg_name]
     arg_index = next(i for (i, p) in enumerate(func_params) if p is arg_param)
     if arg_type is None:
         arg_type = is_optional_of(arg_param.annotation) or arg_param.annotation
-    arg_type_sig: Signature = _get_signature(arg_type)
+    arg_type_sig: Signature = get_signature(arg_type)
 
     # TODO: add tests
     if arg_param.kind == Parameter.KEYWORD_ONLY:
@@ -221,9 +210,9 @@ def expand(arg_name: str, arg_type: Optional[Type] = None, check_type: bool = Tr
             func.__init__ = expand(arg_name, arg_type, check_type)(func.__init__)
             return func
 
-        func_sig: Signature = _get_signature(func)
+        func_sig: Signature = get_signature(func)
         expanded_func: Callable = expand_func_by_argument(func, arg_name, arg_type)
-        expanded_func_sig: Signature = _get_signature(expanded_func)
+        expanded_func_sig: Signature = get_signature(expanded_func)
 
         @functools.wraps(func)
         def wrapped(*args, **kwargs):
@@ -244,7 +233,7 @@ def expand(arg_name: str, arg_type: Optional[Type] = None, check_type: bool = Tr
         wrapped._func = func
         wrapped._expanded_func = expanded_func
         wrapped._func_sig = func_sig
-        wrapped._expanded_func_sig = _get_signature(expanded_func)
+        wrapped._expanded_func_sig = get_signature(expanded_func)
         wrapped._expanded_by = arg_name
         return wrapped
 
