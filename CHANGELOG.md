@@ -1,3 +1,11 @@
+0.1.19
+-------------------
+* Added `from_json` and `to_json` convenience functions to `BaseTolokaObject`
+* Added docstrings for Toloka App API client part
+* Supported classes with `async def __call__(...)` as streaming handlers
+* `inherit_docstrings` decorator preserves `__init__` positional arguments ordering
+* `TolokaClient` is now pickleable
+
 0.1.18
 -------------------
 * Fixed an exceptions caused by returning status 204 with an empty body from API

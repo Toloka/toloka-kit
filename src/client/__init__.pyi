@@ -5012,11 +5012,6 @@ class TolokaClient:
         created_at_lte: typing.Optional[datetime.datetime] = None,
         created_at_gt: typing.Optional[datetime.datetime] = None,
         created_at_gte: typing.Optional[datetime.datetime] = None
-    ) -> typing.Generator[toloka.client.app.AppItem, None, None]: ...
-        created_at_lt: typing.Optional[datetime.datetime] = None,
-        created_at_lte: typing.Optional[datetime.datetime] = None,
-        created_at_gt: typing.Optional[datetime.datetime] = None,
-        created_at_gte: typing.Optional[datetime.datetime] = None
     ) -> typing.Generator[toloka.client.app.AppItem, None, None]:
         """Finds all work items in the App project that match certain rules and returns them in an iterable object.
 
@@ -5191,11 +5186,6 @@ class TolokaClient:
         name_lte: typing.Optional[str] = None,
         name_gt: typing.Optional[str] = None,
         name_gte: typing.Optional[str] = None,
-        created_at_lt: typing.Optional[datetime.datetime] = None,
-        created_at_lte: typing.Optional[datetime.datetime] = None,
-        created_at_gt: typing.Optional[datetime.datetime] = None,
-        created_at_gte: typing.Optional[datetime.datetime] = None
-    ) -> typing.Generator[toloka.client.app.AppBatch, None, None]: ...
         created_at_lt: typing.Optional[datetime.datetime] = None,
         created_at_lte: typing.Optional[datetime.datetime] = None,
         created_at_gt: typing.Optional[datetime.datetime] = None,
