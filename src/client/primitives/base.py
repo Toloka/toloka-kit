@@ -253,7 +253,7 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
         return data or None
 
     @classmethod
-    def structure(cls, data: dict):
+    def structure(cls, data: Any):
 
         # If a class is an incomplete variant type we structure it into
         # one of its subclasses

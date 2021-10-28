@@ -202,7 +202,7 @@ def test_create_pool_check_all_filters(requests_mock, toloka_client, toloka_url,
         (filter.UserAgentVersionMinor < 12) &
         (filter.UserAgentVersionBugfix > 2026) &
         (filter.Rating >= 885.15) &
-        ((filter.Skill('224') >= 85) | (filter.Skill('300') != None) | (filter.Skill('350') == 75.512))
+        ((filter.Skill('224') >= 85) | (filter.Skill('300') != None) | (filter.Skill('350') == 75.512))  # noqa: E711
     )
     result = toloka_client.create_pool(pool)
     assert client.structure(pool_map, client.pool.Pool) == result
