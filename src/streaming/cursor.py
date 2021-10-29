@@ -108,6 +108,9 @@ class BaseCursor:
     def _set_state(self, state: Tuple) -> None:
         self._request, self._prev_response, self._seen_ids = state
 
+    def inject(self, injection: 'BaseCursor') -> None:
+        self._set_state(injection._get_state())
+
     def try_fetch_all(self) -> CursorFetchContext:
         return self.CursorFetchContext(self)
 

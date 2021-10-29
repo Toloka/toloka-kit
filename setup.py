@@ -32,10 +32,13 @@ setup(
     python_requires='>=3.6.0',
     install_requires=[
         'attrs >= 20.3.0',
+        'boto3 >= 1.4.7',
         'cattrs == 1.0.0 ; python_version < "3.7.0"',
         'cattrs >= 1.1.1; python_version >= "3.7.0"',
         'cached-property; python_version < "3.8.0"',
         'backports-datetime-fromisoformat; python_version < "3.7.0"',
+        'filelock >= 3.2.0',
+        'kazoo >= 2.6.1',
         'requests',
         'urllib3',
         'pandas',
