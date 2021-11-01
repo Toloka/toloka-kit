@@ -290,7 +290,7 @@ class YandexDiskProxyHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_YAND
     """You can use this component to download files from Yandex.Disk.
 
     To use YandexDiskProxyHelper, connect Yandex.Disk to your Toloka account and add the proxy by following
-    the instructions: https://yandex.com/support/toloka-requester/concepts/prepare-data.html?lang=en
+    the [instructions](https://yandex.com/support/toloka-requester/concepts/prepare-data.html?lang=en)
     Select the component that you want to add, such as view.image for an image or view.audio for an audio file.
     In the url property of this component, use YandexDiskProxyHelper.
     Attributes:

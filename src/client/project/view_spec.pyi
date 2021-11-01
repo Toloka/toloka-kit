@@ -79,8 +79,7 @@ class ViewSpec(toloka.client.primitives.base.BaseTolokaObject):
 
 class ClassicViewSpec(ViewSpec):
     """A classic view specification defined with HTML, CSS and JS.
-    For more information, see Toloka Requester's guide
-    https://yandex.ru/support/toloka-requester/?lang=en
+    For more information, see [Toloka Requester's guide](https://yandex.ru/support/toloka-requester/?lang=en)
 
     Attributes:
         script: JavaScript interface for the task.
@@ -101,9 +100,9 @@ class ClassicViewSpec(ViewSpec):
             script_urls: Links to JavaScript libraries and Toloka assets.
                 Toloka assets:
                 * "$TOLOKA_ASSETS/js/toloka-handlebars-templates.js" — Handlebars. See the description on the template
-                    engine website here http://handlebarsjs.com/
+                    engine website [here](http://handlebarsjs.com/)
                 * "$TOLOKA_ASSETS/js/image-annotation.js" — Image labeling interface. See image with area selection in
-                    the Requester's guide here https://yandex.ru/support/toloka-requester/concepts/t-components/image-annotation.html/?lang=en
+                    the Requester's guide [here](https://yandex.ru/support/toloka-requester/concepts/t-components/image-annotation.html/?lang=en)
                 Note that the image labeling interface should only be connected together with the Handlebars helpers.
                 The order of connection matters.
 

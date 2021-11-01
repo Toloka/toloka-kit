@@ -8,7 +8,7 @@ Project(
     public_name: Optional[str] = None,
     public_description: Optional[str] = None,
     task_spec: Optional[TaskSpec] = None,
-    assignments_issuing_type: Union[AssignmentsIssuingType, str] = Project.AssignmentsIssuingType.AUTOMATED,
+    assignments_issuing_type: Union[AssignmentsIssuingType, str] = AssignmentsIssuingType.AUTOMATED,
     assignments_issuing_view_config: Optional[AssignmentsIssuingViewConfig] = None,
     assignments_automerge_enabled: Optional[bool] = None,
     max_active_assignments_count: Optional[int] = None,

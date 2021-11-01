@@ -367,8 +367,8 @@ class TolokaClient:
         Responses to all completed tasks will be aggregated.
         The method only starts the aggregation and returns the operation for further tracking.
 
-        **Note**: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
-        methods and can perform on your computers: https://github.com/Toloka/crowd-kit
+        **Note**: In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
+        that have more aggregatio methods and can perform on your computers.
 
         Args:
             request: Parameters describing in which pool to aggregate solutions and by what rules.
@@ -428,8 +428,8 @@ class TolokaClient:
         """Gets aggregated responses after the AggregatedSolutionOperation completes.
         It is better to use the "get_aggregated_solutions" method, that allows to iterate through all results.
 
-        **Note**: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
-        methods and can perform on your computers: https://github.com/Toloka/crowd-kit
+        **Note**: In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
+        that have more aggregation methods and can perform on your computers.
 
         Args:
             operation_id: From what aggregation operation you want to get results.
@@ -465,8 +465,8 @@ class TolokaClient:
     def get_aggregated_solutions(self, operation_id: str, request: search_requests.AggregatedSolutionSearchRequest) -> Generator[AggregatedSolution, None, None]:
         """Finds all aggregated responses after the AggregatedSolutionOperation completes
 
-        **Note**: In all aggregation purposes we are strongly recommending using our crowd-kit library, that have more aggregation
-        methods and can perform on your computers: https://github.com/Toloka/crowd-kit
+        **Note**: In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
+        that have more aggregation methods and can perform on your computers.
 
         Args:
             operation_id: From what aggregation operation you want to get results.

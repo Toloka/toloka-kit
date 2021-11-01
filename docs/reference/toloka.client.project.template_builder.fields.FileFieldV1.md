@@ -29,7 +29,7 @@ devices and makes it easier to upload photos and videos.
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
 `data`|**Optional\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md)\]**|<p>Data with values that will be processed or changed.</p>
-`accept`|**Optional\[Union\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md), List\[Union\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md), str\]\]\]\]**|<p>A list of file types that can be uploaded. By default, you can upload any files. Specify the types in the format (https://developer.mozilla.org/en-US/docs/Web/HTTP/BasicsofHTTP/MIME_types). For example, you can allow only images to be uploaded by adding the image/jpeg and image/png types.</p>
+`accept`|**Optional\[Union\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md), List\[Union\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md), str\]\]\]\]**|<p>A list of file types that can be uploaded. By default, you can upload any files. Specify the types in the [certain format](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types). For example, you can allow only images to be uploaded by adding the image/jpeg and image/png types.</p>
 `multiple`|**Optional\[Union\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md), bool\]\]**|<p>Determines whether multiple files can be uploaded:<ul><li>false (default) — forbidden.</li><li>true — allowed.</li></ul></p>
 `hint`|**Optional\[Any\]**|<p>Hint text.</p>
 `label`|**Optional\[Any\]**|<p>Label above the component.</p>

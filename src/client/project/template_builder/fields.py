@@ -235,7 +235,7 @@ class FileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_FILE):
     devices and makes it easier to upload photos and videos.
     Attributes:
         accept: A list of file types that can be uploaded. By default, you can upload any files.
-            Specify the types in the format (https://developer.mozilla.org/en-US/docs/Web/HTTP/BasicsofHTTP/MIME_types).
+            Specify the types in the [certain format](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types).
             For example, you can allow only images to be uploaded by adding the image/jpeg and image/png types.
         multiple: Determines whether multiple files can be uploaded:
             * false (default) — forbidden.
