@@ -368,7 +368,7 @@ class TolokaClient:
         The method only starts the aggregation and returns the operation for further tracking.
 
         **Note**: In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
-        that have more aggregatio methods and can perform on your computers.
+        that have more aggregation methods and can perform on your computers.
 
         Args:
             request: Parameters describing in which pool to aggregate solutions and by what rules.

@@ -38,6 +38,8 @@ class BaseCursor:
         _start_state: typing.Optional[typing.Tuple]
         _finish_state: typing.Optional[typing.Tuple]
 
+    def inject(self, injection: 'BaseCursor') -> None: ...
+
     def try_fetch_all(self) -> CursorFetchContext: ...
 
     def __init__(

@@ -10,7 +10,7 @@ import datetime
 import inspect
 import logging
 
-from typing import Awaitable, Callable, Dict, Iterable, List, Optional, Tuple, Union
+from typing import Any, Awaitable, Callable, Dict, Iterable, List, Optional, Tuple, Union
 
 from ..client.primitives.base import autocast_to_enum
 from ..client.assignment import Assignment
@@ -29,7 +29,7 @@ class BaseObserver:
     def _get_unique_key(self) -> Tuple:
         return (self.__class__.__name__, self.name or '')
 
-    def inject(self, injection: 'BaseObserver') -> None:
+    def inject(self, injection: Any) -> None:
         raise NotImplementedError
 
     async def __call__(self) -> None:

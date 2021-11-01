@@ -11,9 +11,12 @@ import json
 import os
 from contextlib import contextmanager
 from io import BytesIO
-from typing import Any, ContextManager, Optional, Type, Union
+from typing import Any, ContextManager, Optional, Type, TypeVar
 from ..util.stored import get_base64_digest, get_stored_meta, pickle_dumps_base64, pickle_loads_base64
 from .locker import BaseLocker, FileLocker
+
+
+Pickleable = TypeVar('Pickleable')
 
 
 class BaseStorage:
@@ -23,10 +26,10 @@ class BaseStorage:
     def lock(self, key: str) -> ContextManager[Any]:
         pass
 
-    def save(self, key: str, value: Any) -> None:
+    def save(self, key: str, value: Pickleable) -> None:
         raise NotImplementedError(f'Not implemented method save in {self.__class__.__name__}')
 
-    def load(self, key: str) -> Optional[Any]:
+    def load(self, key: str) -> Optional[Pickleable]:
         raise NotImplementedError(f'Not implemented method load in {self.__class__.__name__}')
 
     def cleanup(self, key: str, lock: Any) -> None:
@@ -72,11 +75,11 @@ class JSONLocalStorage(BaseExternalLockerStorage):
         ...
     """
 
-    class DefaultNearbyFileLocker:
+    class DefaultNearbyFileLocker(BaseLocker):
         pass
 
     dirname: str = attr.ib(default='/tmp')
-    locker: Union[None, DefaultNearbyFileLocker, BaseLocker] = attr.ib(factory=DefaultNearbyFileLocker, kw_only=True)
+    locker: Optional[BaseLocker] = attr.ib(factory=DefaultNearbyFileLocker, kw_only=True)
 
     def __attrs_post_init__(self) -> None:
         if isinstance(self.locker, self.DefaultNearbyFileLocker):
@@ -85,7 +88,7 @@ class JSONLocalStorage(BaseExternalLockerStorage):
     def _get_path_by_key(self, key: str) -> str:
         return os.path.join(self.dirname, super()._get_path_by_key(key))
 
-    def save(self, key: str, value: Any) -> None:
+    def save(self, key: str, value: Pickleable) -> None:
         path = self._get_path_by_key(key)
         with open(path, 'w') as file:
             data = {'key': base64.b64encode(key.encode()).decode(),
@@ -93,7 +96,7 @@ class JSONLocalStorage(BaseExternalLockerStorage):
                     'meta': get_stored_meta()}
             json.dump(data, file, indent=4)
 
-    def load(self, key: str) -> Optional[Any]:
+    def load(self, key: str) -> Optional[Pickleable]:
         path = self._get_path_by_key(key)
         try:
             with open(path, 'r') as file:
@@ -155,12 +158,12 @@ class S3Storage(BaseExternalLockerStorage):
                 return error_info['Code'] == '404' and error_info['Message'] == 'Not Found'
         return False
 
-    def save(self, key: str, value: Any) -> None:
+    def save(self, key: str, value: Pickleable) -> None:
         path = self._get_path_by_key(key)
         stream = BytesIO(pickle_dumps_base64(value))
         self.bucket.upload_fileobj(stream, path, ExtraArgs={'Metadata': {'key': key, **get_stored_meta()}})
 
-    def load(self, key: str) -> None:
+    def load(self, key: str) -> Optional[Pickleable]:
         path = self._get_path_by_key(key)
         try:
             with BytesIO() as file:
