@@ -197,6 +197,11 @@ class TolokaClient:
         SANDBOX = 'https://sandbox.toloka.yandex.com'
         PRODUCTION = 'https://toloka.yandex.com'
 
+    token: str
+    default_timeout: Union[float, Tuple[float, float]]
+    url: Optional[str]
+    retryer_factory: Optional[Callable[[], Retry]]
+
     def __init__(
         self,
         token: str,

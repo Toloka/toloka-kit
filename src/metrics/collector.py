@@ -2,13 +2,17 @@ __all__ = [
     'MetricCollector',
 ]
 
+import asyncio
 import logging
 
-from typing import Any, Dict, List, Tuple
+from typing import Any, Callable, Dict, List, Tuple
 
 from .metrics import BaseMetric
+from ..util.async_utils import ComplexException, get_task_traceback
 
 logger = logging.getLogger(__name__)
+
+NamedMetrics = Dict[str, List[Tuple[Any, Any]]]
 
 
 class MetricCollector:
@@ -22,39 +26,72 @@ class MetricCollector:
         How to gather metrics and sends it to zabbix:
 
         >>> import toloka.client as toloka
-        >>> from toloka.metrics import AssignmentsInPool, Balance, bind_client, MetricCollector
+        >>> from toloka.metrics import MetricCollector, Balance, AssignmentsInPool
         >>>
-        >>> toloka_client = toloka.TolokaClient(auth_token, 'PRODUCTION')
+        >>> toloka_client = toloka.TolokaClient(token, 'PRODUCTION')
+        >>>
+        >>> def send_metric_to_zabbix(metric_dict):
+        >>>     ### do something
+        >>>     pass
         >>>
         >>> collector = MetricCollector(
         >>>     [
         >>>         Balance(),
-        >>>         AssignmentsInPool(pool_id),
+        >>>         AssignmentsInPool('12345678'),
         >>>     ],
+        >>>     send_metric_to_zabbix,
         >>> )
+        >>>
         >>> bind_client(collector.metrics, toloka_client)
         >>>
-        >>> while True:
-        >>>     metric_dict = collector.get_lines()
-        >>>     send_metric_to_zabbix(metric_dict)
-        >>>     sleep(10)
+        >>> asyncio.run(collector.run())
     """
 
     metrics : List[BaseMetric]
+    _callback: Callable[[NamedMetrics], None]
 
-    def __init__(self, metrics: List[BaseMetric]):
+    def __init__(self, metrics: List[BaseMetric], callback: Callable[[NamedMetrics], None]):
+        self._callback = callback
         self.metrics = []
+        all_lines_names = set()
         for i, element in enumerate(metrics):
             if not isinstance(element, BaseMetric):
                 raise TypeError(f'{i+1} positional argument must be an instance of toloka.metrics.BaseMetric, now it\'s {type(element)}')
             self.metrics.append(element)
 
-    def get_lines(self) -> Dict[str, List[Tuple[Any, Any]]]:
-        result = {}
-        for metric in self.metrics:
-            new_points = metric.get_lines()
-            for name, points in new_points.items():
-                if name in result:
-                    logger.warning(f'Duplicated metrics name detected: "{name}". Only one metric was returned.')
-                result[name] = points
-        return result
+            for name in element.get_line_names():
+                assert name not in all_lines_names, f'Duplicated metrics name detected: "{name}".'
+                all_lines_names.add(name)
+
+    @staticmethod
+    def create_async_tasks(coro):
+        task = asyncio.Task(coro())
+        task.new_coro = coro
+        return task
+
+    async def run(self):
+        """Starts collecting metrics. And never stops."""
+        tasks = [MetricCollector.create_async_tasks(m.get_lines) for m in self.metrics]
+
+        while True:
+            done, pending = await asyncio.wait(tasks, timeout=1)
+            # check errors
+            errored = [task for task in done if task.exception() is not None]
+            if errored:
+                for task in errored:
+                    logger.error('Got error in metric:\n%s', get_task_traceback(task))
+                raise ComplexException([task.exception() for task in errored])
+
+            # rerun completed tasks
+            tasks = pending | {MetricCollector.create_async_tasks(done_task.new_coro) for done_task in done}
+
+            # join metrics
+            metrics_points = {}
+            for done_task in done:
+                for name, points in done_task.result().items():
+                    if name in metrics_points:
+                        logger.error(f'Duplicated metrics name detected: "{name}". Only one metric was returned.')
+                    metrics_points[name] = points
+
+            if metrics_points:
+                self._callback(metrics_points)

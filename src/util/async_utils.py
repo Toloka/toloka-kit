@@ -4,6 +4,7 @@ __all__ = [
     'ComplexException',
     'ensure_async',
     'get_task_traceback',
+    'Cooldown',
 ]
 
 import asyncio
@@ -12,6 +13,7 @@ import functools
 import pickle
 from concurrent import futures
 from io import StringIO
+import time
 from typing import Awaitable, Callable, Dict, Generic, List, Optional, Type, TypeVar
 
 from .stored import PICKLE_DEFAULT_PROTOCOL
@@ -156,3 +158,33 @@ def get_task_traceback(task: asyncio.Task) -> Optional[str]:
         stream.flush()
         stream.seek(0)
         return stream.read()
+
+
+class Cooldown:
+    """Сontext manager that implements a delay between calls occurring inside the context
+
+    Args:
+        cooldown_time(int): seconds between calls
+
+    Example:
+        >>> coldown = toloka.util.Cooldown(5)
+        >>> while True:
+        >>>     async with coldown:
+        >>>         await do_it()  # will be called no more than once every 5 seconds
+    """
+    _touch_time: time.time
+    _cooldown_time: int
+
+    def __init__(self, cooldown_time):
+        self._touch_time = None
+        self._cooldown_time = cooldown_time
+
+    async def __aenter__(self):
+        if self._touch_time:
+            time_to_sleep = self._cooldown_time + self._touch_time - time.time()
+            if time_to_sleep > 0:
+                await asyncio.sleep(time_to_sleep)
+        self._touch_time = time.time()
+
+    async def __aexit__(self, *exc):
+        pass
