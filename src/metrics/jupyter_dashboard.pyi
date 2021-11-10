@@ -105,13 +105,13 @@ class DashBoard:
     def __init__(
         self,
         metrics: typing.List[typing.Union[toloka.metrics.metrics.BaseMetric, Chart]],
-        header='Toloka metrics dashboard',
+        header: str = 'Toloka metrics dashboard',
         update_seconds: int = 10,
         min_time_range: datetime.timedelta = ...,
         max_time_range: datetime.timedelta = ...
     ): ...
 
-    def update_charts(self, n_intervals: int):
+    def update_charts(self, n_intervals: int) -> typing.Union[plotly.graph_objs._figure.Figure, typing.List[plotly.graph_objs._figure.Figure]]:
         """Redraws all charts on each iteration
 
         Args:
@@ -125,10 +125,10 @@ class DashBoard:
 
     def run_dash(
         self,
-        mode='inline',
-        height=None,
-        host='127.0.0.1',
-        port='8050'
+        mode: str = 'inline',
+        height: int = None,
+        host: str = '127.0.0.1',
+        port: str = '8050'
     ):
         """Starts dashboard. Starts server for online updating charts.
 

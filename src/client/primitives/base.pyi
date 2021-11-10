@@ -12,6 +12,7 @@ import typing
 
 from toloka.util._codegen import fix_attrs_converters
 
+
 E = typing.TypeVar('E', bound=enum.Enum)
 
 class VariantRegistry:

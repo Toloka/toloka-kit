@@ -18,19 +18,19 @@ from toloka.streaming import (
     locker,
     observer,
     pipeline,
-    storage
+    storage,
 )
 from toloka.streaming.locker import (
     FileLocker,
-    ZooKeeperLocker
+    ZooKeeperLocker,
 )
 from toloka.streaming.observer import (
     AssignmentsObserver,
-    PoolStatusObserver
+    PoolStatusObserver,
 )
 from toloka.streaming.pipeline import Pipeline
 from toloka.streaming.storage import (
     BaseStorage,
     JSONLocalStorage,
-    S3Storage
+    S3Storage,
 )

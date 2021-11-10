@@ -36,7 +36,7 @@ from toloka.client.project import (
     field_spec,
     task_spec,
     template_builder,
-    view_spec
+    view_spec,
 )
 from toloka.client.project.field_spec import (
     ArrayBooleanSpec,
@@ -53,16 +53,17 @@ from toloka.client.project.field_spec import (
     IntegerSpec,
     JsonSpec,
     StringSpec,
-    UrlSpec
+    UrlSpec,
 )
 from toloka.client.project.localization import (
     AdditionalLanguage,
-    LocalizationConfig
+    LocalizationConfig,
 )
 from toloka.client.project.view_spec import (
     ClassicViewSpec,
-    TemplateBuilderViewSpec
+    TemplateBuilderViewSpec,
 )
+
 
 class Project(toloka.client.primitives.base.BaseTolokaObject):
     """Top-level object in Toloka. All other entities are contained in some project.

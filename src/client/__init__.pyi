@@ -115,7 +115,7 @@ from toloka.client import (
     user_bonus,
     user_restriction,
     user_skill,
-    webhook_subscription
+    webhook_subscription,
 )
 from toloka.client.app import (
     App,
@@ -123,7 +123,7 @@ from toloka.client.app import (
     AppBatchCreateRequest,
     AppItem,
     AppItemsCreateRequest,
-    AppProject
+    AppProject,
 )
 from toloka.client.assignment import Assignment
 from toloka.client.attachment import Attachment
@@ -132,7 +132,7 @@ from toloka.client.message_thread import (
     MessageThread,
     MessageThreadCompose,
     MessageThreadFolders,
-    MessageThreadReply
+    MessageThreadReply,
 )
 from toloka.client.pool import Pool
 from toloka.client.project import Project
@@ -141,6 +141,7 @@ from toloka.client.task import Task
 from toloka.client.task_suite import TaskSuite
 from toloka.client.training import Training
 from toloka.client.user_bonus import UserBonus
+
 
 class TolokaClient:
     """Class that implements interaction with [Toloka API](https://yandex.com/dev/toloka/doc/concepts/about.html).

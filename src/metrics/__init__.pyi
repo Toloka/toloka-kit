@@ -14,5 +14,5 @@ from toloka.metrics.metrics import (
     Balance,
     BaseMetric,
     PoolCompletedPercentage,
-    bind_client
+    bind_client,
 )

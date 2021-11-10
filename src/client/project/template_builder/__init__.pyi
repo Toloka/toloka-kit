@@ -110,7 +110,7 @@ from toloka.client.project.template_builder import (
     helpers,
     layouts,
     plugins,
-    view
+    view,
 )
 from toloka.client.project.template_builder.actions import (
     BulkActionV1,
@@ -120,7 +120,7 @@ from toloka.client.project.template_builder.actions import (
     PlayPauseActionV1,
     RotateActionV1,
     SetActionV1,
-    ToggleActionV1
+    ToggleActionV1,
 )
 from toloka.client.project.template_builder.conditions import (
     AllConditionV1,
@@ -135,7 +135,7 @@ from toloka.client.project.template_builder.conditions import (
     RequiredConditionV1,
     SameDomainConditionV1,
     SchemaConditionV1,
-    SubArrayConditionV1
+    SubArrayConditionV1,
 )
 from toloka.client.project.template_builder.data import (
     InputData,
@@ -143,7 +143,7 @@ from toloka.client.project.template_builder.data import (
     LocalData,
     LocationData,
     OutputData,
-    RelativeData
+    RelativeData,
 )
 from toloka.client.project.template_builder.fields import (
     AudioFieldV1,
@@ -164,7 +164,7 @@ from toloka.client.project.template_builder.fields import (
     SelectFieldV1,
     TextAnnotationFieldV1,
     TextFieldV1,
-    TextareaFieldV1
+    TextareaFieldV1,
 )
 from toloka.client.project.template_builder.helpers import (
     ConcatArraysHelperV1,
@@ -178,7 +178,7 @@ from toloka.client.project.template_builder.helpers import (
     TextTransformHelperV1,
     TransformHelperV1,
     TranslateHelperV1,
-    YandexDiskProxyHelperV1
+    YandexDiskProxyHelperV1,
 )
 from toloka.client.project.template_builder.layouts import (
     BarsLayoutV1,
@@ -186,14 +186,14 @@ from toloka.client.project.template_builder.layouts import (
     CompareLayoutItem,
     CompareLayoutV1,
     SideBySideLayoutV1,
-    SidebarLayoutV1
+    SidebarLayoutV1,
 )
 from toloka.client.project.template_builder.plugins import (
     HotkeysPluginV1,
     ImageAnnotationHotkeysPluginV1,
     TextAnnotationHotkeysPluginV1,
     TolokaPluginV1,
-    TriggerPluginV1
+    TriggerPluginV1,
 )
 from toloka.client.project.template_builder.view import (
     ActionButtonViewV1,
@@ -211,8 +211,9 @@ from toloka.client.project.template_builder.view import (
     ListViewV1,
     MarkdownViewV1,
     TextViewV1,
-    VideoViewV1
+    VideoViewV1,
 )
+
 
 class TemplateBuilder(toloka.client.primitives.base.BaseTolokaObject):
     def __init__(
