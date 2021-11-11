@@ -1,0 +1,11 @@
+service: toloka_crowdsouring_intruments
+title: Toloka-kit CI
+ci:
+  secret: sec-01fkjwzs5anr05ttdbdn46zjgd
+  runtime:
+    sandbox-owner: TOLOKA_CROWDSOURCING_INSTRUMENTS
+
+  autocheck:
+    large-autostart:
+      target: library/python/toloka-kit/functional_tests
+      toolchains: default-linux-x86_64-release
