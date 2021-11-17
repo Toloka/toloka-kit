@@ -36,6 +36,7 @@ setup(
         'cattrs == 1.0.0 ; python_version < "3.7.0"',
         'cattrs >= 1.1.1; python_version >= "3.7.0"',
         'cached-property; python_version < "3.8.0"',
+        'contextvars; python_version<"3.7"',
         'backports-datetime-fromisoformat; python_version < "3.7.0"',
         'filelock >= 3.2.0',
         'kazoo >= 2.6.1',

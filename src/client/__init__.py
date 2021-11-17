@@ -64,6 +64,7 @@ import requests
 import time
 import threading
 import uuid
+import contextvars
 
 from decimal import Decimal
 from enum import Enum, unique
@@ -129,6 +130,7 @@ from .user_bonus import UserBonus, UserBonusCreateRequestParameters
 from .user_restriction import UserRestriction
 from .user_skill import SetUserSkillRequest, UserSkill
 from ..util import identity
+from ..util._managing_headers import add_headers, caller_context_var, low_level_method_var, top_level_method_var
 from ..util._codegen import expand
 from .webhook_subscription import WebhookSubscription
 
@@ -279,6 +281,18 @@ class TolokaClient:
                     params[key] = 'true' if value else 'false'
         if self.default_timeout is not None and 'timeout' not in kwargs:
             kwargs['timeout'] = self.default_timeout
+
+        # Add additional headers from contextvars
+        ctx = contextvars.copy_context()
+        additional_headers = {
+            'X-Caller-Context': ctx[caller_context_var],
+            'X-Top-Level-Method': ctx[top_level_method_var],
+            'X-Low-Level-Method': ctx[low_level_method_var],
+        }
+        headers = kwargs.get('headers', {})
+        headers = {**headers, **additional_headers}
+        kwargs['headers'] = headers
+
         response = self._session.request(method, f'{self.url}/api{path}', **kwargs)
         raise_on_api_error(response)
         return response
@@ -295,12 +309,15 @@ class TolokaClient:
         return self._request(method, path, params=params)
 
     def _find_all(self, find_function, request, sort_field: str = 'id', items_field: str = 'items'):
-        result = find_function(request, sort=[sort_field])
+        ctx = contextvars.copy_context()
+        yield
+
+        result = ctx.run(find_function, request, sort=[sort_field])
         items = getattr(result, items_field)
         while result.has_more:
             request = attr.evolve(request, **{f'{sort_field}_gt': getattr(items[-1], sort_field)})
             yield from items
-            result = find_function(request, sort=[sort_field])
+            result = ctx.run(find_function, request, sort=[sort_field])
             items = getattr(result, items_field)
 
         yield from items
@@ -366,6 +383,7 @@ class TolokaClient:
     # Aggregation section
 
     @expand('request')
+    @add_headers('client')
     def aggregate_solutions_by_pool(self, request: aggregation.PoolAggregatedSolutionRequest) -> operations.AggregatedSolutionOperation:
         """Starts aggregation of solutions in the pool
 
@@ -399,6 +417,7 @@ class TolokaClient:
         return structure(response, operations.AggregatedSolutionOperation)
 
     @expand('request')
+    @add_headers('client')
     def aggregate_solutions_by_task(self, request: aggregation.WeightedDynamicOverlapTaskAggregatedSolutionRequest) -> AggregatedSolution:
         """Starts aggregation of solutions to a single task
 
@@ -427,6 +446,7 @@ class TolokaClient:
         return structure(response, AggregatedSolution)
 
     @expand('request')
+    @add_headers('client')
     def find_aggregated_solutions(self, operation_id: str, request: search_requests.AggregatedSolutionSearchRequest,
                                   sort: Union[List[str], search_requests.AggregatedSolutionSortItems, None] = None,
                                   limit: Optional[int] = None) -> search_results.AggregatedSolutionSearchResult:
@@ -467,6 +487,7 @@ class TolokaClient:
         return structure(response, search_results.AggregatedSolutionSearchResult)
 
     @expand('request')
+    @add_headers('client')
     def get_aggregated_solutions(self, operation_id: str, request: search_requests.AggregatedSolutionSearchRequest) -> Generator[AggregatedSolution, None, None]:
         """Finds all aggregated responses after the AggregatedSolutionOperation completes
 
@@ -488,10 +509,13 @@ class TolokaClient:
             ...
         """
         find_function = functools.partial(self.find_aggregated_solutions, operation_id)
-        return self._find_all(find_function, request, sort_field='task_id')
+        generator = self._find_all(find_function, request, sort_field='task_id')
+        generator.send(None)
+        return generator
 
     # Assignments section
 
+    @add_headers('client')
     def accept_assignment(self, assignment_id: str, public_comment: str) -> Assignment:
         """Marks one assignment as accepted
 
@@ -513,6 +537,7 @@ class TolokaClient:
         return self.patch_assignment(assignment_id, public_comment=public_comment, status=Assignment.ACCEPTED)
 
     @expand('request')
+    @add_headers('client')
     def find_assignments(self, request: search_requests.AssignmentSearchRequest,
                          sort: Union[List[str], search_requests.AssignmentSortItems, None] = None,
                          limit: Optional[int] = None) -> search_results.AssignmentSearchResult:
@@ -544,6 +569,7 @@ class TolokaClient:
         response = self._search_request('get', '/v1/assignments', request, sort, limit)
         return structure(response, search_results.AssignmentSearchResult)
 
+    @add_headers('client')
     def get_assignment(self, assignment_id: str) -> Assignment:
         """Reads one specific assignment
 
@@ -561,6 +587,7 @@ class TolokaClient:
         return structure(response, Assignment)
 
     @expand('request')
+    @add_headers('client')
     def get_assignments(self, request: search_requests.AssignmentSearchRequest) -> Generator[Assignment, None, None]:
         """Finds all assignments that match certain rules and returns them in an iterable object
 
@@ -581,9 +608,12 @@ class TolokaClient:
             >>> result_list = [assignment.id for assignment in assignments]
             ...
         """
-        return self._find_all(self.find_assignments, request)
+        generator = self._find_all(self.find_assignments, request)
+        generator.send(None)
+        return generator
 
     @expand('patch')
+    @add_headers('client')
     def patch_assignment(self, assignment_id: str, patch: AssignmentPatch) -> Assignment:
         """Changes status and comment on assignment
 
@@ -603,6 +633,7 @@ class TolokaClient:
         response = self._request('patch', f'/v1/assignments/{assignment_id}', json=unstructure(patch))
         return structure(response, Assignment)
 
+    @add_headers('client')
     def reject_assignment(self, assignment_id: str, public_comment: str) -> Assignment:
         """Marks one assignment as rejected
 
@@ -626,6 +657,7 @@ class TolokaClient:
     # Attachment section
 
     @expand('request')
+    @add_headers('client')
     def find_attachments(self, request: search_requests.AttachmentSearchRequest,
                          sort: Union[List[str], search_requests.AttachmentSortItems, None] = None,
                          limit: Optional[int] = None) -> search_results.AttachmentSearchResult:
@@ -657,6 +689,7 @@ class TolokaClient:
         response = self._search_request('get', '/v1/attachments', request, sort, limit)
         return structure(response, search_results.AttachmentSearchResult)
 
+    @add_headers('client')
     def get_attachment(self, attachment_id: str) -> Attachment:
         """Gets attachment metadata without downloading it
 
@@ -678,6 +711,7 @@ class TolokaClient:
         return structure(response, Attachment)
 
     @expand('request')
+    @add_headers('client')
     def get_attachments(self, request: search_requests.AttachmentSearchRequest) -> Generator[Attachment, None, None]:
         """Finds all attachments that match certain rules and returns their metadata in an iterable object
 
@@ -696,8 +730,11 @@ class TolokaClient:
             >>> results_list = [attachment for attachment in toloka_client.get_attachments(pool_id='1')]
             ...
         """
-        return self._find_all(self.find_attachments, request)
+        generator = self._find_all(self.find_attachments, request)
+        generator.send(None)
+        return generator
 
+    @add_headers('client')
     def download_attachment(self, attachment_id: str, out: BinaryIO) -> None:
         """Downloads specific attachment
 
@@ -719,6 +756,7 @@ class TolokaClient:
     # Message section
 
     @autocast_to_enum
+    @add_headers('client')
     def add_message_thread_to_folders(
         self,
         message_thread_id: str, folders: Union[List[Folder], MessageThreadFolders]
@@ -742,6 +780,7 @@ class TolokaClient:
         return structure(response, MessageThread)
 
     @expand('compose')
+    @add_headers('client')
     def compose_message_thread(self, compose: MessageThreadCompose) -> MessageThread:
         """Sends message to performer
 
@@ -769,6 +808,7 @@ class TolokaClient:
         return structure(response, MessageThread)
 
     @expand('request')
+    @add_headers('client')
     def find_message_threads(self, request: search_requests.MessageThreadSearchRequest,
                              sort: Union[List[str], search_requests.MessageThreadSortItems, None] = None,
                              limit: Optional[int] = None) -> search_results.MessageThreadSearchResult:
@@ -799,6 +839,7 @@ class TolokaClient:
         response = self._search_request('get', '/v1/message-threads', request, sort, limit)
         return structure(response, search_results.MessageThreadSearchResult)
 
+    @add_headers('client')
     def reply_message_thread(self, message_thread_id: str, reply: MessageThreadReply) -> MessageThread:
         """Replies to a message in thread
 
@@ -820,6 +861,7 @@ class TolokaClient:
         return structure(response, MessageThread)
 
     @expand('request')
+    @add_headers('client')
     def get_message_threads(self, request: search_requests.MessageThreadSearchRequest) -> Generator[MessageThread, None, None]:
         """Finds all message threads that match certain rules and returns them in an iterable object
 
@@ -838,10 +880,14 @@ class TolokaClient:
             >>> message_threads = toloka_client.get_message_threads(folder=['INBOX', 'UNREAD'])
             ...
         """
-        return self._find_all(self.find_message_threads, request)
+        generator = self._find_all(self.find_message_threads, request)
+        generator.send(None)
+        return generator
 
     @autocast_to_enum
-    def remove_message_thread_from_folders(self, message_thread_id: str, folders: Union[List[Folder], MessageThreadFolders]) -> MessageThread:
+    @add_headers('client')
+    def remove_message_thread_from_folders(self, message_thread_id: str,
+                                           folders: Union[List[Folder], MessageThreadFolders]) -> MessageThread:
         """Deletes a message chain from one or more folders ("unread", "important" etc.)
 
         Args:
@@ -862,6 +908,7 @@ class TolokaClient:
 
     # Project section
 
+    @add_headers('client')
     def archive_project(self, project_id: str) -> Project:
         """Sends project to archive
 
@@ -882,6 +929,7 @@ class TolokaClient:
         operation = self.wait_operation(operation)
         return self.get_project(operation.parameters.project_id)
 
+    @add_headers('client')
     def archive_project_async(self, project_id: str) -> operations.ProjectArchiveOperation:
         """Sends project to archive, asynchronous version
 
@@ -902,6 +950,7 @@ class TolokaClient:
         response = self._request('post', f'/v1/projects/{project_id}/archive')
         return structure(response, operations.ProjectArchiveOperation)
 
+    @add_headers('client')
     def create_project(self, project: Project) -> Project:
         """Creates a new project
 
@@ -935,6 +984,7 @@ class TolokaClient:
         return result
 
     @expand('request')
+    @add_headers('client')
     def find_projects(self, request: search_requests.ProjectSearchRequest,
                       sort: Union[List[str], search_requests.ProjectSortItems, None] = None,
                       limit: Optional[int] = None) -> search_results.ProjectSearchResult:
@@ -967,6 +1017,7 @@ class TolokaClient:
         response = self._search_request('get', '/v1/projects', request, sort, limit)
         return structure(response, search_results.ProjectSearchResult)
 
+    @add_headers('client')
     def get_project(self, project_id: str) -> Project:
         """Reads one specific project
 
@@ -984,6 +1035,7 @@ class TolokaClient:
         return structure(response, Project)
 
     @expand('request')
+    @add_headers('client')
     def get_projects(self, request: search_requests.ProjectSearchRequest) -> Generator[Project, None, None]:
         """Finds all projects that match certain rules and returns them in an iterable object
 
@@ -1007,8 +1059,11 @@ class TolokaClient:
             >>> my_projects = toloka_client.get_projects()
             ...
         """
-        return self._find_all(self.find_projects, request)
+        generator = self._find_all(self.find_projects, request)
+        generator.send(None)
+        return generator
 
+    @add_headers('client')
     def update_project(self, project_id: str, project: Project) -> Project:
         """Makes changes to the project
 
@@ -1026,6 +1081,7 @@ class TolokaClient:
         response = self._request('put', f'/v1/projects/{project_id}', json=unstructure(project))
         return structure(response, Project)
 
+    @add_headers('client')
     def clone_project(self, project_id: str, reuse_controllers: bool = True) -> CloneResults:
         """Synchronously clones the project, all pools and trainings
 
@@ -1101,6 +1157,7 @@ class TolokaClient:
 
     # Pool section
 
+    @add_headers('client')
     def archive_pool(self, pool_id: str) -> Pool:
         """Sends pool to archive
 
@@ -1124,6 +1181,7 @@ class TolokaClient:
             operation.raise_on_fail()
         return self.get_pool(pool_id)
 
+    @add_headers('client')
     def archive_pool_async(self, pool_id: str) -> Optional[operations.PoolArchiveOperation]:
         """Sends pool to archive, asynchronous version
 
@@ -1149,6 +1207,7 @@ class TolokaClient:
             return
         return structure(response.json(), operations.PoolArchiveOperation)
 
+    @add_headers('client')
     def close_pool(self, pool_id: str) -> Pool:
         """Stops distributing tasks from the pool
 
@@ -1172,6 +1231,7 @@ class TolokaClient:
 
         return self.get_pool(pool_id)
 
+    @add_headers('client')
     def close_pool_async(self, pool_id: str) -> Optional[operations.PoolCloseOperation]:
         """Stops distributing tasks from the pool, asynchronous version
 
@@ -1196,6 +1256,7 @@ class TolokaClient:
             return None
         return structure(response.json(), operations.PoolCloseOperation)
 
+    @add_headers('client')
     def close_pool_for_update(self, pool_id: str) -> Pool:
         """Closes pool for update
 
@@ -1215,6 +1276,7 @@ class TolokaClient:
             operation.raise_on_fail()
         return self.get_pool(pool_id)
 
+    @add_headers('client')
     def close_pool_for_update_async(self, pool_id: str) -> Optional[operations.PoolCloseOperation]:
         """Closes pool for update, asynchronous version
 
@@ -1236,6 +1298,7 @@ class TolokaClient:
             return None
         return structure(response.json(), operations.PoolCloseOperation)
 
+    @add_headers('client')
     def clone_pool(self, pool_id: str) -> Pool:
         """Duplicates existing pool
 
@@ -1258,6 +1321,7 @@ class TolokaClient:
         logger.info(f'A new pool with ID "{result.id}" has been cloned. Link to open in web interface: {self.url}/requester/project/{result.project_id}/pool/{result.id}')
         return result
 
+    @add_headers('client')
     def clone_pool_async(self, pool_id: str) -> operations.PoolCloneOperation:
         """Duplicates existing pool, asynchronous version
 
@@ -1278,6 +1342,7 @@ class TolokaClient:
         response = self._request('post', f'/v1/pools/{pool_id}/clone')
         return structure(response, operations.PoolCloneOperation)
 
+    @add_headers('client')
     def create_pool(self, pool: Pool) -> Pool:
         """Creates a new pool
 
@@ -1317,6 +1382,7 @@ class TolokaClient:
         return result
 
     @expand('request')
+    @add_headers('client')
     def find_pools(self, request: search_requests.PoolSearchRequest,
                    sort: Union[List[str], search_requests.PoolSortItems, None] = None,
                    limit: Optional[int] = None) -> search_results.PoolSearchResult:
@@ -1359,6 +1425,7 @@ class TolokaClient:
         response = self._search_request('get', '/v1/pools', request, sort, limit)
         return structure(response, search_results.PoolSearchResult)
 
+    @add_headers('client')
     def get_pool(self, pool_id: str) -> Pool:
         """Reads one specific pool
 
@@ -1376,6 +1443,7 @@ class TolokaClient:
         return structure(response, Pool)
 
     @expand('request')
+    @add_headers('client')
     def get_pools(self, request: search_requests.PoolSearchRequest) -> Generator[Pool, None, None]:
         """Finds all pools that match certain rules and returns them in an iterable object
 
@@ -1399,8 +1467,11 @@ class TolokaClient:
             >>> all_pools = toloka_client.get_pools(project_id='1')
             ...
         """
-        return self._find_all(self.find_pools, request)
+        generator = self._find_all(self.find_pools, request)
+        generator.send(None)
+        return generator
 
+    @add_headers('client')
     def open_pool(self, pool_id: str) -> Pool:
         """Starts distributing tasks from the pool
 
@@ -1425,6 +1496,7 @@ class TolokaClient:
 
         return self.get_pool(pool_id)
 
+    @add_headers('client')
     def open_pool_async(self, pool_id: str) -> Optional[operations.PoolOpenOperation]:
         """Starts distributing tasks from the pool, asynchronous version
 
@@ -1451,6 +1523,7 @@ class TolokaClient:
         return structure(response.json(), operations.PoolOpenOperation)
 
     @expand('request')
+    @add_headers('client')
     def patch_pool(self, pool_id: str, request: PoolPatchRequest) -> Pool:
         """Changes the priority of the pool issue
 
@@ -1470,6 +1543,7 @@ class TolokaClient:
         response = self._request('patch', f'/v1/pools/{pool_id}', json=unstructure(request))
         return structure(response, Pool)
 
+    @add_headers('client')
     def update_pool(self, pool_id: str, pool: Pool) -> Pool:
         """Makes changes to the pool
 
@@ -1491,6 +1565,7 @@ class TolokaClient:
 
     # Training section
 
+    @add_headers('client')
     def archive_training(self, training_id: str) -> Training:
         """Sends training to archive
 
@@ -1514,6 +1589,7 @@ class TolokaClient:
             operation.raise_on_fail()
         return self.get_training(training_id)
 
+    @add_headers('client')
     def archive_training_async(self, training_id: str) -> Optional[operations.TrainingArchiveOperation]:
         """Sends training to archive, asynchronous version
 
@@ -1539,6 +1615,7 @@ class TolokaClient:
             return
         return structure(response.json(), operations.TrainingArchiveOperation)
 
+    @add_headers('client')
     def close_training(self, training_id: str) -> Training:
         """Stops distributing tasks from the training
 
@@ -1559,6 +1636,7 @@ class TolokaClient:
             operation.raise_on_fail()
         return self.get_training(training_id)
 
+    @add_headers('client')
     def close_training_async(self, training_id: str) -> Optional[operations.TrainingCloseOperation]:
         """Stops distributing tasks from the training, asynchronous version
 
@@ -1581,6 +1659,7 @@ class TolokaClient:
             return None
         return structure(response.json(), operations.TrainingCloseOperation)
 
+    @add_headers('client')
     def clone_training(self, training_id: str) -> Training:
         """Duplicates existing training
 
@@ -1603,6 +1682,7 @@ class TolokaClient:
         logger.info(f'A new training with ID "{result.id}" has been cloned. Link to open in web interface: {self.url}/requester/project/{result.project_id}/training/{result.id}')
         return result
 
+    @add_headers('client')
     def clone_training_async(self, training_id: str) -> operations.TrainingCloneOperation:
         """Duplicates existing training, asynchronous version
 
@@ -1623,6 +1703,7 @@ class TolokaClient:
         response = self._request('post', f'/v1/trainings/{training_id}/clone')
         return structure(response, operations.TrainingCloneOperation)
 
+    @add_headers('client')
     def create_training(self, training: Training) -> Training:
         """Creates a new training
 
@@ -1658,6 +1739,7 @@ class TolokaClient:
         return result
 
     @expand('request')
+    @add_headers('client')
     def find_trainings(self, request: search_requests.TrainingSearchRequest,
                        sort: Union[List[str], search_requests.TrainingSortItems, None] = None,
                        limit: Optional[int] = None) -> search_results.TrainingSearchResult:
@@ -1699,6 +1781,7 @@ class TolokaClient:
         response = self._search_request('get', '/v1/trainings', request, sort, limit)
         return structure(response, search_results.TrainingSearchResult)
 
+    @add_headers('client')
     def get_training(self, training_id: str) -> Training:
         """Reads one specific training
 
@@ -1716,6 +1799,7 @@ class TolokaClient:
         return structure(response, Training)
 
     @expand('request')
+    @add_headers('client')
     def get_trainings(self, request: search_requests.TrainingSearchRequest) -> Generator[Training, None, None]:
         """Finds all trainings that match certain rules and returns them in an iterable object
 
@@ -1734,8 +1818,11 @@ class TolokaClient:
             >>> trainings = toloka_client.get_trainings(project_id=project_id)
             ...
         """
-        return self._find_all(self.find_trainings, request)
+        generator = self._find_all(self.find_trainings, request)
+        generator.send(None)
+        return generator
 
+    @add_headers('client')
     def open_training(self, training_id: str) -> Training:
         """Starts distributing tasks from the training
 
@@ -1757,6 +1844,7 @@ class TolokaClient:
             operation.raise_on_fail()
         return self.get_training(training_id)
 
+    @add_headers('client')
     def open_training_async(self, training_id: str) -> Optional[operations.TrainingOpenOperation]:
         """Starts distributing tasks from the training, asynchronous version
 
@@ -1780,6 +1868,7 @@ class TolokaClient:
             return None
         return structure(response.json(), operations.TrainingOpenOperation)
 
+    @add_headers('client')
     def update_training(self, training_id: str, training: Training) -> Training:
         """Makes changes to the training
 
@@ -1802,6 +1891,7 @@ class TolokaClient:
     # Skills section
 
     @expand('skill')
+    @add_headers('client')
     def create_skill(self, skill: Skill) -> Skill:
         """Creates a new Skill
 
@@ -1832,6 +1922,7 @@ class TolokaClient:
         return result
 
     @expand('request')
+    @add_headers('client')
     def find_skills(self, request: search_requests.SkillSearchRequest,
                     sort: Union[List[str], search_requests.SkillSortItems, None] = None,
                     limit: Optional[int] = None) -> search_results.SkillSearchResult:
@@ -1863,6 +1954,7 @@ class TolokaClient:
         response = self._search_request('get', '/v1/skills', request, sort, limit)
         return structure(response, search_results.SkillSearchResult)
 
+    @add_headers('client')
     def get_skill(self, skill_id: str) -> Skill:
         """Reads one specific skill
 
@@ -1880,6 +1972,7 @@ class TolokaClient:
         return structure(response, Skill)
 
     @expand('request')
+    @add_headers('client')
     def get_skills(self, request: search_requests.SkillSearchRequest) -> Generator[Skill, None, None]:
         """Finds all skills that match certain rules and returns them in an iterable object
 
@@ -1902,8 +1995,11 @@ class TolokaClient:
             >>>     print('Create new segmentation skill here')
             ...
         """
-        return self._find_all(self.find_skills, request)
+        generator = self._find_all(self.find_skills, request)
+        generator.send(None)
+        return generator
 
+    @add_headers('client')
     def update_skill(self, skill_id: str, skill: Skill) -> Skill:
         """Makes changes to the skill
 
@@ -1923,6 +2019,7 @@ class TolokaClient:
 
     # Statistics section
 
+    @add_headers('client')
     def get_analytics(self, stats: List[AnalyticsRequest]) -> operations.Operation:
         """Sends analytics queries, for example, to estimate the percentage of completed tasks in the pool
 
@@ -1952,6 +2049,7 @@ class TolokaClient:
     # Task section
 
     @expand('parameters')
+    @add_headers('client')
     def create_task(self, task: Task, parameters: Optional[task.CreateTaskParameters] = None) -> Task:
         """Creates a new task
 
@@ -1977,6 +2075,7 @@ class TolokaClient:
         return structure(response, Task)
 
     @expand('parameters')
+    @add_headers('client')
     def create_tasks(self, tasks: List[Task], parameters: Optional[task.CreateTasksParameters] = None) -> batch_create_results.TaskBatchCreateResult:
         """Creates many tasks in pools
 
@@ -2040,6 +2139,7 @@ class TolokaClient:
         )
 
     @expand('parameters')
+    @add_headers('client')
     def create_tasks_async(self, tasks: List[Task], parameters: Optional[task.CreateTasksParameters] = None) -> operations.TasksCreateOperation:
         """Creates many tasks in pools, asynchronous version
 
@@ -2071,6 +2171,7 @@ class TolokaClient:
         return structure(response, operations.TasksCreateOperation)
 
     @expand('request')
+    @add_headers('client')
     def find_tasks(self, request: search_requests.TaskSearchRequest,
                    sort: Union[List[str], search_requests.TaskSortItems, None] = None,
                    limit: Optional[int] = None) -> search_results.TaskSearchResult:
@@ -2102,6 +2203,7 @@ class TolokaClient:
         response = self._search_request('get', '/v1/tasks', request, sort, limit)
         return structure(response, search_results.TaskSearchResult)
 
+    @add_headers('client')
     def get_task(self, task_id: str) -> Task:
         """Reads one specific task
 
@@ -2119,6 +2221,7 @@ class TolokaClient:
         return structure(response, Task)
 
     @expand('request')
+    @add_headers('client')
     def get_tasks(self, request: search_requests.TaskSearchRequest) -> Generator[Task, None, None]:
         """Finds all tasks that match certain rules and returns them in an iterable object
 
@@ -2137,9 +2240,12 @@ class TolokaClient:
             >>> results_list = [task for task in toloka_client.get_tasks(pool_id='1')]
             ...
         """
-        return self._find_all(self.find_tasks, request)
+        generator = self._find_all(self.find_tasks, request)
+        generator.send(None)
+        return generator
 
     @expand('patch')
+    @add_headers('client')
     def patch_task(self, task_id: str, patch: task.TaskPatch) -> Task:
         """Changes the task overlap
 
@@ -2154,6 +2260,7 @@ class TolokaClient:
         return structure(response, Task)
 
     @expand('patch')
+    @add_headers('client')
     def patch_task_overlap_or_min(self, task_id: str, patch: task.TaskOverlapPatch) -> Task:
         """Stops issuing the task
 
@@ -2178,6 +2285,7 @@ class TolokaClient:
     # Task suites section
 
     @expand('parameters')
+    @add_headers('client')
     def create_task_suite(self, task_suite: TaskSuite, parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None) -> TaskSuite:
         """Creates a new task suite
 
@@ -2207,6 +2315,7 @@ class TolokaClient:
         return structure(response, TaskSuite)
 
     @expand('parameters')
+    @add_headers('client')
     def create_task_suites(self, task_suites: List[TaskSuite], parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None) -> batch_create_results.TaskSuiteBatchCreateResult:
         """Creates many task suites in pools
 
@@ -2261,7 +2370,9 @@ class TolokaClient:
         )
 
     @expand('parameters')
-    def create_task_suites_async(self, task_suites: List[TaskSuite], parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None) -> operations.TaskSuiteCreateBatchOperation:
+    @add_headers('client')
+    def create_task_suites_async(self, task_suites: List[TaskSuite],
+                                 parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None) -> operations.TaskSuiteCreateBatchOperation:
         """Creates many task suites in pools, asynchronous version
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
@@ -2296,6 +2407,7 @@ class TolokaClient:
         return structure(response, operations.TaskSuiteCreateBatchOperation)
 
     @expand('request')
+    @add_headers('client')
     def find_task_suites(self, request: search_requests.TaskSuiteSearchRequest,
                          sort: Union[List[str], search_requests.TaskSuiteSortItems, None] = None,
                          limit: Optional[int] = None) -> search_results.TaskSuiteSearchResult:
@@ -2327,6 +2439,7 @@ class TolokaClient:
         response = self._search_request('get', '/v1/task-suites', request, sort, limit)
         return structure(response, search_results.TaskSuiteSearchResult)
 
+    @add_headers('client')
     def get_task_suite(self, task_suite_id: str) -> TaskSuite:
         """Reads one specific task suite
 
@@ -2344,6 +2457,7 @@ class TolokaClient:
         return structure(response, TaskSuite)
 
     @expand('request')
+    @add_headers('client')
     def get_task_suites(self, request: search_requests.TaskSuiteSearchRequest) -> Generator[TaskSuite, None, None]:
         """Finds all task suites that match certain rules and returns them in an iterable object
 
@@ -2362,9 +2476,12 @@ class TolokaClient:
             >>> results_list = [task_suite for task_suite in toloka_client.get_task_suites(pool_id='1')]
             ...
         """
-        return self._find_all(self.find_task_suites, request)
+        generator = self._find_all(self.find_task_suites, request)
+        generator.send(None)
+        return generator
 
     @expand('patch')
+    @add_headers('client')
     def patch_task_suite(self, task_suite_id: str, patch: task_suite.TaskSuitePatch) -> TaskSuite:
         """Changes the task suite overlap or priority
 
@@ -2387,6 +2504,7 @@ class TolokaClient:
         return structure(response, TaskSuite)
 
     @expand('patch')
+    @add_headers('client')
     def patch_task_suite_overlap_or_min(self, task_suite_id: str, patch: task_suite.TaskSuiteOverlapPatch) -> TaskSuite:
         """Stops issuing the task suites
 
@@ -2408,6 +2526,7 @@ class TolokaClient:
 
     # Operations section
 
+    @add_headers('client')
     def get_operation(self, operation_id: str) -> operations.Operation:
         """Reads information about operation
 
@@ -2427,6 +2546,7 @@ class TolokaClient:
         response = self._request('get', f'/v1/operations/{operation_id}')
         return structure(response, operations.Operation)
 
+    @add_headers('client')
     def wait_operation(self, op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10)) -> operations.Operation:
         """Waits for the operation to complete, and return it
 
@@ -2477,6 +2597,7 @@ class TolokaClient:
             if datetime.datetime.utcnow() > wait_until_time:
                 raise TimeoutError
 
+    @add_headers('client')
     def get_operation_log(self, operation_id: str) -> List[OperationLogItem]:
         """Reads information about validation errors and which task (or task suites) were created
 
@@ -2500,6 +2621,7 @@ class TolokaClient:
     # User bonus
 
     @expand('parameters')
+    @add_headers('client')
     def create_user_bonus(self, user_bonus: UserBonus, parameters: Optional[UserBonusCreateRequestParameters] = None) -> UserBonus:
         """Issues payments directly to the performer
 
@@ -2529,11 +2651,12 @@ class TolokaClient:
         """
         response = self._request(
             'post', '/v1/user-bonuses', json=unstructure(user_bonus),
-            params=({} if parameters is None else unstructure(parameters)),
+            params=({} if parameters is None else unstructure(parameters))
         )
         return structure(response, UserBonus)
 
     @expand('parameters')
+    @add_headers('client')
     def create_user_bonuses(self, user_bonuses: List[UserBonus], parameters: Optional[UserBonusCreateRequestParameters] = None) -> batch_create_results.UserBonusBatchCreateResult:
         """Creates many user bonuses
 
@@ -2569,11 +2692,12 @@ class TolokaClient:
         """
         response = self._request(
             'post', '/v1/user-bonuses', json=unstructure(user_bonuses),
-            params=({} if parameters is None else unstructure(parameters)),
+            params=({} if parameters is None else unstructure(parameters))
         )
         return structure(response, batch_create_results.UserBonusBatchCreateResult)
 
     @expand('parameters')
+    @add_headers('client')
     def create_user_bonuses_async(self, user_bonuses: List[UserBonus], parameters: Optional[UserBonusCreateRequestParameters] = None) -> operations.UserBonusCreateBatchOperation:
         """Issues payments directly to the performers, asynchronously creates many user bonuses
 
@@ -2611,6 +2735,7 @@ class TolokaClient:
         return structure(response, operations.UserBonusCreateBatchOperation)
 
     @expand('request')
+    @add_headers('client')
     def find_user_bonuses(self, request: search_requests.UserBonusSearchRequest,
                           sort: Union[List[str], search_requests.UserBonusSortItems, None] = None,
                           limit: Optional[int] = None) -> search_results.UserBonusSearchResult:
@@ -2640,6 +2765,7 @@ class TolokaClient:
         response = self._search_request('get', '/v1/user-bonuses', request, sort, limit)
         return structure(response, search_results.UserBonusSearchResult)
 
+    @add_headers('client')
     def get_user_bonus(self, user_bonus_id: str) -> UserBonus:
         """Reads one specific user bonus
 
@@ -2657,6 +2783,7 @@ class TolokaClient:
         return structure(response, UserBonus)
 
     @expand('request')
+    @add_headers('client')
     def get_user_bonuses(self, request: search_requests.UserBonusSearchRequest) -> Generator[UserBonus, None, None]:
         """Finds all user bonuses that match certain rules and returns them in an iterable object
 
@@ -2673,11 +2800,14 @@ class TolokaClient:
             >>> bonuses = [bonus for bonus in toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00')]
             ...
         """
-        return self._find_all(self.find_user_bonuses, request)
+        generator = self._find_all(self.find_user_bonuses, request)
+        generator.send(None)
+        return generator
 
     # User restrictions
 
     @expand('request')
+    @add_headers('client')
     def find_user_restrictions(self, request: search_requests.UserRestrictionSearchRequest,
                                sort: Union[List[str], search_requests.UserRestrictionSortItems, None] = None,
                                limit: Optional[int] = None) -> search_results.UserRestrictionSearchResult:
@@ -2707,6 +2837,7 @@ class TolokaClient:
         response = self._search_request('get', '/v1/user-restrictions', request, sort, limit)
         return structure(response, search_results.UserRestrictionSearchResult)
 
+    @add_headers('client')
     def get_user_restriction(self, user_restriction_id: str) -> UserRestriction:
         """Reads one specific user restriction
 
@@ -2724,6 +2855,7 @@ class TolokaClient:
         return structure(response, UserRestriction)
 
     @expand('request')
+    @add_headers('client')
     def get_user_restrictions(self, request: search_requests.UserRestrictionSearchRequest) -> Generator[UserRestriction, None, None]:
         """Finds all user restrictions that match certain rules and returns them in an iterable object
 
@@ -2740,8 +2872,11 @@ class TolokaClient:
             >>> results_list = [restriction for restriction in toloka_client.get_user_restrictions(scope='ALL_PROJECTS')]
             ...
         """
-        return self._find_all(self.find_user_restrictions, request)
+        generator = self._find_all(self.find_user_restrictions, request)
+        generator.send(None)
+        return generator
 
+    @add_headers('client')
     def set_user_restriction(self, user_restriction: UserRestriction) -> UserRestriction:
         """Closes the performer's access to one or more projects
 
@@ -2766,6 +2901,7 @@ class TolokaClient:
         response = self._request('put', '/v1/user-restrictions', json=unstructure(user_restriction))
         return structure(response, UserRestriction)
 
+    @add_headers('client')
     def delete_user_restriction(self, user_restriction_id: str) -> None:
         """Unlocks existing restriction
 
@@ -2780,6 +2916,7 @@ class TolokaClient:
 
     # Requester
 
+    @add_headers('client')
     def get_requester(self) -> Requester:
         """Reads information about the customer and the account balance
 
@@ -2807,6 +2944,7 @@ class TolokaClient:
     # User skills
 
     @expand('request')
+    @add_headers('client')
     def find_user_skills(self, request: search_requests.UserSkillSearchRequest,
                          sort: Union[List[str], search_requests.UserSkillSortItems, None] = None,
                          limit: Optional[int] = None) -> search_results.UserSkillSearchResult:
@@ -2837,6 +2975,7 @@ class TolokaClient:
         response = self._search_request('get', '/v1/user-skills', request, sort, limit)
         return structure(response, search_results.UserSkillSearchResult)
 
+    @add_headers('client')
     def get_user_skill(self, user_skill_id: str) -> UserSkill:
         """Gets the value of the user's skill
 
@@ -2856,6 +2995,7 @@ class TolokaClient:
         return structure(response, UserSkill)
 
     @expand('request')
+    @add_headers('client')
     def get_user_skills(self, request: search_requests.UserSkillSearchRequest) -> Generator[UserSkill, None, None]:
         """Finds all user skills that match certain rules and returns them in an iterable object
 
@@ -2873,9 +3013,12 @@ class TolokaClient:
             >>> results_list = [skill for skill in toloka_client.get_user_skills()]
             ...
         """
-        return self._find_all(self.find_user_skills, request)
+        generator = self._find_all(self.find_user_skills, request)
+        generator.send(None)
+        return generator
 
     @expand('request')
+    @add_headers('client')
     def set_user_skill(self, request: SetUserSkillRequest) -> UserSkill:
         """Sets the skill value to the performer
 
@@ -2893,6 +3036,7 @@ class TolokaClient:
         response = self._request('put', '/v1/user-skills', json=unstructure(request))
         return structure(response, UserSkill)
 
+    @add_headers('client')
     def delete_user_skill(self, user_skill_id: str) -> None:
         """Drop specific UserSkill
 
@@ -2907,6 +3051,7 @@ class TolokaClient:
         """
         self._raw_request('delete', f'/v1/user-skills/{user_skill_id}')
 
+    @add_headers('client')
     def upsert_webhook_subscriptions(self, subscriptions: List[WebhookSubscription]) -> batch_create_results.WebhookSubscriptionBatchCreateResult:
         """Creates (upsert) many webhook-subscriptions.
 
@@ -2941,6 +3086,7 @@ class TolokaClient:
         response = self._request('put', '/v1/webhook-subscriptions', json=unstructure(subscriptions))
         return structure(response, batch_create_results.WebhookSubscriptionBatchCreateResult)
 
+    @add_headers('client')
     def get_webhook_subscription(self, webhook_subscription_id: str) -> WebhookSubscription:
         """Get one specific webhook-subscription
 
@@ -2954,6 +3100,7 @@ class TolokaClient:
         return structure(response, WebhookSubscription)
 
     @expand('request')
+    @add_headers('client')
     def find_webhook_subscriptions(self, request: search_requests.WebhookSubscriptionSearchRequest,
                                    sort: Union[List[str], search_requests.WebhookSubscriptionSortItems, None] = None,
                                    limit: Optional[int] = None) -> search_results.WebhookSubscriptionSearchResult:
@@ -2979,6 +3126,7 @@ class TolokaClient:
         return structure(response, search_results.WebhookSubscriptionSearchResult)
 
     @expand('request')
+    @add_headers('client')
     def get_webhook_subscriptions(self, request: search_requests.WebhookSubscriptionSearchRequest) -> Generator[WebhookSubscription, None, None]:
         """Finds all webhook-subscriptions that match certain rules and returns them in an iterable object
 
@@ -2991,8 +3139,11 @@ class TolokaClient:
         Yields:
             WebhookSubscription: The next object corresponding to the request parameters.
         """
-        return self._find_all(self.find_webhook_subscriptions, request, sort_field='created')
+        generator = self._find_all(self.find_webhook_subscriptions, request, sort_field='created')
+        generator.send(None)
+        return generator
 
+    @add_headers('client')
     def delete_webhook_subscription(self, webhook_subscription_id: str) -> None:
         """Drop specific webhook-subscription
 
@@ -3004,6 +3155,7 @@ class TolokaClient:
     # Experimental section
 
     @expand('parameters')
+    @add_headers('client')
     def get_assignments_df(self, pool_id: str, parameters: GetAssignmentsTsvParameters) -> pd.DataFrame:
         """Downloads assignments as pandas.DataFrame
 
@@ -3043,6 +3195,7 @@ class TolokaClient:
     # toloka apps
 
     @expand('request')
+    @add_headers('client')
     def find_app_projects(self, request: search_requests.AppProjectSearchRequest,
                           sort: Union[List[str], search_requests.AppProjectSortItems, None] = None,
                           limit: Optional[int] = None) -> search_results.AppProjectSearchResult:
@@ -3070,6 +3223,7 @@ class TolokaClient:
         return structure(response, search_results.AppProjectSearchResult)
 
     @expand('request')
+    @add_headers('client')
     def get_app_projects(self, request: search_requests.AppProjectSearchRequest) -> Generator[AppProject, None, None]:
         """Finds all App projects that match certain rules and returns them in an iterable object.
 
@@ -3086,8 +3240,11 @@ class TolokaClient:
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
 
-        return self._find_all(self.find_app_projects, request, items_field='content')
+        generator = self._find_all(self.find_app_projects, request, items_field='content')
+        generator.send(None)
+        return generator
 
+    @add_headers('client')
     def create_app_project(self, app_project: AppProject) -> AppProject:
         """Creating a new App project.
 
@@ -3104,6 +3261,7 @@ class TolokaClient:
         response = self._request('post', '/app/v0/app-projects', json=unstructure(app_project))
         return structure(response, AppProject)
 
+    @add_headers('client')
     def get_app_project(self, app_project_id: str) -> AppProject:
         """Project information.
 
@@ -3120,6 +3278,7 @@ class TolokaClient:
         response = self._request('get', f'/app/v0/app-projects/{app_project_id}')
         return structure(response, AppProject)
 
+    @add_headers('client')
     def archive_app_project(self, app_project_id: str) -> AppProject:
         """Archiving the project.
 
@@ -3138,6 +3297,7 @@ class TolokaClient:
         self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/archive')
         return self.get_app_project(app_project_id)
 
+    @add_headers('client')
     def unarchive_app_project(self, app_project_id: str) -> AppProject:
         """Unarchiving the project.
 
@@ -3157,6 +3317,7 @@ class TolokaClient:
         return self.get_app_project(app_project_id)
 
     @expand('request')
+    @add_headers('client')
     def find_apps(self, request: search_requests.AppSearchRequest,
                           sort: Union[List[str], search_requests.AppSortItems, None] = None,
                           limit: Optional[int] = None) -> search_results.AppSearchResult:
@@ -3184,6 +3345,7 @@ class TolokaClient:
         return structure(response, search_results.AppSearchResult)
 
     @expand('request')
+    @add_headers('client')
     def get_apps(self, request: search_requests.AppSearchRequest) -> Generator[App, None, None]:
         """Finds all Apps that match certain rules and returns them in an iterable object.
 
@@ -3200,8 +3362,11 @@ class TolokaClient:
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
 
-        return self._find_all(self.find_apps, request, items_field='content')
+        generator = self._find_all(self.find_apps, request, items_field='content')
+        generator.send(None)
+        return generator
 
+    @add_headers('client')
     def get_app(self, app_id: str) -> App:
         """Information about the App.
 
@@ -3219,6 +3384,7 @@ class TolokaClient:
         return structure(response, App)
 
     @expand('request')
+    @add_headers('client')
     def find_app_items(self, app_project_id: str,
                           request: search_requests.AppItemSearchRequest,
                           sort: Union[List[str], search_requests.AppItemSortItems, None] = None,
@@ -3248,6 +3414,7 @@ class TolokaClient:
         return structure(response, search_results.AppItemSearchResult)
 
     @expand('request')
+    @add_headers('client')
     def get_app_items(self,
                       app_project_id: str,
                       request: search_requests.AppItemSearchRequest) -> Generator[AppItem, None, None]:
@@ -3267,8 +3434,11 @@ class TolokaClient:
             raise RuntimeError('this method supports only production environment')
 
         find_function = functools.partial(self.find_app_items, app_project_id)
-        return self._find_all(find_function, request, items_field='content')
+        generator = self._find_all(find_function, request, items_field='content')
+        generator.send(None)
+        return generator
 
+    @add_headers('client')
     def create_app_item(self, app_project_id: str, app_item: AppItem) -> AppItem:
         """Adding a new work item.
 
@@ -3287,6 +3457,7 @@ class TolokaClient:
         return structure(response, AppItem)
 
     @expand('request')
+    @add_headers('client')
     def create_app_items(self, app_project_id: str, request: AppItemsCreateRequest):
         """Creating a batch of new items.
 
@@ -3301,6 +3472,7 @@ class TolokaClient:
         self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/items/bulk', json=unstructure(request))
         return
 
+    @add_headers('client')
     def get_app_item(self, app_project_id: str, app_item_id: str) -> AppItem:
         """Information about one work item.
 
@@ -3319,6 +3491,7 @@ class TolokaClient:
         return structure(response, AppItem)
 
     @expand('request')
+    @add_headers('client')
     def find_app_batches(self, app_project_id: str,
                          request: search_requests.AppBatchSearchRequest,
                          sort: Union[List[str], search_requests.AppBatchSortItems, None] = None,
@@ -3348,6 +3521,7 @@ class TolokaClient:
         return structure(response, search_results.AppBatchSearchResult)
 
     @expand('request')
+    @add_headers('client')
     def get_app_batches(self,
                         app_project_id: str,
                         request: search_requests.AppBatchSearchRequest) -> Generator[AppBatch, None, None]:
@@ -3367,9 +3541,12 @@ class TolokaClient:
             raise RuntimeError('this method supports only production environment')
 
         find_function = functools.partial(self.find_app_batches, app_project_id)
-        return self._find_all(find_function, request, items_field='content')
+        generator = self._find_all(find_function, request, items_field='content')
+        generator.send(None)
+        return generator
 
     @expand('request')
+    @add_headers('client')
     def create_app_batch(self, app_project_id: str, request: AppBatchCreateRequest) -> AppBatch:
         """Creating a new batch.
 
@@ -3387,6 +3564,7 @@ class TolokaClient:
         response = self._request('post', f'/app/v0/app-projects/{app_project_id}/batches', json=unstructure(request))
         return structure(response, AppBatch)
 
+    @add_headers('client')
     def get_app_batch(self, app_project_id: str, app_batch_id: str) -> AppBatch:
         """Batch information.
 
@@ -3404,6 +3582,7 @@ class TolokaClient:
         response = self._request('get', f'/app/v0/app-projects/{app_project_id}/batches/{app_batch_id}')
         return structure(response, AppBatch)
 
+    @add_headers('client')
     def start_app_batch(self, app_project_id: str, app_batch_id: str):
         """Start processing the batch.
 

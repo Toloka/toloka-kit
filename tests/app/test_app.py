@@ -6,10 +6,21 @@ import simplejson
 import toloka.client as client
 
 
+def check_headers(request, expected_headers):
+    assert expected_headers.items() <= request._request.headers.items()
+
+
 def test_find_apps(requests_mock, toloka_client_prod, toloka_app_url, app_map):
     raw_result = {'content': [app_map], 'has_more': False}
 
     def apps(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_apps',
+            'X-Low-Level-Method': 'find_apps'
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'after_id': ['123'],
             'sort': ['name,-id'],
@@ -40,6 +51,13 @@ def test_get_apps(requests_mock, toloka_client_prod, toloka_app_url, app_map):
     expected_apps = [app for app in apps if app['id'] > '20']
 
     def get_apps(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_apps',
+            'X-Low-Level-Method': 'find_apps'
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         id_gt = params.pop('id_gt')[0]
         assert {
@@ -74,6 +92,13 @@ def test_get_apps_one_params(requests_mock, toloka_client_prod, toloka_app_url, 
     expected_apps = [app for app in apps]
 
     def get_apps(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_apps',
+            'X-Low-Level-Method': 'find_apps'
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         assert {'after_id': ['1'], 'sort': ['id']} == params
         return simplejson.dumps({'content': [app for app in apps], 'has_more': False})
@@ -86,7 +111,18 @@ def test_get_apps_one_params(requests_mock, toloka_client_prod, toloka_app_url, 
 
 
 def test_get_app(requests_mock, toloka_client_prod, toloka_app_url, app_map):
-    requests_mock.get(f'{toloka_app_url}/apps/21', text=simplejson.dumps(app_map))
+
+    def get_app(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_app',
+            'X-Low-Level-Method': 'get_app'
+        }
+        check_headers(request, expected_headers)
+
+        return simplejson.dumps(app_map)
+
+    requests_mock.get(f'{toloka_app_url}/apps/21', text=get_app)
     assert app_map == client.unstructure(toloka_client_prod.get_app('21'))
 
 
@@ -94,6 +130,13 @@ def test_find_app_projects(requests_mock, toloka_client_prod, toloka_app_url, ap
     raw_result = {'content': [app_project_map_with_readonly], 'has_more': False}
 
     def app_projects(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_app_projects',
+            'X-Low-Level-Method': 'find_app_projects'
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'app_id': ['123'],
             'sort': ['name,-id'],
