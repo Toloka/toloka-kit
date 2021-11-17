@@ -8,11 +8,12 @@ Project(
     public_name: Optional[str] = None,
     public_description: Optional[str] = None,
     task_spec: Optional[TaskSpec] = None,
-    assignments_issuing_type: Union[AssignmentsIssuingType, str] = AssignmentsIssuingType.AUTOMATED,
+    assignments_issuing_type: Union[AssignmentsIssuingType, str] = Project.AssignmentsIssuingType.AUTOMATED,
     assignments_issuing_view_config: Optional[AssignmentsIssuingViewConfig] = None,
     assignments_automerge_enabled: Optional[bool] = None,
     max_active_assignments_count: Optional[int] = None,
     quality_control: Optional[QualityControl] = None,
+    metadata: Optional[Dict[str, List[str]]] = None,
     status: Optional[ProjectStatus] = None,
     created: Optional[datetime] = None,
     id: Optional[str] = None,
@@ -51,6 +52,7 @@ Pools and training pools are related to a project.
 `assignments_automerge_enabled`|**Optional\[bool\]**|<p>Solve merging identical tasks in the project.</p>
 `max_active_assignments_count`|**Optional\[int\]**|<p>The number of task suites the user can complete simultaneously (“Active” status)</p>
 `quality_control`|**Optional\[[QualityControl](toloka.client.quality_control.QualityControl.md)\]**|<p>The quality control rule.</p>
+`metadata`|**Optional\[Dict\[str, List\[str\]\]\]**|<p>Additional information about project.</p>
 `status`|**Optional\[[ProjectStatus](toloka.client.project.Project.ProjectStatus.md)\]**|<p>Project status.</p>
 `created`|**Optional\[datetime\]**|<p>The UTC date and time the project was created.</p>
 `id`|**Optional\[str\]**|<p>Project ID (assigned automatically).</p>

@@ -28,7 +28,7 @@ __all__ = [
 
 import datetime
 from enum import unique
-from typing import Optional
+from typing import Optional, Dict, List
 
 from . import field_spec
 from . import task_spec
@@ -87,6 +87,7 @@ class Project(BaseTolokaObject):
         assignments_automerge_enabled: Solve merging identical tasks in the project.
         max_active_assignments_count: The number of task suites the user can complete simultaneously (“Active” status)
         quality_control: The quality control rule.
+        metadata: Additional information about project.
         status: Project status.
         created: The UTC date and time the project was created.
         id: Project ID (assigned automatically).
@@ -165,7 +166,7 @@ class Project(BaseTolokaObject):
     max_active_assignments_count: int
     quality_control: QualityControl
 
-    # metadata: Dict[str, List[str]] ???
+    metadata: Dict[str, List[str]]
     status: ProjectStatus = attribute(readonly=True)
     created: datetime.datetime = attribute(readonly=True)
 

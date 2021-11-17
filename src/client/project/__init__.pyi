@@ -91,6 +91,7 @@ class Project(toloka.client.primitives.base.BaseTolokaObject):
         assignments_automerge_enabled: Solve merging identical tasks in the project.
         max_active_assignments_count: The number of task suites the user can complete simultaneously (“Active” status)
         quality_control: The quality control rule.
+        metadata: Additional information about project.
         status: Project status.
         created: The UTC date and time the project was created.
         id: Project ID (assigned automatically).
@@ -221,6 +222,7 @@ class Project(toloka.client.primitives.base.BaseTolokaObject):
         assignments_automerge_enabled: typing.Optional[bool] = None,
         max_active_assignments_count: typing.Optional[int] = None,
         quality_control: typing.Optional[toloka.client.quality_control.QualityControl] = None,
+        metadata: typing.Optional[typing.Dict[str, typing.List[str]]] = None,
         status: typing.Optional[ProjectStatus] = None,
         created: typing.Optional[datetime.datetime] = None,
         id: typing.Optional[str] = None,
@@ -241,6 +243,7 @@ class Project(toloka.client.primitives.base.BaseTolokaObject):
     assignments_automerge_enabled: typing.Optional[bool]
     max_active_assignments_count: typing.Optional[int]
     quality_control: typing.Optional[toloka.client.quality_control.QualityControl]
+    metadata: typing.Optional[typing.Dict[str, typing.List[str]]]
     status: typing.Optional[ProjectStatus]
     created: typing.Optional[datetime.datetime]
     id: typing.Optional[str]
