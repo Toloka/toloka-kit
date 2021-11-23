@@ -1,3 +1,7 @@
+Next release
+-------------------
+* Fixed `TemplateBuilder` structure method issue with attributes annotated by `ListBaseComponent`
+
 0.1.19
 -------------------
 * Added `from_json` and `to_json` convenience functions to `BaseTolokaObject`
@@ -16,7 +20,7 @@
 * Reverted from `PreloadingHTTPAdapter` to `HTTPAdapter`
 * Fixed `get_app_items()` signature
 
-0.1.16
+0.1.16 [YANKED]
 -------------------
 * Added methods to use toloka apps
 * Used `PreloadingHTTPAdapter` instead of `HTTPAdapter`
@@ -57,7 +61,7 @@
 * Fixed an exception raising when opening an open pool
 * Fixed `TemplateBuilder` view-components bug with the disappearance of the `hint`, `label` and `validation` fields in `0.1.10` version.
 
-0.1.10
+0.1.10 [YANKED]
 -------------------
 
 * `TemplateBuilder` components now support positional arguments
@@ -105,7 +109,7 @@
 -------------------
 Fixing issues with `create_tasks` and `create_task_suites`
 
-0.1.4
+0.1.4 [YANKED]
 -------------------
 * Implemented a `clone_project` method
 * Deserialization should not fail on unknown enum values or unexpected value types anymore
