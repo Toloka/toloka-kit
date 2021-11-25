@@ -4,14 +4,14 @@ __all__ = [
     'top_level_method_var',
     'low_level_method_var',
 ]
-import builtins
+import contextvars
 
 
-caller_context_var: builtins.ContextVar
+caller_context_var: contextvars.ContextVar
 
-top_level_method_var: builtins.ContextVar
+top_level_method_var: contextvars.ContextVar
 
-low_level_method_var: builtins.ContextVar
+low_level_method_var: contextvars.ContextVar
 
 def add_headers(client: str):
     """This decorator add 3 headers into resulting http request:

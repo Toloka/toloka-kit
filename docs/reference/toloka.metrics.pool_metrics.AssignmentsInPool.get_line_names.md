@@ -1,5 +1,5 @@
 # get_line_names
-`toloka.metrics.metrics.PoolCompletedPercentage.get_line_names`
+`toloka.metrics.pool_metrics.AssignmentsInPool.get_line_names`
 
 ```
 get_line_names(self)

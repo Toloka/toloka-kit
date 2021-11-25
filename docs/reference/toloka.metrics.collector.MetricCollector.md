@@ -2,7 +2,11 @@
 `toloka.metrics.collector.MetricCollector`
 
 ```
-MetricCollector(self, metrics: List[BaseMetric])
+MetricCollector(
+    self,
+    metrics: List[BaseMetric],
+    callback: Callable[[Dict[str, List[Tuple[Any, Any]]]], None]
+)
 ```
 
 Gather metrics
@@ -14,22 +18,23 @@ How to gather metrics and sends it to zabbix:
 
 ```python
 import toloka.client as toloka
-from toloka.metrics import AssignmentsInPool, Balance, bind_client, MetricCollector
-toloka_client = toloka.TolokaClient(auth_token, 'PRODUCTION')
+from toloka.metrics import MetricCollector, Balance, AssignmentsInPool
+toloka_client = toloka.TolokaClient(token, 'PRODUCTION')
+def send_metric_to_zabbix(metric_dict):
+    pass
 collector = MetricCollector(
     [
         Balance(),
-        AssignmentsInPool(pool_id),
+        AssignmentsInPool('12345678'),
     ],
+    send_metric_to_zabbix,
 )
 bind_client(collector.metrics, toloka_client)
-while True:
-    metric_dict = collector.get_lines()
-    send_metric_to_zabbix(metric_dict)
-    sleep(10)
+asyncio.run(collector.run())
 ```
 ## Methods summary
 
 | Method | Description |
 | :------| :-----------|
-[get_lines](toloka.metrics.collector.MetricCollector.get_lines.md)| None
+[create_async_tasks](toloka.metrics.collector.MetricCollector.create_async_tasks.md)| None
+[run](toloka.metrics.collector.MetricCollector.run.md)| Starts collecting metrics. And never stops.

@@ -2,7 +2,12 @@
 `toloka.metrics.metrics.BaseMetric`
 
 ```
-BaseMetric(self, *, toloka_client: TolokaClient = None)
+BaseMetric(
+    self,
+    *,
+    toloka_client: TolokaClient = None,
+    timeout: timedelta = ...
+)
 ```
 
 Base class for all metrics.

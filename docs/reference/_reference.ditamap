@@ -854,38 +854,58 @@
             <topicref format="markdown" href="toloka.client.webhook_subscription.WebhookSubscription.EventType.md" navtitle="WebhookSubscription.EventType" locktitle="yes" toc="no"/>
         </topichead>
     </topichead>
+    <topichead navtitle="toloka.async_client">
+        <topicref format="markdown" href="toloka.async_client.client.AsyncTolokaClient.md"/>
+        <topicref format="markdown" href="toloka.async_client.client.AsyncTolokaClient.from_sync_client.md" toc="no"/>
+        <topicref format="markdown" href="toloka.async_client.client.AsyncTolokaClient.wait_operation.md" toc="no"/>
+    </topichead>
     <topichead navtitle="toloka.metrics">
         <topichead navtitle="collector">
             <topicref format="markdown" href="toloka.metrics.collector.MetricCollector.md"/>
-            <topicref format="markdown" href="toloka.metrics.collector.MetricCollector.get_lines.md" navtitle="MetricCollector.get_lines" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.collector.MetricCollector.create_async_tasks.md" navtitle="MetricCollector.create_async_tasks" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.collector.MetricCollector.run.md" navtitle="MetricCollector.run" locktitle="yes"/>
         </topichead>
         <topichead navtitle="jupyter_dashboard">
             <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.Chart.md"/>
+            <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.Chart.create_async_tasks.md" navtitle="Chart.create_async_tasks" locktitle="yes" toc="no"/>
             <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.Chart.create_figure.md" navtitle="Chart.create_figure" locktitle="yes" toc="no"/>
             <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.Chart.update_metrics.md" navtitle="Chart.update_metrics" locktitle="yes" toc="no"/>
             <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.DashBoard.md"/>
             <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.DashBoard.run_dash.md" navtitle="DashBoard.run_dash" locktitle="yes" toc="no"/>
             <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.DashBoard.stop_dash.md" navtitle="DashBoard.stop_dash" locktitle="yes" toc="no"/>
             <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.DashBoard.update_charts.md" navtitle="DashBoard.update_charts" locktitle="yes" toc="no"/>
-            <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.LineStats.md"/>
+            <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.LineStats.md" toc="no"/>
         </topichead>
         <topichead navtitle="metrics">
-            <topicref format="markdown" href="toloka.metrics.metrics.BaseMetric.md" toc="no" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.BaseMetric.md" toc="no"/>
             <topicref format="markdown" href="toloka.metrics.metrics.BaseMetric.get_lines.md" navtitle="BaseMetric.get_lines" locktitle="yes" toc="no"/>
             <topicref format="markdown" href="toloka.metrics.metrics.BaseMetric.get_line_names.md" navtitle="BaseMetric.get_line_names" locktitle="yes" toc="no"/>
-            <topicref format="markdown" href="toloka.metrics.metrics.AssignmentEventsInPool.md"/>
-            <topicref format="markdown" href="toloka.metrics.metrics.AssignmentEventsInPool.get_line_names.md" navtitle="AssignmentEventsInPool.get_line_names" locktitle="yes" toc="no"/>
-            <topicref format="markdown" href="toloka.metrics.metrics.AssignmentEventsInPool.get_lines.md" navtitle="AssignmentEventsInPool.get_lines" locktitle="yes" toc="no"/>
-            <topicref format="markdown" href="toloka.metrics.metrics.AssignmentsInPool.md"/>
-            <topicref format="markdown" href="toloka.metrics.metrics.AssignmentsInPool.get_line_names.md" navtitle="AssignmentsInPool.get_line_names" locktitle="yes" toc="no"/>
-            <topicref format="markdown" href="toloka.metrics.metrics.AssignmentsInPool.get_lines.md" navtitle="AssignmentsInPool.get_lines" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.bind_client.md"/>
             <topicref format="markdown" href="toloka.metrics.metrics.Balance.md"/>
             <topicref format="markdown" href="toloka.metrics.metrics.Balance.get_line_names.md" navtitle="Balance.get_line_names" locktitle="yes" toc="no"/>
-            <topicref format="markdown" href="toloka.metrics.metrics.Balance.get_lines.md" navtitle="Balance.get_lines" locktitle="yes" toc="no"/>
-            <topicref format="markdown" href="toloka.metrics.metrics.bind_client.md"/>
-            <topicref format="markdown" href="toloka.metrics.metrics.PoolCompletedPercentage.md"/>
-            <topicref format="markdown" href="toloka.metrics.metrics.PoolCompletedPercentage.get_line_names.md" navtitle="PoolCompletedPercentage.get_line_names" locktitle="yes" toc="no"/>
-            <topicref format="markdown" href="toloka.metrics.metrics.PoolCompletedPercentage.get_lines.md" navtitle="PoolCompletedPercentage.get_lines" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.NewMessageThreads.md"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.NewMessageThreads.get_line_names.md" navtitle="NewMessageThreads.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.NewUserBonuses.md"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.NewUserBonuses.get_line_names.md" navtitle="NewUserBonuses.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.NewUserSkills.md"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.NewUserSkills.get_line_names.md" navtitle="NewUserSkills.get_line_names" locktitle="yes" toc="no"/>
+        </topichead>
+        <topichead navtitle="pool_metrics">
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.AssignmentEventsInPool.md"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.AssignmentEventsInPool.get_line_names.md" navtitle="AssignmentEventsInPool.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.AssignmentsInPool.md"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.AssignmentsInPool.get_line_names.md" navtitle="AssignmentsInPool.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.BansInPool.md"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.BansInPool.get_line_names.md" navtitle="BansInPool.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.BasePoolMetric.md" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.PoolCompletedPercentage.md"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.PoolCompletedPercentage.get_line_names.md" navtitle="PoolCompletedPercentage.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.SpentBudgetOnPool.md"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.SpentBudgetOnPool.get_line_names.md" navtitle="SpentBudgetOnPool.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.TasksInPool.md"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.TasksInPool.get_line_names.md" navtitle="TasksInPool.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.WorkersByFilterOnPool.md"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.WorkersByFilterOnPool.get_line_names.md" navtitle="WorkersByFilterOnPool.get_line_names" locktitle="yes" toc="no"/>
         </topichead>
     </topichead>
     <topichead navtitle="toloka.streaming">
@@ -894,16 +914,20 @@
             <topicref format="markdown" href="toloka.streaming.cursor.BaseCursor.CursorFetchContext.md" navtitle="BaseCursor.CursorFetchContext" locktitle="yes" toc="no"/>
             <topicref format="markdown" href="toloka.streaming.cursor.BaseCursor.try_fetch_all.md" navtitle="BaseCursor.try_fetch_all" locktitle="yes" toc="no"/>
             <topicref format="markdown" href="toloka.streaming.cursor.AssignmentCursor.md"/>
+            <topicref format="markdown" href="toloka.streaming.cursor.MessageThreadCursor.md"/>
             <topicref format="markdown" href="toloka.streaming.cursor.TaskCursor.md"/>
             <topicref format="markdown" href="toloka.streaming.cursor.UserBonusCursor.md"/>
+            <topicref format="markdown" href="toloka.streaming.cursor.UserRestrictionCursor.md"/>
             <topicref format="markdown" href="toloka.streaming.cursor.UserSkillCursor.md"/>
         </topichead>
         <topichead navtitle="event">
             <topicref format="markdown" href="toloka.streaming.event.BaseEvent.md" toc="no"/>
             <topicref format="markdown" href="toloka.streaming.event.AssignmentEvent.md"/>
             <topicref format="markdown" href="toloka.streaming.event.AssignmentEvent.Type.md" navtitle="AssignmentEvent.Type" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.event.MessageThreadEvent.md"/>
             <topicref format="markdown" href="toloka.streaming.event.TaskEvent.md"/>
             <topicref format="markdown" href="toloka.streaming.event.UserBonusEvent.md"/>
+            <topicref format="markdown" href="toloka.streaming.event.UserRestrictionEvent.md"/>
             <topicref format="markdown" href="toloka.streaming.event.UserSkillEvent.md"/>
             <topicref format="markdown" href="toloka.streaming.event.UserSkillEvent.Type.md" navtitle="UserSkillEvent.Type" locktitle="yes" toc="no"/>
         </topichead>
@@ -941,8 +965,10 @@
         <topicref format="markdown" href="toloka.util._extendable_enum.extend_enum.md" toc="no"/>
         <topicref format="markdown" href="toloka.util._extendable_enum.ExtendableStrEnum.md" toc="no"/>
         <topicref format="markdown" href="toloka.util._extendable_enum.ExtendableStrEnumMetaclass.md" toc="no"/>
+        <topicref format="markdown" href="toloka.util._managing_headers.add_headers.md" toc="no"/>
         <topicref format="markdown" href="toloka.util.async_utils.AsyncInterfaceWrapper.md"/>
         <topicref format="markdown" href="toloka.util.async_utils.AsyncMultithreadWrapper.md"/>
+        <topicref format="markdown" href="toloka.util.async_utils.Cooldown.md"/>
         <topicref format="markdown" href="toloka.util.async_utils.ComplexException.md"/>
         <topicref format="markdown" href="toloka.util.async_utils.ensure_async.md"/>
         <topicref format="markdown" href="toloka.util.async_utils.get_task_traceback.md"/>

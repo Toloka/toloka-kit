@@ -2,9 +2,11 @@ __all__ = [
     'AssignmentCursor',
     'BaseCursor',
     'DATETIME_MIN',
+    'MessageThreadCursor',
     'TaskCursor',
     'TolokaClientSyncOrAsyncType',
     'UserBonusCursor',
+    'UserRestrictionCursor',
     'UserSkillCursor',
 ]
 
@@ -16,9 +18,11 @@ from typing import Any, AsyncIterator, Awaitable, Callable, Iterator, List, Opti
 
 from ..client import (
     Assignment,
+    MessageThread,
     Task,
     TolokaClient,
     UserBonus,
+    UserRestriction,
     UserSkill,
     expand,
     search_requests,
@@ -26,7 +30,7 @@ from ..client import (
     structure,
 )
 from ..util._codegen import fix_attrs_converters
-from .event import AssignmentEvent, BaseEvent, TaskEvent, UserBonusEvent, UserSkillEvent
+from .event import AssignmentEvent, BaseEvent, MessageThreadEvent, TaskEvent, UserBonusEvent, UserRestrictionEvent, UserSkillEvent
 from ..util.async_utils import AsyncMultithreadWrapper, ensure_async
 
 
@@ -346,3 +350,71 @@ class UserSkillCursor(BaseCursor):
         return UserSkillEvent(user_skill=item,
                               event_type=self._event_type,
                               event_time=getattr(item, self._event_type.time_key))
+
+
+@expand('request')
+@fix_attrs_converters
+@attr.s
+class UserRestrictionCursor(BaseCursor):
+    """Iterator over user restrictions by create time.
+
+    Args:
+        toloka_client: TolokaClient object that is being used to search user restrictions.
+        request: Base request to search user restrictions.
+
+    Examples:
+        Iterate over user restrictions in project.
+
+        >>> it = UserRestrictionCursor(toloka_client=toloka_client, project_id=my_proj_id)
+        >>> current_restrictions = list(it)
+        >>> # ... new restrictions could appear ...
+        >>> new_restrictions = list(it)  # Contains only new user restrictions, appeared since the previous call.
+        ...
+    """
+
+    _request: search_requests.UserRestrictionSearchRequest = attr.ib(
+        factory=search_requests.UserRestrictionSearchRequest,
+    )
+
+    def _get_fetcher(self) -> Callable[..., search_results.UserRestrictionSearchResult]:
+        return self.toloka_client.find_user_restrictions
+
+    def _get_time_field(self) -> str:
+        return 'created'
+
+    def _construct_event(self, item: UserRestriction) -> UserRestrictionEvent:
+        return UserRestrictionEvent(user_restriction=item, event_time=getattr(item, self._get_time_field()))
+
+
+@expand('request')
+@fix_attrs_converters
+@attr.s
+class MessageThreadCursor(BaseCursor):
+    """Iterator over messages by create time.
+
+    Args:
+        toloka_client: TolokaClient object that is being used to search messages.
+        request: Base request to search messages.
+
+    Examples:
+        Iterate over all messages.
+
+        >>> it = MessageThreadCursor(toloka_client=toloka_client)
+        >>> all_messages = list(it)
+        >>> # ... new messages could appear ...
+        >>> new_messages = list(it)  # Contains only new messages, appeared since the previous call.
+        ...
+    """
+
+    _request: search_requests.MessageThreadSearchRequest = attr.ib(
+        factory=search_requests.MessageThreadSearchRequest,
+    )
+
+    def _get_fetcher(self) -> Callable[..., search_results.MessageThreadSearchResult]:
+        return self.toloka_client.find_message_threads
+
+    def _get_time_field(self) -> str:
+        return 'created'
+
+    def _construct_event(self, item: MessageThread) -> MessageThreadEvent:
+        return MessageThreadEvent(message_thread=item, event_time=getattr(item, self._get_time_field()))

@@ -5,7 +5,8 @@
 Chart(
     self,
     name: Optional[str],
-    metrics: List[BaseMetric]
+    metrics: List[BaseMetric],
+    loop=None
 )
 ```
 
@@ -35,5 +36,6 @@ Chart(
 
 | Method | Description |
 | :------| :-----------|
+[create_async_tasks](toloka.metrics.jupyter_dashboard.Chart.create_async_tasks.md)| None
 [create_figure](toloka.metrics.jupyter_dashboard.Chart.create_figure.md)| Create figure for this chart. Called at each step.
 [update_metrics](toloka.metrics.jupyter_dashboard.Chart.update_metrics.md)| Gathers all metrics, and stores them in lines.

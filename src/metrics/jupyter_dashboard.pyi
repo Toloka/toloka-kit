@@ -7,9 +7,12 @@ __all__ = [
     'DashBoard',
     'Chart',
 ]
+import asyncio
+import asyncio.events
 import datetime
 import jupyter_dash.jupyter_app  # type: ignore
 import plotly.graph_objs._figure  # type: ignore
+import threading
 import toloka.metrics.metrics
 import typing
 
@@ -41,8 +44,12 @@ class Chart:
     def __init__(
         self,
         name: typing.Optional[str],
-        metrics: typing.List[toloka.metrics.metrics.BaseMetric]
+        metrics: typing.List[toloka.metrics.metrics.BaseMetric],
+        loop=None
     ): ...
+
+    @staticmethod
+    def create_async_tasks(metric: toloka.metrics.metrics.BaseMetric, loop: asyncio.events.AbstractEventLoop): ...
 
     def update_metrics(self):
         """Gathers all metrics, and stores them in lines.
@@ -61,6 +68,8 @@ class Chart:
     metrics: typing.List[toloka.metrics.metrics.BaseMetric]
     _id: str
     _lines: typing.Dict[str, LineStats]
+    _event_loop: asyncio.events.AbstractEventLoop
+    _tasks: typing.List[asyncio.Task]
 
 
 class DashBoard:
@@ -156,3 +165,5 @@ class DashBoard:
     _min_time_range: datetime.timedelta
     _max_time_range: datetime.timedelta
     _update_seconds: int
+    _toloka_thread: threading.Thread
+    _event_loop: asyncio.events.AbstractEventLoop

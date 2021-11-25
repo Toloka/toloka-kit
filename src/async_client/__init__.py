@@ -2,4 +2,4 @@ __all__ = [
     'AsyncTolokaClient',
 ]
 
-from .async_client import AsyncTolokaClient
+from .client import AsyncTolokaClient

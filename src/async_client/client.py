@@ -16,9 +16,7 @@ class AsyncTolokaClient:
     """Class that implements interaction with [Toloka API], in an asynchronous way.
 
     All methods are wrapped as async. So all methods calls must be awaited.
-
-    Args:
-        All arguments, same as in TolokaClient.
+    All arguments, same as in TolokaClient.
     """
     def __init__(self, *args, **kwargs):
         self._async_wrapped_client = AsyncMultithreadWrapper(TolokaClient(*args, **kwargs))
