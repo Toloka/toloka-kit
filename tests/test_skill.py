@@ -5,6 +5,8 @@ from urllib.parse import urlparse, parse_qs
 import pytest
 import toloka.client as client
 
+from .testutils.util_functions import check_headers
+
 
 @pytest.fixture
 def skill_header():
@@ -28,6 +30,13 @@ def test_find_skills(skill_sample, requests_mock, toloka_client, toloka_url):
     raw_result = {'items': [skill_sample], 'has_more': False}
 
     def find_skill(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_skills',
+            'X-Low-Level-Method': 'find_skills',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'id_gt': ['20'],
             'sort': ['-created,id']
@@ -58,6 +67,13 @@ def test_get_skills(skill_sample, requests_mock, toloka_client, toloka_url):
     expected_skills = [skill for skill in skills if skill['id'] > '20']
 
     def get_skill(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_skills',
+            'X-Low-Level-Method': 'find_skills',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         id_gt = params.pop('id_gt')[0]
         assert {'sort': ['id']} == params
@@ -82,9 +98,20 @@ def test_get_skills(skill_sample, requests_mock, toloka_client, toloka_url):
 
 
 def test_get_skill(skill_sample, requests_mock, toloka_client, toloka_url):
+
+    def skill(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_skill',
+            'X-Low-Level-Method': 'get_skill',
+        }
+        check_headers(request, expected_headers)
+
+        return skill_sample
+
     requests_mock.get(
         f'{toloka_url}/skills/21',
-        json=skill_sample,
+        json=skill,
         status_code=200
     )
 
@@ -94,6 +121,13 @@ def test_get_skill(skill_sample, requests_mock, toloka_client, toloka_url):
 
 def test_create_skill(skill_sample, skill_header, requests_mock, toloka_client, toloka_url, caplog):
     def create_skill(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_skill',
+            'X-Low-Level-Method': 'create_skill',
+        }
+        check_headers(request, expected_headers)
+
         assert request.json() == skill_header
         return skill_sample
 
@@ -143,6 +177,13 @@ def test_create_skill_readonly_fields(skill_sample, toloka_client):
 
 def test_update_skill(skill_sample, skill_header, requests_mock, toloka_client, toloka_url):
     def update_skill(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'update_skill',
+            'X-Low-Level-Method': 'update_skill',
+        }
+        check_headers(request, expected_headers)
+
         assert request.json() == skill_header
         return skill_sample
 

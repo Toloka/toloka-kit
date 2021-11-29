@@ -7,6 +7,8 @@ import pytest
 import simplejson as json
 import toloka.client as client
 
+from .testutils.util_functions import check_headers
+
 
 @pytest.fixture
 def task_map():
@@ -52,7 +54,7 @@ def test_task_from_json(task_map):
     assert task == task_from_json
 
 
-def test_project_to_json(task_map):
+def test_task_to_json(task_map):
     task = client.structure(task_map, client.task.Task)
     task_json = task.to_json()
     task_json_basic = json.dumps(task_map, use_decimal=True, ensure_ascii=False)
@@ -67,6 +69,13 @@ def task_map_with_readonly(task_map):
 def test_create_task(requests_mock, toloka_client, toloka_url, task_map, task_map_with_readonly):
 
     def tasks(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_task',
+            'X-Low-Level-Method': 'create_task',
+        }
+        check_headers(request, expected_headers)
+
         assert task_map == request.json()
         return task_map_with_readonly
 
@@ -85,6 +94,13 @@ def test_create_tasks_with_error(requests_mock, toloka_client, toloka_url, task_
     }
 
     def tasks(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_tasks',
+            'X-Low-Level-Method': 'create_tasks',
+        }
+        check_headers(request, expected_headers)
+
         assert {'allow_defaults': ['true'], 'async_mode': ['false']} == parse_qs(urlparse(request.url).query)
         assert tasks_map == request.json()
         return raw_result
@@ -276,6 +292,13 @@ def test_create_tasks_sync_through_async(
 ):
 
     def check_tasks(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_tasks',
+            'X-Low-Level-Method': 'create_tasks',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'operation_id': ['281073ea-ab34-416e-a028-47421ff1b166'],
             'skip_invalid_items': ['true'],
@@ -291,7 +314,34 @@ def test_create_tasks_sync_through_async(
         assert tasks_map == imcoming_tasks
         return operation_running_map
 
+    def operation_success(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_tasks',
+            'X-Low-Level-Method': 'get_operation',
+        }
+        check_headers(request, expected_headers)
+
+        return operation_success_map
+
+    def tasks_log(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_tasks',
+            'X-Low-Level-Method': 'get_operation_log',
+        }
+        check_headers(request, expected_headers)
+
+        return create_tasks_log
+
     def return_tasks_by_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_tasks',
+            'X-Low-Level-Method': 'find_tasks',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         res_map = created_tasks_21_map if params['pool_id'][0] == '21' else created_tasks_22_map
         return {'items': res_map, 'has_more': False}
@@ -300,9 +350,9 @@ def test_create_tasks_sync_through_async(
     # create_task -> operation
     requests_mock.post(f'{toloka_url}/tasks', json=check_tasks, status_code=201)
     # wait_operation -> operation Success
-    requests_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}', json=operation_success_map, status_code=201)
+    requests_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}', json=operation_success, status_code=201)
     # get_log -> log_res
-    requests_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}/log', json=create_tasks_log, status_code=201)
+    requests_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}/log', json=tasks_log, status_code=201)
     # get tasks from pools (2 calls - for each pool)
     requests_mock.get(f'{toloka_url}/tasks', json=return_tasks_by_pool, status_code=201)
 
@@ -318,7 +368,18 @@ def test_create_tasks_sync_through_async(
 
 
 def test_create_tasks_sync(requests_mock, toloka_client, toloka_url, tasks_map, task_create_result_map):
-    requests_mock.post(f'{toloka_url}/tasks', json=task_create_result_map, status_code=201)
+
+    def task(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_tasks',
+            'X-Low-Level-Method': 'create_tasks',
+        }
+        check_headers(request, expected_headers)
+
+        return task_create_result_map
+
+    requests_mock.post(f'{toloka_url}/tasks', json=task, status_code=201)
 
     # Expanded syntax
     result = toloka_client.create_tasks(
@@ -349,6 +410,13 @@ def test_create_tasks_async(requests_mock, toloka_client, toloka_url):
     }
 
     def tasks(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_tasks_async',
+            'X-Low-Level-Method': 'create_tasks_async',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'operation_id': ['281073ea-ab34-416e-a028-47421ff1b166'],
             'skip_invalid_items': ['true'],
@@ -389,6 +457,13 @@ def test_find_tasks(requests_mock, toloka_client, toloka_url, task_map_with_read
     raw_result = {'items': [task_map_with_readonly], 'has_more': False}
 
     def tasks(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_tasks',
+            'X-Low-Level-Method': 'find_tasks',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'pool_id': ['21'],
             'created_gt': ['2001-01-01T12:00:00'],
@@ -426,6 +501,13 @@ def test_get_tasks(requests_mock, toloka_client, toloka_url, task_map_with_reado
     tasks.sort(key=itemgetter('id'))
 
     def get_tasks(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_tasks',
+            'X-Low-Level-Method': 'find_tasks',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         id_gt = params.pop('id_gt')[0] if 'id_gt' in params else None
         assert {
@@ -459,7 +541,18 @@ def test_get_tasks(requests_mock, toloka_client, toloka_url, task_map_with_reado
 
 
 def test_get_task(requests_mock, toloka_client, toloka_url, task_map_with_readonly):
-    requests_mock.get(f'{toloka_url}/tasks/task-1', json=task_map_with_readonly)
+
+    def get_task(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_task',
+            'X-Low-Level-Method': 'get_task',
+        }
+        check_headers(request, expected_headers)
+
+        return task_map_with_readonly
+
+    requests_mock.get(f'{toloka_url}/tasks/task-1', json=get_task)
     result = toloka_client.get_task('task-1')
     assert task_map_with_readonly == client.unstructure(result)
 
@@ -469,6 +562,13 @@ def test_patch_task(requests_mock, toloka_client, toloka_url, task_map_with_read
     raw_result = {**task_map_with_readonly, **raw_request}
 
     def tasks(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'patch_task',
+            'X-Low-Level-Method': 'patch_task',
+        }
+        check_headers(request, expected_headers)
+
         assert raw_request == request.json()
         return raw_result
 
@@ -494,6 +594,13 @@ def test_patch_task_with_baseline_solution(requests_mock, toloka_client, toloka_
     raw_result = {**task_map_with_readonly, **raw_request}
 
     def tasks(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'patch_task',
+            'X-Low-Level-Method': 'patch_task',
+        }
+        check_headers(request, expected_headers)
+
         assert raw_request == request.json()
         return raw_result
 
@@ -522,6 +629,13 @@ def test_task_overlap_or_min(requests_mock, toloka_client, toloka_url, task_map_
     raw_result = {**task_map_with_readonly, 'overlap': 12}
 
     def tasks(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'patch_task_overlap_or_min',
+            'X-Low-Level-Method': 'patch_task_overlap_or_min',
+        }
+        check_headers(request, expected_headers)
+
         assert raw_request == request.json()
         return raw_result
 
@@ -542,6 +656,13 @@ def test_task_overlap_or_min_infinite_overlap(requests_mock, toloka_client, tolo
     raw_result = task_map_with_readonly
 
     def tasks(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'patch_task_overlap_or_min',
+            'X-Low-Level-Method': 'patch_task_overlap_or_min',
+        }
+        check_headers(request, expected_headers)
+
         assert raw_request == request.json()
         return raw_result
 

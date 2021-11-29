@@ -7,6 +7,8 @@ import simplejson
 from toloka.client import TolokaClient
 import toloka.client as client
 
+from .testutils.util_functions import check_headers
+
 
 @pytest.fixture
 def random_url():
@@ -41,7 +43,17 @@ def test_different_urls(requests_mock, random_url):
         },
     }
 
-    requests_mock.get(f'{random_url}/api/v1/requester', text=simplejson.dumps(result))
+    def get_requester(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_requester',
+            'X-Low-Level-Method': 'get_requester',
+        }
+        check_headers(request, expected_headers)
+
+        return simplejson.dumps(result)
+
+    requests_mock.get(f'{random_url}/api/v1/requester', text=get_requester)
 
     toloka_client = TolokaClient('fake-token', url=random_url)
     requester = toloka_client.get_requester()

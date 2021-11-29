@@ -3,6 +3,8 @@ from urllib.parse import urlparse, parse_qs
 
 import toloka.client as client
 
+from .testutils.util_functions import check_headers
+
 
 def test_find_user_restrictions(requests_mock, toloka_client, toloka_url):
     raw_result = {
@@ -28,6 +30,13 @@ def test_find_user_restrictions(requests_mock, toloka_client, toloka_url):
     }
 
     def user_restrictions(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_user_restrictions',
+            'X-Low-Level-Method': 'find_user_restrictions',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'scope': ['PROJECT'],
             'id_gt': ['123'],
@@ -60,7 +69,7 @@ def test_find_user_restrictions(requests_mock, toloka_client, toloka_url):
     assert raw_result == client.unstructure(result)
 
 
-def test_alll_find_user_restrictions(requests_mock, toloka_client, toloka_url):
+def test_all_find_user_restrictions(requests_mock, toloka_client, toloka_url):
     restrictions = [
         {
             'id': '256',
@@ -81,6 +90,13 @@ def test_alll_find_user_restrictions(requests_mock, toloka_client, toloka_url):
     ]
 
     def get_user_restrictions(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_user_restrictions',
+            'X-Low-Level-Method': 'find_user_restrictions',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         id_gt = params.pop('id_gt')[0]
         assert {
@@ -122,7 +138,17 @@ def test_get_user_restriction(requests_mock, toloka_client, toloka_url):
         'created': '2016-03-28T18:16:00',
     }
 
-    requests_mock.get(f'{toloka_url}/user-restrictions/56', json=result, status_code=200)
+    def user_restrictions(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_user_restriction',
+            'X-Low-Level-Method': 'get_user_restriction',
+        }
+        check_headers(request, expected_headers)
+
+        return result
+
+    requests_mock.get(f'{toloka_url}/user-restrictions/56', json=user_restrictions, status_code=200)
     assert result == client.unstructure(toloka_client.get_user_restriction('56'))
 
 
@@ -141,6 +167,13 @@ def test_set_user_restriction(requests_mock, toloka_client, toloka_url):
     }
 
     def user_restrictions(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'set_user_restriction',
+            'X-Low-Level-Method': 'set_user_restriction',
+        }
+        check_headers(request, expected_headers)
+
         assert user_restriction_map == request.json()
         return user_restriction_map_with_readonly
 
@@ -160,6 +193,15 @@ def test_set_user_restriction(requests_mock, toloka_client, toloka_url):
     assert user_restriction_map_with_readonly == client.unstructure(response)
 
 
-def test_delete_user_skill(requests_mock, toloka_client, toloka_url):
-    requests_mock.delete(f'{toloka_url}/user-restrictions/user-restriction-i1d', status_code=204)
+def test_delete_user_restriction(requests_mock, toloka_client, toloka_url):
+
+    def deletion(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'delete_user_restriction',
+            'X-Low-Level-Method': 'delete_user_restriction',
+        }
+        check_headers(request, expected_headers)
+
+    requests_mock.delete(f'{toloka_url}/user-restrictions/user-restriction-i1d', status_code=204, text=deletion)
     toloka_client.delete_user_restriction('user-restriction-i1d')

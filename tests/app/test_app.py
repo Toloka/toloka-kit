@@ -5,9 +5,7 @@ from urllib.parse import urlparse, parse_qs
 import simplejson
 import toloka.client as client
 
-
-def check_headers(request, expected_headers):
-    assert expected_headers.items() <= request._request.headers.items()
+from ..testutils.util_functions import check_headers
 
 
 def test_find_apps(requests_mock, toloka_client_prod, toloka_app_url, app_map):
@@ -17,7 +15,7 @@ def test_find_apps(requests_mock, toloka_client_prod, toloka_app_url, app_map):
         expected_headers = {
             'X-Caller-Context': 'client',
             'X-Top-Level-Method': 'find_apps',
-            'X-Low-Level-Method': 'find_apps'
+            'X-Low-Level-Method': 'find_apps',
         }
         check_headers(request, expected_headers)
 
@@ -54,7 +52,7 @@ def test_get_apps(requests_mock, toloka_client_prod, toloka_app_url, app_map):
         expected_headers = {
             'X-Caller-Context': 'client',
             'X-Top-Level-Method': 'get_apps',
-            'X-Low-Level-Method': 'find_apps'
+            'X-Low-Level-Method': 'find_apps',
         }
         check_headers(request, expected_headers)
 
@@ -95,7 +93,7 @@ def test_get_apps_one_params(requests_mock, toloka_client_prod, toloka_app_url, 
         expected_headers = {
             'X-Caller-Context': 'client',
             'X-Top-Level-Method': 'get_apps',
-            'X-Low-Level-Method': 'find_apps'
+            'X-Low-Level-Method': 'find_apps',
         }
         check_headers(request, expected_headers)
 
@@ -116,7 +114,7 @@ def test_get_app(requests_mock, toloka_client_prod, toloka_app_url, app_map):
         expected_headers = {
             'X-Caller-Context': 'client',
             'X-Top-Level-Method': 'get_app',
-            'X-Low-Level-Method': 'get_app'
+            'X-Low-Level-Method': 'get_app',
         }
         check_headers(request, expected_headers)
 
@@ -133,7 +131,7 @@ def test_find_app_projects(requests_mock, toloka_client_prod, toloka_app_url, ap
         expected_headers = {
             'X-Caller-Context': 'client',
             'X-Top-Level-Method': 'find_app_projects',
-            'X-Low-Level-Method': 'find_app_projects'
+            'X-Low-Level-Method': 'find_app_projects',
         }
         check_headers(request, expected_headers)
 
@@ -167,6 +165,13 @@ def test_get_app_projects(requests_mock, toloka_client_prod, toloka_app_url, app
     expected_app_projects = [project for project in app_projects if project['id'] > '20']
 
     def get_app_projects(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_app_projects',
+            'X-Low-Level-Method': 'find_app_projects',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         id_gt = params.pop('id_gt')[0]
         assert {
@@ -201,6 +206,13 @@ def test_get_app_projects_one_params(requests_mock, toloka_client_prod, toloka_a
     expected_app_projects = [project for project in app_projects]
 
     def get_app_projects(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_app_projects',
+            'X-Low-Level-Method': 'find_app_projects',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         assert {'status': ['READY'], 'sort': ['id']} == params
         return {'content': [project for project in app_projects], 'has_more': False}
@@ -213,13 +225,31 @@ def test_get_app_projects_one_params(requests_mock, toloka_client_prod, toloka_a
 
 
 def test_get_app_project(requests_mock, toloka_client_prod, toloka_app_url, app_project_map_with_readonly):
-    requests_mock.get(f'{toloka_app_url}/app-projects/123', json=app_project_map_with_readonly)
+
+    def get_app_project(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_app_project',
+            'X-Low-Level-Method': 'get_app_project',
+        }
+        check_headers(request, expected_headers)
+
+        return app_project_map_with_readonly
+
+    requests_mock.get(f'{toloka_app_url}/app-projects/123', json=get_app_project)
     assert app_project_map_with_readonly == client.unstructure(toloka_client_prod.get_app_project('123'))
 
 
 def test_create_app_project(requests_mock, toloka_client_prod, toloka_app_url, app_map, app_project_map_with_readonly):
 
     def app_projects(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_app_project',
+            'X-Low-Level-Method': 'create_app_project',
+        }
+        check_headers(request, expected_headers)
+
         assert app_map == request.json()
         return app_project_map_with_readonly
 
@@ -230,14 +260,56 @@ def test_create_app_project(requests_mock, toloka_client_prod, toloka_app_url, a
 
 
 def test_archive_app_project(requests_mock, toloka_client_prod, toloka_app_url, app_project_map_with_readonly):
-    requests_mock.post(f'{toloka_app_url}/app-projects/123/archive', json=app_project_map_with_readonly)
-    requests_mock.get(f'{toloka_app_url}/app-projects/123', json=app_project_map_with_readonly)
+
+    def archive_app_project(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'archive_app_project',
+            'X-Low-Level-Method': 'archive_app_project',
+        }
+        check_headers(request, expected_headers)
+
+        return app_project_map_with_readonly
+
+    def get_app_project(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'archive_app_project',
+            'X-Low-Level-Method': 'get_app_project',
+        }
+        check_headers(request, expected_headers)
+
+        return app_project_map_with_readonly
+
+    requests_mock.post(f'{toloka_app_url}/app-projects/123/archive', json=archive_app_project)
+    requests_mock.get(f'{toloka_app_url}/app-projects/123', json=get_app_project)
     assert app_project_map_with_readonly == client.unstructure(toloka_client_prod.archive_app_project('123'))
 
 
 def test_unarchive_app_project(requests_mock, toloka_client_prod, toloka_app_url, app_project_map_with_readonly):
-    requests_mock.post(f'{toloka_app_url}/app-projects/123/unarchive', json=app_project_map_with_readonly)
-    requests_mock.get(f'{toloka_app_url}/app-projects/123', json=app_project_map_with_readonly)
+
+    def unarchive_app_project(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'unarchive_app_project',
+            'X-Low-Level-Method': 'unarchive_app_project',
+        }
+        check_headers(request, expected_headers)
+
+        return app_project_map_with_readonly
+
+    def get_app_project(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'unarchive_app_project',
+            'X-Low-Level-Method': 'get_app_project',
+        }
+        check_headers(request, expected_headers)
+
+        return app_project_map_with_readonly
+
+    requests_mock.post(f'{toloka_app_url}/app-projects/123/unarchive', json=unarchive_app_project)
+    requests_mock.get(f'{toloka_app_url}/app-projects/123', json=get_app_project)
     assert app_project_map_with_readonly == client.unstructure(toloka_client_prod.unarchive_app_project('123'))
 
 
@@ -245,6 +317,13 @@ def test_find_app_items(requests_mock, toloka_client_prod, toloka_app_url, app_i
     raw_result = {'content': [app_item_map_with_readonly], 'has_more': False}
 
     def app_items(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_app_items',
+            'X-Low-Level-Method': 'find_app_items',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'after_id': ['123'],
             'sort': ['created_at,-id'],
@@ -276,6 +355,13 @@ def test_get_app_items(requests_mock, toloka_client_prod, toloka_app_url, app_it
     expected_app_items = [app_item for app_item in app_items if app_item['id'] > '20']
 
     def get_app_items(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_app_items',
+            'X-Low-Level-Method': 'find_app_items',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         id_gt = params.pop('id_gt')[0]
         assert {
@@ -311,6 +397,13 @@ def test_get_app_items_one_params(requests_mock, toloka_client_prod, toloka_app_
     expected_app_items = [app_item for app_item in app_items]
 
     def get_app_items(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_app_items',
+            'X-Low-Level-Method': 'find_app_items',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         assert {'after_id': ['1'], 'sort': ['id']} == params
         return simplejson.dumps({'content': [app_item for app_item in app_items], 'has_more': False})
@@ -323,13 +416,31 @@ def test_get_app_items_one_params(requests_mock, toloka_client_prod, toloka_app_
 
 
 def test_get_app_item(requests_mock, toloka_client_prod, toloka_app_url, app_item_map_with_readonly):
-    requests_mock.get(f'{toloka_app_url}/app-projects/21/items/123', text=simplejson.dumps(app_item_map_with_readonly))
+
+    def get_app_item(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_app_item',
+            'X-Low-Level-Method': 'get_app_item',
+        }
+        check_headers(request, expected_headers)
+
+        return simplejson.dumps(app_item_map_with_readonly)
+
+    requests_mock.get(f'{toloka_app_url}/app-projects/21/items/123', text=get_app_item)
     assert app_item_map_with_readonly == client.unstructure(toloka_client_prod.get_app_item('21', '123'))
 
 
 def test_create_app_item(requests_mock, toloka_client_prod, toloka_app_url, app_item_map, app_item_map_with_readonly):
 
     def app_items(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_app_item',
+            'X-Low-Level-Method': 'create_app_item',
+        }
+        check_headers(request, expected_headers)
+
         assert app_item_map == request.json()
         return simplejson.dumps(app_item_map_with_readonly)
 
@@ -347,6 +458,13 @@ def test_create_app_items(requests_mock, toloka_client_prod, toloka_app_url, app
     }
 
     def app_items(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_app_items',
+            'X-Low-Level-Method': 'create_app_items',
+        }
+        check_headers(request, expected_headers)
+
         assert app_items_create_request == request.json()
         return
 
@@ -359,6 +477,13 @@ def test_find_app_batches(requests_mock, toloka_client_prod, toloka_app_url, app
     raw_result = {'content': [app_batch_map], 'has_more': False}
 
     def app_batches(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_app_batches',
+            'X-Low-Level-Method': 'find_app_batches',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'after_id': ['123'],
             'sort': ['created_at,-id'],
@@ -390,6 +515,13 @@ def test_get_app_batches(requests_mock, toloka_client_prod, toloka_app_url, app_
     expected_app_batches = [app_batch for app_batch in app_batches if app_batch['id'] > '20']
 
     def get_app_batches(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_app_batches',
+            'X-Low-Level-Method': 'find_app_batches',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         id_gt = params.pop('id_gt')[0]
         assert {
@@ -425,6 +557,13 @@ def test_get_app_batches_one_params(requests_mock, toloka_client_prod, toloka_ap
     expected_app_batches = [app_batch for app_batch in app_batches]
 
     def get_app_batches(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_app_batches',
+            'X-Low-Level-Method': 'find_app_batches',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         assert {'after_id': ['1'], 'sort': ['id']} == params
         return {'content': [app_batch for app_batch in app_batches], 'has_more': False}
@@ -437,7 +576,18 @@ def test_get_app_batches_one_params(requests_mock, toloka_client_prod, toloka_ap
 
 
 def test_get_app_batch(requests_mock, toloka_client_prod, toloka_app_url, app_batch_map):
-    requests_mock.get(f'{toloka_app_url}/app-projects/21/batches/123', json=app_batch_map)
+
+    def get_app_batch(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_app_batch',
+            'X-Low-Level-Method': 'get_app_batch',
+        }
+        check_headers(request, expected_headers)
+
+        return app_batch_map
+
+    requests_mock.get(f'{toloka_app_url}/app-projects/21/batches/123', json=get_app_batch)
     assert app_batch_map == client.unstructure(toloka_client_prod.get_app_batch('21', '123'))
 
 
@@ -448,6 +598,13 @@ def test_create_app_batch(requests_mock, toloka_client_prod, toloka_app_url, app
     }
 
     def app_batch(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_app_batch',
+            'X-Low-Level-Method': 'create_app_batch',
+        }
+        check_headers(request, expected_headers)
+
         assert app_batch_create_request == request.json()
         return app_batch_map
 
@@ -458,5 +615,14 @@ def test_create_app_batch(requests_mock, toloka_client_prod, toloka_app_url, app
 
 
 def test_start_app_batch(requests_mock, toloka_client_prod, toloka_app_url):
-    requests_mock.post(f'{toloka_app_url}/app-projects/123/batches/321/start', status_code=201)
+
+    def start_app_batch(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'start_app_batch',
+            'X-Low-Level-Method': 'start_app_batch',
+        }
+        check_headers(request, expected_headers)
+
+    requests_mock.post(f'{toloka_app_url}/app-projects/123/batches/321/start', text=start_app_batch, status_code=201)
     toloka_client_prod.start_app_batch('123', '321')

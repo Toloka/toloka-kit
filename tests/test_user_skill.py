@@ -7,6 +7,8 @@ import pytest
 import simplejson
 import toloka.client as client
 
+from .testutils.util_functions import check_headers
+
 
 @pytest.fixture
 def set_user_skill_map():
@@ -41,6 +43,13 @@ def test_find_user_skills(requests_mock, toloka_client, toloka_url, user_skill_m
     raw_result = {'items': [user_skill_map_with_readonly], 'has_more': True}
 
     def user_skills(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_user_skills',
+            'X-Low-Level-Method': 'find_user_skills',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'skill_id': ['skill-i1d'],
             'created_gt': ['2016-03-25T00:00:00'],
@@ -78,6 +87,13 @@ def test_get_user_skills(requests_mock, toloka_client, toloka_url, user_skill_ma
     user_skills.sort(key=itemgetter('id'))
 
     def get_user_skills(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_user_skills',
+            'X-Low-Level-Method': 'find_user_skills',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         id_gt = params.pop('id_gt')[0] if 'id_gt' in params else None
         assert {
@@ -112,9 +128,19 @@ def test_get_user_skills(requests_mock, toloka_client, toloka_url, user_skill_ma
 
 def test_get_user_skill(requests_mock, toloka_client, toloka_url, user_skill_map_with_readonly):
 
+    def user_skill(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_user_skill',
+            'X-Low-Level-Method': 'get_user_skill',
+        }
+        check_headers(request, expected_headers)
+
+        return simplejson.dumps(user_skill_map_with_readonly)
+
     requests_mock.get(
         f'{toloka_url}/user-skills/user-skill-i1d',
-        text=simplejson.dumps(user_skill_map_with_readonly),
+        text=user_skill,
         status_code=200
     )
 
@@ -130,6 +156,13 @@ def test_set_user_skill(requests_mock, toloka_client, toloka_url, set_user_skill
     }
 
     def user_skills(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'set_user_skill',
+            'X-Low-Level-Method': 'set_user_skill',
+        }
+        check_headers(request, expected_headers)
+
         assert request.text == simplejson.dumps(user_skill_request_map)
         assert set_user_skill_map == request.json(parse_float=Decimal)
         return simplejson.dumps(user_skill_map_with_readonly)
@@ -148,7 +181,16 @@ def test_set_user_skill(requests_mock, toloka_client, toloka_url, set_user_skill
 
 
 def test_delete_user_skill(requests_mock, toloka_client, toloka_url):
-    requests_mock.delete(f'{toloka_url}/user-skills/user-skill-i1d', status_code=204)
+
+    def user_skills(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'delete_user_skill',
+            'X-Low-Level-Method': 'delete_user_skill',
+        }
+        check_headers(request, expected_headers)
+
+    requests_mock.delete(f'{toloka_url}/user-skills/user-skill-i1d', status_code=204, text=user_skills)
     toloka_client.delete_user_skill('user-skill-i1d')
 
 
@@ -170,9 +212,19 @@ def test_exact_value_in_user_skill(
 ):
     new_map = dict(user_skill_map_with_readonly, exact_value=value_to_check)
 
+    def new_user_skills(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_user_skill',
+            'X-Low-Level-Method': 'get_user_skill',
+        }
+        check_headers(request, expected_headers)
+
+        return simplejson.dumps(new_map)
+
     requests_mock.get(
         f'{toloka_url}/user-skills/user-skill-i1d',
-        text=simplejson.dumps(new_map),
+        text=new_user_skills,
         status_code=200
     )
     user_skill = toloka_client.get_user_skill('user-skill-i1d')

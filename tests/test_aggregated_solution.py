@@ -2,6 +2,8 @@ from urllib.parse import urlparse, parse_qs
 
 import toloka.client as client
 
+from .testutils.util_functions import check_headers
+
 
 def test_aggregate_solution_by_pool(requests_mock, toloka_client, toloka_url):
 
@@ -24,8 +26,25 @@ def test_aggregate_solution_by_pool(requests_mock, toloka_client, toloka_url):
     operation_success_map = dict(operation_map, status='SUCCESS', finished='2016-03-07T15:48:03')
 
     def aggregate_by_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'aggregate_solutions_by_pool',
+            'X-Low-Level-Method': 'aggregate_solutions_by_pool',
+        }
+        check_headers(request, expected_headers)
+
         assert raw_request == request.json()
         return operation_map
+
+    def operation_success(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'wait_operation',
+            'X-Low-Level-Method': 'get_operation',
+        }
+        check_headers(request, expected_headers)
+
+        return operation_success_map
 
     requests_mock.post(
         f'{toloka_url}/aggregated-solutions/aggregate-by-pool',
@@ -34,7 +53,7 @@ def test_aggregate_solution_by_pool(requests_mock, toloka_client, toloka_url):
     )
     requests_mock.get(
         f'{toloka_url}/operations/aggregated-solution-op1id',
-        json=operation_success_map,
+        json=operation_success,
         status_code=200
     )
 
@@ -72,6 +91,13 @@ def test_aggregatte_solution_by_task(requests_mock, toloka_client, toloka_url):
     }
 
     def aggregate_by_task(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'aggregate_solutions_by_task',
+            'X-Low-Level-Method': 'aggregate_solutions_by_task',
+        }
+        check_headers(request, expected_headers)
+
         assert raw_request == request.json()
         return raw_result
 
@@ -116,6 +142,13 @@ def test_find_aggregated_solutions(requests_mock, toloka_client, toloka_url):
     }
 
     def aggregated_solutions(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_aggregated_solutions',
+            'X-Low-Level-Method': 'find_aggregated_solutions',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'task_id_gte': ['qwerty_123'],
             'task_id_lte': ['qwerty_987'],
@@ -185,6 +218,13 @@ def test_get_aggregated_solutions(requests_mock, toloka_client, toloka_url):
     ]
 
     def find_aggregated_solutions_mock(request, _):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_aggregated_solutions',
+            'X-Low-Level-Method': 'find_aggregated_solutions',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         task_id_gt = params.pop('task_id_gt', None)
         assert {'sort': ['task_id']} == params, params

@@ -15,6 +15,8 @@ from toloka.client.analytics_request import (
     EstimatedAssignmentsCountPoolAnalytics,
 )
 
+from .testutils.util_functions import check_headers
+
 
 @pytest.fixture
 def full_tasks_request_map():
@@ -142,6 +144,13 @@ def test_send_analytics_request(requests_mock, toloka_client, toloka_api_url,
                                       full_tasks_request_map, simple_answer_map):
 
     def task_suites(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_analytics',
+            'X-Low-Level-Method': 'get_analytics',
+        }
+        check_headers(request, expected_headers)
+
         assert full_tasks_request_map == request.json()
         return simple_answer_map
 
@@ -174,6 +183,16 @@ def test_less_ms_digits(requests_mock, toloka_client, toloka_api_url, success_an
         'finished': '2021-08-24T06:30:11.999990',   # 6 ms digits
     }
 
-    requests_mock.post(f'{toloka_api_url}/staging/analytics-2', json=success_answer_map)
+    def task_map(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_analytics',
+            'X-Low-Level-Method': 'get_analytics',
+        }
+        check_headers(request, expected_headers)
+
+        return success_answer_map
+
+    requests_mock.post(f'{toloka_api_url}/staging/analytics-2', json=task_map)
     operation = toloka_client.get_analytics([SubmitedAssignmentsCountPoolAnalytics(subject_id='123')])
     assert real_result == client.unstructure(operation)

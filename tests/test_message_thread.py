@@ -5,6 +5,8 @@ from urllib.parse import urlparse, parse_qs
 import pytest
 import toloka.client as client
 
+from .testutils.util_functions import check_headers
+
 
 @pytest.fixture
 def message_thread_base_map():
@@ -58,6 +60,13 @@ def test_find_message_thread(requests_mock, toloka_client, toloka_url, message_t
     raw_result = {'items': [message_thread_base_map], 'has_more': False}
 
     def message_threads(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_message_threads',
+            'X-Low-Level-Method': 'find_message_threads',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'folder': ['OUTBOX'],
             'folder_ne': ['IMPORTANT'],
@@ -97,6 +106,13 @@ def test_get_message_threads(requests_mock, toloka_client, toloka_url, message_t
     threads.sort(key=itemgetter('id'))
 
     def get_message_threads(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_message_threads',
+            'X-Low-Level-Method': 'find_message_threads',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         id_gt = params.pop('id_gt')[0] if 'id_gt' in params else None
         assert {
@@ -174,6 +190,13 @@ def test_compose_thread_direct(requests_mock, toloka_client, toloka_url, message
     raw_result = {**message_thread_base_map, 'compose_details': compose_details_direct_map}
 
     def message_threads(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'compose_message_thread',
+            'X-Low-Level-Method': 'compose_message_thread',
+        }
+        check_headers(request, expected_headers)
+
         assert raw_request == request.json()
         return raw_result
 
@@ -203,6 +226,13 @@ def test_compose_thread_filter(requests_mock, toloka_client, toloka_url, message
     raw_result = {**message_thread_base_map, 'compose_details': compose_details_filter_map}
 
     def message_threads(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'compose_message_thread',
+            'X-Low-Level-Method': 'compose_message_thread',
+        }
+        check_headers(request, expected_headers)
+
         assert raw_request == request.json()
         return raw_result
 
@@ -228,6 +258,13 @@ def test_reply_message_thread(requests_mock, toloka_client, toloka_url, message_
     raw_request = {'text': {'EN': 'Message text'}}
 
     def message_threads(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'reply_message_thread',
+            'X-Low-Level-Method': 'reply_message_thread',
+        }
+        check_headers(request, expected_headers)
+
         assert raw_request == request.json()
         return message_thread_base_map
 
@@ -242,6 +279,13 @@ def test_add_message_thread_to_folders(requests_mock, toloka_client, toloka_url,
     raw_request = {'folders': ['IMPORTANT']}
 
     def message_threads(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'add_message_thread_to_folders',
+            'X-Low-Level-Method': 'add_message_thread_to_folders',
+        }
+        check_headers(request, expected_headers)
+
         assert raw_request == request.json()
         return message_thread_base_map
 
@@ -261,6 +305,13 @@ def test_remove_message_thread_from_folders(requests_mock, toloka_client, toloka
     raw_request = {'folders': ['UNREAD']}
 
     def message_threads(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'remove_message_thread_from_folders',
+            'X-Low-Level-Method': 'remove_message_thread_from_folders',
+        }
+        check_headers(request, expected_headers)
+
         assert raw_request == request.json()
         return message_thread_base_map
 

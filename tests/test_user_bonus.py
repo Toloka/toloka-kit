@@ -8,6 +8,8 @@ import pytest
 import simplejson
 import toloka.client as client
 
+from .testutils.util_functions import check_headers
+
 
 @pytest.fixture
 def user_bonus_map():
@@ -57,6 +59,13 @@ def user_bonus_map_without_message_with_readonly(user_bonus_map_without_message)
 def test_create_user_bonus(requests_mock, toloka_client, toloka_url, user_bonus_map, user_bonus_map_with_readonly):
 
     def user_bonuses(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_user_bonus',
+            'X-Low-Level-Method': 'create_user_bonus',
+        }
+        check_headers(request, expected_headers)
+
         assert {'skip_invalid_items': ['true']} == parse_qs(urlparse(request.url).query)
         assert user_bonus_map == request.json()
         return simplejson.dumps(user_bonus_map_with_readonly)
@@ -90,6 +99,13 @@ def test_create_user_bonuses(requests_mock, toloka_client, toloka_url, user_bonu
     }
 
     def user_bonuses(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_user_bonuses',
+            'X-Low-Level-Method': 'create_user_bonuses',
+        }
+        check_headers(request, expected_headers)
+
         assert {'skip_invalid_items': ['true']} == parse_qs(urlparse(request.url).query)
         assert [{'user_id': 'user-2', 'amount': -5}, user_bonus_map] == request.json()
         return simplejson.dumps(raw_result)
@@ -124,6 +140,13 @@ def test_create_user_bonuses_without_message(
     raw_result = {'items': {'0': user_bonus_map_without_message_with_readonly}}
 
     def user_bonuses(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_user_bonuses',
+            'X-Low-Level-Method': 'create_user_bonuses',
+        }
+        check_headers(request, expected_headers)
+
         assert {'skip_invalid_items': ['true']} == parse_qs(urlparse(request.url).query)
         assert [user_bonus_map_without_message] == request.json()
         return simplejson.dumps(raw_result)
@@ -164,6 +187,13 @@ def test_create_user_bonuses_async(requests_mock, toloka_client, toloka_url):
     }
 
     def user_bonuses(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_user_bonuses_async',
+            'X-Low-Level-Method': 'create_user_bonuses_async',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'async_mode': ['true'],
             'operation_id': [operation_id],
@@ -192,6 +222,13 @@ def test_find_user_bonuses(requests_mock, toloka_client, toloka_url, user_bonus_
     raw_result = {'items': [user_bonus_map_with_readonly], 'has_more': False}
 
     def user_bonuses(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_user_bonuses',
+            'X-Low-Level-Method': 'find_user_bonuses',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'user_id': ['user-1'],
             'created_gte': ['2012-01-01T12:00:00'],
@@ -226,6 +263,13 @@ def test_get_user_bonuses(requests_mock, toloka_client, toloka_url, user_bonus_m
     user_bonuses.sort(key=itemgetter('id'))
 
     def get_user_bonuses(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_user_bonuses',
+            'X-Low-Level-Method': 'find_user_bonuses',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         id_gt = params.pop('id_gt')[0] if 'id_gt' in params else None
         assert {
@@ -256,16 +300,27 @@ def test_get_user_bonuses(requests_mock, toloka_client, toloka_url, user_bonus_m
 
 
 def test_get_user_bonus(requests_mock, toloka_client, toloka_url, user_bonus_map_with_readonly):
-    requests_mock.get(f'{toloka_url}/user-bonuses/user-bonus-1', text=simplejson.dumps(user_bonus_map_with_readonly))
+
+    def user_bonus(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_user_bonus',
+            'X-Low-Level-Method': 'get_user_bonus',
+        }
+        check_headers(request, expected_headers)
+
+        return simplejson.dumps(user_bonus_map_with_readonly)
+
+    requests_mock.get(f'{toloka_url}/user-bonuses/user-bonus-1', text=user_bonus)
     assert user_bonus_map_with_readonly == client.unstructure(toloka_client.get_user_bonus('user-bonus-1'))
 
 
 @pytest.mark.parametrize('value_from', [0.05, '0.05', 5])
-def test_create_user_bonus_from_different_amoun(value_from):
+def test_create_user_bonus_from_different_amount(value_from):
     with pytest.raises(TypeError):
         client.user_bonus.UserBonus(amount=value_from)
 
 
-def test_create_user_bonus_with_none_amoun():
+def test_create_user_bonus_with_none_amount():
     user_bonus = client.user_bonus.UserBonus(amount=None)
     assert user_bonus.amount is None

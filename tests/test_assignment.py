@@ -7,6 +7,8 @@ import pytest
 import simplejson
 import toloka.client as client
 
+from .testutils.util_functions import check_headers
+
 
 @pytest.fixture
 def assignment_map():
@@ -29,7 +31,18 @@ def assignment_map():
 
 
 def test_get_assignment(requests_mock, toloka_client, toloka_url, assignment_map):
-    requests_mock.get(f'{toloka_url}/assignments/assignment-i1d', text=simplejson.dumps(assignment_map))
+
+    def get_assignment(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_assignment',
+            'X-Low-Level-Method': 'get_assignment',
+        }
+        check_headers(request, expected_headers)
+
+        return simplejson.dumps(assignment_map)
+
+    requests_mock.get(f'{toloka_url}/assignments/assignment-i1d', text=get_assignment)
     result = toloka_client.get_assignment('assignment-i1d')
     assert assignment_map == client.unstructure(result)
 
@@ -41,6 +54,13 @@ def test_find_assignments(requests_mock, toloka_client, toloka_url, assignment_m
     }
 
     def find_assignments(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_assignments',
+            'X-Low-Level-Method': 'find_assignments',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'status': ['ACCEPTED'],
             'pool_id': ['21'],
@@ -82,6 +102,13 @@ def test_get_assignments(requests_mock, toloka_client, toloka_url, assignment_ma
     assignments.sort(key=itemgetter('id'))
 
     def get_assignments(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_assignments',
+            'X-Low-Level-Method': 'find_assignments',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         id_gt = params.pop('id_gt')[0] if 'id_gt' in params else None
         assert {
@@ -127,7 +154,7 @@ def test_assignment_from_json(assignment_map):
     assert assignment == assignment_from_json
 
 
-def test_project_to_json(assignment_map):
+def test_assignment_to_json(assignment_map):
     assignment = client.structure(assignment_map, client.assignment.Assignment)
     assignment_json = assignment.to_json()
     assignment_json_basic = simplejson.dumps(assignment_map, use_decimal=True, ensure_ascii=True)
@@ -163,6 +190,13 @@ def test_patch_assignment(requests_mock, toloka_client, toloka_url, assignment_m
     raw_result = dict(assignment_map, public_comment='Well done')
 
     def patch_assignment(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'patch_assignment',
+            'X-Low-Level-Method': 'patch_assignment',
+        }
+        check_headers(request, expected_headers)
+
         assert raw_request == request.json()
         return simplejson.dumps(raw_result)
 
@@ -183,9 +217,20 @@ def test_patch_assignment(requests_mock, toloka_client, toloka_url, assignment_m
 )
 def test_reward_in_get_assignment(requests_mock, toloka_client, toloka_url, assignment_map, value_to_check):
     new_assignment_map = dict(assignment_map, reward=value_to_check)
+
+    def get_assignment(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_assignment',
+            'X-Low-Level-Method': 'get_assignment',
+        }
+        check_headers(request, expected_headers)
+
+        return simplejson.dumps(new_assignment_map)
+
     requests_mock.get(
         f'{toloka_url}/assignments/assignment-i1d',
-        text=simplejson.dumps(new_assignment_map)
+        text=get_assignment
     )
     result = toloka_client.get_assignment('assignment-i1d')
     assert result.reward == value_to_check
