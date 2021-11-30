@@ -2,6 +2,8 @@ import pytest
 
 import toloka.client as client
 
+from ..testutils.util_functions import check_headers
+
 
 @pytest.fixture
 def acceptance_rate_config_map():
@@ -481,6 +483,13 @@ def test_create_pool_with_collector(request, requests_mock, toloka_client, tolok
     }
 
     def pools(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_pool',
+            'X-Low-Level-Method': 'create_pool',
+        }
+        check_headers(request, expected_headers)
+
         assert pool_map == request.json()
         return pool_map
 

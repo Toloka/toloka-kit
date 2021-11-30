@@ -2,6 +2,8 @@ import copy
 import pytest
 import toloka.client as client
 
+from .testutils.util_functions import check_headers
+
 
 @pytest.fixture
 def original_project_map():
@@ -313,18 +315,86 @@ def test_clone_project(requests_mock, toloka_client, toloka_url,
                             original_train_map, clone_train_map,
                             original_pool_without_train_map, clone_pool_without_train_map,
                             original_pool_with_train_map, clone_pool_with_train_map):
-    requests_mock.get(f'{toloka_url}/projects/404040', json=original_project_with_quality_map, status_code=200)
-    requests_mock.post(f'{toloka_url}/projects', json=clone_project_map, status_code=201)
-    requests_mock.put(f'{toloka_url}/projects/505050', json=clone_project_with_quality_map, status_code=200)
 
-    requests_mock.get(f'{toloka_url}/trainings', json={'items': [original_train_map], 'has_more': False}, status_code=200)
-    requests_mock.post(f'{toloka_url}/trainings', json=clone_train_map, status_code=201)
+    def original_project_with_quality(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'clone_project',
+            'X-Low-Level-Method': 'get_project',
+        }
+        check_headers(request, expected_headers)
 
-    requests_mock.get(f'{toloka_url}/pools', json={'items': [original_pool_without_train_map, original_pool_with_train_map], 'has_more': False}, status_code=200)
+        return original_project_with_quality_map
+
+    def clone_project(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'clone_project',
+            'X-Low-Level-Method': 'create_project',
+        }
+        check_headers(request, expected_headers)
+
+        return clone_project_map
+
+    def clone_project_with_quality(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'clone_project',
+            'X-Low-Level-Method': 'update_project',
+        }
+        check_headers(request, expected_headers)
+
+        return clone_project_with_quality_map
+
+    requests_mock.get(f'{toloka_url}/projects/404040', json=original_project_with_quality, status_code=200)
+    requests_mock.post(f'{toloka_url}/projects', json=clone_project, status_code=201)
+    requests_mock.put(f'{toloka_url}/projects/505050', json=clone_project_with_quality, status_code=200)
+
+    def get_trainings(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'clone_project',
+            'X-Low-Level-Method': 'find_trainings',
+        }
+        check_headers(request, expected_headers)
+
+        return {'items': [original_train_map], 'has_more': False}
+
+    def clone_train(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'clone_project',
+            'X-Low-Level-Method': 'create_training',
+        }
+        check_headers(request, expected_headers)
+
+        return clone_train_map
+
+    requests_mock.get(f'{toloka_url}/trainings', json=get_trainings, status_code=200)
+    requests_mock.post(f'{toloka_url}/trainings', json=clone_train, status_code=201)
+
+    def original_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'clone_project',
+            'X-Low-Level-Method': 'find_pools',
+        }
+        check_headers(request, expected_headers)
+
+        return {'items': [original_pool_without_train_map, original_pool_with_train_map], 'has_more': False}
+
+    requests_mock.get(f'{toloka_url}/pools', json=original_pool, status_code=200)
 
     created_pools = [clone_pool_without_train_map, clone_pool_with_train_map]
 
     def create_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'clone_project',
+            'X-Low-Level-Method': 'create_pool',
+        }
+        check_headers(request, expected_headers)
+
         return created_pools.pop(0)
 
     requests_mock.post(f'{toloka_url}/pools', json=create_pool, status_code=201)

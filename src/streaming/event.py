@@ -1,14 +1,16 @@
 __all__ = [
     'AssignmentEvent',
     'BaseEvent',
+    'MessageThreadEvent',
     'TaskEvent',
     'UserBonusEvent',
+    'UserRestrictionEvent',
     'UserSkillEvent',
 ]
 
 from enum import Enum, unique
 from datetime import datetime
-from ..client import Assignment, Task, UserBonus, UserSkill
+from ..client import Assignment, MessageThread, Task, UserBonus, UserSkill, UserRestriction
 from ..client.primitives.base import BaseTolokaObject
 from ..util._codegen import attribute
 
@@ -89,3 +91,25 @@ class UserSkillEvent(BaseEvent):
 
     event_type: Type = attribute(autocast=True)
     user_skill: UserSkill
+
+
+class UserRestrictionEvent(BaseEvent):
+    """UserSkill-related event.
+
+    Attributes:
+        event_time: Event datetime.
+        user_skill: UserSkill object itself.
+    """
+
+    user_restriction: UserRestriction
+
+
+class MessageThreadEvent(BaseEvent):
+    """MessageThread-related event.
+
+    Args:
+        event_time: Event datetime.
+        user_skill: UserSkill object itself.
+    """
+
+    message_thread: MessageThread

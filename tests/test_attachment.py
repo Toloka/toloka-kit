@@ -6,6 +6,8 @@ from urllib.parse import urlparse, parse_qs
 import pytest
 import toloka.client as client
 
+from .testutils.util_functions import check_headers
+
 
 @pytest.fixture
 def assignment_attachment_map():
@@ -32,6 +34,13 @@ def test_find_attachments(requests_mock, toloka_client, toloka_url, assignment_a
     raw_result = {'items': [assignment_attachment_map], 'has_more': True}
 
     def attachments(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_attachments',
+            'X-Low-Level-Method': 'find_attachments',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'type': ['ASSIGNMENT_ATTACHMENT'],
             'owner_id': ['requester-1'],
@@ -78,6 +87,13 @@ def test_get_attachments(requests_mock, toloka_client, toloka_url, assignment_at
     attachments.sort(key=itemgetter('id'))
 
     def get_attachments(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_attachments',
+            'X-Low-Level-Method': 'find_attachments',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         id_gt = params.pop('id_gt')[0] if 'id_gt' in params else None
         assert {
@@ -121,9 +137,19 @@ def test_get_attachments(requests_mock, toloka_client, toloka_url, assignment_at
 
 def test_get_attachment(requests_mock, toloka_client, toloka_url, assignment_attachment_map):
 
+    def get_attachment(request,  context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_attachment',
+            'X-Low-Level-Method': 'get_attachment',
+        }
+        check_headers(request, expected_headers)
+
+        return assignment_attachment_map
+
     requests_mock.get(
         f'{toloka_url}/attachments/attachment-1',
-        json=assignment_attachment_map,
+        json=get_attachment,
         status_code=200
     )
 
@@ -132,9 +158,20 @@ def test_get_attachment(requests_mock, toloka_client, toloka_url, assignment_att
 
 def test_download_attachment_binary(requests_mock, toloka_client, toloka_url, tmp_path):
     content = b''.join(i.to_bytes(i.bit_length(), 'big') for i in range(1000))
+
+    def get_content(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'download_attachment',
+            'X-Low-Level-Method': 'download_attachment',
+        }
+        check_headers(request, expected_headers)
+
+        return content
+
     requests_mock.get(
         f'{toloka_url}/attachments/attachment-i1d/download',
-        content=content,
+        content=get_content,
         headers={
             'Content-Type': 'image/png',
             'Content-Disposition': 'attachment',
@@ -155,9 +192,19 @@ def test_download_attachment_text(requests_mock, toloka_client, toloka_url, tmp_
 Not a nasty, dirty, wet hole, filled with the ends of worms and an oozy smell, nor yet a dry, bare,
 sandy hole with nothing in it to sit down on or to eat: it was a hobbit-hole, and that means comfort."""
 
+    def get_content(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'download_attachment',
+            'X-Low-Level-Method': 'download_attachment',
+        }
+        check_headers(request, expected_headers)
+
+        return content
+
     requests_mock.get(
         f'{toloka_url}/attachments/attachment-i1d/download',
-        text=content,
+        text=get_content,
         headers={
             'Content-Type': 'text/html',
             'Content-Disposition': 'attachment',

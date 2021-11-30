@@ -1,0 +1,1045 @@
+<?xml version="1.0" encoding="UTF-8"?><map xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsa8="http://dita.oasis-open.org/architecture/2005/" id="_reference" title="Toloka Kit" rev="1.0" xml:lang="en" xsi:noNamespaceSchemaLocation="urn:yandex:names:tc:dita:xsd:yandexMap.xsd:1.3">
+    <topichead navtitle="toloka.client">
+        <topicref format="markdown" href="toloka.client.TolokaClient.Environment.md" navtitle="TolokaClient.Environment" locktitle="yes" toc="no"/>
+        <topichead navtitle="TolokaClient methods">
+            <topichead navtitle="aggregation">
+                <topicref format="markdown" href="toloka.client.TolokaClient.aggregate_solutions_by_pool.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.aggregate_solutions_by_task.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_aggregated_solutions.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_aggregated_solutions.md"/>
+            </topichead>
+            <topichead navtitle="analytics">
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_analytics.md"/>
+            </topichead>
+            <topichead navtitle="app">
+                <topicref format="markdown" href="toloka.client.TolokaClient.archive_app_project.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_app_batch.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_app_item.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_app_items.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_app_project.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_app_batches.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_app_items.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_app_projects.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_apps.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_app.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_app_batch.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_app_batches.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_app_item.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_app_items.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_app_project.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_app_projects.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_apps.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.start_app_batch.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.unarchive_app_project.md"/>
+            </topichead>
+            <topichead navtitle="assignments">
+                <topicref format="markdown" href="toloka.client.TolokaClient.accept_assignment.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_assignments.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_assignment.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_assignments.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_assignments_df.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.patch_assignment.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.reject_assignment.md"/>
+            </topichead>
+            <topichead navtitle="attachments">
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_attachments.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_attachment.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_attachments.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.download_attachment.md"/>
+            </topichead>
+            <topichead navtitle="messages">
+                <topicref format="markdown" href="toloka.client.TolokaClient.add_message_thread_to_folders.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.compose_message_thread.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_message_threads.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_message_threads.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.reply_message_thread.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.remove_message_thread_from_folders.md"/>
+            </topichead>
+            <topichead navtitle="operations">
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_operation.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_operation_log.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.wait_operation.md"/>
+            </topichead>
+            <topichead navtitle="pools">
+                <topicref format="markdown" href="toloka.client.TolokaClient.archive_pool.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.archive_pool_async.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.clone_pool.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.clone_pool_async.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.close_pool.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.close_pool_async.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.close_pool_for_update.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.close_pool_for_update_async.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_pool.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_pools.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_pool.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_pools.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.open_pool.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.open_pool_async.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.patch_pool.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.update_pool.md"/>
+            </topichead>
+            <topichead navtitle="projects">
+                <topicref format="markdown" href="toloka.client.TolokaClient.archive_project.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.archive_project_async.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_project.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.clone_project.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_projects.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_project.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_projects.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.update_project.md"/>
+            </topichead>
+            <topichead navtitle="requester">
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_requester.md"/>
+            </topichead>
+            <topichead navtitle="skills">
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_skill.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_skills.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_skill.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_skills.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.update_skill.md"/>
+            </topichead>
+            <topichead navtitle="tasks">
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_task.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_tasks.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_tasks_async.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_tasks.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_task.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_tasks.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.patch_task.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.patch_task_overlap_or_min.md"/>
+            </topichead>
+            <topichead navtitle="task suites">
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_task_suite.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_task_suites.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_task_suites_async.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_task_suites.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_task_suite.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_task_suites.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.patch_task_suite.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.patch_task_suite_overlap_or_min.md"/>
+            </topichead>
+            <topichead navtitle="training">
+                <topicref format="markdown" href="toloka.client.TolokaClient.archive_training.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.archive_training_async.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.clone_training.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.clone_training_async.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.close_training.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.close_training_async.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_training.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_trainings.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_training.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_trainings.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.open_training.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.open_training_async.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.update_training.md"/>
+            </topichead>
+            <topichead navtitle="user bonus">
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_user_bonus.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_user_bonuses.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.create_user_bonuses_async.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_user_bonuses.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_user_bonus.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_user_bonuses.md"/>
+            </topichead>
+            <topichead navtitle="user restrictions">
+                <topicref format="markdown" href="toloka.client.TolokaClient.delete_user_restriction.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_user_restrictions.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_user_restriction.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_user_restrictions.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.set_user_restriction.md"/>
+            </topichead>
+            <topichead navtitle="user skills">
+                <topicref format="markdown" href="toloka.client.TolokaClient.delete_user_skill.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_user_skills.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_user_skill.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_user_skills.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.set_user_skill.md"/>
+            </topichead>
+            <topichead navtitle="webhook subscription">
+                <topicref format="markdown" href="toloka.client.TolokaClient.delete_webhook_subscription.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.find_webhook_subscriptions.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_webhook_subscription.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.get_webhook_subscriptions.md"/>
+                <topicref format="markdown" href="toloka.client.TolokaClient.upsert_webhook_subscriptions.md"/>
+            </topichead>
+        </topichead>
+        <topichead navtitle="actions">
+            <topicref format="markdown" href="toloka.client.actions.RuleType.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.actions.RuleAction.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.actions.Restriction.md"/>
+            <topicref format="markdown" href="toloka.client.actions.Restriction.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.actions.RestrictionV2.md"/>
+            <topicref format="markdown" href="toloka.client.actions.RestrictionV2.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.actions.ChangeOverlap.md"/>
+            <topicref format="markdown" href="toloka.client.actions.ChangeOverlap.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.actions.SetSkill.md"/>
+            <topicref format="markdown" href="toloka.client.actions.SetSkill.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.actions.SetSkillFromOutputField.md"/>
+            <topicref format="markdown" href="toloka.client.actions.SetSkillFromOutputField.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.actions.ApproveAllAssignments.md"/>
+            <topicref format="markdown" href="toloka.client.actions.RejectAllAssignments.md"/>
+            <topicref format="markdown" href="toloka.client.actions.RejectAllAssignments.Parameters.md" toc="no"/>
+        </topichead>
+        <topichead navtitle="aggregation">
+            <topicref format="markdown" href="toloka.client.aggregation.AggregatedSolution.md"/>
+            <topicref format="markdown" href="toloka.client.aggregation.AggregatedSolutionType.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.aggregation.PoolAggregatedSolutionRequest.Field.md" navtitle="PoolAggregatedSolutionRequest.Field" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.aggregation.PoolAggregatedSolutionRequest.md"/>
+            <topicref format="markdown" href="toloka.client.aggregation.TaskAggregatedSolutionRequest.md"/>
+            <topicref format="markdown" href="toloka.client.aggregation.WeightedDynamicOverlapTaskAggregatedSolutionRequest.Field.md" navtitle="WeightedDynamicOverlapTaskAggregatedSolutionRequest.Field" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.aggregation.WeightedDynamicOverlapTaskAggregatedSolutionRequest.md"/>
+        </topichead>
+        <topichead navtitle="analytics_request">
+            <topicref format="markdown" href="toloka.client.analytics_request.AnalyticsRequest.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.analytics_request.ActiveWorkersByFilterCountPoolAnalytics.md"/>
+            <topicref format="markdown" href="toloka.client.analytics_request.AnalyticsRequest.Subject.md" navtitle="AnalyticsRequest.Subject" locktitle="yes"  toc="no"/>
+            <topicref format="markdown" href="toloka.client.analytics_request.ApprovedAssignmentsCountPoolAnalytics.md"/>
+            <topicref format="markdown" href="toloka.client.analytics_request.AvgSubmitAssignmentMillisPoolAnalytics.md"/>
+            <topicref format="markdown" href="toloka.client.analytics_request.CompletionPercentagePoolAnalytics.md"/>
+            <topicref format="markdown" href="toloka.client.analytics_request.EstimatedAssignmentsCountPoolAnalytics.md"/>
+            <topicref format="markdown" href="toloka.client.analytics_request.PoolAnalyticsRequest.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.analytics_request.PoolAnalyticsRequest.Subject.md" navtitle="PoolAnalyticsRequest.Subject" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.analytics_request.RealTasksCountPoolAnalytics.md"/>
+            <topicref format="markdown" href="toloka.client.analytics_request.RejectedAssignmentsCountPoolAnalytics.md"/>
+            <topicref format="markdown" href="toloka.client.analytics_request.SkippedAssignmentsCountPoolAnalytics.md"/>
+            <topicref format="markdown" href="toloka.client.analytics_request.SpentBudgetPoolAnalytics.md"/>
+            <topicref format="markdown" href="toloka.client.analytics_request.SubmitedAssignmentsCountPoolAnalytics.md"/>
+            <topicref format="markdown" href="toloka.client.analytics_request.UniqueSubmittersCountPoolAnalytics.md"/>
+            <topicref format="markdown" href="toloka.client.analytics_request.UniqueWorkersCountPoolAnalytics.md"/>
+        </topichead>
+        <topichead navtitle="app">
+            <topicref format="markdown" href="toloka.client.app.App.md"/>
+            <topicref format="markdown" href="toloka.client.app.AppBatch.md"/>
+            <topicref format="markdown" href="toloka.client.app.AppBatch.Status.md" navtitle="AppBatch.Status" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.app.AppBatchCreateRequest.md"/>
+            <topicref format="markdown" href="toloka.client.app.AppItem.md"/>
+            <topicref format="markdown" href="toloka.client.app.AppItem.Status.md" navtitle="AppItem.Status" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.app.AppItemsCreateRequest.md"/>
+            <topicref format="markdown" href="toloka.client.app.AppProject.md"/>
+            <topicref format="markdown" href="toloka.client.app.AppProject.Status.md" navtitle="AppItem.Status" locktitle="yes" toc="no"/>
+        </topichead>
+        <topichead navtitle="assignment">
+            <topicref format="markdown" href="toloka.client.assignment.Assignment.md"/>
+            <topicref format="markdown" href="toloka.client.assignment.Assignment.Status.md" navtitle="Assignment.Status" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.assignment.AssignmentPatch.md"/>
+            <topicref format="markdown" href="toloka.client.assignment.GetAssignmentsTsvParameters.Field.md" navtitle="GetAssignmentsTsvParameters.Field" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.assignment.GetAssignmentsTsvParameters.md"/>
+            <topicref format="markdown" href="toloka.client.assignment.GetAssignmentsTsvParameters.Status.md" navtitle="GetAssignmentsTsvParameters.Status" locktitle="yes" toc="no"/>
+        </topichead>
+        <topichead navtitle="attachment">
+            <topicref format="markdown" href="toloka.client.attachment.Attachment.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.attachment.AssignmentAttachment.md"/>
+            <topicref format="markdown" href="toloka.client.attachment.Attachment.Details.md" navtitle="Attachment.Details" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.attachment.Attachment.Type.md" navtitle="Attachment.Type" locktitle="yes" toc="no"/>
+        </topichead>
+        <topichead navtitle="batch_create_results">
+            <topicref format="markdown" href="toloka.client.batch_create_results.FieldValidationError.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.batch_create_results.TaskBatchCreateResult.md"/>
+            <topicref format="markdown" href="toloka.client.batch_create_results.TaskSuiteBatchCreateResult.md"/>
+            <topicref format="markdown" href="toloka.client.batch_create_results.UserBonusBatchCreateResult.md"/>
+            <topicref format="markdown" href="toloka.client.batch_create_results.WebhookSubscriptionBatchCreateResult.md"/>
+        </topichead>
+        <topichead navtitle="clone_results">
+            <topicref format="markdown" href="toloka.client.clone_results.CloneResults.md"/>
+        </topichead>
+        <topichead navtitle="collectors">
+            <topicref format="markdown" href="toloka.client.collectors.CollectorConfig.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.collectors.CollectorConfig.Type.md" navtitle="CollectorConfig.Type" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.collectors.CollectorConfig.validate_condition.md" navtitle="CollectorConfig.validate_condition" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.collectors.AcceptanceRate.md"/>
+            <topicref format="markdown" href="toloka.client.collectors.AcceptanceRate.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.collectors.AnswerCount.md"/>
+            <topicref format="markdown" href="toloka.client.collectors.AssignmentsAssessment.md"/>
+            <topicref format="markdown" href="toloka.client.collectors.AssignmentSubmitTime.md"/>
+            <topicref format="markdown" href="toloka.client.collectors.AssignmentSubmitTime.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.collectors.Captcha.md"/>
+            <topicref format="markdown" href="toloka.client.collectors.Captcha.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.collectors.GoldenSet.md"/>
+            <topicref format="markdown" href="toloka.client.collectors.GoldenSet.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.collectors.Income.md"/>
+            <topicref format="markdown" href="toloka.client.collectors.MajorityVote.md"/>
+            <topicref format="markdown" href="toloka.client.collectors.MajorityVote.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.collectors.SkippedInRowAssignments.md"/>
+            <topicref format="markdown" href="toloka.client.collectors.Training.md"/>
+            <topicref format="markdown" href="toloka.client.collectors.UsersAssessment.md"/>
+        </topichead>
+        <topichead navtitle="conditions">
+            <topicref format="markdown" href="toloka.client.conditions.RuleCondition.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.conditions.RuleConditionKey.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.conditions.ComparableRuleCondition.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.conditions.IdentityRuleCondition.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.conditions.AcceptedAssignmentsRate.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.AcceptedAssignmentsCount.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.AssessmentEvent.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.AssessmentEvent.Type.md" navtitle="AssessmentEvent.Type" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.conditions.AssignmentsAcceptedCount.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.CorrectAnswersRate.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.FailRate.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.FastSubmittedCount.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.GoldenSetAnswersCount.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.GoldenSetCorrectAnswersRate.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.GoldenSetIncorrectAnswersRate.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.IncomeSumForLast24Hours.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.IncorrectAnswersRate.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.NextAssignmentAvailable.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.PendingAssignmentsCount.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.PoolAccessRevokedReason.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.PoolAccessRevokedReason.Type.md" navtitle="PoolAccessRevokedReason.Type" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.conditions.RejectedAssignmentsCount.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.RejectedAssignmentsRate.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.SkillId.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.SkippedInRowCount.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.StoredResultsCount.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.SubmittedAssignmentsCount.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.SuccessRate.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.TotalAnswersCount.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.TotalAssignmentsCount.md"/>
+            <topicref format="markdown" href="toloka.client.conditions.TotalSubmittedCount.md"/>
+        </topichead>
+        <topichead navtitle="error_codes">
+            <topicref format="markdown" href="toloka.client.error_codes.CommonErrorCodes.md"/>
+            <topicref format="markdown" href="toloka.client.error_codes.InternalErrorCodes.md"/>
+            <topicref format="markdown" href="toloka.client.error_codes.ValidationErrorCodes.md"/>
+        </topichead>
+        <topichead navtitle="exceptions">
+            <topicref format="markdown" href="toloka.client.exceptions.SpecClassIdentificationError.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.exceptions.ApiError.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.exceptions.AccessDeniedApiError.md"/>
+            <topicref format="markdown" href="toloka.client.exceptions.AuthenticationApiError.md"/>
+            <topicref format="markdown" href="toloka.client.exceptions.ConflictStateApiError.md"/>
+            <topicref format="markdown" href="toloka.client.exceptions.DoesNotExistApiError.md"/>
+            <topicref format="markdown" href="toloka.client.exceptions.FailedOperation.md"/>
+            <topicref format="markdown" href="toloka.client.exceptions.IncorrectActionsApiError.md"/>
+            <topicref format="markdown" href="toloka.client.exceptions.InternalApiError.md"/>
+            <topicref format="markdown" href="toloka.client.exceptions.raise_on_api_error.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.exceptions.RemoteServiceUnavailableApiError.md"/>
+            <topicref format="markdown" href="toloka.client.exceptions.TooManyRequestsApiError.md"/>
+            <topicref format="markdown" href="toloka.client.exceptions.ValidationApiError.md"/>
+        </topichead>
+        <topichead navtitle="filter">
+            <topicref format="markdown" href="toloka.client.filter.FilterCondition.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.filter.FilterOr.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.filter.FilterAnd.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.filter.Condition.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.filter.Condition.Category.md" navtitle="Condition.Category" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.filter.AdultAllowed.md"/>
+            <topicref format="markdown" href="toloka.client.filter.Citizenship.md"/>
+            <topicref format="markdown" href="toloka.client.filter.City.md"/>
+            <topicref format="markdown" href="toloka.client.filter.ClientType.ClientType.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.filter.ClientType.md"/>
+            <topicref format="markdown" href="toloka.client.filter.Computed.md"/>
+            <topicref format="markdown" href="toloka.client.filter.Computed.Key.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.filter.Country.md"/>
+            <topicref format="markdown" href="toloka.client.filter.DateOfBirth.md"/>
+            <topicref format="markdown" href="toloka.client.filter.DeviceCategory.DeviceCategory.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.filter.DeviceCategory.md"/>
+            <topicref format="markdown" href="toloka.client.filter.Education.md"/>
+            <topicref format="markdown" href="toloka.client.filter.Education.Education.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.filter.Gender.md"/>
+            <topicref format="markdown" href="toloka.client.filter.Gender.Gender.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.filter.Languages.md"/>
+            <topicref format="markdown" href="toloka.client.filter.OSFamily.md"/>
+            <topicref format="markdown" href="toloka.client.filter.OSFamily.OSFamily.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.filter.OSVersion.md"/>
+            <topicref format="markdown" href="toloka.client.filter.OSVersionBugfix.md"/>
+            <topicref format="markdown" href="toloka.client.filter.OSVersionMajor.md"/>
+            <topicref format="markdown" href="toloka.client.filter.OSVersionMinor.md"/>
+            <topicref format="markdown" href="toloka.client.filter.Profile.md"/>
+            <topicref format="markdown" href="toloka.client.filter.Profile.Key.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.filter.Rating.md"/>
+            <topicref format="markdown" href="toloka.client.filter.RegionByIp.md"/>
+            <topicref format="markdown" href="toloka.client.filter.RegionByPhone.md"/>
+            <topicref format="markdown" href="toloka.client.filter.Skill.md"/>
+            <topicref format="markdown" href="toloka.client.filter.UserAgentFamily.md"/>
+            <topicref format="markdown" href="toloka.client.filter.UserAgentFamily.UserAgentFamily.md"/>
+            <topicref format="markdown" href="toloka.client.filter.UserAgentType.md"/>
+            <topicref format="markdown" href="toloka.client.filter.UserAgentType.UserAgentType.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.filter.UserAgentVersion.md"/>
+            <topicref format="markdown" href="toloka.client.filter.UserAgentVersionBugfix.md"/>
+            <topicref format="markdown" href="toloka.client.filter.UserAgentVersionMajor.md"/>
+            <topicref format="markdown" href="toloka.client.filter.UserAgentVersionMinor.md"/>
+        </topichead>
+        <topichead navtitle="message_thread">
+            <topicref format="markdown" href="toloka.client.message_thread.MessageThread.md"/>
+            <topicref format="markdown" href="toloka.client.message_thread.Folder.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.message_thread.Interlocutor.InterlocutorRole.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.message_thread.Interlocutor.md"/>
+            <topicref format="markdown" href="toloka.client.message_thread.MessageThread.ComposeDetails.md" navtitle="MessageThread.ComposeDetails" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.message_thread.MessageThread.Message.md" navtitle="MessageThread.Message" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.message_thread.MessageThread.Meta.md" navtitle="MessageThread.Meta" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.message_thread.MessageThreadCompose.md"/>
+            <topicref format="markdown" href="toloka.client.message_thread.MessageThreadFolders.md"/>
+            <topicref format="markdown" href="toloka.client.message_thread.MessageThreadReply.md"/>
+            <topicref format="markdown" href="toloka.client.message_thread.RecipientsSelectType.md" toc="no"/>
+        </topichead>
+        <topichead navtitle="operations">
+            <topicref format="markdown" href="toloka.client.operations.Operation.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.AggregatedSolutionOperation.md"/>
+            <topicref format="markdown" href="toloka.client.operations.AggregatedSolutionOperation.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.AnalyticsOperation.md"/>
+            <topicref format="markdown" href="toloka.client.operations.Operation.is_completed.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.Operation.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.Operation.Status.md" navtitle="Operation.Status" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.OperationType.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.PoolArchiveOperation.md"/>
+            <topicref format="markdown" href="toloka.client.operations.PoolCloneOperation.Details.md" navtitle="PoolCloneOperation.Details" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.PoolCloneOperation.md"/>
+            <topicref format="markdown" href="toloka.client.operations.PoolCloseOperation.md"/>
+            <topicref format="markdown" href="toloka.client.operations.PoolOpenOperation.md"/>
+            <topicref format="markdown" href="toloka.client.operations.PoolOperation.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.PoolOperation.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.ProjectArchiveOperation.md"/>
+            <topicref format="markdown" href="toloka.client.operations.ProjectArchiveOperation.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.Operation.raise_on_fail.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.TasksCreateOperation.md"/>
+            <topicref format="markdown" href="toloka.client.operations.TasksCreateOperation.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.TaskSuiteCreateBatchOperation.md"/>
+            <topicref format="markdown" href="toloka.client.operations.TaskSuiteCreateBatchOperation.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.TrainingArchiveOperation.md"/>
+            <topicref format="markdown" href="toloka.client.operations.TrainingCloneOperation.Details.md" navtitle="TrainingCloneOperation.Details" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.TrainingCloneOperation.md"/>
+            <topicref format="markdown" href="toloka.client.operations.TrainingCloseOperation.md"/>
+            <topicref format="markdown" href="toloka.client.operations.TrainingOpenOperation.md"/>
+            <topicref format="markdown" href="toloka.client.operations.TrainingOperation.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.TrainingOperation.Parameters.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.UserBonusCreateBatchOperation.Details.md" navtitle="UserBonusCreateBatchOperation.Details" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.operations.UserBonusCreateBatchOperation.md"/>
+            <topicref format="markdown" href="toloka.client.operations.UserBonusCreateBatchOperation.Parameters.md" toc="no"/>
+        </topichead>
+        <topichead navtitle="operation_log">
+            <topicref format="markdown" href="toloka.client.operation_log.OperationLogItem.md"/>
+        </topichead>
+        <topichead navtitle="owner">
+            <topicref format="markdown" href="toloka.client.owner.Owner.md"/>
+        </topichead>
+        <topichead navtitle="pool">
+            <topicref format="markdown" href="toloka.client.pool.Pool.md"/>
+            <topicref format="markdown" href="toloka.client.pool.Pool.AssignmentsIssuingConfig.md" navtitle="Pool.AssignmentsIssuingConfig" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.Pool.CloseReason.md" navtitle="Pool.CloseReason" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.Pool.Defaults.md" navtitle="Pool.Defaults" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.Pool.is_archived.md" navtitle="Pool.is_archived" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.Pool.is_closed.md" navtitle="Pool.is_closed" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.Pool.is_locked.md" navtitle="Pool.is_locked" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.Pool.is_open.md" navtitle="Pool.is_open" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.Pool.Status.md" navtitle="Pool.Status" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.Pool.TrainingConfig.md" navtitle=".Pool.TrainingConfig" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.Pool.Type.md" navtitle="Pool.Type" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.PoolPatchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.pool.codegen_setter_for_assignments_issuing_config.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.codegen_setter_for_defaults.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.codegen_setter_for_dynamic_overlap_config.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.codegen_setter_for_dynamic_pricing_config.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.codegen_setter_for_filter.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.codegen_setter_for_mixer_config.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.codegen_setter_for_owner.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.codegen_setter_for_quality_control.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.codegen_setter_for_quality_control_captcha_frequency.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.codegen_setter_for_quality_control_checkpoints_config.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.codegen_setter_for_quality_control_configs.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.codegen_setter_for_quality_control_training_requirement.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.pool.codegen_setter_for_training_config.md" toc="no"/>
+            <topichead navtitle="dynamic_overlap_config">
+                <topicref format="markdown" href="toloka.client.pool.dynamic_overlap_config.DynamicOverlapConfig.md"/>
+                <topicref format="markdown" href="toloka.client.pool.dynamic_overlap_config.DynamicOverlapConfig.Field.md" navtitle="DynamicOverlapConfig.Field" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.pool.dynamic_overlap_config.DynamicOverlapConfig.Type.md" navtitle="DynamicOverlapConfig.Type" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.pool.dynamic_pricing_config.DynamicPricingConfig.md"/>
+                <topicref format="markdown" href="toloka.client.pool.dynamic_pricing_config.DynamicPricingConfig.Interval.md" navtitle="DynamicPricingConfig.Interval" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.pool.dynamic_pricing_config.DynamicPricingConfig.Type.md" navtitle="DynamicPricingConfig.Type" locktitle="yes" toc="no"/>
+            </topichead>
+            <topichead navtitle="mixer_config">
+                <topicref format="markdown" href="toloka.client.pool.mixer_config.MixerConfig.md"/>
+            </topichead>
+        </topichead>
+        <topichead navtitle="primitives">
+            <topichead navtitle="base">
+                <topicref format="markdown" href="toloka.client.primitives.base.autocast_to_enum.md"/>
+                <topicref format="markdown" href="toloka.client.primitives.base.BaseParameters.md"/>
+                <topicref format="markdown" href="toloka.client.primitives.base.BaseParameters.Parameters.md" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.base.BaseTolokaObject.md"/>
+                <topicref format="markdown" href="toloka.client.primitives.base.BaseTolokaObject.from_json.md" navtitle="BaseTolokaObject.from_json" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.base.BaseTolokaObject.get_spec_subclass_for_value.md" navtitle="BaseTolokaObject.get_spec_subclass_for_value" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.base.BaseTolokaObject.get_variant_specs.md" navtitle="BaseTolokaObject.get_variant_specs" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.base.BaseTolokaObject.is_variant_base.md" navtitle="BaseTolokaObject.is_variant_base" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.base.BaseTolokaObject.is_variant_incomplete.md" navtitle="BaseTolokaObject.is_variant_incomplete" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.base.BaseTolokaObject.is_variant_spec.md" navtitle="BaseTolokaObject.is_variant_spec" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.base.BaseTolokaObject.to_json.md" navtitle="BaseTolokaObject.to_json" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.base.BaseTolokaObjectMetaclass.md" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.base.BaseTolokaObjectMetaclass.transformer.md" navtitle="BaseTolokaObjectMetaclass.transformer" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.base.VariantRegistry.md" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.base.VariantRegistry.register.md" navtitle="VariantRegistry.register" locktitle="yes" toc="no"/>
+            </topichead>
+            <topichead navtitle="infinite_overlap">
+                <topicref format="markdown" href="toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin.md"/>
+                <topicref format="markdown" href="toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin.unset_overlap.md" navtitle="InfiniteOverlapParametersMixin.unset_overlap" locktitle="yes" toc="no"/>
+            </topichead>
+            <topichead navtitle="operators" toc="no">
+                <topicref format="markdown" href="toloka.client.primitives.operators.ComparableConditionMixin.md"/>
+                <topicref format="markdown" href="toloka.client.primitives.operators.CompareOperator.md"/>
+                <topicref format="markdown" href="toloka.client.primitives.operators.IdentityConditionMixin.md"/>
+                <topicref format="markdown" href="toloka.client.primitives.operators.IdentityOperator.md"/>
+                <topicref format="markdown" href="toloka.client.primitives.operators.InclusionConditionMixin.md"/>
+                <topicref format="markdown" href="toloka.client.primitives.operators.InclusionOperator.md"/>
+                <topicref format="markdown" href="toloka.client.primitives.operators.StatefulComparableConditionMixin.eq.md" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.operators.StatefulComparableConditionMixin.gt.md" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.operators.StatefulComparableConditionMixin.gte.md" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.operators.StatefulComparableConditionMixin.lt.md" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.operators.StatefulComparableConditionMixin.lte.md" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.operators.StatefulComparableConditionMixin.md"/>
+                <topicref format="markdown" href="toloka.client.primitives.operators.StatefulComparableConditionMixin.ne.md" toc="no"/>
+            </topichead>
+            <topichead navtitle="parameter" toc="no">
+                <topicref format="markdown" href="toloka.client.primitives.parameter.Parameters.md" toc="no"/>
+            </topichead>
+            <topichead navtitle="retry">
+                <topicref format="markdown" href="toloka.client.primitives.retry.PreloadingHTTPAdapter.md"/>
+                <topicref format="markdown" href="toloka.client.primitives.retry.PreloadingHTTPAdapter.build_response.md" navtitle="PreloadingHTTPAdapter.build_response" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.retry.PreloadingHTTPAdapter.get_connection.md" navtitle="PreloadingHTTPAdapter.get_connection" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.retry.TolokaRetry.md"/>
+                <topicref format="markdown" href="toloka.client.primitives.retry.TolokaRetry.get_retry_after.md" navtitle="TolokaRetry.get_retry_after" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.retry.TolokaRetry.increment.md" navtitle="TolokaRetry.increment" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.retry.TolokaRetry.new.md" navtitle="TolokaRetry.new" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.primitives.retry.TolokaRetry.Unit.md" navtitle="TolokaRetry.Unit" locktitle="yes" toc="no"/>
+            </topichead>
+        </topichead>
+        <topichead navtitle="project">
+            <topicref format="markdown" href="toloka.client.project.Project.md"/>
+            <topicref format="markdown" href="toloka.client.project.Project.add_requester_translation.md" navtitle="Project.add_requester_translation" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.project.Project.AssignmentsIssuingType.md" navtitle="Project.AssignmentsIssuingType" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.project.Project.AssignmentsIssuingViewConfig.md" navtitle="Project.AssignmentsIssuingViewConfig" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.project.Project.ProjectStatus.md" navtitle="Project.ProjectStatus" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.project.Project.set_default_language.md" navtitle="Project.set_default_language" locktitle="yes" toc="no"/>
+            <topichead navtitle="localization">
+                <topicref format="markdown" href="toloka.client.project.localization.AdditionalLanguage.md"/>
+                <topicref format="markdown" href="toloka.client.project.localization.AdditionalLanguage.FieldTranslation.Source.md" toc="no"/>
+                <topicref format="markdown" href="toloka.client.project.localization.AdditionalLanguage.FieldTranslation.md" navtitle="AdditionalLanguage.FieldTranslation" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.project.localization.LocalizationConfig.md"/>
+            </topichead>
+            <topichead navtitle="field_spec">
+                <topicref format="markdown" href="toloka.client.project.field_spec.FieldSpec.md" toc="no"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.ArrayBooleanSpec.md"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.ArrayCoordinatesSpec.md"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.ArrayFileSpec.md"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.ArrayFloatSpec.md"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.ArrayIntegerSpec.md"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.ArrayStringSpec.md"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.ArrayUrlSpec.md"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.BooleanSpec.md"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.CoordinatesSpec.md"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.FieldType.md"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.FileSpec.md"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.FloatSpec.md"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.IntegerSpec.md"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.JsonSpec.md"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.StringSpec.md"/>
+                <topicref format="markdown" href="toloka.client.project.field_spec.UrlSpec.md"/>
+            </topichead>
+            <topichead navtitle="task_spec">
+                <topicref format="markdown" href="toloka.client.project.task_spec.TaskSpec.md"/>
+            </topichead>
+            <topichead navtitle="view_spec">
+                <topicref format="markdown" href="toloka.client.project.view_spec.ViewSpec.md" toc="no"/>
+                <topicref format="markdown" href="toloka.client.project.view_spec.ViewSpec.Settings.md" navtitle="ViewSpec.Settings" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.project.view_spec.ViewSpec.Type.md" navtitle="ViewSpec.Type" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.project.view_spec.ClassicViewSpec.md"/>
+                <topicref format="markdown" href="toloka.client.project.view_spec.ClassicViewSpec.Assets.md" navtitle="ClassicViewSpec.Assets" locktitle="yes" toc="no"/>
+                <topicref format="markdown" href="toloka.client.project.view_spec.TemplateBuilderViewSpec.md"/>
+            </topichead>
+        </topichead>
+        <topichead navtitle="quality_control">
+            <topicref format="markdown" href="toloka.client.quality_control.QualityControl.md"/>
+            <topicref format="markdown" href="toloka.client.quality_control.QualityControl.add_action.md" navtitle="QualityControl.add_action" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.quality_control.QualityControl.CaptchaFrequency.md" navtitle="QualityControl.CaptchaFrequency" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.quality_control.QualityControl.CheckpointsConfig.md" navtitle="QualityControl.CheckpointsConfig" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.quality_control.QualityControl.CheckpointsConfig.Settings.md" navtitle="QualityControl.CheckpointsConfig.Settings" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.quality_control.QualityControl.QualityControlConfig.md" navtitle="QualityControl.QualityControlConfig" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.quality_control.QualityControl.QualityControlConfig.RuleConfig.md" navtitle="QualityControl.QualityControlConfig.RuleConfig" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.quality_control.QualityControl.TrainingRequirement.md" navtitle="QualityControl.TrainingRequirement" locktitle="yes" toc="no"/>
+        </topichead>
+        <topichead navtitle="requester">
+            <topicref format="markdown" href="toloka.client.requester.Requester.md"/>
+            <topicref format="markdown" href="toloka.client.requester.Requester.Company.md" navtitle="Requester.Company" locktitle="yes" toc="no"/>
+        </topichead>
+        <topichead navtitle="search_requests">
+            <topicref format="markdown" href="toloka.client.search_requests.BaseSortItem.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.BaseSortItem.for_fields.md" navtitle="BaseSortItem.for_fields" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.BaseSortItems.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.BaseSortItems.for_fields.md" navtitle="BaseSortItems.for_fields" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AggregatedSolutionSortItems.SortItem.SortField.md" navtitle="AggregatedSolutionSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AggregatedSolutionSortItems.SortItem.md" navtitle="AggregatedSolutionSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppBatchSortItems.SortItem.SortField.md" navtitle="AppBatchSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppBatchSortItems.SortItem.md" navtitle="AppBatchSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppItemSortItems.SortItem.SortField.md" navtitle="AppItemSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppItemSortItems.SortItem.md" navtitle="AppItemSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppProjectSortItems.SortItem.SortField.md" navtitle="AppProjectSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppProjectSortItems.SortItem.md" navtitle="AppProjectSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppSortItems.SortItem.SortField.md" navtitle="AppSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppSortItems.SortItem.md" navtitle="AppSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AssignmentSortItems.SortItem.SortField.md" navtitle="AssignmentSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AssignmentSortItems.SortItem.md" navtitle="AssignmentSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AttachmentSortItems.SortItem.SortField.md" navtitle="AttachmentSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AttachmentSortItems.SortItem.md" navtitle="AttachmentSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.MessageThreadSortItems.SortItem.SortField.md" navtitle="MessageThreadSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.MessageThreadSortItems.SortItem.md" navtitle="MessageThreadSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.PoolSortItems.SortItem.SortField.md" navtitle="PoolSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.PoolSortItems.SortItem.md" navtitle="PoolSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.ProjectSortItems.SortItem.SortField.md" navtitle="ProjectSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.ProjectSortItems.SortItem.md" navtitle="ProjectSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.SkillSortItems.SortItem.SortField.md" navtitle="SkillSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.SkillSortItems.SortItem.md" navtitle="SkillSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TaskSortItems.SortItem.SortField.md" navtitle="TaskSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TaskSortItems.SortItem.md" navtitle="TaskSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TaskSuiteSortItems.SortItem.SortField.md" navtitle="TaskSuiteSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TaskSuiteSortItems.SortItem.md" navtitle="TaskSuiteSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TrainingSortItems.SortItem.SortField.md" navtitle="TrainingSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TrainingSortItems.SortItem.md" navtitle="TrainingSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserBonusSortItems.SortItem.SortField.md" navtitle="UserBonusSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserBonusSortItems.SortItem.md" navtitle="UserBonusSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserRestrictionSortItems.SortItem.SortField.md" navtitle="UserRestrictionSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserRestrictionSortItems.SortItem.md" navtitle="UserRestrictionSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserSkillSortItems.SortItem.SortField.md" navtitle="UserSkillSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserSkillSortItems.SortItem.md" navtitle="UserSkillSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.WebhookSubscriptionSortItems.SortItem.SortField.md" navtitle="WebhookSubscriptionSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.WebhookSubscriptionSortItems.SortItem.md" navtitle="WebhookSubscriptionSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AggregatedSolutionSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppBatchSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppItemSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppProjectSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AssignmentSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AttachmentSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.MessageThreadSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.PoolSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.ProjectSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.SkillSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TaskSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TaskSuiteSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TrainingSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserBonusSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserRestrictionSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserSkillSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.WebhookSubscriptionSortItems.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.BaseSearchRequest.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.BaseSearchRequest.CompareFields.md" navtitle="BaseSearchRequest.CompareFields" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AggregatedSolutionSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AggregatedSolutionSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppBatchSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppBatchSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppItemSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppItemSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppProjectSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppProjectSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppProjectSearchRequest.Scope.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AssignmentSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AssignmentSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AttachmentSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AttachmentSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.MessageThreadSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.MessageThreadSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.ProjectSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.ProjectSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.PoolSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.PoolSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.SkillSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.SkillSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TaskSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TaskSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TaskSuiteSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TaskSuiteSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TrainingSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TrainingSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserBonusSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserBonusSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserRestrictionSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserRestrictionSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserSkillSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserSkillSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.WebhookSubscriptionSearchRequest.md"/>
+            <topicref format="markdown" href="toloka.client.search_requests.WebhookSubscriptionSearchRequest.CompareFields.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.SearchRequestMetaclass.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.SortOrder.md" toc="no"/>
+        </topichead>
+        <topichead navtitle="search_results">
+            <topicref format="markdown" href="toloka.client.search_results.AggregatedSolutionSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.AppBatchSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.AppItemSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.AppProjectSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.AppSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.AssignmentSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.AttachmentSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.MessageThreadSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.PoolSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.ProjectSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.SkillSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.TaskSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.TaskSuiteSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.TrainingSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.UserBonusSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.UserRestrictionSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.UserSkillSearchResult.md"/>
+            <topicref format="markdown" href="toloka.client.search_results.WebhookSubscriptionSearchResult.md"/>
+        </topichead>
+        <topichead navtitle="skill">
+            <topicref format="markdown" href="toloka.client.skill.Skill.md"/>
+        </topichead>
+        <topichead navtitle="solution">
+            <topicref format="markdown" href="toloka.client.solution.Solution.md"/>
+        </topichead>
+        <topichead navtitle="task">
+            <topicref format="markdown" href="toloka.client.task.BaseTask.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.task.BaseTask.KnownSolution.md" navtitle="BaseTask.KnownSolution" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.task.Task.md"/>
+            <topicref format="markdown" href="toloka.client.task.Task.BaselineSolution.md" navtitle="Task.BaselineSolution" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.task.CreateTaskParameters.md"/>
+            <topicref format="markdown" href="toloka.client.task.CreateTaskAsyncParameters.md"/>
+            <topicref format="markdown" href="toloka.client.task.CreateTasksParameters.md"/>
+            <topicref format="markdown" href="toloka.client.task.TaskOverlapPatch.md"/>
+            <topicref format="markdown" href="toloka.client.task.TaskPatch.md"/>
+        </topichead>
+        <topichead navtitle="task_distribution_function">
+            <topicref format="markdown" href="toloka.client.task_distribution_function.TaskDistributionFunction.md"/>
+            <topicref format="markdown" href="toloka.client.task_distribution_function.TaskDistributionFunction.Distribution.md" navtitle="TaskDistributionFunction.Distribution" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.task_distribution_function.TaskDistributionFunction.Interval.md" navtitle="TaskDistributionFunction.Interval" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.task_distribution_function.TaskDistributionFunction.Scope.md" navtitle="TaskDistributionFunction.Scope" locktitle="yes" toc="no"/>
+        </topichead>
+        <topichead navtitle="task_suite">
+            <topicref format="markdown" href="toloka.client.task_suite.TaskSuite.md"/>
+            <topicref format="markdown" href="toloka.client.task_suite.TaskSuite.add_base_task.md" navtitle="TaskSuite.add_base_task" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.task_suite.TaskSuiteCreateRequestParameters.md"/>
+            <topicref format="markdown" href="toloka.client.task_suite.TaskSuiteOverlapPatch.md"/>
+            <topicref format="markdown" href="toloka.client.task_suite.TaskSuitePatch.md"/>
+        </topichead>
+        <topichead navtitle="template_builder">
+                <topicref format="markdown" href="toloka.client.project.template_builder.get_input_and_output.md"/>
+                <topicref format="markdown" href="toloka.client.project.template_builder.TemplateBuilder.md"/>
+                <topichead navtitle="actions">
+                    <topicref format="markdown" href="toloka.client.project.template_builder.actions.BaseActionV1.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.actions.BulkActionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.actions.NotifyActionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.actions.NotifyActionV1.Payload.md" navtitle="NotifyActionV1.Payload" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.actions.NotifyActionV1.Payload.Theme.md" navtitle="NotifyActionV1.Payload.Theme" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.actions.OpenCloseActionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.actions.OpenLinkActionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.actions.PlayPauseActionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.actions.RotateActionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.actions.RotateActionV1.Payload.md" navtitle="RotateActionV1.Payload" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.actions.SetActionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.actions.ToggleActionV1.md"/>
+                </topichead>
+                <topichead navtitle="base">
+                    <topicref format="markdown" href="toloka.client.project.template_builder.base.BaseComponent.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.base.BaseComponentOr.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.base.BaseTemplate.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.base.BaseTemplateMetaclass.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.base.base_component_or.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.base.ComponentType.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.base.ListDirection.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.base.ListSize.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.base.RefComponent.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.base.UnknownComponent.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.base.VersionedBaseComponentMetaclass.md" toc="no"/>
+                </topichead>
+                <topichead navtitle="conditions">
+                    <topicref format="markdown" href="toloka.client.project.template_builder.conditions.AllConditionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.conditions.AnyConditionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.conditions.BaseConditionV1.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.conditions.DistanceConditionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.conditions.EmptyConditionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.conditions.EqualsConditionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.conditions.LinkOpenedConditionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.conditions.NotConditionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.conditions.PlayedConditionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.conditions.PlayedFullyConditionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.conditions.RequiredConditionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.conditions.SameDomainConditionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.conditions.SchemaConditionV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.conditions.SubArrayConditionV1.md"/>
+                </topichead>
+                <topichead navtitle="data">
+                    <topicref format="markdown" href="toloka.client.project.template_builder.data.BaseData.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.data.InputData.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.data.InternalData.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.data.LocalData.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.data.LocationData.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.data.OutputData.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.data.RelativeData.md"/>
+                </topichead>
+                <topichead navtitle="fields">
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.BaseFieldV1.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.AudioFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.ButtonRadioFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.ButtonRadioGroupFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.CheckboxFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.CheckboxGroupFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.DateFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.EmailFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.FileFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.GroupFieldOption.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.ImageAnnotationFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.ImageAnnotationFieldV1.Label.md" navtitle="ImageAnnotationFieldV1.Label" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.ImageAnnotationFieldV1.Shape.md" navtitle="ImageAnnotationFieldV1.Shape" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.ListFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.MediaFileFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.MediaFileFieldV1.Accept.md" navtitle="MediaFileFieldV1.Accept" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.NumberFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.PhoneNumberFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.RadioGroupFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.SelectFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.SelectFieldV1.Option.md" navtitle="SelectFieldV1.Option" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.TextAnnotationFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.TextAnnotationFieldV1.Label.md" navtitle="TextAnnotationFieldV1.Label" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.TextareaFieldV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.fields.TextFieldV1.md"/>
+                </topichead>
+                <topichead navtitle="helpers">
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.BaseHelperV1.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.ConcatArraysHelperV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.Entries2ObjectHelperV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.Entries2ObjectHelperV1.Entry.md" navtitle="Entries2ObjectHelperV1.Entry" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.IfHelperV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.JoinHelperV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.Object2EntriesHelperV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.ReplaceHelperV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.SearchQueryHelperV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.SearchQueryHelperV1.Engine.md" navtitle="SearchQueryHelperV1.Engine" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.SwitchHelperV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.SwitchHelperV1.Case.md" navtitle="SwitchHelperV1.Case" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.TextTransformHelperV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.TextTransformHelperV1.Transformation.md" navtitle="TextTransformHelperV1.Transformation" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.TransformHelperV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.TranslateHelperV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.helpers.YandexDiskProxyHelperV1.md"/>
+                </topichead>
+                <topichead navtitle="layouts">
+                    <topicref format="markdown" href="toloka.client.project.template_builder.layouts.BarsLayoutV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.layouts.BaseLayoutV1.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.layouts.ColumnsLayoutV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.layouts.ColumnsLayoutV1.VerticalAlign.md" navtitle="ColumnsLayoutV1.VerticalAlign" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.layouts.CompareLayoutV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.layouts.CompareLayoutItem.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.layouts.SidebarLayoutV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.layouts.SideBySideLayoutV1.md"/>
+                </topichead>
+                <topichead navtitle="plugins">
+                    <topicref format="markdown" href="toloka.client.project.template_builder.plugins.BasePluginV1.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.plugins.HotkeysPluginV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.plugins.ImageAnnotationHotkeysPluginV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.plugins.ImageAnnotationHotkeysPluginV1.Mode.md" navtitle="ImageAnnotationHotkeysPluginV1.Mode" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.plugins.TextAnnotationHotkeysPluginV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.plugins.TolokaPluginV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.plugins.TolokaPluginV1.TolokaPluginLayout.md" navtitle="TolokaPluginV1.TolokaPluginLayout" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.plugins.TolokaPluginV1.TolokaPluginLayout.Kind.md" navtitle="TolokaPluginV1.TolokaPluginLayout.Kind" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.plugins.TriggerPluginV1.md"/>
+                </topichead>
+                <topichead navtitle="views">
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.ActionButtonViewV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.AlertViewV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.AlertViewV1.Theme.md" navtitle="AlertViewV1.Theme" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.AudioViewV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.BaseViewV1.md" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.CollapseViewV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.DeviceFrameViewV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.DividerViewV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.GroupViewV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.IframeViewV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.ImageViewV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.LabeledListViewV1.Item.md" navtitle="LabeledListViewV1.Item" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.LabeledListViewV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.LinkViewV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.LinkGroupViewV1.Link.md" navtitle="LinkGroupViewV1.Link" locktitle="yes" toc="no"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.LinkGroupViewV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.ListViewV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.MarkdownViewV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.TextViewV1.md"/>
+                    <topicref format="markdown" href="toloka.client.project.template_builder.view.VideoViewV1.md"/>
+                </topichead>
+            </topichead>
+        <topichead navtitle="training">
+            <topicref format="markdown" href="toloka.client.training.Training.md"/>
+            <topicref format="markdown" href="toloka.client.training.Training.CloseReason.md" navtitle="Training.CloseReason" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.training.Training.is_archived.md" navtitle="Training.is_archived" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.training.Training.is_closed.md" navtitle="Training.is_closed" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.training.Training.is_locked.md" navtitle="Training.is_locked" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.training.Training.is_open.md" navtitle="Training.is_open" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.training.Training.Status.md" navtitle="Training.Status" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.training.codegen_setter_for_owner.md" toc="no"/>
+        </topichead>
+        <topichead navtitle="user_bonus">
+            <topicref format="markdown" href="toloka.client.user_bonus.UserBonus.md"/>
+            <topicref format="markdown" href="toloka.client.user_bonus.UserBonusCreateRequestParameters.md"/>
+        </topichead>
+        <topichead navtitle="user_restriction">
+            <topicref format="markdown" href="toloka.client.user_restriction.UserRestriction.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.user_restriction.UserRestriction.Scope.md" navtitle="UserRestriction.Scope" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.user_restriction.AllProjectsUserRestriction.md"/>
+            <topicref format="markdown" href="toloka.client.user_restriction.DurationUnit.md"/>
+            <topicref format="markdown" href="toloka.client.user_restriction.PoolUserRestriction.md"/>
+            <topicref format="markdown" href="toloka.client.user_restriction.ProjectUserRestriction.md"/>
+            <topicref format="markdown" href="toloka.client.user_restriction.SystemUserRestriction.md"/>
+        </topichead>
+        <topichead navtitle="user_skill">
+            <topicref format="markdown" href="toloka.client.user_skill.UserSkill.md"/>
+            <topicref format="markdown" href="toloka.client.user_skill.SetUserSkillRequest.md"/>
+        </topichead>
+        <topichead navtitle="webhook_subscription">
+            <topicref format="markdown" href="toloka.client.webhook_subscription.WebhookSubscription.md"/>
+            <topicref format="markdown" href="toloka.client.webhook_subscription.WebhookSubscription.EventType.md" navtitle="WebhookSubscription.EventType" locktitle="yes" toc="no"/>
+        </topichead>
+    </topichead>
+    <topichead navtitle="toloka.async_client">
+        <topicref format="markdown" href="toloka.async_client.client.AsyncTolokaClient.md"/>
+        <topicref format="markdown" href="toloka.async_client.client.AsyncTolokaClient.from_sync_client.md" toc="no"/>
+        <topicref format="markdown" href="toloka.async_client.client.AsyncTolokaClient.wait_operation.md" toc="no"/>
+    </topichead>
+    <topichead navtitle="toloka.metrics">
+        <topichead navtitle="collector">
+            <topicref format="markdown" href="toloka.metrics.collector.MetricCollector.md"/>
+            <topicref format="markdown" href="toloka.metrics.collector.MetricCollector.create_async_tasks.md" navtitle="MetricCollector.create_async_tasks" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.collector.MetricCollector.run.md" navtitle="MetricCollector.run" locktitle="yes"/>
+        </topichead>
+        <topichead navtitle="jupyter_dashboard">
+            <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.Chart.md"/>
+            <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.Chart.create_async_tasks.md" navtitle="Chart.create_async_tasks" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.Chart.create_figure.md" navtitle="Chart.create_figure" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.Chart.update_metrics.md" navtitle="Chart.update_metrics" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.DashBoard.md"/>
+            <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.DashBoard.run_dash.md" navtitle="DashBoard.run_dash" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.DashBoard.stop_dash.md" navtitle="DashBoard.stop_dash" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.DashBoard.update_charts.md" navtitle="DashBoard.update_charts" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.jupyter_dashboard.LineStats.md" toc="no"/>
+        </topichead>
+        <topichead navtitle="metrics">
+            <topicref format="markdown" href="toloka.metrics.metrics.BaseMetric.md" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.BaseMetric.get_lines.md" navtitle="BaseMetric.get_lines" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.BaseMetric.get_line_names.md" navtitle="BaseMetric.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.bind_client.md"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.Balance.md"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.Balance.get_line_names.md" navtitle="Balance.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.NewMessageThreads.md"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.NewMessageThreads.get_line_names.md" navtitle="NewMessageThreads.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.NewUserBonuses.md"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.NewUserBonuses.get_line_names.md" navtitle="NewUserBonuses.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.NewUserSkills.md"/>
+            <topicref format="markdown" href="toloka.metrics.metrics.NewUserSkills.get_line_names.md" navtitle="NewUserSkills.get_line_names" locktitle="yes" toc="no"/>
+        </topichead>
+        <topichead navtitle="pool_metrics">
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.AssignmentEventsInPool.md"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.AssignmentEventsInPool.get_line_names.md" navtitle="AssignmentEventsInPool.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.AssignmentsInPool.md"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.AssignmentsInPool.get_line_names.md" navtitle="AssignmentsInPool.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.BansInPool.md"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.BansInPool.get_line_names.md" navtitle="BansInPool.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.BasePoolMetric.md" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.PoolCompletedPercentage.md"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.PoolCompletedPercentage.get_line_names.md" navtitle="PoolCompletedPercentage.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.SpentBudgetOnPool.md"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.SpentBudgetOnPool.get_line_names.md" navtitle="SpentBudgetOnPool.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.TasksInPool.md"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.TasksInPool.get_line_names.md" navtitle="TasksInPool.get_line_names" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.WorkersByFilterOnPool.md"/>
+            <topicref format="markdown" href="toloka.metrics.pool_metrics.WorkersByFilterOnPool.get_line_names.md" navtitle="WorkersByFilterOnPool.get_line_names" locktitle="yes" toc="no"/>
+        </topichead>
+    </topichead>
+    <topichead navtitle="toloka.streaming">
+        <topichead navtitle="cursor">
+            <topicref format="markdown" href="toloka.streaming.cursor.BaseCursor.inject.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.cursor.BaseCursor.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.cursor.BaseCursor.CursorFetchContext.md" navtitle="BaseCursor.CursorFetchContext" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.cursor.BaseCursor.try_fetch_all.md" navtitle="BaseCursor.try_fetch_all" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.cursor.AssignmentCursor.md"/>
+            <topicref format="markdown" href="toloka.streaming.cursor.MessageThreadCursor.md"/>
+            <topicref format="markdown" href="toloka.streaming.cursor.TaskCursor.md"/>
+            <topicref format="markdown" href="toloka.streaming.cursor.UserBonusCursor.md"/>
+            <topicref format="markdown" href="toloka.streaming.cursor.UserRestrictionCursor.md"/>
+            <topicref format="markdown" href="toloka.streaming.cursor.UserSkillCursor.md"/>
+        </topichead>
+        <topichead navtitle="locker" toc="no">
+            <topicref format="markdown" href="toloka.streaming.locker.BaseLocker.cleanup.md" navtitle="BaseLocker.cleanup" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.locker.BaseLocker.md" navtitle="BaseLocker" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.locker.FileLocker.cleanup.md" navtitle="FileLocker.cleanup" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.locker.FileLocker.md" navtitle="FileLocker" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.locker.NewerInstanceDetectedError.md" navtitle="NewerInstanceDetectedError" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.locker.ZooKeeperLocker.md" navtitle="ZooKeeperLocker" toc="no"/>
+        </topichead>
+        <topichead navtitle="event">
+            <topicref format="markdown" href="toloka.streaming.event.BaseEvent.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.event.AssignmentEvent.md"/>
+            <topicref format="markdown" href="toloka.streaming.event.AssignmentEvent.Type.md" navtitle="AssignmentEvent.Type" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.event.MessageThreadEvent.md"/>
+            <topicref format="markdown" href="toloka.streaming.event.TaskEvent.md"/>
+            <topicref format="markdown" href="toloka.streaming.event.UserBonusEvent.md"/>
+            <topicref format="markdown" href="toloka.streaming.event.UserRestrictionEvent.md"/>
+            <topicref format="markdown" href="toloka.streaming.event.UserSkillEvent.md"/>
+            <topicref format="markdown" href="toloka.streaming.event.UserSkillEvent.Type.md" navtitle="UserSkillEvent.Type" locktitle="yes" toc="no"/>
+        </topichead>
+        <topichead navtitle="observer">
+            <topicref format="markdown" href="toloka.streaming.observer.AssignmentsObserver.inject.md" navtitle="AssignmentsObserver.inject" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.BaseObserver.inject.md" navtitle="BaseObserver.inject" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.PoolStatusObserver.inject.md" navtitle="PoolStatusObserver.inject" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.BaseObserver.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.BaseObserver.run.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.BaseObserver.should_resume.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.AssignmentsObserver.md"/>
+            <topicref format="markdown" href="toloka.streaming.observer.AssignmentsObserver.on_accepted.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.AssignmentsObserver.on_any_event.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.AssignmentsObserver.on_created.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.AssignmentsObserver.on_expired.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.AssignmentsObserver.on_rejected.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.AssignmentsObserver.on_skipped.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.AssignmentsObserver.on_submitted.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.AssignmentsObserver.register_callback.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.PoolStatusObserver.md"/>
+            <topicref format="markdown" href="toloka.streaming.observer.PoolStatusObserver.on_archieved.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.PoolStatusObserver.on_closed.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.PoolStatusObserver.on_locked.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.PoolStatusObserver.on_open.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.PoolStatusObserver.on_status_change.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.PoolStatusObserver.register_callback.md" toc="no"/>
+        </topichead>
+        <topichead navtitle="pipeline">
+            <topicref format="markdown" href="toloka.streaming.pipeline.Pipeline.inject.md", navtitle="Pipeline.inject", toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.pipeline.Pipeline.md"/>
+            <topicref format="markdown" href="toloka.streaming.pipeline.Pipeline.register.md" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.pipeline.Pipeline.run.md" toc="no"/>
+        </topichead>
+        <topichead navtitle="storage" toc="no">
+            <topicref format="markdown" href="toloka.streaming.storage.BaseStorage.cleanup.md" navtitle="BaseStorage.cleanup" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.BaseStorage.load.md" navtitle="BaseStorage.load" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.BaseStorage.lock.md" navtitle="BaseStorage.lock" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.BaseStorage.md" navtitle="BaseStorage"/>
+            <topicref format="markdown" href="toloka.streaming.storage.BaseStorage.save.md" navtitle="BaseStorage.save" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.JSONLocalStorage.DefaultNearbyFileLocker.md" navtitle="JSONLocalStorage.DefaultNearbyFileLocker" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.JSONLocalStorage.cleanup.md" navtitle="JSONLocalStorage.cleanup" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.JSONLocalStorage.load.md" navtitle="JSONLocalStorage.load" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.JSONLocalStorage.md" navtitle="JSONLocalStorage"/>
+            <topicref format="markdown" href="toloka.streaming.storage.JSONLocalStorage.save.md" navtitle="JSONLocalStorage.save" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.S3Storage.cleanup.md" navtitle="S3Storage.cleanup" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.S3Storage.load.md" navtitle="S3Storage.load" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.S3Storage.md" navtitle="S3Storage"/>
+            <topicref format="markdown" href="toloka.streaming.storage.S3Storage.save.md" navtitle="S3Storage.save" toc="no"/>
+        </topichead>
+    </topichead>
+    <topichead navtitle="toloka.util" toc="no">
+        <topicref format="markdown" href="toloka.util._managing_headers.add_headers.md" navtitle="add_headers" toc="no"/>
+        <topicref format="markdown" href="toloka.util._codegen.attribute.md" toc="no"/>
+        <topicref format="markdown" href="toloka.util._codegen.fix_attrs_converters.md" toc="no"/>
+        <topicref format="markdown" href="toloka.util._docstrings.inherit_docstrings.md" toc="no"/>
+        <topicref format="markdown" href="toloka.util._extendable_enum.extend_enum.md" toc="no"/>
+        <topicref format="markdown" href="toloka.util._extendable_enum.ExtendableStrEnum.md" toc="no"/>
+        <topicref format="markdown" href="toloka.util._extendable_enum.ExtendableStrEnumMetaclass.md" toc="no"/>
+        <topicref format="markdown" href="toloka.util._managing_headers.add_headers.md" toc="no"/>
+        <topicref format="markdown" href="toloka.util.async_utils.AsyncInterfaceWrapper.md"/>
+        <topicref format="markdown" href="toloka.util.async_utils.AsyncMultithreadWrapper.md"/>
+        <topicref format="markdown" href="toloka.util.async_utils.Cooldown.md"/>
+        <topicref format="markdown" href="toloka.util.async_utils.ComplexException.md"/>
+        <topicref format="markdown" href="toloka.util.async_utils.ensure_async.md"/>
+        <topicref format="markdown" href="toloka.util.async_utils.get_task_traceback.md"/>
+        <topicref format="markdown" href="toloka.util.get_signature.md"/>
+        <topicref format="markdown" href="toloka.util.identity.md"/>
+        <topicref format="markdown" href="toloka.util.stored.get_base64_digest.md" navtitle="get_base64_digest" toc="no"/>
+        <topicref format="markdown" href="toloka.util.stored.get_stored_meta.md" navtitle="get_stored_meta" toc="no"/>
+        <topicref format="markdown" href="toloka.util.stored.pickle_dumps_base64.md" navtitle="pickle_dumps_base64" toc="no"/>
+        <topicref format="markdown" href="toloka.util.stored.pickle_loads_base64.md" navtitle="pickle_loads_base64" toc="no"/>
+    </topichead>
+</map>

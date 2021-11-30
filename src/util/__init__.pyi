@@ -1,7 +1,7 @@
 __all__ = [
     'AsyncMultithreadWrapper',
     'get_signature',
-    'identity'
+    'identity',
 ]
 import inspect
 import typing

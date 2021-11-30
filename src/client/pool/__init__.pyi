@@ -23,11 +23,12 @@ import typing
 from toloka.client.pool import (
     dynamic_overlap_config,
     dynamic_pricing_config,
-    mixer_config
+    mixer_config,
 )
 from toloka.client.pool.dynamic_overlap_config import DynamicOverlapConfig
 from toloka.client.pool.dynamic_pricing_config import DynamicPricingConfig
 from toloka.client.pool.mixer_config import MixerConfig
+
 
 class Pool(toloka.client.primitives.base.BaseTolokaObject):
     """A set of tasks that are issued and checked according to the same rules within the project

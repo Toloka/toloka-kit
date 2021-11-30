@@ -5,6 +5,8 @@ from uuid import uuid4
 import pytest
 import toloka.client as client
 
+from .testutils.util_functions import check_headers
+
 
 @pytest.fixture
 def webhook_subscriptions_map():
@@ -62,6 +64,13 @@ def test_upsert_webhook_subscriptions(
 ):
 
     def upsert_webhook_subscriptions_mock(request, _):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'upsert_webhook_subscriptions',
+            'X-Low-Level-Method': 'upsert_webhook_subscriptions',
+        }
+        check_headers(request, expected_headers)
+
         assert webhook_subscriptions_map == request.json()
         return upsert_webhook_subscriptions_result_map
 
@@ -84,7 +93,18 @@ def webhook_subscription_map():
 
 
 def test_get_webhook_subscription(requests_mock, toloka_client, toloka_url, webhook_subscription_map):
-    requests_mock.get(f'{toloka_url}/webhook-subscriptions/webhook_subscription-1', json=webhook_subscription_map)
+
+    def webhook_subscription(request, _):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_webhook_subscription',
+            'X-Low-Level-Method': 'get_webhook_subscription',
+        }
+        check_headers(request, expected_headers)
+
+        return webhook_subscription_map
+
+    requests_mock.get(f'{toloka_url}/webhook-subscriptions/webhook_subscription-1', json=webhook_subscription)
     result = toloka_client.get_webhook_subscription('webhook_subscription-1')
     assert webhook_subscription_map == client.unstructure(result)
 
@@ -100,6 +120,13 @@ def test_get_webhook_subscriptions(requests_mock, toloka_client, toloka_url, web
     ]
 
     def get_webhook_subscriptions_mock(request, _):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_webhook_subscriptions',
+            'X-Low-Level-Method': 'find_webhook_subscriptions',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         created_gt = params.pop('created_gt')[0] if 'created_gt' in params else None
         assert {

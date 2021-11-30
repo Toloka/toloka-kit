@@ -1,10 +1,11 @@
 __all__: list = [
     'AsyncMultithreadWrapper',
     'get_signature',
-    'identity'
+    'identity',
 ]
 from typing import Any, Callable, Dict, Iterator
 from inspect import signature, Signature
+
 from .async_utils import AsyncMultithreadWrapper
 
 

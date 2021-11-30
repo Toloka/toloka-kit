@@ -6,6 +6,8 @@ from urllib.parse import urlparse, parse_qs
 import pytest
 import toloka.client as client
 
+from .testutils.util_functions import check_headers
+
 
 @pytest.fixture
 def task_suite_map():
@@ -58,6 +60,13 @@ def task_suite_map_with_readonly(task_suite_map):
 def test_create_task_suite(requests_mock, toloka_client, toloka_url, task_suite_map, task_suite_map_with_readonly):
 
     def task_suites(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_task_suite',
+            'X-Low-Level-Method': 'create_task_suite',
+        }
+        check_headers(request, expected_headers)
+
         assert task_suite_map == request.json()
         return task_suite_map_with_readonly
 
@@ -101,6 +110,13 @@ def test_create_task_suites(requests_mock, toloka_client, toloka_url):
     }
 
     def task_suites(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_task_suites',
+            'X-Low-Level-Method': 'create_task_suites',
+        }
+        check_headers(request, expected_headers)
+
         assert raw_request == request.json()
         return raw_result
 
@@ -227,6 +243,13 @@ def test_create_task_suites_sync_through_async(
 ):
 
     def check_task_suites(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_task_suites',
+            'X-Low-Level-Method': 'create_task_suites',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'operation_id': ['operation-i1d'],
             'skip_invalid_items': ['true'],
@@ -242,11 +265,41 @@ def test_create_task_suites_sync_through_async(
         assert task_suites_map == imcoming_task_suites
         return operation_running_map
 
+    def operation_success(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_task_suites',
+            'X-Low-Level-Method': 'get_operation',
+        }
+        check_headers(request, expected_headers)
+
+        return operation_success_map
+
+    def get_log(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_task_suites',
+            'X-Low-Level-Method': 'get_operation_log',
+        }
+        check_headers(request, expected_headers)
+
+        return create_log
+
+    def task_suites(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_task_suites',
+            'X-Low-Level-Method': 'find_task_suites',
+        }
+        check_headers(request, expected_headers)
+
+        return {'items': get_task_suites_map, 'has_more': False}
+
     # mocks
     requests_mock.post(f'{toloka_url}/task-suites', json=check_task_suites, status_code=201)
-    requests_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}', json=operation_success_map, status_code=201)
-    requests_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}/log', json=create_log, status_code=201)
-    requests_mock.get(f'{toloka_url}/task-suites', json={'items': get_task_suites_map, 'has_more': False}, status_code=201)
+    requests_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}', json=operation_success, status_code=201)
+    requests_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}/log', json=get_log, status_code=201)
+    requests_mock.get(f'{toloka_url}/task-suites', json=task_suites, status_code=201)
 
     # Expanded syntax
     result = toloka_client.create_task_suites(
@@ -286,6 +339,13 @@ def test_create_task_suites_async(requests_mock, toloka_client, toloka_url):
     }
 
     def task_suites(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_task_suites_async',
+            'X-Low-Level-Method': 'create_task_suites_async',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'skip_invalid_items': ['true'],
             'allow_defaults': ['true'],
@@ -323,6 +383,13 @@ def test_find_task_suites(requests_mock, toloka_client, toloka_url, task_suite_m
     raw_result = {'items': [task_suite_map_with_readonly], 'has_more': False}
 
     def task_suites(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_task_suites',
+            'X-Low-Level-Method': 'find_task_suites',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'pool_id': ['21'],
             'created_lte': ['2020-02-01T00:00:00'],
@@ -361,6 +428,13 @@ def test_get_task_suites(requests_mock, toloka_client, toloka_url, task_suite_ma
     task_suites.sort(key=itemgetter('id'))
 
     def get_task_suites(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_task_suites',
+            'X-Low-Level-Method': 'find_task_suites',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         id_gt = params.pop('id_gt')[0] if 'id_gt' in params else None
         assert {
@@ -394,7 +468,18 @@ def test_get_task_suites(requests_mock, toloka_client, toloka_url, task_suite_ma
 
 
 def test_get_task_suite(requests_mock, toloka_client, toloka_url, task_suite_map_with_readonly):
-    requests_mock.get(f'{toloka_url}/task-suites/task-suite-i1d', json=task_suite_map_with_readonly)
+
+    def task_suite(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_task_suite',
+            'X-Low-Level-Method': 'get_task_suite',
+        }
+        check_headers(request, expected_headers)
+
+        return task_suite_map_with_readonly
+
+    requests_mock.get(f'{toloka_url}/task-suites/task-suite-i1d', json=task_suite)
     result = toloka_client.get_task_suite('task-suite-i1d')
     assert task_suite_map_with_readonly == client.unstructure(result)
 
@@ -404,6 +489,13 @@ def test_patch_task_suite(requests_mock, toloka_client, toloka_url, task_suite_m
     raw_result = {**task_suite_map_with_readonly, 'overlap': 12, 'issuing_order_override': 10.4}
 
     def task_suites(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'patch_task_suite',
+            'X-Low-Level-Method': 'patch_task_suite',
+        }
+        check_headers(request, expected_headers)
+
         assert raw_request == request.json()
         return raw_result
 
@@ -419,6 +511,13 @@ def test_patch_task_suite_with_parameters(requests_mock, toloka_client, toloka_u
     raw_result = {**task_suite_map_with_readonly, 'overlap': 12, 'infinite_overlap': False}
 
     def task_suites(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'patch_task_suite',
+            'X-Low-Level-Method': 'patch_task_suite',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         assert {'open_pool': ['true']} == params
         assert {'overlap': 12, 'infinite_overlap': False} == request.json()
@@ -442,6 +541,13 @@ def test_patch_task_suite_overlap_or_min(requests_mock, toloka_client, toloka_ur
     raw_result = {**task_suite_map_with_readonly, 'overlap': 12}
 
     def task_suites(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'patch_task_suite_overlap_or_min',
+            'X-Low-Level-Method': 'patch_task_suite_overlap_or_min',
+        }
+        check_headers(request, expected_headers)
+
         assert raw_patch == request.json()
         return raw_result
 

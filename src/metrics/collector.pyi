@@ -16,26 +16,40 @@ class MetricCollector:
         How to gather metrics and sends it to zabbix:
 
         >>> import toloka.client as toloka
-        >>> from toloka.metrics import AssignmentsInPool, Balance, bind_client, MetricCollector
+        >>> from toloka.metrics import MetricCollector, Balance, AssignmentsInPool
         >>>
-        >>> toloka_client = toloka.TolokaClient(auth_token, 'PRODUCTION')
+        >>> toloka_client = toloka.TolokaClient(token, 'PRODUCTION')
+        >>>
+        >>> def send_metric_to_zabbix(metric_dict):
+        >>>     ### do something
+        >>>     pass
         >>>
         >>> collector = MetricCollector(
         >>>     [
         >>>         Balance(),
-        >>>         AssignmentsInPool(pool_id),
+        >>>         AssignmentsInPool('12345678'),
         >>>     ],
+        >>>     send_metric_to_zabbix,
         >>> )
+        >>>
         >>> bind_client(collector.metrics, toloka_client)
         >>>
-        >>> while True:
-        >>>     metric_dict = collector.get_lines()
-        >>>     send_metric_to_zabbix(metric_dict)
-        >>>     sleep(10)
+        >>> asyncio.run(collector.run())
     """
 
-    def __init__(self, metrics: typing.List[toloka.metrics.metrics.BaseMetric]): ...
+    def __init__(
+        self,
+        metrics: typing.List[toloka.metrics.metrics.BaseMetric],
+        callback: typing.Callable[[typing.Dict[str, typing.List[typing.Tuple[typing.Any, typing.Any]]]], None]
+    ): ...
 
-    def get_lines(self) -> typing.Dict[str, typing.List[typing.Tuple[typing.Any, typing.Any]]]: ...
+    @staticmethod
+    def create_async_tasks(coro): ...
+
+    def run(self):
+        """Starts collecting metrics. And never stops.
+        """
+        ...
 
     metrics: typing.List[toloka.metrics.metrics.BaseMetric]
+    _callback: typing.Callable[[typing.Dict[str, typing.List[typing.Tuple[typing.Any, typing.Any]]]], None]

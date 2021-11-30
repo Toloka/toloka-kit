@@ -2,49 +2,55 @@ __all__ = [
     'AssignmentCursor',
     'BaseCursor',
     'DATETIME_MIN',
+    'MessageThreadCursor',
     'TaskCursor',
     'TolokaClientSyncOrAsyncType',
     'UserBonusCursor',
+    'UserRestrictionCursor',
     'UserSkillCursor',
 ]
 
 import attr
+import copy
 import functools
-import logging
 from datetime import datetime
-from typing import Any, AsyncIterator, Awaitable, Callable, Iterator, List, Optional, Tuple, TypeVar, Union
+from typing import Any, AsyncIterator, Awaitable, Callable, Iterator, List, Optional, Set, Tuple, Union
+from typing_extensions import Protocol
 
 from ..client import (
     Assignment,
+    MessageThread,
     Task,
     TolokaClient,
     UserBonus,
+    UserRestriction,
     UserSkill,
     expand,
     search_requests,
     search_results,
     structure,
 )
+from ..client.search_requests import BaseSearchRequest
 from ..util._codegen import fix_attrs_converters
-from .event import AssignmentEvent, BaseEvent, TaskEvent, UserBonusEvent, UserSkillEvent
+from .event import AssignmentEvent, BaseEvent, MessageThreadEvent, TaskEvent, UserBonusEvent, UserRestrictionEvent, UserSkillEvent
 from ..util.async_utils import AsyncMultithreadWrapper, ensure_async
 
 
-RequestObjectType = TypeVar('RequestObjectType')
-ResponseObjectType = TypeVar('ResponseObjectType')
+class ResponseObjectType(Protocol):
+    items: Optional[List[Any]]
+    has_more: Optional[bool]
+
+
 TolokaClientSyncOrAsyncType = Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]]
 
 DATETIME_MIN = datetime.fromtimestamp(0)
 
 
-logger = logging.getLogger(__name__)
-
-
 @attr.s
 class _ByIdCursor:
     """Iterate by id only."""
-    fetcher: Callable[[RequestObjectType], ResponseObjectType] = attr.ib()
-    request: RequestObjectType = attr.ib()
+    fetcher: Callable[[BaseSearchRequest], ResponseObjectType] = attr.ib()
+    request: BaseSearchRequest = attr.ib()
 
     def __iter__(self) -> Iterator[Any]:
         while True:
@@ -70,8 +76,9 @@ class _ByIdCursor:
 @attr.s
 class BaseCursor:
     toloka_client: TolokaClientSyncOrAsyncType = attr.ib()
-    _request: RequestObjectType = attr.ib()
+    _request: BaseSearchRequest = attr.ib()
     _prev_response: Optional[ResponseObjectType] = attr.ib(default=None, init=False)
+    _seen_ids: Set[str] = attr.ib(factory=set, init=False)
 
     @attr.s
     class CursorFetchContext:
@@ -83,14 +90,14 @@ class BaseCursor:
         _finish_state: Optional[Tuple] = attr.ib(default=None, init=False)
 
         def __enter__(self) -> List[BaseEvent]:
-            self._start_state = self._cursor._get_state()
+            self._start_state = copy.deepcopy(self._cursor._get_state())
             res = [item for item in self._cursor]
             self._finish_state = self._cursor._get_state()
             self._cursor._set_state(self._start_state)
             return res
 
         async def __aenter__(self) -> List[BaseEvent]:
-            self._start_state = self._cursor._get_state()
+            self._start_state = copy.deepcopy(self._cursor._get_state())
             res = [item async for item in self._cursor]
             self._finish_state = self._cursor._get_state()
             self._cursor._set_state(self._start_state)
@@ -104,11 +111,14 @@ class BaseCursor:
             if exc_type is None:
                 self._cursor._set_state(self._finish_state)
 
-    def _get_state(self) -> Tuple[RequestObjectType, Optional[ResponseObjectType]]:
-        return self._request, self._prev_response
+    def _get_state(self) -> Tuple:
+        return self._request, self._prev_response, self._seen_ids
 
-    def _set_state(self, state: Tuple[RequestObjectType, Optional[ResponseObjectType]]) -> None:
-        self._request, self._prev_response = state
+    def _set_state(self, state: Tuple) -> None:
+        self._request, self._prev_response, self._seen_ids = state
+
+    def inject(self, injection: 'BaseCursor') -> None:
+        self._set_state(injection._get_state())
 
     def try_fetch_all(self) -> CursorFetchContext:
         return self.CursorFetchContext(self)
@@ -150,23 +160,26 @@ class BaseCursor:
             response = fetcher(self._request, sort=self._get_time_field())  # Diff between sync and async.
             if response.items:
                 max_time = self._get_time(response.items[-1])
-                self._request = attr.evolve(self._request, **{self._time_field_gte: max_time})
-                seen_ids = frozenset(item.id for item in self._prev_response.items) if self._prev_response else ()
+                self._prev_response = response
                 for item in response.items:
-                    if item.id not in seen_ids:
+                    if item.id not in self._seen_ids:
+                        self._request = attr.evolve(self._request, **{self._time_field_gte: self._get_time(item)})
+                        self._seen_ids.add(item.id)
                         yield self._construct_event(item)
 
-                self._prev_response = response
                 if not response.has_more:
                     return
 
                 if self._get_time(response.items[0]) == max_time:
                     fixed_time_request = attr.evolve(self._request, **{self._time_field_lte: max_time})
-                    seen_ids = frozenset(item.id for item in response.items)
                     for item in _ByIdCursor(fetcher, fixed_time_request):  # Diff between sync and async.
-                        if item.id not in seen_ids:
+                        if item.id not in self._seen_ids:
+                            self._seen_ids.add(item.id)
                             yield self._construct_event(item)
                     self._request = attr.evolve(self._request, **{self._time_field_gt: max_time})
+
+                # Strip it to the current response size.
+                self._seen_ids = {item.id for item in response.items}
             else:
                 return
 
@@ -176,23 +189,26 @@ class BaseCursor:
             response = await ensure_async(fetcher)(self._request, sort=self._get_time_field())  # Diff between sync and async.
             if response.items:
                 max_time = self._get_time(response.items[-1])
-                self._request = attr.evolve(self._request, **{self._time_field_gte: max_time})
-                seen_ids = frozenset(item.id for item in self._prev_response.items) if self._prev_response else ()
+                self._prev_response = response
                 for item in response.items:
-                    if item.id not in seen_ids:
+                    if item.id not in self._seen_ids:
+                        self._request = attr.evolve(self._request, **{self._time_field_gte: self._get_time(item)})
+                        self._seen_ids.add(item.id)
                         yield self._construct_event(item)
 
-                self._prev_response = response
                 if not response.has_more:
                     return
 
                 if self._get_time(response.items[0]) == max_time:
                     fixed_time_request = attr.evolve(self._request, **{self._time_field_lte: max_time})
-                    seen_ids = frozenset(item.id for item in response.items)
                     async for item in _ByIdCursor(fetcher, fixed_time_request):  # Diff between sync and async.
-                        if item.id not in seen_ids:
+                        if item.id not in self._seen_ids:
+                            self._seen_ids.add(item.id)
                             yield self._construct_event(item)
                     self._request = attr.evolve(self._request, **{self._time_field_gt: max_time})
+
+                # Strip it to the current response size.
+                self._seen_ids = {item.id for item in response.items}
             else:
                 return
 
@@ -339,3 +355,71 @@ class UserSkillCursor(BaseCursor):
         return UserSkillEvent(user_skill=item,
                               event_type=self._event_type,
                               event_time=getattr(item, self._event_type.time_key))
+
+
+@expand('request')
+@fix_attrs_converters
+@attr.s
+class UserRestrictionCursor(BaseCursor):
+    """Iterator over user restrictions by create time.
+
+    Args:
+        toloka_client: TolokaClient object that is being used to search user restrictions.
+        request: Base request to search user restrictions.
+
+    Examples:
+        Iterate over user restrictions in project.
+
+        >>> it = UserRestrictionCursor(toloka_client=toloka_client, project_id=my_proj_id)
+        >>> current_restrictions = list(it)
+        >>> # ... new restrictions could appear ...
+        >>> new_restrictions = list(it)  # Contains only new user restrictions, appeared since the previous call.
+        ...
+    """
+
+    _request: search_requests.UserRestrictionSearchRequest = attr.ib(
+        factory=search_requests.UserRestrictionSearchRequest,
+    )
+
+    def _get_fetcher(self) -> Callable[..., search_results.UserRestrictionSearchResult]:
+        return self.toloka_client.find_user_restrictions
+
+    def _get_time_field(self) -> str:
+        return 'created'
+
+    def _construct_event(self, item: UserRestriction) -> UserRestrictionEvent:
+        return UserRestrictionEvent(user_restriction=item, event_time=getattr(item, self._get_time_field()))
+
+
+@expand('request')
+@fix_attrs_converters
+@attr.s
+class MessageThreadCursor(BaseCursor):
+    """Iterator over messages by create time.
+
+    Args:
+        toloka_client: TolokaClient object that is being used to search messages.
+        request: Base request to search messages.
+
+    Examples:
+        Iterate over all messages.
+
+        >>> it = MessageThreadCursor(toloka_client=toloka_client)
+        >>> all_messages = list(it)
+        >>> # ... new messages could appear ...
+        >>> new_messages = list(it)  # Contains only new messages, appeared since the previous call.
+        ...
+    """
+
+    _request: search_requests.MessageThreadSearchRequest = attr.ib(
+        factory=search_requests.MessageThreadSearchRequest,
+    )
+
+    def _get_fetcher(self) -> Callable[..., search_results.MessageThreadSearchResult]:
+        return self.toloka_client.find_message_threads
+
+    def _get_time_field(self) -> str:
+        return 'created'
+
+    def _construct_event(self, item: MessageThread) -> MessageThreadEvent:
+        return MessageThreadEvent(message_thread=item, event_time=getattr(item, self._get_time_field()))

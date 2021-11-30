@@ -7,11 +7,20 @@ from urllib.parse import urlparse, parse_qs
 import pytest
 import toloka.client as client
 
+from ..testutils.util_functions import check_headers
+
 
 def test_find_pools(requests_mock, toloka_client, toloka_url, pool_map_with_readonly):
     raw_result = {'items': [pool_map_with_readonly], 'has_more': False}
 
     def pools(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_pools',
+            'X-Low-Level-Method': 'find_pools',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'project_id': ['10'],
             'id_gt': ['20'],
@@ -48,6 +57,13 @@ def test_get_pools(requests_mock, toloka_client, toloka_url, pool_map_with_reado
     expected_pools = [pool for pool in pools if pool['id'] > '20']
 
     def get_pools(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_pools',
+            'X-Low-Level-Method': 'find_pools',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         id_gt = params.pop('id_gt')[0]
         assert {
@@ -85,6 +101,13 @@ def test_get_pools_one_params(requests_mock, toloka_client, toloka_url, pool_map
     expected_pools = [pool for pool in pools]
 
     def get_pools(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_pools',
+            'X-Low-Level-Method': 'find_pools',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         assert {'status': ['OPEN'], 'sort': ['id']} == params
         return {'items': [pool for pool in pools], 'has_more': False}
@@ -97,18 +120,47 @@ def test_get_pools_one_params(requests_mock, toloka_client, toloka_url, pool_map
 
 
 def test_get_pool(requests_mock, toloka_client, toloka_url, pool_map_with_readonly):
-    requests_mock.get(f'{toloka_url}/pools/21', json=pool_map_with_readonly)
+
+    def pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_pool',
+            'X-Low-Level-Method': 'get_pool',
+        }
+        check_headers(request, expected_headers)
+
+        return pool_map_with_readonly
+
+    requests_mock.get(f'{toloka_url}/pools/21', json=pool)
     assert pool_map_with_readonly == client.unstructure(toloka_client.get_pool('21'))
 
 
 def test_get_pool_training(requests_mock, toloka_client, toloka_url, training_pool_map):
-    requests_mock.get(f'{toloka_url}/pools/22', json=training_pool_map)
+
+    def pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_pool',
+            'X-Low-Level-Method': 'get_pool',
+        }
+        check_headers(request, expected_headers)
+
+        return training_pool_map
+
+    requests_mock.get(f'{toloka_url}/pools/22', json=pool)
     assert training_pool_map == client.unstructure(toloka_client.get_pool('22'))
 
 
 def test_create_pool(requests_mock, toloka_client, toloka_url, pool_map, pool_map_with_readonly, caplog):
 
     def pools(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_pool',
+            'X-Low-Level-Method': 'create_pool',
+        }
+        check_headers(request, expected_headers)
+
         assert pool_map == request.json()
         return pool_map_with_readonly
 
@@ -173,6 +225,13 @@ def test_create_pool_check_all_filters(requests_mock, toloka_client, toloka_url,
     }
 
     def pools(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_pool',
+            'X-Low-Level-Method': 'create_pool',
+        }
+        check_headers(request, expected_headers)
+
         assert pool_map == request.json()
         return pool_map
 
@@ -202,7 +261,7 @@ def test_create_pool_check_all_filters(requests_mock, toloka_client, toloka_url,
         (filter.UserAgentVersionMinor < 12) &
         (filter.UserAgentVersionBugfix > 2026) &
         (filter.Rating >= 885.15) &
-        ((filter.Skill('224') >= 85) | (filter.Skill('300') != None) | (filter.Skill('350') == 75.512))
+        ((filter.Skill('224') >= 85) | (filter.Skill('300') != None) | (filter.Skill('350') == 75.512))  # noqa: E711
     )
     result = toloka_client.create_pool(pool)
     assert client.structure(pool_map, client.pool.Pool) == result
@@ -227,6 +286,13 @@ def test_unstructure_pool_check_one_filter_wrap(requests_mock, toloka_client, to
     }
 
     def pools(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_pool',
+            'X-Low-Level-Method': 'create_pool',
+        }
+        check_headers(request, expected_headers)
+
         assert pool_map == request.json()
         return pool_map
 
@@ -288,6 +354,13 @@ def test_update_pool(requests_mock, toloka_client, toloka_url, pool_map_with_rea
     }
 
     def pools(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'update_pool',
+            'X-Low-Level-Method': 'update_pool',
+        }
+        check_headers(request, expected_headers)
+
         assert updated_pool == request.json()
         return updated_pool
 
@@ -300,6 +373,13 @@ def test_patch_pool(requests_mock, toloka_client, toloka_url, pool_map_with_read
     raw_result = {**pool_map_with_readonly, 'priority': 42}
 
     def pools(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'patch_pool',
+            'X-Low-Level-Method': 'patch_pool',
+        }
+        check_headers(request, expected_headers)
+
         assert {'priority': 42} == request.json()
         return raw_result
 
@@ -340,8 +420,29 @@ def complete_open_pool_operation_map(open_pool_operation_map):
 
 
 def test_open_pool_async(requests_mock, toloka_client, toloka_url, open_pool_operation_map, complete_open_pool_operation_map):
-    requests_mock.post(f'{toloka_url}/pools/21/open', json=open_pool_operation_map, status_code=202)
-    requests_mock.get(f'{toloka_url}/operations/{open_pool_operation_map["id"]}', json=complete_open_pool_operation_map, status_code=200)
+
+    def open_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'open_pool_async',
+            'X-Low-Level-Method': 'open_pool_async',
+        }
+        check_headers(request, expected_headers)
+
+        return open_pool_operation_map
+
+    def complete_open_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'wait_operation',
+            'X-Low-Level-Method': 'get_operation',
+        }
+        check_headers(request, expected_headers)
+
+        return complete_open_pool_operation_map
+
+    requests_mock.post(f'{toloka_url}/pools/21/open', json=open_pool, status_code=202)
+    requests_mock.get(f'{toloka_url}/operations/{open_pool_operation_map["id"]}', json=complete_open_pool, status_code=200)
 
     operation = toloka_client.open_pool_async('21')
     assert open_pool_operation_map == client.unstructure(operation)
@@ -352,17 +453,59 @@ def test_open_pool_async(requests_mock, toloka_client, toloka_url, open_pool_ope
 
 def test_open_pool(requests_mock, toloka_client, toloka_url,
                    open_pool_operation_map, complete_open_pool_operation_map, open_pool_map_with_readonly):
-    requests_mock.post(f'{toloka_url}/pools/21/open', json=open_pool_operation_map, status_code=202)
-    requests_mock.get(f'{toloka_url}/operations/{open_pool_operation_map["id"]}', json=complete_open_pool_operation_map, status_code=200)
-    requests_mock.get(f'{toloka_url}/pools/21', json=open_pool_map_with_readonly, status_code=200)
+
+    def open_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'open_pool',
+            'X-Low-Level-Method': 'open_pool_async',
+        }
+        check_headers(request, expected_headers)
+
+        return open_pool_operation_map
+
+    def complete_open_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'open_pool',
+            'X-Low-Level-Method': 'get_operation',
+        }
+        check_headers(request, expected_headers)
+
+        return complete_open_pool_operation_map
+
+    def get_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'open_pool',
+            'X-Low-Level-Method': 'get_pool',
+        }
+        check_headers(request, expected_headers)
+
+        return open_pool_map_with_readonly
+
+    requests_mock.post(f'{toloka_url}/pools/21/open', json=open_pool, status_code=202)
+    requests_mock.get(f'{toloka_url}/operations/{open_pool_operation_map["id"]}', json=complete_open_pool, status_code=200)
+    requests_mock.get(f'{toloka_url}/pools/21', json=get_pool, status_code=200)
 
     result = toloka_client.open_pool('21')
     assert open_pool_map_with_readonly == client.unstructure(result)
 
 
 def test_open_pool_opened(requests_mock, toloka_client, toloka_url, open_pool_map_with_readonly):
+
+    def get_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'open_pool',
+            'X-Low-Level-Method': 'get_pool',
+        }
+        check_headers(request, expected_headers)
+
+        return open_pool_map_with_readonly
+
     requests_mock.post(f'{toloka_url}/pools/21/open', status_code=204)
-    requests_mock.get(f'{toloka_url}/pools/21', json=open_pool_map_with_readonly)
+    requests_mock.get(f'{toloka_url}/pools/21', json=get_pool)
     result = toloka_client.open_pool('21')
     assert open_pool_map_with_readonly == client.unstructure(result)
 
@@ -378,14 +521,35 @@ def empty_pool_error():
 
 
 def test_open_pool_exception(requests_mock, toloka_client, toloka_url, empty_pool_error):
-    requests_mock.post(f'{toloka_url}/pools/21/open', json=empty_pool_error, status_code=409)
+
+    def get_empty_pool_error(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'open_pool',
+            'X-Low-Level-Method': 'open_pool_async',
+        }
+        check_headers(request, expected_headers)
+
+        return empty_pool_error
+
+    requests_mock.post(f'{toloka_url}/pools/21/open', json=get_empty_pool_error, status_code=409)
     with pytest.raises(client.exceptions.IncorrectActionsApiError):
         toloka_client.open_pool('21')
 
 
 def test_open_pool_already_open(requests_mock, toloka_client, toloka_url, open_pool_map_with_readonly):
+
+    def pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'open_pool',
+            'X-Low-Level-Method': 'get_pool',
+        }
+        check_headers(request, expected_headers)
+        return open_pool_map_with_readonly
+
     requests_mock.post(f'{toloka_url}/pools/21/open', [{'status_code': 204}])
-    requests_mock.get(f'{toloka_url}/pools/21', json=open_pool_map_with_readonly)
+    requests_mock.get(f'{toloka_url}/pools/21', json=pool)
     assert toloka_client.open_pool_async('21') is None
     result = toloka_client.open_pool('21')
     assert open_pool_map_with_readonly == client.unstructure(result)
@@ -413,24 +577,87 @@ def complete_close_pool_operation_map(close_pool_operation_map):
 
 
 def test_close_pool_async(requests_mock, toloka_client, toloka_url, complete_close_pool_operation_map):
-    requests_mock.post(f'{toloka_url}/pools/21/close', json=complete_close_pool_operation_map, status_code=202)
-    result = toloka_client.wait_operation(toloka_client.close_pool_async('21'))
+
+    def complete_close_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'close_pool_async',
+            'X-Low-Level-Method': 'close_pool_async',
+        }
+        check_headers(request, expected_headers)
+
+        return complete_close_pool_operation_map
+
+    def async_operation(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'wait_operation',
+            'X-Low-Level-Method': 'get_operation',
+        }
+        check_headers(request, expected_headers)
+
+    requests_mock.post(f'{toloka_url}/pools/21/close', json=complete_close_pool, status_code=202)
+    op = toloka_client.close_pool_async('21')
+    requests_mock.get(f'{toloka_url}/operations/{op.id}', json=async_operation, status_code=202)
+    result = toloka_client.wait_operation(op)
     assert complete_close_pool_operation_map == client.unstructure(result)
 
 
 def test_close_pool(requests_mock, toloka_client, toloka_url,
                     close_pool_operation_map, complete_close_pool_operation_map, pool_map_with_readonly):
-    requests_mock.post(f'{toloka_url}/pools/21/close', json=close_pool_operation_map, status_code=202)
-    requests_mock.get(f'{toloka_url}/operations/{close_pool_operation_map["id"]}', json=complete_close_pool_operation_map, status_code=200)
-    requests_mock.get(f'{toloka_url}/pools/21', json=pool_map_with_readonly, status_code=200)
+
+    def close_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'close_pool',
+            'X-Low-Level-Method': 'close_pool_async',
+        }
+        check_headers(request, expected_headers)
+
+        return close_pool_operation_map
+
+    def complete_close_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'close_pool',
+            'X-Low-Level-Method': 'get_operation',
+        }
+        check_headers(request, expected_headers)
+
+        return complete_close_pool_operation_map
+
+    def pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'close_pool',
+            'X-Low-Level-Method': 'get_pool',
+        }
+        check_headers(request, expected_headers)
+
+        return pool_map_with_readonly
+
+    requests_mock.post(f'{toloka_url}/pools/21/close', json=close_pool, status_code=202)
+    requests_mock.get(f'{toloka_url}/operations/{close_pool_operation_map["id"]}', json=complete_close_pool, status_code=200)
+    requests_mock.get(f'{toloka_url}/pools/21', json=pool, status_code=200)
 
     result = toloka_client.close_pool('21')
     assert pool_map_with_readonly == client.unstructure(result)
 
 
 def test_close_pool_already_closed(requests_mock, toloka_client, toloka_url, pool_map_with_readonly):
+
+    def pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'close_pool',
+            'X-Low-Level-Method': 'get_pool',
+        }
+        check_headers(request, expected_headers)
+
+        return pool_map_with_readonly
+
     requests_mock.post(f'{toloka_url}/pools/21/close', [{'status_code': 204}])
-    requests_mock.get(f'{toloka_url}/pools/21', json=pool_map_with_readonly)
+    requests_mock.get(f'{toloka_url}/pools/21', json=pool)
     assert toloka_client.close_pool_async('21') is None
     result = toloka_client.close_pool('21')
     assert pool_map_with_readonly == client.unstructure(result)
@@ -459,9 +686,20 @@ def complete_close_for_update_pool_operation_map(close_for_update_pool_operation
 
 def test_close_pool_for_update_async(requests_mock, toloka_client, toloka_url,
                                      complete_close_for_update_pool_operation_map):
+
+    def complete_close_for_update_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'close_pool_for_update_async',
+            'X-Low-Level-Method': 'close_pool_for_update_async',
+        }
+        check_headers(request, expected_headers)
+
+        return complete_close_for_update_pool_operation_map
+
     requests_mock.post(
         f'{toloka_url}/pools/21/close-for-update',
-        json=complete_close_for_update_pool_operation_map,
+        json=complete_close_for_update_pool,
         status_code=202
     )
     result = toloka_client.wait_operation(toloka_client.close_pool_for_update_async('21'))
@@ -471,17 +709,48 @@ def test_close_pool_for_update_async(requests_mock, toloka_client, toloka_url,
 def test_close_pool_for_update(requests_mock, toloka_client, toloka_url,
                                close_for_update_pool_operation_map, complete_close_for_update_pool_operation_map,
                                pool_map_with_readonly):
+
+    def close_for_update_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'close_pool_for_update',
+            'X-Low-Level-Method': 'close_pool_for_update_async',
+        }
+        check_headers(request, expected_headers)
+
+        return close_for_update_pool_operation_map
+
+    def complete_close_for_update_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'close_pool_for_update',
+            'X-Low-Level-Method': 'get_operation',
+        }
+        check_headers(request, expected_headers)
+
+        return complete_close_for_update_pool_operation_map
+
+    def pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'close_pool_for_update',
+            'X-Low-Level-Method': 'get_pool',
+        }
+        check_headers(request, expected_headers)
+
+        return pool_map_with_readonly
+
     requests_mock.post(
         f'{toloka_url}/pools/21/close-for-update',
-        json=close_for_update_pool_operation_map,
+        json=close_for_update_pool,
         status_code=202
     )
     requests_mock.get(
         f'{toloka_url}/operations/{close_for_update_pool_operation_map["id"]}',
-        json=complete_close_for_update_pool_operation_map,
+        json=complete_close_for_update_pool,
         status_code=200
     )
-    requests_mock.get(f'{toloka_url}/pools/21', json=pool_map_with_readonly, status_code=200)
+    requests_mock.get(f'{toloka_url}/pools/21', json=pool, status_code=200)
 
     result = toloka_client.close_pool_for_update('21')
     assert pool_map_with_readonly == client.unstructure(result)
@@ -489,8 +758,19 @@ def test_close_pool_for_update(requests_mock, toloka_client, toloka_url,
 
 def test_close_pool_for_update_already_closed_for_update(requests_mock, toloka_client, toloka_url,
                                                          pool_map_with_readonly):
+
+    def pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'close_pool_for_update',
+            'X-Low-Level-Method': 'get_pool',
+        }
+        check_headers(request, expected_headers)
+
+        return pool_map_with_readonly
+
     requests_mock.post(f'{toloka_url}/pools/21/close-for-update', [{'status_code': 204}])
-    requests_mock.get(f'{toloka_url}/pools/21', json=pool_map_with_readonly)
+    requests_mock.get(f'{toloka_url}/pools/21', json=pool)
     assert toloka_client.close_pool_for_update_async('21') is None
     result = toloka_client.close_pool_for_update('21')
     assert pool_map_with_readonly == client.unstructure(result)
@@ -518,28 +798,81 @@ def complete_archive_pool_operation_map(archive_pool_operation_map):
 
 
 def test_archive_pool_async(requests_mock, toloka_client, toloka_url, complete_archive_pool_operation_map):
-    requests_mock.post(f'{toloka_url}/pools/21/archive', json=complete_archive_pool_operation_map, status_code=202)
+
+    def complete_archive_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'archive_pool_async',
+            'X-Low-Level-Method': 'archive_pool_async',
+        }
+        check_headers(request, expected_headers)
+
+        return complete_archive_pool_operation_map
+
+    requests_mock.post(f'{toloka_url}/pools/21/archive', json=complete_archive_pool, status_code=202)
     result = toloka_client.wait_operation(toloka_client.archive_pool_async('21'))
     assert complete_archive_pool_operation_map == client.unstructure(result)
 
 
 def test_archive_pool(requests_mock, toloka_client, toloka_url,
                       archive_pool_operation_map, complete_archive_pool_operation_map, pool_map_with_readonly):
-    requests_mock.post(f'{toloka_url}/pools/21/archive', json=archive_pool_operation_map, status_code=202)
+
+    def archive_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'archive_pool',
+            'X-Low-Level-Method': 'archive_pool_async',
+        }
+        check_headers(request, expected_headers)
+
+        return archive_pool_operation_map
+
+    def complete_archive_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'archive_pool',
+            'X-Low-Level-Method': 'get_operation',
+        }
+        check_headers(request, expected_headers)
+
+        return complete_archive_pool_operation_map
+
+    def pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'archive_pool',
+            'X-Low-Level-Method': 'get_pool',
+        }
+        check_headers(request, expected_headers)
+
+        return pool_map_with_readonly
+
+    requests_mock.post(f'{toloka_url}/pools/21/archive', json=archive_pool, status_code=202)
     requests_mock.get(
         f'{toloka_url}/operations/{archive_pool_operation_map["id"]}',
-        json=complete_archive_pool_operation_map,
+        json=complete_archive_pool,
         status_code=200
     )
-    requests_mock.get(f'{toloka_url}/pools/21', json=pool_map_with_readonly, status_code=200)
+    requests_mock.get(f'{toloka_url}/pools/21', json=pool, status_code=200)
 
     result = toloka_client.archive_pool('21')
     assert pool_map_with_readonly == client.unstructure(result)
 
 
 def test_archive_pool_already_archived(requests_mock, toloka_client, toloka_url, archived_pool_map_with_readonly):
+
+    def pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'archive_pool',
+            'X-Low-Level-Method': 'get_pool',
+        }
+        check_headers(request, expected_headers)
+
+        return archived_pool_map_with_readonly
+
     requests_mock.post(f'{toloka_url}/pools/21/archive', [{'status_code': 204}])
-    requests_mock.get(f'{toloka_url}/pools/21', json=archived_pool_map_with_readonly)
+    requests_mock.get(f'{toloka_url}/pools/21', json=pool)
     assert toloka_client.archive_pool_async('21') is None
     result = toloka_client.archive_pool('21')
     assert archived_pool_map_with_readonly == client.unstructure(result)
@@ -576,20 +909,62 @@ def cloned_pool_map(pool_map_with_readonly):
 
 
 def test_clone_pool_async(requests_mock, toloka_client, toloka_url, complete_clone_pool_operation_map):
-    requests_mock.post(f'{toloka_url}/pools/21/clone', json=complete_clone_pool_operation_map, status_code=202)
+
+    def complete_clone_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'clone_pool_async',
+            'X-Low-Level-Method': 'clone_pool_async',
+        }
+        check_headers(request, expected_headers)
+
+        return complete_clone_pool_operation_map
+
+    requests_mock.post(f'{toloka_url}/pools/21/clone', json=complete_clone_pool, status_code=202)
     result = toloka_client.wait_operation(toloka_client.clone_pool_async('21'))
     assert complete_clone_pool_operation_map == client.unstructure(result)
 
 
 def test_clone_pool(requests_mock, toloka_client, toloka_url,
                     clone_pool_operation_map, complete_clone_pool_operation_map, cloned_pool_map, caplog):
-    requests_mock.post(f'{toloka_url}/pools/21/clone', json=clone_pool_operation_map, status_code=202)
+
+    def clone_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'clone_pool',
+            'X-Low-Level-Method': 'clone_pool_async',
+        }
+        check_headers(request, expected_headers)
+
+        return clone_pool_operation_map
+
+    def complete_clone_pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'clone_pool',
+            'X-Low-Level-Method': 'get_operation',
+        }
+        check_headers(request, expected_headers)
+
+        return complete_clone_pool_operation_map
+
+    def pool(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'clone_pool',
+            'X-Low-Level-Method': 'get_pool',
+        }
+        check_headers(request, expected_headers)
+
+        return cloned_pool_map
+
+    requests_mock.post(f'{toloka_url}/pools/21/clone', json=clone_pool, status_code=202)
     requests_mock.get(
         f'{toloka_url}/operations/{clone_pool_operation_map["id"]}',
-        json=complete_clone_pool_operation_map,
+        json=complete_clone_pool,
         status_code=200
     )
-    requests_mock.get(f'{toloka_url}/pools/22', json=cloned_pool_map, status_code=200)
+    requests_mock.get(f'{toloka_url}/pools/22', json=pool, status_code=200)
 
     with caplog.at_level(logging.INFO):
         caplog.clear()

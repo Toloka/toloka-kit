@@ -14,11 +14,13 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 
+import asyncio
 from collections import namedtuple
 import datetime
 import logging
 import math
 import sys
+from threading import Thread
 from typing import Dict, List, Optional, Union
 import uuid
 
@@ -28,8 +30,14 @@ else:
     from cached_property import cached_property
 
 from .metrics import BaseMetric
+from ..util.async_utils import get_task_traceback
 
 logger = logging.getLogger(__name__)
+
+
+def _start_background_loop(loop: asyncio.AbstractEventLoop) -> None:
+    asyncio.set_event_loop(loop)
+    loop.run_forever()
 
 
 class Chart:
@@ -57,10 +65,14 @@ class Chart:
     metrics: List[BaseMetric]
     _id: str
     _lines: Dict[str, LineStats]  # {'line_id': ([x_times], [y_values], 'line name')}
+    _event_loop: asyncio.AbstractEventLoop
+    _tasks: List[asyncio.Task]
 
-    def __init__(self, name: Optional[str], metrics: List[BaseMetric]):
+    def __init__(self, name: Optional[str], metrics: List[BaseMetric], loop=None):
         self._name = name
         self._id = str(uuid.uuid4())
+        self._event_loop = loop
+        self._tasks = []
         self.metrics = []
         for i, element in enumerate(metrics):
             if not isinstance(element, BaseMetric):
@@ -76,15 +88,38 @@ class Chart:
     def _get_unique_name(self, name: str, metric: BaseMetric) -> str:
         return f'{name}-{id(metric)}'
 
+    @staticmethod
+    def create_async_tasks(metric: BaseMetric, loop: asyncio.AbstractEventLoop):
+        task = asyncio.Task(metric.get_lines(), loop=loop)
+        task.metric_inst = metric
+        return task
+
     def update_metrics(self):
         """Gathers all metrics, and stores them in lines.
         """
-        for metric in self.metrics:
-            for name, points in metric.get_lines().items():
-                x_list, y_list, _ = self._lines[self._get_unique_name(name, metric)]
-                for x, y in points:
-                    x_list.append(x)
-                    y_list.append(y)
+        if not self._tasks:
+            self._tasks = [Chart.create_async_tasks(metric, self._event_loop) for metric in self.metrics]
+            asyncio.run_coroutine_threadsafe(asyncio.wait(self._tasks), self._event_loop)
+
+        new_tasks = []
+        old_tasks = []
+        for task in self._tasks:
+            if task.done():
+                if task.exception() is None:
+                    lines_dict = task.result()
+                    for name, points in lines_dict.items():
+                        x_list, y_list, _ = self._lines[self._get_unique_name(name, task.metric_inst)]
+                        for x, y in points:
+                            x_list.append(x)
+                            y_list.append(y)
+                else:
+                    logger.error(f'Got error in metric:{task.exception()}\n{get_task_traceback(task)}')
+                new_tasks.append(Chart.create_async_tasks(task.metric_inst, self._event_loop))
+            else:
+                old_tasks.append(task)
+        if new_tasks:
+            asyncio.run_coroutine_threadsafe(asyncio.wait(new_tasks), self._event_loop)
+        self._tasks = new_tasks + old_tasks
 
     def create_figure(self) -> go.Figure:
         """Create figure for this chart. Called at each step.
@@ -182,6 +217,8 @@ class DashBoard:
     _min_time_range: datetime.timedelta
     _max_time_range: datetime.timedelta
     _update_seconds: int
+    _toloka_thread: Thread
+    _event_loop: asyncio.AbstractEventLoop
 
     CHART_STYLE_TEMPLATE = {'width': '48%', 'display': 'inline-block', 'padding': '0px 0px'}
 
@@ -198,12 +235,17 @@ class DashBoard:
         self._update_seconds = update_seconds
         self._min_time_range = min_time_range
         self._max_time_range = max_time_range
+
+        self._event_loop = asyncio.new_event_loop()
+        self._toloka_thread = Thread(target=_start_background_loop, args=(self._event_loop,), daemon=True)
+
         self._charts = {}
         for i, element in enumerate(metrics):
             if isinstance(element, BaseMetric):
-                chart = Chart(None, [element])
+                chart = Chart(None, [element], loop=self._event_loop)
                 self._charts[chart._id] = chart
             elif isinstance(element, Chart):
+                element._event_loop = self._event_loop
                 self._charts[element._id] = element
             else:
                 raise TypeError(f'{i} element in metrics must be an instance of toloka.metrics.BaseMetric or toloka.metrics.jupyter_dashboard.Chart, now it\'s {type(element)}')
@@ -254,8 +296,6 @@ class DashBoard:
             Union[plotly.graph_objects.Figure(), List[plotly.graph_objects.Figure()]]: all new Figure's.
                 Must have the same length on each iteration.
         """
-        # TODO: Maybe it's worth updating only the part of the graphs that we managed to calculate,
-        # and next time we should update it further.
         # Because many metrics easily take at least 1 second, for the simplest operations
         now = datetime.datetime.utcnow()
         if self._time_from is None:
@@ -276,7 +316,7 @@ class DashBoard:
             figures.append(new_figure)
         return figures if len(figures) > 1 else figures[0]
 
-    def run_dash(self, mode: str = 'inline', height: int =None, host: str = '127.0.0.1', port: str = '8050'):
+    def run_dash(self, mode: str = 'inline', height: int = None, host: str = '127.0.0.1', port: str = '8050'):
         """Starts dashboard. Starts server for online updating charts.
 
         You can stop it, by calling 'stop_dash()' for the same dashboard instance.
@@ -288,6 +328,7 @@ class DashBoard:
             port: Port fo server. Defaults to '8050'.
         """
         self.stop_dash()
+        self._toloka_thread.start()
         if height is None:
             rows = math.ceil(len(self._charts) / 2)
             height = 220*rows + 100
@@ -302,6 +343,16 @@ class DashBoard:
             self._dashboard._terminate_server_for_port(self._host, self._port)
         self._host = None
         self._port = None
+
+        for chart in self._charts.values():
+            for task in chart._tasks:
+                task.cancel()
+        if self._event_loop.is_running():
+            self._event_loop.stop()
+        if self._toloka_thread.is_alive():
+            self._toloka_thread.join()
+        for chart in self._charts.values():
+            chart._tasks = []
 
     def __del__(self):
         self.stop_dash()

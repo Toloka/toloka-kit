@@ -1,6 +1,7 @@
 import asyncio
 import inspect
 import itertools
+import pickle
 import pytest
 
 from toloka.client import unstructure
@@ -106,6 +107,13 @@ def fetch_async(cursor):
     return unstructure(loop.run_until_complete(_fetch()))
 
 
+def test_cursor_pickleable(toloka_client):
+    assert pickle.dumps(AssignmentCursor(toloka_client=toloka_client, pool_id='1', event_type='ACCEPTED'))
+    assert pickle.dumps(TaskCursor(toloka_client=toloka_client, pool_id='1'))
+    assert pickle.dumps(UserBonusCursor(toloka_client=toloka_client, user_id='1'))
+    assert pickle.dumps(UserSkillCursor(toloka_client=toloka_client, user_id='1', event_type='CREATED'))
+
+
 @pytest.mark.parametrize('fetcher', [fetch_sync, fetch_async])
 def test_cursor_create_expanded(toloka_client, mocked_backend_for_user_bonus, user_bonus_existing, fetcher):
     mocked_backend_for_user_bonus.storage.extend(user_bonus_existing)
@@ -166,6 +174,29 @@ def test_cursor_iter_different_chunk_size(toloka_client, mocked_backend_for_user
         {'user_bonus': item, 'event_time': item['created']}
         for item in user_bonus_existing
     ], key=str) == sorted(unstructure(list(cursor)), key=str)
+
+
+@pytest.mark.parametrize('do_pickle', (False, True))
+@pytest.mark.parametrize('chunk_size', range(1, 9))
+def test_cursor_iter_by_one(toloka_client, mocked_backend_for_user_bonus, user_bonus_existing, chunk_size, do_pickle):
+    mocked_backend_for_user_bonus.storage.extend(user_bonus_existing)
+    mocked_backend_for_user_bonus.limit = chunk_size
+    cursor = UserBonusCursor(toloka_client=toloka_client)
+
+    result = []
+    for _ in range(len(user_bonus_existing) + 1):  # Iterate one more time to check no more items fetched.
+        if do_pickle:
+            cursor = pickle.loads(pickle.dumps(cursor))
+        item = next(iter(cursor), None)
+        if item and len(result) <= len(user_bonus_existing):
+            result.append(item)
+        else:
+            break
+
+    assert sorted([
+        {'user_bonus': item, 'event_time': item['created']}
+        for item in user_bonus_existing
+    ], key=str) == sorted(unstructure(result), key=str)
 
 
 def test_assignment_cursor(requests_mock, toloka_url, toloka_client):

@@ -12,6 +12,8 @@ import toloka.client as client
 from toloka.client.exceptions import InternalApiError, ValidationApiError, IncorrectActionsApiError
 from .template_builder.test_template_builder import view_spec_map as tb_view_spec_map  # noqa: F401
 
+from .testutils.util_functions import check_headers
+
 
 @pytest.fixture
 def project_map():
@@ -84,6 +86,13 @@ def test_find_project(requests_mock, toloka_client, toloka_url, project_map):
     raw_result = {'items': [project_map], 'has_more': False}
 
     def find_projects(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'find_projects',
+            'X-Low-Level-Method': 'find_projects',
+        }
+        check_headers(request, expected_headers)
+
         assert {
             'status': ['ACTIVE'],
             'limit': ['50'],
@@ -122,6 +131,13 @@ def test_get_projects(requests_mock, toloka_client, toloka_url, project_map):
     expected_projects = [project for project in projects if project['id'] > '123']
 
     def get_projects(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_projects',
+            'X-Low-Level-Method': 'find_projects',
+        }
+        check_headers(request, expected_headers)
+
         params = parse_qs(urlparse(request.url).query)
         id_gt = params.pop('id_gt')[0]
         assert {
@@ -154,7 +170,18 @@ def test_get_projects(requests_mock, toloka_client, toloka_url, project_map):
 
 
 def test_get_project(requests_mock, toloka_client, toloka_url, project_map):
-    requests_mock.get(f'{toloka_url}/projects/10', headers={'Authorization': 'OAuth abc'}, json=project_map, status_code=200)
+
+    def get_project(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_project',
+            'X-Low-Level-Method': 'get_project',
+        }
+        check_headers(request, expected_headers)
+
+        return project_map
+
+    requests_mock.get(f'{toloka_url}/projects/10', headers={'Authorization': 'OAuth abc'}, json=get_project, status_code=200)
     result = toloka_client.get_project('10')
     assert project_map == client.unstructure(result)
 
@@ -168,7 +195,18 @@ def test_get_project_returns_internal_server_error(requests_mock, toloka_client,
             'additional_message': 'Error details',
         },
     }
-    requests_mock.get(f'{toloka_url}/projects/10', headers={'Authorization': 'OAuth abc'}, json=body, status_code=500)
+
+    def get_project(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_project',
+            'X-Low-Level-Method': 'get_project',
+        }
+        check_headers(request, expected_headers)
+
+        return body
+
+    requests_mock.get(f'{toloka_url}/projects/10', headers={'Authorization': 'OAuth abc'}, json=get_project, status_code=500)
     with pytest.raises(InternalApiError) as excinfo:
         toloka_client.get_project('10')
     assert excinfo.value.status_code == 500
@@ -245,7 +283,18 @@ def simple_poject_map():
 
 
 def test_create_project(requests_mock, toloka_client, toloka_url, simple_poject_map, caplog):
-    requests_mock.post(f'{toloka_url}/projects', headers={'Content-Type': 'application/json; charset=UTF-8'}, json=simple_poject_map, status_code=201)
+
+    def project(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_project',
+            'X-Low-Level-Method': 'create_project',
+        }
+        check_headers(request, expected_headers)
+
+        return simple_poject_map
+
+    requests_mock.post(f'{toloka_url}/projects', headers={'Content-Type': 'application/json; charset=UTF-8'}, json=project, status_code=201)
 
     project = client.structure(simple_poject_map, client.project.Project)
     with caplog.at_level(logging.INFO):
@@ -286,6 +335,13 @@ def test_create_project_check_validation_errors(requests_mock, toloka_client, to
     }
 
     def create_project(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_project',
+            'X-Low-Level-Method': 'create_project',
+        }
+        check_headers(request, expected_headers)
+
         assert body == request.json()
         return response_body
 
@@ -329,6 +385,13 @@ def test_create_project_check_logical_errors(requests_mock, toloka_client, tolok
     }
 
     def create_project(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_project',
+            'X-Low-Level-Method': 'create_project',
+        }
+        check_headers(request, expected_headers)
+
         assert body == request.json()
         return response_body
 
@@ -392,6 +455,13 @@ def test_project_update(requests_mock, toloka_client, toloka_url):
     }
 
     def update_project(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'update_project',
+            'X-Low-Level-Method': 'update_project',
+        }
+        check_headers(request, expected_headers)
+
         assert project_map == request.json()
         return dict(
             project_map,
@@ -488,20 +558,62 @@ def complete_archive_operation_map(archive_operation_map):
 
 
 def test_archive_project_async(requests_mock, toloka_client, toloka_url, complete_archive_operation_map):
-    requests_mock.post(f'{toloka_url}/projects/10/archive', json=complete_archive_operation_map, status_code=202)
+
+    def complete_archive(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'archive_project_async',
+            'X-Low-Level-Method': 'archive_project_async',
+        }
+        check_headers(request, expected_headers)
+
+        return complete_archive_operation_map
+
+    requests_mock.post(f'{toloka_url}/projects/10/archive', json=complete_archive, status_code=202)
     result = toloka_client.archive_project_async('10')
     assert complete_archive_operation_map == client.unstructure(result)
 
 
 def test_archive_project(requests_mock, toloka_client, toloka_url,
                          archive_operation_map, complete_archive_operation_map, project_map):
-    requests_mock.post(f'{toloka_url}/projects/10/archive', json=archive_operation_map, status_code=202)
+
+    def archive(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'archive_project',
+            'X-Low-Level-Method': 'archive_project_async',
+        }
+        check_headers(request, expected_headers)
+
+        return archive_operation_map
+
+    def complete_archive(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'archive_project',
+            'X-Low-Level-Method': 'get_operation',
+        }
+        check_headers(request, expected_headers)
+
+        return complete_archive_operation_map
+
+    def project(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'archive_project',
+            'X-Low-Level-Method': 'get_project',
+        }
+        check_headers(request, expected_headers)
+
+        return project_map
+
+    requests_mock.post(f'{toloka_url}/projects/10/archive', json=archive, status_code=202)
     requests_mock.get(
         f'{toloka_url}/operations/{archive_operation_map["id"]}',
-        json=complete_archive_operation_map,
+        json=complete_archive,
         status_code=200
     )
-    requests_mock.get(f'{toloka_url}/projects/10', json=project_map, status_code=200)
+    requests_mock.get(f'{toloka_url}/projects/10', json=project, status_code=200)
 
     result = toloka_client.archive_project('10')
     assert project_map == client.unstructure(result)
@@ -509,7 +621,17 @@ def test_archive_project(requests_mock, toloka_client, toloka_url,
 
 def test_get_template_builder_project(requests_mock, toloka_client, toloka_url, tb_project_map):
 
-    requests_mock.get(f'{toloka_url}/projects/10', headers={'Authorization': 'OAuth abc'}, json=tb_project_map, status_code=200)
+    def tb_project(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_project',
+            'X-Low-Level-Method': 'get_project',
+        }
+        check_headers(request, expected_headers)
+
+        return tb_project_map
+
+    requests_mock.get(f'{toloka_url}/projects/10', headers={'Authorization': 'OAuth abc'}, json=tb_project, status_code=200)
     result = toloka_client.get_project('10')
     unstructured_result = client.unstructure(result)
     expected_template_config = tb_project_map['task_spec']['view_spec'].pop('config')
@@ -534,8 +656,19 @@ def test_get_assignments_df(requests_mock, toloka_client, toloka_api_url):
     })
     buf = io.StringIO()
     expected_df.to_csv(buf, sep='\t', index=False, columns=['a', 'b'])
+
+    def get_content(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_assignments_df',
+            'X-Low-Level-Method': 'get_assignments_df',
+        }
+        check_headers(request, expected_headers)
+
+        return buf.getvalue().encode('utf-8')
+
     requests_mock.get(f'{toloka_api_url}/new/requester/pools/123/assignments.tsv',
-                      content=buf.getvalue().encode('utf-8'),
+                      content=get_content,
                       headers={'Authorization': 'OAuth abc'},
                       status_code=200)
     result = toloka_client.get_assignments_df(pool_id=123,
@@ -597,7 +730,18 @@ def project_map_with_localization(project_map, simple_localization_config_map):
 
 
 def test_localization(requests_mock, toloka_client, toloka_url, project_map, project_map_with_localization):
-    requests_mock.post(f'{toloka_url}/projects', headers={'Content-Type': 'application/json; charset=UTF-8'}, json=project_map_with_localization, status_code=201)
+
+    def project_with_localization(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'create_project',
+            'X-Low-Level-Method': 'create_project',
+        }
+        check_headers(request, expected_headers)
+
+        return project_map_with_localization
+
+    requests_mock.post(f'{toloka_url}/projects', headers={'Content-Type': 'application/json; charset=UTF-8'}, json=project_with_localization, status_code=201)
 
     project = client.structure(project_map, client.project.Project)
 

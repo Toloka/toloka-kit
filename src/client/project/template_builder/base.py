@@ -127,6 +127,9 @@ class BaseComponent(BaseTemplate, spec_enum=ComponentType, spec_field='type'):
 
     @classmethod
     def structure(cls, data: dict):
+        if not isinstance(data, dict):
+            raise TypeError
+
         try:
             return super().structure(data)
         except SpecClassIdentificationError:

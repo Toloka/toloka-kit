@@ -89,23 +89,25 @@ class BaseSortItem(BaseTolokaObject):
         return cls(structure(value, cls.SortField), SortOrder.ASCENDING)  # type: ignore
 
     @staticmethod
-    def _create_sort_field_enum(sort_fields: List[str]):
+    def _create_sort_field_enum(qualname: str, sort_fields: List[str]):
         namespace = {field.upper(): field for field in sort_fields}
-        return unique(Enum('SortField', namespace))  # type: ignore
+        namespace['__qualname__'] = qualname
+        return unique(Enum(qualname.split('.')[-1], namespace))  # type: ignore
 
     @classmethod
-    def for_fields(cls, sort_fields: List[str]):
-        sort_field_enum = cls._create_sort_field_enum(sort_fields)
+    def for_fields(cls, qualname: str, sort_fields: List[str]):
+        sort_field_enum = cls._create_sort_field_enum(f'{qualname}.SortField', sort_fields)
         namespace = {
             'SortField': sort_field_enum,
             'order': SortOrder.ASCENDING,
+            '__qualname__': qualname,
             '__annotations__': {
                 'field': sort_field_enum,
                 'order': SortOrder,
             },
         }
 
-        subclass = BaseTolokaObjectMetaclass('SortItem', (cls,), namespace, kw_only=False)
+        subclass = BaseTolokaObjectMetaclass(qualname.split('.')[-1], (cls,), namespace, kw_only=False)
         subclass.__module__ = __name__
         return subclass
 
@@ -122,8 +124,8 @@ class BaseSortItems(BaseTolokaObject):
         return cls(items=items)
 
     @classmethod
-    def for_fields(cls, name: str, sort_fields: List[str], docstring: Optional[str] = None):
-        sort_item_class: Type = BaseSortItem.for_fields(sort_fields)
+    def for_fields(cls, qualname: str, sort_fields: List[str], docstring: Optional[str] = None):
+        sort_item_class: Type = BaseSortItem.for_fields(f'{qualname}.SortItem', sort_fields)
 
         def items_converter(items):
             if isinstance(items, sort_items_class):
@@ -136,8 +138,9 @@ class BaseSortItems(BaseTolokaObject):
             'SortItem': sort_item_class,
             '__annotations__': {'items': List[sort_item_class]},  # type: ignore
             'items': attr.attrib(converter=items_converter),
+            '__qualname__': qualname,
         }
-        sort_items_class = BaseTolokaObjectMetaclass(name, (BaseSortItems,), namespace, kw_only=False)
+        sort_items_class = BaseTolokaObjectMetaclass(qualname.split('.')[-1], (BaseSortItems,), namespace, kw_only=False)
         sort_items_class.__module__ = __name__
         sort_items_class.__doc__ = docstring
         return sort_items_class

@@ -7,9 +7,10 @@ __all__ = [
 import asyncio
 import attr
 import datetime
+import inspect
 import logging
 
-from typing import Awaitable, Callable, Dict, List, Optional, Union
+from typing import Any, Awaitable, Callable, Dict, Iterable, List, Optional, Tuple, Union
 
 from ..client.primitives.base import autocast_to_enum
 from ..client.assignment import Assignment
@@ -23,6 +24,14 @@ logger = logging.getLogger(__name__)
 
 @attr.s
 class BaseObserver:
+    name: Optional[str] = attr.ib(default=None, kw_only=True)
+
+    def _get_unique_key(self) -> Tuple:
+        return (self.__class__.__name__, self.name or '')
+
+    def inject(self, injection: Any) -> None:
+        raise NotImplementedError
+
     async def __call__(self) -> None:
         raise NotImplementedError
 
@@ -45,11 +54,65 @@ def _wrap_client_to_async_converter(client: TolokaClientSyncOrAsyncType):
     return AsyncInterfaceWrapper(client)
 
 
+def _unwrap_callback(callback: Callable) -> Callable:
+    wrapped = getattr(callback, '__wrapped__', None)
+    if wrapped:
+        return _unwrap_callback(wrapped)
+    return callback
+
+
+def _get_callback_unique_key(callback: Callable) -> str:
+    callback = _unwrap_callback(callback)
+    name = getattr(callback, '__name__', None)
+    if name:
+        return name
+    return type(callback).__name__
+
+
+def _get_callbacks_unique_key(callbacks: Iterable[Callable]) -> Tuple[str]:
+    return tuple(sorted(map(_get_callback_unique_key, callbacks)))
+
+
+def _inject_callback(callback_initial: Callable, injection_loaded: Callable) -> Callable:
+    """Inject state got from the storage (injection) to the given callback.
+
+    By default, injection should be done as follows;
+        * If the callback is a class instance,
+            it's __dict__ should be updated with the injection's one.
+        * It the callback is a function,
+            it should be entirely replaced by the new one.
+    """
+
+    # Both exising callback and the injection may be wrapped, so we need to unwrap them first.
+    callback = _unwrap_callback(callback_initial)
+    injection = _unwrap_callback(injection_loaded)
+
+    # You may define `inject(self, injection: YourCallbackType) -> None` in your callback class to manage this process.
+    if getattr(callback, 'inject', None):
+        callback.inject(injection)
+    elif getattr(callback, '__setstate__', None) and getattr(injection, '__getstate__', None):
+        callback.__setstate__(injection.__getstate__())
+    elif getattr(callback, '__call__', None) and not inspect.isfunction(callback):
+        callback.__dict__.update(injection.__dict__)
+    else:
+        return injection_loaded
+    return callback_initial
+
+
+def _inject_callbacks(callbacks: Iterable[Callable], injections: Iterable[Callable]) -> List[Callable]:
+    injection_by_key = {_get_callback_unique_key(injection): injection for injection in injections}
+    return [_inject_callback(callback, injection_by_key[_get_callback_unique_key(callback)])
+            for callback in callbacks]
+
+
 @attr.s
 class BasePoolObserver(BaseObserver):
 
     toloka_client: AsyncInterfaceWrapper[TolokaClientSyncOrAsyncType] = attr.ib(converter=_wrap_client_to_async_converter)
     pool_id: str = attr.ib()
+
+    def _get_unique_key(self) -> Tuple:
+        return super()._get_unique_key() + (self.pool_id,)
 
     async def should_resume(self) -> bool:
         logger.info('Check resume by pool status: %s', self.pool_id)
@@ -106,6 +169,22 @@ class PoolStatusObserver(BasePoolObserver):
 
     _callbacks: Dict[Pool.Status, List[CallbackForPoolAsyncType]] = attr.ib(factory=dict, init=False)
     _previous_status: Optional[Pool.Status] = attr.ib(default=None, init=False)
+
+    def _get_unique_key(self) -> Tuple:
+        return super()._get_unique_key() + tuple(sorted(
+            (status.value, _get_callbacks_unique_key(callbacks))
+            for status, callbacks in self._callbacks.items()
+        ))
+
+    def inject(self, injection: 'PoolStatusObserver') -> None:
+        injection_callbacks_by_status = {
+            status: callbacks
+            for status, callbacks in injection._callbacks.items()
+        }
+        self._callbacks = {
+            status: _inject_callbacks(self._callbacks[status], injection_callbacks_by_status[status])
+            for status, callbacks in self._callbacks.items()
+        }
 
     @autocast_to_enum
     def register_callback(
@@ -179,6 +258,13 @@ class _CallbacksCursorConsumer:
     cursor: AssignmentCursor = attr.ib()
     callbacks: List[CallbackForAssignmentEventsAsyncType] = attr.ib(factory=list, init=False)
 
+    def _get_unique_key(self) -> Tuple:
+        return self.cursor._event_type.value, _get_callbacks_unique_key(self.callbacks)
+
+    def inject(self, injection: '_CallbacksCursorConsumer') -> None:
+        self.cursor.inject(injection.cursor)
+        self.callbacks = _inject_callbacks(self.callbacks, injection.callbacks)
+
     def add_callback(self, callback: CallbackForAssignmentEventsType) -> None:
         self.callbacks.append(ensure_async(callback))
 
@@ -231,6 +317,21 @@ class AssignmentsObserver(BasePoolObserver):
     """
 
     _callbacks: Dict[AssignmentEvent.Type, _CallbacksCursorConsumer] = attr.ib(factory=dict, init=False)
+
+    def _get_unique_key(self) -> Tuple:
+        return super()._get_unique_key() + tuple(sorted(
+            consumer._get_unique_key()
+            for consumer in self._callbacks.values()
+        ))
+
+    def inject(self, injection: 'AssignmentsObserver') -> None:
+        injection_consumer_by_key = {
+            consumer._get_unique_key(): consumer
+            for consumer in injection._callbacks.values()
+        }
+        for consumer in self._callbacks.values():
+            key = consumer._get_unique_key()
+            consumer.inject(injection_consumer_by_key[key])
 
     # Setup section.
 

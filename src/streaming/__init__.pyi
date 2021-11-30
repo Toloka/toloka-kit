@@ -1,18 +1,36 @@
 __all__ = [
     'AssignmentsObserver',
-    'PoolStatusObserver',
+    'BaseStorage',
+    'FileLocker',
+    'JSONLocalStorage',
     'Pipeline',
+    'PoolStatusObserver',
+    'S3Storage',
+    'ZooKeeperLocker',
     'cursor',
-    'pipeline',
+    'locker',
     'observer',
+    'pipeline',
+    'storage',
 ]
 from toloka.streaming import (
     cursor,
+    locker,
     observer,
-    pipeline
+    pipeline,
+    storage,
+)
+from toloka.streaming.locker import (
+    FileLocker,
+    ZooKeeperLocker,
 )
 from toloka.streaming.observer import (
     AssignmentsObserver,
-    PoolStatusObserver
+    PoolStatusObserver,
 )
 from toloka.streaming.pipeline import Pipeline
+from toloka.streaming.storage import (
+    BaseStorage,
+    JSONLocalStorage,
+    S3Storage,
+)

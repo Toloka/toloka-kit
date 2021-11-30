@@ -1,3 +1,14 @@
+0.1.20
+-------------------
+* Retries should work not only while establishing connection to server but also when transfering data
+* Added functional tests against production environment
+* Fixed `TemplateBuilder` structure method issue with attributes annotated by `ListBaseComponent`
+* TolokaClient method names are passed in request headers. This allows usage analytics for complex features such as `clone_project` or `get_assignments` that call subsequent TolokaClient methods.
+* Now you can track 11 metric types from Toloka with minimal latency.
+
+* AsyncTolokaClient introduced (experimental)
+* Streaming state storage introduced (experimental)
+
 0.1.19
 -------------------
 * Added `from_json` and `to_json` convenience functions to `BaseTolokaObject`
@@ -16,7 +27,7 @@
 * Reverted from `PreloadingHTTPAdapter` to `HTTPAdapter`
 * Fixed `get_app_items()` signature
 
-0.1.16
+0.1.16 [YANKED]
 -------------------
 * Added methods to use toloka apps
 * Used `PreloadingHTTPAdapter` instead of `HTTPAdapter`
@@ -36,20 +47,17 @@
 
 0.1.13
 -------------------
-
 * Streaming library to build pipelines
 * Examples refactoring
 
 0.1.12
 -------------------
-
 * Added new template builder components
 * Added the ability to translate project title and description into multiple languages
 * ExtendableStrEnum class has been added for forward compatibility with new enumeration keys
 
 0.1.11
 -------------------
-
 * Added new `TemplateBuilder` components
 * Deleted `name` from `UserSkillSearchRequest`
 * Passing `Retry` object into `TolokaClient.retries` is now deprecated. Use new `TolokaClient.retryer_factory` argument instead.
@@ -57,9 +65,8 @@
 * Fixed an exception raising when opening an open pool
 * Fixed `TemplateBuilder` view-components bug with the disappearance of the `hint`, `label` and `validation` fields in `0.1.10` version.
 
-0.1.10
+0.1.10 [YANKED]
 -------------------
-
 * `TemplateBuilder` components now support positional arguments
 * Added `readonly` flag to attributes
 * Added `ACCEPT_AFTER_REJECT` value to ` AssessmentEvent.Type`
@@ -105,7 +112,7 @@
 -------------------
 Fixing issues with `create_tasks` and `create_task_suites`
 
-0.1.4
+0.1.4 [YANKED]
 -------------------
 * Implemented a `clone_project` method
 * Deserialization should not fail on unknown enum values or unexpected value types anymore

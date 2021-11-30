@@ -4,14 +4,19 @@ __all__ = [
     'ComplexException',
     'ensure_async',
     'get_task_traceback',
+    'Cooldown',
 ]
 
 import asyncio
 import attr
 import functools
+import pickle
 from concurrent import futures
 from io import StringIO
+import time
 from typing import Awaitable, Callable, Dict, Generic, List, Optional, Type, TypeVar
+
+from .stored import PICKLE_DEFAULT_PROTOCOL
 
 
 @attr.s
@@ -46,6 +51,14 @@ class ComplexException(Exception):
         raise self
 
 
+@attr.s
+class _EnsureAsynced:
+    __wrapped__: Callable = attr.ib()
+
+    async def __call__(self, *args, **kwargs):
+        return self.__wrapped__(*args, **kwargs)
+
+
 def ensure_async(func: Callable) -> Callable[..., Awaitable]:
     """Ensure given callable is async.
 
@@ -58,14 +71,9 @@ def ensure_async(func: Callable) -> Callable[..., Awaitable]:
         Wrapper that return awaitable object at call.
     """
 
-    @functools.wraps(func)
-    async def _async_wrapper(*args, **kwargs):
-        return func(*args, **kwargs)
-
     if asyncio.iscoroutinefunction(func) or asyncio.iscoroutinefunction(getattr(func, '__call__', None)):
         return func
-
-    return _async_wrapper
+    return functools.wraps(func)(_EnsureAsynced(func))
 
 
 T = TypeVar('T')
@@ -79,10 +87,16 @@ class AsyncInterfaceWrapper(Generic[T]):
     """
 
     def __init__(self, wrapped: T):
-        self.__wrapped = wrapped
+        self.__wrapped__ = wrapped
+
+    def __getstate__(self) -> bytes:
+        return pickle.dumps(self.__wrapped__, protocol=PICKLE_DEFAULT_PROTOCOL)
+
+    def __setstate__(self, state: bytes) -> None:
+        self.__wrapped__ = pickle.loads(state)
 
     def __getattr__(self, name: str):
-        attribute = getattr(self.__wrapped, name)
+        attribute = getattr(self.__wrapped__, name)
         return ensure_async(attribute) if callable(attribute) else attribute
 
 
@@ -103,9 +117,10 @@ class AsyncMultithreadWrapper(Generic[T]):
     """
 
     def __init__(self, wrapped: T, pool_size: int = 10, loop: Optional[asyncio.AbstractEventLoop] = None):
-        self.__wrapped = wrapped
+        self.__wrapped__ = wrapped
         self.__executor = futures.ThreadPoolExecutor(max_workers=pool_size)
         self.__loop = loop
+        self.__pool_size = pool_size
 
     @property
     def _loop(self):
@@ -113,8 +128,15 @@ class AsyncMultithreadWrapper(Generic[T]):
             self.__loop = asyncio.get_event_loop()
         return self.__loop
 
+    def __getstate__(self) -> bytes:
+        return pickle.dumps((self.__wrapped__, self.__pool_size), protocol=PICKLE_DEFAULT_PROTOCOL)
+
+    def __setstate__(self, state: bytes) -> None:
+        self.__wrapped__, self.__pool_size = pickle.loads(state)
+        self.__executor = futures.ThreadPoolExecutor(max_workers=self.__pool_size)
+
     def __getattr__(self, name: str):
-        attribute = getattr(self.__wrapped, name)
+        attribute = getattr(self.__wrapped__, name)
         if not callable(attribute):
             return attribute
 
@@ -136,3 +158,33 @@ def get_task_traceback(task: asyncio.Task) -> Optional[str]:
         stream.flush()
         stream.seek(0)
         return stream.read()
+
+
+class Cooldown:
+    """Сontext manager that implements a delay between calls occurring inside the context
+
+    Args:
+        cooldown_time(int): seconds between calls
+
+    Example:
+        >>> coldown = toloka.util.Cooldown(5)
+        >>> while True:
+        >>>     async with coldown:
+        >>>         await do_it()  # will be called no more than once every 5 seconds
+    """
+    _touch_time: float
+    _cooldown_time: int
+
+    def __init__(self, cooldown_time):
+        self._touch_time = None
+        self._cooldown_time = cooldown_time
+
+    async def __aenter__(self):
+        if self._touch_time:
+            time_to_sleep = self._cooldown_time + self._touch_time - time.time()
+            if time_to_sleep > 0:
+                await asyncio.sleep(time_to_sleep)
+        self._touch_time = time.time()
+
+    async def __aexit__(self, *exc):
+        pass

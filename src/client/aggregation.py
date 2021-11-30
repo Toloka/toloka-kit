@@ -4,8 +4,7 @@ For example, when you need to decide whether a cat or a dog is in the picture, a
 In this case, you need to decide on the final answer and sometimes calculate the probability. This module will help you do this.
 Aggregation works on the Toloka server side.
 
-In these cases, we strongly recommend using our crowd-kit solution:
-https://github.com/Toloka/crowd-kit
+In these cases, we strongly recommend using our [crowd-kit](https://github.com/Toloka/crowd-kit) solution.
 It will allow you to:
 - use more different aggregation methods,
 - perform aggregation on your side
@@ -46,7 +45,7 @@ class PoolAggregatedSolutionRequest(BaseTolokaObject):
                 A. Philip Dawid and Allan M. Skene. 1979.
                 Maximum Likelihood Estimation of Observer Error-Rates Using the EM Algorithm.
                 Journal of the Royal Statistical Society. Series C (Applied Statistics), Vol. 28, 1 (1979), 20–28.
-                https://doi.org/10.2307/2346806
+                [https://doi.org/10.2307/2346806](https://doi.org/10.2307/2346806)
         pool_id: In which pool to aggregate the results.
         answer_weight_skill_id: A skill that determines the weight of the performer's response.
         fields: Output data fields to use for aggregating responses. For best results, each of these fields
