@@ -15,4 +15,4 @@ minus sign before the parameter. For example, sort=-id.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`items`|**Optional\[List\[[SortItem](toloka.client.search_requests.SortItem.md)\]\]**|<p>The order and direction of sorting the results. Available parameters:<ul><li>id - by id;</li><li>name - by name;</li></ul></p>
+`items`|**Optional\[List\[[SortItem](toloka.client.search_requests.AppSortItems.SortItem.md)\]\]**|<p>The order and direction of sorting the results. Available parameters:<ul><li>id - by id;</li><li>name - by name;</li></ul></p>

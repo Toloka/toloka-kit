@@ -4,7 +4,7 @@
 ```
 MessageThreadCursor(
     self,
-    toloka_client: Union[TolokaClient, ...],
+    toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
     folder: Union[str, Folder, List[Union[str, Folder]]] = None,
     folder_ne: Union[str, Folder, List[Union[str, Folder]]] = None,
     id_lt: Optional[str] = None,
@@ -24,7 +24,7 @@ Iterator over messages by create time.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), ...\]**|<p>TolokaClient object that is being used to search messages.</p>
+`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncMultithreadWrapper](toloka.util.async_utils.AsyncMultithreadWrapper.md)\[[TolokaClient](toloka.client.TolokaClient.md)\]\]**|<p>TolokaClient object that is being used to search messages.</p>
 `request`|**[MessageThreadSearchRequest](toloka.client.search_requests.MessageThreadSearchRequest.md)**|<p>Base request to search messages.</p>
 
 **Examples:**

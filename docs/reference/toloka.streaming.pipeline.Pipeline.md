@@ -2,7 +2,13 @@
 `toloka.streaming.pipeline.Pipeline`
 
 ```
-Pipeline(self, period: timedelta = ...)
+Pipeline(
+    self,
+    period: timedelta = ...,
+    storage: Optional[BaseStorage] = None,
+    *,
+    name: Optional[str] = None
+)
 ```
 
 An entry point for toloka streaming pipelines.
@@ -16,6 +22,7 @@ while at least one of them may resume.
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
 `period`|**timedelta**|<p>Period of observers calls. By default, 60 seconds.</p>
+`storage`|**Optional\[[BaseStorage](toloka.streaming.storage.BaseStorage.md)\]**|<p>Optional storage object to save pipeline&#x27;s state. Allow to recover from previous state in case of failure.</p>
 
 **Examples:**
 
@@ -46,9 +53,20 @@ pipeline.register(AssignmentsObserver(toloka_client, pool_id='123')).on_submitte
 pipeline.register(AssignmentsObserver(toloka_client, pool_id='456')).on_accepted(handle_accepted)
 await pipeline.run()
 ```
+
+With external storage.
+
+```python
+from toloka.streaming import S3Storage, ZooKeeperLocker
+locker = ZooKeeperLocker(...)
+storage = S3Storage(locker=locker, ...)
+pipeline = Pipeline(storage=storage)
+await pipeline.run()  # Save state after each iteration. Try to load saved at start.
+```
 ## Methods summary
 
 | Method | Description |
 | :------| :-----------|
+[inject](toloka.streaming.pipeline.Pipeline.inject.md)| None
 [register](toloka.streaming.pipeline.Pipeline.register.md)| Register given observer.
 [run](toloka.streaming.pipeline.Pipeline.run.md)| None

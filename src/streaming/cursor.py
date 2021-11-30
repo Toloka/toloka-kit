@@ -14,7 +14,8 @@ import attr
 import copy
 import functools
 from datetime import datetime
-from typing import Any, AsyncIterator, Awaitable, Callable, Iterator, List, Optional, Set, Tuple, TypeVar, Union
+from typing import Any, AsyncIterator, Awaitable, Callable, Iterator, List, Optional, Set, Tuple, Union
+from typing_extensions import Protocol
 
 from ..client import (
     Assignment,
@@ -29,13 +30,17 @@ from ..client import (
     search_results,
     structure,
 )
+from ..client.search_requests import BaseSearchRequest
 from ..util._codegen import fix_attrs_converters
 from .event import AssignmentEvent, BaseEvent, MessageThreadEvent, TaskEvent, UserBonusEvent, UserRestrictionEvent, UserSkillEvent
 from ..util.async_utils import AsyncMultithreadWrapper, ensure_async
 
 
-RequestObjectType = TypeVar('RequestObjectType')
-ResponseObjectType = TypeVar('ResponseObjectType')
+class ResponseObjectType(Protocol):
+    items: Optional[List[Any]]
+    has_more: Optional[bool]
+
+
 TolokaClientSyncOrAsyncType = Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]]
 
 DATETIME_MIN = datetime.fromtimestamp(0)
@@ -44,8 +49,8 @@ DATETIME_MIN = datetime.fromtimestamp(0)
 @attr.s
 class _ByIdCursor:
     """Iterate by id only."""
-    fetcher: Callable[[RequestObjectType], ResponseObjectType] = attr.ib()
-    request: RequestObjectType = attr.ib()
+    fetcher: Callable[[BaseSearchRequest], ResponseObjectType] = attr.ib()
+    request: BaseSearchRequest = attr.ib()
 
     def __iter__(self) -> Iterator[Any]:
         while True:
@@ -71,7 +76,7 @@ class _ByIdCursor:
 @attr.s
 class BaseCursor:
     toloka_client: TolokaClientSyncOrAsyncType = attr.ib()
-    _request: RequestObjectType = attr.ib()
+    _request: BaseSearchRequest = attr.ib()
     _prev_response: Optional[ResponseObjectType] = attr.ib(default=None, init=False)
     _seen_ids: Set[str] = attr.ib(factory=set, init=False)
 

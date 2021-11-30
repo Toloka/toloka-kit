@@ -2,6 +2,10 @@
 `toloka.client.search_requests.BaseSortItem.for_fields`
 
 ```
-for_fields(cls, sort_fields: List[str])
+for_fields(
+    cls,
+    qualname: str,
+    sort_fields: List[str]
+)
 ```
 

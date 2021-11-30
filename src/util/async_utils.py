@@ -172,7 +172,7 @@ class Cooldown:
         >>>     async with coldown:
         >>>         await do_it()  # will be called no more than once every 5 seconds
     """
-    _touch_time: time.time
+    _touch_time: float
     _cooldown_time: int
 
     def __init__(self, cooldown_time):

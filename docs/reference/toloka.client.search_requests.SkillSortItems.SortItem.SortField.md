@@ -1,5 +1,5 @@
 # SortField
-`toloka.client.search_requests.SortField`
+`toloka.client.search_requests.SkillSortItems.SortItem.SortField`
 
 An enumeration.
 
@@ -8,5 +8,4 @@ An enumeration.
 | Name | Value | Description |
 | :------| :-----------| :----------| 
 `ID`|'id'|<p></p>
-`NAME`|'name'|<p></p>
-`CREATED_AT`|'created_at'|<p></p>
+`CREATED`|'created'|<p></p>

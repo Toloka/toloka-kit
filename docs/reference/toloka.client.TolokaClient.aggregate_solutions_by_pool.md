@@ -8,7 +8,7 @@ Responses to all completed tasks will be aggregated.
 The method only starts the aggregation and returns the operation for further tracking.
 
 **Note**: In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
-that have more aggregatio methods and can perform on your computers.
+that have more aggregation methods and can perform on your computers.
 
 ## Parameters Description
 

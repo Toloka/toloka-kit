@@ -238,7 +238,7 @@ class NewUserSkills(BaseMetric):
 class NewMessageThreads(BaseMetric):
     """Tracking the new messages
 
-    Could count messages in projects or pools. If you want to track messages count in several projects/pools, don't get several 
+    Could count messages in projects or pools. If you want to track messages count in several projects/pools, don't get several
     NewMessageThreads instance. You can gather all in one instance.
 
     Args:

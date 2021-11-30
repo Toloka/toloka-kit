@@ -1,5 +1,5 @@
 # SortItem
-`toloka.client.search_requests.SortItem`
+`toloka.client.search_requests.AppProjectSortItems.SortItem`
 
 ```
 SortItem(

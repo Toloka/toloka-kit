@@ -208,7 +208,6 @@
             <topicref format="markdown" href="toloka.client.analytics_request.UniqueWorkersCountPoolAnalytics.md"/>
         </topichead>
         <topichead navtitle="app">
-            <topicref format="markdown" href="toloka.client.app._AppError.md" toc="no"/>
             <topicref format="markdown" href="toloka.client.app.App.md"/>
             <topicref format="markdown" href="toloka.client.app.AppBatch.md"/>
             <topicref format="markdown" href="toloka.client.app.AppBatch.Status.md" navtitle="AppBatch.Status" locktitle="yes" toc="no"/>
@@ -565,8 +564,42 @@
             <topicref format="markdown" href="toloka.client.search_requests.BaseSortItem.for_fields.md" navtitle="BaseSortItem.for_fields" locktitle="yes" toc="no"/>
             <topicref format="markdown" href="toloka.client.search_requests.BaseSortItems.md" toc="no"/>
             <topicref format="markdown" href="toloka.client.search_requests.BaseSortItems.for_fields.md" navtitle="BaseSortItems.for_fields" locktitle="yes" toc="no"/>
-            <topicref format="markdown" href="toloka.client.search_requests.SortField.md" toc="no"/>
-            <topicref format="markdown" href="toloka.client.search_requests.SortItem.md" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AggregatedSolutionSortItems.SortItem.SortField.md" navtitle="AggregatedSolutionSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AggregatedSolutionSortItems.SortItem.md" navtitle="AggregatedSolutionSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppBatchSortItems.SortItem.SortField.md" navtitle="AppBatchSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppBatchSortItems.SortItem.md" navtitle="AppBatchSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppItemSortItems.SortItem.SortField.md" navtitle="AppItemSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppItemSortItems.SortItem.md" navtitle="AppItemSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppProjectSortItems.SortItem.SortField.md" navtitle="AppProjectSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppProjectSortItems.SortItem.md" navtitle="AppProjectSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppSortItems.SortItem.SortField.md" navtitle="AppSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AppSortItems.SortItem.md" navtitle="AppSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AssignmentSortItems.SortItem.SortField.md" navtitle="AssignmentSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AssignmentSortItems.SortItem.md" navtitle="AssignmentSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AttachmentSortItems.SortItem.SortField.md" navtitle="AttachmentSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.AttachmentSortItems.SortItem.md" navtitle="AttachmentSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.MessageThreadSortItems.SortItem.SortField.md" navtitle="MessageThreadSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.MessageThreadSortItems.SortItem.md" navtitle="MessageThreadSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.PoolSortItems.SortItem.SortField.md" navtitle="PoolSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.PoolSortItems.SortItem.md" navtitle="PoolSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.ProjectSortItems.SortItem.SortField.md" navtitle="ProjectSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.ProjectSortItems.SortItem.md" navtitle="ProjectSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.SkillSortItems.SortItem.SortField.md" navtitle="SkillSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.SkillSortItems.SortItem.md" navtitle="SkillSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TaskSortItems.SortItem.SortField.md" navtitle="TaskSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TaskSortItems.SortItem.md" navtitle="TaskSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TaskSuiteSortItems.SortItem.SortField.md" navtitle="TaskSuiteSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TaskSuiteSortItems.SortItem.md" navtitle="TaskSuiteSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TrainingSortItems.SortItem.SortField.md" navtitle="TrainingSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.TrainingSortItems.SortItem.md" navtitle="TrainingSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserBonusSortItems.SortItem.SortField.md" navtitle="UserBonusSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserBonusSortItems.SortItem.md" navtitle="UserBonusSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserRestrictionSortItems.SortItem.SortField.md" navtitle="UserRestrictionSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserRestrictionSortItems.SortItem.md" navtitle="UserRestrictionSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserSkillSortItems.SortItem.SortField.md" navtitle="UserSkillSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.UserSkillSortItems.SortItem.md" navtitle="UserSkillSortItems.SortItem" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.WebhookSubscriptionSortItems.SortItem.SortField.md" navtitle="WebhookSubscriptionSortItems.SortItem.SortField" toc="no"/>
+            <topicref format="markdown" href="toloka.client.search_requests.WebhookSubscriptionSortItems.SortItem.md" navtitle="WebhookSubscriptionSortItems.SortItem" toc="no"/>
             <topicref format="markdown" href="toloka.client.search_requests.AggregatedSolutionSortItems.md"/>
             <topicref format="markdown" href="toloka.client.search_requests.AppBatchSortItems.md"/>
             <topicref format="markdown" href="toloka.client.search_requests.AppItemSortItems.md"/>
@@ -910,6 +943,7 @@
     </topichead>
     <topichead navtitle="toloka.streaming">
         <topichead navtitle="cursor">
+            <topicref format="markdown" href="toloka.streaming.cursor.BaseCursor.inject.md" toc="no"/>
             <topicref format="markdown" href="toloka.streaming.cursor.BaseCursor.md" toc="no"/>
             <topicref format="markdown" href="toloka.streaming.cursor.BaseCursor.CursorFetchContext.md" navtitle="BaseCursor.CursorFetchContext" locktitle="yes" toc="no"/>
             <topicref format="markdown" href="toloka.streaming.cursor.BaseCursor.try_fetch_all.md" navtitle="BaseCursor.try_fetch_all" locktitle="yes" toc="no"/>
@@ -919,6 +953,14 @@
             <topicref format="markdown" href="toloka.streaming.cursor.UserBonusCursor.md"/>
             <topicref format="markdown" href="toloka.streaming.cursor.UserRestrictionCursor.md"/>
             <topicref format="markdown" href="toloka.streaming.cursor.UserSkillCursor.md"/>
+        </topichead>
+        <topichead navtitle="locker" toc="no">
+            <topicref format="markdown" href="toloka.streaming.locker.BaseLocker.cleanup.md" navtitle="BaseLocker.cleanup" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.locker.BaseLocker.md" navtitle="BaseLocker" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.locker.FileLocker.cleanup.md" navtitle="FileLocker.cleanup" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.locker.FileLocker.md" navtitle="FileLocker" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.locker.NewerInstanceDetectedError.md" navtitle="NewerInstanceDetectedError" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.locker.ZooKeeperLocker.md" navtitle="ZooKeeperLocker" toc="no"/>
         </topichead>
         <topichead navtitle="event">
             <topicref format="markdown" href="toloka.streaming.event.BaseEvent.md" toc="no"/>
@@ -932,6 +974,9 @@
             <topicref format="markdown" href="toloka.streaming.event.UserSkillEvent.Type.md" navtitle="UserSkillEvent.Type" locktitle="yes" toc="no"/>
         </topichead>
         <topichead navtitle="observer">
+            <topicref format="markdown" href="toloka.streaming.observer.AssignmentsObserver.inject.md" navtitle="AssignmentsObserver.inject" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.BaseObserver.inject.md" navtitle="BaseObserver.inject" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.observer.PoolStatusObserver.inject.md" navtitle="PoolStatusObserver.inject" toc="no"/>
             <topicref format="markdown" href="toloka.streaming.observer.BaseObserver.md" toc="no"/>
             <topicref format="markdown" href="toloka.streaming.observer.BaseObserver.run.md" toc="no"/>
             <topicref format="markdown" href="toloka.streaming.observer.BaseObserver.should_resume.md" toc="no"/>
@@ -953,12 +998,30 @@
             <topicref format="markdown" href="toloka.streaming.observer.PoolStatusObserver.register_callback.md" toc="no"/>
         </topichead>
         <topichead navtitle="pipeline">
+            <topicref format="markdown" href="toloka.streaming.pipeline.Pipeline.inject.md", navtitle="Pipeline.inject", toc="no"/>
             <topicref format="markdown" href="toloka.streaming.pipeline.Pipeline.md"/>
             <topicref format="markdown" href="toloka.streaming.pipeline.Pipeline.register.md" toc="no"/>
             <topicref format="markdown" href="toloka.streaming.pipeline.Pipeline.run.md" toc="no"/>
         </topichead>
+        <topichead navtitle="storage" toc="no">
+            <topicref format="markdown" href="toloka.streaming.storage.BaseStorage.cleanup.md" navtitle="BaseStorage.cleanup" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.BaseStorage.load.md" navtitle="BaseStorage.load" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.BaseStorage.lock.md" navtitle="BaseStorage.lock" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.BaseStorage.md" navtitle="BaseStorage"/>
+            <topicref format="markdown" href="toloka.streaming.storage.BaseStorage.save.md" navtitle="BaseStorage.save" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.JSONLocalStorage.DefaultNearbyFileLocker.md" navtitle="JSONLocalStorage.DefaultNearbyFileLocker" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.JSONLocalStorage.cleanup.md" navtitle="JSONLocalStorage.cleanup" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.JSONLocalStorage.load.md" navtitle="JSONLocalStorage.load" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.JSONLocalStorage.md" navtitle="JSONLocalStorage"/>
+            <topicref format="markdown" href="toloka.streaming.storage.JSONLocalStorage.save.md" navtitle="JSONLocalStorage.save" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.S3Storage.cleanup.md" navtitle="S3Storage.cleanup" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.S3Storage.load.md" navtitle="S3Storage.load" toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.storage.S3Storage.md" navtitle="S3Storage"/>
+            <topicref format="markdown" href="toloka.streaming.storage.S3Storage.save.md" navtitle="S3Storage.save" toc="no"/>
+        </topichead>
     </topichead>
     <topichead navtitle="toloka.util" toc="no">
+        <topicref format="markdown" href="toloka.util._managing_headers.add_headers.md" navtitle="add_headers" toc="no"/>
         <topicref format="markdown" href="toloka.util._codegen.attribute.md" toc="no"/>
         <topicref format="markdown" href="toloka.util._codegen.fix_attrs_converters.md" toc="no"/>
         <topicref format="markdown" href="toloka.util._docstrings.inherit_docstrings.md" toc="no"/>
@@ -974,5 +1037,9 @@
         <topicref format="markdown" href="toloka.util.async_utils.get_task_traceback.md"/>
         <topicref format="markdown" href="toloka.util.get_signature.md"/>
         <topicref format="markdown" href="toloka.util.identity.md"/>
+        <topicref format="markdown" href="toloka.util.stored.get_base64_digest.md" navtitle="get_base64_digest" toc="no"/>
+        <topicref format="markdown" href="toloka.util.stored.get_stored_meta.md" navtitle="get_stored_meta" toc="no"/>
+        <topicref format="markdown" href="toloka.util.stored.pickle_dumps_base64.md" navtitle="pickle_dumps_base64" toc="no"/>
+        <topicref format="markdown" href="toloka.util.stored.pickle_loads_base64.md" navtitle="pickle_loads_base64" toc="no"/>
     </topichead>
 </map>

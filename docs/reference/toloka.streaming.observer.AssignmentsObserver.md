@@ -4,8 +4,10 @@
 ```
 AssignmentsObserver(
     self,
-    toloka_client: Union[TolokaClient, ...],
-    pool_id: str
+    toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
+    pool_id: str,
+    *,
+    name: Optional[str] = None
 )
 ```
 
@@ -28,7 +30,7 @@ Corresponding assignment events will be passed to the triggered callbacks.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`toloka_client`|**...**|<p>TolokaClient instance or async wrapper around it.</p>
+`toloka_client`|**[AsyncInterfaceWrapper](toloka.util.async_utils.AsyncInterfaceWrapper.md)\[Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncMultithreadWrapper](toloka.util.async_utils.AsyncMultithreadWrapper.md)\[[TolokaClient](toloka.client.TolokaClient.md)\]\]\]**|<p>TolokaClient instance or async wrapper around it.</p>
 `pool_id`|**str**|<p>Pool ID.</p>
 
 **Examples:**
@@ -46,6 +48,7 @@ observer.on_submitted(handle_submitted)
 
 | Method | Description |
 | :------| :-----------|
+[inject](toloka.streaming.observer.AssignmentsObserver.inject.md)| None
 [on_accepted](toloka.streaming.observer.AssignmentsObserver.on_accepted.md)| None
 [on_any_event](toloka.streaming.observer.AssignmentsObserver.on_any_event.md)| None
 [on_created](toloka.streaming.observer.AssignmentsObserver.on_created.md)| None

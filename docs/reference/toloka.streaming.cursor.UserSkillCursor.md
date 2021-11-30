@@ -4,7 +4,7 @@
 ```
 UserSkillCursor(
     self,
-    toloka_client: Union[TolokaClient, ...],
+    toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
     event_type: Any,
     user_id: Optional[str] = None,
     skill_id: Optional[str] = None,
@@ -29,7 +29,7 @@ Iterator over UserSkillEvent objects of seleted event_type.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), ...\]**|<p>TolokaClient object that is being used to search user skills.</p>
+`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncMultithreadWrapper](toloka.util.async_utils.AsyncMultithreadWrapper.md)\[[TolokaClient](toloka.client.TolokaClient.md)\]\]**|<p>TolokaClient object that is being used to search user skills.</p>
 `request`|**[UserSkillSearchRequest](toloka.client.search_requests.UserSkillSearchRequest.md)**|<p>Base request to search user skills by.</p>
 `event_type`|**Any**|<p>User skill event&#x27;s type to search.</p>
 

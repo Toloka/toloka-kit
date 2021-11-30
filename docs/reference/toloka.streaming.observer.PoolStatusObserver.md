@@ -4,8 +4,10 @@
 ```
 PoolStatusObserver(
     self,
-    toloka_client: Union[TolokaClient, ...],
-    pool_id: str
+    toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
+    pool_id: str,
+    *,
+    name: Optional[str] = None
 )
 ```
 
@@ -27,7 +29,7 @@ The Pool object will be passed to the triggered callbacks.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`toloka_client`|**...**|<p>TolokaClient instance or async wrapper around it.</p>
+`toloka_client`|**[AsyncInterfaceWrapper](toloka.util.async_utils.AsyncInterfaceWrapper.md)\[Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncMultithreadWrapper](toloka.util.async_utils.AsyncMultithreadWrapper.md)\[[TolokaClient](toloka.client.TolokaClient.md)\]\]\]**|<p>TolokaClient instance or async wrapper around it.</p>
 `pool_id`|**str**|<p>Pool ID.</p>
 
 **Examples:**
@@ -51,6 +53,7 @@ observer.on_status_change(lambda pool: ...)
 
 | Method | Description |
 | :------| :-----------|
+[inject](toloka.streaming.observer.PoolStatusObserver.inject.md)| None
 [on_archieved](toloka.streaming.observer.PoolStatusObserver.on_archieved.md)| None
 [on_closed](toloka.streaming.observer.PoolStatusObserver.on_closed.md)| None
 [on_locked](toloka.streaming.observer.PoolStatusObserver.on_locked.md)| None

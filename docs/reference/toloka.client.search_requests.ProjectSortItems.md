@@ -15,7 +15,7 @@ To change the sorting direction (sort in descending order), add a hyphen before 
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`items`|**Optional\[List\[[SortItem](toloka.client.search_requests.SortItem.md)\]\]**|<p>Fields by which to sort. Possible values:<ul><li>id - Project ID in ascending order.</li><li>created - Project creation date in UTC in yyyy-MM-DD format (ascending).</li><li>public_name - Project name (in alphabetical order).</li><li>private_comment - Comment on the project (in alphabetical order).</li></ul></p>
+`items`|**Optional\[List\[[SortItem](toloka.client.search_requests.ProjectSortItems.SortItem.md)\]\]**|<p>Fields by which to sort. Possible values:<ul><li>id - Project ID in ascending order.</li><li>created - Project creation date in UTC in yyyy-MM-DD format (ascending).</li><li>public_name - Project name (in alphabetical order).</li><li>private_comment - Comment on the project (in alphabetical order).</li></ul></p>
 
 **Examples:**
 

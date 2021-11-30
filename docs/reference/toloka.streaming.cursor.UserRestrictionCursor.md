@@ -4,7 +4,7 @@
 ```
 UserRestrictionCursor(
     self,
-    toloka_client: Union[TolokaClient, ...],
+    toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
     scope: Optional[UserRestriction.Scope] = None,
     user_id: Optional[str] = None,
     project_id: Optional[str] = None,
@@ -26,7 +26,7 @@ Iterator over user restrictions by create time.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), ...\]**|<p>TolokaClient object that is being used to search user restrictions.</p>
+`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncMultithreadWrapper](toloka.util.async_utils.AsyncMultithreadWrapper.md)\[[TolokaClient](toloka.client.TolokaClient.md)\]\]**|<p>TolokaClient object that is being used to search user restrictions.</p>
 `request`|**[UserRestrictionSearchRequest](toloka.client.search_requests.UserRestrictionSearchRequest.md)**|<p>Base request to search user restrictions.</p>
 
 **Examples:**

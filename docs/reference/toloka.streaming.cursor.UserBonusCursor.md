@@ -4,7 +4,7 @@
 ```
 UserBonusCursor(
     self,
-    toloka_client: Union[TolokaClient, ...],
+    toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
     user_id: Optional[str] = None,
     private_comment: Optional[str] = None,
     id_lt: Optional[str] = None,
@@ -24,7 +24,7 @@ Iterator over user bonuses by create time.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), ...\]**|<p>TolokaClient object that is being used to search user bonuses.</p>
+`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncMultithreadWrapper](toloka.util.async_utils.AsyncMultithreadWrapper.md)\[[TolokaClient](toloka.client.TolokaClient.md)\]\]**|<p>TolokaClient object that is being used to search user bonuses.</p>
 `request`|**[UserBonusSearchRequest](toloka.client.search_requests.UserBonusSearchRequest.md)**|<p>Base request to search user bonuses by.</p>
 
 **Examples:**

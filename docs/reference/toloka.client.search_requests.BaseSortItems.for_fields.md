@@ -4,7 +4,7 @@
 ```
 for_fields(
     cls,
-    name: str,
+    qualname: str,
     sort_fields: List[str],
     docstring: Optional[str] = None
 )

@@ -15,7 +15,7 @@ To change the sorting direction (sort in descending order), add a hyphen before 
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`items`|**Optional\[List\[[SortItem](toloka.client.search_requests.SortItem.md)\]\]**|<p>Fields by which to sort. Possible values:<ul><li>id - File ID in ascending order.</li><li>created - Date of sending the file in UTC in the yyyy-MM-DD format (ascending).</li></ul></p>
+`items`|**Optional\[List\[[SortItem](toloka.client.search_requests.AttachmentSortItems.SortItem.md)\]\]**|<p>Fields by which to sort. Possible values:<ul><li>id - File ID in ascending order.</li><li>created - Date of sending the file in UTC in the yyyy-MM-DD format (ascending).</li></ul></p>
 
 **Examples:**
 

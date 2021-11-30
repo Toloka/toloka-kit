@@ -4,7 +4,7 @@
 ```
 AssignmentCursor(
     self,
-    toloka_client: Union[TolokaClient, ...],
+    toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
     event_type: Any,
     status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]] = None,
     task_id: Optional[str] = None,
@@ -48,7 +48,7 @@ Iterator over Assignment objects of seleted AssignmentEventType.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), ...\]**|<p>TolokaClient object that is being used to search assignments.</p>
+`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncMultithreadWrapper](toloka.util.async_utils.AsyncMultithreadWrapper.md)\[[TolokaClient](toloka.client.TolokaClient.md)\]\]**|<p>TolokaClient object that is being used to search assignments.</p>
 `request`|**[AssignmentSearchRequest](toloka.client.search_requests.AssignmentSearchRequest.md)**|<p>Base request to search assignments by.</p>
 `event_type`|**Any**|<p>Assignments event&#x27;s type to search.</p>
 

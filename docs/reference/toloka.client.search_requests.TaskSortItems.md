@@ -15,7 +15,7 @@ To change the sorting direction (sort in descending order), add a hyphen before 
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`items`|**Optional\[List\[[SortItem](toloka.client.search_requests.SortItem.md)\]\]**|<p>Fields by which to sort. Possible values:<ul><li>id - Job ID (in ascending order).</li><li>created - Date of creation of the task in UTC in the format YYYY-MM-DD (ascending).</li></ul></p>
+`items`|**Optional\[List\[[SortItem](toloka.client.search_requests.TaskSortItems.SortItem.md)\]\]**|<p>Fields by which to sort. Possible values:<ul><li>id - Job ID (in ascending order).</li><li>created - Date of creation of the task in UTC in the format YYYY-MM-DD (ascending).</li></ul></p>
 
 **Examples:**
 

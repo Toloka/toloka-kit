@@ -4,6 +4,7 @@ __all__ = [
     'ComplexException',
     'ensure_async',
     'get_task_traceback',
+    'Cooldown',
 ]
 import asyncio
 import asyncio.events
@@ -81,3 +82,22 @@ def get_task_traceback(task: asyncio.Task) -> typing.Optional[str]:
     Return traceback as string if exists. Or None if there was no error.
     """
     ...
+
+
+class Cooldown:
+    """Сontext manager that implements a delay between calls occurring inside the context
+
+    Args:
+        cooldown_time(int): seconds between calls
+
+    Example:
+        >>> coldown = toloka.util.Cooldown(5)
+        >>> while True:
+        >>>     async with coldown:
+        >>>         await do_it()  # will be called no more than once every 5 seconds
+    """
+
+    def __init__(self, cooldown_time): ...
+
+    _touch_time: float
+    _cooldown_time: int
