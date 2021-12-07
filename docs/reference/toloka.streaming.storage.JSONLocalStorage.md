@@ -16,7 +16,7 @@ Simplest local storage to dump state of a pipeline and restore in case of restar
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`dirname`|**str**|<p>Directory to store pipeline&#x27;s state. By default, &quot;/tmp&quot;.</p>
+`dirname`|**str**|<p>Directory to store pipeline&#x27;s state files. By default, &quot;/tmp&quot;.</p>
 `locker`|**Optional\[[BaseLocker](toloka.streaming.locker.BaseLocker.md)\]**|<p>Optional locker object. By default, FileLocker with the same dirname is used.</p>
 
 **Examples:**

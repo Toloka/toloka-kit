@@ -4,7 +4,8 @@
 ```
 cleanup(
     self,
-    key: str,
+    base_key: str,
+    keys: Sequence[str],
     lock: Any
 )
 ```

@@ -2,6 +2,10 @@
 `toloka.streaming.storage.BaseStorage.load`
 
 ```
-load(self, key: str)
+load(
+    self,
+    base_key: str,
+    keys: Sequence[str]
+)
 ```
 

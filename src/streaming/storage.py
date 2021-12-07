@@ -5,13 +5,13 @@ __all__ = [
 ]
 
 import attr
-import base64
 import collections
 import json
 import os
+import shutil
 from contextlib import contextmanager
 from io import BytesIO
-from typing import Any, ContextManager, Optional, Type, TypeVar
+from typing import Any, ContextManager, Dict, Optional, Sequence, Type, TypeVar
 from ..util.stored import get_base64_digest, get_stored_meta, pickle_dumps_base64, pickle_loads_base64
 from .locker import BaseLocker, FileLocker
 
@@ -20,19 +20,20 @@ Pickleable = TypeVar('Pickleable')
 
 
 class BaseStorage:
-    def _get_path_by_key(self, key: str) -> str:
+    def _get_base_path(self, key: str) -> str:
+        """Prepare key representing all current pipeline-related stored data."""
         return f'{self.__class__.__name__}_{get_base64_digest(key)}'
 
     def lock(self, key: str) -> ContextManager[Any]:
         pass
 
-    def save(self, key: str, value: Pickleable) -> None:
+    def save(self, base_key: str, data: Dict[str, Pickleable]) -> None:
         raise NotImplementedError(f'Not implemented method save in {self.__class__.__name__}')
 
-    def load(self, key: str) -> Optional[Pickleable]:
+    def load(self, base_key: str, keys: Sequence[str]) -> Optional[Dict[str, Pickleable]]:
         raise NotImplementedError(f'Not implemented method load in {self.__class__.__name__}')
 
-    def cleanup(self, key: str, lock: Any) -> None:
+    def cleanup(self, base_key: str, keys: Sequence[str], lock: Any) -> None:
         pass
 
 
@@ -48,7 +49,7 @@ class BaseExternalLockerStorage(BaseStorage):
                 return
         yield None
 
-    def cleanup(self, key: str, lock: Any) -> None:
+    def cleanup(self, base_key: str, keys: Sequence[str], lock: Any) -> None:
         if self.locker:
             self.locker.cleanup(lock)
 
@@ -58,7 +59,7 @@ class JSONLocalStorage(BaseExternalLockerStorage):
     """Simplest local storage to dump state of a pipeline and restore in case of restart.
 
     Attributes:
-        dirname: Directory to store pipeline's state. By default, "/tmp".
+        dirname: Directory to store pipeline's state files. By default, "/tmp".
         locker: Optional locker object. By default, FileLocker with the same dirname is used.
 
     Example:
@@ -85,32 +86,54 @@ class JSONLocalStorage(BaseExternalLockerStorage):
         if isinstance(self.locker, self.DefaultNearbyFileLocker):
             self.locker = FileLocker(self.dirname)
 
-    def _get_path_by_key(self, key: str) -> str:
-        return os.path.join(self.dirname, super()._get_path_by_key(key))
+    def _get_base_path(self, base_key: str) -> str:
+        """Return path to the directory containing all observers related to the current pipeline."""
+        return os.path.join(self.dirname, super()._get_base_path(base_key))
 
-    def save(self, key: str, value: Pickleable) -> None:
-        path = self._get_path_by_key(key)
-        with open(path, 'w') as file:
-            data = {'key': base64.b64encode(key.encode()).decode(),
-                    'value': pickle_dumps_base64(value).decode(),
-                    'meta': get_stored_meta()}
-            json.dump(data, file, indent=4)
+    def _join_minor_path(self, base_path: str, key: str) -> str:
+        """Return path to the file representing exactly observer with the given key."""
+        return os.path.join(base_path, get_base64_digest(key))
 
-    def load(self, key: str) -> Optional[Pickleable]:
-        path = self._get_path_by_key(key)
+    def save(self, base_key: str, data: Dict[str, Pickleable]) -> None:
+        base_path = self._get_base_path(base_key)
         try:
-            with open(path, 'r') as file:
-                content = file.read()
-                return pickle_loads_base64(json.loads(content)['value']) if content else None
-        except FileNotFoundError:
+            os.mkdir(base_path)
+        except FileExistsError:
+            if not os.path.isdir(base_path):
+                raise
+
+        for key, value in data.items():
+            with open(self._join_minor_path(base_path, key), 'w') as file:
+                data = {'base_key': base_key,
+                        'key': key,
+                        'value': pickle_dumps_base64(value).decode(),
+                        'meta': get_stored_meta()}
+                json.dump(data, file, indent=4)
+
+    def load(self, base_key: str, keys: Sequence[str]) -> Optional[Dict[str, Pickleable]]:
+        base_path = self._get_base_path(base_key)
+        if not os.path.exists(base_path):
             return None
 
-    def cleanup(self, key: str, lock: Any) -> None:
+        res: Dict[str, Pickleable] = {}
+        for key in keys:
+            try:
+                with open(self._join_minor_path(base_path, key), 'r') as file:
+                    content = file.read()
+                    if content:
+                        res[key] = pickle_loads_base64(json.loads(content)['value'])
+            except FileNotFoundError:
+                pass
+
+        return res
+
+    def cleanup(self, base_key: str, keys: Sequence[str], lock: Any) -> None:
         try:
-            os.remove(self._get_path_by_key(key))
+            shutil.rmtree(self._get_base_path(base_key))
         except FileNotFoundError:
             pass
-        super().cleanup(key, lock)
+        if self.locker:
+            self.locker.cleanup(lock)
 
 
 BucketType = Type
@@ -158,27 +181,41 @@ class S3Storage(BaseExternalLockerStorage):
                 return error_info['Code'] == '404' and error_info['Message'] == 'Not Found'
         return False
 
-    def save(self, key: str, value: Pickleable) -> None:
-        path = self._get_path_by_key(key)
-        stream = BytesIO(pickle_dumps_base64(value))
-        self.bucket.upload_fileobj(stream, path, ExtraArgs={'Metadata': {'key': key, **get_stored_meta()}})
+    def _join_minor_path(self, base_path: str, key: str) -> str:
+        """Each observer is being saved with the key prefixed by the base path."""
+        return f'{base_path}_{get_base64_digest(key)}'
 
-    def load(self, key: str) -> Optional[Pickleable]:
-        path = self._get_path_by_key(key)
-        try:
-            with BytesIO() as file:
-                self.bucket.download_fileobj(path, file)
-                file.seek(0)
-                content = file.read()
-            return pickle_loads_base64(content) if content else None
-        except Exception as exc:
-            if self._is_not_found_error(exc):
-                return None
-            raise
+    def save(self, base_key: str, data: Dict[str, Pickleable]) -> None:
+        base_path = self._get_base_path(base_key)
+        for key, value in data.items():
+            stream = BytesIO(pickle_dumps_base64(value))
+            path = self._join_minor_path(base_path, key)
+            metadata = {'base_key': base_key,  # Metadata values should be strings.
+                        'key': key,
+                        'meta': json.dumps(get_stored_meta(), ensure_ascii=True, indent=None, separators=(',', ':'))}
+            self.bucket.upload_fileobj(stream, path, ExtraArgs={'Metadata': metadata})
 
-    def cleanup(self, key: str, lock: Any) -> None:
-        try:
-            self.bucket.Object(self._get_path_by_key(key)).delete()
-        except Exception:
-            pass
-        super().cleanup(key, lock)
+    def load(self, base_key: str, keys: Sequence[str]) -> Dict[str, Pickleable]:
+        base_path = self._get_base_path(base_key)
+
+        res: Dict[str, Pickleable] = {}
+        for key in keys:
+            path = self._join_minor_path(base_path, key)
+            try:
+                with BytesIO() as file:
+                    self.bucket.download_fileobj(path, file)
+                    file.seek(0)
+                    content = file.read()
+                    if content:
+                        res[key] = pickle_loads_base64(content)
+            except Exception as exc:
+                if self._is_not_found_error(exc):
+                    return None
+                raise
+
+        return res
+
+    def cleanup(self, base_key: str, keys: Sequence[str], lock: Any) -> None:
+        self.bucket.objects.filter(Prefix=self._get_base_path(base_key)).delete()
+        if self.locker:
+            self.locker.cleanup(lock)

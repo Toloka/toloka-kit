@@ -748,9 +748,8 @@ class TolokaClient:
             >>>     toloka_client.download_attachment(attachment_id='1', out=out_f)
             ...
         """
-        response = self._raw_request('get', f'/v1/attachments/{attachment_id}/download', stream=True)
-        for content in response.iter_content():
-            out.write(content)
+        response = self._raw_request('get', f'/v1/attachments/{attachment_id}/download')
+        out.write(response.content)
 
     # Message section
 

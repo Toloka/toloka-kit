@@ -55,7 +55,7 @@ __all__ = [
 import datetime
 import decimal
 import enum
-import pandas.core.frame
+import pandas
 import requests.packages.urllib3.util.retry
 import toloka.client.aggregation
 import toloka.client.analytics_request
@@ -4570,7 +4570,7 @@ class TolokaClient:
         self,
         pool_id: str,
         parameters: toloka.client.assignment.GetAssignmentsTsvParameters
-    ) -> pandas.core.frame.DataFrame:
+    ) -> pandas.DataFrame:
         """Downloads assignments as pandas.DataFrame
 
         Experimental method.
@@ -4613,7 +4613,7 @@ class TolokaClient:
         start_time_to: typing.Optional[datetime.datetime] = None,
         exclude_banned: typing.Optional[bool] = None,
         field: typing.Optional[typing.List[toloka.client.assignment.GetAssignmentsTsvParameters.Field]] = ...
-    ) -> pandas.core.frame.DataFrame:
+    ) -> pandas.DataFrame:
         """Downloads assignments as pandas.DataFrame
 
         Experimental method.
