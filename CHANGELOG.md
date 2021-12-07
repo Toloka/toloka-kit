@@ -1,5 +1,18 @@
-0.1.20
+0.1.21
 -------------------
+Fixes:
+* Fixed maximum recursion depth exceptions
+* Fixed `download_attachment`
+
+
+0.1.20 [YANKED]
+-------------------
+Yanked due to issues found in retries functionality:
+* Might raise maximum recursion depth exceptions
+* Breaks `download_attachment`
+Fixed in `toloka-kit==0.1.21`
+
+Features:
 * Retries should work not only while establishing connection to server but also when transfering data
 * Added functional tests against production environment
 * Fixed `TemplateBuilder` structure method issue with attributes annotated by `ListBaseComponent`
