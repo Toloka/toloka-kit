@@ -5,7 +5,7 @@ import os
 import pytest
 from concurrent import futures
 from io import BytesIO
-from typing import Dict
+from typing import Dict, List
 from toloka.streaming.storage import FileLocker, JSONLocalStorage, S3Storage
 
 
@@ -15,14 +15,20 @@ def obj_to_store():
 
 
 @pytest.fixture
-def file_suffix():
+def base_encoded():
+    return 'HxvmYIAcEI16m7012L0lKUz3SaUqs4fAEdgXLffHej4eWdU_o5IbnFnn5F3nTMXRJhha07_NuV_HdDHIaWDWHQ'
+
+
+@pytest.fixture
+def key_encoded():
     return 'jixChDQEF2aMpModrR2VhYZ1iAlAV701vUlA2-mlYlDdIoZFnxiclCEcaoocol5sg83irFeABVM3uPh63W4xBQ'
 
 
 @pytest.fixture
 def json_storage_result():
     return {
-        "key": "c29tZV9rZXk=",
+        "base_key": "some_pipeline_key",
+        "key": "some_key",
         "value": "gASVOgAAAAAAAAB9lCiMAWGUSwGMAWKUR0ABmZmZmZmajAFjlF2UKIwBM5RLBE6MBtCw0LHQspSMA+OBgpSGlIeUZXUu",
         "meta": {}
     }
@@ -39,23 +45,23 @@ def check_stored_meta(meta):
     assert meta.pop('ts')
 
 
-def test_json_storage(tmp_path, obj_to_store, file_suffix, json_storage_result):
+def test_json_storage(tmp_path, obj_to_store, base_encoded, key_encoded, json_storage_result):
     dirname = tmp_path / 'storage'
     dirname.mkdir()
 
     storage = JSONLocalStorage(dirname=dirname)
-    storage.save('some_key', obj_to_store)
+    storage.save('some_pipeline_key', {'some_key': obj_to_store})
 
-    with open(dirname / f'JSONLocalStorage_{file_suffix}') as file:
+    with open(dirname / f'JSONLocalStorage_{base_encoded}' / key_encoded) as file:
         stored = json.load(file)
         check_stored_meta(stored['meta'])
         assert json_storage_result == stored
 
-    assert obj_to_store == storage.load('some_key')
+    assert {'some_key': obj_to_store} == storage.load('some_pipeline_key', ['some_key', 'unknown_key'])
 
 
 @pytest.mark.parametrize('lock_dirname', [None, 'lock_storage'])
-def test_store_with_lock(tmp_path, obj_to_store, file_suffix, json_storage_result, lock_dirname):
+def test_store_with_lock(tmp_path, obj_to_store, base_encoded, key_encoded, json_storage_result, lock_dirname):
 
     class JSONLocalStorageMock(JSONLocalStorage):
         stored_count = 0
@@ -71,18 +77,18 @@ def test_store_with_lock(tmp_path, obj_to_store, file_suffix, json_storage_resul
         lock_dirname = tmp_path / lock_dirname
         lock_dirname.mkdir()
 
-    expected_path = dirname / f'JSONLocalStorageMock_{file_suffix}'
-    expected_lock_path = (lock_dirname or dirname) / f'{file_suffix}.lock'
+    expected_path = dirname / f'JSONLocalStorageMock_{base_encoded}' / key_encoded
+    expected_lock_path = (lock_dirname or dirname) / f'{key_encoded}.lock'
 
-    def _save_under_lock(storage, key, obj):
+    def _save_under_lock(storage, base_key, key, obj):
         with storage.lock(key) as lock:
-            storage.save(key, obj)
+            storage.save(base_key, {key: obj})
             with open(expected_path) as file:
                 stored = json.load(file)
                 check_stored_meta(stored['meta'])
                 assert json_storage_result == stored
             assert os.path.exists(expected_lock_path), (expected_lock_path, os.listdir(os.path.dirname(expected_lock_path)))
-            storage.cleanup(key, lock)
+            storage.cleanup(base_key, [key], lock)
 
     simultaneous_count = 10
     with futures.ThreadPoolExecutor(max_workers=simultaneous_count) as executor:
@@ -93,7 +99,7 @@ def test_store_with_lock(tmp_path, obj_to_store, file_suffix, json_storage_resul
             else:
                 storage = JSONLocalStorageMock(dirname)
                 storage.locker.timeout = 0
-            tasks.append(executor.submit(_save_under_lock, storage, 'some_key', obj_to_store))
+            tasks.append(executor.submit(_save_under_lock, storage, 'some_pipeline_key', 'some_key', obj_to_store))
             time.sleep(0.01)
         futures.wait(tasks)
 
@@ -108,7 +114,7 @@ def test_store_with_lock(tmp_path, obj_to_store, file_suffix, json_storage_resul
 
 
 @pytest.mark.parametrize('lock_dirname', [None, 'lock_storage'])
-def test_s3_storage(tmp_path, obj_to_store, file_suffix, json_storage_result, lock_dirname):
+def test_s3_storage(tmp_path, obj_to_store, base_encoded, key_encoded, json_storage_result, lock_dirname):
 
     @attr.s
     class S3ObjectMock:
@@ -130,6 +136,7 @@ def test_s3_storage(tmp_path, obj_to_store, file_suffix, json_storage_result, lo
                 Fileobj.seek(0)
                 file.write(Fileobj.read())
                 assert 'some_key' == ExtraArgs['Metadata']['key']
+                assert json.loads(ExtraArgs['Metadata']['meta'])
 
         def download_fileobj(self, Key: str, Fileobj: BytesIO) -> None:
             try:
@@ -140,6 +147,29 @@ def test_s3_storage(tmp_path, obj_to_store, file_suffix, json_storage_result, lo
 
         def Object(self, key: str) -> S3ObjectMock:
             return S3ObjectMock(os.path.join(self.dirname, key))
+
+        @property
+        def objects(self):
+            return BucketObjectsCollectionMock(self)
+
+    @attr.s
+    class BucketObjectsCollectionMock:
+        bucket: BucketMock = attr.ib()
+        objs: List[S3ObjectMock] = attr.ib(factory=list)
+
+        def filter(self, Prefix: str) -> 'BucketObjectsCollectionMock':
+            return BucketObjectsCollectionMock(
+                self.bucket,
+                [
+                    S3ObjectMock(os.path.join(self.bucket.dirname, name))
+                    for name in os.listdir(self.bucket.dirname)
+                    if name.startswith(Prefix)
+                ]
+            )
+
+        def delete(self) -> None:
+            for obj in self.objs:
+                obj.delete()
 
     dirname = tmp_path / 'storage'
     dirname.mkdir()
@@ -155,22 +185,22 @@ def test_s3_storage(tmp_path, obj_to_store, file_suffix, json_storage_result, lo
     storage = S3Storage(bucket, **storage_kwargs)
 
     with storage.lock('some_key') as lock:
-        storage.save('some_key', obj_to_store)
+        storage.save('some_pipeline_key', {'some_key': obj_to_store})
 
-        with open(dirname / f'S3Storage_{file_suffix}', 'rb') as file:
+        with open(dirname / f'S3Storage_{base_encoded}_{key_encoded}', 'rb') as file:
             assert json_storage_result['value'].encode() == file.read()
 
-        assert obj_to_store == storage.load('some_key')
+        assert {'some_key': obj_to_store} == storage.load('some_pipeline_key', ['some_key'])
 
         if lock_dirname:
-            assert os.path.exists(lock_dirname / f'{file_suffix}.lock')
+            assert os.path.exists(lock_dirname / f'{key_encoded}.lock')
 
-        storage.cleanup('some_key', lock)
+        storage.cleanup('some_pipeline_key', ['some_key'], lock)
 
-    assert not os.path.exists(dirname / f'S3Storage_{file_suffix}')
+    assert not os.path.exists(dirname / f'S3Storage_{base_encoded}_{key_encoded}')
     if lock_dirname:
-        assert not os.path.exists(lock_dirname / f'S3Storage_{file_suffix}.lock')
-    assert storage.load('some_key') is None
+        assert not os.path.exists(lock_dirname / f'S3Storage_{key_encoded}.lock')
+    assert not storage.load('some_pipeline_key', ['some_key'])
 
 
 @pytest.mark.parametrize('start_after_iteration', [1, 2])

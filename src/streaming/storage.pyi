@@ -14,15 +14,20 @@ class BaseStorage:
 
     def save(
         self,
-        key: str,
-        value: Pickleable
+        base_key: str,
+        data: typing.Dict[str, Pickleable]
     ) -> None: ...
 
-    def load(self, key: str) -> typing.Optional[Pickleable]: ...
+    def load(
+        self,
+        base_key: str,
+        keys: typing.Sequence[str]
+    ) -> typing.Optional[typing.Dict[str, Pickleable]]: ...
 
     def cleanup(
         self,
-        key: str,
+        base_key: str,
+        keys: typing.Sequence[str],
         lock: typing.Any
     ) -> None: ...
 
@@ -32,7 +37,8 @@ class BaseExternalLockerStorage(BaseStorage):
 
     def cleanup(
         self,
-        key: str,
+        base_key: str,
+        keys: typing.Sequence[str],
         lock: typing.Any
     ) -> None: ...
 
@@ -48,7 +54,7 @@ class JSONLocalStorage(BaseExternalLockerStorage):
     """Simplest local storage to dump state of a pipeline and restore in case of restart.
 
     Attributes:
-        dirname: Directory to store pipeline's state. By default, "/tmp".
+        dirname: Directory to store pipeline's state files. By default, "/tmp".
         locker: Optional locker object. By default, FileLocker with the same dirname is used.
 
     Example:
@@ -70,15 +76,20 @@ class JSONLocalStorage(BaseExternalLockerStorage):
 
     def save(
         self,
-        key: str,
-        value: Pickleable
+        base_key: str,
+        data: typing.Dict[str, Pickleable]
     ) -> None: ...
 
-    def load(self, key: str) -> typing.Optional[Pickleable]: ...
+    def load(
+        self,
+        base_key: str,
+        keys: typing.Sequence[str]
+    ) -> typing.Optional[typing.Dict[str, Pickleable]]: ...
 
     def cleanup(
         self,
-        key: str,
+        base_key: str,
+        keys: typing.Sequence[str],
         lock: typing.Any
     ) -> None: ...
 
@@ -129,15 +140,20 @@ class S3Storage(BaseExternalLockerStorage):
 
     def save(
         self,
-        key: str,
-        value: Pickleable
+        base_key: str,
+        data: typing.Dict[str, Pickleable]
     ) -> None: ...
 
-    def load(self, key: str) -> typing.Optional[Pickleable]: ...
+    def load(
+        self,
+        base_key: str,
+        keys: typing.Sequence[str]
+    ) -> typing.Dict[str, Pickleable]: ...
 
     def cleanup(
         self,
-        key: str,
+        base_key: str,
+        keys: typing.Sequence[str],
         lock: typing.Any
     ) -> None: ...
 

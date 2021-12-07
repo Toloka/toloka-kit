@@ -59,8 +59,6 @@ class Pipeline:
         ...
     """
 
-    def inject(self, injection: 'Pipeline') -> None: ...
-
     def register(self, observer: toloka.streaming.observer.BaseObserver) -> toloka.streaming.observer.BaseObserver:
         """Register given observer.
 
@@ -85,7 +83,7 @@ class Pipeline:
         """
         ...
 
-    def run(self): ...
+    def run(self) -> None: ...
 
     def __init__(
         self,

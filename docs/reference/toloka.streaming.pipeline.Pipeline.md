@@ -67,6 +67,5 @@ await pipeline.run()  # Save state after each iteration. Try to load saved at st
 
 | Method | Description |
 | :------| :-----------|
-[inject](toloka.streaming.pipeline.Pipeline.inject.md)| None
 [register](toloka.streaming.pipeline.Pipeline.register.md)| Register given observer.
 [run](toloka.streaming.pipeline.Pipeline.run.md)| None

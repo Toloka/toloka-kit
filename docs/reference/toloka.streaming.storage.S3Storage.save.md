@@ -4,8 +4,8 @@
 ```
 save(
     self,
-    key: str,
-    value: TypeVar('Pickleable')
+    base_key: str,
+    data: Dict[str, TypeVar('Pickleable')]
 )
 ```
 

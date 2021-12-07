@@ -2,6 +2,7 @@ import asyncio
 import attr
 import copy
 import datetime
+import logging
 import pytest
 from typing import List, Set, Tuple
 
@@ -12,6 +13,9 @@ from toloka.streaming.storage import JSONLocalStorage
 from toloka.streaming.locker import NewerInstanceDetectedError
 
 from ..testutils.backend_mock import BackendSearchMock
+
+
+Pipeline.MIN_SLEEP_SECONDS = 0
 
 
 @pytest.fixture
@@ -192,7 +196,11 @@ def test_inject(toloka_client):
     handler_class_new = observer_new_2.on_accepted(HandlerClass('w_new', 'x_new'))
     handler_class_custom_inject_new = observer_new_3.on_accepted(HandlerClassCustomInject('y_new', 'z_new'))
 
-    pipeline_new.inject(pipeline_old)
+    observer_by_key_old = {observer._get_unique_key(): observer for observer in pipeline_old._observers.values()}
+    for observer in pipeline_new._observers.values():
+        injection = observer_by_key_old[observer._get_unique_key()]
+        observer.inject(injection)
+
     assert 'w_old' == handler_class_new.w
     assert 'x_old' == handler_class_new.x
     assert 'y_old' == handler_class_custom_inject_new.y
@@ -316,7 +324,69 @@ class HandlerToSaveAssignments:
         self.history.extend(events)
 
 
-def test_parallel_run(
+def test_async_observers():
+
+    @attr.s
+    class CountingObserver:
+        history = []
+
+        name: str = attr.ib()
+        duration: float = attr.ib()
+        enough_iterations: int = attr.ib()
+        _count: int = attr.ib(default=0)
+        _should_resume: bool = attr.ib(default=True)
+
+        def _get_unique_key(self):
+            return self.name
+
+        async def __call__(self):
+            self._count += 1
+            self._should_resume = (self._count < self.enough_iterations)
+            logging.info(f'Start {self.name}. Iteration: {self._count}. Sleep for: {self.duration} seconds')
+            self.history.append((self.name, 'start'))
+            await asyncio.sleep(self.duration)
+            logging.info(f'Finish <{id(self)}>. Should resume: {self._should_resume}')
+            self.history.append((self.name, 'finish'))
+
+        async def should_resume(self):
+            self.history.append((self.name, f'should_resume == {self._should_resume}'))
+            return self._should_resume
+
+    pipeline = Pipeline(period=datetime.timedelta(milliseconds=200))
+    pipeline.register(CountingObserver('fast', 0.10, enough_iterations=4))
+    pipeline.register(CountingObserver('slow', 0.55, enough_iterations=1))
+
+    asyncio.get_event_loop().run_until_complete(pipeline.run())
+
+    assert [
+        ('fast', 'start'),
+        ('slow', 'start'),
+        ('fast', 'finish'),
+        ('fast', 'should_resume == True'),
+        ('fast', 'start'),
+        ('fast', 'finish'),
+        ('fast', 'should_resume == True'),
+        ('fast', 'start'),
+        ('fast', 'finish'),
+        ('fast', 'should_resume == True'),
+        ('slow', 'finish'),
+        ('slow', 'should_resume == False'),
+        ('fast', 'start'),
+        ('slow', 'start'),
+        ('fast', 'finish'),
+        ('fast', 'should_resume == False'),
+        ('slow', 'finish'),
+        ('slow', 'should_resume == False'),
+        ('fast', 'start'),
+        ('slow', 'start'),
+        ('fast', 'finish'),
+        ('fast', 'should_resume == False'),
+        ('slow', 'finish'),
+        ('slow', 'should_resume == False')
+    ] == CountingObserver.history
+
+
+def test_two_pipeline_instances_run(
     requests_mock,
     toloka_url,
     toloka_client,
