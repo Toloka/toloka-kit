@@ -105,6 +105,7 @@ class PreloadingHTTPAdapter(HTTPAdapter):
             resp = func(*args, **kwargs)
             return resp
 
+        wrapper.__dict__['__preload_content_patch'] = True
         return wrapper
 
     def build_response(self, req, resp):
@@ -114,5 +115,6 @@ class PreloadingHTTPAdapter(HTTPAdapter):
 
     def get_connection(self, *args, **kwargs):
         connection = super().get_connection(*args, **kwargs)
-        connection.urlopen = self._override_preload_content(connection.urlopen)
+        if not getattr(connection.urlopen, '__preload_content_patch', False):
+            connection.urlopen = self._override_preload_content(connection.urlopen)
         return connection
