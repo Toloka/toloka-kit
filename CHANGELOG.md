@@ -1,4 +1,11 @@
-0.1.21
+0.1.22
+-------------------
+Fixes:
+* Fixed uninitialized `start_soon`. See https://github.com/Toloka/toloka-kit/issues/48
+* New `metrics` example
+
+
+0.1.21 [YANKED]
 -------------------
 Fixes:
 * Fixed maximum recursion depth exceptions
