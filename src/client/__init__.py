@@ -249,7 +249,7 @@ class TolokaClient:
             retry_quotas=retry_quotas,
             total=retries,
             status_forcelist=list(status_list),
-            method_whitelist=['HEAD', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'POST', 'PATCH'],
+            allowed_methods=['HEAD', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'POST', 'PATCH'],
             backoff_factor=2,  # summary retry time more than 10 seconds
         )
 

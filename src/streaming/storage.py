@@ -175,7 +175,7 @@ class S3Storage(BaseExternalLockerStorage):
     @classmethod
     def _is_not_found_error(cls, exc: Exception) -> bool:
         response = getattr(exc, 'response', None)
-        if isinstance(response, collections.Mapping):
+        if isinstance(response, collections.abc.Mapping):
             error_info = response.get('Error')
             if error_info and 'Code' in error_info and 'Message' in error_info:
                 return error_info['Code'] == '404' and error_info['Message'] == 'Not Found'
