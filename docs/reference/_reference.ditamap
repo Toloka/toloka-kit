@@ -999,7 +999,7 @@
             <topicref format="markdown" href="toloka.streaming.observer.PoolStatusObserver.register_callback.md" toc="no"/>
         </topichead>
         <topichead navtitle="pipeline">
-            <topicref format="markdown" href="toloka.streaming.pipeline.Pipeline.inject.md", navtitle="Pipeline.inject", toc="no"/>
+            <topicref format="markdown" href="toloka.streaming.pipeline.Pipeline.inject.md" navtitle="Pipeline.inject" toc="no"/>
             <topicref format="markdown" href="toloka.streaming.pipeline.Pipeline.md"/>
             <topicref format="markdown" href="toloka.streaming.pipeline.Pipeline.register.md" toc="no"/>
             <topicref format="markdown" href="toloka.streaming.pipeline.Pipeline.run.md" toc="no"/>
