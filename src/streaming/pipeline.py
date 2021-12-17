@@ -262,7 +262,7 @@ class Pipeline:
                     self._process_done_tasks(pipeline_key, done, waiting, pending)
                     if _Worker._no_one_should_resume(workers):  # If stop condition at all workers, run in check_mode.
                         check_mode = True
-                        start_soon = max(pending.values())
+                    start_soon = max(pending.values())
                 else:
                     check_mode = False
                     start_soon = min(pending.values())

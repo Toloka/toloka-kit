@@ -9,11 +9,11 @@
 [![GitHub Tests](https://github.com/Toloka/toloka-kit/workflows/Tests/badge.svg?branch=main)](//github.com/Toloka/toloka-kit/actions?query=workflow:Tests)
 
 
-[**<span style="color:red">Documentation</span>**](https://yandex.com/dev/toloka/toloka-kit/doc/)
+[**<span style="color:red">Documentation</span>**](https://toloka.ai/docs/toloka-kit/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
 
-[Website](https://toloka.ai) |
-[API Documentation](https://yandex.ru/dev/toloka/doc/concepts/about.html?lang=en) |
-[Platform](http://toloka.yandex.com)
+[Website](https://toloka.ai/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) |
+[API Documentation](https://toloka.ai/docs/api/concepts/about.html?utm_source=github&utm_medium=site&utm_campaign=tolokakit) |
+[Platform](http://toloka.yandex.com/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
 
 
 Designed by engineers for engineers, Toloka lets you integrate an on-demand workforce directly into your processes. Our cloud-based crowdsourcing platform is a fast and efficient way to collect and label large data sources for machine learning and other business purposes.
@@ -28,9 +28,9 @@ Main advantages of Toloka:
 Requirements
 --------------
 - Python 3.6+
-- Register in [Toloka.ai](https://toloka.ai/) as requester. Registration process described [here.](https://yandex.ru/support/toloka-requester/concepts/access.html?lang=en)
-- [Topping up your account.](https://yandex.ru/support/toloka-requester/concepts/refill.html?lang=en)
-- Getting an OAuth. Learn more in [help](https://yandex.ru/dev/toloka/doc/concepts/access.html?lang=en) and in the image below.
+- Register in [Toloka.ai](https://toloka.ai/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) as requester. Registration process described [here.](https://toloka.ai/docs/guide/concepts/access.html?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
+- [Topping up your account.](https://toloka.ai/docs/guide/concepts/refill.html?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
+- Getting an OAuth. Learn more in [help](https://toloka.ai/docs/api/concepts/access.html?utm_source=github&utm_medium=site&utm_campaign=tolokakit) and in the image below.
 
 
 ![How to get OAuth token](https://tlk.s3.yandex.net/toloka-kit/OAuth.png "How to get OAuth token")
@@ -53,21 +53,21 @@ print(toloka_client.get_requester())
 
 Free trial
 --------------
-To get acquainted with Toloka tools for free, you can use the promo code **TOLOKAKIT1** on $20 on your [profile page](https://toloka.yandex.com/requester/profile) after registration.
+To get acquainted with Toloka tools for free, you can use the promo code **TOLOKAKIT1** on $20 on your [profile page](https://toloka.yandex.com/requester/profile?utm_source=github&utm_medium=site&utm_campaign=tolokakit) after registration.
 
 
 Useful Links
 --------------
-- [Toloka homepage.](https://toloka.ai/)
-- [Toloka requester's guide.](https://yandex.ru/support/toloka-requester/index.html?lang=en)
-- We recommend that you first get acquainted with Toloka through the web interface and implement [one of the tutorials.](https://yandex.ru/support/toloka-requester/concepts/usecases.html)
-- [Toloka API documentation.](https://yandex.com/dev/toloka/doc/concepts/about.html?lang=en)
+- [Toloka homepage.](https://toloka.ai/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
+- [Toloka requester's guide.](https://toloka.ai/docs/guide/index.html?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
+- We recommend that you first get acquainted with Toloka through the web interface and implement [one of the tutorials.](https://toloka.ai/docs/guide/concepts/usecases.html?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
+- [Toloka API documentation.](https://toloka.ai/docs/api/concepts/about.html?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
 - [Toloka-kit usage examples.](https://github.com/Toloka/toloka-kit/tree/main/examples#toloka-kit-usage-examples)
 
 Questions and bug reports
 --------------
 * For reporting bugs please use the [Toloka/bugreport](https://github.com/Toloka/toloka-kit/issues) page.
-* Join our English-speaking [slack community](https://toloka.ai/community) for both tech and abstract questions.
+* Join our English-speaking [slack community](https://toloka.ai/community?utm_source=github&utm_medium=site&utm_campaign=tolokakit) for both tech and abstract questions.
 
 
 Contributing

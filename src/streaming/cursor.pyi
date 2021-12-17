@@ -20,7 +20,7 @@ import toloka.util.async_utils
 import typing
 
 
-class ResponseObjectType():
+class ResponseObjectType(typing.Protocol):
     def __init__(
         self,
         *args,

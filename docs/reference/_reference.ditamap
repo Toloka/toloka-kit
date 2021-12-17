@@ -208,6 +208,7 @@
             <topicref format="markdown" href="toloka.client.analytics_request.UniqueWorkersCountPoolAnalytics.md"/>
         </topichead>
         <topichead navtitle="app">
+            <topicref format="markdown" href="toloka.client.app._AppError.md" toc="no"/>
             <topicref format="markdown" href="toloka.client.app.App.md"/>
             <topicref format="markdown" href="toloka.client.app.AppBatch.md"/>
             <topicref format="markdown" href="toloka.client.app.AppBatch.Status.md" navtitle="AppBatch.Status" locktitle="yes" toc="no"/>
