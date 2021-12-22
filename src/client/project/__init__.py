@@ -149,8 +149,21 @@ class Project(BaseTolokaObject):
             description_template: Brief description of the task. Users will see it in the task preview mode.
         """
 
+        @unique
+        class MapProvider(ExtendableStrEnum):
+            """Map provider for assignments_issuing_view_config:
+
+            Attributes:
+                YANDEX: Use Yandex.Maps as a map provider
+                GOOGLE: Use Google Maps as a map provider
+            """
+
+            YANDEX = 'YANDEX'
+            GOOGLE = 'GOOGLE'
+
         title_template: str
         description_template: str
+        map_provider: Optional[MapProvider] = None
 
     QualityControl = QualityControl
 

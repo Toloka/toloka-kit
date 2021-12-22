@@ -6,7 +6,8 @@ AssignmentsIssuingViewConfig(
     self,
     *,
     title_template: Optional[str] = None,
-    description_template: Optional[str] = None
+    description_template: Optional[str] = None,
+    map_provider: Optional[MapProvider] = None
 )
 ```
 
