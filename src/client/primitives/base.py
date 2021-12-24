@@ -73,9 +73,7 @@ def convert_type_recursively(cur_type, type_converter):
             return type_converter(cur_type)
 
         new_args = tuple(convert_type_recursively(arg, type_converter=type_converter) for arg in cur_type.__args__)
-        # Python3.6 distinguish between generic types initialized with singleton tuple of type and type itself in some
-        # cases (i.e. List[Union[int, str]] != List[tuple(Union[int, str]])).
-        return origin[new_args] if len(new_args) > 1 else origin[new_args[0]]
+        return origin[new_args]
 
     return type_converter(cur_type)
 

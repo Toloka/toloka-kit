@@ -1,13 +1,10 @@
 import pytest
 import requests
-import sys
 from urllib3.util import Retry
 from toloka.client import TolokaClient
 
 
-@pytest.mark.skipif(sys.version_info < (3, 7), reason='aiohttp requires python3.7 or higher')
 def test_socket_timeout_is_retried(timeout_server_url, fake_requester, retries_before_response):
-
     toloka_client = TolokaClient(
         'fake-token',
         url=timeout_server_url,
@@ -19,9 +16,7 @@ def test_socket_timeout_is_retried(timeout_server_url, fake_requester, retries_b
     assert toloka_client.get_requester() == fake_requester
 
 
-@pytest.mark.skipif(sys.version_info < (3, 7), reason='aiohttp requires python3.7 or higher')
 def test_socket_connection_error_when_not_retried_enough(timeout_server_url, retries_before_response):
-
     toloka_client = TolokaClient(
         'fake-token',
         url=timeout_server_url,
@@ -37,7 +32,6 @@ def test_socket_connection_error_when_not_retried_enough(timeout_server_url, ret
     assert retries_left == 0
 
 
-@pytest.mark.skipif(sys.version_info < (3, 7), reason='aiohttp requires python3.7 or higher')
 def test_retries_off(connection_error_server_url, retries_before_response):
     toloka_client = TolokaClient(
         'fake-token',
@@ -53,7 +47,6 @@ def test_retries_off(connection_error_server_url, retries_before_response):
     assert retries_left == retries_before_response - 1
 
 
-@pytest.mark.skipif(sys.version_info < (3, 7), reason='aiohttp requires python3.7 or higher')
 def test_retries_from_int(connection_error_server_url, retries_before_response):
     toloka_client = TolokaClient(
         'fake-token',
@@ -69,7 +62,6 @@ def test_retries_from_int(connection_error_server_url, retries_before_response):
     assert retries_left == retries_before_response - 3
 
 
-@pytest.mark.skipif(sys.version_info < (3, 7), reason='aiohttp requires python3.7 or higher')
 def test_retries_from_class(connection_error_server_url, retries_before_response):
     toloka_client = TolokaClient(
         'fake-token',
