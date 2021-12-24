@@ -9,6 +9,7 @@ from typing import Any, Callable, Dict, List, Tuple
 
 from .metrics import BaseMetric
 from ..util.async_utils import ComplexException, get_task_traceback
+from ..util._managing_headers import async_add_headers
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +48,7 @@ class MetricCollector:
         >>> asyncio.run(collector.run())
     """
 
-    metrics : List[BaseMetric]
+    metrics: List[BaseMetric]
     _callback: Callable[[NamedMetrics], None]
 
     def __init__(self, metrics: List[BaseMetric], callback: Callable[[NamedMetrics], None]):
@@ -69,6 +70,7 @@ class MetricCollector:
         task.new_coro = coro
         return task
 
+    @async_add_headers('metrics')
     async def run(self):
         """Starts collecting metrics. And never stops."""
         tasks = [MetricCollector.create_async_tasks(m.get_lines) for m in self.metrics]

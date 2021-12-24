@@ -27,6 +27,7 @@ from ..client import (
     Requester,
     TolokaClient,
 )
+from ..util._managing_headers import async_add_headers
 from ..util.async_utils import Cooldown
 from ..streaming import cursor
 
@@ -76,6 +77,7 @@ class BaseMetric:
         assert self.toloka_client is not None
         return AsyncTolokaClient.from_sync_client(self.toloka_client)
 
+    @async_add_headers('metrics')
     async def get_lines(self) -> Dict[str, List[Tuple[Any, Any]]]:
         """Gather and return metrics
 
@@ -144,7 +146,7 @@ class Balance(BaseMetric):
         }
     """
 
-    balance_name : Optional[str] = None
+    balance_name: Optional[str] = None
 
     def __attrs_post_init__(self):
         if self.balance_name is None:
@@ -182,10 +184,10 @@ class NewUserBonuses(BaseMetric):
             'bonus_money': [(datetime.datetime(2021, 11, 18, 8, 29, 9, 734377), Decimal('0'))]
         }
     """
-    _count_name : Optional[str] = None
-    _money_name : Optional[str] = None
+    _count_name: Optional[str] = None
+    _money_name: Optional[str] = None
 
-    _join_events : bool = False
+    _join_events: bool = False
 
     def __attrs_post_init__(self):
         metric_names = self.get_line_names()
@@ -266,11 +268,11 @@ class NewUserSkills(BaseMetric):
             'values':  [(datetime.datetime(2021, 11, 18, 8, 31, 54, 11000), Decimal('50.000000000000'))],
         }
     """
-    _skill_id : str = attr.ib(kw_only=False)
-    _count_name : Optional[str] = None
-    _value_name : Optional[str] = None
+    _skill_id: str = attr.ib(kw_only=False)
+    _count_name: Optional[str] = None
+    _value_name: Optional[str] = None
 
-    _join_events : bool = False
+    _join_events: bool = False
 
     def __attrs_post_init__(self):
         metric_names = self.get_line_names()
@@ -360,10 +362,10 @@ class NewMessageThreads(BaseMetric):
             'checking_proj': [(datetime.datetime(2021, 11, 19, 12, 42, 50, 554830), 1)],
         }
     """
-    _count_name : Optional[str] = None
-    _projects_name : Dict[str, str] = {}  # {project_id: line_name}
-    _pools_name : Dict[str, str] = {}  # {pool_id: line_name}
-    _join_events : bool = False
+    _count_name: Optional[str] = None
+    _projects_name: Dict[str, str] = {}  # {project_id: line_name}
+    _pools_name: Dict[str, str] = {}  # {pool_id: line_name}
+    _join_events: bool = False
 
     def __attrs_post_init__(self):
         metric_names = self.get_line_names()
