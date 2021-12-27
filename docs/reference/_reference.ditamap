@@ -507,6 +507,7 @@
             <topicref format="markdown" href="toloka.client.project.Project.add_requester_translation.md" navtitle="Project.add_requester_translation" locktitle="yes" toc="no"/>
             <topicref format="markdown" href="toloka.client.project.Project.AssignmentsIssuingType.md" navtitle="Project.AssignmentsIssuingType" locktitle="yes" toc="no"/>
             <topicref format="markdown" href="toloka.client.project.Project.AssignmentsIssuingViewConfig.md" navtitle="Project.AssignmentsIssuingViewConfig" locktitle="yes" toc="no"/>
+            <topicref format="markdown" href="toloka.client.project.Project.AssignmentsIssuingViewConfig.MapProvider.md" navtitle="Project.AssignmentsIssuingViewConfig.MapProvider" locktitle="yes" toc="no"/>
             <topicref format="markdown" href="toloka.client.project.Project.ProjectStatus.md" navtitle="Project.ProjectStatus" locktitle="yes" toc="no"/>
             <topicref format="markdown" href="toloka.client.project.Project.set_default_language.md" navtitle="Project.set_default_language" locktitle="yes" toc="no"/>
             <topichead navtitle="localization">
@@ -1023,13 +1024,13 @@
     </topichead>
     <topichead navtitle="toloka.util" toc="no">
         <topicref format="markdown" href="toloka.util._managing_headers.add_headers.md" navtitle="add_headers" toc="no"/>
+        <topicref format="markdown" href="toloka.util._managing_headers.async_add_headers.md" navtitle="add_headers" toc="no"/>
         <topicref format="markdown" href="toloka.util._codegen.attribute.md" toc="no"/>
         <topicref format="markdown" href="toloka.util._codegen.fix_attrs_converters.md" toc="no"/>
         <topicref format="markdown" href="toloka.util._docstrings.inherit_docstrings.md" toc="no"/>
         <topicref format="markdown" href="toloka.util._extendable_enum.extend_enum.md" toc="no"/>
         <topicref format="markdown" href="toloka.util._extendable_enum.ExtendableStrEnum.md" toc="no"/>
         <topicref format="markdown" href="toloka.util._extendable_enum.ExtendableStrEnumMetaclass.md" toc="no"/>
-        <topicref format="markdown" href="toloka.util._managing_headers.add_headers.md" toc="no"/>
         <topicref format="markdown" href="toloka.util.async_utils.AsyncInterfaceWrapper.md"/>
         <topicref format="markdown" href="toloka.util.async_utils.AsyncMultithreadWrapper.md"/>
         <topicref format="markdown" href="toloka.util.async_utils.Cooldown.md"/>
