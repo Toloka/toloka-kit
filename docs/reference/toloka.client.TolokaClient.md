@@ -7,7 +7,7 @@ TolokaClient(
     token: str,
     environment: Union[Environment, str, None] = None,
     retries: Union[int, Retry] = 3,
-    timeout: Union[float, Tuple[float, float]] = ...,
+    timeout: Union[float, Tuple[float, float]] = 10.0,
     url: Optional[str] = None,
     retry_quotas: Union[List[str], str, None] = 'MIN',
     retryer_factory: Optional[Callable[[], Retry]] = None

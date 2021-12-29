@@ -212,7 +212,7 @@ class TolokaClient:
         token: str,
         environment: typing.Union[Environment, str, None] = None,
         retries: typing.Union[int, requests.packages.urllib3.util.retry.Retry] = 3,
-        timeout: typing.Union[float, typing.Tuple[float, float]] = ...,
+        timeout: typing.Union[float, typing.Tuple[float, float]] = 10.0,
         url: typing.Optional[str] = None,
         retry_quotas: typing.Union[typing.List[str], str, None] = 'MIN',
         retryer_factory: typing.Optional[typing.Callable[[], requests.packages.urllib3.util.retry.Retry]] = None
