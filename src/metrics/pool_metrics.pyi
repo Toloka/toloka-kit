@@ -106,6 +106,8 @@ class AssignmentEventsInPool(BasePoolMetric):
 class PoolCompletedPercentage(BasePoolMetric):
     """Track pool completion in percentage
 
+    You can't gather this metric from a pool with infinite task suites. For example, if you have infinite overlap on a pool.
+
     Args:
         pool_id: From which pool track metrics.
         percents_name: Metric name for pool completion percentage. Default 'completion_percentage'.

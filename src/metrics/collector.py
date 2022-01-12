@@ -3,12 +3,13 @@ __all__ = [
 ]
 
 import asyncio
+import datetime
 import logging
 
 from typing import Any, Callable, Dict, List, Tuple
 
 from .metrics import BaseMetric
-from ..util.async_utils import ComplexException, get_task_traceback
+from ..util.async_utils import get_task_traceback
 from ..util._managing_headers import async_add_headers
 
 logger = logging.getLogger(__name__)
@@ -79,10 +80,8 @@ class MetricCollector:
             done, pending = await asyncio.wait(tasks, timeout=1)
             # check errors
             errored = [task for task in done if task.exception() is not None]
-            if errored:
-                for task in errored:
-                    logger.error('Got error in metric:\n%s', get_task_traceback(task))
-                raise ComplexException([task.exception() for task in errored])
+            for task in errored:
+                logger.error('Got error in metric:\n%s', get_task_traceback(task))
 
             # rerun completed tasks
             tasks = pending | {MetricCollector.create_async_tasks(done_task.new_coro) for done_task in done}
@@ -90,10 +89,12 @@ class MetricCollector:
             # join metrics
             metrics_points = {}
             for done_task in done:
+                if done_task.exception() is not None:
+                    continue
                 for name, points in done_task.result().items():
                     if name in metrics_points:
                         logger.error(f'Duplicated metrics name detected: "{name}". Only one metric was returned.')
-                    metrics_points[name] = points
+                    metrics_points[name] = [(dt.replace(tzinfo=datetime.timezone.utc), val) for dt, val in points]
 
             if metrics_points:
                 self._callback(metrics_points)

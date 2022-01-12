@@ -16,6 +16,7 @@ from itertools import groupby
 from operator import attrgetter
 import sys
 
+
 if sys.version_info[:2] >= (3, 8):
     from functools import cached_property
 else:
@@ -154,6 +155,8 @@ class AssignmentEventsInPool(BasePoolMetric):
 @attr.s(auto_attribs=True)
 class PoolCompletedPercentage(BasePoolMetric):
     """Track pool completion in percentage
+
+    You can't gather this metric from a pool with infinite task suites. For example, if you have infinite overlap on a pool.
 
     Args:
         pool_id: From which pool track metrics.
