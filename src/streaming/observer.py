@@ -16,6 +16,7 @@ from ..client.primitives.base import autocast_to_enum
 from ..client.assignment import Assignment
 from ..client.pool import Pool
 from ..util.async_utils import AsyncInterfaceWrapper, ComplexException, ensure_async, get_task_traceback
+from ..util._managing_headers import async_add_headers
 from .cursor import AssignmentCursor, TolokaClientSyncOrAsyncType
 from .event import AssignmentEvent
 
@@ -38,6 +39,7 @@ class BaseObserver:
     async def should_resume(self) -> bool:
         return False
 
+    @async_add_headers('streaming')
     async def run(self, period: datetime.timedelta = datetime.timedelta(seconds=60)) -> None:
         """For standalone usage (out of a Pipeline)."""
         while True:
@@ -114,6 +116,7 @@ class BasePoolObserver(BaseObserver):
     def _get_unique_key(self) -> Tuple:
         return super()._get_unique_key() + (self.pool_id,)
 
+    @async_add_headers('streaming')
     async def should_resume(self) -> bool:
         logger.info('Check resume by pool status: %s', self.pool_id)
         pool = await self.toloka_client.get_pool(self.pool_id)
@@ -222,6 +225,7 @@ class PoolStatusObserver(BasePoolObserver):
             self.register_callback(callback, status)
         return callback
 
+    @async_add_headers('streaming')
     async def __call__(self) -> None:
         if not self._callbacks:
             return
@@ -268,6 +272,7 @@ class _CallbacksCursorConsumer:
     def add_callback(self, callback: CallbackForAssignmentEventsType) -> None:
         self.callbacks.append(ensure_async(callback))
 
+    @async_add_headers('streaming')
     async def __call__(self, pool_id: str) -> None:
         async with self.cursor.try_fetch_all() as fetched:
             if not fetched:
@@ -382,6 +387,7 @@ class AssignmentsObserver(BasePoolObserver):
 
     # Run section.
 
+    @async_add_headers('streaming')
     async def __call__(self) -> None:
         if not self._callbacks:
             return
