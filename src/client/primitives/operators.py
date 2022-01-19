@@ -67,11 +67,11 @@ def _eq_compatible_with_help(cls, value):
 
 class _InclusionConditionMetaclass(BaseTolokaObjectMetaclass):
 
-    def include(cls, value):
-        return cls(operator=InclusionOperator.IN, value=value)
+    def include(cls, *args, **kwargs):
+        return cls(InclusionOperator.IN, *args, **kwargs)
 
-    def exclude(cls, value):
-        return cls(operator=InclusionOperator.NOT_IN, value=value)
+    def exclude(cls, *args, **kwargs):
+        return cls(InclusionOperator.NOT_IN, *args, **kwargs)
 
     in_ = include
     not_in = exclude

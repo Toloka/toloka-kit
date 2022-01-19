@@ -31,8 +31,9 @@ __all__ = [
     'UserAgentVersionBugfix',
     'Rating'
 ]
+import inspect
 from enum import unique
-from typing import Any, List, Optional, Union
+from typing import Any, List, Optional, Union, ClassVar, Dict
 
 from .primitives.base import BaseTolokaObject
 from .primitives.operators import (
@@ -41,6 +42,7 @@ from .primitives.operators import (
     IdentityConditionMixin,
     ComparableConditionMixin,
     InclusionConditionMixin,
+    InclusionOperator,
 )
 from ..util._codegen import attribute
 from ..util._docstrings import inherit_docstrings
@@ -328,9 +330,69 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
 
     Attributes:
         value: Languages specified by the user in the profile (two-letter ISO code of the standard ISO 639-1 in upper case).
+        verified: If set to True only users who have passed language test will be selected. Currently only following
+            ISO codes are supported: DE, EN, FR, JA, PT, SV, RU, AR, ES.
     """
 
+    verified_languages_to_skills: ClassVar[Dict[str, str]] = {
+        'DE': '26377',
+        'EN': '26366',
+        'FR': '26711',
+        'JA': '26513',
+        'PT': '26714',
+        'SV': '29789',
+        'RU': '26296',
+        'AR': '30724',
+        'ES': '32346',
+    }
+
+    VERIFIED_LANGUAGE_SKILL_VALUE: ClassVar[int] = 100
+
     value: Union[str, List[str]] = attribute(required=True)
+
+    def __new__(cls, *args, **kwargs):
+        """Handle "verified" parameter
+
+        If class is instantiated with `verified=True` parameter then return
+        `FilterAnd([verified_skill_for_language_1, ..., verified_skill_for_language_n, language_1, ..., language_n])`
+        condition for API compatibility reasons.
+        """
+        bound_args = inspect.signature(cls.__init__).bind(None, *args, **kwargs).arguments
+        value = bound_args['value']
+        operator = bound_args['operator']
+
+        if bound_args.get('verified', False) and operator == InclusionOperator.IN:
+            skills_mapping = cls.verified_languages_to_skills
+            try:
+                conditions = [Languages(operator=operator, value=value)]
+                if isinstance(value, list):
+                    conditions.extend([Skill(skills_mapping[value]).eq(cls.VERIFIED_LANGUAGE_SKILL_VALUE) for value in value])
+                else:
+                    conditions.append(Skill(skills_mapping[value]).eq(cls.VERIFIED_LANGUAGE_SKILL_VALUE))
+
+                return FilterAnd(conditions)
+            except KeyError:
+                if not isinstance(value, str):
+                    unsupported_languages = set(value) - skills_mapping.keys()
+                else:
+                    unsupported_languages = [value]
+                raise ValueError(
+                    'Following languages are not supported as verified languages:\n' + '\n'.join(unsupported_languages)
+                )
+        else:
+            if kwargs.pop('verified', False):
+                raise ValueError('"Language not in" filter does not support verified=True argument')
+            return super().__new__(cls, *args, **kwargs)
+
+
+# add fake parameter "verified: bool = False" to Languages.__init__ signature. This parameter will be consumed in
+# Languages.__new__ while the actual __init__ is managed by attrs.
+languages_init_signature = inspect.signature(Languages.__init__)
+languages_init_signature_parameters = dict(languages_init_signature.parameters)
+languages_init_signature_parameters['verified'] = inspect.Parameter(
+    name='verified', kind=inspect.Parameter.POSITIONAL_OR_KEYWORD, default=False, annotation=bool,
+)
+Languages.__init__.__signature__ = languages_init_signature.replace(parameters=languages_init_signature_parameters.values())
 
 
 @inherit_docstrings
