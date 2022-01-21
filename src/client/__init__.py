@@ -2640,8 +2640,14 @@ class TolokaClient:
             >>>     UserBonus(
             >>>         user_id='1',
             >>>         amount=decimal.Decimal('0.50'),
-            >>>         public_title='Perfect job!',
-            >>>         public_message='You are the best performer!',
+            >>>         public_title={
+            >>>             'EN': 'Perfect job!',
+            >>>             'RU': 'Прекрасная работа!',
+            >>>         },
+            >>>         public_message={
+            >>>             'EN': 'You are the best performer!',
+            >>>             'RU': 'Молодец!',
+            >>>         },
             >>>         assignment_id='012345'
             >>>     )
             >>> )
@@ -2675,14 +2681,26 @@ class TolokaClient:
             >>>     UserBonus(
             >>>         user_id='1',
             >>>         amount=decimal.Decimal('0.50'),
-            >>>         public_title='Perfect job!',
-            >>>         public_message='You are the best performer!',
+            >>>         public_title={
+            >>>             'EN': 'Perfect job!',
+            >>>             'RU': 'Прекрасная работа!',
+            >>>         },
+            >>>         public_message={
+            >>>             'EN': 'You are the best performer!',
+            >>>             'RU': 'Молодец!',
+            >>>         },
             >>>         assignment_id='1'),
             >>>     UserBonus(
             >>>         user_id='2',
             >>>         amount=decimal.Decimal('1.0'),
-            >>>         public_title='Excellent work!',
-            >>>         public_message='You completed all the tasks!',
+            >>>         public_title={
+            >>>             'EN': 'Excellent work!',
+            >>>             'RU': 'Отличная работа!',
+            >>>         },
+            >>>         public_message={
+            >>>             'EN': 'You have completed all tasks!',
+            >>>             'RU': 'Сделаны все задания!',
+            >>>         },
             >>>         assignment_id='2')
             >>> ]
             >>> toloka_client.create_user_bonuses(new_bonuses)
@@ -2714,14 +2732,26 @@ class TolokaClient:
             >>>     UserBonus(
             >>>         user_id='1',
             >>>         amount=decimal.Decimal('0.50'),
-            >>>         public_title='Perfect job!',
-            >>>         public_message='You are the best performer!',
+            >>>         public_title={
+            >>>             'EN': 'Perfect job!',
+            >>>             'RU': 'Прекрасная работа!',
+            >>>         },
+            >>>         public_message={
+            >>>             'EN': 'You are the best performer!',
+            >>>             'RU': 'Молодец!',
+            >>>         },
             >>>         assignment_id='1'),
             >>>     UserBonus(
             >>>         user_id='2',
             >>>         amount=decimal.Decimal('1.0'),
-            >>>         public_title='Excellent work!',
-            >>>         public_message='You completed all the tasks!',
+            >>>         public_title={
+            >>>             'EN': 'Excellent work!',
+            >>>             'RU': 'Превосходная работа!',
+            >>>         },
+            >>>         public_message={
+            >>>             'EN': 'You have completed all tasks!',
+            >>>             'RU': 'Сделаны все задания!',
+            >>>         },
             >>>         assignment_id='2')
             >>> ]
             >>> create_bonuses = toloka_client.create_user_bonuses_async(new_bonuses)

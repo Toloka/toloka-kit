@@ -32,8 +32,14 @@ new_bonus = toloka_client.create_user_bonus(
     UserBonus(
         user_id='1',
         amount=decimal.Decimal('0.50'),
-        public_title='Perfect job!',
-        public_message='You are the best performer!',
+        public_title={
+            'EN': 'Perfect job!',
+            'RU': 'Прекрасная работа!',
+        },
+        public_message={
+            'EN': 'You are the best performer!',
+            'RU': 'Молодец!',
+        },
         assignment_id='012345'
     )
 )
