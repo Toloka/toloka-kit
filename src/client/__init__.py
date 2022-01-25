@@ -137,7 +137,7 @@ logger = logging.getLogger(__name__)
 
 
 class TolokaClient:
-    """Class that implements interaction with [Toloka API](https://yandex.com/dev/toloka/doc/concepts/about.html).
+    """Class that implements interaction with [Toloka API](https://toloka.ai/docs/api/concepts/about.html).
 
     Objects of other classes are created and modified only in memory of your computer.
     You can transfer information about these objects to Toloka only by calling one of the `TolokaClient` methods.
@@ -149,7 +149,7 @@ class TolokaClient:
     Call `TolokaClient.update_project` and pass the `Project` to apply your changes.
 
     Args:
-        token: Your OAuth token for Toloka. You can learn more about how to get it [here](https://yandex.com/dev/toloka/doc/concepts/access.html#access__token)
+        token: Your OAuth token for Toloka. You can learn more about how to get it [here](https://toloka.ai/docs/api/concepts/access.html#access__token)
         environment: There are two environments in Toloka:
             * `SANDBOX` – [Testing environment](https://sandbox.toloka.yandex.com) for Toloka requesters.
             You can test complex projects before starting them on real performers. Nobody will see your tasks, and it's free.

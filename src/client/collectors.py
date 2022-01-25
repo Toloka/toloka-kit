@@ -13,7 +13,7 @@ __all__ = [
     'UsersAssessment'
 ]
 """
-https://yandex.ru/dev/toloka/doc/concepts/quality_control-docpage/
+https://toloka.ai/ru/docs/guide/concepts/control.html?lang=en
 """
 
 from enum import unique

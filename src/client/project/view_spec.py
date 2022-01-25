@@ -64,7 +64,7 @@ class ViewSpec(BaseTolokaObject, spec_enum='Type', spec_field='type'):
 
 class ClassicViewSpec(ViewSpec, spec_value=ViewSpec.CLASSIC):
     """A classic view specification defined with HTML, CSS and JS.
-    For more information, see [Toloka Requester's guide](https://yandex.ru/support/toloka-requester/?lang=en)
+    For more information, see [Toloka Requester's guide](https://toloka.ai/ru/docs/guide/?lang=en)
 
     Attributes:
         script: JavaScript interface for the task.

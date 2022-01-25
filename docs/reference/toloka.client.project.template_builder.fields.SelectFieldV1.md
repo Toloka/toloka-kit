@@ -5,7 +5,7 @@
 SelectFieldV1(
     self,
     data: Optional[BaseComponent] = None,
-    options: Optional[Union[BaseComponent, Option]] = None,
+    options: Optional[Union[BaseComponent, List[Union[BaseComponent, Option]]]] = None,
     *,
     placeholder: Optional[Any] = None,
     hint: Optional[Any] = None,
@@ -30,7 +30,7 @@ To allow selecting multiple options, use the field.checkbox-group component.
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
 `data`|**Optional\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md)\]**|<p>Data with values that will be processed or changed.</p>
-`options`|**Optional\[Union\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md), [Option](toloka.client.project.template_builder.fields.SelectFieldV1.Option.md)\]\]**|<p>Options to choose from.</p>
+`options`|**Optional\[Union\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md), List\[Union\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md), [Option](toloka.client.project.template_builder.fields.SelectFieldV1.Option.md)\]\]\]\]**|<p>Options to choose from.</p>
 `placeholder`|**Optional\[Any\]**|<p>The text that will be displayed if none of the options is selected.</p>
 `hint`|**Optional\[Any\]**|<p>Hint text.</p>
 `label`|**Optional\[Any\]**|<p>Label above the component.</p>

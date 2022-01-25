@@ -4,7 +4,7 @@ from toloka.client.pool import Pool
 from toloka.client.task import Task
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='package')
 def pool(client, empty_project):
     new_pool = Pool(
         project_id=empty_project.id,
@@ -20,7 +20,7 @@ def pool(client, empty_project):
     assert client.get_pool(new_pool.id).status == Pool.Status.ARCHIVED
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='package')
 def task(client, pool):
     new_task = Task(input_values={'url': 'https://toloka.yandex.com'}, pool_id=pool.id, overlap=1)
     new_task = client.create_task(new_task)

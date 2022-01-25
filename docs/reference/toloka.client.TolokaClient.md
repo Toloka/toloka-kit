@@ -14,7 +14,7 @@ TolokaClient(
 )
 ```
 
-Class that implements interaction with [Toloka API](https://yandex.com/dev/toloka/doc/concepts/about.html).
+Class that implements interaction with [Toloka API](https://toloka.ai/docs/api/concepts/about.html).
 
 
 Objects of other classes are created and modified only in memory of your computer.
@@ -30,7 +30,7 @@ Call `TolokaClient.update_project` and pass the `Project` to apply your changes.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`token`|**str**|<p>Your OAuth token for Toloka. You can learn more about how to get it [here](https://yandex.com/dev/toloka/doc/concepts/access.html#access__token)</p>
+`token`|**str**|<p>Your OAuth token for Toloka. You can learn more about how to get it [here](https://toloka.ai/docs/api/concepts/access.html#access__token)</p>
 `environment`|**Union\[[Environment](toloka.client.TolokaClient.Environment.md), str, None\]**|<p>There are two environments in Toloka:<ul><li>`SANDBOX` – [Testing environment](https://sandbox.toloka.yandex.com) for Toloka requesters. You can test complex projects before starting them on real performers. Nobody will see your tasks, and it&#x27;s free.</li><li>`PRODUCTION` – [Production environment](https://toloka.yandex.com) for Toloka requesters. You spend money there and get the results. You need to register in each environment separately. OAuth tokens are generated in each environment separately too. </li></ul></p><p>Default value: `None`.</p>
 `retries`|**Union\[int, Retry\]**|<p>Retry policy for failed API requests. Possible values:<ul><li>`int` – The number of retries for all requests. In this case, the retry policy is created automatically.</li><li>`Retry` object – Deprecated type. Use `retryer_factory` parameter instead. </li></ul></p><p>Default value: `3`.</p>
 `timeout`|**Union\[float, Tuple\[float, float\]\]**|<p>Number of seconds that [Requests library](https://docs.python-requests.org/en/master) will wait for your client to establish connection to a remote machine. Possible values:<ul><li>`float` – Single value for both connect and read timeouts.</li><li>`Tuple[float, float]` – Tuple sets the values for connect and read timeouts separately.</li><li>`None` – Set the timeout to `None` only if you are willing to wait the [Response](https://docs.python-requests.org/en/master/api/#requests.Response) for unlimited number of seconds. </li></ul></p><p>Default value: `10.0`.</p>

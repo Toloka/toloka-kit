@@ -863,7 +863,7 @@ class SelectFieldV1(BaseFieldV1):
     def __init__(
         self,
         data: typing.Optional[toloka.client.project.template_builder.base.BaseComponent] = None,
-        options: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, Option]] = None,
+        options: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, typing.List[typing.Union[toloka.client.project.template_builder.base.BaseComponent, Option]]]] = None,
         *,
         placeholder: typing.Optional[typing.Any] = None,
         hint: typing.Optional[typing.Any] = None,
@@ -881,7 +881,7 @@ class SelectFieldV1(BaseFieldV1):
     label: typing.Optional[typing.Any]
     validation: typing.Optional[toloka.client.project.template_builder.base.BaseComponent]
     version: typing.Optional[str]
-    options: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, Option]]
+    options: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, typing.List[typing.Union[toloka.client.project.template_builder.base.BaseComponent, Option]]]]
     placeholder: typing.Optional[typing.Any]
 
 

@@ -1,10 +1,10 @@
 import os
-import pytest
 
+import pytest
 from toloka.client import TolokaClient
 from toloka.client.project import Project
-from toloka.client.project.task_spec import TaskSpec
 from toloka.client.project.field_spec import UrlSpec, StringSpec
+from toloka.client.project.task_spec import TaskSpec
 from toloka.client.project.view_spec import ClassicViewSpec
 
 
@@ -29,7 +29,7 @@ def client(token):
     return client
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='package')
 def empty_project(client, dummy_task_spec):
     test_project = Project(
         public_name='Test project',
