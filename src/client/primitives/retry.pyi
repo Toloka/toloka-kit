@@ -3,12 +3,12 @@ __all__ = [
     'PreloadingHTTPAdapter',
 ]
 import requests.adapters
-import requests.packages.urllib3.response
-import requests.packages.urllib3.util.retry
 import typing
+import urllib3.response
+import urllib3.util.retry
 
 
-class TolokaRetry(requests.packages.urllib3.util.retry.Retry):
+class TolokaRetry(urllib3.util.retry.Retry):
     """Retry toloka quotas. By default only minutes quotas.
 
     Args:
@@ -32,13 +32,13 @@ class TolokaRetry(requests.packages.urllib3.util.retry.Retry):
 
     def new(self, **kwargs): ...
 
-    def get_retry_after(self, response: requests.packages.urllib3.response.HTTPResponse) -> typing.Optional[float]: ...
+    def get_retry_after(self, response: urllib3.response.HTTPResponse) -> typing.Optional[float]: ...
 
     def increment(
         self,
         *args,
         **kwargs
-    ) -> requests.packages.urllib3.util.retry.Retry: ...
+    ) -> urllib3.util.retry.Retry: ...
 
     _retry_quotas: typing.Union[typing.List[str], str, None]
 

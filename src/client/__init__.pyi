@@ -56,7 +56,6 @@ import datetime
 import decimal
 import enum
 import pandas
-import requests.packages.urllib3.util.retry
 import toloka.client.aggregation
 import toloka.client.analytics_request
 import toloka.client.app
@@ -82,6 +81,7 @@ import toloka.client.user_restriction
 import toloka.client.user_skill
 import toloka.client.webhook_subscription
 import typing
+import urllib3.util.retry
 import uuid
 
 from toloka.client import (
@@ -211,11 +211,11 @@ class TolokaClient:
         self,
         token: str,
         environment: typing.Union[Environment, str, None] = None,
-        retries: typing.Union[int, requests.packages.urllib3.util.retry.Retry] = 3,
+        retries: typing.Union[int, urllib3.util.retry.Retry] = 3,
         timeout: typing.Union[float, typing.Tuple[float, float]] = 10.0,
         url: typing.Optional[str] = None,
         retry_quotas: typing.Union[typing.List[str], str, None] = 'MIN',
-        retryer_factory: typing.Optional[typing.Callable[[], requests.packages.urllib3.util.retry.Retry]] = None
+        retryer_factory: typing.Optional[typing.Callable[[], urllib3.util.retry.Retry]] = None
     ): ...
 
     @typing.overload
@@ -5334,4 +5334,4 @@ class TolokaClient:
     token: str
     default_timeout: typing.Union[float, typing.Tuple[float, float]]
     url: typing.Optional[str]
-    retryer_factory: typing.Optional[typing.Callable[[], requests.packages.urllib3.util.retry.Retry]]
+    retryer_factory: typing.Optional[typing.Callable[[], urllib3.util.retry.Retry]]
