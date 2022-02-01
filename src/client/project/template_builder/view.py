@@ -423,3 +423,4 @@ class VideoViewV1(BaseViewV1, spec_value=ComponentType.VIEW_VIDEO):
     full_height: base_component_or(bool) = attribute(origin='fullHeight', kw_only=True)
     max_width: base_component_or(float) = attribute(origin='maxWidth', kw_only=True)
     min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)

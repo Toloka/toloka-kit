@@ -9,6 +9,7 @@ VideoViewV1(
     full_height: Optional[Union[BaseComponent, bool]] = None,
     max_width: Optional[Union[BaseComponent, float]] = None,
     min_width: Optional[Union[BaseComponent, float]] = None,
+    ratio: Optional[Union[BaseComponent, List[Union[BaseComponent, float]]]] = None,
     hint: Optional[Any] = None,
     label: Optional[Any] = None,
     validation: Optional[BaseComponent] = None,
@@ -33,7 +34,7 @@ cropped.
 `full_height`|**Optional\[Union\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md), bool\]\]**|<p>If true, the element takes up all the vertical free space. The element is set to a minimum height of 400 pixels.</p>
 `max_width`|**Optional\[Union\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md), float\]\]**|<p>Maximum width of the element in pixels, must be greater than min_width.</p>
 `min_width`|**Optional\[Union\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md), float\]\]**|<p>Minimum width of the element in pixels. Takes priority over max_width.</p>
+`ratio`|**Optional\[Union\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md), List\[Union\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md), float\]\]\]\]**|<p>The aspect ratio of the video block. An array of two numbers: the first sets the width of the block and the second sets the height.</p>
 `hint`|**Optional\[Any\]**|<p>Hint text.</p>
 `label`|**Optional\[Any\]**|<p>Label above the component.</p>
 `validation`|**Optional\[[BaseComponent](toloka.client.project.template_builder.base.BaseComponent.md)\]**|<p>Validation based on condition.</p>
-`ratio`|**-**|<p>The aspect ratio of the video block. An array of two numbers: the first sets the width of the block and the second sets the height.</p>

@@ -15,7 +15,7 @@ ReplaceHelperV1(
 Allows you to replace some parts of the string with others.
 
 
-This helper function returns a string in which all occurrences of 'findindataare replaced withreplace`.
+This helper function returns a string in which all occurrences of `find` in `data` are replaced with `replace`.
 Because the helper.replace helper returns a string, it can be used in properties that accept string values.
 
 ## Parameters Description

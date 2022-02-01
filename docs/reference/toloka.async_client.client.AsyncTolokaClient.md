@@ -9,7 +9,7 @@ AsyncTolokaClient(
 )
 ```
 
-Class that implements interaction with [Toloka API], in an asynchronous way.
+Class that implements interaction with [Toloka API](https://toloka.ai/docs/api/concepts/about.html), in an asynchronous way.
 
 
 All methods are wrapped as async. So all methods calls must be awaited.

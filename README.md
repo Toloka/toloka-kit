@@ -27,7 +27,7 @@ Main advantages of Toloka:
 
 Requirements
 --------------
-- Python 3.6+
+- Python 3.7+
 - Register in [Toloka.ai](https://toloka.ai/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) as requester. Registration process described [here.](https://toloka.ai/docs/guide/concepts/access.html?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
 - [Topping up your account.](https://toloka.ai/docs/guide/concepts/refill.html?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
 - Getting an OAuth. Learn more in [help](https://toloka.ai/docs/api/concepts/access.html?utm_source=github&utm_medium=site&utm_campaign=tolokakit) and in the image below.

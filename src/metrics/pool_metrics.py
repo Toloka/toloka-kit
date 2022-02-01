@@ -16,6 +16,7 @@ from itertools import groupby
 from operator import attrgetter
 import sys
 
+
 if sys.version_info[:2] >= (3, 8):
     from functools import cached_property
 else:
@@ -31,10 +32,12 @@ from ..client import analytics_request
 from ..client.operations import Operation
 from ..client._converter import structure
 from ..streaming import cursor
+from ..util._managing_headers import add_headers
 from .metrics import BaseMetric
 
 
 @lru_cache(maxsize=128)
+@add_headers('metrics')
 def get_pool(pool_id: str, toloka_client: TolokaClient) -> Pool:
     return toloka_client.get_pool(pool_id)
 
@@ -42,7 +45,7 @@ def get_pool(pool_id: str, toloka_client: TolokaClient) -> Pool:
 @attr.s(auto_attribs=True)
 class BasePoolMetric(BaseMetric):
     """Base class for all pool metrics"""
-    pool_id : str = attr.ib(kw_only=False)
+    pool_id: str = attr.ib(kw_only=False)
 
     @cached_property
     def beautiful_name(self) -> str:
@@ -85,14 +88,14 @@ class AssignmentEventsInPool(BasePoolMetric):
             'rejected_events_in_pool': [],
         }
     """
-    _created_name : Optional[str] = None
-    _submitted_name : Optional[str] = None
-    _accepted_name : Optional[str] = None
-    _rejected_name : Optional[str] = None
-    _skipped_name : Optional[str] = None
-    _expired_name : Optional[str] = None
+    _created_name: Optional[str] = None
+    _submitted_name: Optional[str] = None
+    _accepted_name: Optional[str] = None
+    _rejected_name: Optional[str] = None
+    _skipped_name: Optional[str] = None
+    _expired_name: Optional[str] = None
 
-    _join_events : bool = False
+    _join_events: bool = False
 
     _status_dict = {
         '_created_name': 'CREATED',
@@ -153,6 +156,8 @@ class AssignmentEventsInPool(BasePoolMetric):
 class PoolCompletedPercentage(BasePoolMetric):
     """Track pool completion in percentage
 
+    You can't gather this metric from a pool with infinite task suites. For example, if you have infinite overlap on a pool.
+
     Args:
         pool_id: From which pool track metrics.
         percents_name: Metric name for pool completion percentage. Default 'completion_percentage'.
@@ -169,7 +174,7 @@ class PoolCompletedPercentage(BasePoolMetric):
             'completion_percentage': [(datetime.datetime(2021, 8, 11, 15, 13, 4, 31000), 55)],
         }
     """
-    _percents_name : Optional[str] = None
+    _percents_name: Optional[str] = None
 
     def __attrs_post_init__(self):
         if self._percents_name is None:
@@ -221,10 +226,10 @@ class AssignmentsInPool(BasePoolMetric):
             'accepted_assignments_in_pool': [(datetime.datetime(2021, 8, 12, 10, 4, 45, 951156), 75)],
         }
     """
-    _submitted_name : Optional[str] = None
-    _accepted_name : Optional[str] = None
-    _rejected_name : Optional[str] = None
-    _skipped_name : Optional[str] = None
+    _submitted_name: Optional[str] = None
+    _accepted_name: Optional[str] = None
+    _rejected_name: Optional[str] = None
+    _skipped_name: Optional[str] = None
 
     _analytics_dict = {
         '_submitted_name': analytics_request.SubmitedAssignmentsCountPoolAnalytics,
@@ -295,7 +300,7 @@ class TasksInPool(BasePoolMetric):
             'tasks_count': [(datetime.datetime(2021, 11, 18, 9, 36, 34, 163000), 40)],
         }
     """
-    _tasks_name : Optional[str] = None
+    _tasks_name: Optional[str] = None
 
     def __attrs_post_init__(self):
         if self._tasks_name is None:
@@ -338,7 +343,7 @@ class SpentBudgetOnPool(BasePoolMetric):
             'spent_money': [(datetime.datetime(2021, 11, 18, 9, 36, 34, 163000), Decimal('0.3'))],
         }
     """
-    _money_name : Optional[str] = None
+    _money_name: Optional[str] = None
 
     def __attrs_post_init__(self):
         if self._money_name is None:
@@ -382,7 +387,7 @@ class WorkersByFilterOnPool(BasePoolMetric):
             'workers_count': [(datetime.datetime(2021, 11, 18, 9, 36, 34, 163000), 2697)],
         }
     """
-    _workers_name : Optional[str] = None
+    _workers_name: Optional[str] = None
     _interval_hours: int = attr.ib(default=1)
 
     def __attrs_post_init__(self):
@@ -454,10 +459,10 @@ class BansInPool(BasePoolMetric):
             'fast': [(datetime.datetime(2021, 11, 18, 13, 32, 50, 453000), 1)],
         }
     """
-    _count_name : Optional[str] = None
-    _filter_by_comment : Optional[Dict[str, str]] = None  # {'comment': 'line_name'}
+    _count_name: Optional[str] = None
+    _filter_by_comment: Optional[Dict[str, str]] = None  # {'comment': 'line_name'}
 
-    _join_events : bool = False
+    _join_events: bool = False
 
     def __attrs_post_init__(self):
         metric_names = self.get_line_names()

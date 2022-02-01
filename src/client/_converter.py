@@ -3,16 +3,11 @@ import datetime
 from decimal import Decimal
 import typing
 import re
-import sys
 import uuid
 from typing import List, Union
 
 import cattr
 from ..util._extendable_enum import ExtendableStrEnum
-
-if sys.version_info[:2] < (3, 7):
-    from backports.datetime_fromisoformat import MonkeyPatch
-    MonkeyPatch.patch_fromisoformat()
 
 
 converter = cattr.Converter()

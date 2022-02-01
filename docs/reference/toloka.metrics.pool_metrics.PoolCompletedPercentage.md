@@ -14,6 +14,9 @@ PoolCompletedPercentage(
 
 Track pool completion in percentage
 
+
+You can't gather this metric from a pool with infinite task suites. For example, if you have infinite overlap on a pool.
+
 ## Parameters Description
 
 | Parameters | Type | Description |

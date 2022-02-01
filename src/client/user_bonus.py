@@ -5,7 +5,7 @@ __all__ = [
 from attr.validators import optional, instance_of
 import datetime
 from decimal import Decimal
-from typing import Any
+from typing import Dict
 
 from .primitives.base import BaseTolokaObject
 from .primitives.parameter import Parameters
@@ -22,9 +22,11 @@ class UserBonus(BaseTolokaObject):
         amount: The bonus amount in dollars. Can be from 0.01 to 100 dollars per user per time.
         private_comment: Comments that are only visible to the requester.
         public_title: Message header for the user. You can provide a title in several languages
-            (the message will come in the user's language).
+            (the message will come in the user's language). Format {'language': 'title', ... }.
+            The language can be RU/EN/TR/ID/FR.
         public_message: Message text for the user. You can provide text in several languages
-            (the message will come in the user's language).
+            (the message will come in the user's language). Format {'language': 'message', ... }.
+            The language can be RU/EN/TR/ID/FR.
         without_message: Do not send a bonus message to the user. To award a bonus without a message, specify null
             for public_title and public_message and True for without_message.
         assignment_id: The answer to the task for which this bonus was issued.
@@ -38,27 +40,30 @@ class UserBonus(BaseTolokaObject):
         >>>     UserBonus(
         >>>         user_id='1',
         >>>         amount='0.50',
-        >>>         public_title='Perfect job!',
-        >>>         public_message='You are the best performer EVER!'
+        >>>         public_title={
+        >>>             'EN': 'Perfect job!',
+        >>>         },
+        >>>         public_message={
+        >>>             'EN': 'You are the best performer EVER',
+        >>>         },
         >>>         assignment_id='012345'
         >>>     )
         >>> )
-        ...
 
-        Hoiw to create bonus with message in several languages.
+        How to create bonus with message in several languages.
 
         >>> new_bonus = toloka_client.create_user_bonus(
         >>>     UserBonus(
         >>>         user_id='1',
         >>>         amount='0.10',
-        >>>         public_title= {
+        >>>         public_title={
         >>>             'EN': 'Good Job!',
         >>>             'RU': 'Молодец!',
         >>>         },
-        >>>         public_message: {
+        >>>         public_message={
         >>>             'EN': 'Ten tasks completed',
         >>>             'RU': 'Выполнено 10 заданий',
-        >>>         },
+        >>>         }
         >>>     )
         >>> )
         ...
@@ -68,8 +73,8 @@ class UserBonus(BaseTolokaObject):
     amount: Decimal = attribute(validator=optional(instance_of(Decimal)))
 
     private_comment: str
-    public_title: Any
-    public_message: Any
+    public_title: Dict[str, str]
+    public_message: Dict[str, str]
     without_message: bool
     assignment_id: str
 

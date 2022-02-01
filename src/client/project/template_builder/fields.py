@@ -475,7 +475,7 @@ class SelectFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_SELECT):
         label: base_component_or(Any)
         value: base_component_or(Any)
 
-    options: base_component_or(Option)
+    options: base_component_or(List[base_component_or(Option)], 'ListBaseComponentOrOption')
     placeholder: base_component_or(Any) = attribute(kw_only=True)
 
 

@@ -144,7 +144,7 @@ class Object2EntriesHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_OBJEC
 class ReplaceHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_REPLACE):
     """Allows you to replace some parts of the string with others.
 
-    This helper function returns a string in which all occurrences of 'findindataare replaced withreplace`.
+    This helper function returns a string in which all occurrences of `find` in `data` are replaced with `replace`.
     Because the helper.replace helper returns a string, it can be used in properties that accept string values.
     Attributes:
         data: Data to perform the replacement on.
@@ -290,11 +290,11 @@ class YandexDiskProxyHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_YAND
     """You can use this component to download files from Yandex.Disk.
 
     To use YandexDiskProxyHelper, connect Yandex.Disk to your Toloka account and add the proxy by following
-    the [instructions](https://yandex.com/support/toloka-requester/concepts/prepare-data.html?lang=en)
+    the [instructions](https://toloka.ai/docs/guide/concepts/prepare-data.html?lang=en)
     Select the component that you want to add, such as view.image for an image or view.audio for an audio file.
     In the url property of this component, use YandexDiskProxyHelper.
     Attributes:
-        path: Path to the file in the /&lt;Proxy name&gt;/&lt;File name&gt;.&lt;type&gt; format
+        path: Path to the file in the <Proxy name>/<File name>.<type> format
     """
 
     path: base_component_or(str)

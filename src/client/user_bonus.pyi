@@ -19,9 +19,11 @@ class UserBonus(toloka.client.primitives.base.BaseTolokaObject):
         amount: The bonus amount in dollars. Can be from 0.01 to 100 dollars per user per time.
         private_comment: Comments that are only visible to the requester.
         public_title: Message header for the user. You can provide a title in several languages
-            (the message will come in the user's language).
+            (the message will come in the user's language). Format {'language': 'title', ... }.
+            The language can be RU/EN/TR/ID/FR.
         public_message: Message text for the user. You can provide text in several languages
-            (the message will come in the user's language).
+            (the message will come in the user's language). Format {'language': 'message', ... }.
+            The language can be RU/EN/TR/ID/FR.
         without_message: Do not send a bonus message to the user. To award a bonus without a message, specify null
             for public_title and public_message and True for without_message.
         assignment_id: The answer to the task for which this bonus was issued.
@@ -35,27 +37,30 @@ class UserBonus(toloka.client.primitives.base.BaseTolokaObject):
         >>>     UserBonus(
         >>>         user_id='1',
         >>>         amount='0.50',
-        >>>         public_title='Perfect job!',
-        >>>         public_message='You are the best performer EVER!'
+        >>>         public_title={
+        >>>             'EN': 'Perfect job!',
+        >>>         },
+        >>>         public_message={
+        >>>             'EN': 'You are the best performer EVER',
+        >>>         },
         >>>         assignment_id='012345'
         >>>     )
         >>> )
-        ...
 
-        Hoiw to create bonus with message in several languages.
+        How to create bonus with message in several languages.
 
         >>> new_bonus = toloka_client.create_user_bonus(
         >>>     UserBonus(
         >>>         user_id='1',
         >>>         amount='0.10',
-        >>>         public_title= {
+        >>>         public_title={
         >>>             'EN': 'Good Job!',
         >>>             'RU': 'Молодец!',
         >>>         },
-        >>>         public_message: {
+        >>>         public_message={
         >>>             'EN': 'Ten tasks completed',
         >>>             'RU': 'Выполнено 10 заданий',
-        >>>         },
+        >>>         }
         >>>     )
         >>> )
         ...
@@ -67,8 +72,8 @@ class UserBonus(toloka.client.primitives.base.BaseTolokaObject):
         user_id: typing.Optional[str] = None,
         amount: typing.Optional[decimal.Decimal] = None,
         private_comment: typing.Optional[str] = None,
-        public_title: typing.Optional[typing.Any] = None,
-        public_message: typing.Optional[typing.Any] = None,
+        public_title: typing.Optional[typing.Dict[str, str]] = None,
+        public_message: typing.Optional[typing.Dict[str, str]] = None,
         without_message: typing.Optional[bool] = None,
         assignment_id: typing.Optional[str] = None,
         id: typing.Optional[str] = None,
@@ -82,8 +87,8 @@ class UserBonus(toloka.client.primitives.base.BaseTolokaObject):
     user_id: typing.Optional[str]
     amount: typing.Optional[decimal.Decimal]
     private_comment: typing.Optional[str]
-    public_title: typing.Optional[typing.Any]
-    public_message: typing.Optional[typing.Any]
+    public_title: typing.Optional[typing.Dict[str, str]]
+    public_message: typing.Optional[typing.Dict[str, str]]
     without_message: typing.Optional[bool]
     assignment_id: typing.Optional[str]
     id: typing.Optional[str]

@@ -1,3 +1,18 @@
+0.1.23
+-------------------
+Python versions support:
+* Python 3.10 support added
+* Python 3.6 support dropped
+
+Improvements:
+* Added native support for verfied language skills
+* Added native support for map provider's selection for pedestrian tasks in `AssignmentsIssuingViewConfig`
+* Improved default status code dependent retry policies
+* Requests originated from `toloka.streaming` or `toloka.metrics` are now marked with additional headers. This makes it easier for us to collect these features' usage statistics
+* Annotations now use `urllib3` instead of weird `requests.packages.urllib3`
+* Actualized outdated docstrings in `toloka.client.user_bonus`
+
+
 0.1.22
 -------------------
 Fixes:

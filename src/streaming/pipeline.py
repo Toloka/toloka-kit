@@ -14,6 +14,7 @@ from typing import Any, ContextManager, Dict, Iterable, List, Optional, Set, Tup
 from .observer import BaseObserver
 from .storage import BaseStorage
 from ..util.async_utils import ComplexException
+from ..util._managing_headers import async_add_headers
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +33,7 @@ class _Worker:
     observer: BaseObserver = attr.ib()
     should_resume: bool = attr.ib(default=False)
 
+    @async_add_headers('streaming')
     async def __call__(self) -> None:
         await self.observer()
         self.should_resume = await self.observer.should_resume()
@@ -202,6 +204,7 @@ class Pipeline:
                 logger.error('Got error in: %s', task)
             raise ComplexException([task.exception() for task in errored])
 
+    @async_add_headers('streaming')
     async def run(self) -> None:
         if not self._observers:
             raise ValueError('No observers registered')

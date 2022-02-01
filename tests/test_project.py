@@ -247,6 +247,7 @@ def simple_poject_map():
         'assignments_issuing_view_config': {
             'title_template': 'Company: {{inputParams[\'company\']}}',
             'description_template': 'Check if company {{inputParams[\'company\']}} exists',
+            'map_provider': 'YANDEX',
         },
         'metadata': {'projectMetadataKey': ['projectMetadataValue']},
         'quality_control': {
@@ -450,7 +451,8 @@ def test_project_update(requests_mock, toloka_client, toloka_url):
         'max_active_assignments_count': 5,
         'assignments_issuing_view_config': {
             'title_template': 'Company: {{inputParams[\'company\']}}',
-            'description_template': 'Check if company {{inputParams[\'company\']}} exists'
+            'description_template': 'Check if company {{inputParams[\'company\']}} exists',
+            'map_provider': 'GOOGLE'
         },
     }
 
@@ -488,6 +490,7 @@ def test_project_update(requests_mock, toloka_client, toloka_url):
         assignments_issuing_view_config=client.project.Project.AssignmentsIssuingViewConfig(
             title_template='Company: {{inputParams[\'company\']}}',
             description_template='Check if company {{inputParams[\'company\']}} exists',
+            map_provider=client.project.Project.AssignmentsIssuingViewConfig.MapProvider.GOOGLE
         ),
         max_active_assignments_count=5
     )
@@ -507,7 +510,8 @@ def test_project_update(requests_mock, toloka_client, toloka_url):
         public_instructions='Check if company exists',
         assignments_issuing_view_config=client.project.Project.AssignmentsIssuingViewConfig(
             title_template='Company: {{inputParams[\'company\']}}',
-            description_template='Check if company {{inputParams[\'company\']}} exists'
+            description_template='Check if company {{inputParams[\'company\']}} exists',
+            map_provider=client.project.Project.AssignmentsIssuingViewConfig.MapProvider.GOOGLE
         ),
         max_active_assignments_count=5,
         id='10',

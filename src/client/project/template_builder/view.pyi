@@ -757,11 +757,11 @@ class VideoViewV1(BaseViewV1):
             of 400 pixels.
         max_width: Maximum width of the element in pixels, must be greater than min_width.
         min_width: Minimum width of the element in pixels. Takes priority over max_width.
+        ratio: The aspect ratio of the video block. An array of two numbers: the first sets the width of the block and
+            the second sets the height.
         hint: Hint text.
         label: Label above the component.
         validation: Validation based on condition.
-        ratio: The aspect ratio of the video block. An array of two numbers: the first sets the width of the block and
-            the second sets the height.
     """
 
     def __init__(
@@ -771,6 +771,7 @@ class VideoViewV1(BaseViewV1):
         full_height: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, bool]] = None,
         max_width: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, float]] = None,
         min_width: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, float]] = None,
+        ratio: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, typing.List[typing.Union[toloka.client.project.template_builder.base.BaseComponent, float]]]] = None,
         hint: typing.Optional[typing.Any] = None,
         label: typing.Optional[typing.Any] = None,
         validation: typing.Optional[toloka.client.project.template_builder.base.BaseComponent] = None,
@@ -789,3 +790,4 @@ class VideoViewV1(BaseViewV1):
     full_height: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, bool]]
     max_width: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, float]]
     min_width: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, float]]
+    ratio: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, typing.List[typing.Union[toloka.client.project.template_builder.base.BaseComponent, float]]]]

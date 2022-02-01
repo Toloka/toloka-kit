@@ -1,6 +1,5 @@
 import asyncio
 import json
-import sys
 import time
 from copy import copy
 from decimal import Decimal
@@ -10,9 +9,9 @@ import pytest
 import requests
 from toloka.client.requester import Requester
 
-if sys.version_info >= (3, 7):
-    from aiohttp import web
-    from aiohttp.test_utils import unused_port
+
+from aiohttp import web
+from aiohttp.test_utils import unused_port
 
 
 # local test requester server

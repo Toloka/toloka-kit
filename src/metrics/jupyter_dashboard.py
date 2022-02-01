@@ -31,6 +31,8 @@ else:
 
 from .metrics import BaseMetric
 from ..util.async_utils import get_task_traceback
+from ..util._managing_headers import add_headers
+
 
 logger = logging.getLogger(__name__)
 
@@ -94,6 +96,7 @@ class Chart:
         task.metric_inst = metric
         return task
 
+    @add_headers('metrics')
     def update_metrics(self):
         """Gathers all metrics, and stores them in lines.
         """
@@ -316,6 +319,7 @@ class DashBoard:
             figures.append(new_figure)
         return figures if len(figures) > 1 else figures[0]
 
+    @add_headers('metrics')
     def run_dash(self, mode: str = 'inline', height: int = None, host: str = '127.0.0.1', port: str = '8050'):
         """Starts dashboard. Starts server for online updating charts.
 
@@ -336,6 +340,7 @@ class DashBoard:
         self._port = port
         self._dashboard.run_server(mode=mode, height=height, host=host, port=port)
 
+    @add_headers('metrics')
     def stop_dash(self):
         """Stops server. And stops updating dashboard.
         """
