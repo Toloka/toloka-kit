@@ -2038,7 +2038,7 @@ class TolokaClient:
             >>> from toloka.client.analytics_request import CompletionPercentagePoolAnalytics
             >>> operation = toloka_client.get_analytics([CompletionPercentagePoolAnalytics(subject_id=pool_id)])
             >>> operation = toloka_client.wait_operation(operation)
-            >>> print(op.details['value'][0]['result']['value'])
+            >>> print(operation.details['value'][0]['result']['value'])
             ...
         """
         response = self._request('post', '/staging/analytics-2', json=unstructure(stats))
