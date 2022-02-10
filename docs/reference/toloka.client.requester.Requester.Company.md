@@ -1,7 +1,7 @@
 # Company
 `toloka.client.requester.Requester.Company`
 
-```
+```python
 Company(
     self,
     *,

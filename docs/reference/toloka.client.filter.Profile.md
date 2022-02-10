@@ -1,7 +1,7 @@
 # Profile
 `toloka.client.filter.Profile`
 
-```
+```python
 Profile(
     self,
     *,

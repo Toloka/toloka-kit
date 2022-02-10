@@ -1,7 +1,7 @@
 # Attachment
 `toloka.client.attachment.Attachment`
 
-```
+```python
 Attachment(
     self,
     *,

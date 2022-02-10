@@ -1,7 +1,7 @@
 # ChangeOverlap
 `toloka.client.actions.ChangeOverlap`
 
-```
+```python
 ChangeOverlap(
     self,
     *,

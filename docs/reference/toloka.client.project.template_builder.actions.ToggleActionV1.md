@@ -1,7 +1,7 @@
 # ToggleActionV1
 `toloka.client.project.template_builder.actions.ToggleActionV1`
 
-```
+```python
 ToggleActionV1(
     self,
     data: Optional[BaseComponent] = None,

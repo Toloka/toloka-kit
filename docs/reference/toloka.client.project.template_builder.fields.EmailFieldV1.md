@@ -1,7 +1,7 @@
 # EmailFieldV1
 `toloka.client.project.template_builder.fields.EmailFieldV1`
 
-```
+```python
 EmailFieldV1(
     self,
     data: Optional[BaseComponent] = None,

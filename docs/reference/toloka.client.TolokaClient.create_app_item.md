@@ -1,7 +1,7 @@
 # create_app_item
 `toloka.client.TolokaClient.create_app_item`
 
-```
+```python
 create_app_item(
     self,
     app_project_id: str,

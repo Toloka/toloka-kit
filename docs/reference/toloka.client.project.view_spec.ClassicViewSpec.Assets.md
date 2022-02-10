@@ -1,7 +1,7 @@
 # Assets
 `toloka.client.project.view_spec.ClassicViewSpec.Assets`
 
-```
+```python
 Assets(
     self,
     *,

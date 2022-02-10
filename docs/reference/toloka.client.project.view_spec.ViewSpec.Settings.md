@@ -1,7 +1,7 @@
 # Settings
 `toloka.client.project.view_spec.ViewSpec.Settings`
 
-```
+```python
 Settings(
     self,
     *,

@@ -1,7 +1,7 @@
 # TaskSuiteSearchResult
 `toloka.client.search_results.TaskSuiteSearchResult`
 
-```
+```python
 TaskSuiteSearchResult(
     self,
     *,

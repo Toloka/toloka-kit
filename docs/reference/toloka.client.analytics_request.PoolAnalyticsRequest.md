@@ -1,7 +1,7 @@
 # PoolAnalyticsRequest
 `toloka.client.analytics_request.PoolAnalyticsRequest`
 
-```
+```python
 PoolAnalyticsRequest(self, *, subject_id: str)
 ```
 

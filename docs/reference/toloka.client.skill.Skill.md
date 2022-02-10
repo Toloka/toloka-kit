@@ -1,7 +1,7 @@
 # Skill
 `toloka.client.skill.Skill`
 
-```
+```python
 Skill(
     self,
     *,

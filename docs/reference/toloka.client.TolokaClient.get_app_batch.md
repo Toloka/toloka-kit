@@ -1,7 +1,7 @@
 # get_app_batch
 `toloka.client.TolokaClient.get_app_batch`
 
-```
+```python
 get_app_batch(
     self,
     app_project_id: str,

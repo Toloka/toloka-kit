@@ -1,7 +1,7 @@
 # AppProjectSearchRequest
 `toloka.client.search_requests.AppProjectSearchRequest`
 
-```
+```python
 AppProjectSearchRequest(
     self,
     app_id: Optional[str] = None,

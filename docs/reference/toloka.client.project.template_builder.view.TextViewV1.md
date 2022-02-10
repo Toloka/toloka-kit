@@ -1,7 +1,7 @@
 # TextViewV1
 `toloka.client.project.template_builder.view.TextViewV1`
 
-```
+```python
 TextViewV1(
     self,
     content: Optional[Any] = None,

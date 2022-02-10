@@ -1,7 +1,7 @@
 # SearchQueryHelperV1
 `toloka.client.project.template_builder.helpers.SearchQueryHelperV1`
 
-```
+```python
 SearchQueryHelperV1(
     self,
     query: Optional[Any] = None,

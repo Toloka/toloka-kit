@@ -1,7 +1,7 @@
 # Object2EntriesHelperV1
 `toloka.client.project.template_builder.helpers.Object2EntriesHelperV1`
 
-```
+```python
 Object2EntriesHelperV1(
     self,
     data: Optional[Any] = None,

@@ -1,7 +1,7 @@
 # AnalyticsRequest
 `toloka.client.analytics_request.AnalyticsRequest`
 
-```
+```python
 AnalyticsRequest(self, *, subject_id: str)
 ```
 

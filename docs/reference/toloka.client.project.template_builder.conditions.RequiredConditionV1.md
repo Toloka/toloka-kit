@@ -1,7 +1,7 @@
 # RequiredConditionV1
 `toloka.client.project.template_builder.conditions.RequiredConditionV1`
 
-```
+```python
 RequiredConditionV1(
     self,
     data: Optional[Any] = None,

@@ -1,7 +1,7 @@
 # UserBonus
 `toloka.client.user_bonus.UserBonus`
 
-```
+```python
 UserBonus(
     self,
     *,

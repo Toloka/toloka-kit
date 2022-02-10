@@ -1,7 +1,7 @@
 # SkillId
 `toloka.client.conditions.SkillId`
 
-```
+```python
 SkillId(
     self,
     operator: IdentityOperator,

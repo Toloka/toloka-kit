@@ -1,7 +1,7 @@
 # wait_operation
 `toloka.client.TolokaClient.wait_operation`
 
-```
+```python
 wait_operation(
     self,
     op: Operation,

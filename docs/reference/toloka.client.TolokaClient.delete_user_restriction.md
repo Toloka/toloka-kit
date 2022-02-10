@@ -1,7 +1,7 @@
 # delete_user_restriction
 `toloka.client.TolokaClient.delete_user_restriction`
 
-```
+```python
 delete_user_restriction(self, user_restriction_id: str)
 ```
 

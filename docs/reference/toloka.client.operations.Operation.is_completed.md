@@ -1,7 +1,7 @@
 # is_completed
 `toloka.client.operations.Operation.is_completed`
 
-```
+```python
 is_completed(self)
 ```
 

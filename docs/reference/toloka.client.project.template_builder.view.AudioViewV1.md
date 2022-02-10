@@ -1,7 +1,7 @@
 # AudioViewV1
 `toloka.client.project.template_builder.view.AudioViewV1`
 
-```
+```python
 AudioViewV1(
     self,
     url: Optional[Any] = None,

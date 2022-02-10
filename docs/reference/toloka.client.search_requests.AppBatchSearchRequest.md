@@ -1,7 +1,7 @@
 # AppBatchSearchRequest
 `toloka.client.search_requests.AppBatchSearchRequest`
 
-```
+```python
 AppBatchSearchRequest(
     self,
     after_id: Optional[str] = None,

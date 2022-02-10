@@ -1,7 +1,7 @@
 # close_pool
 `toloka.client.TolokaClient.close_pool`
 
-```
+```python
 close_pool(self, pool_id: str)
 ```
 

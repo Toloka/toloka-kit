@@ -1,7 +1,7 @@
 # TrainingCloseOperation
 `toloka.client.operations.TrainingCloseOperation`
 
-```
+```python
 TrainingCloseOperation(
     self,
     *,

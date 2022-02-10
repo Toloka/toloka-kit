@@ -1,7 +1,7 @@
 # TaskSuiteOverlapPatch
 `toloka.client.task_suite.TaskSuiteOverlapPatch`
 
-```
+```python
 TaskSuiteOverlapPatch(self, *, overlap: Optional[int] = None)
 ```
 

@@ -1,7 +1,7 @@
 # TaskSuiteCreateRequestParameters
 `toloka.client.task_suite.TaskSuiteCreateRequestParameters`
 
-```
+```python
 TaskSuiteCreateRequestParameters(
     self,
     *,

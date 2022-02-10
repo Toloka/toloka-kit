@@ -1,7 +1,7 @@
 # archive_training_async
 `toloka.client.TolokaClient.archive_training_async`
 
-```
+```python
 archive_training_async(self, training_id: str)
 ```
 

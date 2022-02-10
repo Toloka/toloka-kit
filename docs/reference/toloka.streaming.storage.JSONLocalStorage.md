@@ -1,7 +1,7 @@
 # JSONLocalStorage
 `toloka.streaming.storage.JSONLocalStorage`
 
-```
+```python
 JSONLocalStorage(
     self,
     dirname: str = '/tmp',

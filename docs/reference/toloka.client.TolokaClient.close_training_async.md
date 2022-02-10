@@ -1,7 +1,7 @@
 # close_training_async
 `toloka.client.TolokaClient.close_training_async`
 
-```
+```python
 close_training_async(self, training_id: str)
 ```
 

@@ -1,7 +1,7 @@
 # ActiveWorkersByFilterCountPoolAnalytics
 `toloka.client.analytics_request.ActiveWorkersByFilterCountPoolAnalytics`
 
-```
+```python
 ActiveWorkersByFilterCountPoolAnalytics(
     self,
     *,

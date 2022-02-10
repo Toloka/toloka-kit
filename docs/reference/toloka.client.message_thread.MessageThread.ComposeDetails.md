@@ -1,7 +1,7 @@
 # ComposeDetails
 `toloka.client.message_thread.MessageThread.ComposeDetails`
 
-```
+```python
 ComposeDetails(
     self,
     *,

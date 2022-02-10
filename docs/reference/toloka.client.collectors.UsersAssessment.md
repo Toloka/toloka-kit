@@ -1,7 +1,7 @@
 # UsersAssessment
 `toloka.client.collectors.UsersAssessment`
 
-```
+```python
 UsersAssessment(self, *, uuid: Optional[UUID] = None)
 ```
 

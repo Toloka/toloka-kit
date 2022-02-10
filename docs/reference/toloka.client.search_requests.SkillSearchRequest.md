@@ -1,7 +1,7 @@
 # SkillSearchRequest
 `toloka.client.search_requests.SkillSearchRequest`
 
-```
+```python
 SkillSearchRequest(
     self,
     name: Optional[str] = None,

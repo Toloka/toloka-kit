@@ -1,7 +1,7 @@
 # Parameters
 `toloka.client.operations.Operation.Parameters`
 
-```
+```python
 Parameters(self)
 ```
 

@@ -1,7 +1,7 @@
 # Field
 `toloka.client.pool.dynamic_overlap_config.DynamicOverlapConfig.Field`
 
-```
+```python
 Field(self, name: Optional[str] = None)
 ```
 

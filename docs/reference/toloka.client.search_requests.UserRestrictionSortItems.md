@@ -1,7 +1,7 @@
 # UserRestrictionSortItems
 `toloka.client.search_requests.UserRestrictionSortItems`
 
-```
+```python
 UserRestrictionSortItems(self, items=None)
 ```
 

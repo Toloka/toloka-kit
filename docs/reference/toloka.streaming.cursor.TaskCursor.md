@@ -1,7 +1,7 @@
 # TaskCursor
 `toloka.streaming.cursor.TaskCursor`
 
-```
+```python
 TaskCursor(
     self,
     toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],

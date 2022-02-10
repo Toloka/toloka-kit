@@ -1,7 +1,7 @@
 # CheckboxFieldV1
 `toloka.client.project.template_builder.fields.CheckboxFieldV1`
 
-```
+```python
 CheckboxFieldV1(
     self,
     data: Optional[BaseComponent] = None,

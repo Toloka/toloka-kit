@@ -1,7 +1,7 @@
 # AllProjectsUserRestriction
 `toloka.client.user_restriction.AllProjectsUserRestriction`
 
-```
+```python
 AllProjectsUserRestriction(
     self,
     *,

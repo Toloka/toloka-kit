@@ -1,7 +1,7 @@
 # Parameters
 `toloka.client.collectors.AssignmentSubmitTime.Parameters`
 
-```
+```python
 Parameters(
     self,
     *,

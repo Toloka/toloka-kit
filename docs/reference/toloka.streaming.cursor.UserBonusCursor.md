@@ -1,7 +1,7 @@
 # UserBonusCursor
 `toloka.streaming.cursor.UserBonusCursor`
 
-```
+```python
 UserBonusCursor(
     self,
     toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],

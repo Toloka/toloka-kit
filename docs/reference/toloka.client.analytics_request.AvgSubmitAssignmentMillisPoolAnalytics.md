@@ -1,7 +1,7 @@
 # AvgSubmitAssignmentMillisPoolAnalytics
 `toloka.client.analytics_request.AvgSubmitAssignmentMillisPoolAnalytics`
 
-```
+```python
 AvgSubmitAssignmentMillisPoolAnalytics(self, *, subject_id: str)
 ```
 

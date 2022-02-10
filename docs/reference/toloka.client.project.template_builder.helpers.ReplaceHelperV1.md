@@ -1,7 +1,7 @@
 # ReplaceHelperV1
 `toloka.client.project.template_builder.helpers.ReplaceHelperV1`
 
-```
+```python
 ReplaceHelperV1(
     self,
     data: Optional[Any] = None,

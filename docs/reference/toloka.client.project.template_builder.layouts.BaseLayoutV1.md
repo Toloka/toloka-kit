@@ -1,7 +1,7 @@
 # BaseLayoutV1
 `toloka.client.project.template_builder.layouts.BaseLayoutV1`
 
-```
+```python
 BaseLayoutV1(
     self,
     *,

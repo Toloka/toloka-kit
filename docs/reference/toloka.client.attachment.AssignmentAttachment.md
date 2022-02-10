@@ -1,7 +1,7 @@
 # AssignmentAttachment
 `toloka.client.attachment.AssignmentAttachment`
 
-```
+```python
 AssignmentAttachment(
     self,
     *,

@@ -1,7 +1,7 @@
 # ArrayUrlSpec
 `toloka.client.project.field_spec.ArrayUrlSpec`
 
-```
+```python
 ArrayUrlSpec(
     self,
     *,

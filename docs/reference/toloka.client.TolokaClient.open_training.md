@@ -1,7 +1,7 @@
 # open_training
 `toloka.client.TolokaClient.open_training`
 
-```
+```python
 open_training(self, training_id: str)
 ```
 

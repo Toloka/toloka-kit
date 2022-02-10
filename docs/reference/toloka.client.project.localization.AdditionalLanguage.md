@@ -1,7 +1,7 @@
 # AdditionalLanguage
 `toloka.client.project.localization.AdditionalLanguage`
 
-```
+```python
 AdditionalLanguage(
     self,
     *,

@@ -1,7 +1,7 @@
 # Pool
 `toloka.client.pool.Pool`
 
-```
+```python
 Pool(
     self,
     *,

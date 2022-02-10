@@ -1,7 +1,7 @@
 # ApiError
 `toloka.client.exceptions.ApiError`
 
-```
+```python
 ApiError(
     self,
     *,

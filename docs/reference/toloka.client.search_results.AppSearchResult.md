@@ -1,7 +1,7 @@
 # AppSearchResult
 `toloka.client.search_results.AppSearchResult`
 
-```
+```python
 AppSearchResult(
     self,
     *,

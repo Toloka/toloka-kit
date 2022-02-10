@@ -1,7 +1,7 @@
 # Link
 `toloka.client.project.template_builder.view.LinkGroupViewV1.Link`
 
-```
+```python
 Link(
     self,
     url: Optional[Union[BaseComponent, str]] = None,

@@ -1,7 +1,7 @@
 # AdultAllowed
 `toloka.client.filter.AdultAllowed`
 
-```
+```python
 AdultAllowed(
     self,
     operator: IdentityOperator,

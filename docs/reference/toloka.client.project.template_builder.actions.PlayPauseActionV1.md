@@ -1,7 +1,7 @@
 # PlayPauseActionV1
 `toloka.client.project.template_builder.actions.PlayPauseActionV1`
 
-```
+```python
 PlayPauseActionV1(
     self,
     view: Optional[Union[BaseComponent, RefComponent]] = None,

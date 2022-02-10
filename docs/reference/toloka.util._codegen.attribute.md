@@ -1,7 +1,7 @@
 # attribute
 `toloka.util._codegen.attribute`
 
-```
+```python
 attribute(
     *args,
     required: bool = False,

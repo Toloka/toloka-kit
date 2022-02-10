@@ -1,7 +1,7 @@
 # BaseCursor
 `toloka.streaming.cursor.BaseCursor`
 
-```
+```python
 BaseCursor(
     self,
     toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],

@@ -1,7 +1,7 @@
 # FileSpec
 `toloka.client.project.field_spec.FileSpec`
 
-```
+```python
 FileSpec(
     self,
     *,

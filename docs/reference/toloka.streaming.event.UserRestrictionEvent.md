@@ -1,7 +1,7 @@
 # UserRestrictionEvent
 `toloka.streaming.event.UserRestrictionEvent`
 
-```
+```python
 UserRestrictionEvent(
     self,
     *,

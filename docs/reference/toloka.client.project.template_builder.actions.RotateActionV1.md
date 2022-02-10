@@ -1,7 +1,7 @@
 # RotateActionV1
 `toloka.client.project.template_builder.actions.RotateActionV1`
 
-```
+```python
 RotateActionV1(
     self,
     view: Optional[Union[BaseComponent, RefComponent]] = None,

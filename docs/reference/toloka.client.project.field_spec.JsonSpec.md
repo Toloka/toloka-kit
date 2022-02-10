@@ -1,7 +1,7 @@
 # JsonSpec
 `toloka.client.project.field_spec.JsonSpec`
 
-```
+```python
 JsonSpec(
     self,
     *,

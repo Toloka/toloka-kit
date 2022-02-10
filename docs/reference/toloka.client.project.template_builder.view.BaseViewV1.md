@@ -1,7 +1,7 @@
 # BaseViewV1
 `toloka.client.project.template_builder.view.BaseViewV1`
 
-```
+```python
 BaseViewV1(
     self,
     *,

@@ -1,7 +1,7 @@
 # ComplexException
 `toloka.util.async_utils.ComplexException`
 
-```
+```python
 ComplexException(self, exceptions: List[Exception])
 ```
 

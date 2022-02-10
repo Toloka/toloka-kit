@@ -1,7 +1,7 @@
 # ArrayStringSpec
 `toloka.client.project.field_spec.ArrayStringSpec`
 
-```
+```python
 ArrayStringSpec(
     self,
     *,

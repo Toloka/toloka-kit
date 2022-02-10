@@ -1,7 +1,7 @@
 # BaseData
 `toloka.client.project.template_builder.data.BaseData`
 
-```
+```python
 BaseData(
     self,
     path: Optional[Any] = None,

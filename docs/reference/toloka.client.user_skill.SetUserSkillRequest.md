@@ -1,7 +1,7 @@
 # SetUserSkillRequest
 `toloka.client.user_skill.SetUserSkillRequest`
 
-```
+```python
 SetUserSkillRequest(
     self,
     *,

@@ -1,7 +1,7 @@
 # VariantRegistry
 `toloka.client.primitives.base.VariantRegistry`
 
-```
+```python
 VariantRegistry(
     self,
     field: str,

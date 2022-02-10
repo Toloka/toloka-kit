@@ -1,7 +1,7 @@
 # GoldenSetAnswersCount
 `toloka.client.conditions.GoldenSetAnswersCount`
 
-```
+```python
 GoldenSetAnswersCount(
     self,
     operator: CompareOperator,

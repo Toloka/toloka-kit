@@ -1,7 +1,7 @@
 # AlertViewV1
 `toloka.client.project.template_builder.view.AlertViewV1`
 
-```
+```python
 AlertViewV1(
     self,
     content: Optional[BaseComponent] = None,

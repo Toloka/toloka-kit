@@ -1,7 +1,7 @@
 # Cooldown
 `toloka.util.async_utils.Cooldown`
 
-```
+```python
 Cooldown(self, cooldown_time)
 ```
 

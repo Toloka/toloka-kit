@@ -1,7 +1,7 @@
 # TaskSuiteSearchRequest
 `toloka.client.search_requests.TaskSuiteSearchRequest`
 
-```
+```python
 TaskSuiteSearchRequest(
     self,
     task_id: Optional[str] = None,

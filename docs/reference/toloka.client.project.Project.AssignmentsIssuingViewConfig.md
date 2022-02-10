@@ -1,7 +1,7 @@
 # AssignmentsIssuingViewConfig
 `toloka.client.project.Project.AssignmentsIssuingViewConfig`
 
-```
+```python
 AssignmentsIssuingViewConfig(
     self,
     *,

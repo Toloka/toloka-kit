@@ -1,7 +1,7 @@
 # AsyncTolokaClient
 `toloka.async_client.client.AsyncTolokaClient`
 
-```
+```python
 AsyncTolokaClient(
     self,
     *args,

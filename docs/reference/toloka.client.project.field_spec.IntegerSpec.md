@@ -1,7 +1,7 @@
 # IntegerSpec
 `toloka.client.project.field_spec.IntegerSpec`
 
-```
+```python
 IntegerSpec(
     self,
     *,

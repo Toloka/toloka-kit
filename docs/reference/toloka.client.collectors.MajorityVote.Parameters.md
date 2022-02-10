@@ -1,7 +1,7 @@
 # Parameters
 `toloka.client.collectors.MajorityVote.Parameters`
 
-```
+```python
 Parameters(
     self,
     *,

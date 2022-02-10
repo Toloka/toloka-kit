@@ -1,7 +1,7 @@
 # archive_training
 `toloka.client.TolokaClient.archive_training`
 
-```
+```python
 archive_training(self, training_id: str)
 ```
 

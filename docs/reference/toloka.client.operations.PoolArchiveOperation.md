@@ -1,7 +1,7 @@
 # PoolArchiveOperation
 `toloka.client.operations.PoolArchiveOperation`
 
-```
+```python
 PoolArchiveOperation(
     self,
     *,

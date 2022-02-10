@@ -1,7 +1,7 @@
 # AssignmentPatch
 `toloka.client.assignment.AssignmentPatch`
 
-```
+```python
 AssignmentPatch(
     self,
     *,

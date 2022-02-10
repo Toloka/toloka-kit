@@ -1,7 +1,7 @@
 # ApprovedAssignmentsCountPoolAnalytics
 `toloka.client.analytics_request.ApprovedAssignmentsCountPoolAnalytics`
 
-```
+```python
 ApprovedAssignmentsCountPoolAnalytics(self, *, subject_id: str)
 ```
 

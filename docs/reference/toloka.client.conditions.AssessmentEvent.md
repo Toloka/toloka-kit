@@ -1,7 +1,7 @@
 # AssessmentEvent
 `toloka.client.conditions.AssessmentEvent`
 
-```
+```python
 AssessmentEvent(
     self,
     operator: IdentityOperator,

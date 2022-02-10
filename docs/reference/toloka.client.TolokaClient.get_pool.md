@@ -1,7 +1,7 @@
 # get_pool
 `toloka.client.TolokaClient.get_pool`
 
-```
+```python
 get_pool(self, pool_id: str)
 ```
 

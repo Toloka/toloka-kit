@@ -1,7 +1,7 @@
 # PlayedConditionV1
 `toloka.client.project.template_builder.conditions.PlayedConditionV1`
 
-```
+```python
 PlayedConditionV1(
     self,
     *,

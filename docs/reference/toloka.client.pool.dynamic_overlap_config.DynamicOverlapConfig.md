@@ -1,7 +1,7 @@
 # DynamicOverlapConfig
 `toloka.client.pool.dynamic_overlap_config.DynamicOverlapConfig`
 
-```
+```python
 DynamicOverlapConfig(
     self,
     *,

@@ -1,7 +1,7 @@
 # OutputData
 `toloka.client.project.template_builder.data.OutputData`
 
-```
+```python
 OutputData(
     self,
     path: Optional[Any] = None,

@@ -1,7 +1,7 @@
 # TotalSubmittedCount
 `toloka.client.conditions.TotalSubmittedCount`
 
-```
+```python
 TotalSubmittedCount(
     self,
     operator: CompareOperator,

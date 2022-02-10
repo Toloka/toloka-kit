@@ -1,7 +1,7 @@
 # RuleAction
 `toloka.client.actions.RuleAction`
 
-```
+```python
 RuleAction(self)
 ```
 

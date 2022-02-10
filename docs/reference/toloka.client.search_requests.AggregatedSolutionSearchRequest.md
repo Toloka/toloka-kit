@@ -1,7 +1,7 @@
 # AggregatedSolutionSearchRequest
 `toloka.client.search_requests.AggregatedSolutionSearchRequest`
 
-```
+```python
 AggregatedSolutionSearchRequest(
     self,
     task_id_lt: Optional[str] = None,

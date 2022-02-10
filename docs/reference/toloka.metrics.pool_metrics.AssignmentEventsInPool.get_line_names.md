@@ -1,7 +1,7 @@
 # get_line_names
 `toloka.metrics.pool_metrics.AssignmentEventsInPool.get_line_names`
 
-```
+```python
 get_line_names(self)
 ```
 

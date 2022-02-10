@@ -1,7 +1,7 @@
 # AppItemSearchRequest
 `toloka.client.search_requests.AppItemSearchRequest`
 
-```
+```python
 AppItemSearchRequest(
     self,
     after_id: Optional[str] = None,

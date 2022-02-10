@@ -1,7 +1,7 @@
 # add_action
 `toloka.client.quality_control.QualityControl.add_action`
 
-```
+```python
 add_action(
     self,
     collector: CollectorConfig,

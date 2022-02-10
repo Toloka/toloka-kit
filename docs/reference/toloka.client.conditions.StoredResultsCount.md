@@ -1,7 +1,7 @@
 # StoredResultsCount
 `toloka.client.conditions.StoredResultsCount`
 
-```
+```python
 StoredResultsCount(
     self,
     operator: CompareOperator,

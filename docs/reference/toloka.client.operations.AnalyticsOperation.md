@@ -1,7 +1,7 @@
 # AnalyticsOperation
 `toloka.client.operations.AnalyticsOperation`
 
-```
+```python
 AnalyticsOperation(
     self,
     *,

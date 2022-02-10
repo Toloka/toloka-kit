@@ -1,7 +1,7 @@
 # Payload
 `toloka.client.project.template_builder.actions.NotifyActionV1.Payload`
 
-```
+```python
 Payload(
     self,
     content: Optional[Any] = None,

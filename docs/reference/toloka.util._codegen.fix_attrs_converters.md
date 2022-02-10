@@ -1,7 +1,7 @@
 # fix_attrs_converters
 `toloka.util._codegen.fix_attrs_converters`
 
-```
+```python
 fix_attrs_converters(cls)
 ```
 

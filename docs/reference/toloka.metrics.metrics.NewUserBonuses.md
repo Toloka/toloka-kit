@@ -1,7 +1,7 @@
 # NewUserBonuses
 `toloka.metrics.metrics.NewUserBonuses`
 
-```
+```python
 NewUserBonuses(
     self,
     count_name: Optional[str] = None,

@@ -1,7 +1,7 @@
 # ImageAnnotationHotkeysPluginV1
 `toloka.client.project.template_builder.plugins.ImageAnnotationHotkeysPluginV1`
 
-```
+```python
 ImageAnnotationHotkeysPluginV1(
     self,
     *,

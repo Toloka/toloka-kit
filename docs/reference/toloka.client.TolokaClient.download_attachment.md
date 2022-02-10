@@ -1,7 +1,7 @@
 # download_attachment
 `toloka.client.TolokaClient.download_attachment`
 
-```
+```python
 download_attachment(
     self,
     attachment_id: str,

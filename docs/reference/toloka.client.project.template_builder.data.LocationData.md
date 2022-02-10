@@ -1,7 +1,7 @@
 # LocationData
 `toloka.client.project.template_builder.data.LocationData`
 
-```
+```python
 LocationData(self)
 ```
 

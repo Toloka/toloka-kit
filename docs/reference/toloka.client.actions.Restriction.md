@@ -1,7 +1,7 @@
 # Restriction
 `toloka.client.actions.Restriction`
 
-```
+```python
 Restriction(
     self,
     *,

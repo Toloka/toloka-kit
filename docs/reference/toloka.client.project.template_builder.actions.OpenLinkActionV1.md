@@ -1,7 +1,7 @@
 # OpenLinkActionV1
 `toloka.client.project.template_builder.actions.OpenLinkActionV1`
 
-```
+```python
 OpenLinkActionV1(
     self,
     payload: Optional[Any] = None,

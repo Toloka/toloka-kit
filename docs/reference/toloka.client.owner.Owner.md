@@ -1,7 +1,7 @@
 # Owner
 `toloka.client.owner.Owner`
 
-```
+```python
 Owner(
     self,
     *,

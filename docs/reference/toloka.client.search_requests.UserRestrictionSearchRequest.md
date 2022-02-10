@@ -1,7 +1,7 @@
 # UserRestrictionSearchRequest
 `toloka.client.search_requests.UserRestrictionSearchRequest`
 
-```
+```python
 UserRestrictionSearchRequest(
     self,
     scope: Optional[UserRestriction.Scope] = None,

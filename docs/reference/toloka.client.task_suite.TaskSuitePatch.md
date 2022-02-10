@@ -1,7 +1,7 @@
 # TaskSuitePatch
 `toloka.client.task_suite.TaskSuitePatch`
 
-```
+```python
 TaskSuitePatch(
     self,
     *,

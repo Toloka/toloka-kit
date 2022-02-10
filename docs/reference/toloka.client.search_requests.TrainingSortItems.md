@@ -1,7 +1,7 @@
 # TrainingSortItems
 `toloka.client.search_requests.TrainingSortItems`
 
-```
+```python
 TrainingSortItems(self, items=None)
 ```
 

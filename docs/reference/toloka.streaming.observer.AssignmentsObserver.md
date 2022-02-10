@@ -1,7 +1,7 @@
 # AssignmentsObserver
 `toloka.streaming.observer.AssignmentsObserver`
 
-```
+```python
 AssignmentsObserver(
     self,
     toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],

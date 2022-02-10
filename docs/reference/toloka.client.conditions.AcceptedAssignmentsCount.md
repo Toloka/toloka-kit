@@ -1,7 +1,7 @@
 # AcceptedAssignmentsCount
 `toloka.client.conditions.AcceptedAssignmentsCount`
 
-```
+```python
 AcceptedAssignmentsCount(
     self,
     operator: CompareOperator,

@@ -1,7 +1,7 @@
 # FileFieldV1
 `toloka.client.project.template_builder.fields.FileFieldV1`
 
-```
+```python
 FileFieldV1(
     self,
     data: Optional[BaseComponent] = None,

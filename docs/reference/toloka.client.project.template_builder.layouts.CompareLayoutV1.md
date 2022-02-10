@@ -1,7 +1,7 @@
 # CompareLayoutV1
 `toloka.client.project.template_builder.layouts.CompareLayoutV1`
 
-```
+```python
 CompareLayoutV1(
     self,
     common_controls: Optional[BaseComponent] = None,

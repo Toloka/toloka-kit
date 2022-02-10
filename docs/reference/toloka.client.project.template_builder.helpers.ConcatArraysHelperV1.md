@@ -1,7 +1,7 @@
 # ConcatArraysHelperV1
 `toloka.client.project.template_builder.helpers.ConcatArraysHelperV1`
 
-```
+```python
 ConcatArraysHelperV1(
     self,
     items: Optional[Union[BaseComponent, List[Any]]] = None,

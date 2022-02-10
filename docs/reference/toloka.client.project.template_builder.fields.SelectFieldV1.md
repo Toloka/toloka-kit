@@ -1,7 +1,7 @@
 # SelectFieldV1
 `toloka.client.project.template_builder.fields.SelectFieldV1`
 
-```
+```python
 SelectFieldV1(
     self,
     data: Optional[BaseComponent] = None,

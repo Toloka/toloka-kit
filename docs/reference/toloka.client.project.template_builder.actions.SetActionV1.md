@@ -1,7 +1,7 @@
 # SetActionV1
 `toloka.client.project.template_builder.actions.SetActionV1`
 
-```
+```python
 SetActionV1(
     self,
     data: Optional[BaseComponent] = None,

@@ -1,7 +1,7 @@
 # Meta
 `toloka.client.message_thread.MessageThread.Meta`
 
-```
+```python
 Meta(
     self,
     *,

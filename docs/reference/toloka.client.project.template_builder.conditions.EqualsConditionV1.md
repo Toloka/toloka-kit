@@ -1,7 +1,7 @@
 # EqualsConditionV1
 `toloka.client.project.template_builder.conditions.EqualsConditionV1`
 
-```
+```python
 EqualsConditionV1(
     self,
     to: Optional[Any] = None,

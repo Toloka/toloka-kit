@@ -1,7 +1,7 @@
 # SwitchHelperV1
 `toloka.client.project.template_builder.helpers.SwitchHelperV1`
 
-```
+```python
 SwitchHelperV1(
     self,
     cases: Optional[Union[BaseComponent, List[Union[BaseComponent, Case]]]] = None,

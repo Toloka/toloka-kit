@@ -1,7 +1,7 @@
 # Pipeline
 `toloka.streaming.pipeline.Pipeline`
 
-```
+```python
 Pipeline(
     self,
     period: timedelta = ...,

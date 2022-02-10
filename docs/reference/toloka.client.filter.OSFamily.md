@@ -1,7 +1,7 @@
 # OSFamily
 `toloka.client.filter.OSFamily`
 
-```
+```python
 OSFamily(
     self,
     operator: IdentityOperator,

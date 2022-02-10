@@ -1,7 +1,7 @@
 # AssignmentEvent
 `toloka.streaming.event.AssignmentEvent`
 
-```
+```python
 AssignmentEvent(
     self,
     *,

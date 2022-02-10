@@ -1,7 +1,7 @@
 # TrainingSearchRequest
 `toloka.client.search_requests.TrainingSearchRequest`
 
-```
+```python
 TrainingSearchRequest(
     self,
     status: Optional[Training.Status] = None,

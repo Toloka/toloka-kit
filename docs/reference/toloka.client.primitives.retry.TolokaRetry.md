@@ -1,7 +1,7 @@
 # TolokaRetry
 `toloka.client.primitives.retry.TolokaRetry`
 
-```
+```python
 TolokaRetry(
     self,
     *args,

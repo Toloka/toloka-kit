@@ -1,7 +1,7 @@
 # clone_training
 `toloka.client.TolokaClient.clone_training`
 
-```
+```python
 clone_training(self, training_id: str)
 ```
 

@@ -1,7 +1,7 @@
 # TextareaFieldV1
 `toloka.client.project.template_builder.fields.TextareaFieldV1`
 
-```
+```python
 TextareaFieldV1(
     self,
     data: Optional[BaseComponent] = None,

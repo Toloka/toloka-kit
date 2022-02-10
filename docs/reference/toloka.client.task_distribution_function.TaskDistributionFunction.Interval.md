@@ -1,7 +1,7 @@
 # Interval
 `toloka.client.task_distribution_function.TaskDistributionFunction.Interval`
 
-```
+```python
 Interval(
     self,
     *,

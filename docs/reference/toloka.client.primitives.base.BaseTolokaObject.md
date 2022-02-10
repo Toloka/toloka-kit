@@ -1,7 +1,7 @@
 # BaseTolokaObject
 `toloka.client.primitives.base.BaseTolokaObject`
 
-```
+```python
 BaseTolokaObject(self)
 ```
 

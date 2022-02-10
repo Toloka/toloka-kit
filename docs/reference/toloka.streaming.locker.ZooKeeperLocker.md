@@ -1,7 +1,7 @@
 # ZooKeeperLocker
 `toloka.streaming.locker.ZooKeeperLocker`
 
-```
+```python
 ZooKeeperLocker(
     self,
     client: KazooClient,

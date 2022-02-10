@@ -1,7 +1,7 @@
 # Country
 `toloka.client.filter.Country`
 
-```
+```python
 Country(
     self,
     operator: IdentityOperator,

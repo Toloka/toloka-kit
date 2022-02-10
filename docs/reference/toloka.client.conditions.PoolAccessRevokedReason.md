@@ -1,7 +1,7 @@
 # PoolAccessRevokedReason
 `toloka.client.conditions.PoolAccessRevokedReason`
 
-```
+```python
 PoolAccessRevokedReason(
     self,
     operator: IdentityOperator,

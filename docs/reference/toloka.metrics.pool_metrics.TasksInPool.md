@@ -1,7 +1,7 @@
 # TasksInPool
 `toloka.metrics.pool_metrics.TasksInPool`
 
-```
+```python
 TasksInPool(
     self,
     pool_id: str,

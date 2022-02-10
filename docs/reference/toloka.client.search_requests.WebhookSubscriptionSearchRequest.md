@@ -1,7 +1,7 @@
 # WebhookSubscriptionSearchRequest
 `toloka.client.search_requests.WebhookSubscriptionSearchRequest`
 
-```
+```python
 WebhookSubscriptionSearchRequest(
     self,
     event_type: Optional[WebhookSubscription.EventType] = None,

@@ -1,7 +1,7 @@
 # FieldSpec
 `toloka.client.project.field_spec.FieldSpec`
 
-```
+```python
 FieldSpec(
     self,
     *,

@@ -1,7 +1,7 @@
 # DateFieldV1
 `toloka.client.project.template_builder.fields.DateFieldV1`
 
-```
+```python
 DateFieldV1(
     self,
     data: Optional[BaseComponent] = None,

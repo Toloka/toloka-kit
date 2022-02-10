@@ -1,7 +1,7 @@
 # TemplateBuilderViewSpec
 `toloka.client.project.view_spec.TemplateBuilderViewSpec`
 
-```
+```python
 TemplateBuilderViewSpec(
     self,
     *,

@@ -1,7 +1,7 @@
 # PoolCloseOperation
 `toloka.client.operations.PoolCloseOperation`
 
-```
+```python
 PoolCloseOperation(
     self,
     *,

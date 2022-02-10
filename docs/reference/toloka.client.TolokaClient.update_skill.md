@@ -1,7 +1,7 @@
 # update_skill
 `toloka.client.TolokaClient.update_skill`
 
-```
+```python
 update_skill(
     self,
     skill_id: str,

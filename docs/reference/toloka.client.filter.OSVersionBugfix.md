@@ -1,7 +1,7 @@
 # OSVersionBugfix
 `toloka.client.filter.OSVersionBugfix`
 
-```
+```python
 OSVersionBugfix(
     self,
     operator: CompareOperator,

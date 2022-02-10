@@ -1,7 +1,7 @@
 # OperationLogItem
 `toloka.client.operation_log.OperationLogItem`
 
-```
+```python
 OperationLogItem(
     self,
     *,

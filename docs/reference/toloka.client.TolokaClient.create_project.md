@@ -1,7 +1,7 @@
 # create_project
 `toloka.client.TolokaClient.create_project`
 
-```
+```python
 create_project(self, project: Project)
 ```
 

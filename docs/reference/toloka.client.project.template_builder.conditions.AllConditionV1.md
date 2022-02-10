@@ -1,7 +1,7 @@
 # AllConditionV1
 `toloka.client.project.template_builder.conditions.AllConditionV1`
 
-```
+```python
 AllConditionV1(
     self,
     conditions: Optional[Union[BaseComponent, List[BaseComponent]]] = None,

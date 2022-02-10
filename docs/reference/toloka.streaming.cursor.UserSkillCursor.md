@@ -1,7 +1,7 @@
 # UserSkillCursor
 `toloka.streaming.cursor.UserSkillCursor`
 
-```
+```python
 UserSkillCursor(
     self,
     toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],

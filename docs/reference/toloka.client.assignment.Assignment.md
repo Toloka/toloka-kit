@@ -1,7 +1,7 @@
 # Assignment
 `toloka.client.assignment.Assignment`
 
-```
+```python
 Assignment(
     self,
     *,

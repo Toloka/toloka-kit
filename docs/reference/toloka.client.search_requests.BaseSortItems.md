@@ -1,7 +1,7 @@
 # BaseSortItems
 `toloka.client.search_requests.BaseSortItems`
 
-```
+```python
 BaseSortItems(self)
 ```
 

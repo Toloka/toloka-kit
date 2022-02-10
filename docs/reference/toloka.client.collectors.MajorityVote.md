@@ -1,7 +1,7 @@
 # MajorityVote
 `toloka.client.collectors.MajorityVote`
 
-```
+```python
 MajorityVote(
     self,
     *,

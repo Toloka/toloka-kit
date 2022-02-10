@@ -1,7 +1,7 @@
 # FloatSpec
 `toloka.client.project.field_spec.FloatSpec`
 
-```
+```python
 FloatSpec(
     self,
     *,

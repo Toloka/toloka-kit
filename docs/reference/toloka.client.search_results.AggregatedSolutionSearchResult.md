@@ -1,7 +1,7 @@
 # AggregatedSolutionSearchResult
 `toloka.client.search_results.AggregatedSolutionSearchResult`
 
-```
+```python
 AggregatedSolutionSearchResult(
     self,
     *,

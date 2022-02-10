@@ -1,7 +1,7 @@
 # PoolUserRestriction
 `toloka.client.user_restriction.PoolUserRestriction`
 
-```
+```python
 PoolUserRestriction(
     self,
     *,

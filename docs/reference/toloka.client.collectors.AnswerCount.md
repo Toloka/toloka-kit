@@ -1,7 +1,7 @@
 # AnswerCount
 `toloka.client.collectors.AnswerCount`
 
-```
+```python
 AnswerCount(self, *, uuid: Optional[UUID] = None)
 ```
 

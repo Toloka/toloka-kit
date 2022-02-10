@@ -1,7 +1,7 @@
 # LabeledListViewV1
 `toloka.client.project.template_builder.view.LabeledListViewV1`
 
-```
+```python
 LabeledListViewV1(
     self,
     items: Optional[Union[BaseComponent, List[Union[BaseComponent, Item]]]] = None,

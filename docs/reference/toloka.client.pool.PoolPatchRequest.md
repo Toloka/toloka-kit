@@ -1,7 +1,7 @@
 # PoolPatchRequest
 `toloka.client.pool.PoolPatchRequest`
 
-```
+```python
 PoolPatchRequest(self, priority: Optional[int] = None)
 ```
 

@@ -1,7 +1,7 @@
 # start_app_batch
 `toloka.client.TolokaClient.start_app_batch`
 
-```
+```python
 start_app_batch(
     self,
     app_project_id: str,

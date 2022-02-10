@@ -1,7 +1,7 @@
 # SkippedInRowAssignments
 `toloka.client.collectors.SkippedInRowAssignments`
 
-```
+```python
 SkippedInRowAssignments(self, *, uuid: Optional[UUID] = None)
 ```
 

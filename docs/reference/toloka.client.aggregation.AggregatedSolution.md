@@ -1,7 +1,7 @@
 # AggregatedSolution
 `toloka.client.aggregation.AggregatedSolution`
 
-```
+```python
 AggregatedSolution(
     self,
     *,

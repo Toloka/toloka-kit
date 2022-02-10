@@ -1,7 +1,7 @@
 # NewUserSkills
 `toloka.metrics.metrics.NewUserSkills`
 
-```
+```python
 NewUserSkills(
     self,
     skill_id: str,

@@ -1,7 +1,7 @@
 # MessageThreadSearchRequest
 `toloka.client.search_requests.MessageThreadSearchRequest`
 
-```
+```python
 MessageThreadSearchRequest(
     self,
     folder: Union[str, Folder, List[Union[str, Folder]]] = None,

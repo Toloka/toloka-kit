@@ -1,7 +1,7 @@
 # ImageAnnotationFieldV1
 `toloka.client.project.template_builder.fields.ImageAnnotationFieldV1`
 
-```
+```python
 ImageAnnotationFieldV1(
     self,
     data: Optional[BaseComponent] = None,

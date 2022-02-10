@@ -1,7 +1,7 @@
 # get_task_traceback
 `toloka.util.async_utils.get_task_traceback`
 
-```
+```python
 get_task_traceback(task: Task)
 ```
 

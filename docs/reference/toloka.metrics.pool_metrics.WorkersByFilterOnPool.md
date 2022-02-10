@@ -1,7 +1,7 @@
 # WorkersByFilterOnPool
 `toloka.metrics.pool_metrics.WorkersByFilterOnPool`
 
-```
+```python
 WorkersByFilterOnPool(
     self,
     pool_id: str,

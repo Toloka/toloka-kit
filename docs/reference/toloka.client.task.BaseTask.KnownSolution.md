@@ -1,7 +1,7 @@
 # KnownSolution
 `toloka.client.task.BaseTask.KnownSolution`
 
-```
+```python
 KnownSolution(
     self,
     *,

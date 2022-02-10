@@ -1,7 +1,7 @@
 # InputData
 `toloka.client.project.template_builder.data.InputData`
 
-```
+```python
 InputData(
     self,
     path: Optional[Any] = None,

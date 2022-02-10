@@ -1,7 +1,7 @@
 # add_requester_translation
 `toloka.client.project.Project.add_requester_translation`
 
-```
+```python
 add_requester_translation(
     self,
     language: str,

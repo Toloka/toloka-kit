@@ -1,7 +1,7 @@
 # TextAnnotationFieldV1
 `toloka.client.project.template_builder.fields.TextAnnotationFieldV1`
 
-```
+```python
 TextAnnotationFieldV1(
     self,
     data: Optional[BaseComponent] = None,

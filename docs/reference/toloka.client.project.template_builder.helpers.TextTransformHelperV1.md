@@ -1,7 +1,7 @@
 # TextTransformHelperV1
 `toloka.client.project.template_builder.helpers.TextTransformHelperV1`
 
-```
+```python
 TextTransformHelperV1(
     self,
     data: Optional[Any] = None,

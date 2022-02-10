@@ -1,7 +1,7 @@
 # get_project
 `toloka.client.TolokaClient.get_project`
 
-```
+```python
 get_project(self, project_id: str)
 ```
 

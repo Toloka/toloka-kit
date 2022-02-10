@@ -1,7 +1,7 @@
 # Label
 `toloka.client.project.template_builder.fields.TextAnnotationFieldV1.Label`
 
-```
+```python
 Label(
     self,
     label: Optional[Union[BaseComponent, str]] = None,

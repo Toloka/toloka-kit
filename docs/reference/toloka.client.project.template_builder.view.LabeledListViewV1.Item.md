@@ -1,7 +1,7 @@
 # Item
 `toloka.client.project.template_builder.view.LabeledListViewV1.Item`
 
-```
+```python
 Item(
     self,
     content: Optional[BaseComponent] = None,

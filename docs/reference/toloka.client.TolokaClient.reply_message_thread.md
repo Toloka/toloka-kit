@@ -1,7 +1,7 @@
 # reply_message_thread
 `toloka.client.TolokaClient.reply_message_thread`
 
-```
+```python
 reply_message_thread(
     self,
     message_thread_id: str,

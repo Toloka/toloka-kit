@@ -1,7 +1,7 @@
 # SubArrayConditionV1
 `toloka.client.project.template_builder.conditions.SubArrayConditionV1`
 
-```
+```python
 SubArrayConditionV1(
     self,
     data: Optional[Any] = None,

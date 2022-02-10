@@ -1,7 +1,7 @@
 # SpecClassIdentificationError
 `toloka.client.exceptions.SpecClassIdentificationError`
 
-```
+```python
 SpecClassIdentificationError(
     self,
     *,

@@ -1,7 +1,7 @@
 # MessageThreadCompose
 `toloka.client.message_thread.MessageThreadCompose`
 
-```
+```python
 MessageThreadCompose(
     self,
     *,

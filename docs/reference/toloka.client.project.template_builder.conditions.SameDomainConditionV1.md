@@ -1,7 +1,7 @@
 # SameDomainConditionV1
 `toloka.client.project.template_builder.conditions.SameDomainConditionV1`
 
-```
+```python
 SameDomainConditionV1(
     self,
     data: Optional[Any] = None,

@@ -1,7 +1,7 @@
 # MediaFileFieldV1
 `toloka.client.project.template_builder.fields.MediaFileFieldV1`
 
-```
+```python
 MediaFileFieldV1(
     self,
     data: Optional[BaseComponent] = None,

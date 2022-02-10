@@ -1,7 +1,7 @@
 # Message
 `toloka.client.message_thread.MessageThread.Message`
 
-```
+```python
 Message(
     self,
     *,

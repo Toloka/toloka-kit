@@ -1,7 +1,7 @@
 # BaseConditionV1
 `toloka.client.project.template_builder.conditions.BaseConditionV1`
 
-```
+```python
 BaseConditionV1(
     self,
     *,

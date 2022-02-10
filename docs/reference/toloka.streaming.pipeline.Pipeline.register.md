@@ -1,7 +1,7 @@
 # register
 `toloka.streaming.pipeline.Pipeline.register`
 
-```
+```python
 register(self, observer: BaseObserver)
 ```
 

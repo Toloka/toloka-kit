@@ -1,7 +1,7 @@
 # GroupViewV1
 `toloka.client.project.template_builder.view.GroupViewV1`
 
-```
+```python
 GroupViewV1(
     self,
     content: Optional[BaseComponent] = None,

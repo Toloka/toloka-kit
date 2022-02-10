@@ -1,7 +1,7 @@
 # DeviceFrameViewV1
 `toloka.client.project.template_builder.view.DeviceFrameViewV1`
 
-```
+```python
 DeviceFrameViewV1(
     self,
     content: Optional[BaseComponent] = None,

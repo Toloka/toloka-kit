@@ -1,7 +1,7 @@
 # PoolCompletedPercentage
 `toloka.metrics.pool_metrics.PoolCompletedPercentage`
 
-```
+```python
 PoolCompletedPercentage(
     self,
     pool_id: str,

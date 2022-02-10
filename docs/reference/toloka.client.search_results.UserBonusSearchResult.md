@@ -1,7 +1,7 @@
 # UserBonusSearchResult
 `toloka.client.search_results.UserBonusSearchResult`
 
-```
+```python
 UserBonusSearchResult(
     self,
     *,

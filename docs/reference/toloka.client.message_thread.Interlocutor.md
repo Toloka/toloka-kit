@@ -1,7 +1,7 @@
 # Interlocutor
 `toloka.client.message_thread.Interlocutor`
 
-```
+```python
 Interlocutor(
     self,
     *,

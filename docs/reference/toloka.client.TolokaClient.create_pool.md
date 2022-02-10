@@ -1,7 +1,7 @@
 # create_pool
 `toloka.client.TolokaClient.create_pool`
 
-```
+```python
 create_pool(self, pool: Pool)
 ```
 

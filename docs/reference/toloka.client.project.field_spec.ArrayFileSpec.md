@@ -1,7 +1,7 @@
 # ArrayFileSpec
 `toloka.client.project.field_spec.ArrayFileSpec`
 
-```
+```python
 ArrayFileSpec(
     self,
     *,

@@ -1,7 +1,7 @@
 # ProjectSearchRequest
 `toloka.client.search_requests.ProjectSearchRequest`
 
-```
+```python
 ProjectSearchRequest(
     self,
     status: Optional[Project.ProjectStatus] = None,

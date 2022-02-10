@@ -1,7 +1,7 @@
 # Parameters
 `toloka.client.actions.RestrictionV2.Parameters`
 
-```
+```python
 Parameters(
     self,
     *,

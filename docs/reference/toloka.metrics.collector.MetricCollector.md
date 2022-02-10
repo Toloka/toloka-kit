@@ -1,7 +1,7 @@
 # MetricCollector
 `toloka.metrics.collector.MetricCollector`
 
-```
+```python
 MetricCollector(
     self,
     metrics: List[BaseMetric],

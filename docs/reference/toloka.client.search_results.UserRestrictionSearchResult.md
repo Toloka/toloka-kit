@@ -1,7 +1,7 @@
 # UserRestrictionSearchResult
 `toloka.client.search_results.UserRestrictionSearchResult`
 
-```
+```python
 UserRestrictionSearchResult(
     self,
     *,

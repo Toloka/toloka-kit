@@ -1,7 +1,7 @@
 # BaselineSolution
 `toloka.client.task.Task.BaselineSolution`
 
-```
+```python
 BaselineSolution(
     self,
     *,

@@ -1,7 +1,7 @@
 # IdentityRuleCondition
 `toloka.client.conditions.IdentityRuleCondition`
 
-```
+```python
 IdentityRuleCondition(
     self,
     operator: IdentityOperator,

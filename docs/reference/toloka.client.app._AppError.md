@@ -1,7 +1,7 @@
 # _AppError
 `toloka.client.app._AppError`
 
-```
+```python
 _AppError(
     self,
     *,

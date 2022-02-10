@@ -1,7 +1,7 @@
 # IncorrectAnswersRate
 `toloka.client.conditions.IncorrectAnswersRate`
 
-```
+```python
 IncorrectAnswersRate(
     self,
     operator: CompareOperator,

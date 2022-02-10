@@ -1,7 +1,7 @@
 # LinkViewV1
 `toloka.client.project.template_builder.view.LinkViewV1`
 
-```
+```python
 LinkViewV1(
     self,
     url: Optional[Any] = None,

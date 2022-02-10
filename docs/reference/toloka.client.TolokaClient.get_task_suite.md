@@ -1,7 +1,7 @@
 # get_task_suite
 `toloka.client.TolokaClient.get_task_suite`
 
-```
+```python
 get_task_suite(self, task_suite_id: str)
 ```
 

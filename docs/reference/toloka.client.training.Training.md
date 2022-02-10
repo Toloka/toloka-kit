@@ -1,7 +1,7 @@
 # Training
 `toloka.client.training.Training`
 
-```
+```python
 Training(
     self,
     *,

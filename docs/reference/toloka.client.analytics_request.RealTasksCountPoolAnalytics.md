@@ -1,7 +1,7 @@
 # RealTasksCountPoolAnalytics
 `toloka.client.analytics_request.RealTasksCountPoolAnalytics`
 
-```
+```python
 RealTasksCountPoolAnalytics(self, *, subject_id: str)
 ```
 

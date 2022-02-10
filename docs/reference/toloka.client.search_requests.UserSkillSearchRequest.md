@@ -1,7 +1,7 @@
 # UserSkillSearchRequest
 `toloka.client.search_requests.UserSkillSearchRequest`
 
-```
+```python
 UserSkillSearchRequest(
     self,
     user_id: Optional[str] = None,

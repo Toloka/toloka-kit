@@ -1,7 +1,7 @@
 # Parameters
 `toloka.client.operations.TaskSuiteCreateBatchOperation.Parameters`
 
-```
+```python
 Parameters(
     self,
     *,

@@ -1,7 +1,7 @@
 # FileLocker
 `toloka.streaming.locker.FileLocker`
 
-```
+```python
 FileLocker(
     self,
     dirname: str = '/tmp',

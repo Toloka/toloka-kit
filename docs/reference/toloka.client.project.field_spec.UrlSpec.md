@@ -1,7 +1,7 @@
 # UrlSpec
 `toloka.client.project.field_spec.UrlSpec`
 
-```
+```python
 UrlSpec(
     self,
     *,

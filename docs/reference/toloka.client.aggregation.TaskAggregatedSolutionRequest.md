@@ -1,7 +1,7 @@
 # TaskAggregatedSolutionRequest
 `toloka.client.aggregation.TaskAggregatedSolutionRequest`
 
-```
+```python
 TaskAggregatedSolutionRequest(
     self,
     *,

@@ -1,7 +1,7 @@
 # RuleCondition
 `toloka.client.conditions.RuleCondition`
 
-```
+```python
 RuleCondition(
     self,
     *,

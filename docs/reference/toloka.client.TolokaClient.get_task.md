@@ -1,7 +1,7 @@
 # get_task
 `toloka.client.TolokaClient.get_task`
 
-```
+```python
 get_task(self, task_id: str)
 ```
 

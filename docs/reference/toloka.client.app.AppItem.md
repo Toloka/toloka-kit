@@ -1,7 +1,7 @@
 # AppItem
 `toloka.client.app.AppItem`
 
-```
+```python
 AppItem(
     self,
     *,

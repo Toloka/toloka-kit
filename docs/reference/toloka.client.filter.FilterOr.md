@@ -1,7 +1,7 @@
 # FilterOr
 `toloka.client.filter.FilterOr`
 
-```
+```python
 FilterOr(self, or_: List[FilterCondition])
 ```
 

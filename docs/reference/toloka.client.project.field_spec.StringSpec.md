@@ -1,7 +1,7 @@
 # StringSpec
 `toloka.client.project.field_spec.StringSpec`
 
-```
+```python
 StringSpec(
     self,
     *,

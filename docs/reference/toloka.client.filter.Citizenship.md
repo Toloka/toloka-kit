@@ -1,7 +1,7 @@
 # Citizenship
 `toloka.client.filter.Citizenship`
 
-```
+```python
 Citizenship(
     self,
     operator: IdentityOperator,

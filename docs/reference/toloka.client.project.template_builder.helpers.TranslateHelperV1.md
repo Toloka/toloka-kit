@@ -1,7 +1,7 @@
 # TranslateHelperV1
 `toloka.client.project.template_builder.helpers.TranslateHelperV1`
 
-```
+```python
 TranslateHelperV1(
     self,
     key: Optional[Union[BaseComponent, str]] = None,

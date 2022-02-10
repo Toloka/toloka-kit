@@ -1,7 +1,7 @@
 # BasePoolMetric
 `toloka.metrics.pool_metrics.BasePoolMetric`
 
-```
+```python
 BasePoolMetric(
     self,
     pool_id: str,

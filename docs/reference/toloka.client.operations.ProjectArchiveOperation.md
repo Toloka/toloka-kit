@@ -1,7 +1,7 @@
 # ProjectArchiveOperation
 `toloka.client.operations.ProjectArchiveOperation`
 
-```
+```python
 ProjectArchiveOperation(
     self,
     *,

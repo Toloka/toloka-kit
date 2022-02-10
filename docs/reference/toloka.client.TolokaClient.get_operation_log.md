@@ -1,7 +1,7 @@
 # get_operation_log
 `toloka.client.TolokaClient.get_operation_log`
 
-```
+```python
 get_operation_log(self, operation_id: str)
 ```
 

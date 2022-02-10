@@ -1,7 +1,7 @@
 # MessageThreadFolders
 `toloka.client.message_thread.MessageThreadFolders`
 
-```
+```python
 MessageThreadFolders(self, *, folders: Optional[List[Folder]] = None)
 ```
 

@@ -1,7 +1,7 @@
 # TasksCreateOperation
 `toloka.client.operations.TasksCreateOperation`
 
-```
+```python
 TasksCreateOperation(
     self,
     *,

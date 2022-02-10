@@ -1,7 +1,7 @@
 # RegionByIp
 `toloka.client.filter.RegionByIp`
 
-```
+```python
 RegionByIp(
     self,
     operator: InclusionOperator,

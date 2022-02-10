@@ -1,7 +1,7 @@
 # UserBonusCreateBatchOperation
 `toloka.client.operations.UserBonusCreateBatchOperation`
 
-```
+```python
 UserBonusCreateBatchOperation(
     self,
     *,

@@ -1,7 +1,7 @@
 # MessageThreadCursor
 `toloka.streaming.cursor.MessageThreadCursor`
 
-```
+```python
 MessageThreadCursor(
     self,
     toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],

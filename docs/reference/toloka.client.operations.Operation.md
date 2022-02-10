@@ -1,7 +1,7 @@
 # Operation
 `toloka.client.operations.Operation`
 
-```
+```python
 Operation(
     self,
     *,

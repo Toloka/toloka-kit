@@ -1,7 +1,7 @@
 # S3Storage
 `toloka.streaming.storage.S3Storage`
 
-```
+```python
 S3Storage(
     self,
     bucket: Type,

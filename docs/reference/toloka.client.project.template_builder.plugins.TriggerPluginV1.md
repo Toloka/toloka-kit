@@ -1,7 +1,7 @@
 # TriggerPluginV1
 `toloka.client.project.template_builder.plugins.TriggerPluginV1`
 
-```
+```python
 TriggerPluginV1(
     self,
     *,

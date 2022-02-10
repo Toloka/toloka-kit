@@ -1,7 +1,7 @@
 # Defaults
 `toloka.client.pool.Pool.Defaults`
 
-```
+```python
 Defaults(
     self,
     *,

@@ -1,7 +1,7 @@
 # TextAnnotationHotkeysPluginV1
 `toloka.client.project.template_builder.plugins.TextAnnotationHotkeysPluginV1`
 
-```
+```python
 TextAnnotationHotkeysPluginV1(
     self,
     labels: Optional[Union[BaseComponent, List[str]]] = None,

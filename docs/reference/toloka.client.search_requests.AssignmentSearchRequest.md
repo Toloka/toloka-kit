@@ -1,7 +1,7 @@
 # AssignmentSearchRequest
 `toloka.client.search_requests.AssignmentSearchRequest`
 
-```
+```python
 AssignmentSearchRequest(
     self,
     status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]] = None,

@@ -1,7 +1,7 @@
 # SidebarLayoutV1
 `toloka.client.project.template_builder.layouts.SidebarLayoutV1`
 
-```
+```python
 SidebarLayoutV1(
     self,
     content: Optional[BaseComponent] = None,

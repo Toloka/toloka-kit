@@ -1,7 +1,7 @@
 # get_webhook_subscription
 `toloka.client.TolokaClient.get_webhook_subscription`
 
-```
+```python
 get_webhook_subscription(self, webhook_subscription_id: str)
 ```
 

@@ -1,7 +1,7 @@
 # CompletionPercentagePoolAnalytics
 `toloka.client.analytics_request.CompletionPercentagePoolAnalytics`
 
-```
+```python
 CompletionPercentagePoolAnalytics(self, *, subject_id: str)
 ```
 

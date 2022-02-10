@@ -1,7 +1,7 @@
 # GoldenSetCorrectAnswersRate
 `toloka.client.conditions.GoldenSetCorrectAnswersRate`
 
-```
+```python
 GoldenSetCorrectAnswersRate(
     self,
     operator: CompareOperator,

@@ -1,7 +1,7 @@
 # RefComponent
 `toloka.client.project.template_builder.base.RefComponent`
 
-```
+```python
 RefComponent(self, ref: Optional[str] = None)
 ```
 

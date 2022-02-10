@@ -1,7 +1,7 @@
 # get_skill
 `toloka.client.TolokaClient.get_skill`
 
-```
+```python
 get_skill(self, skill_id: str)
 ```
 

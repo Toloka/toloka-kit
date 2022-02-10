@@ -1,7 +1,7 @@
 # VideoViewV1
 `toloka.client.project.template_builder.view.VideoViewV1`
 
-```
+```python
 VideoViewV1(
     self,
     url: Optional[Any] = None,

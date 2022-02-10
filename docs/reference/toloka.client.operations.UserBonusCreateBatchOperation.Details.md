@@ -1,7 +1,7 @@
 # Details
 `toloka.client.operations.UserBonusCreateBatchOperation.Details`
 
-```
+```python
 Details(
     self,
     *,

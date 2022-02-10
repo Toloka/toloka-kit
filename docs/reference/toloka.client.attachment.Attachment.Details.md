@@ -1,7 +1,7 @@
 # Details
 `toloka.client.attachment.Attachment.Details`
 
-```
+```python
 Details(
     self,
     *,

@@ -1,7 +1,7 @@
 # register_callback
 `toloka.streaming.observer.PoolStatusObserver.register_callback`
 
-```
+```python
 register_callback(
     self,
     callback: Union[Callable[[Pool], None], Callable[[Pool], Awaitable[None]]],

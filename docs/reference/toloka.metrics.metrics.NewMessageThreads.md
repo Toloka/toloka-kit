@@ -1,7 +1,7 @@
 # NewMessageThreads
 `toloka.metrics.metrics.NewMessageThreads`
 
-```
+```python
 NewMessageThreads(
     self,
     count_name: Optional[str] = None,

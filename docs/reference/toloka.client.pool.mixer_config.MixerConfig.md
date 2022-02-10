@@ -1,7 +1,7 @@
 # MixerConfig
 `toloka.client.pool.mixer_config.MixerConfig`
 
-```
+```python
 MixerConfig(
     self,
     *,

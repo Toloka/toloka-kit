@@ -1,7 +1,7 @@
 # RejectedAssignmentsRate
 `toloka.client.conditions.RejectedAssignmentsRate`
 
-```
+```python
 RejectedAssignmentsRate(
     self,
     operator: CompareOperator,

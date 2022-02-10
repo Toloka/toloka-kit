@@ -1,7 +1,7 @@
 # LocalData
 `toloka.client.project.template_builder.data.LocalData`
 
-```
+```python
 LocalData(
     self,
     path: Optional[Any] = None,

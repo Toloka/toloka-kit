@@ -1,7 +1,7 @@
 # SetSkillFromOutputField
 `toloka.client.actions.SetSkillFromOutputField`
 
-```
+```python
 SetSkillFromOutputField(
     self,
     *,

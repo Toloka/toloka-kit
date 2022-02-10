@@ -1,7 +1,7 @@
 # RuleConfig
 `toloka.client.quality_control.QualityControl.QualityControlConfig.RuleConfig`
 
-```
+```python
 RuleConfig(
     self,
     *,

@@ -1,7 +1,7 @@
 # UserBonusSearchRequest
 `toloka.client.search_requests.UserBonusSearchRequest`
 
-```
+```python
 UserBonusSearchRequest(
     self,
     user_id: Optional[str] = None,

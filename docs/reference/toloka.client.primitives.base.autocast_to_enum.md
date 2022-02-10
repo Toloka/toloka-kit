@@ -1,7 +1,7 @@
 # autocast_to_enum
 `toloka.client.primitives.base.autocast_to_enum`
 
-```
+```python
 autocast_to_enum(func: Callable)
 ```
 

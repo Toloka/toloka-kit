@@ -1,7 +1,7 @@
 # InternalData
 `toloka.client.project.template_builder.data.InternalData`
 
-```
+```python
 InternalData(
     self,
     path: Optional[Any] = None,

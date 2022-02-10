@@ -1,7 +1,7 @@
 # DateOfBirth
 `toloka.client.filter.DateOfBirth`
 
-```
+```python
 DateOfBirth(
     self,
     operator: CompareOperator,

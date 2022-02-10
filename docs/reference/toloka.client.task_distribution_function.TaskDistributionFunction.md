@@ -1,7 +1,7 @@
 # TaskDistributionFunction
 `toloka.client.task_distribution_function.TaskDistributionFunction`
 
-```
+```python
 TaskDistributionFunction(
     self,
     *,

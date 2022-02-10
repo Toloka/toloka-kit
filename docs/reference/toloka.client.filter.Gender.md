@@ -1,7 +1,7 @@
 # Gender
 `toloka.client.filter.Gender`
 
-```
+```python
 Gender(
     self,
     operator: IdentityOperator,

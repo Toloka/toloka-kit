@@ -1,7 +1,7 @@
 # clone_project
 `toloka.client.TolokaClient.clone_project`
 
-```
+```python
 clone_project(
     self,
     project_id: str,

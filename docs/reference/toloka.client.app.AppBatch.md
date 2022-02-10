@@ -1,7 +1,7 @@
 # AppBatch
 `toloka.client.app.AppBatch`
 
-```
+```python
 AppBatch(
     self,
     *,

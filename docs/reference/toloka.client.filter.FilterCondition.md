@@ -1,7 +1,7 @@
 # FilterCondition
 `toloka.client.filter.FilterCondition`
 
-```
+```python
 FilterCondition(self)
 ```
 

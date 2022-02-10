@@ -1,7 +1,7 @@
 # WebhookSubscription
 `toloka.client.webhook_subscription.WebhookSubscription`
 
-```
+```python
 WebhookSubscription(
     self,
     *,

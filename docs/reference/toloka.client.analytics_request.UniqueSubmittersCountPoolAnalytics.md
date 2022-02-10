@@ -1,7 +1,7 @@
 # UniqueSubmittersCountPoolAnalytics
 `toloka.client.analytics_request.UniqueSubmittersCountPoolAnalytics`
 
-```
+```python
 UniqueSubmittersCountPoolAnalytics(self, *, subject_id: str)
 ```
 

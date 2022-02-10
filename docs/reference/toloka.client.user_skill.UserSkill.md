@@ -1,7 +1,7 @@
 # UserSkill
 `toloka.client.user_skill.UserSkill`
 
-```
+```python
 UserSkill(
     self,
     *,

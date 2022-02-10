@@ -1,7 +1,7 @@
 # ArrayIntegerSpec
 `toloka.client.project.field_spec.ArrayIntegerSpec`
 
-```
+```python
 ArrayIntegerSpec(
     self,
     *,

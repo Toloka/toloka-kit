@@ -1,7 +1,7 @@
 # AsyncInterfaceWrapper
 `toloka.util.async_utils.AsyncInterfaceWrapper`
 
-```
+```python
 AsyncInterfaceWrapper(self, wrapped: TypeVar('T'))
 ```
 

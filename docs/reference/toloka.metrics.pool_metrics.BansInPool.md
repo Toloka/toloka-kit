@@ -1,7 +1,7 @@
 # BansInPool
 `toloka.metrics.pool_metrics.BansInPool`
 
-```
+```python
 BansInPool(
     self,
     pool_id: str,

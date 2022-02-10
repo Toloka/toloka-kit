@@ -1,7 +1,7 @@
 # Education
 `toloka.client.filter.Education`
 
-```
+```python
 Education(
     self,
     operator: IdentityOperator,

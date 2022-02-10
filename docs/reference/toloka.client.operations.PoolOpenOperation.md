@@ -1,7 +1,7 @@
 # PoolOpenOperation
 `toloka.client.operations.PoolOpenOperation`
 
-```
+```python
 PoolOpenOperation(
     self,
     *,

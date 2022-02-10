@@ -1,7 +1,7 @@
 # FieldValidationError
 `toloka.client.batch_create_results.FieldValidationError`
 
-```
+```python
 FieldValidationError(
     self,
     *,

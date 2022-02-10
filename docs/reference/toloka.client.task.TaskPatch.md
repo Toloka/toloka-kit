@@ -1,7 +1,7 @@
 # TaskPatch
 `toloka.client.task.TaskPatch`
 
-```
+```python
 TaskPatch(
     self,
     *,

@@ -1,7 +1,7 @@
 # archive_project_async
 `toloka.client.TolokaClient.archive_project_async`
 
-```
+```python
 archive_project_async(self, project_id: str)
 ```
 

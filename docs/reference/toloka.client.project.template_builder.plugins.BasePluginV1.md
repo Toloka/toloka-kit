@@ -1,7 +1,7 @@
 # BasePluginV1
 `toloka.client.project.template_builder.plugins.BasePluginV1`
 
-```
+```python
 BasePluginV1(self, *, version: Optional[str] = '1.0.0')
 ```
 

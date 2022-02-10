@@ -1,7 +1,7 @@
 # DividerViewV1
 `toloka.client.project.template_builder.view.DividerViewV1`
 
-```
+```python
 DividerViewV1(
     self,
     *,

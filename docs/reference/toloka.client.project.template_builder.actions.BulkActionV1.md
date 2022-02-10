@@ -1,7 +1,7 @@
 # BulkActionV1
 `toloka.client.project.template_builder.actions.BulkActionV1`
 
-```
+```python
 BulkActionV1(
     self,
     payload: Optional[Union[BaseComponent, List[BaseComponent]]] = None,

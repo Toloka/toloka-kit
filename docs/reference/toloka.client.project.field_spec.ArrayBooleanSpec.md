@@ -1,7 +1,7 @@
 # ArrayBooleanSpec
 `toloka.client.project.field_spec.ArrayBooleanSpec`
 
-```
+```python
 ArrayBooleanSpec(
     self,
     *,

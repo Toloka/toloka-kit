@@ -1,7 +1,7 @@
 # Parameters
 `toloka.client.operations.TasksCreateOperation.Parameters`
 
-```
+```python
 Parameters(
     self,
     *,

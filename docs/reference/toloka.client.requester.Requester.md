@@ -1,7 +1,7 @@
 # Requester
 `toloka.client.requester.Requester`
 
-```
+```python
 Requester(
     self,
     *,

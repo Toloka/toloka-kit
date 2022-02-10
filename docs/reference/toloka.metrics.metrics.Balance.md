@@ -1,7 +1,7 @@
 # Balance
 `toloka.metrics.metrics.Balance`
 
-```
+```python
 Balance(
     self,
     balance_name: Optional[str] = None,

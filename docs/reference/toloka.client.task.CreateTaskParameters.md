@@ -1,7 +1,7 @@
 # CreateTaskParameters
 `toloka.client.task.CreateTaskParameters`
 
-```
+```python
 CreateTaskParameters(
     self,
     *,

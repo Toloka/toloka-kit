@@ -1,7 +1,7 @@
 # Captcha
 `toloka.client.collectors.Captcha`
 
-```
+```python
 Captcha(
     self,
     *,

@@ -1,7 +1,7 @@
 # TrainingCloneOperation
 `toloka.client.operations.TrainingCloneOperation`
 
-```
+```python
 TrainingCloneOperation(
     self,
     *,

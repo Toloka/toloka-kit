@@ -1,7 +1,7 @@
 # TaskSuite
 `toloka.client.task_suite.TaskSuite`
 
-```
+```python
 TaskSuite(
     self,
     *,

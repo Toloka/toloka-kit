@@ -1,7 +1,7 @@
 # ArrayFloatSpec
 `toloka.client.project.field_spec.ArrayFloatSpec`
 
-```
+```python
 ArrayFloatSpec(
     self,
     *,

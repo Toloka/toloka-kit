@@ -1,7 +1,7 @@
 # AssignmentSubmitTime
 `toloka.client.collectors.AssignmentSubmitTime`
 
-```
+```python
 AssignmentSubmitTime(
     self,
     *,

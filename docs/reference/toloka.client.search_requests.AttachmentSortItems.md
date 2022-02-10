@@ -1,7 +1,7 @@
 # AttachmentSortItems
 `toloka.client.search_requests.AttachmentSortItems`
 
-```
+```python
 AttachmentSortItems(self, items=None)
 ```
 

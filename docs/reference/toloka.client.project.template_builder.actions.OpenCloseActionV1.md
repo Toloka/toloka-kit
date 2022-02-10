@@ -1,7 +1,7 @@
 # OpenCloseActionV1
 `toloka.client.project.template_builder.actions.OpenCloseActionV1`
 
-```
+```python
 OpenCloseActionV1(
     self,
     view: Optional[Union[BaseComponent, RefComponent]] = None,

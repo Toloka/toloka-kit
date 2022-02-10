@@ -1,7 +1,7 @@
 # unarchive_app_project
 `toloka.client.TolokaClient.unarchive_app_project`
 
-```
+```python
 unarchive_app_project(self, app_project_id: str)
 ```
 

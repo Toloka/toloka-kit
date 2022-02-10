@@ -1,7 +1,7 @@
 # add_headers
 `toloka.util._managing_headers.add_headers`
 
-```
+```python
 add_headers(client: str)
 ```
 

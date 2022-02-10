@@ -995,10 +995,10 @@ class TolokaClient:
         Example:
             If you want to thank Toloka performers who have tried to complete your tasks, send them a nice message.
 
-            >>> message_text = 'Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!'
+            >>> message_text = "Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!"
             >>> toloka_client.compose_message_thread(
             >>>     recipients_select_type='ALL',
-            >>>     topic={'EN':'Thank you, performer!'},
+            >>>     topic={'EN': 'Thank you, performer!'},
             >>>     text={'EN': message_text},
             >>>     answerable=False
             >>> )
@@ -1030,10 +1030,10 @@ class TolokaClient:
         Example:
             If you want to thank Toloka performers who have tried to complete your tasks, send them a nice message.
 
-            >>> message_text = 'Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!'
+            >>> message_text = "Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!"
             >>> toloka_client.compose_message_thread(
             >>>     recipients_select_type='ALL',
-            >>>     topic={'EN':'Thank you, performer!'},
+            >>>     topic={'EN': 'Thank you, performer!'},
             >>>     text={'EN': message_text},
             >>>     answerable=False
             >>> )
@@ -2344,7 +2344,7 @@ class TolokaClient:
             >>>     name='Area selection of road signs',
             >>>     public_requester_description={
             >>>         'EN': 'Performer is annotating road signs',
-            >>>         'FR': 'L'exécuteur marque les signaux routier',
+            >>>         'FR': "L'exécuteur marque les signaux routier",
             >>>     },
             >>> )
             >>> print(new_skill.id)
@@ -2381,7 +2381,7 @@ class TolokaClient:
             >>>     name='Area selection of road signs',
             >>>     public_requester_description={
             >>>         'EN': 'Performer is annotating road signs',
-            >>>         'FR': 'L'exécuteur marque les signaux routier',
+            >>>         'FR': "L'exécuteur marque les signaux routier",
             >>>     },
             >>> )
             >>> print(new_skill.id)
@@ -4261,7 +4261,7 @@ class TolokaClient:
             >>> if requester.balance >= approx_pipeline_price:
             >>>     print('You have enough money on your account!')
             >>> else:
-            >>>     print('You haven't got enough money on your account!')
+            >>>     print("You haven't got enough money on your account!")
             ...
         """
         ...

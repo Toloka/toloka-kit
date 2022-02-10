@@ -1,7 +1,7 @@
 # Mode
 `toloka.client.project.template_builder.plugins.ImageAnnotationHotkeysPluginV1.Mode`
 
-```
+```python
 Mode(
     self,
     *,

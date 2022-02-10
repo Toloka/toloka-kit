@@ -1,7 +1,7 @@
 # AssignmentsIssuingConfig
 `toloka.client.pool.Pool.AssignmentsIssuingConfig`
 
-```
+```python
 AssignmentsIssuingConfig(self, issue_task_suites_in_creation_order: Optional[bool] = None)
 ```
 

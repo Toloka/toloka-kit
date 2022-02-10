@@ -1,7 +1,7 @@
 # TaskSearchRequest
 `toloka.client.search_requests.TaskSearchRequest`
 
-```
+```python
 TaskSearchRequest(
     self,
     pool_id: Optional[str] = None,

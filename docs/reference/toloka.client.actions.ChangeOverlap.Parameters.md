@@ -1,7 +1,7 @@
 # Parameters
 `toloka.client.actions.ChangeOverlap.Parameters`
 
-```
+```python
 Parameters(
     self,
     *,

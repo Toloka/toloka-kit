@@ -1,7 +1,7 @@
 # AudioFieldV1
 `toloka.client.project.template_builder.fields.AudioFieldV1`
 
-```
+```python
 AudioFieldV1(
     self,
     data: Optional[BaseComponent] = None,

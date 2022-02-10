@@ -1,7 +1,7 @@
 # SpentBudgetOnPool
 `toloka.metrics.pool_metrics.SpentBudgetOnPool`
 
-```
+```python
 SpentBudgetOnPool(
     self,
     pool_id: str,

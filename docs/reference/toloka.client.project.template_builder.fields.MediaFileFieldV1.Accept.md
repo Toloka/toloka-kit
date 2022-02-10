@@ -1,7 +1,7 @@
 # Accept
 `toloka.client.project.template_builder.fields.MediaFileFieldV1.Accept`
 
-```
+```python
 Accept(
     self,
     *,

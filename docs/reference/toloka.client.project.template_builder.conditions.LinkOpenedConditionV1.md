@@ -1,7 +1,7 @@
 # LinkOpenedConditionV1
 `toloka.client.project.template_builder.conditions.LinkOpenedConditionV1`
 
-```
+```python
 LinkOpenedConditionV1(
     self,
     url: Optional[Any] = None,

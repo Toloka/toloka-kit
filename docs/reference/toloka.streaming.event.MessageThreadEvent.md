@@ -1,7 +1,7 @@
 # MessageThreadEvent
 `toloka.streaming.event.MessageThreadEvent`
 
-```
+```python
 MessageThreadEvent(
     self,
     *,

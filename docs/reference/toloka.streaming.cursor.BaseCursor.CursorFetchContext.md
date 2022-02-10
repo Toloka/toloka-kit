@@ -1,7 +1,7 @@
 # CursorFetchContext
 `toloka.streaming.cursor.BaseCursor.CursorFetchContext`
 
-```
+```python
 CursorFetchContext(self, cursor: 'BaseCursor')
 ```
 

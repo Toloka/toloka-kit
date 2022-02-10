@@ -1,7 +1,7 @@
 # Parameters
 `toloka.client.actions.SetSkillFromOutputField.Parameters`
 
-```
+```python
 Parameters(
     self,
     *,

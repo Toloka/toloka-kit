@@ -1,7 +1,7 @@
 # Income
 `toloka.client.collectors.Income`
 
-```
+```python
 Income(self, *, uuid: Optional[UUID] = None)
 ```
 

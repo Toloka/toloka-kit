@@ -1,7 +1,7 @@
 # OSVersionMajor
 `toloka.client.filter.OSVersionMajor`
 
-```
+```python
 OSVersionMajor(
     self,
     operator: CompareOperator,

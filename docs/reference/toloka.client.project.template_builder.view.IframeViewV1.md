@@ -1,7 +1,7 @@
 # IframeViewV1
 `toloka.client.project.template_builder.view.IframeViewV1`
 
-```
+```python
 IframeViewV1(
     self,
     url: Optional[Union[BaseComponent, str]] = None,

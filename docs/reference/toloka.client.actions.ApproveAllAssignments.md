@@ -1,7 +1,7 @@
 # ApproveAllAssignments
 `toloka.client.actions.ApproveAllAssignments`
 
-```
+```python
 ApproveAllAssignments(self)
 ```
 

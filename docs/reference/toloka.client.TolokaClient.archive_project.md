@@ -1,7 +1,7 @@
 # archive_project
 `toloka.client.TolokaClient.archive_project`
 
-```
+```python
 archive_project(self, project_id: str)
 ```
 

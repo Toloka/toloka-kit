@@ -1,7 +1,7 @@
 # UserAgentFamily
 `toloka.client.filter.UserAgentFamily`
 
-```
+```python
 UserAgentFamily(
     self,
     operator: IdentityOperator,

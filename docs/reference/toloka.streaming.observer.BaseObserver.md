@@ -1,7 +1,7 @@
 # BaseObserver
 `toloka.streaming.observer.BaseObserver`
 
-```
+```python
 BaseObserver(self, *, name: Optional[str] = None)
 ```
 

@@ -1,7 +1,7 @@
 # AppProject
 `toloka.client.app.AppProject`
 
-```
+```python
 AppProject(
     self,
     *,

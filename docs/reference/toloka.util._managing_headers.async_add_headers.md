@@ -1,7 +1,7 @@
 # async_add_headers
 `toloka.util._managing_headers.async_add_headers`
 
-```
+```python
 async_add_headers(client: str)
 ```
 

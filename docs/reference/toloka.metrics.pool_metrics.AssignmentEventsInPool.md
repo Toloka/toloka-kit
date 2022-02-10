@@ -1,7 +1,7 @@
 # AssignmentEventsInPool
 `toloka.metrics.pool_metrics.AssignmentEventsInPool`
 
-```
+```python
 AssignmentEventsInPool(
     self,
     pool_id: str,

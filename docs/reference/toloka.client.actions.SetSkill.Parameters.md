@@ -1,7 +1,7 @@
 # Parameters
 `toloka.client.actions.SetSkill.Parameters`
 
-```
+```python
 Parameters(
     self,
     *,

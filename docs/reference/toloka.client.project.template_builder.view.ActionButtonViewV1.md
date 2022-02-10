@@ -1,7 +1,7 @@
 # ActionButtonViewV1
 `toloka.client.project.template_builder.view.ActionButtonViewV1`
 
-```
+```python
 ActionButtonViewV1(
     self,
     action: Optional[BaseComponent] = None,

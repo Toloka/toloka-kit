@@ -1,7 +1,7 @@
 # UserSkillEvent
 `toloka.streaming.event.UserSkillEvent`
 
-```
+```python
 UserSkillEvent(
     self,
     *,

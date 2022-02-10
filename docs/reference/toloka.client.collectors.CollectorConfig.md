@@ -1,7 +1,7 @@
 # CollectorConfig
 `toloka.client.collectors.CollectorConfig`
 
-```
+```python
 CollectorConfig(self, *, uuid: Optional[UUID] = None)
 ```
 

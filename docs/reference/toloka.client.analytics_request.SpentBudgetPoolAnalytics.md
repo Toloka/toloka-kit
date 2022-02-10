@@ -1,7 +1,7 @@
 # SpentBudgetPoolAnalytics
 `toloka.client.analytics_request.SpentBudgetPoolAnalytics`
 
-```
+```python
 SpentBudgetPoolAnalytics(self, *, subject_id: str)
 ```
 

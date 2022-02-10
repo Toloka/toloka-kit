@@ -1,7 +1,7 @@
 # remove_message_thread_from_folders
 `toloka.client.TolokaClient.remove_message_thread_from_folders`
 
-```
+```python
 remove_message_thread_from_folders(
     self,
     message_thread_id: str,

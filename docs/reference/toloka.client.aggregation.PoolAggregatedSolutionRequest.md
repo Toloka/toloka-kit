@@ -1,7 +1,7 @@
 # PoolAggregatedSolutionRequest
 `toloka.client.aggregation.PoolAggregatedSolutionRequest`
 
-```
+```python
 PoolAggregatedSolutionRequest(
     self,
     *,

@@ -1,7 +1,7 @@
 # Languages
 `toloka.client.filter.Languages`
 
-```
+```python
 Languages(
     self,
     operator: InclusionOperator,

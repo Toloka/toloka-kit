@@ -1,7 +1,7 @@
 # SideBySideLayoutV1
 `toloka.client.project.template_builder.layouts.SideBySideLayoutV1`
 
-```
+```python
 SideBySideLayoutV1(
     self,
     controls: Optional[BaseComponent] = None,

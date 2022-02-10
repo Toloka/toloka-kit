@@ -1,7 +1,7 @@
 # UniqueWorkersCountPoolAnalytics
 `toloka.client.analytics_request.UniqueWorkersCountPoolAnalytics`
 
-```
+```python
 UniqueWorkersCountPoolAnalytics(self, *, subject_id: str)
 ```
 

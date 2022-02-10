@@ -1,7 +1,7 @@
 # UserAgentVersionMajor
 `toloka.client.filter.UserAgentVersionMajor`
 
-```
+```python
 UserAgentVersionMajor(
     self,
     operator: CompareOperator,

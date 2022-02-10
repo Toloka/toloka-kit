@@ -1,7 +1,7 @@
 # Rating
 `toloka.client.filter.Rating`
 
-```
+```python
 Rating(
     self,
     operator: CompareOperator,

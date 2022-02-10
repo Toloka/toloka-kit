@@ -1,7 +1,7 @@
 # AssignmentCursor
 `toloka.streaming.cursor.AssignmentCursor`
 
-```
+```python
 AssignmentCursor(
     self,
     toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],

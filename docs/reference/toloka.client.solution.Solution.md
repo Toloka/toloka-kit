@@ -1,7 +1,7 @@
 # Solution
 `toloka.client.solution.Solution`
 
-```
+```python
 Solution(self, output_values: Dict[str, Any])
 ```
 

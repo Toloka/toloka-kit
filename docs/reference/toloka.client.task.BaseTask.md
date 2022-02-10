@@ -1,7 +1,7 @@
 # BaseTask
 `toloka.client.task.BaseTask`
 
-```
+```python
 BaseTask(
     self,
     *,

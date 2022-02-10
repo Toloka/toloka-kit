@@ -1,7 +1,7 @@
 # Case
 `toloka.client.project.template_builder.helpers.SwitchHelperV1.Case`
 
-```
+```python
 Case(
     self,
     condition: Optional[BaseComponent] = None,

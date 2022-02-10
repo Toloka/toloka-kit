@@ -1,7 +1,7 @@
 # get_signature
 `toloka.util.get_signature`
 
-```
+```python
 get_signature(func: Callable)
 ```
 

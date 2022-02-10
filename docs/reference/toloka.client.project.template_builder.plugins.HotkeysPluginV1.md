@@ -1,7 +1,7 @@
 # HotkeysPluginV1
 `toloka.client.project.template_builder.plugins.HotkeysPluginV1`
 
-```
+```python
 HotkeysPluginV1(
     self,
     *,

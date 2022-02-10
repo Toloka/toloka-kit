@@ -1,7 +1,7 @@
 # PoolSearchRequest
 `toloka.client.search_requests.PoolSearchRequest`
 
-```
+```python
 PoolSearchRequest(
     self,
     status: Optional[Pool.Status] = None,

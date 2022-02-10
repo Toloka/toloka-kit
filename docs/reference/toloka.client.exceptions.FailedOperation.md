@@ -1,7 +1,7 @@
 # FailedOperation
 `toloka.client.exceptions.FailedOperation`
 
-```
+```python
 FailedOperation(self, *, operation: Optional[Any] = None)
 ```
 

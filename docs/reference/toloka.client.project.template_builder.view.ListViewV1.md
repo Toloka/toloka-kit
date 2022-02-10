@@ -1,7 +1,7 @@
 # ListViewV1
 `toloka.client.project.template_builder.view.ListViewV1`
 
-```
+```python
 ListViewV1(
     self,
     items: Optional[Union[BaseComponent, List[BaseComponent]]] = None,

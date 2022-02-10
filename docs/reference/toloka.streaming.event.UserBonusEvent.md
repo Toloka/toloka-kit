@@ -1,7 +1,7 @@
 # UserBonusEvent
 `toloka.streaming.event.UserBonusEvent`
 
-```
+```python
 UserBonusEvent(
     self,
     *,

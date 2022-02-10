@@ -1,7 +1,7 @@
 # TaskEvent
 `toloka.streaming.event.TaskEvent`
 
-```
+```python
 TaskEvent(
     self,
     *,

@@ -1,7 +1,7 @@
 # ImageViewV1
 `toloka.client.project.template_builder.view.ImageViewV1`
 
-```
+```python
 ImageViewV1(
     self,
     url: Optional[Any] = None,

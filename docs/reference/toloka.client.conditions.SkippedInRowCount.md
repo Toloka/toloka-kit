@@ -1,7 +1,7 @@
 # SkippedInRowCount
 `toloka.client.conditions.SkippedInRowCount`
 
-```
+```python
 SkippedInRowCount(
     self,
     operator: CompareOperator,

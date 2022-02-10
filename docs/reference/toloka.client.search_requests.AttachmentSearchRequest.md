@@ -1,7 +1,7 @@
 # AttachmentSearchRequest
 `toloka.client.search_requests.AttachmentSearchRequest`
 
-```
+```python
 AttachmentSearchRequest(
     self,
     name: Optional[str] = None,

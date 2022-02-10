@@ -1,7 +1,7 @@
 # ensure_async
 `toloka.util.async_utils.ensure_async`
 
-```
+```python
 ensure_async(func: Callable)
 ```
 

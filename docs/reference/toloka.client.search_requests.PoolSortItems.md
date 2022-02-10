@@ -1,7 +1,7 @@
 # PoolSortItems
 `toloka.client.search_requests.PoolSortItems`
 
-```
+```python
 PoolSortItems(self, items=None)
 ```
 

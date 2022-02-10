@@ -1,7 +1,7 @@
 # set_default_language
 `toloka.client.project.Project.set_default_language`
 
-```
+```python
 set_default_language(self, language: str)
 ```
 

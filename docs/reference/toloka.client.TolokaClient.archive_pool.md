@@ -1,7 +1,7 @@
 # archive_pool
 `toloka.client.TolokaClient.archive_pool`
 
-```
+```python
 archive_pool(self, pool_id: str)
 ```
 

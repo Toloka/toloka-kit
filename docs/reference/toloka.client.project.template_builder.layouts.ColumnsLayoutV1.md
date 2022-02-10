@@ -1,7 +1,7 @@
 # ColumnsLayoutV1
 `toloka.client.project.template_builder.layouts.ColumnsLayoutV1`
 
-```
+```python
 ColumnsLayoutV1(
     self,
     items: Optional[Union[BaseComponent, List[BaseComponent]]] = None,

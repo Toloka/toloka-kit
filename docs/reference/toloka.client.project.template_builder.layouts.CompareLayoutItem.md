@@ -1,7 +1,7 @@
 # CompareLayoutItem
 `toloka.client.project.template_builder.layouts.CompareLayoutItem`
 
-```
+```python
 CompareLayoutItem(
     self,
     content: Optional[BaseComponent] = None,

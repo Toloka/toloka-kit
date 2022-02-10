@@ -1,7 +1,7 @@
 # inherit_docstrings
 `toloka.util._docstrings.inherit_docstrings`
 
-```
+```python
 inherit_docstrings(cls: Type[TypeVar('T')])
 ```
 

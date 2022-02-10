@@ -1,7 +1,7 @@
 # Computed
 `toloka.client.filter.Computed`
 
-```
+```python
 Computed(
     self,
     *,

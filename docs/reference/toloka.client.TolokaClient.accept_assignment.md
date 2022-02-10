@@ -1,7 +1,7 @@
 # accept_assignment
 `toloka.client.TolokaClient.accept_assignment`
 
-```
+```python
 accept_assignment(
     self,
     assignment_id: str,

@@ -1,7 +1,7 @@
 # EmptyConditionV1
 `toloka.client.project.template_builder.conditions.EmptyConditionV1`
 
-```
+```python
 EmptyConditionV1(
     self,
     data: Optional[Any] = None,

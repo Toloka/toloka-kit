@@ -1,7 +1,7 @@
 # delete_user_skill
 `toloka.client.TolokaClient.delete_user_skill`
 
-```
+```python
 delete_user_skill(self, user_skill_id: str)
 ```
 

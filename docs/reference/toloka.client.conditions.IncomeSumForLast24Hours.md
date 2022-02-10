@@ -1,7 +1,7 @@
 # IncomeSumForLast24Hours
 `toloka.client.conditions.IncomeSumForLast24Hours`
 
-```
+```python
 IncomeSumForLast24Hours(
     self,
     operator: CompareOperator,

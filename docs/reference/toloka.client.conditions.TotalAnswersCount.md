@@ -1,7 +1,7 @@
 # TotalAnswersCount
 `toloka.client.conditions.TotalAnswersCount`
 
-```
+```python
 TotalAnswersCount(
     self,
     operator: CompareOperator,

@@ -1,7 +1,7 @@
 # get_attachment
 `toloka.client.TolokaClient.get_attachment`
 
-```
+```python
 get_attachment(self, attachment_id: str)
 ```
 

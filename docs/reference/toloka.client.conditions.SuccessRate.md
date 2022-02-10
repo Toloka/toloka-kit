@@ -1,7 +1,7 @@
 # SuccessRate
 `toloka.client.conditions.SuccessRate`
 
-```
+```python
 SuccessRate(
     self,
     operator: CompareOperator,

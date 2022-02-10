@@ -1,7 +1,7 @@
 # DistanceConditionV1
 `toloka.client.project.template_builder.conditions.DistanceConditionV1`
 
-```
+```python
 DistanceConditionV1(
     self,
     from_: Optional[Union[BaseComponent, str]] = None,

@@ -1,7 +1,7 @@
 # get_user_restriction
 `toloka.client.TolokaClient.get_user_restriction`
 
-```
+```python
 get_user_restriction(self, user_restriction_id: str)
 ```
 

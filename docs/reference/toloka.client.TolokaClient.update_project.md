@@ -1,7 +1,7 @@
 # update_project
 `toloka.client.TolokaClient.update_project`
 
-```
+```python
 update_project(
     self,
     project_id: str,

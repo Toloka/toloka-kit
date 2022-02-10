@@ -1,7 +1,7 @@
 # run
 `toloka.metrics.collector.MetricCollector.run`
 
-```
+```python
 run(self)
 ```
 

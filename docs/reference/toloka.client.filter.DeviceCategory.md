@@ -1,7 +1,7 @@
 # DeviceCategory
 `toloka.client.filter.DeviceCategory`
 
-```
+```python
 DeviceCategory(
     self,
     operator: IdentityOperator,

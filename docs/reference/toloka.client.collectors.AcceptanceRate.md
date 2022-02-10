@@ -1,7 +1,7 @@
 # AcceptanceRate
 `toloka.client.collectors.AcceptanceRate`
 
-```
+```python
 AcceptanceRate(
     self,
     *,

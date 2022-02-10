@@ -1,7 +1,7 @@
 # BaseMetric
 `toloka.metrics.metrics.BaseMetric`
 
-```
+```python
 BaseMetric(
     self,
     *,

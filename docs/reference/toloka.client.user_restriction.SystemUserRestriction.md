@@ -1,7 +1,7 @@
 # SystemUserRestriction
 `toloka.client.user_restriction.SystemUserRestriction`
 
-```
+```python
 SystemUserRestriction(
     self,
     *,

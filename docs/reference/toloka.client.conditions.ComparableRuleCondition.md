@@ -1,7 +1,7 @@
 # ComparableRuleCondition
 `toloka.client.conditions.ComparableRuleCondition`
 
-```
+```python
 ComparableRuleCondition(
     self,
     operator: CompareOperator,

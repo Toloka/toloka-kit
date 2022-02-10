@@ -1,7 +1,7 @@
 # CreateTaskAsyncParameters
 `toloka.client.task.CreateTaskAsyncParameters`
 
-```
+```python
 CreateTaskAsyncParameters(
     self,
     *,

@@ -1,7 +1,7 @@
 # bind_client
 `toloka.metrics.metrics.bind_client`
 
-```
+```python
 bind_client(metrics: List['BaseMetric'], toloka_client: TolokaClient)
 ```
 

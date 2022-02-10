@@ -1,7 +1,7 @@
 # MarkdownViewV1
 `toloka.client.project.template_builder.view.MarkdownViewV1`
 
-```
+```python
 MarkdownViewV1(
     self,
     content: Optional[Any] = None,

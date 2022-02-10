@@ -1,7 +1,7 @@
 # BarsLayoutV1
 `toloka.client.project.template_builder.layouts.BarsLayoutV1`
 
-```
+```python
 BarsLayoutV1(
     self,
     content: Optional[BaseComponent] = None,

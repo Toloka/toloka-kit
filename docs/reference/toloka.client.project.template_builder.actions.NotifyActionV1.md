@@ -1,7 +1,7 @@
 # NotifyActionV1
 `toloka.client.project.template_builder.actions.NotifyActionV1`
 
-```
+```python
 NotifyActionV1(
     self,
     payload: Optional[Union[BaseComponent, Payload]] = None,

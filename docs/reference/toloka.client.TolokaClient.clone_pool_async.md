@@ -1,7 +1,7 @@
 # clone_pool_async
 `toloka.client.TolokaClient.clone_pool_async`
 
-```
+```python
 clone_pool_async(self, pool_id: str)
 ```
 

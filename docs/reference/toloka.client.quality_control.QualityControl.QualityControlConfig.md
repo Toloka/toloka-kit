@@ -1,7 +1,7 @@
 # QualityControlConfig
 `toloka.client.quality_control.QualityControl.QualityControlConfig`
 
-```
+```python
 QualityControlConfig(
     self,
     *,

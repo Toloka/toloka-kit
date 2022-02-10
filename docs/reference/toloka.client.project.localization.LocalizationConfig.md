@@ -1,7 +1,7 @@
 # LocalizationConfig
 `toloka.client.project.localization.LocalizationConfig`
 
-```
+```python
 LocalizationConfig(
     self,
     *,

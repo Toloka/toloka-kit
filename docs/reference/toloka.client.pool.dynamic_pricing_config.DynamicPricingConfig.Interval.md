@@ -1,7 +1,7 @@
 # Interval
 `toloka.client.pool.dynamic_pricing_config.DynamicPricingConfig.Interval`
 
-```
+```python
 Interval(
     self,
     *,

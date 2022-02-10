@@ -1,7 +1,7 @@
 # AssignmentsAssessment
 `toloka.client.collectors.AssignmentsAssessment`
 
-```
+```python
 AssignmentsAssessment(self, *, uuid: Optional[UUID] = None)
 ```
 

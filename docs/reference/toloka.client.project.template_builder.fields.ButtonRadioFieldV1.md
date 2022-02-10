@@ -1,7 +1,7 @@
 # ButtonRadioFieldV1
 `toloka.client.project.template_builder.fields.ButtonRadioFieldV1`
 
-```
+```python
 ButtonRadioFieldV1(
     self,
     data: Optional[BaseComponent] = None,

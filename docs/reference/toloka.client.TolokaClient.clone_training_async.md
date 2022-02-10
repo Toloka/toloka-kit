@@ -1,7 +1,7 @@
 # clone_training_async
 `toloka.client.TolokaClient.clone_training_async`
 
-```
+```python
 clone_training_async(self, training_id: str)
 ```
 

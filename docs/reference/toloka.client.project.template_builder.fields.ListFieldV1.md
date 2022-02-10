@@ -1,7 +1,7 @@
 # ListFieldV1
 `toloka.client.project.template_builder.fields.ListFieldV1`
 
-```
+```python
 ListFieldV1(
     self,
     data: Optional[BaseComponent] = None,

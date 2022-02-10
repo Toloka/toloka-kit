@@ -1,7 +1,7 @@
 # NumberFieldV1
 `toloka.client.project.template_builder.fields.NumberFieldV1`
 
-```
+```python
 NumberFieldV1(
     self,
     data: Optional[BaseComponent] = None,

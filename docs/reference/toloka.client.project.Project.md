@@ -1,7 +1,7 @@
 # Project
 `toloka.client.project.Project`
 
-```
+```python
 Project(
     self,
     *,

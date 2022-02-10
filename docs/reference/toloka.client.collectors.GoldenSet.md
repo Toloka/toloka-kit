@@ -1,7 +1,7 @@
 # GoldenSet
 `toloka.client.collectors.GoldenSet`
 
-```
+```python
 GoldenSet(
     self,
     *,

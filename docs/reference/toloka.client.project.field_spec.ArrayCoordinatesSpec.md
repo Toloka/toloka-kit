@@ -1,7 +1,7 @@
 # ArrayCoordinatesSpec
 `toloka.client.project.field_spec.ArrayCoordinatesSpec`
 
-```
+```python
 ArrayCoordinatesSpec(
     self,
     *,

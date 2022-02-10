@@ -1,7 +1,7 @@
 # register_callback
 `toloka.streaming.observer.AssignmentsObserver.register_callback`
 
-```
+```python
 register_callback(
     self,
     callback: Union[Callable[[List[AssignmentEvent]], None], Callable[[List[AssignmentEvent]], Awaitable[None]]],

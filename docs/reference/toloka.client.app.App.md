@@ -1,7 +1,7 @@
 # App
 `toloka.client.app.App`
 
-```
+```python
 App(
     self,
     *,

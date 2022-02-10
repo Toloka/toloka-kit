@@ -1,7 +1,7 @@
 # close_pool_for_update
 `toloka.client.TolokaClient.close_pool_for_update`
 
-```
+```python
 close_pool_for_update(self, pool_id: str)
 ```
 

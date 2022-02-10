@@ -1,7 +1,7 @@
 # get_user_bonus
 `toloka.client.TolokaClient.get_user_bonus`
 
-```
+```python
 get_user_bonus(self, user_bonus_id: str)
 ```
 

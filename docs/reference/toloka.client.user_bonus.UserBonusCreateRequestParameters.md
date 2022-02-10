@@ -1,7 +1,7 @@
 # UserBonusCreateRequestParameters
 `toloka.client.user_bonus.UserBonusCreateRequestParameters`
 
-```
+```python
 UserBonusCreateRequestParameters(
     self,
     *,

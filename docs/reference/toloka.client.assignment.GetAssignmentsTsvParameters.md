@@ -1,7 +1,7 @@
 # GetAssignmentsTsvParameters
 `toloka.client.assignment.GetAssignmentsTsvParameters`
 
-```
+```python
 GetAssignmentsTsvParameters(
     self,
     *,

@@ -1,7 +1,7 @@
 # ClassicViewSpec
 `toloka.client.project.view_spec.ClassicViewSpec`
 
-```
+```python
 ClassicViewSpec(
     self,
     *,

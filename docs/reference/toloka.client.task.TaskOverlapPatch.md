@@ -1,7 +1,7 @@
 # TaskOverlapPatch
 `toloka.client.task.TaskOverlapPatch`
 
-```
+```python
 TaskOverlapPatch(
     self,
     *,

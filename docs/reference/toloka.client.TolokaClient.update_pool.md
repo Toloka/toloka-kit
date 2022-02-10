@@ -1,7 +1,7 @@
 # update_pool
 `toloka.client.TolokaClient.update_pool`
 
-```
+```python
 update_pool(
     self,
     pool_id: str,

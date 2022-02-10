@@ -1,7 +1,7 @@
 # InfiniteOverlapParametersMixin
 `toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin`
 
-```
+```python
 InfiniteOverlapParametersMixin(
     self,
     infinite_overlap=None,

@@ -1,7 +1,7 @@
 # BaseSearchRequest
 `toloka.client.search_requests.BaseSearchRequest`
 
-```
+```python
 BaseSearchRequest(self)
 ```
 

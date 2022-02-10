@@ -1,7 +1,7 @@
 # MessageThreadReply
 `toloka.client.message_thread.MessageThreadReply`
 
-```
+```python
 MessageThreadReply(self, *, text: Optional[Dict[str, str]] = None)
 ```
 

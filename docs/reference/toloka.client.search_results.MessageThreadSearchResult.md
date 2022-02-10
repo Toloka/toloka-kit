@@ -1,7 +1,7 @@
 # MessageThreadSearchResult
 `toloka.client.search_results.MessageThreadSearchResult`
 
-```
+```python
 MessageThreadSearchResult(
     self,
     *,

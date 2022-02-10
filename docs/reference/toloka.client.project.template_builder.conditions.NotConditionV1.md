@@ -1,7 +1,7 @@
 # NotConditionV1
 `toloka.client.project.template_builder.conditions.NotConditionV1`
 
-```
+```python
 NotConditionV1(
     self,
     condition: Optional[BaseComponent] = None,

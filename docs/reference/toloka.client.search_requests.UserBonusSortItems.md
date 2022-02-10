@@ -1,7 +1,7 @@
 # UserBonusSortItems
 `toloka.client.search_requests.UserBonusSortItems`
 
-```
+```python
 UserBonusSortItems(self, items=None)
 ```
 

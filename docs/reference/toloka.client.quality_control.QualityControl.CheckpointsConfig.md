@@ -1,7 +1,7 @@
 # CheckpointsConfig
 `toloka.client.quality_control.QualityControl.CheckpointsConfig`
 
-```
+```python
 CheckpointsConfig(
     self,
     *,

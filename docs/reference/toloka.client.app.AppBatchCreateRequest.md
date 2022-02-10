@@ -1,7 +1,7 @@
 # AppBatchCreateRequest
 `toloka.client.app.AppBatchCreateRequest`
 
-```
+```python
 AppBatchCreateRequest(self, *, items: Optional[List[Dict[str, Any]]] = None)
 ```
 

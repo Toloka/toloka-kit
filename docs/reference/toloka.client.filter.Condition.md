@@ -1,7 +1,7 @@
 # Condition
 `toloka.client.filter.Condition`
 
-```
+```python
 Condition(
     self,
     *,

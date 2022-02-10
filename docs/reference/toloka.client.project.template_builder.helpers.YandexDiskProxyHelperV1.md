@@ -1,7 +1,7 @@
 # YandexDiskProxyHelperV1
 `toloka.client.project.template_builder.helpers.YandexDiskProxyHelperV1`
 
-```
+```python
 YandexDiskProxyHelperV1(
     self,
     path: Optional[Union[BaseComponent, str]] = None,

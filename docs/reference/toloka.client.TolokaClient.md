@@ -1,7 +1,7 @@
 # TolokaClient
 `toloka.client.TolokaClient`
 
-```
+```python
 TolokaClient(
     self,
     token: str,

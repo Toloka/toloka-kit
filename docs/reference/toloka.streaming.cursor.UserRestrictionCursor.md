@@ -1,7 +1,7 @@
 # UserRestrictionCursor
 `toloka.streaming.cursor.UserRestrictionCursor`
 
-```
+```python
 UserRestrictionCursor(
     self,
     toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],

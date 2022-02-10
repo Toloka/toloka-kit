@@ -1,7 +1,7 @@
 # TemplateBuilder
 `toloka.client.project.template_builder.TemplateBuilder`
 
-```
+```python
 TemplateBuilder(
     self,
     *,

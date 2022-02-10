@@ -1,7 +1,7 @@
 # Task
 `toloka.client.task.Task`
 
-```
+```python
 Task(
     self,
     *,

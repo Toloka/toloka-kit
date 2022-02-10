@@ -1,7 +1,7 @@
 # PoolStatusObserver
 `toloka.streaming.observer.PoolStatusObserver`
 
-```
+```python
 PoolStatusObserver(
     self,
     toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
