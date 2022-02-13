@@ -243,7 +243,7 @@ class TolokaClient:
     def _default_retryer_factory(
         retries: int,
         retry_quotas: Union[List[str], str, None],
-        status_list: Tuple[int] = (408, 409, 429, 500, 503),
+        status_list: Tuple[int] = (408, 429, 500, 503),
     ) -> Retry:
         return TolokaRetry(
             retry_quotas=retry_quotas,
