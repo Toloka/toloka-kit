@@ -384,6 +384,10 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
                 raise ValueError('"Language not in" filter does not support verified=True argument')
             return super().__new__(cls, *args, **kwargs)
 
+    def __getnewargs__(self):
+        """Due to redefined __new__ method class can't be deepcopied or pickled without __getnewargs__ definition"""
+        return self.operator, self.value
+
 
 # add fake parameter "verified: bool = False" to Languages.__init__ signature. This parameter will be consumed in
 # Languages.__new__ while the actual __init__ is managed by attrs.
