@@ -30,20 +30,34 @@ __all__ = [
     'user_restriction',
     'user_skill',
     'webhook_subscription',
+    'structure',
+    'unstructure',
     'TolokaClient',
+    'AggregatedSolution',
+    'AnalyticsRequest',
     'Assignment',
+    'AssignmentPatch',
+    'CloneResults',
+    'GetAssignmentsTsvParameters',
     'Attachment',
     'Folder',
     'MessageThread',
     'MessageThreadReply',
     'MessageThreadFolders',
     'MessageThreadCompose',
+    'OperationLogItem',
+    'Requester',
     'Skill',
+    'SetUserSkillRequest',
     'TaskSuite',
     'Task',
     'Training',
     'UserBonus',
+    'UserBonusCreateRequestParameters',
+    'UserRestriction',
+    'UserSkill',
     'Pool',
+    'PoolPatchRequest',
     'Project',
     'AppProject',
     'App',
@@ -117,6 +131,8 @@ from toloka.client import (
     user_skill,
     webhook_subscription,
 )
+from toloka.client.aggregation import AggregatedSolution
+from toloka.client.analytics_request import AnalyticsRequest
 from toloka.client.app import (
     App,
     AppBatch,
@@ -125,8 +141,13 @@ from toloka.client.app import (
     AppItemsCreateRequest,
     AppProject,
 )
-from toloka.client.assignment import Assignment
+from toloka.client.assignment import (
+    Assignment,
+    AssignmentPatch,
+    GetAssignmentsTsvParameters,
+)
 from toloka.client.attachment import Attachment
+from toloka.client.clone_results import CloneResults
 from toloka.client.message_thread import (
     Folder,
     MessageThread,
@@ -134,13 +155,26 @@ from toloka.client.message_thread import (
     MessageThreadFolders,
     MessageThreadReply,
 )
-from toloka.client.pool import Pool
+from toloka.client.operation_log import OperationLogItem
+from toloka.client.pool import (
+    Pool,
+    PoolPatchRequest,
+)
 from toloka.client.project import Project
+from toloka.client.requester import Requester
 from toloka.client.skill import Skill
 from toloka.client.task import Task
 from toloka.client.task_suite import TaskSuite
 from toloka.client.training import Training
-from toloka.client.user_bonus import UserBonus
+from toloka.client.user_bonus import (
+    UserBonus,
+    UserBonusCreateRequestParameters,
+)
+from toloka.client.user_restriction import UserRestriction
+from toloka.client.user_skill import (
+    SetUserSkillRequest,
+    UserSkill,
+)
 
 
 class TolokaClient:
