@@ -30,6 +30,7 @@ UNDOCUMENTED_COMPONENTS = {
     'view.web-phone-next',
     'view.with-label',
     'field.button-checkbox',
+    'field.tumbler',
 }
 
 
