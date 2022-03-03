@@ -29,7 +29,6 @@ __all__ = [
     'UserAgentVersionMajor',
     'UserAgentVersionMinor',
     'UserAgentVersionBugfix',
-    'Rating'
 ]
 import inspect
 from enum import unique
@@ -192,7 +191,6 @@ class Computed(Condition, spec_value=Condition.Category.COMPUTED, spec_field='ke
 
         REGION_BY_PHONE = 'region_by_phone'
         REGION_BY_IP = 'region_by_ip'
-        RATING = 'rating'
         DEVICE_CATEGORY = 'device_category'
         OS_FAMILY = 'os_family'
         OS_VERSION = 'os_version'
@@ -654,14 +652,3 @@ class UserAgentVersionBugfix(Computed, ComparableConditionMixin, spec_value=Comp
     """
 
     value: int
-
-
-@inherit_docstrings
-class Rating(Computed, ComparableConditionMixin, spec_value=Computed.Key.RATING):
-    """Use to select users by user rating.
-
-    Attributes:
-        value: User rating. Calculated based on earnings in all projects available to the user.
-    """
-
-    value: float

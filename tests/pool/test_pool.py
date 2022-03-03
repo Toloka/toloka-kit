@@ -212,7 +212,6 @@ def test_create_pool_check_all_filters(requests_mock, toloka_client, toloka_url,
                 {'category': 'computed', 'key': 'user_agent_version_major', 'operator': 'LT', 'value': 11},
                 {'category': 'computed', 'key': 'user_agent_version_minor', 'operator': 'LT', 'value': 12},
                 {'category': 'computed', 'key': 'user_agent_version_bugfix', 'operator': 'GT', 'value': 2026},
-                {'category': 'computed', 'key': 'rating', 'operator': 'GTE', 'value': 885.15},
                 {
                     'or': [
                         {'category': 'skill', 'key': '224', 'operator': 'GTE', 'value': 85},
@@ -260,7 +259,6 @@ def test_create_pool_check_all_filters(requests_mock, toloka_client, toloka_url,
         (filter.UserAgentVersionMajor < 11) &
         (filter.UserAgentVersionMinor < 12) &
         (filter.UserAgentVersionBugfix > 2026) &
-        (filter.Rating >= 885.15) &
         ((filter.Skill('224') >= 85) | (filter.Skill('300') != None) | (filter.Skill('350') == 75.512))  # noqa: E711
     )
     result = toloka_client.create_pool(pool)
