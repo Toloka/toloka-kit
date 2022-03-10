@@ -1,5 +1,6 @@
 import pytest
 from toloka.client.project import Project
+from ..template_builder import compare_view_specs
 
 
 def test_project_is_created(client, empty_project):
@@ -28,6 +29,10 @@ def test_clone_project(cloned_project_with_pool, project_with_pool):
         sorted(project_with_pool.unstructure().items())
     ):
         if key1 not in {'status', 'created', 'id'}:
+            if key1 == 'task_spec':
+                compare_view_specs(value1['view_spec'], value2['view_spec'])
+                value1.pop('view_spec')
+                value2.pop('view_spec')
             assert value1 == value2, f'Projects are different in {key1}'
 
 
