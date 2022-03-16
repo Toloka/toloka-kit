@@ -100,3 +100,4 @@ class Pipeline:
     storage: typing.Optional[toloka.streaming.storage.BaseStorage]
     name: typing.Optional[str]
     _observers: typing.Dict[int, toloka.streaming.observer.BaseObserver]
+    _got_sigint: bool

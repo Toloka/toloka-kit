@@ -6,10 +6,11 @@ import asyncio
 import attr
 import itertools
 import logging
+import signal
 
 from contextlib import contextmanager
 from datetime import datetime, timedelta
-from typing import Any, ContextManager, Dict, Iterable, List, Optional, Set, Tuple
+from typing import Any, Container, ContextManager, Dict, Iterable, List, Optional, Set, Tuple
 
 from .observer import BaseObserver
 from .storage import BaseStorage
@@ -112,6 +113,7 @@ class Pipeline:
     storage: Optional[BaseStorage] = attr.ib(default=None)
     name: Optional[str] = attr.ib(default=None, kw_only=True)
     _observers: Dict[int, BaseObserver] = attr.ib(factory=dict, init=False)
+    _got_sigint: bool = attr.ib(default=False, init=False)
 
     @contextmanager
     def _lock(self, key: str) -> ContextManager[Any]:
@@ -180,6 +182,15 @@ class Pipeline:
         self._observers[id(observer)] = observer
         return observer
 
+    def _sigint_handler(self, loop: asyncio.AbstractEventLoop, waiting: Container[_Worker]) -> None:
+        """Is being called in case of KeyboardInterrupt during workers run."""
+        logger.error('Gracefully shutdown...')
+        loop.remove_signal_handler(signal.SIGINT)
+        self._got_sigint = True
+        if not waiting:
+            logger.warning('No workers to wait')
+            raise KeyboardInterrupt
+
     def _process_done_tasks(
         self,
         pipeline_key: str,
@@ -200,14 +211,15 @@ class Pipeline:
                 pending[task.worker] = task.start_time + self.period
         self._storage_save(pipeline_key, workers_to_dump)
         if errored:
+            asyncio.get_event_loop().remove_signal_handler(signal.SIGINT)
             for task in errored:
                 logger.error('Got error in: %s', task)
             raise ComplexException([task.exception() for task in errored])
 
-    @async_add_headers('streaming')
     async def run(self) -> None:
         if not self._observers:
             raise ValueError('No observers registered')
+        self._got_sigint = False
 
         pipeline_key: str = str(self._get_unique_key())
 
@@ -224,6 +236,8 @@ class Pipeline:
             with self._lock(pipeline_key) as lock:
                 if iteration == 1:  # Get checkpoint from the storage.
                     self._storage_load(pipeline_key, workers)
+                    loop = asyncio.get_event_loop()
+                    loop.add_signal_handler(signal.SIGINT, self._sigint_handler, loop, waiting)
 
                 iteration_start = datetime.now()
 
@@ -237,24 +251,36 @@ class Pipeline:
                         still_pending[worker] = time_to_start
                 pending = still_pending
 
-                logger.info('Observers to run count: %d', len(to_start))
-                for worker in to_start:
-                    task = asyncio.get_event_loop().create_task(worker())
-                    task.worker = worker
-                    task.start_time = iteration_start
-                    waiting[worker] = task
+                if self._got_sigint:
+                    logger.warning('Not starting new workers due to SIGINT received')
+                    to_start = []
+                else:
+                    logger.info('Observers to run count: %d', len(to_start))
+                    for worker in to_start:
+                        task = asyncio.get_event_loop().create_task(worker())
+                        task.worker = worker
+                        task.start_time = iteration_start
+                        waiting[worker] = task
 
                 return_when = asyncio.FIRST_COMPLETED
                 if check_mode:
                     return_when = asyncio.ALL_COMPLETED
                     logger.info('Check resume all')
-                done, _ = await asyncio.wait(waiting.values(), return_when=return_when)
-                self._process_done_tasks(pipeline_key, done, waiting, pending)
+                if self._got_sigint:
+                    return_when = asyncio.ALL_COMPLETED
+                    logger.warning('Need to wait all working')
+
+                if waiting:  # It may be empty due to SIGINT.
+                    done, _ = await asyncio.wait(waiting.values(), return_when=return_when)
+                    self._process_done_tasks(pipeline_key, done, waiting, pending)
+                if self._got_sigint:
+                    raise KeyboardInterrupt
 
                 if _Worker._no_one_should_resume(workers):  # But some of them may still work.
                     if check_mode:
                         self._storage_cleanup(pipeline_key, workers, lock)
                         logger.info('Finish')
+                        asyncio.get_event_loop().remove_signal_handler(signal.SIGINT)
                         return
 
                     logger.info('No one should resume yet. Waiting for remaining ones...')
@@ -263,15 +289,20 @@ class Pipeline:
                     else:
                         done = set()
                     self._process_done_tasks(pipeline_key, done, waiting, pending)
+                    if self._got_sigint:
+                        raise KeyboardInterrupt
                     if _Worker._no_one_should_resume(workers):  # If stop condition at all workers, run in check_mode.
                         check_mode = True
-                    start_soon = max(pending.values())
+                    start_soon = max(pending.values(), default=None)
                 else:
                     check_mode = False
-                    start_soon = min(pending.values())
+                    start_soon = min(pending.values(), default=None)
 
-            sleep_time = (start_soon - datetime.now()).total_seconds()
-            sleep_time = max(sleep_time, self.MIN_SLEEP_SECONDS)
+            if self._got_sigint:
+                logger.warning('No sleeping while SIGINT handling')
+            else:
+                sleep_time = (start_soon - datetime.now()).total_seconds()
+                sleep_time = max(sleep_time, self.MIN_SLEEP_SECONDS)
 
-            logger.info('Sleeping for %f seconds', sleep_time)
-            await asyncio.sleep(sleep_time)
+                logger.info('Sleeping for %f seconds', sleep_time)
+                await asyncio.sleep(sleep_time)
