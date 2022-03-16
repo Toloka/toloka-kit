@@ -83,7 +83,7 @@ import contextvars
 
 from decimal import Decimal
 from enum import Enum, unique
-from typing import BinaryIO, Callable, Generator, List, Optional, Tuple, Union
+from typing import BinaryIO, Callable, Generator, List, Optional, Sequence, Tuple, Union
 from urllib3.util.retry import Retry
 
 from . import actions
@@ -132,7 +132,7 @@ from .message_thread import (
 )
 from .operation_log import OperationLogItem
 from .pool import Pool, PoolPatchRequest
-from .primitives.retry import TolokaRetry, PreloadingHTTPAdapter
+from .primitives.retry import TolokaRetry, PreloadingHTTPAdapter, STATUSES_TO_RETRY
 from .primitives.base import autocast_to_enum
 from .project import Project
 from .training import Training
@@ -258,12 +258,12 @@ class TolokaClient:
     def _default_retryer_factory(
         retries: int,
         retry_quotas: Union[List[str], str, None],
-        status_list: Tuple[int] = (408, 429, 500, 503),
+        status_list: Optional[Sequence[int]] = None,
     ) -> Retry:
         return TolokaRetry(
             retry_quotas=retry_quotas,
             total=retries,
-            status_forcelist=list(status_list),
+            status_forcelist=list(status_list or STATUSES_TO_RETRY),
             allowed_methods=['HEAD', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'POST', 'PATCH'],
             backoff_factor=2,  # summary retry time more than 10 seconds
         )

@@ -12,6 +12,8 @@ from urllib3.util.retry import Retry  # type: ignore
 
 logger = logging.getLogger(__name__)
 
+STATUSES_TO_RETRY = {408, 429, 500, 503, 504}
+
 
 class TolokaRetry(Retry):
     """Retry toloka quotas. By default only minutes quotas.
