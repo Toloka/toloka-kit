@@ -1,12 +1,12 @@
 # MessageThreadCursor
-`toloka.streaming.cursor.MessageThreadCursor`
+`toloka.streaming.cursor.MessageThreadCursor` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/cursor.py#L393)
 
 ```python
 MessageThreadCursor(
     self,
     toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
-    folder: Union[str, Folder, List[Union[str, Folder]]] = None,
-    folder_ne: Union[str, Folder, List[Union[str, Folder]]] = None,
+    folder: Union[str, Folder, List[Union[str, Folder]], None] = None,
+    folder_ne: Union[str, Folder, List[Union[str, Folder]], None] = None,
     id_lt: Optional[str] = None,
     id_lte: Optional[str] = None,
     id_gt: Optional[str] = None,

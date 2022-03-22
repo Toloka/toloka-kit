@@ -1,5 +1,5 @@
 # AcceptedAssignmentsRate
-`toloka.client.conditions.AcceptedAssignmentsRate`
+`toloka.client.conditions.AcceptedAssignmentsRate` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/conditions.py#L94)
 
 ```python
 AcceptedAssignmentsRate(

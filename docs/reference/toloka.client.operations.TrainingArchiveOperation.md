@@ -1,5 +1,5 @@
 # TrainingArchiveOperation
-`toloka.client.operations.TrainingArchiveOperation`
+`toloka.client.operations.TrainingArchiveOperation` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/operations.py#L204)
 
 ```python
 TrainingArchiveOperation(

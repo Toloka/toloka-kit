@@ -1,5 +1,5 @@
 # AttachmentSearchRequest
-`toloka.client.search_requests.AttachmentSearchRequest`
+`toloka.client.search_requests.AttachmentSearchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/search_requests.py#L630)
 
 ```python
 AttachmentSearchRequest(

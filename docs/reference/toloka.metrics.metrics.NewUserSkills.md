@@ -1,5 +1,5 @@
 # NewUserSkills
-`toloka.metrics.metrics.NewUserSkills`
+`toloka.metrics.metrics.NewUserSkills` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/metrics.py#L238)
 
 ```python
 NewUserSkills(
@@ -9,7 +9,7 @@ NewUserSkills(
     value_name: Optional[str] = None,
     join_events: bool = False,
     *,
-    toloka_client: TolokaClient = None,
+    toloka_client: Optional[TolokaClient] = None,
     timeout: timedelta = ...
 )
 ```

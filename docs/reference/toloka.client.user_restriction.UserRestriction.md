@@ -1,5 +1,5 @@
 # UserRestriction
-`toloka.client.user_restriction.UserRestriction`
+`toloka.client.user_restriction.UserRestriction` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/user_restriction.py#L25)
 
 ```python
 UserRestriction(

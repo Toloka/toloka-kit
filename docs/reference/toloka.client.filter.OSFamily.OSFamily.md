@@ -1,5 +1,5 @@
 # OSFamily
-`toloka.client.filter.OSFamily.OSFamily`
+`toloka.client.filter.OSFamily.OSFamily` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/filter.py#L475)
 
 The operating system family.
 

@@ -1,5 +1,5 @@
 # CheckpointsConfig
-`toloka.client.quality_control.QualityControl.CheckpointsConfig`
+`toloka.client.quality_control.QualityControl.CheckpointsConfig` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/quality_control.py#L62)
 
 ```python
 CheckpointsConfig(

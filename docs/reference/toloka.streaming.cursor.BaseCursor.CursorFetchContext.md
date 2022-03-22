@@ -1,8 +1,8 @@
 # CursorFetchContext
-`toloka.streaming.cursor.BaseCursor.CursorFetchContext`
+`toloka.streaming.cursor.BaseCursor.CursorFetchContext` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/cursor.py#L82)
 
 ```python
-CursorFetchContext(self, cursor: 'BaseCursor')
+CursorFetchContext(self, cursor: BaseCursor)
 ```
 
 Context manager to return from `BaseCursor.try_fetch_all method`.

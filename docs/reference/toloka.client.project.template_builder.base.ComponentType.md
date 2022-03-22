@@ -1,5 +1,5 @@
 # ComponentType
-`toloka.client.project.template_builder.base.ComponentType`
+`toloka.client.project.template_builder.base.ComponentType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/base.py#L24)
 
 An enumeration.
 

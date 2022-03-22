@@ -1,5 +1,5 @@
 # BaseViewV1
-`toloka.client.project.template_builder.view.BaseViewV1`
+`toloka.client.project.template_builder.view.BaseViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/view.py#L51)
 
 ```python
 BaseViewV1(

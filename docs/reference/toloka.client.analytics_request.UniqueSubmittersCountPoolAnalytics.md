@@ -1,5 +1,5 @@
 # UniqueSubmittersCountPoolAnalytics
-`toloka.client.analytics_request.UniqueSubmittersCountPoolAnalytics`
+`toloka.client.analytics_request.UniqueSubmittersCountPoolAnalytics` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/analytics_request.py#L140)
 
 ```python
 UniqueSubmittersCountPoolAnalytics(self, *, subject_id: str)

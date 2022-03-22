@@ -1,5 +1,5 @@
 # create_pool
-`toloka.client.TolokaClient.create_pool`
+`toloka.client.TolokaClient.create_pool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client.py#L44)
 
 ```python
 create_pool(self, pool: Pool)

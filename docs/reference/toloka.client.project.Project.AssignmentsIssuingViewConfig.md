@@ -1,5 +1,5 @@
 # AssignmentsIssuingViewConfig
-`toloka.client.project.Project.AssignmentsIssuingViewConfig`
+`toloka.client.project.Project.AssignmentsIssuingViewConfig` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project.py#L141)
 
 ```python
 AssignmentsIssuingViewConfig(

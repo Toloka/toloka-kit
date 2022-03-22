@@ -1,12 +1,12 @@
 # Balance
-`toloka.metrics.metrics.Balance`
+`toloka.metrics.metrics.Balance` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/metrics.py#L124)
 
 ```python
 Balance(
     self,
     balance_name: Optional[str] = None,
     *,
-    toloka_client: TolokaClient = None,
+    toloka_client: Optional[TolokaClient] = None,
     timeout: timedelta = ...
 )
 ```

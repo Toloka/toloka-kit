@@ -1,5 +1,5 @@
 # Gender
-`toloka.client.filter.Gender`
+`toloka.client.filter.Gender` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/filter.py#L223)
 
 ```python
 Gender(

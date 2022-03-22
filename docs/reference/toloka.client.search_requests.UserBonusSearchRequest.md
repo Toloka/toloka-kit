@@ -1,5 +1,5 @@
 # UserBonusSearchRequest
-`toloka.client.search_requests.UserBonusSearchRequest`
+`toloka.client.search_requests.UserBonusSearchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/search_requests.py#L795)
 
 ```python
 UserBonusSearchRequest(

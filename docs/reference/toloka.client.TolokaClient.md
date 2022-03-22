@@ -1,5 +1,5 @@
 # TolokaClient
-`toloka.client.TolokaClient`
+`toloka.client.TolokaClient` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client.py#L153)
 
 ```python
 TolokaClient(

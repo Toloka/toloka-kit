@@ -1,12 +1,12 @@
 # AssignmentCursor
-`toloka.streaming.cursor.AssignmentCursor`
+`toloka.streaming.cursor.AssignmentCursor` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/cursor.py#L215)
 
 ```python
 AssignmentCursor(
     self,
     toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
     event_type: Any,
-    status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]] = None,
+    status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]], None] = None,
     task_id: Optional[str] = None,
     task_suite_id: Optional[str] = None,
     pool_id: Optional[str] = None,

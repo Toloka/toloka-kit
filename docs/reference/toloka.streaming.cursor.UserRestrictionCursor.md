@@ -1,5 +1,5 @@
 # UserRestrictionCursor
-`toloka.streaming.cursor.UserRestrictionCursor`
+`toloka.streaming.cursor.UserRestrictionCursor` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/cursor.py#L359)
 
 ```python
 UserRestrictionCursor(

@@ -1,8 +1,8 @@
 # bind_client
-`toloka.metrics.metrics.bind_client`
+`toloka.metrics.metrics.bind_client` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/metrics.py#L34)
 
 ```python
-bind_client(metrics: List['BaseMetric'], toloka_client: TolokaClient)
+bind_client(metrics: List[BaseMetric], toloka_client: TolokaClient)
 ```
 
 Sets/updates toloka_client for all metrics in list.

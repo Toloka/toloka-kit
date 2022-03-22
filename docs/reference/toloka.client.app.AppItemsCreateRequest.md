@@ -1,5 +1,5 @@
 # AppItemsCreateRequest
-`toloka.client.app.AppItemsCreateRequest`
+`toloka.client.app.AppItemsCreateRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/app.py#L152)
 
 ```python
 AppItemsCreateRequest(

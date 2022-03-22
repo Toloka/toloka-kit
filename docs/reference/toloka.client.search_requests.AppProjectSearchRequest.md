@@ -1,5 +1,5 @@
 # AppProjectSearchRequest
-`toloka.client.search_requests.AppProjectSearchRequest`
+`toloka.client.search_requests.AppProjectSearchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/search_requests.py#L950)
 
 ```python
 AppProjectSearchRequest(
@@ -9,7 +9,7 @@ AppProjectSearchRequest(
     status: Optional[AppProject.Status] = None,
     after_id: Optional[str] = None,
     scope: Optional[Scope] = None,
-    requester_ids: Union[str, List[str]] = None,
+    requester_ids: Union[str, List[str], None] = None,
     id_lt: Optional[str] = None,
     id_lte: Optional[str] = None,
     id_gt: Optional[str] = None,

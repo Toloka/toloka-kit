@@ -1,5 +1,5 @@
 # TaskDistributionFunction
-`toloka.client.task_distribution_function.TaskDistributionFunction`
+`toloka.client.task_distribution_function.TaskDistributionFunction` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/task_distribution_function.py#L9)
 
 ```python
 TaskDistributionFunction(

@@ -1,5 +1,5 @@
 # SkippedInRowAssignments
-`toloka.client.collectors.SkippedInRowAssignments`
+`toloka.client.collectors.SkippedInRowAssignments` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/collectors.py#L434)
 
 ```python
 SkippedInRowAssignments(self, *, uuid: Optional[UUID] = None)

@@ -1,5 +1,5 @@
 # Interlocutor
-`toloka.client.message_thread.Interlocutor`
+`toloka.client.message_thread.Interlocutor` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/message_thread.py#L46)
 
 ```python
 Interlocutor(

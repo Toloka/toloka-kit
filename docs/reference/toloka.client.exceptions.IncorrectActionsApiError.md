@@ -1,5 +1,5 @@
 # IncorrectActionsApiError
-`toloka.client.exceptions.IncorrectActionsApiError`
+`toloka.client.exceptions.IncorrectActionsApiError` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/exceptions.py#L123)
 
 ## Parameters Description
 

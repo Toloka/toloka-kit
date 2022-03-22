@@ -1,5 +1,5 @@
 # get_line_names
-`toloka.metrics.metrics.NewUserSkills.get_line_names`
+`toloka.metrics.metrics.NewUserSkills.get_line_names` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/metrics.py#L283)
 
 ```python
 get_line_names(self)

@@ -1,5 +1,5 @@
 # TasksInPool
-`toloka.metrics.pool_metrics.TasksInPool`
+`toloka.metrics.pool_metrics.TasksInPool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/pool_metrics.py#L283)
 
 ```python
 TasksInPool(
@@ -7,7 +7,7 @@ TasksInPool(
     pool_id: str,
     tasks_name: Optional[str] = None,
     *,
-    toloka_client: TolokaClient = None,
+    toloka_client: Optional[TolokaClient] = None,
     timeout: timedelta = ...
 )
 ```

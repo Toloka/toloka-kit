@@ -1,5 +1,5 @@
 # ChangeOverlap
-`toloka.client.actions.ChangeOverlap`
+`toloka.client.actions.ChangeOverlap` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/actions.py#L131)
 
 ```python
 ChangeOverlap(

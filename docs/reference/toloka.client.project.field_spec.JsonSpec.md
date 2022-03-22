@@ -1,5 +1,5 @@
 # JsonSpec
-`toloka.client.project.field_spec.JsonSpec`
+`toloka.client.project.field_spec.JsonSpec` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/field_spec.py#L135)
 
 ```python
 JsonSpec(

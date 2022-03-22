@@ -1,5 +1,5 @@
 # BaseConditionV1
-`toloka.client.project.template_builder.conditions.BaseConditionV1`
+`toloka.client.project.template_builder.conditions.BaseConditionV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/conditions.py#L33)
 
 ```python
 BaseConditionV1(

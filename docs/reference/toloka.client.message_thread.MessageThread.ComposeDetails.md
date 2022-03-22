@@ -1,5 +1,5 @@
 # ComposeDetails
-`toloka.client.message_thread.MessageThread.ComposeDetails`
+`toloka.client.message_thread.MessageThread.ComposeDetails` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/message_thread.py#L102)
 
 ```python
 ComposeDetails(

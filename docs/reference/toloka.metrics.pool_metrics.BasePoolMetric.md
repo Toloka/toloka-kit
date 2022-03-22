@@ -1,12 +1,12 @@
 # BasePoolMetric
-`toloka.metrics.pool_metrics.BasePoolMetric`
+`toloka.metrics.pool_metrics.BasePoolMetric` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/pool_metrics.py#L44)
 
 ```python
 BasePoolMetric(
     self,
     pool_id: str,
     *,
-    toloka_client: TolokaClient = None,
+    toloka_client: Optional[TolokaClient] = None,
     timeout: timedelta = ...
 )
 ```

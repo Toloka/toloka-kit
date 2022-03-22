@@ -1,5 +1,5 @@
 # BulkActionV1
-`toloka.client.project.template_builder.actions.BulkActionV1`
+`toloka.client.project.template_builder.actions.BulkActionV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/actions.py#L34)
 
 ```python
 BulkActionV1(

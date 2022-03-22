@@ -1,5 +1,5 @@
 # update_pool
-`toloka.client.TolokaClient.update_pool`
+`toloka.client.TolokaClient.update_pool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client.py#L44)
 
 ```python
 update_pool(

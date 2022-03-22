@@ -1,5 +1,5 @@
 # SkippedInRowCount
-`toloka.client.conditions.SkippedInRowCount`
+`toloka.client.conditions.SkippedInRowCount` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/conditions.py#L262)
 
 ```python
 SkippedInRowCount(

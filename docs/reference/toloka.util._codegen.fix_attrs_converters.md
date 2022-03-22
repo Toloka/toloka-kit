@@ -1,5 +1,5 @@
 # fix_attrs_converters
-`toloka.util._codegen.fix_attrs_converters`
+`toloka.util._codegen.fix_attrs_converters` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/util/_codegen.py#L266)
 
 ```python
 fix_attrs_converters(cls)

@@ -1,5 +1,5 @@
 # NewMessageThreads
-`toloka.metrics.metrics.NewMessageThreads`
+`toloka.metrics.metrics.NewMessageThreads` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/metrics.py#L320)
 
 ```python
 NewMessageThreads(
@@ -9,7 +9,7 @@ NewMessageThreads(
     pools_name: Dict[str, str] = ...,
     join_events: bool = False,
     *,
-    toloka_client: TolokaClient = None,
+    toloka_client: Optional[TolokaClient] = None,
     timeout: timedelta = ...
 )
 ```

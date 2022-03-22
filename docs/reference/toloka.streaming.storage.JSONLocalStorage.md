@@ -1,5 +1,5 @@
 # JSONLocalStorage
-`toloka.streaming.storage.JSONLocalStorage`
+`toloka.streaming.storage.JSONLocalStorage` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/storage.py#L56)
 
 ```python
 JSONLocalStorage(

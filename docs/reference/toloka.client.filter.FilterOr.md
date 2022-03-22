@@ -1,5 +1,5 @@
 # FilterOr
-`toloka.client.filter.FilterOr`
+`toloka.client.filter.FilterOr` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/filter.py#L86)
 
 ```python
 FilterOr(self, or_: List[FilterCondition])

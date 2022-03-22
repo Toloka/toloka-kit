@@ -1,5 +1,5 @@
 # MessageThreadFolders
-`toloka.client.message_thread.MessageThreadFolders`
+`toloka.client.message_thread.MessageThreadFolders` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/message_thread.py#L160)
 
 ```python
 MessageThreadFolders(self, *, folders: Optional[List[Folder]] = None)

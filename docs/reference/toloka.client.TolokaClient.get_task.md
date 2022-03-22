@@ -1,5 +1,5 @@
 # get_task
-`toloka.client.TolokaClient.get_task`
+`toloka.client.TolokaClient.get_task` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client.py#L44)
 
 ```python
 get_task(self, task_id: str)

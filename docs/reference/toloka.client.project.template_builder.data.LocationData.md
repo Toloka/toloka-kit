@@ -1,5 +1,5 @@
 # LocationData
-`toloka.client.project.template_builder.data.LocationData`
+`toloka.client.project.template_builder.data.LocationData` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/data.py#L73)
 
 ```python
 LocationData(self)

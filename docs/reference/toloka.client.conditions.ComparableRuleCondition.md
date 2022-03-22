@@ -1,5 +1,5 @@
 # ComparableRuleCondition
-`toloka.client.conditions.ComparableRuleCondition`
+`toloka.client.conditions.ComparableRuleCondition` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/conditions.py#L74)
 
 ```python
 ComparableRuleCondition(

@@ -1,5 +1,5 @@
 # Type
-`toloka.client.project.view_spec.ViewSpec.Type`
+`toloka.client.project.view_spec.ViewSpec.Type` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/view_spec.py#L22)
 
 A view spec type
 

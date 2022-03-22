@@ -1,5 +1,5 @@
 # BaseObserver
-`toloka.streaming.observer.BaseObserver`
+`toloka.streaming.observer.BaseObserver` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/observer.py#L25)
 
 ```python
 BaseObserver(self, *, name: Optional[str] = None)

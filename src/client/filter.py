@@ -394,6 +394,7 @@ languages_init_signature_parameters = dict(languages_init_signature.parameters)
 languages_init_signature_parameters['verified'] = inspect.Parameter(
     name='verified', kind=inspect.Parameter.POSITIONAL_OR_KEYWORD, default=False, annotation=bool,
 )
+Languages.__init__.__annotations__['verified'] = bool
 Languages.__init__.__signature__ = languages_init_signature.replace(parameters=languages_init_signature_parameters.values())
 
 

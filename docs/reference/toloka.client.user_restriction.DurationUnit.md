@@ -1,5 +1,5 @@
 # DurationUnit
-`toloka.client.user_restriction.DurationUnit`
+`toloka.client.user_restriction.DurationUnit` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/user_restriction.py#L17)
 
 An enumeration.
 

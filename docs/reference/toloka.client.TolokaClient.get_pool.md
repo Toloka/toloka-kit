@@ -1,5 +1,5 @@
 # get_pool
-`toloka.client.TolokaClient.get_pool`
+`toloka.client.TolokaClient.get_pool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client.py#L44)
 
 ```python
 get_pool(self, pool_id: str)

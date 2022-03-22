@@ -1,5 +1,5 @@
 # OSVersionMinor
-`toloka.client.filter.OSVersionMinor`
+`toloka.client.filter.OSVersionMinor` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/filter.py#L525)
 
 ```python
 OSVersionMinor(

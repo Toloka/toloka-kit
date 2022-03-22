@@ -11,7 +11,7 @@ While iterating over the result, several requests to the Toloka server is possib
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`status`|**Union\[str, [Assignment.Status](toloka.client.assignment.Assignment.Status.md), List\[Union\[str, [Assignment.Status](toloka.client.assignment.Assignment.Status.md)\]\]\]**|<p>Status of an assigned task suite (Detailed status description in Assignment.Status):<ul><li>ACTIVE</li><li>SUBMITTED</li><li>ACCEPTED</li><li>REJECTED</li><li>SKIPPED</li><li>EXPIRED</li></ul></p>
+`status`|**Union\[str, [Assignment.Status](toloka.client.assignment.Assignment.Status.md), List\[Union\[str, [Assignment.Status](toloka.client.assignment.Assignment.Status.md)\]\], None\]**|<p>Status of an assigned task suite (Detailed status description in Assignment.Status):<ul><li>ACTIVE</li><li>SUBMITTED</li><li>ACCEPTED</li><li>REJECTED</li><li>SKIPPED</li><li>EXPIRED</li></ul></p>
 `task_id`|**Optional\[str\]**|<p>The task ID in suites generated automatically using &quot;smart mixing&quot;. You will get responses for task suites that contain the specified task.</p>
 `task_suite_id`|**Optional\[str\]**|<p>ID of a task suite.</p>
 `pool_id`|**Optional\[str\]**|<p>Pool ID.</p>

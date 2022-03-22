@@ -1,5 +1,5 @@
 # AssignmentEventsInPool
-`toloka.metrics.pool_metrics.AssignmentEventsInPool`
+`toloka.metrics.pool_metrics.AssignmentEventsInPool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/pool_metrics.py#L56)
 
 ```python
 AssignmentEventsInPool(
@@ -13,7 +13,7 @@ AssignmentEventsInPool(
     expired_name: Optional[str] = None,
     join_events: bool = False,
     *,
-    toloka_client: TolokaClient = None,
+    toloka_client: Optional[TolokaClient] = None,
     timeout: timedelta = ...
 )
 ```

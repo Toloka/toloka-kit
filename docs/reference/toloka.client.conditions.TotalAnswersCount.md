@@ -1,5 +1,5 @@
 # TotalAnswersCount
-`toloka.client.conditions.TotalAnswersCount`
+`toloka.client.conditions.TotalAnswersCount` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/conditions.py#L287)
 
 ```python
 TotalAnswersCount(

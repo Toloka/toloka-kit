@@ -1,5 +1,5 @@
 # AppItemSearchRequest
-`toloka.client.search_requests.AppItemSearchRequest`
+`toloka.client.search_requests.AppItemSearchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/search_requests.py#L1065)
 
 ```python
 AppItemSearchRequest(

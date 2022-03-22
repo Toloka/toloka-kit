@@ -1,5 +1,5 @@
 # OperationLogItem
-`toloka.client.operation_log.OperationLogItem`
+`toloka.client.operation_log.OperationLogItem` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/operation_log.py#L6)
 
 ```python
 OperationLogItem(

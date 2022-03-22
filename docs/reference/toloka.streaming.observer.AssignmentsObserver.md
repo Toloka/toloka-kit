@@ -1,5 +1,5 @@
 # AssignmentsObserver
-`toloka.streaming.observer.AssignmentsObserver`
+`toloka.streaming.observer.AssignmentsObserver` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/observer.py#L292)
 
 ```python
 AssignmentsObserver(

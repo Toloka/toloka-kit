@@ -1,7 +1,7 @@
 # DashBoard
-`toloka.metrics.jupyter_dashboard.DashBoard`
+`toloka.metrics.jupyter_dashboard.DashBoard` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/jupyter_dashboard.py#L174)
 
-```
+```python
 DashBoard(
     self,
     metrics: List[Union[BaseMetric, Chart]],

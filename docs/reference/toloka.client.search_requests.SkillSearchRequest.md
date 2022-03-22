@@ -1,5 +1,5 @@
 # SkillSearchRequest
-`toloka.client.search_requests.SkillSearchRequest`
+`toloka.client.search_requests.SkillSearchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/search_requests.py#L339)
 
 ```python
 SkillSearchRequest(
