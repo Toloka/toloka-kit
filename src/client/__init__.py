@@ -31,20 +31,35 @@ __all__ = [
     'user_skill',
     'webhook_subscription',
 
+    'structure',
+    'unstructure',
+
     'TolokaClient',
+    'AggregatedSolution',
+    'AnalyticsRequest',
     'Assignment',
+    'AssignmentPatch',
+    'CloneResults',
+    'GetAssignmentsTsvParameters',
     'Attachment',
     'Folder',
     'MessageThread',
     'MessageThreadReply',
     'MessageThreadFolders',
     'MessageThreadCompose',
+    'OperationLogItem',
+    'Requester',
     'Skill',
+    'SetUserSkillRequest',
     'TaskSuite',
     'Task',
     'Training',
     'UserBonus',
+    'UserBonusCreateRequestParameters',
+    'UserRestriction',
+    'UserSkill',
     'Pool',
+    'PoolPatchRequest',
     'Project',
     'AppProject',
     'App',
@@ -68,7 +83,7 @@ import contextvars
 
 from decimal import Decimal
 from enum import Enum, unique
-from typing import BinaryIO, Callable, Generator, List, Optional, Tuple, Union
+from typing import BinaryIO, Callable, Generator, List, Optional, Sequence, Tuple, Union
 from urllib3.util.retry import Retry
 
 from . import actions
@@ -117,7 +132,7 @@ from .message_thread import (
 )
 from .operation_log import OperationLogItem
 from .pool import Pool, PoolPatchRequest
-from .primitives.retry import TolokaRetry, PreloadingHTTPAdapter
+from .primitives.retry import TolokaRetry, PreloadingHTTPAdapter, STATUSES_TO_RETRY
 from .primitives.base import autocast_to_enum
 from .project import Project
 from .training import Training
@@ -243,12 +258,12 @@ class TolokaClient:
     def _default_retryer_factory(
         retries: int,
         retry_quotas: Union[List[str], str, None],
-        status_list: Tuple[int] = (408, 409, 429, 500, 503),
+        status_list: Optional[Sequence[int]] = None,
     ) -> Retry:
         return TolokaRetry(
             retry_quotas=retry_quotas,
             total=retries,
-            status_forcelist=list(status_list),
+            status_forcelist=list(status_list or STATUSES_TO_RETRY),
             allowed_methods=['HEAD', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'POST', 'PATCH'],
             backoff_factor=2,  # summary retry time more than 10 seconds
         )
@@ -793,10 +808,10 @@ class TolokaClient:
         Example:
             If you want to thank Toloka performers who have tried to complete your tasks, send them a nice message.
 
-            >>> message_text = 'Amazing job! We\'ve just trained our first model with the data YOU prepared for us. Thank you!'
+            >>> message_text = "Amazing job! We\'ve just trained our first model with the data YOU prepared for us. Thank you!"
             >>> toloka_client.compose_message_thread(
             >>>     recipients_select_type='ALL',
-            >>>     topic={'EN':'Thank you, performer!'},
+            >>>     topic={'EN': 'Thank you, performer!'},
             >>>     text={'EN': message_text},
             >>>     answerable=False
             >>> )
@@ -1908,7 +1923,7 @@ class TolokaClient:
             >>>     name='Area selection of road signs',
             >>>     public_requester_description={
             >>>         'EN': 'Performer is annotating road signs',
-            >>>         'FR': 'L'exécuteur marque les signaux routier',
+            >>>         'FR': "L'exécuteur marque les signaux routier",
             >>>     },
             >>> )
             >>> print(new_skill.id)
@@ -2963,7 +2978,7 @@ class TolokaClient:
             >>> if requester.balance >= approx_pipeline_price:
             >>>     print('You have enough money on your account!')
             >>> else:
-            >>>     print('You haven\'t got enough money on your account!')
+            >>>     print("You haven't got enough money on your account!")
             ...
         """
         response = self._request('get', '/v1/requester')
