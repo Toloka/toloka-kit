@@ -525,7 +525,7 @@ class TaskSearchRequest(BaseSearchRequest):
     """Parameters for searching tasks
 
     Attributes:
-        pool_id: ID of the pool to get tasks from.
+        pool_id: The ID of the pool to get tasks from.
         overlap: Tasks with an overlap equal to the specified value.
         id_lt: Tasks with an ID less than the specified value.
         id_lte: Tasks with an ID less than or equal to the specified value.
@@ -536,9 +536,9 @@ class TaskSearchRequest(BaseSearchRequest):
         created_gt: Tasks created after the specified date.
         created_gte: Tasks created after or on the specified date.
         overlap_lt: Tasks with an overlap less than the specified value.
-        overlap_lte: Tasks with an overlap equal to the specified value.
+        overlap_lte: Tasks with an overlap less than or equal to the specified value.
         overlap_gt: Tasks with an overlap greater than the specified value.
-        overlap_gte: Tasks with an overlap equal to the specified value.
+        overlap_gte: Tasks with an overlap greater than or equal to the specified value.
     """
 
     class CompareFields:

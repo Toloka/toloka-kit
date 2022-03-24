@@ -116,9 +116,9 @@ class CreateTaskParameters(Parameters):
     Used when creating one Task.
 
     Attributes:
-        allow_defaults: Overlap settings:
-            * True - Use the overlap that is set in the pool parameters (in the defaults.default_overlap_for_new_task_suites key).
-            * False - Use the overlap that is set in the task suite parameters (in the overlap field).
+        allow_defaults: Active overlap setting:
+            * True — Use the overlap value that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
+            * False — Use the overlap value that is set in the `overlap` task suite parameter.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
     """
 
@@ -138,15 +138,12 @@ class CreateTasksParameters(CreateTaskParameters):
     Used when creating many Tasks.
 
     Attributes:
-        skip_invalid_items: Validation parameters:
-            * True — Create the tasks that passed validation. Skip the rest of the tasks (errors will
-                be listed in the response to the request).
-            * False — If at least one of the tasks didn't pass validation, stop the operation and don't create any tasks.
-        async_mode: How the request is processed:
-            * True — deferred. The query results in an asynchronous operation running in the background.
-                The response contains information about the operation (start and end time, status, number of sets).
-            * False — synchronous. The response contains information about the created tasks.
-                A maximum of 5000 tasks can be sent in a single request.
+        skip_invalid_items: Task validation option:
+            * True — All valid tasks are added. If a task does not pass validation, then it is not added to Toloka. All such tasks are listed in the response.
+            * False — If any task does not pass validation, then operation is cancelled and no tasks are added to Toloka.
+        async_mode: Request processing mode:
+            * True — Asynchronous operation is started internally and `create_tasks` waits for the completion of it. It is recommended to create no more than 10,000 tasks per request in this mode.
+            * False — The request is processed synchronously. A maximum of 5000 tasks can be added in a single request in this mode.
     """
 
     skip_invalid_items: bool
@@ -158,10 +155,10 @@ class TaskOverlapPatch(BaseTolokaObject):
     """Parameters for changing the overlap of a specific Task
 
     Attributes:
-        overlap: Overlapping a set of tasks.
-        infinite_overlap: Issue a task with infinite overlap. Used, for example, for sets of training tasks to give them to all users:
-            * True - Set infinite overlap.
-            * False - Leave the overlap specified for the task or pool. Default Behaviour.
+        overlap: Overlap value.
+        infinite_overlap: Infinite overlap:
+            * True — Assign the task to all users. It is useful for training tasks.
+            * False — Overlap value specified for the task or for the pool is used. Default value: False.
     """
 
     overlap: int
