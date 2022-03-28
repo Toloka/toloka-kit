@@ -87,6 +87,7 @@ An enumeration.
 `VIEW_LINK`|'view.link'|<p></p>
 `VIEW_LINK_GROUP`|'view.link-group'|<p></p>
 `VIEW_LIST`|'view.list'|<p></p>
+`VIEW_MAP`|'view.map'|<p></p>
 `VIEW_MARKDOWN`|'view.markdown'|<p></p>
 `VIEW_TEXT`|'view.text'|<p></p>
 `VIEW_VIDEO`|'view.video'|<p></p>

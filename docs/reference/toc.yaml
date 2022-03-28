@@ -1832,6 +1832,14 @@ items:
         href: toloka.client.project.template_builder.view.LinkGroupViewV1.md
       - name: ListViewV1
         href: toloka.client.project.template_builder.view.ListViewV1.md
+      - name: MapViewV1.Marker
+        href: toloka.client.project.template_builder.view.MapViewV1.Marker.md
+        hidden: true
+      - name: MapViewV1.Polygon
+        href: toloka.client.project.template_builder.view.MapViewV1.Polygon.md
+        hidden: true
+      - name: MapViewV1
+        href: toloka.client.project.template_builder.view.MapViewV1.md
       - name: MarkdownViewV1
         href: toloka.client.project.template_builder.view.MarkdownViewV1.md
       - name: TextViewV1

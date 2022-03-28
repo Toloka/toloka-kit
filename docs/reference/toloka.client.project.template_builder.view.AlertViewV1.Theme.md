@@ -1,5 +1,5 @@
 # Theme
-`toloka.client.project.template_builder.view.AlertViewV1.Theme` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/view.py#L86)
+`toloka.client.project.template_builder.view.AlertViewV1.Theme` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/view.py#L87)
 
 An enumeration
 
