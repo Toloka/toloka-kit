@@ -478,7 +478,7 @@ def test_find_tasks(requests_mock, toloka_client, toloka_url, task_map_with_read
     # Request object syntax
     request = client.search_requests.TaskSearchRequest(
         pool_id=21,
-        created_gt=datetime.datetime(2001, 1, 1, 12, 0, 0),
+        created_gt=datetime.datetime(2001, 1, 1, 12, 0, 0, tzinfo=datetime.timezone.utc),
         overlap_gte=42,
     )
     sort = client.search_requests.TaskSortItems(['id', '-created'])
@@ -488,7 +488,7 @@ def test_find_tasks(requests_mock, toloka_client, toloka_url, task_map_with_read
     # Expanded syntax
     result = toloka_client.find_tasks(
         pool_id=21,
-        created_gt=datetime.datetime(2001, 1, 1, 12, 0, 0),
+        created_gt=datetime.datetime(2001, 1, 1, 12, 0, 0, tzinfo=datetime.timezone.utc),
         overlap_gte=42,
         sort=['id', '-created'],
         limit=20,
@@ -525,7 +525,7 @@ def test_get_tasks(requests_mock, toloka_client, toloka_url, task_map_with_reado
     # Request object syntax
     request = client.search_requests.TaskSearchRequest(
         pool_id=21,
-        created_gt=datetime.datetime(2001, 1, 1, 12, 0, 0),
+        created_gt=datetime.datetime(2001, 1, 1, 12, 0, 0, tzinfo=datetime.timezone.utc),
         overlap_gte=42,
     )
     result = toloka_client.get_tasks(request)
@@ -534,7 +534,7 @@ def test_get_tasks(requests_mock, toloka_client, toloka_url, task_map_with_reado
     # Expanded syntax
     result = toloka_client.get_tasks(
         pool_id=21,
-        created_gt=datetime.datetime(2001, 1, 1, 12, 0, 0),
+        created_gt=datetime.datetime(2001, 1, 1, 12, 0, 0, tzinfo=datetime.timezone.utc),
         overlap_gte=42,
     )
     assert tasks == client.unstructure(list(result))

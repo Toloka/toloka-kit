@@ -25,9 +25,9 @@ NewMessageThreads instance. You can gather all in one instance.
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
 `count_name`|**Optional\[str\]**|<p>Metric name for a count of new messages.</p>
-`projects_name`|**Dict\[str, str\]**|<p>Dictyonary that allows count messages on exact projects. {project_id: line_name}</p>
-`pools_name`|**Dict\[str, str\]**|<p>Dictyonary that allows count messages on exact pools. {pool_id: line_name}</p>
-`join_events`|**bool**|<p>Count all events in one point.  Default False. &quot;Values&quot; never join.</p>
+`projects_name`|**Dict\[str, str\]**|<p>Dictionary that allows count messages on exact projects. {project_id: line_name}</p>
+`pools_name`|**Dict\[str, str\]**|<p>Dictionary that allows count messages on exact pools. {pool_id: line_name}</p>
+`join_events`|**bool**|<p>Count all events in one point. Default False. &quot;Values&quot; never join.</p>
 
 **Examples:**
 

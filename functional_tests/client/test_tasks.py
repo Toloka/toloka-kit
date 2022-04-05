@@ -11,7 +11,7 @@ def pool(client, empty_project):
         private_name='Test pool',
         reward_per_assignment=0.01,
         assignment_max_duration_seconds=100,
-        will_expire=datetime.datetime.utcnow() + datetime.timedelta(days=365),
+        will_expire=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=365),
     )
     new_pool.set_mixer_config(real_tasks_count=1)
     new_pool = client.create_pool(new_pool)

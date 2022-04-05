@@ -242,7 +242,7 @@ def test_find_user_bonuses(requests_mock, toloka_client, toloka_url, user_bonus_
     # Request object syntax
     request = client.search_requests.UserBonusSearchRequest(
         user_id='user-1',
-        created_gte=datetime.datetime(2012, 1, 1, 12, 0, 0)
+        created_gte=datetime.datetime(2012, 1, 1, 12, 0, 0, tzinfo=datetime.timezone.utc)
     )
     sort = client.search_requests.UserBonusSortItems(['created', '-id'])
     result = toloka_client.find_user_bonuses(request, sort=sort, limit=20)
@@ -251,7 +251,7 @@ def test_find_user_bonuses(requests_mock, toloka_client, toloka_url, user_bonus_
     # Expanded syntax
     result = toloka_client.find_user_bonuses(
         user_id='user-1',
-        created_gte=datetime.datetime(2012, 1, 1, 12, 0, 0),
+        created_gte=datetime.datetime(2012, 1, 1, 12, 0, 0, tzinfo=datetime.timezone.utc),
         sort=['created', '-id'],
         limit=20,
     )
@@ -286,7 +286,7 @@ def test_get_user_bonuses(requests_mock, toloka_client, toloka_url, user_bonus_m
     # Request object syntax
     request = client.search_requests.UserBonusSearchRequest(
         user_id='user-1',
-        created_gte=datetime.datetime(2012, 1, 1, 12, 0, 0)
+        created_gte=datetime.datetime(2012, 1, 1, 12, 0, 0, tzinfo=datetime.timezone.utc)
     )
     result = toloka_client.get_user_bonuses(request)
     assert user_bonuses == client.unstructure(list(result))
@@ -294,7 +294,7 @@ def test_get_user_bonuses(requests_mock, toloka_client, toloka_url, user_bonus_m
     # Expanded syntax
     result = toloka_client.get_user_bonuses(
         user_id='user-1',
-        created_gte=datetime.datetime(2012, 1, 1, 12, 0, 0),
+        created_gte=datetime.datetime(2012, 1, 1, 12, 0, 0, tzinfo=datetime.timezone.utc),
     )
     assert user_bonuses == client.unstructure(list(result))
 

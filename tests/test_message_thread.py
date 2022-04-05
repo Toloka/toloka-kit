@@ -82,8 +82,8 @@ def test_find_message_thread(requests_mock, toloka_client, toloka_url, message_t
     request = client.search_requests.MessageThreadSearchRequest(
         folder=client.message_thread.Folder.OUTBOX,
         folder_ne=client.message_thread.Folder.IMPORTANT,
-        created_gte=datetime.datetime(2015, 12, 1),
-        created_lt=datetime.datetime(2016, 6, 1),
+        created_gte=datetime.datetime(2015, 12, 1, tzinfo=datetime.timezone.utc),
+        created_lt=datetime.datetime(2016, 6, 1, tzinfo=datetime.timezone.utc),
     )
     sort = client.search_requests.MessageThreadSortItems(['-created'])
     result = toloka_client.find_message_threads(request, sort=sort)
@@ -93,8 +93,8 @@ def test_find_message_thread(requests_mock, toloka_client, toloka_url, message_t
     result = toloka_client.find_message_threads(
         folder=client.message_thread.Folder.OUTBOX,
         folder_ne=client.message_thread.Folder.IMPORTANT,
-        created_gte=datetime.datetime(2015, 12, 1),
-        created_lt=datetime.datetime(2016, 6, 1),
+        created_gte=datetime.datetime(2015, 12, 1, tzinfo=datetime.timezone.utc),
+        created_lt=datetime.datetime(2016, 6, 1, tzinfo=datetime.timezone.utc),
         sort=['-created'],
     )
     assert raw_result == client.unstructure(result)
@@ -132,8 +132,8 @@ def test_get_message_threads(requests_mock, toloka_client, toloka_url, message_t
     request = client.search_requests.MessageThreadSearchRequest(
         folder=client.message_thread.Folder.OUTBOX,
         folder_ne=client.message_thread.Folder.IMPORTANT,
-        created_gte=datetime.datetime(2015, 12, 1),
-        created_lt=datetime.datetime(2016, 6, 1),
+        created_gte=datetime.datetime(2015, 12, 1, tzinfo=datetime.timezone.utc),
+        created_lt=datetime.datetime(2016, 6, 1, tzinfo=datetime.timezone.utc),
     )
     result = toloka_client.get_message_threads(request)
     assert threads == client.unstructure(list(result))
@@ -142,8 +142,8 @@ def test_get_message_threads(requests_mock, toloka_client, toloka_url, message_t
     result = toloka_client.get_message_threads(
         folder=client.message_thread.Folder.OUTBOX,
         folder_ne=client.message_thread.Folder.IMPORTANT,
-        created_gte=datetime.datetime(2015, 12, 1),
-        created_lt=datetime.datetime(2016, 6, 1),
+        created_gte=datetime.datetime(2015, 12, 1, tzinfo=datetime.timezone.utc),
+        created_lt=datetime.datetime(2016, 6, 1, tzinfo=datetime.timezone.utc),
     )
     assert threads == client.unstructure(list(result))
 

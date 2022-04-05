@@ -40,16 +40,30 @@ def str_to_datetime(str_dt: str) -> datetime.datetime:
     def fill_miliseconds(miliseconds) -> str:
         return miliseconds.group().ljust(7 if len(miliseconds.group()) > 4 else 4, '0')
 
-    return datetime.datetime.fromisoformat(MS_IN_ISO_REGEX.sub(fill_miliseconds, str_dt))
+    str_dt = MS_IN_ISO_REGEX.sub(fill_miliseconds, str_dt)
+    return ensure_timezone(datetime.datetime.fromisoformat(str_dt))
+
+
+def ensure_timezone(dt: datetime.datetime):
+    return dt.replace(tzinfo=datetime.timezone.utc) if dt.tzinfo is None else dt
 
 
 # Dates are represented as ISO 8601: YYYY-MM-DDThh:mm:ss[.sss]
 # and structured to datetime.datetime
 converter.register_structure_hook(
     datetime.datetime,
-    lambda data, type_: data if isinstance(data, datetime.datetime) else str_to_datetime(data)  # type: ignore
+    lambda data, type_: ensure_timezone(data) if isinstance(data, datetime.datetime) else str_to_datetime(data)  # type: ignore
 )
-converter.register_unstructure_hook(datetime.datetime, lambda data: data.isoformat())  # type: ignore
+
+
+def datetime_to_naive_utc(dt: datetime.datetime):
+    # consider naive time as utc time
+    if dt.tzinfo is not None:
+        dt = dt.astimezone(datetime.timezone.utc)
+    return dt.replace(tzinfo=None)
+
+
+converter.register_unstructure_hook(datetime.datetime, lambda data: datetime_to_naive_utc(data).isoformat())  # type: ignore
 
 
 converter.register_structure_hook(

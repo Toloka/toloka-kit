@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from operator import itemgetter
 from textwrap import dedent
 from urllib.parse import urlparse, parse_qs
@@ -108,7 +108,7 @@ def test_find_project(requests_mock, toloka_client, toloka_url, project_map):
     request = client.search_requests.ProjectSearchRequest(
         status=client.Project.ProjectStatus.ACTIVE,
         id_gt='123',
-        created_lt=datetime(2015, 12, 9, 12, 10, 0),
+        created_lt=datetime.datetime(2015, 12, 9, 12, 10, 0, tzinfo=datetime.timezone.utc),
     )
     sort = client.search_requests.ProjectSortItems(['-public_name', 'id'])
     result = toloka_client.find_projects(request, sort=sort, limit=50)
@@ -118,7 +118,7 @@ def test_find_project(requests_mock, toloka_client, toloka_url, project_map):
     result = toloka_client.find_projects(
         status=client.Project.ProjectStatus.ACTIVE,
         id_gt='123',
-        created_lt=datetime(2015, 12, 9, 12, 10, 0),
+        created_lt=datetime.datetime(2015, 12, 9, 12, 10, 0, tzinfo=datetime.timezone.utc),
         limit=50,
         sort=['-public_name', 'id']
     )
@@ -155,7 +155,7 @@ def test_get_projects(requests_mock, toloka_client, toloka_url, project_map):
     request = client.search_requests.ProjectSearchRequest(
         status=client.Project.ProjectStatus.ACTIVE,
         id_gt='123',
-        created_lt=datetime(2015, 12, 9, 12, 10, 0),
+        created_lt=datetime.datetime(2015, 12, 9, 12, 10, 0, tzinfo=datetime.timezone.utc),
     )
     result = toloka_client.get_projects(request)
     assert expected_projects == client.unstructure(list(result))
@@ -164,7 +164,7 @@ def test_get_projects(requests_mock, toloka_client, toloka_url, project_map):
     result = toloka_client.get_projects(
         status=client.Project.ProjectStatus.ACTIVE,
         id_gt='123',
-        created_lt=datetime(2015, 12, 9, 12, 10, 0),
+        created_lt=datetime.datetime(2015, 12, 9, 12, 10, 0, tzinfo=datetime.timezone.utc),
     )
     assert expected_projects == client.unstructure(list(result))
 
@@ -516,7 +516,7 @@ def test_project_update(requests_mock, toloka_client, toloka_url):
         max_active_assignments_count=5,
         id='10',
         status=client.project.Project.ProjectStatus.ACTIVE,
-        created=datetime.strptime('2015-12-09 12:10:00', '%Y-%m-%d %H:%M:%S'),
+        created=datetime.datetime(2015, 12, 9, 12, 10, 0, tzinfo=datetime.timezone.utc),
     )
 
     result = toloka_client.update_project('10', update_to_project)
@@ -675,23 +675,22 @@ def test_get_assignments_df(requests_mock, toloka_client, toloka_api_url):
                       content=get_content,
                       headers={'Authorization': 'OAuth abc'},
                       status_code=200)
-    result = toloka_client.get_assignments_df(pool_id=123,
-                                              parameters=client.assignment.GetAssignmentsTsvParameters(
-                                                  start_time_from=datetime(2020, 1, 1),
-                                                  exclude_banned=True,
-                                                  status=[s for s in
-                                                          client.assignment.GetAssignmentsTsvParameters.Status]
-                                              ))
+    result = toloka_client.get_assignments_df(
+        pool_id='123',
+        parameters=client.assignment.GetAssignmentsTsvParameters(
+            start_time_from=datetime.datetime(2020, 1, 1, tzinfo=datetime.timezone.utc),
+            exclude_banned=True,
+            status=[s for s in client.assignment.GetAssignmentsTsvParameters.Status]
+        )
+    )
 
     assert result.equals(expected_df)
     assert requests_mock.last_request.qs == expected_params
 
-    result = toloka_client.get_assignments_df(pool_id=123,
-                                              start_time_from=datetime(2020, 1, 1),
-                                              exclude_banned=True,
-                                              status=[s for s in
-                                                      client.assignment.GetAssignmentsTsvParameters.Status]
-                                              )
+    result = toloka_client.get_assignments_df(
+        pool_id='123', start_time_from=datetime.datetime(2020, 1, 1, tzinfo=datetime.timezone.utc),
+        exclude_banned=True, status=[s for s in client.assignment.GetAssignmentsTsvParameters.Status]
+    )
 
     assert result.equals(expected_df)
     assert requests_mock.last_request.qs == expected_params

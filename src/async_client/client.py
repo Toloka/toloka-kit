@@ -42,7 +42,7 @@ class AsyncTolokaClient:
         if op.is_completed():
             return op
 
-        utcnow = datetime.datetime.utcnow()
+        utcnow = datetime.datetime.now(datetime.timezone.utc)
         wait_until_time = utcnow + timeout
 
         if not op.started or utcnow - op.started < default_initial_delay:
@@ -53,5 +53,5 @@ class AsyncTolokaClient:
             if op.is_completed():
                 return op
             await asyncio.sleep(default_time_to_wait.total_seconds())
-            if datetime.datetime.utcnow() > wait_until_time:
+            if datetime.datetime.now(datetime.timezone.utc) > wait_until_time:
                 raise TimeoutError

@@ -187,7 +187,7 @@ def test_get_app_projects(requests_mock, toloka_client_prod, toloka_app_url, app
     # Request object syntax
     request = client.search_requests.AppProjectSearchRequest(
         id_gt='20',
-        created_gt=datetime.datetime(2016, 3, 23, 12, 59, 0)
+        created_gt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc)
     )
     result = toloka_client_prod.get_app_projects(request)
     assert expected_app_projects == client.unstructure(list(result))
@@ -195,7 +195,7 @@ def test_get_app_projects(requests_mock, toloka_client_prod, toloka_app_url, app
     # Expanded syntax
     result = toloka_client_prod.get_app_projects(
         id_gt='20',
-        created_gt=datetime.datetime(2016, 3, 23, 12, 59, 0)
+        created_gt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc)
     )
     assert expected_app_projects == client.unstructure(list(result))
 
@@ -377,7 +377,7 @@ def test_get_app_items(requests_mock, toloka_client_prod, toloka_app_url, app_it
     # Request object syntax
     request = client.search_requests.AppItemSearchRequest(
         id_gt='20',
-        created_at_gt=datetime.datetime(2016, 3, 23, 12, 59, 0)
+        created_at_gt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc)
     )
     result = toloka_client_prod.get_app_items('123', request)
     assert expected_app_items == client.unstructure(list(result))
@@ -386,7 +386,7 @@ def test_get_app_items(requests_mock, toloka_client_prod, toloka_app_url, app_it
     result = toloka_client_prod.get_app_items(
         '123',
         id_gt='20',
-        created_at_gt=datetime.datetime(2016, 3, 23, 12, 59, 0)
+        created_at_gt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc)
     )
     assert expected_app_items == client.unstructure(list(result))
 

@@ -808,7 +808,7 @@ class TolokaClient:
         Example:
             If you want to thank Toloka performers who have tried to complete your tasks, send them a nice message.
 
-            >>> message_text = "Amazing job! We\'ve just trained our first model with the data YOU prepared for us. Thank you!"
+            >>> message_text = "Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!"
             >>> toloka_client.compose_message_thread(
             >>>     recipients_select_type='ALL',
             >>>     topic={'EN': 'Thank you, performer!'},
@@ -1374,7 +1374,7 @@ class TolokaClient:
             >>>     project_id=existing_project_id,
             >>>     private_name='Pool 1',
             >>>     may_contain_adult_content=False,
-            >>>     will_expire=datetime.datetime.utcnow() + datetime.timedelta(days=365),
+            >>>     will_expire=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=365),
             >>>     reward_per_assignment=0.01,
             >>>     assignment_max_duration_seconds=60*20,
             >>>     defaults=toloka.pool.Pool.Defaults(default_overlap_for_new_task_suites=3),
@@ -2596,7 +2596,7 @@ class TolokaClient:
         if op.is_completed():
             return op
 
-        utcnow = datetime.datetime.utcnow()
+        utcnow = datetime.datetime.now(datetime.timezone.utc)
         wait_until_time = utcnow + timeout
 
         if not op.started or utcnow - op.started < default_initial_delay:
@@ -2607,7 +2607,7 @@ class TolokaClient:
             if op.is_completed():
                 return op
             time.sleep(default_time_to_wait.total_seconds())
-            if datetime.datetime.utcnow() > wait_until_time:
+            if datetime.datetime.now(datetime.timezone.utc) > wait_until_time:
                 raise TimeoutError
 
     @add_headers('client')

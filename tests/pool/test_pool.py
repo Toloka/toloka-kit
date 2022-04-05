@@ -1,11 +1,12 @@
 import datetime
-from operator import itemgetter
 import logging
-import simplejson as json
+from operator import itemgetter
 from urllib.parse import urlparse, parse_qs
 
 import pytest
+import simplejson as json
 import toloka.client as client
+from toloka.client.pool import Pool
 
 from ..testutils.util_functions import check_headers
 
@@ -35,7 +36,7 @@ def test_find_pools(requests_mock, toloka_client, toloka_url, pool_map_with_read
     request = client.search_requests.PoolSearchRequest(
         project_id='10',
         id_gt='20',
-        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0),
+        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc),
     )
     sort = client.search_requests.PoolSortItems(['created', '-id'])
     result = toloka_client.find_pools(request, sort=sort)
@@ -45,7 +46,7 @@ def test_find_pools(requests_mock, toloka_client, toloka_url, pool_map_with_read
     result = toloka_client.find_pools(
         project_id='10',
         id_gt='20',
-        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0),
+        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc),
         sort=['created', '-id'],
     )
     assert raw_result == client.unstructure(result)
@@ -81,7 +82,7 @@ def test_get_pools(requests_mock, toloka_client, toloka_url, pool_map_with_reado
     request = client.search_requests.PoolSearchRequest(
         project_id='10',
         id_gt='20',
-        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0),
+        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc),
     )
     result = toloka_client.get_pools(request)
     assert expected_pools == client.unstructure(list(result))
@@ -90,7 +91,7 @@ def test_get_pools(requests_mock, toloka_client, toloka_url, pool_map_with_reado
     result = toloka_client.get_pools(
         project_id='10',
         id_gt='20',
-        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0),
+        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc),
     )
     assert expected_pools == client.unstructure(list(result))
 
@@ -264,6 +265,20 @@ def test_create_pool_check_all_filters(requests_mock, toloka_client, toloka_url,
     result = toloka_client.create_pool(pool)
     assert client.structure(pool_map, client.pool.Pool) == result
     assert pool_map == client.unstructure(result)
+
+
+@pytest.mark.parametrize('expire_time', [
+    datetime.datetime.now(),
+    datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=10))),
+    datetime.datetime.now(tz=datetime.timezone.utc),
+])
+def test_create_pool_time_format(expire_time):
+    pool = Pool(will_expire=expire_time)
+    pool = Pool.structure(pool.unstructure())
+    assert pool.will_expire.tzinfo == datetime.timezone.utc
+    if expire_time.tzinfo is None:
+        expire_time = expire_time.replace(tzinfo=datetime.timezone.utc)
+    assert expire_time.astimezone(datetime.timezone.utc) == pool.will_expire
 
 
 @pytest.fixture

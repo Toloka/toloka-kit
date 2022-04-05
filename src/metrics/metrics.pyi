@@ -243,9 +243,9 @@ class NewMessageThreads(BaseMetric):
 
     Args:
         count_name: Metric name for a count of new messages.
-        projects_name: Dictyonary that allows count messages on exact projects. {project_id: line_name}
-        pools_name: Dictyonary that allows count messages on exact pools. {pool_id: line_name}
-        join_events: Count all events in one point.  Default False. "Values" never join.
+        projects_name: Dictionary that allows count messages on exact projects. {project_id: line_name}
+        pools_name: Dictionary that allows count messages on exact pools. {pool_id: line_name}
+        join_events: Count all events in one point. Default False. "Values" never join.
 
     Example:
         How to collect this metrics:
@@ -271,7 +271,7 @@ class NewMessageThreads(BaseMetric):
             'messages_count': [(datetime.datetime(2021, 11, 19, 9, 40, 15, 970000), 10)],
             # messages on this exact pool
             'my_train_pool': [(datetime.datetime(2021, 11, 19, 12, 42, 50, 554830), 4)],
-            # with 'join_evants=True' it will be zero if no messages
+            # with 'join_events=True' it will be zero if no messages
             'my_working_pool': [(datetime.datetime(2021, 11, 19, 12, 42, 50, 554830), 0)],
             'pedestrian_proj': [(datetime.datetime(2021, 11, 19, 12, 42, 50, 554830), 1)],
             # total count != sum of other counts, because could exist different pools and projects

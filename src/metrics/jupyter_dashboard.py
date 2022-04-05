@@ -140,7 +140,7 @@ class Chart:
         for x_points, y_points, line_name  in self._lines.values():
             figure.add_trace(
                 go.Scatter(
-                    x=x_points if x_points else [datetime.datetime.utcnow()],
+                    x=x_points if x_points else [datetime.datetime.now(datetime.timezone.utc)],
                     y=y_points if y_points else [0],
                     name=line_name,
                     mode='lines',
@@ -300,7 +300,7 @@ class DashBoard:
                 Must have the same length on each iteration.
         """
         # Because many metrics easily take at least 1 second, for the simplest operations
-        now = datetime.datetime.utcnow()
+        now = datetime.datetime.now(datetime.timezone.utc)
         if self._time_from is None:
             self._time_from = now
         time_from = self._time_from
