@@ -44,7 +44,7 @@ new_pool.quality_control.add_action(
     )
 )
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

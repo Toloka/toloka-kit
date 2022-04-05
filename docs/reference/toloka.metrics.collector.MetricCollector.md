@@ -32,7 +32,7 @@ collector = MetricCollector(
 bind_client(collector.metrics, toloka_client)
 asyncio.run(collector.run())
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

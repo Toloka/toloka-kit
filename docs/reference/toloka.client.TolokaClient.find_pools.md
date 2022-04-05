@@ -59,4 +59,5 @@ Find open pools in a specific project.
 toloka_client.find_pools(status='OPEN', project_id='1')
 ```
 
-If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+If method finds more objects than custom or system `limit` allows to operate, it will also show an
+indicator `has_more=True`.

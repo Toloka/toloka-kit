@@ -5,7 +5,7 @@
 BaseSortItem(self)
 ```
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

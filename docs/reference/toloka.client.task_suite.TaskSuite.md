@@ -50,7 +50,7 @@ Performers receive exactly one TaskSuite when they take on your task.
 `remaining_overlap`|**Optional\[int\]**|<p>How many times will this Task Suite be issued to performers. Read only field.</p>
 `automerged`|**Optional\[bool\]**|<p>The task suite flag is created after task merging. Read Only field. Value:<ul><li>True - The task suite is generated as a result of merging identical tasks.</li><li>False - A standard task suite created by &quot;smart mixing&quot; or by the requester.</li></ul></p>
 `created`|**Optional\[datetime\]**|<p>The UTC date and time when the task suite was created. Read Only field.</p>
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

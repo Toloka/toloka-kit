@@ -15,7 +15,7 @@ Class that implements interaction with [Toloka API](https://toloka.ai/docs/api/c
 All methods are wrapped as async. So all methods calls must be awaited.
 All arguments, same as in TolokaClient.
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

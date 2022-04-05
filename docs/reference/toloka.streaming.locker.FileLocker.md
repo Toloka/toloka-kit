@@ -46,7 +46,7 @@ with locker_2('some_key'):
 with locker_1('some_key'):  # raise an error: NewerInstanceDetectedError
     pass
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

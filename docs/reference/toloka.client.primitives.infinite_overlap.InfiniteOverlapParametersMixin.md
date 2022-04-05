@@ -24,7 +24,7 @@ Possible states:
 
 All other states are considered invalid
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

@@ -1,5 +1,5 @@
 # Pool
-`toloka.client.pool.Pool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/pool.py#L33)
+`toloka.client.pool.Pool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/pool/__init__.py#L33)
 
 ```python
 Pool(
@@ -101,7 +101,7 @@ new_pool.quality_control.add_action(...)
 new_pool = toloka_client.create_pool(new_pool)
 print(new_pool.id)
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

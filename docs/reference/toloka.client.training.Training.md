@@ -57,7 +57,7 @@ Allows:
 `created`|**Optional\[datetime\]**|<p>UTC date and time of creation of the training pool in ISO 8601 format. Read only.</p>
 `last_started`|**Optional\[datetime\]**|<p>UTC date and time of the last start of the training pool in ISO 8601 format. Read only.</p>
 `last_stopped`|**Optional\[datetime\]**|<p>UTC date and time of the last stop of the training pool in ISO 8601 format. Read only.</p>
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

@@ -13,7 +13,7 @@ Subclasses of BaseTolokaObject will:
   if not explicitly configured otherwise
 * Skip missing optional fields during unstructuring with client's cattr converter
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

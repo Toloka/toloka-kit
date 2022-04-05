@@ -1,5 +1,5 @@
 # AppBatch
-`toloka.client.app.AppBatch` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/app.py#L164)
+`toloka.client.app.AppBatch` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/app/__init__.py#L164)
 
 ```python
 AppBatch(

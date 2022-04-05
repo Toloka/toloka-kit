@@ -44,7 +44,7 @@ collector = MetricCollector
 )
 asyncio.run(collector.run())
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

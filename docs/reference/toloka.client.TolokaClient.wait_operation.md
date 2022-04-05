@@ -1,5 +1,5 @@
 # wait_operation
-`toloka.client.TolokaClient.wait_operation` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client.py#L44)
+`toloka.client.TolokaClient.wait_operation` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/__init__.py#L44)
 
 ```python
 wait_operation(

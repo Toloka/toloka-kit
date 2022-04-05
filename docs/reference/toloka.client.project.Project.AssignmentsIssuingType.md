@@ -1,5 +1,5 @@
 # AssignmentsIssuingType
-`toloka.client.project.Project.AssignmentsIssuingType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project.py#L115)
+`toloka.client.project.Project.AssignmentsIssuingType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/__init__.py#L115)
 
 How to assign tasks:
 

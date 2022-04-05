@@ -49,7 +49,7 @@ Call something at any status change.
 ```python
 observer.on_status_change(lambda pool: ...)
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

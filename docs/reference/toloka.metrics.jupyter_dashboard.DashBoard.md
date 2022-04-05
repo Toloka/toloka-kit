@@ -49,7 +49,7 @@ metrics.bind_client(new_dash.metrics, toloka_client)
 new_dash.run_dash()
 new_dash.stop_dash()
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

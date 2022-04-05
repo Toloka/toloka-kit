@@ -63,7 +63,7 @@ storage = S3Storage(locker=locker, ...)
 pipeline = Pipeline(storage=storage)
 await pipeline.run()  # Save state after each iteration. Try to load saved at start.
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

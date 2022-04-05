@@ -13,7 +13,7 @@ Attriutes:
         So collectors can behave a little unexpectedly. For example they start gather "history_size" patameter
         from both pools.
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

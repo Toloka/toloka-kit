@@ -6,8 +6,12 @@ Gets aggregated responses after the AggregatedSolutionOperation completes.
 
 It is better to use the "get_aggregated_solutions" method, that allows to iterate through all results.
 
-**Note**: In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
+{% note info %}
+
+In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
 that have more aggregation methods and can perform on your computers.
+
+{% endnote %}
 
 ## Parameters Description
 

@@ -9,7 +9,7 @@ BaseCursor(
 )
 ```
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

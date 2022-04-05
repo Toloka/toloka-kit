@@ -12,7 +12,7 @@ retrying failed body read can be achieved by passing preload_content=False to ur
 this using HTTPAdapter we need to use HTTP(S)ConnectionPool.urlopen with preload_content=True during send method and
 override build_response method to populate requests Response wrapper with content.
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

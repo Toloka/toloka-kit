@@ -44,7 +44,7 @@ def handle_submitted(evets: List[AssignmentEvent]) -> None:
 observer = AssignmentsObserver(toloka_client, pool_id='123')
 observer.on_submitted(handle_submitted)
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

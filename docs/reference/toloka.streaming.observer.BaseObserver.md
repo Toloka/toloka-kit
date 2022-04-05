@@ -5,7 +5,7 @@
 BaseObserver(self, *, name: Optional[str] = None)
 ```
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

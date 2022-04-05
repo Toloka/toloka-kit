@@ -1,20 +1,20 @@
 # patch_task
 `toloka.client.TolokaClient.patch_task`
 
-Changes the task overlap
+Changes a task overlap value.
 
 ## Parameters Description
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`task_id`|**str**|<p>ID of the task that will be changed.</p>
-`overlap`|**Optional\[int\]**|<p>Overlapping a set of tasks.</p>
-`infinite_overlap`|**Optional\[bool\]**|<p>Issue a task with infinite overlap. Used, for example, for sets of training tasks to give them to all users:<ul><li>True - Set infinite overlap.</li><li>False - Leave the overlap specified for the task or pool. Default Behaviour.</li></ul></p>
+`task_id`|**str**|<p>The ID of the task.</p>
+`overlap`|**Optional\[int\]**|<p>Overlap value.</p>
+`infinite_overlap`|**Optional\[bool\]**|<p>Infinite overlap:<ul><li>True — Assign the task to all users. It is useful for training tasks.</li><li>False — Overlap value specified for the task or for the pool is used. </li></ul></p><p>Default value: False.</p>
 `baseline_solutions`|**Optional\[List\[[Task.BaselineSolution](toloka.client.task.Task.BaselineSolution.md)\]\]**|<p></p>
 
 * **Returns:**
 
-  Task with updated fields.
+  The task with updated fields.
 
 * **Return type:**
 

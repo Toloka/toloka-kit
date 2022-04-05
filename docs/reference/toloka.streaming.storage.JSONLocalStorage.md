@@ -34,7 +34,7 @@ Set locker explicitly.
 ```python
 storage = JSONLocalStorage('/store-data-here', locker=FileLocker('/store-locks-here'))
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

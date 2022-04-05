@@ -44,7 +44,7 @@ pipeline = Pipeline(storage=storage)
 ...
 await pipeline.run()  # Will load from storage at the start and save after each iteration.
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

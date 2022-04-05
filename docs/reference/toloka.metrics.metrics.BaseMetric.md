@@ -15,7 +15,7 @@ Base class for all metrics.
 
 Stores TolokaClient instance for this metric.
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

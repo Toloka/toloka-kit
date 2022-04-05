@@ -39,7 +39,7 @@ def print_metric(metric_dict):
 collector = MetricCollector([AssignmentsInPool(pool_id, toloka_client=toloka_client)], print_metric)
 asyncio.run(collector.run())
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|
