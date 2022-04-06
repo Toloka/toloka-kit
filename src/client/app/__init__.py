@@ -144,7 +144,7 @@ class AppItem(BaseTolokaObject):
     updated: datetime.datetime = attribute(readonly=True)
     status: Status = attribute(readonly=True, autocast=True)
     output_data: Dict[str, Any] = attribute(readonly=True)
-    errors: _AppError = attribute(readonly=True)
+    errors: List[_AppError] = attribute(readonly=True)
     created_at: datetime.datetime = attribute(readonly=True)
     started_at: datetime.datetime = attribute(readonly=True)
     finished_at: datetime.datetime = attribute(readonly=True)
