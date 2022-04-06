@@ -17,6 +17,21 @@ class BaseObserver:
 
     def should_resume(self) -> bool: ...
 
+    def delete(self) -> None:
+        """Schedule observer to be removed from the pipeline.
+        """
+        ...
+
+    def disable(self) -> None:
+        """Prevent observer from being called.
+        """
+        ...
+
+    def enable(self) -> None:
+        """Enable observer to be called during pipeline execution.
+        """
+        ...
+
     def run(self, period: datetime.timedelta = ...) -> None:
         """For standalone usage (out of a Pipeline).
         """
@@ -28,6 +43,8 @@ class BaseObserver:
         ...
 
     name: typing.Optional[str]
+    _enabled: bool
+    _deleted: bool
 
 
 class BasePoolObserver(BaseObserver):
@@ -45,6 +62,8 @@ class BasePoolObserver(BaseObserver):
         ...
 
     name: typing.Optional[str]
+    _enabled: bool
+    _deleted: bool
     toloka_client: toloka.util.async_utils.AsyncInterfaceWrapper[typing.Union[toloka.client.TolokaClient, toloka.util.async_utils.AsyncMultithreadWrapper[toloka.client.TolokaClient]]]
     pool_id: str
 
@@ -123,6 +142,8 @@ class PoolStatusObserver(BasePoolObserver):
         ...
 
     name: typing.Optional[str]
+    _enabled: bool
+    _deleted: bool
     toloka_client: toloka.util.async_utils.AsyncInterfaceWrapper[typing.Union[toloka.client.TolokaClient, toloka.util.async_utils.AsyncMultithreadWrapper[toloka.client.TolokaClient]]]
     pool_id: str
     _callbacks: typing.Dict[toloka.client.pool.Pool.Status, typing.List[typing.Callable[[toloka.client.pool.Pool], typing.Awaitable[None]]]]
@@ -222,6 +243,8 @@ class AssignmentsObserver(BasePoolObserver):
         ...
 
     name: typing.Optional[str]
+    _enabled: bool
+    _deleted: bool
     toloka_client: toloka.util.async_utils.AsyncInterfaceWrapper[typing.Union[toloka.client.TolokaClient, toloka.util.async_utils.AsyncMultithreadWrapper[toloka.client.TolokaClient]]]
     pool_id: str
     _callbacks: typing.Dict[toloka.streaming.event.AssignmentEvent.Type, _CallbacksCursorConsumer]

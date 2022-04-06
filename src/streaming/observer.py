@@ -26,6 +26,8 @@ logger = logging.getLogger(__name__)
 @attr.s
 class BaseObserver:
     name: Optional[str] = attr.ib(default=None, kw_only=True)
+    _enabled: bool = attr.ib(default=True, init=False)
+    _deleted: bool = attr.ib(default=False, init=False)
 
     def _get_unique_key(self) -> Tuple:
         return (self.__class__.__name__, self.name or '')
@@ -38,6 +40,18 @@ class BaseObserver:
 
     async def should_resume(self) -> bool:
         return False
+
+    def delete(self) -> None:
+        """Schedule observer to be removed from the pipeline."""
+        self._deleted = True
+
+    def disable(self) -> None:
+        """Prevent observer from being called."""
+        self._enabled = False
+
+    def enable(self) -> None:
+        """Enable observer to be called during pipeline execution."""
+        self._enabled = True
 
     @async_add_headers('streaming')
     async def run(self, period: datetime.timedelta = datetime.timedelta(seconds=60)) -> None:

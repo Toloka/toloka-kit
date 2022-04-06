@@ -10,7 +10,7 @@ import signal
 
 from contextlib import contextmanager
 from datetime import datetime, timedelta
-from typing import Any, Container, ContextManager, Dict, Iterable, List, Optional, Set, Tuple
+from typing import Any, Container, ContextManager, Dict, Iterable, Iterator, List, Optional, Set, Tuple
 
 from .observer import BaseObserver
 from .storage import BaseStorage
@@ -18,6 +18,9 @@ from ..util.async_utils import ComplexException
 from ..util._managing_headers import async_add_headers
 
 logger = logging.getLogger(__name__)
+
+
+_OrderedSet = dict.fromkeys
 
 
 @attr.s(eq=False, hash=False)
@@ -36,8 +39,11 @@ class _Worker:
 
     @async_add_headers('streaming')
     async def __call__(self) -> None:
-        await self.observer()
-        self.should_resume = await self.observer.should_resume()
+        if getattr(self.observer, '_enabled', True):
+            await self.observer()
+            self.should_resume = await self.observer.should_resume()
+        else:
+            self.should_resume = False
 
     def __hash__(self) -> int:
         return hash(self.name)
@@ -52,6 +58,9 @@ class _Worker:
     @staticmethod
     def _no_one_should_resume(workers: Iterable['_Worker']) -> bool:
         return all(not worker.should_resume for worker in workers)
+
+    def _is_deleted(self) -> bool:
+        return getattr(self.observer, '_deleted', False)
 
 
 @attr.s
@@ -123,7 +132,7 @@ class Pipeline:
                 return
         yield None
 
-    def _storage_load(self, pipeline_key: str, workers: List[_Worker]) -> None:
+    def _storage_load(self, pipeline_key: str, workers: Iterable[_Worker]) -> None:
         if self.storage:
             logger.info('Loading state from storage: %s', type(self.storage).__name__)
             observer_by_key = {worker.name: worker.observer for worker in workers}
@@ -135,14 +144,14 @@ class Pipeline:
             else:
                 logger.info('No saved states found')
 
-    def _storage_save(self, pipeline_key: str, workers: List[_Worker]) -> None:
+    def _storage_save(self, pipeline_key: str, workers: Iterable[_Worker]) -> None:
         if self.storage:
             logger.info('Save state to: %s', type(self.storage).__name__)
             observer_by_key = {worker.name: worker.observer for worker in workers}
             self.storage.save(pipeline_key, observer_by_key)
             logger.info('Saved count: %d', len(observer_by_key))
 
-    def _storage_cleanup(self, pipeline_key: str, workers: List[_Worker], lock: Any) -> None:
+    def _storage_cleanup(self, pipeline_key: str, workers: Iterable[_Worker], lock: Any) -> None:
         if self.storage:
             try:
                 keys = {worker.name for worker in workers}
@@ -181,6 +190,15 @@ class Pipeline:
         """
         self._observers[id(observer)] = observer
         return observer
+
+    def observers_iter(self) -> Iterator[BaseObserver]:
+        """Iterate over registered observers.
+
+        Returns:
+            An iterator over all registered observers except deleted ones.
+            May contain observers sheduled to deletion and not deleted yet.
+        """
+        return iter(self._observers.values())
 
     def _sigint_handler(self, loop: asyncio.AbstractEventLoop, waiting: Container[_Worker]) -> None:
         """Is being called in case of KeyboardInterrupt during workers run."""
@@ -223,10 +241,16 @@ class Pipeline:
 
         pipeline_key: str = str(self._get_unique_key())
 
-        workers = [_Worker._from_observer(observer) for observer in self._observers.values()]
-
+        workers = _OrderedSet(())
         waiting: Dict[_Worker, asyncio.Task] = {}
-        pending: Dict[_Worker, datetime] = {worker: datetime.min for worker in workers}
+        pending: Dict[_Worker, datetime] = {}
+
+        def _add_new_observers(new_observers: Iterable[BaseObserver]) -> None:
+            new_workers = _OrderedSet(_Worker._from_observer(observer) for observer in new_observers)
+            workers.update(new_workers)
+            pending.update({worker: datetime.min for worker in new_workers})
+
+        _add_new_observers(self.observers_iter())
 
         check_mode = False
 
@@ -243,13 +267,22 @@ class Pipeline:
 
                 still_pending = {}
                 to_start: List[_Worker] = []
+                to_remove: List[_Worker] = []
                 for worker, time_to_start in pending.items():
-                    if time_to_start <= iteration_start or check_mode:
+                    if worker._is_deleted():
+                        to_remove.append(worker)
+                    elif time_to_start <= iteration_start or check_mode:
                         assert worker not in waiting
                         to_start.append(worker)
                     else:
                         still_pending[worker] = time_to_start
                 pending = still_pending
+
+                if to_remove:
+                    logger.info('Found observers to remove count: %d', len(to_remove))
+                    for worker in to_remove:
+                        self._observers.pop(id(worker.observer))
+                        workers.pop(worker)
 
                 if self._got_sigint:
                     logger.warning('Not starting new workers due to SIGINT received')
@@ -273,8 +306,11 @@ class Pipeline:
                 if waiting:  # It may be empty due to SIGINT.
                     done, _ = await asyncio.wait(waiting.values(), return_when=return_when)
                     self._process_done_tasks(pipeline_key, done, waiting, pending)
-                if self._got_sigint:
+                elif self._got_sigint:
                     raise KeyboardInterrupt
+                else:
+                    logger.info('No workers to process. Finish')
+                    return
 
                 if _Worker._no_one_should_resume(workers):  # But some of them may still work.
                     if check_mode:
@@ -306,3 +342,8 @@ class Pipeline:
 
                 logger.info('Sleeping for %f seconds', sleep_time)
                 await asyncio.sleep(sleep_time)
+
+            new_observers = self._observers.keys() - {id(worker.observer) for worker in workers}
+            if new_observers:
+                logger.info('New observers found in quantity: %d', len(new_observers))
+                _add_new_observers(new_observers)

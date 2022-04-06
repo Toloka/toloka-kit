@@ -8,7 +8,8 @@ from typing import List, Set, Tuple
 
 from toloka.client import unstructure
 from toloka.util.async_utils import ComplexException, AsyncMultithreadWrapper
-from toloka.streaming import AssignmentsObserver, PoolStatusObserver, Pipeline
+from toloka.streaming import Pipeline
+from toloka.streaming.observer import AssignmentsObserver, BaseObserver, PoolStatusObserver
 from toloka.streaming.storage import JSONLocalStorage
 from toloka.streaming.locker import NewerInstanceDetectedError
 
@@ -449,3 +450,46 @@ def test_two_pipeline_instances_run(
 
     assert 2 == handler_2.iterations
     assert 10 == len(handler_2.history)
+
+
+def test_disable_observer():
+    @attr.s
+    class ObserverToDisableSelf(BaseObserver):
+        count: int = attr.ib(default=0)
+
+        async def should_resume(self) -> bool:
+            return True
+
+        async def __call__(self) -> None:
+            self.count += 1
+            self.disable()
+
+    Pipeline.MIN_SLEEP_SECONDS = 0.01
+    pipeline = Pipeline(period=datetime.timedelta(seconds=Pipeline.MIN_SLEEP_SECONDS))
+    observer = pipeline.register(ObserverToDisableSelf())
+    asyncio.new_event_loop().run_until_complete(pipeline.run())
+
+    assert observer.count == 1
+
+
+def test_delete_observer():
+    @attr.s
+    class ObserverToDeleteSelf(BaseObserver):
+        count: int = attr.ib(default=0)
+
+        async def should_resume(self) -> bool:
+            return True
+
+        async def __call__(self) -> None:
+            self.count += 1
+            self.delete()
+
+    Pipeline.MIN_SLEEP_SECONDS = 0.01
+    pipeline = Pipeline(period=datetime.timedelta(seconds=Pipeline.MIN_SLEEP_SECONDS))
+    observer = pipeline.register(ObserverToDeleteSelf())
+    assert observer in pipeline.observers_iter()
+
+    asyncio.new_event_loop().run_until_complete(pipeline.run())
+
+    assert observer.count == 1
+    assert observer not in pipeline.observers_iter()
