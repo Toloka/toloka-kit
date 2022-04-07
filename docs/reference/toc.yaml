@@ -2115,6 +2115,15 @@ items:
     - name: BaseObserver
       href: toloka.streaming.observer.BaseObserver.md
       hidden: true
+    - name: BaseObserver.delete
+      href: toloka.streaming.observer.BaseObserver.delete.md
+      hidden: true
+    - name: BaseObserver.disable
+      href: toloka.streaming.observer.BaseObserver.disable.md
+      hidden: true
+    - name: BaseObserver.enable
+      href: toloka.streaming.observer.BaseObserver.enable.md
+      hidden: true
     - name: BaseObserver.run
       href: toloka.streaming.observer.BaseObserver.run.md
       hidden: true
@@ -2171,6 +2180,9 @@ items:
     items:
     - name: Pipeline
       href: toloka.streaming.pipeline.Pipeline.md
+    - name: Pipeline.observers_iter
+      href: toloka.streaming.pipeline.Pipeline.observers_iter.md
+      hidden: true
     - name: Pipeline.register
       href: toloka.streaming.pipeline.Pipeline.register.md
       hidden: true

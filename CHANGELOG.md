@@ -1,3 +1,24 @@
+0.1.24
+-------------------
+
+Fixes:
+* Status code 409 is no longer retried by default.
+* Status code 504 is now retried by default.
+* Fixed bug when `AppItem.errors` have been structured incorrectly.
+* Fixed the bug when an incorrect version of the `urllib3` was used.
+
+Changes:
+* `toloka.client.filters.Rating` was removed according to changes in Toloka API.
+* All time data now have a UTC timezone by default (instead of a local timezone).
+
+Streaming improvements:
+* `toloka.streaming.Pipeline` now supports "gentle shutdown": the first SIGINT received will force the `Pipeline` to process all observers in the current iteration and then exit. On the second SIGINT received, the `Pipeline` will be interrupted (warning: this may lead to errors such as incorrect saved observers states).
+* `toloka.streaming.Pipeline` now supports registering new observers during execution.
+* Observers now support `delete`, `disable`, and `enable` methods: these methods change the target Observer state such that `toloka.streaming.Pipeline` handles it accordingly.
+
+Other improvements:
+* Added [MapView](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.project.template_builder.view.MapViewV1) Template Builder component.
+
 0.1.23
 -------------------
 Python versions support:

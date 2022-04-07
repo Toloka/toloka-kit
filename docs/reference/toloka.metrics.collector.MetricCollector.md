@@ -1,5 +1,5 @@
 # MetricCollector
-`toloka.metrics.collector.MetricCollector` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/collector.py#L19)
+`toloka.metrics.collector.MetricCollector` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/collector.py#L18)
 
 ```python
 MetricCollector(
