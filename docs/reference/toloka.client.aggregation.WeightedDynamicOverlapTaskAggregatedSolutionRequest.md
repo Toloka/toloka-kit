@@ -1,7 +1,7 @@
 # WeightedDynamicOverlapTaskAggregatedSolutionRequest
-`toloka.client.aggregation.WeightedDynamicOverlapTaskAggregatedSolutionRequest`
+`toloka.client.aggregation.WeightedDynamicOverlapTaskAggregatedSolutionRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/aggregation.py#L75)
 
-```
+```python
 WeightedDynamicOverlapTaskAggregatedSolutionRequest(
     self,
     *,

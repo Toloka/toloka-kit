@@ -1,7 +1,7 @@
 # TextFieldV1
-`toloka.client.project.template_builder.fields.TextFieldV1`
+`toloka.client.project.template_builder.fields.TextFieldV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/fields.py#L481)
 
-```
+```python
 TextFieldV1(
     self,
     data: Optional[BaseComponent] = None,

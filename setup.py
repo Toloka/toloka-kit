@@ -39,7 +39,7 @@ setup(
         'kazoo >= 2.6.1',
         'requests',
         'typing-extensions',
-        'urllib3',
+        'urllib3 >= 1.26.0',
         'pandas',
         'plotly',
         'simplejson',

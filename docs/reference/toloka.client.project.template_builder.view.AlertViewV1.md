@@ -1,7 +1,7 @@
 # AlertViewV1
-`toloka.client.project.template_builder.view.AlertViewV1`
+`toloka.client.project.template_builder.view.AlertViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/view.py#L77)
 
-```
+```python
 AlertViewV1(
     self,
     content: Optional[BaseComponent] = None,

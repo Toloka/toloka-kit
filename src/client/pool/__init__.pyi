@@ -100,7 +100,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
         >>>     project_id=existing_project_id,
         >>>     private_name='Pool 1',
         >>>     may_contain_adult_content=False,
-        >>>     will_expire=datetime.datetime.utcnow() + datetime.timedelta(days=365),
+        >>>     will_expire=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=365),
         >>>     reward_per_assignment=0.01,
         >>>     assignment_max_duration_seconds=60*20,
         >>>     defaults=toloka.pool.Pool.Defaults(default_overlap_for_new_task_suites=3),

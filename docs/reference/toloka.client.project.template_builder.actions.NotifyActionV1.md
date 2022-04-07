@@ -1,7 +1,7 @@
 # NotifyActionV1
-`toloka.client.project.template_builder.actions.NotifyActionV1`
+`toloka.client.project.template_builder.actions.NotifyActionV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/actions.py#L46)
 
-```
+```python
 NotifyActionV1(
     self,
     payload: Optional[Union[BaseComponent, Payload]] = None,

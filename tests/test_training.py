@@ -82,7 +82,7 @@ def test_find_trainings(requests_mock, toloka_client, toloka_url, training_map_w
     request = client.search_requests.TrainingSearchRequest(
         project_id='10',
         id_gt='20',
-        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0),
+        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc),
     )
     sort = client.search_requests.TrainingSortItems(['created', '-id'])
     result = toloka_client.find_trainings(request, sort=sort)
@@ -92,7 +92,7 @@ def test_find_trainings(requests_mock, toloka_client, toloka_url, training_map_w
     result = toloka_client.find_trainings(
         project_id='10',
         id_gt='20',
-        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0),
+        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc),
         sort=['created', '-id'],
     )
     assert raw_result == client.unstructure(result)
@@ -128,7 +128,7 @@ def test_get_trainings(requests_mock, toloka_client, toloka_url, training_map_wi
     request = client.search_requests.TrainingSearchRequest(
         project_id='10',
         id_gt='20',
-        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0),
+        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc),
     )
     result = toloka_client.get_trainings(request)
     assert expected_trainings == client.unstructure(list(result))
@@ -137,7 +137,7 @@ def test_get_trainings(requests_mock, toloka_client, toloka_url, training_map_wi
     result = toloka_client.get_trainings(
         project_id='10',
         id_gt='20',
-        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0),
+        last_started_lt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc),
     )
     assert expected_trainings == client.unstructure(list(result))
 

@@ -1,7 +1,7 @@
 # ZooKeeperLocker
-`toloka.streaming.locker.ZooKeeperLocker`
+`toloka.streaming.locker.ZooKeeperLocker` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/locker.py#L109)
 
-```
+```python
 ZooKeeperLocker(
     self,
     client: KazooClient,

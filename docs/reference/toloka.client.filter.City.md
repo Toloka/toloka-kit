@@ -1,7 +1,7 @@
 # City
-`toloka.client.filter.City`
+`toloka.client.filter.City` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/filter.py#L313)
 
-```
+```python
 City(
     self,
     operator: InclusionOperator,

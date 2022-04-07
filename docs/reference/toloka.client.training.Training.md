@@ -1,7 +1,7 @@
 # Training
-`toloka.client.training.Training`
+`toloka.client.training.Training` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/training.py#L11)
 
-```
+```python
 Training(
     self,
     *,
@@ -57,7 +57,7 @@ Allows:
 `created`|**Optional\[datetime\]**|<p>UTC date and time of creation of the training pool in ISO 8601 format. Read only.</p>
 `last_started`|**Optional\[datetime\]**|<p>UTC date and time of the last start of the training pool in ISO 8601 format. Read only.</p>
 `last_stopped`|**Optional\[datetime\]**|<p>UTC date and time of the last stop of the training pool in ISO 8601 format. Read only.</p>
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

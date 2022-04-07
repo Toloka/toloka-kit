@@ -1,7 +1,7 @@
 # WebhookSubscriptionSortItems
 `toloka.client.search_requests.WebhookSubscriptionSortItems`
 
-```
+```python
 WebhookSubscriptionSortItems(self, items=None)
 ```
 

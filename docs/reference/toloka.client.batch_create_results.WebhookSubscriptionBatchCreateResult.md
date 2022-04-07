@@ -1,7 +1,7 @@
 # WebhookSubscriptionBatchCreateResult
 `toloka.client.batch_create_results.WebhookSubscriptionBatchCreateResult`
 
-```
+```python
 WebhookSubscriptionBatchCreateResult(
     self,
     *,

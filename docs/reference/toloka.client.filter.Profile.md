@@ -1,7 +1,7 @@
 # Profile
-`toloka.client.filter.Profile`
+`toloka.client.filter.Profile` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/filter.py#L159)
 
-```
+```python
 Profile(
     self,
     *,

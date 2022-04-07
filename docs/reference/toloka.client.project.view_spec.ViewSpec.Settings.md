@@ -1,7 +1,7 @@
 # Settings
-`toloka.client.project.view_spec.ViewSpec.Settings`
+`toloka.client.project.view_spec.ViewSpec.Settings` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/view_spec.py#L36)
 
-```
+```python
 Settings(
     self,
     *,

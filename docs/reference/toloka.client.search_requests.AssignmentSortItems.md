@@ -1,7 +1,7 @@
 # AssignmentSortItems
 `toloka.client.search_requests.AssignmentSortItems`
 
-```
+```python
 AssignmentSortItems(self, items=None)
 ```
 

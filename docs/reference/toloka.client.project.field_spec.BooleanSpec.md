@@ -1,7 +1,7 @@
 # BooleanSpec
-`toloka.client.project.field_spec.BooleanSpec`
+`toloka.client.project.field_spec.BooleanSpec` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/field_spec.py#L62)
 
-```
+```python
 BooleanSpec(
     self,
     *,

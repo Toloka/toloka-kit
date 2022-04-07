@@ -1,7 +1,7 @@
 # Country
-`toloka.client.filter.Country`
+`toloka.client.filter.Country` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/filter.py#L245)
 
-```
+```python
 Country(
     self,
     operator: IdentityOperator,

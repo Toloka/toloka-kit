@@ -1,7 +1,7 @@
 # close_training_async
-`toloka.client.TolokaClient.close_training_async`
+`toloka.client.TolokaClient.close_training_async` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/__init__.py#L44)
 
-```
+```python
 close_training_async(self, training_id: str)
 ```
 

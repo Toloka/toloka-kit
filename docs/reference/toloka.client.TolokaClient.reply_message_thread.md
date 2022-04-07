@@ -1,7 +1,7 @@
 # reply_message_thread
-`toloka.client.TolokaClient.reply_message_thread`
+`toloka.client.TolokaClient.reply_message_thread` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/__init__.py#L44)
 
-```
+```python
 reply_message_thread(
     self,
     message_thread_id: str,

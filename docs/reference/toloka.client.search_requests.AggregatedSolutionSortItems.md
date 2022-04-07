@@ -1,7 +1,7 @@
 # AggregatedSolutionSortItems
 `toloka.client.search_requests.AggregatedSolutionSortItems`
 
-```
+```python
 AggregatedSolutionSortItems(self, items=None)
 ```
 

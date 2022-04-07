@@ -1,7 +1,7 @@
 # IframeViewV1
-`toloka.client.project.template_builder.view.IframeViewV1`
+`toloka.client.project.template_builder.view.IframeViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/view.py#L190)
 
-```
+```python
 IframeViewV1(
     self,
     url: Optional[Union[BaseComponent, str]] = None,

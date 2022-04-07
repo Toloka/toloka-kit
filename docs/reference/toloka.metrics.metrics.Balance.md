@@ -1,12 +1,12 @@
 # Balance
-`toloka.metrics.metrics.Balance`
+`toloka.metrics.metrics.Balance` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/metrics.py#L124)
 
-```
+```python
 Balance(
     self,
     balance_name: Optional[str] = None,
     *,
-    toloka_client: TolokaClient = None,
+    toloka_client: Optional[TolokaClient] = None,
     timeout: timedelta = ...
 )
 ```
@@ -31,7 +31,7 @@ def print_metric(metric_dict):
 collector = MetricCollector([Balance(toloka_client=toloka_client)], print_metric)
 asyncio.run(collector.run())
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

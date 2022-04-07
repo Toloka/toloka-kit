@@ -125,7 +125,7 @@ class AssignmentEventsInPool(BasePoolMetric):
         # key - metric name. One of the value of paramets: created_name, submitted_name, etc.
         # val - cursor configured for gathering this metric
         cursors = {}
-        start_time = datetime.datetime.utcnow()
+        start_time = datetime.datetime.now(datetime.timezone.utc)
         for attr_name, status_value in self._status_dict.items():
             metric_name = getattr(self, attr_name)
             if metric_name:
@@ -143,7 +143,7 @@ class AssignmentEventsInPool(BasePoolMetric):
             event_list = [event async for event in it]
             if self._join_events:
                 count = len(event_list)
-                result[metric_name] = [(event_list[-1].event_time, count)] if count else [(datetime.datetime.utcnow(), 0)]
+                result[metric_name] = [(event_list[-1].event_time, count)] if count else [(datetime.datetime.now(datetime.timezone.utc), 0)]
             else:
                 result[metric_name] = [
                     (event_time, len(events))
@@ -483,7 +483,7 @@ class BansInPool(BasePoolMetric):
     def _cursor(self) -> cursor.UserRestrictionCursor:
         return cursor.UserRestrictionCursor(
             toloka_client=self.atoloka_client,
-            created_gte=datetime.datetime.utcnow(),
+            created_gte=datetime.datetime.now(datetime.timezone.utc),
             pool_id=self.pool_id
         )
 
@@ -494,13 +494,14 @@ class BansInPool(BasePoolMetric):
         event_list = [event async for event in it]
         if self._join_events:
             if self._count_name is not None:
-                result[self._count_name] = [(event_list[-1].event_time, len(event_list))] if event_list else [(datetime.datetime.utcnow(), 0)]
+                result[self._count_name] = [(event_list[-1].event_time, len(event_list))] if event_list else [(datetime.datetime.now(datetime.timezone.utc), 0)]
             if self._filter_by_comment is not None:
                 comments_count = defaultdict(int)
                 for event in event_list:
                     comments_count[event.user_restriction.private_comment] += 1
+                datetime_now = datetime.datetime.now(datetime.timezone.utc)
                 for comment, line_name in self._filter_by_comment.items():
-                    result[line_name] = [(datetime.datetime.utcnow(), comments_count[comment] if comment in comments_count else 0)]
+                    result[line_name] = [(datetime_now, comments_count.get(comment, 0))]
         else:
             if self._count_name is not None:
                 result[self._count_name] = [

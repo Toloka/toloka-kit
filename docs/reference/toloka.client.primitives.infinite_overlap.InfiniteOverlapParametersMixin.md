@@ -1,7 +1,7 @@
 # InfiniteOverlapParametersMixin
-`toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin`
+`toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/primitives/infinite_overlap.py#L6)
 
-```
+```python
 InfiniteOverlapParametersMixin(
     self,
     infinite_overlap=None,
@@ -24,7 +24,7 @@ Possible states:
 
 All other states are considered invalid
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

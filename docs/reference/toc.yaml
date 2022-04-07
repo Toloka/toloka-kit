@@ -1,0 +1,2288 @@
+title: Toloka-Kit Reference
+items:
+- name: toloka.client
+  items:
+  - name: Environment
+    href: toloka.client.TolokaClient.Environment.md
+    hidden: true
+  - name: TolokaClient methods
+    items:
+    - name: aggregation
+      items:
+      - name: aggregate_solutions_by_pool
+        href: toloka.client.TolokaClient.aggregate_solutions_by_pool.md
+      - name: aggregate_solutions_by_task
+        href: toloka.client.TolokaClient.aggregate_solutions_by_task.md
+      - name: find_aggregated_solutions
+        href: toloka.client.TolokaClient.find_aggregated_solutions.md
+      - name: get_aggregated_solutions
+        href: toloka.client.TolokaClient.get_aggregated_solutions.md
+    - name: analytics
+      items:
+      - name: get_analytics
+        href: toloka.client.TolokaClient.get_analytics.md
+    - name: app
+      items:
+      - name: archive_app_project
+        href: toloka.client.TolokaClient.archive_app_project.md
+      - name: create_app_batch
+        href: toloka.client.TolokaClient.create_app_batch.md
+      - name: create_app_item
+        href: toloka.client.TolokaClient.create_app_item.md
+      - name: create_app_items
+        href: toloka.client.TolokaClient.create_app_items.md
+      - name: create_app_project
+        href: toloka.client.TolokaClient.create_app_project.md
+      - name: find_app_batches
+        href: toloka.client.TolokaClient.find_app_batches.md
+      - name: find_app_items
+        href: toloka.client.TolokaClient.find_app_items.md
+      - name: find_app_projects
+        href: toloka.client.TolokaClient.find_app_projects.md
+      - name: find_apps
+        href: toloka.client.TolokaClient.find_apps.md
+      - name: get_app
+        href: toloka.client.TolokaClient.get_app.md
+      - name: get_app_batch
+        href: toloka.client.TolokaClient.get_app_batch.md
+      - name: get_app_batches
+        href: toloka.client.TolokaClient.get_app_batches.md
+      - name: get_app_item
+        href: toloka.client.TolokaClient.get_app_item.md
+      - name: get_app_items
+        href: toloka.client.TolokaClient.get_app_items.md
+      - name: get_app_project
+        href: toloka.client.TolokaClient.get_app_project.md
+      - name: get_app_projects
+        href: toloka.client.TolokaClient.get_app_projects.md
+      - name: get_apps
+        href: toloka.client.TolokaClient.get_apps.md
+      - name: start_app_batch
+        href: toloka.client.TolokaClient.start_app_batch.md
+      - name: unarchive_app_project
+        href: toloka.client.TolokaClient.unarchive_app_project.md
+    - name: assignments
+      items:
+      - name: accept_assignment
+        href: toloka.client.TolokaClient.accept_assignment.md
+      - name: find_assignments
+        href: toloka.client.TolokaClient.find_assignments.md
+      - name: get_assignment
+        href: toloka.client.TolokaClient.get_assignment.md
+      - name: get_assignments
+        href: toloka.client.TolokaClient.get_assignments.md
+      - name: get_assignments_df
+        href: toloka.client.TolokaClient.get_assignments_df.md
+      - name: patch_assignment
+        href: toloka.client.TolokaClient.patch_assignment.md
+      - name: reject_assignment
+        href: toloka.client.TolokaClient.reject_assignment.md
+    - name: attachments
+      items:
+      - name: find_attachments
+        href: toloka.client.TolokaClient.find_attachments.md
+      - name: get_attachment
+        href: toloka.client.TolokaClient.get_attachment.md
+      - name: get_attachments
+        href: toloka.client.TolokaClient.get_attachments.md
+      - name: download_attachment
+        href: toloka.client.TolokaClient.download_attachment.md
+    - name: messages
+      items:
+      - name: add_message_thread_to_folders
+        href: toloka.client.TolokaClient.add_message_thread_to_folders.md
+      - name: compose_message_thread
+        href: toloka.client.TolokaClient.compose_message_thread.md
+      - name: find_message_threads
+        href: toloka.client.TolokaClient.find_message_threads.md
+      - name: get_message_threads
+        href: toloka.client.TolokaClient.get_message_threads.md
+      - name: reply_message_thread
+        href: toloka.client.TolokaClient.reply_message_thread.md
+      - name: remove_message_thread_from_folders
+        href: toloka.client.TolokaClient.remove_message_thread_from_folders.md
+    - name: operations
+      items:
+      - name: get_operation
+        href: toloka.client.TolokaClient.get_operation.md
+      - name: get_operation_log
+        href: toloka.client.TolokaClient.get_operation_log.md
+      - name: wait_operation
+        href: toloka.client.TolokaClient.wait_operation.md
+    - name: pools
+      items:
+      - name: archive_pool
+        href: toloka.client.TolokaClient.archive_pool.md
+      - name: archive_pool_async
+        href: toloka.client.TolokaClient.archive_pool_async.md
+      - name: clone_pool
+        href: toloka.client.TolokaClient.clone_pool.md
+      - name: clone_pool_async
+        href: toloka.client.TolokaClient.clone_pool_async.md
+      - name: close_pool
+        href: toloka.client.TolokaClient.close_pool.md
+      - name: close_pool_async
+        href: toloka.client.TolokaClient.close_pool_async.md
+      - name: close_pool_for_update
+        href: toloka.client.TolokaClient.close_pool_for_update.md
+      - name: close_pool_for_update_async
+        href: toloka.client.TolokaClient.close_pool_for_update_async.md
+      - name: create_pool
+        href: toloka.client.TolokaClient.create_pool.md
+      - name: find_pools
+        href: toloka.client.TolokaClient.find_pools.md
+      - name: get_pool
+        href: toloka.client.TolokaClient.get_pool.md
+      - name: get_pools
+        href: toloka.client.TolokaClient.get_pools.md
+      - name: open_pool
+        href: toloka.client.TolokaClient.open_pool.md
+      - name: open_pool_async
+        href: toloka.client.TolokaClient.open_pool_async.md
+      - name: patch_pool
+        href: toloka.client.TolokaClient.patch_pool.md
+      - name: update_pool
+        href: toloka.client.TolokaClient.update_pool.md
+    - name: projects
+      items:
+      - name: archive_project
+        href: toloka.client.TolokaClient.archive_project.md
+      - name: archive_project_async
+        href: toloka.client.TolokaClient.archive_project_async.md
+      - name: create_project
+        href: toloka.client.TolokaClient.create_project.md
+      - name: clone_project
+        href: toloka.client.TolokaClient.clone_project.md
+      - name: find_projects
+        href: toloka.client.TolokaClient.find_projects.md
+      - name: get_project
+        href: toloka.client.TolokaClient.get_project.md
+      - name: get_projects
+        href: toloka.client.TolokaClient.get_projects.md
+      - name: update_project
+        href: toloka.client.TolokaClient.update_project.md
+    - name: requester
+      items:
+      - name: get_requester
+        href: toloka.client.TolokaClient.get_requester.md
+    - name: skills
+      items:
+      - name: create_skill
+        href: toloka.client.TolokaClient.create_skill.md
+      - name: find_skills
+        href: toloka.client.TolokaClient.find_skills.md
+      - name: get_skill
+        href: toloka.client.TolokaClient.get_skill.md
+      - name: get_skills
+        href: toloka.client.TolokaClient.get_skills.md
+      - name: update_skill
+        href: toloka.client.TolokaClient.update_skill.md
+    - name: tasks
+      items:
+      - name: create_task
+        href: toloka.client.TolokaClient.create_task.md
+      - name: create_tasks
+        href: toloka.client.TolokaClient.create_tasks.md
+      - name: create_tasks_async
+        href: toloka.client.TolokaClient.create_tasks_async.md
+      - name: find_tasks
+        href: toloka.client.TolokaClient.find_tasks.md
+      - name: get_task
+        href: toloka.client.TolokaClient.get_task.md
+      - name: get_tasks
+        href: toloka.client.TolokaClient.get_tasks.md
+      - name: patch_task
+        href: toloka.client.TolokaClient.patch_task.md
+      - name: patch_task_overlap_or_min
+        href: toloka.client.TolokaClient.patch_task_overlap_or_min.md
+    - name: task suites
+      items:
+      - name: create_task_suite
+        href: toloka.client.TolokaClient.create_task_suite.md
+      - name: create_task_suites
+        href: toloka.client.TolokaClient.create_task_suites.md
+      - name: create_task_suites_async
+        href: toloka.client.TolokaClient.create_task_suites_async.md
+      - name: find_task_suites
+        href: toloka.client.TolokaClient.find_task_suites.md
+      - name: get_task_suite
+        href: toloka.client.TolokaClient.get_task_suite.md
+      - name: get_task_suites
+        href: toloka.client.TolokaClient.get_task_suites.md
+      - name: patch_task_suite
+        href: toloka.client.TolokaClient.patch_task_suite.md
+      - name: patch_task_suite_overlap_or_min
+        href: toloka.client.TolokaClient.patch_task_suite_overlap_or_min.md
+    - name: training
+      items:
+      - name: archive_training
+        href: toloka.client.TolokaClient.archive_training.md
+      - name: archive_training_async
+        href: toloka.client.TolokaClient.archive_training_async.md
+      - name: clone_training
+        href: toloka.client.TolokaClient.clone_training.md
+      - name: clone_training_async
+        href: toloka.client.TolokaClient.clone_training_async.md
+      - name: close_training
+        href: toloka.client.TolokaClient.close_training.md
+      - name: close_training_async
+        href: toloka.client.TolokaClient.close_training_async.md
+      - name: create_training
+        href: toloka.client.TolokaClient.create_training.md
+      - name: find_trainings
+        href: toloka.client.TolokaClient.find_trainings.md
+      - name: get_training
+        href: toloka.client.TolokaClient.get_training.md
+      - name: get_trainings
+        href: toloka.client.TolokaClient.get_trainings.md
+      - name: open_training
+        href: toloka.client.TolokaClient.open_training.md
+      - name: open_training_async
+        href: toloka.client.TolokaClient.open_training_async.md
+      - name: update_training
+        href: toloka.client.TolokaClient.update_training.md
+    - name: user bonus
+      items:
+      - name: create_user_bonus
+        href: toloka.client.TolokaClient.create_user_bonus.md
+      - name: create_user_bonuses
+        href: toloka.client.TolokaClient.create_user_bonuses.md
+      - name: create_user_bonuses_async
+        href: toloka.client.TolokaClient.create_user_bonuses_async.md
+      - name: find_user_bonuses
+        href: toloka.client.TolokaClient.find_user_bonuses.md
+      - name: get_user_bonus
+        href: toloka.client.TolokaClient.get_user_bonus.md
+      - name: get_user_bonuses
+        href: toloka.client.TolokaClient.get_user_bonuses.md
+    - name: user restrictions
+      items:
+      - name: delete_user_restriction
+        href: toloka.client.TolokaClient.delete_user_restriction.md
+      - name: find_user_restrictions
+        href: toloka.client.TolokaClient.find_user_restrictions.md
+      - name: get_user_restriction
+        href: toloka.client.TolokaClient.get_user_restriction.md
+      - name: get_user_restrictions
+        href: toloka.client.TolokaClient.get_user_restrictions.md
+      - name: set_user_restriction
+        href: toloka.client.TolokaClient.set_user_restriction.md
+    - name: user skills
+      items:
+      - name: delete_user_skill
+        href: toloka.client.TolokaClient.delete_user_skill.md
+      - name: find_user_skills
+        href: toloka.client.TolokaClient.find_user_skills.md
+      - name: get_user_skill
+        href: toloka.client.TolokaClient.get_user_skill.md
+      - name: get_user_skills
+        href: toloka.client.TolokaClient.get_user_skills.md
+      - name: set_user_skill
+        href: toloka.client.TolokaClient.set_user_skill.md
+    - name: webhook subscription
+      items:
+      - name: delete_webhook_subscription
+        href: toloka.client.TolokaClient.delete_webhook_subscription.md
+      - name: find_webhook_subscriptions
+        href: toloka.client.TolokaClient.find_webhook_subscriptions.md
+      - name: get_webhook_subscription
+        href: toloka.client.TolokaClient.get_webhook_subscription.md
+      - name: get_webhook_subscriptions
+        href: toloka.client.TolokaClient.get_webhook_subscriptions.md
+      - name: upsert_webhook_subscriptions
+        href: toloka.client.TolokaClient.upsert_webhook_subscriptions.md
+  - name: actions
+    items:
+    - name: RuleType
+      href: toloka.client.actions.RuleType.md
+      hidden: true
+    - name: RuleAction
+      href: toloka.client.actions.RuleAction.md
+      hidden: true
+    - name: Restriction
+      href: toloka.client.actions.Restriction.md
+    - name: Parameters
+      href: toloka.client.actions.Restriction.Parameters.md
+      hidden: true
+    - name: RestrictionV2
+      href: toloka.client.actions.RestrictionV2.md
+    - name: Parameters
+      href: toloka.client.actions.RestrictionV2.Parameters.md
+      hidden: true
+    - name: ChangeOverlap
+      href: toloka.client.actions.ChangeOverlap.md
+    - name: Parameters
+      href: toloka.client.actions.ChangeOverlap.Parameters.md
+      hidden: true
+    - name: SetSkill
+      href: toloka.client.actions.SetSkill.md
+    - name: Parameters
+      href: toloka.client.actions.SetSkill.Parameters.md
+      hidden: true
+    - name: SetSkillFromOutputField
+      href: toloka.client.actions.SetSkillFromOutputField.md
+    - name: Parameters
+      href: toloka.client.actions.SetSkillFromOutputField.Parameters.md
+      hidden: true
+    - name: ApproveAllAssignments
+      href: toloka.client.actions.ApproveAllAssignments.md
+    - name: RejectAllAssignments
+      href: toloka.client.actions.RejectAllAssignments.md
+    - name: Parameters
+      href: toloka.client.actions.RejectAllAssignments.Parameters.md
+      hidden: true
+  - name: aggregation
+    items:
+    - name: AggregatedSolution
+      href: toloka.client.aggregation.AggregatedSolution.md
+    - name: AggregatedSolutionType
+      href: toloka.client.aggregation.AggregatedSolutionType.md
+      hidden: true
+    - name: PoolAggregatedSolutionRequest.Field
+      href: toloka.client.aggregation.PoolAggregatedSolutionRequest.Field.md
+      hidden: true
+    - name: PoolAggregatedSolutionRequest
+      href: toloka.client.aggregation.PoolAggregatedSolutionRequest.md
+    - name: TaskAggregatedSolutionRequest
+      href: toloka.client.aggregation.TaskAggregatedSolutionRequest.md
+    - name: WeightedDynamicOverlapTaskAggregatedSolutionRequest.Field
+      href: toloka.client.aggregation.WeightedDynamicOverlapTaskAggregatedSolutionRequest.Field.md
+      hidden: true
+    - name: WeightedDynamicOverlapTaskAggregatedSolutionRequest
+      href: toloka.client.aggregation.WeightedDynamicOverlapTaskAggregatedSolutionRequest.md
+  - name: analytics_request
+    items:
+    - name: AnalyticsRequest
+      href: toloka.client.analytics_request.AnalyticsRequest.md
+      hidden: true
+    - name: ActiveWorkersByFilterCountPoolAnalytics
+      href: toloka.client.analytics_request.ActiveWorkersByFilterCountPoolAnalytics.md
+    - name: AnalyticsRequest.Subject
+      href: toloka.client.analytics_request.AnalyticsRequest.Subject.md
+      hidden: true
+    - name: ApprovedAssignmentsCountPoolAnalytics
+      href: toloka.client.analytics_request.ApprovedAssignmentsCountPoolAnalytics.md
+    - name: AvgSubmitAssignmentMillisPoolAnalytics
+      href: toloka.client.analytics_request.AvgSubmitAssignmentMillisPoolAnalytics.md
+    - name: CompletionPercentagePoolAnalytics
+      href: toloka.client.analytics_request.CompletionPercentagePoolAnalytics.md
+    - name: EstimatedAssignmentsCountPoolAnalytics
+      href: toloka.client.analytics_request.EstimatedAssignmentsCountPoolAnalytics.md
+    - name: PoolAnalyticsRequest
+      href: toloka.client.analytics_request.PoolAnalyticsRequest.md
+      hidden: true
+    - name: PoolAnalyticsRequest.Subject
+      href: toloka.client.analytics_request.PoolAnalyticsRequest.Subject.md
+      hidden: true
+    - name: RealTasksCountPoolAnalytics
+      href: toloka.client.analytics_request.RealTasksCountPoolAnalytics.md
+    - name: RejectedAssignmentsCountPoolAnalytics
+      href: toloka.client.analytics_request.RejectedAssignmentsCountPoolAnalytics.md
+    - name: SkippedAssignmentsCountPoolAnalytics
+      href: toloka.client.analytics_request.SkippedAssignmentsCountPoolAnalytics.md
+    - name: SpentBudgetPoolAnalytics
+      href: toloka.client.analytics_request.SpentBudgetPoolAnalytics.md
+    - name: SubmitedAssignmentsCountPoolAnalytics
+      href: toloka.client.analytics_request.SubmitedAssignmentsCountPoolAnalytics.md
+    - name: UniqueSubmittersCountPoolAnalytics
+      href: toloka.client.analytics_request.UniqueSubmittersCountPoolAnalytics.md
+    - name: UniqueWorkersCountPoolAnalytics
+      href: toloka.client.analytics_request.UniqueWorkersCountPoolAnalytics.md
+  - name: app
+    items:
+    - name: _AppError
+      href: toloka.client.app._AppError.md
+      hidden: true
+    - name: App
+      href: toloka.client.app.App.md
+    - name: AppBatch
+      href: toloka.client.app.AppBatch.md
+    - name: AppBatch.Status
+      href: toloka.client.app.AppBatch.Status.md
+      hidden: true
+    - name: AppBatchCreateRequest
+      href: toloka.client.app.AppBatchCreateRequest.md
+    - name: AppItem
+      href: toloka.client.app.AppItem.md
+    - name: AppItem.Status
+      href: toloka.client.app.AppItem.Status.md
+      hidden: true
+    - name: AppItemsCreateRequest
+      href: toloka.client.app.AppItemsCreateRequest.md
+    - name: AppProject
+      href: toloka.client.app.AppProject.md
+    - name: AppItem.Status
+      href: toloka.client.app.AppProject.Status.md
+      hidden: true
+  - name: assignment
+    items:
+    - name: Assignment
+      href: toloka.client.assignment.Assignment.md
+    - name: Assignment.Status
+      href: toloka.client.assignment.Assignment.Status.md
+      hidden: true
+    - name: AssignmentPatch
+      href: toloka.client.assignment.AssignmentPatch.md
+    - name: GetAssignmentsTsvParameters.Field
+      href: toloka.client.assignment.GetAssignmentsTsvParameters.Field.md
+      hidden: true
+    - name: GetAssignmentsTsvParameters
+      href: toloka.client.assignment.GetAssignmentsTsvParameters.md
+    - name: GetAssignmentsTsvParameters.Status
+      href: toloka.client.assignment.GetAssignmentsTsvParameters.Status.md
+      hidden: true
+  - name: attachment
+    items:
+    - name: Attachment
+      href: toloka.client.attachment.Attachment.md
+      hidden: true
+    - name: AssignmentAttachment
+      href: toloka.client.attachment.AssignmentAttachment.md
+    - name: Attachment.Details
+      href: toloka.client.attachment.Attachment.Details.md
+      hidden: true
+    - name: Attachment.Type
+      href: toloka.client.attachment.Attachment.Type.md
+      hidden: true
+  - name: batch_create_results
+    items:
+    - name: FieldValidationError
+      href: toloka.client.batch_create_results.FieldValidationError.md
+      hidden: true
+    - name: TaskBatchCreateResult
+      href: toloka.client.batch_create_results.TaskBatchCreateResult.md
+    - name: TaskSuiteBatchCreateResult
+      href: toloka.client.batch_create_results.TaskSuiteBatchCreateResult.md
+    - name: UserBonusBatchCreateResult
+      href: toloka.client.batch_create_results.UserBonusBatchCreateResult.md
+    - name: WebhookSubscriptionBatchCreateResult
+      href: toloka.client.batch_create_results.WebhookSubscriptionBatchCreateResult.md
+  - name: clone_results
+    items:
+    - name: CloneResults
+      href: toloka.client.clone_results.CloneResults.md
+  - name: collectors
+    items:
+    - name: CollectorConfig
+      href: toloka.client.collectors.CollectorConfig.md
+      hidden: true
+    - name: CollectorConfig.Type
+      href: toloka.client.collectors.CollectorConfig.Type.md
+      hidden: true
+    - name: CollectorConfig.validate_condition
+      href: toloka.client.collectors.CollectorConfig.validate_condition.md
+      hidden: true
+    - name: AcceptanceRate
+      href: toloka.client.collectors.AcceptanceRate.md
+    - name: AcceptanceRate.Parameters
+      href: toloka.client.collectors.AcceptanceRate.Parameters.md
+      hidden: true
+    - name: AnswerCount
+      href: toloka.client.collectors.AnswerCount.md
+    - name: AssignmentsAssessment
+      href: toloka.client.collectors.AssignmentsAssessment.md
+    - name: AssignmentSubmitTime
+      href: toloka.client.collectors.AssignmentSubmitTime.md
+    - name: AssignmentSubmitTime.Parameters
+      href: toloka.client.collectors.AssignmentSubmitTime.Parameters.md
+      hidden: true
+    - name: Captcha
+      href: toloka.client.collectors.Captcha.md
+    - name: Captcha.Parameters
+      href: toloka.client.collectors.Captcha.Parameters.md
+      hidden: true
+    - name: GoldenSet
+      href: toloka.client.collectors.GoldenSet.md
+    - name: GoldenSet.Parameters
+      href: toloka.client.collectors.GoldenSet.Parameters.md
+      hidden: true
+    - name: Income
+      href: toloka.client.collectors.Income.md
+    - name: MajorityVote
+      href: toloka.client.collectors.MajorityVote.md
+    - name: MajorityVote.Parameters
+      href: toloka.client.collectors.MajorityVote.Parameters.md
+      hidden: true
+    - name: SkippedInRowAssignments
+      href: toloka.client.collectors.SkippedInRowAssignments.md
+    - name: Training
+      href: toloka.client.collectors.Training.md
+    - name: UsersAssessment
+      href: toloka.client.collectors.UsersAssessment.md
+  - name: conditions
+    items:
+    - name: RuleCondition
+      href: toloka.client.conditions.RuleCondition.md
+      hidden: true
+    - name: RuleConditionKey
+      href: toloka.client.conditions.RuleConditionKey.md
+      hidden: true
+    - name: ComparableRuleCondition
+      href: toloka.client.conditions.ComparableRuleCondition.md
+      hidden: true
+    - name: IdentityRuleCondition
+      href: toloka.client.conditions.IdentityRuleCondition.md
+      hidden: true
+    - name: AcceptedAssignmentsRate
+      href: toloka.client.conditions.AcceptedAssignmentsRate.md
+    - name: AcceptedAssignmentsCount
+      href: toloka.client.conditions.AcceptedAssignmentsCount.md
+    - name: AssessmentEvent
+      href: toloka.client.conditions.AssessmentEvent.md
+    - name: AssessmentEvent.Type
+      href: toloka.client.conditions.AssessmentEvent.Type.md
+      hidden: true
+    - name: AssignmentsAcceptedCount
+      href: toloka.client.conditions.AssignmentsAcceptedCount.md
+    - name: CorrectAnswersRate
+      href: toloka.client.conditions.CorrectAnswersRate.md
+    - name: FailRate
+      href: toloka.client.conditions.FailRate.md
+    - name: FastSubmittedCount
+      href: toloka.client.conditions.FastSubmittedCount.md
+    - name: GoldenSetAnswersCount
+      href: toloka.client.conditions.GoldenSetAnswersCount.md
+    - name: GoldenSetCorrectAnswersRate
+      href: toloka.client.conditions.GoldenSetCorrectAnswersRate.md
+    - name: GoldenSetIncorrectAnswersRate
+      href: toloka.client.conditions.GoldenSetIncorrectAnswersRate.md
+    - name: IncomeSumForLast24Hours
+      href: toloka.client.conditions.IncomeSumForLast24Hours.md
+    - name: IncorrectAnswersRate
+      href: toloka.client.conditions.IncorrectAnswersRate.md
+    - name: NextAssignmentAvailable
+      href: toloka.client.conditions.NextAssignmentAvailable.md
+    - name: PendingAssignmentsCount
+      href: toloka.client.conditions.PendingAssignmentsCount.md
+    - name: PoolAccessRevokedReason
+      href: toloka.client.conditions.PoolAccessRevokedReason.md
+    - name: PoolAccessRevokedReason.Type
+      href: toloka.client.conditions.PoolAccessRevokedReason.Type.md
+      hidden: true
+    - name: RejectedAssignmentsCount
+      href: toloka.client.conditions.RejectedAssignmentsCount.md
+    - name: RejectedAssignmentsRate
+      href: toloka.client.conditions.RejectedAssignmentsRate.md
+    - name: SkillId
+      href: toloka.client.conditions.SkillId.md
+    - name: SkippedInRowCount
+      href: toloka.client.conditions.SkippedInRowCount.md
+    - name: StoredResultsCount
+      href: toloka.client.conditions.StoredResultsCount.md
+    - name: SubmittedAssignmentsCount
+      href: toloka.client.conditions.SubmittedAssignmentsCount.md
+    - name: SuccessRate
+      href: toloka.client.conditions.SuccessRate.md
+    - name: TotalAnswersCount
+      href: toloka.client.conditions.TotalAnswersCount.md
+    - name: TotalAssignmentsCount
+      href: toloka.client.conditions.TotalAssignmentsCount.md
+    - name: TotalSubmittedCount
+      href: toloka.client.conditions.TotalSubmittedCount.md
+  - name: error_codes
+    items:
+    - name: CommonErrorCodes
+      href: toloka.client.error_codes.CommonErrorCodes.md
+    - name: InternalErrorCodes
+      href: toloka.client.error_codes.InternalErrorCodes.md
+    - name: ValidationErrorCodes
+      href: toloka.client.error_codes.ValidationErrorCodes.md
+  - name: exceptions
+    items:
+    - name: SpecClassIdentificationError
+      href: toloka.client.exceptions.SpecClassIdentificationError.md
+      hidden: true
+    - name: ApiError
+      href: toloka.client.exceptions.ApiError.md
+      hidden: true
+    - name: AccessDeniedApiError
+      href: toloka.client.exceptions.AccessDeniedApiError.md
+    - name: AuthenticationApiError
+      href: toloka.client.exceptions.AuthenticationApiError.md
+    - name: ConflictStateApiError
+      href: toloka.client.exceptions.ConflictStateApiError.md
+    - name: DoesNotExistApiError
+      href: toloka.client.exceptions.DoesNotExistApiError.md
+    - name: FailedOperation
+      href: toloka.client.exceptions.FailedOperation.md
+    - name: IncorrectActionsApiError
+      href: toloka.client.exceptions.IncorrectActionsApiError.md
+    - name: InternalApiError
+      href: toloka.client.exceptions.InternalApiError.md
+    - name: raise_on_api_error
+      href: toloka.client.exceptions.raise_on_api_error.md
+      hidden: true
+    - name: RemoteServiceUnavailableApiError
+      href: toloka.client.exceptions.RemoteServiceUnavailableApiError.md
+    - name: TooManyRequestsApiError
+      href: toloka.client.exceptions.TooManyRequestsApiError.md
+    - name: ValidationApiError
+      href: toloka.client.exceptions.ValidationApiError.md
+  - name: filter
+    items:
+    - name: FilterCondition
+      href: toloka.client.filter.FilterCondition.md
+      hidden: true
+    - name: FilterOr
+      href: toloka.client.filter.FilterOr.md
+      hidden: true
+    - name: FilterAnd
+      href: toloka.client.filter.FilterAnd.md
+      hidden: true
+    - name: Condition
+      href: toloka.client.filter.Condition.md
+      hidden: true
+    - name: Condition.Category
+      href: toloka.client.filter.Condition.Category.md
+      hidden: true
+    - name: AdultAllowed
+      href: toloka.client.filter.AdultAllowed.md
+    - name: Citizenship
+      href: toloka.client.filter.Citizenship.md
+    - name: City
+      href: toloka.client.filter.City.md
+    - name: ClientType.ClientType
+      href: toloka.client.filter.ClientType.ClientType.md
+      hidden: true
+    - name: ClientType
+      href: toloka.client.filter.ClientType.md
+    - name: Computed
+      href: toloka.client.filter.Computed.md
+    - name: Computed.Key
+      href: toloka.client.filter.Computed.Key.md
+      hidden: true
+    - name: Country
+      href: toloka.client.filter.Country.md
+    - name: DateOfBirth
+      href: toloka.client.filter.DateOfBirth.md
+    - name: DeviceCategory.DeviceCategory
+      href: toloka.client.filter.DeviceCategory.DeviceCategory.md
+      hidden: true
+    - name: DeviceCategory
+      href: toloka.client.filter.DeviceCategory.md
+    - name: Education
+      href: toloka.client.filter.Education.md
+    - name: Education.Education
+      href: toloka.client.filter.Education.Education.md
+      hidden: true
+    - name: Gender
+      href: toloka.client.filter.Gender.md
+    - name: Gender.Gender
+      href: toloka.client.filter.Gender.Gender.md
+      hidden: true
+    - name: Languages
+      href: toloka.client.filter.Languages.md
+    - name: OSFamily
+      href: toloka.client.filter.OSFamily.md
+    - name: OSFamily.OSFamily
+      href: toloka.client.filter.OSFamily.OSFamily.md
+      hidden: true
+    - name: OSVersion
+      href: toloka.client.filter.OSVersion.md
+    - name: OSVersionBugfix
+      href: toloka.client.filter.OSVersionBugfix.md
+    - name: OSVersionMajor
+      href: toloka.client.filter.OSVersionMajor.md
+    - name: OSVersionMinor
+      href: toloka.client.filter.OSVersionMinor.md
+    - name: Profile
+      href: toloka.client.filter.Profile.md
+    - name: Profile.Key
+      href: toloka.client.filter.Profile.Key.md
+      hidden: true
+    - name: RegionByIp
+      href: toloka.client.filter.RegionByIp.md
+    - name: RegionByPhone
+      href: toloka.client.filter.RegionByPhone.md
+    - name: Skill
+      href: toloka.client.filter.Skill.md
+    - name: UserAgentFamily
+      href: toloka.client.filter.UserAgentFamily.md
+    - name: UserAgentFamily.UserAgentFamily
+      href: toloka.client.filter.UserAgentFamily.UserAgentFamily.md
+    - name: UserAgentType
+      href: toloka.client.filter.UserAgentType.md
+    - name: UserAgentType.UserAgentType
+      href: toloka.client.filter.UserAgentType.UserAgentType.md
+      hidden: true
+    - name: UserAgentVersion
+      href: toloka.client.filter.UserAgentVersion.md
+    - name: UserAgentVersionBugfix
+      href: toloka.client.filter.UserAgentVersionBugfix.md
+    - name: UserAgentVersionMajor
+      href: toloka.client.filter.UserAgentVersionMajor.md
+    - name: UserAgentVersionMinor
+      href: toloka.client.filter.UserAgentVersionMinor.md
+  - name: message_thread
+    items:
+    - name: MessageThread
+      href: toloka.client.message_thread.MessageThread.md
+    - name: Folder
+      href: toloka.client.message_thread.Folder.md
+      hidden: true
+    - name: InterlocutorRole
+      href: toloka.client.message_thread.Interlocutor.InterlocutorRole.md
+      hidden: true
+    - name: Interlocutor
+      href: toloka.client.message_thread.Interlocutor.md
+    - name: MessageThread.ComposeDetails
+      href: toloka.client.message_thread.MessageThread.ComposeDetails.md
+      hidden: true
+    - name: MessageThread.Message
+      href: toloka.client.message_thread.MessageThread.Message.md
+      hidden: true
+    - name: MessageThread.Meta
+      href: toloka.client.message_thread.MessageThread.Meta.md
+      hidden: true
+    - name: MessageThreadCompose
+      href: toloka.client.message_thread.MessageThreadCompose.md
+    - name: MessageThreadFolders
+      href: toloka.client.message_thread.MessageThreadFolders.md
+    - name: MessageThreadReply
+      href: toloka.client.message_thread.MessageThreadReply.md
+    - name: RecipientsSelectType
+      href: toloka.client.message_thread.RecipientsSelectType.md
+      hidden: true
+  - name: operations
+    items:
+    - name: Operation
+      href: toloka.client.operations.Operation.md
+      hidden: true
+    - name: AggregatedSolutionOperation
+      href: toloka.client.operations.AggregatedSolutionOperation.md
+    - name: AggregatedSolutionOperation.Parameters
+      href: toloka.client.operations.AggregatedSolutionOperation.Parameters.md
+      hidden: true
+    - name: AnalyticsOperation
+      href: toloka.client.operations.AnalyticsOperation.md
+    - name: Operation.is_completed
+      href: toloka.client.operations.Operation.is_completed.md
+      hidden: true
+    - name: Operation.Parameters
+      href: toloka.client.operations.Operation.Parameters.md
+      hidden: true
+    - name: Operation.Status
+      href: toloka.client.operations.Operation.Status.md
+      hidden: true
+    - name: OperationType
+      href: toloka.client.operations.OperationType.md
+      hidden: true
+    - name: PoolArchiveOperation
+      href: toloka.client.operations.PoolArchiveOperation.md
+    - name: PoolCloneOperation.Details
+      href: toloka.client.operations.PoolCloneOperation.Details.md
+      hidden: true
+    - name: PoolCloneOperation
+      href: toloka.client.operations.PoolCloneOperation.md
+    - name: PoolCloseOperation
+      href: toloka.client.operations.PoolCloseOperation.md
+    - name: PoolOpenOperation
+      href: toloka.client.operations.PoolOpenOperation.md
+    - name: PoolOperation
+      href: toloka.client.operations.PoolOperation.md
+      hidden: true
+    - name: PoolOperation.Parameters
+      href: toloka.client.operations.PoolOperation.Parameters.md
+      hidden: true
+    - name: ProjectArchiveOperation
+      href: toloka.client.operations.ProjectArchiveOperation.md
+    - name: ProjectArchiveOperation.Parameters
+      href: toloka.client.operations.ProjectArchiveOperation.Parameters.md
+      hidden: true
+    - name: Operation.raise_on_fail
+      href: toloka.client.operations.Operation.raise_on_fail.md
+      hidden: true
+    - name: TasksCreateOperation
+      href: toloka.client.operations.TasksCreateOperation.md
+    - name: TasksCreateOperation.Parameters
+      href: toloka.client.operations.TasksCreateOperation.Parameters.md
+      hidden: true
+    - name: TaskSuiteCreateBatchOperation
+      href: toloka.client.operations.TaskSuiteCreateBatchOperation.md
+    - name: TaskSuiteCreateBatchOperation.Parameters
+      href: toloka.client.operations.TaskSuiteCreateBatchOperation.Parameters.md
+      hidden: true
+    - name: TrainingArchiveOperation
+      href: toloka.client.operations.TrainingArchiveOperation.md
+    - name: TrainingCloneOperation.Details
+      href: toloka.client.operations.TrainingCloneOperation.Details.md
+      hidden: true
+    - name: TrainingCloneOperation
+      href: toloka.client.operations.TrainingCloneOperation.md
+    - name: TrainingCloseOperation
+      href: toloka.client.operations.TrainingCloseOperation.md
+    - name: TrainingOpenOperation
+      href: toloka.client.operations.TrainingOpenOperation.md
+    - name: TrainingOperation
+      href: toloka.client.operations.TrainingOperation.md
+      hidden: true
+    - name: TrainingOperation.Parameters
+      href: toloka.client.operations.TrainingOperation.Parameters.md
+      hidden: true
+    - name: UserBonusCreateBatchOperation.Details
+      href: toloka.client.operations.UserBonusCreateBatchOperation.Details.md
+      hidden: true
+    - name: UserBonusCreateBatchOperation
+      href: toloka.client.operations.UserBonusCreateBatchOperation.md
+    - name: UserBonusCreateBatchOperation.Parameters
+      href: toloka.client.operations.UserBonusCreateBatchOperation.Parameters.md
+      hidden: true
+  - name: operation_log
+    items:
+    - name: OperationLogItem
+      href: toloka.client.operation_log.OperationLogItem.md
+  - name: owner
+    items:
+    - name: Owner
+      href: toloka.client.owner.Owner.md
+  - name: pool
+    items:
+    - name: Pool
+      href: toloka.client.pool.Pool.md
+    - name: Pool.AssignmentsIssuingConfig
+      href: toloka.client.pool.Pool.AssignmentsIssuingConfig.md
+      hidden: true
+    - name: Pool.CloseReason
+      href: toloka.client.pool.Pool.CloseReason.md
+      hidden: true
+    - name: Pool.Defaults
+      href: toloka.client.pool.Pool.Defaults.md
+      hidden: true
+    - name: Pool.is_archived
+      href: toloka.client.pool.Pool.is_archived.md
+      hidden: true
+    - name: Pool.is_closed
+      href: toloka.client.pool.Pool.is_closed.md
+      hidden: true
+    - name: Pool.is_locked
+      href: toloka.client.pool.Pool.is_locked.md
+      hidden: true
+    - name: Pool.is_open
+      href: toloka.client.pool.Pool.is_open.md
+      hidden: true
+    - name: Pool.Status
+      href: toloka.client.pool.Pool.Status.md
+      hidden: true
+    - name: Pool.TrainingConfig
+      href: toloka.client.pool.Pool.TrainingConfig.md
+      hidden: true
+    - name: Pool.Type
+      href: toloka.client.pool.Pool.Type.md
+      hidden: true
+    - name: PoolPatchRequest
+      href: toloka.client.pool.PoolPatchRequest.md
+    - name: codegen_setter_for_assignments_issuing_config
+      href: toloka.client.pool.codegen_setter_for_assignments_issuing_config.md
+      hidden: true
+    - name: codegen_setter_for_defaults
+      href: toloka.client.pool.codegen_setter_for_defaults.md
+      hidden: true
+    - name: codegen_setter_for_dynamic_overlap_config
+      href: toloka.client.pool.codegen_setter_for_dynamic_overlap_config.md
+      hidden: true
+    - name: codegen_setter_for_dynamic_pricing_config
+      href: toloka.client.pool.codegen_setter_for_dynamic_pricing_config.md
+      hidden: true
+    - name: codegen_setter_for_filter
+      href: toloka.client.pool.codegen_setter_for_filter.md
+      hidden: true
+    - name: codegen_setter_for_mixer_config
+      href: toloka.client.pool.codegen_setter_for_mixer_config.md
+      hidden: true
+    - name: codegen_setter_for_owner
+      href: toloka.client.pool.codegen_setter_for_owner.md
+      hidden: true
+    - name: codegen_setter_for_quality_control
+      href: toloka.client.pool.codegen_setter_for_quality_control.md
+      hidden: true
+    - name: codegen_setter_for_quality_control_captcha_frequency
+      href: toloka.client.pool.codegen_setter_for_quality_control_captcha_frequency.md
+      hidden: true
+    - name: codegen_setter_for_quality_control_checkpoints_config
+      href: toloka.client.pool.codegen_setter_for_quality_control_checkpoints_config.md
+      hidden: true
+    - name: codegen_setter_for_quality_control_configs
+      href: toloka.client.pool.codegen_setter_for_quality_control_configs.md
+      hidden: true
+    - name: codegen_setter_for_quality_control_training_requirement
+      href: toloka.client.pool.codegen_setter_for_quality_control_training_requirement.md
+      hidden: true
+    - name: codegen_setter_for_training_config
+      href: toloka.client.pool.codegen_setter_for_training_config.md
+      hidden: true
+    - name: dynamic_overlap_config
+      items:
+      - name: DynamicOverlapConfig
+        href: toloka.client.pool.dynamic_overlap_config.DynamicOverlapConfig.md
+      - name: DynamicOverlapConfig.Field
+        href: toloka.client.pool.dynamic_overlap_config.DynamicOverlapConfig.Field.md
+        hidden: true
+      - name: DynamicOverlapConfig.Type
+        href: toloka.client.pool.dynamic_overlap_config.DynamicOverlapConfig.Type.md
+        hidden: true
+      - name: DynamicPricingConfig
+        href: toloka.client.pool.dynamic_pricing_config.DynamicPricingConfig.md
+      - name: DynamicPricingConfig.Interval
+        href: toloka.client.pool.dynamic_pricing_config.DynamicPricingConfig.Interval.md
+        hidden: true
+      - name: DynamicPricingConfig.Type
+        href: toloka.client.pool.dynamic_pricing_config.DynamicPricingConfig.Type.md
+        hidden: true
+    - name: mixer_config
+      items:
+      - name: MixerConfig
+        href: toloka.client.pool.mixer_config.MixerConfig.md
+  - name: primitives
+    items:
+    - name: base
+      items:
+      - name: autocast_to_enum
+        href: toloka.client.primitives.base.autocast_to_enum.md
+      - name: BaseParameters
+        href: toloka.client.primitives.base.BaseParameters.md
+      - name: BaseParameters.Parameters
+        href: toloka.client.primitives.base.BaseParameters.Parameters.md
+        hidden: true
+      - name: BaseTolokaObject
+        href: toloka.client.primitives.base.BaseTolokaObject.md
+      - name: BaseTolokaObject.from_json
+        href: toloka.client.primitives.base.BaseTolokaObject.from_json.md
+        hidden: true
+      - name: BaseTolokaObject.get_spec_subclass_for_value
+        href: toloka.client.primitives.base.BaseTolokaObject.get_spec_subclass_for_value.md
+        hidden: true
+      - name: BaseTolokaObject.get_variant_specs
+        href: toloka.client.primitives.base.BaseTolokaObject.get_variant_specs.md
+        hidden: true
+      - name: BaseTolokaObject.is_variant_base
+        href: toloka.client.primitives.base.BaseTolokaObject.is_variant_base.md
+        hidden: true
+      - name: BaseTolokaObject.is_variant_incomplete
+        href: toloka.client.primitives.base.BaseTolokaObject.is_variant_incomplete.md
+        hidden: true
+      - name: BaseTolokaObject.is_variant_spec
+        href: toloka.client.primitives.base.BaseTolokaObject.is_variant_spec.md
+        hidden: true
+      - name: BaseTolokaObject.to_json
+        href: toloka.client.primitives.base.BaseTolokaObject.to_json.md
+        hidden: true
+      - name: BaseTolokaObjectMetaclass
+        href: toloka.client.primitives.base.BaseTolokaObjectMetaclass.md
+        hidden: true
+      - name: BaseTolokaObjectMetaclass.transformer
+        href: toloka.client.primitives.base.BaseTolokaObjectMetaclass.transformer.md
+        hidden: true
+      - name: VariantRegistry
+        href: toloka.client.primitives.base.VariantRegistry.md
+        hidden: true
+      - name: VariantRegistry.register
+        href: toloka.client.primitives.base.VariantRegistry.register.md
+        hidden: true
+    - name: infinite_overlap
+      items:
+      - name: InfiniteOverlapParametersMixin
+        href: toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin.md
+      - name: InfiniteOverlapParametersMixin.unset_overlap
+        href: toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin.unset_overlap.md
+        hidden: true
+    - name: operators
+      hidden: true
+      items:
+      - name: ComparableConditionMixin
+        href: toloka.client.primitives.operators.ComparableConditionMixin.md
+      - name: CompareOperator
+        href: toloka.client.primitives.operators.CompareOperator.md
+      - name: IdentityConditionMixin
+        href: toloka.client.primitives.operators.IdentityConditionMixin.md
+      - name: IdentityOperator
+        href: toloka.client.primitives.operators.IdentityOperator.md
+      - name: InclusionConditionMixin
+        href: toloka.client.primitives.operators.InclusionConditionMixin.md
+      - name: InclusionOperator
+        href: toloka.client.primitives.operators.InclusionOperator.md
+      - name: StatefulComparableConditionMixin.eq
+        href: toloka.client.primitives.operators.StatefulComparableConditionMixin.eq.md
+        hidden: true
+      - name: StatefulComparableConditionMixin.gt
+        href: toloka.client.primitives.operators.StatefulComparableConditionMixin.gt.md
+        hidden: true
+      - name: StatefulComparableConditionMixin.gte
+        href: toloka.client.primitives.operators.StatefulComparableConditionMixin.gte.md
+        hidden: true
+      - name: StatefulComparableConditionMixin.lt
+        href: toloka.client.primitives.operators.StatefulComparableConditionMixin.lt.md
+        hidden: true
+      - name: StatefulComparableConditionMixin.lte
+        href: toloka.client.primitives.operators.StatefulComparableConditionMixin.lte.md
+        hidden: true
+      - name: StatefulComparableConditionMixin.md
+        href: toloka.client.primitives.operators.StatefulComparableConditionMixin.md
+      - name: StatefulComparableConditionMixin.ne
+        href: toloka.client.primitives.operators.StatefulComparableConditionMixin.ne.md
+        hidden: true
+    - name: parameter
+      hidden: true
+      items:
+      - name: Parameters
+        href: toloka.client.primitives.parameter.Parameters.md
+        hidden: true
+    - name: retry
+      items:
+      - name: PreloadingHTTPAdapter
+        href: toloka.client.primitives.retry.PreloadingHTTPAdapter.md
+      - name: PreloadingHTTPAdapter.build_response
+        href: toloka.client.primitives.retry.PreloadingHTTPAdapter.build_response.md
+        hidden: true
+      - name: PreloadingHTTPAdapter.get_connection
+        href: toloka.client.primitives.retry.PreloadingHTTPAdapter.get_connection.md
+        hidden: true
+      - name: TolokaRetry
+        href: toloka.client.primitives.retry.TolokaRetry.md
+      - name: TolokaRetry.get_retry_after
+        href: toloka.client.primitives.retry.TolokaRetry.get_retry_after.md
+        hidden: true
+      - name: TolokaRetry.increment
+        href: toloka.client.primitives.retry.TolokaRetry.increment.md
+        hidden: true
+      - name: TolokaRetry.new
+        href: toloka.client.primitives.retry.TolokaRetry.new.md
+        hidden: true
+      - name: TolokaRetry.Unit
+        href: toloka.client.primitives.retry.TolokaRetry.Unit.md
+        hidden: true
+  - name: project
+    items:
+    - name: Project
+      href: toloka.client.project.Project.md
+    - name: Project.add_requester_translation
+      href: toloka.client.project.Project.add_requester_translation.md
+      hidden: true
+    - name: Project.AssignmentsIssuingType
+      href: toloka.client.project.Project.AssignmentsIssuingType.md
+      hidden: true
+    - name: Project.AssignmentsIssuingViewConfig
+      href: toloka.client.project.Project.AssignmentsIssuingViewConfig.md
+      hidden: true
+    - name: Project.ProjectStatus
+      href: toloka.client.project.Project.ProjectStatus.md
+      hidden: true
+    - name: Project.set_default_language
+      href: toloka.client.project.Project.set_default_language.md
+      hidden: true
+    - name: localization
+      items:
+      - name: AdditionalLanguage
+        href: toloka.client.project.localization.AdditionalLanguage.md
+      - name: AdditionalLanguage.FieldTranslation.Source
+        href: toloka.client.project.localization.AdditionalLanguage.FieldTranslation.Source.md
+        hidden: true
+      - name: AdditionalLanguage.FieldTranslation
+        href: toloka.client.project.localization.AdditionalLanguage.FieldTranslation.md
+        hidden: true
+      - name: LocalizationConfig
+        href: toloka.client.project.localization.LocalizationConfig.md
+    - name: field_spec
+      items:
+      - name: FieldSpec
+        href: toloka.client.project.field_spec.FieldSpec.md
+        hidden: true
+      - name: ArrayBooleanSpec
+        href: toloka.client.project.field_spec.ArrayBooleanSpec.md
+      - name: ArrayCoordinatesSpec
+        href: toloka.client.project.field_spec.ArrayCoordinatesSpec.md
+      - name: ArrayFileSpec
+        href: toloka.client.project.field_spec.ArrayFileSpec.md
+      - name: ArrayFloatSpec
+        href: toloka.client.project.field_spec.ArrayFloatSpec.md
+      - name: ArrayIntegerSpec
+        href: toloka.client.project.field_spec.ArrayIntegerSpec.md
+      - name: ArrayStringSpec
+        href: toloka.client.project.field_spec.ArrayStringSpec.md
+      - name: ArrayUrlSpec
+        href: toloka.client.project.field_spec.ArrayUrlSpec.md
+      - name: BooleanSpec
+        href: toloka.client.project.field_spec.BooleanSpec.md
+      - name: CoordinatesSpec
+        href: toloka.client.project.field_spec.CoordinatesSpec.md
+      - name: FieldType
+        href: toloka.client.project.field_spec.FieldType.md
+      - name: FileSpec
+        href: toloka.client.project.field_spec.FileSpec.md
+      - name: FloatSpec
+        href: toloka.client.project.field_spec.FloatSpec.md
+      - name: IntegerSpec
+        href: toloka.client.project.field_spec.IntegerSpec.md
+      - name: JsonSpec
+        href: toloka.client.project.field_spec.JsonSpec.md
+      - name: StringSpec
+        href: toloka.client.project.field_spec.StringSpec.md
+      - name: UrlSpec
+        href: toloka.client.project.field_spec.UrlSpec.md
+    - name: task_spec
+      items:
+      - name: TaskSpec
+        href: toloka.client.project.task_spec.TaskSpec.md
+    - name: view_spec
+      items:
+      - name: ViewSpec
+        href: toloka.client.project.view_spec.ViewSpec.md
+        hidden: true
+      - name: ViewSpec.Settings
+        href: toloka.client.project.view_spec.ViewSpec.Settings.md
+        hidden: true
+      - name: ViewSpec.Type
+        href: toloka.client.project.view_spec.ViewSpec.Type.md
+        hidden: true
+      - name: ClassicViewSpec
+        href: toloka.client.project.view_spec.ClassicViewSpec.md
+      - name: ClassicViewSpec.Assets
+        href: toloka.client.project.view_spec.ClassicViewSpec.Assets.md
+        hidden: true
+      - name: TemplateBuilderViewSpec
+        href: toloka.client.project.view_spec.TemplateBuilderViewSpec.md
+  - name: quality_control
+    items:
+    - name: QualityControl
+      href: toloka.client.quality_control.QualityControl.md
+    - name: QualityControl.add_action
+      href: toloka.client.quality_control.QualityControl.add_action.md
+      hidden: true
+    - name: QualityControl.CaptchaFrequency
+      href: toloka.client.quality_control.QualityControl.CaptchaFrequency.md
+      hidden: true
+    - name: QualityControl.CheckpointsConfig
+      href: toloka.client.quality_control.QualityControl.CheckpointsConfig.md
+      hidden: true
+    - name: QualityControl.CheckpointsConfig.Settings
+      href: toloka.client.quality_control.QualityControl.CheckpointsConfig.Settings.md
+      hidden: true
+    - name: QualityControl.QualityControlConfig
+      href: toloka.client.quality_control.QualityControl.QualityControlConfig.md
+      hidden: true
+    - name: QualityControl.QualityControlConfig.RuleConfig
+      href: toloka.client.quality_control.QualityControl.QualityControlConfig.RuleConfig.md
+      hidden: true
+    - name: QualityControl.TrainingRequirement
+      href: toloka.client.quality_control.QualityControl.TrainingRequirement.md
+      hidden: true
+  - name: requester
+    items:
+    - name: Requester
+      href: toloka.client.requester.Requester.md
+    - name: Requester.Company
+      href: toloka.client.requester.Requester.Company.md
+      hidden: true
+  - name: search_requests
+    items:
+    - name: BaseSortItem
+      href: toloka.client.search_requests.BaseSortItem.md
+      hidden: true
+    - name: BaseSortItem.for_fields
+      href: toloka.client.search_requests.BaseSortItem.for_fields.md
+      hidden: true
+    - name: BaseSortItems
+      href: toloka.client.search_requests.BaseSortItems.md
+      hidden: true
+    - name: BaseSortItems.for_fields
+      href: toloka.client.search_requests.BaseSortItems.for_fields.md
+      hidden: true
+    - name: AggregatedSolutionSortItems.SortItem.SortField
+      href: toloka.client.search_requests.AggregatedSolutionSortItems.SortItem.SortField.md
+      hidden: true
+    - name: AggregatedSolutionSortItems.SortItem
+      href: toloka.client.search_requests.AggregatedSolutionSortItems.SortItem.md
+      hidden: true
+    - name: AppBatchSortItems.SortItem.SortField
+      href: toloka.client.search_requests.AppBatchSortItems.SortItem.SortField.md
+      hidden: true
+    - name: AppBatchSortItems.SortItem
+      href: toloka.client.search_requests.AppBatchSortItems.SortItem.md
+      hidden: true
+    - name: AppItemSortItems.SortItem.SortField
+      href: toloka.client.search_requests.AppItemSortItems.SortItem.SortField.md
+      hidden: true
+    - name: AppItemSortItems.SortItem
+      href: toloka.client.search_requests.AppItemSortItems.SortItem.md
+      hidden: true
+    - name: AppProjectSortItems.SortItem.SortField
+      href: toloka.client.search_requests.AppProjectSortItems.SortItem.SortField.md
+      hidden: true
+    - name: AppProjectSortItems.SortItem
+      href: toloka.client.search_requests.AppProjectSortItems.SortItem.md
+      hidden: true
+    - name: AppSortItems.SortItem.SortField
+      href: toloka.client.search_requests.AppSortItems.SortItem.SortField.md
+      hidden: true
+    - name: AppSortItems.SortItem
+      href: toloka.client.search_requests.AppSortItems.SortItem.md
+      hidden: true
+    - name: AssignmentSortItems.SortItem.SortField
+      href: toloka.client.search_requests.AssignmentSortItems.SortItem.SortField.md
+      hidden: true
+    - name: AssignmentSortItems.SortItem
+      href: toloka.client.search_requests.AssignmentSortItems.SortItem.md
+      hidden: true
+    - name: AttachmentSortItems.SortItem.SortField
+      href: toloka.client.search_requests.AttachmentSortItems.SortItem.SortField.md
+      hidden: true
+    - name: AttachmentSortItems.SortItem
+      href: toloka.client.search_requests.AttachmentSortItems.SortItem.md
+      hidden: true
+    - name: MessageThreadSortItems.SortItem.SortField
+      href: toloka.client.search_requests.MessageThreadSortItems.SortItem.SortField.md
+      hidden: true
+    - name: MessageThreadSortItems.SortItem
+      href: toloka.client.search_requests.MessageThreadSortItems.SortItem.md
+      hidden: true
+    - name: PoolSortItems.SortItem.SortField
+      href: toloka.client.search_requests.PoolSortItems.SortItem.SortField.md
+      hidden: true
+    - name: PoolSortItems.SortItem
+      href: toloka.client.search_requests.PoolSortItems.SortItem.md
+      hidden: true
+    - name: ProjectSortItems.SortItem.SortField
+      href: toloka.client.search_requests.ProjectSortItems.SortItem.SortField.md
+      hidden: true
+    - name: ProjectSortItems.SortItem
+      href: toloka.client.search_requests.ProjectSortItems.SortItem.md
+      hidden: true
+    - name: SkillSortItems.SortItem.SortField
+      href: toloka.client.search_requests.SkillSortItems.SortItem.SortField.md
+      hidden: true
+    - name: SkillSortItems.SortItem
+      href: toloka.client.search_requests.SkillSortItems.SortItem.md
+      hidden: true
+    - name: TaskSortItems.SortItem.SortField
+      href: toloka.client.search_requests.TaskSortItems.SortItem.SortField.md
+      hidden: true
+    - name: TaskSortItems.SortItem
+      href: toloka.client.search_requests.TaskSortItems.SortItem.md
+      hidden: true
+    - name: TaskSuiteSortItems.SortItem.SortField
+      href: toloka.client.search_requests.TaskSuiteSortItems.SortItem.SortField.md
+      hidden: true
+    - name: TaskSuiteSortItems.SortItem
+      href: toloka.client.search_requests.TaskSuiteSortItems.SortItem.md
+      hidden: true
+    - name: TrainingSortItems.SortItem.SortField
+      href: toloka.client.search_requests.TrainingSortItems.SortItem.SortField.md
+      hidden: true
+    - name: TrainingSortItems.SortItem
+      href: toloka.client.search_requests.TrainingSortItems.SortItem.md
+      hidden: true
+    - name: UserBonusSortItems.SortItem.SortField
+      href: toloka.client.search_requests.UserBonusSortItems.SortItem.SortField.md
+      hidden: true
+    - name: UserBonusSortItems.SortItem
+      href: toloka.client.search_requests.UserBonusSortItems.SortItem.md
+      hidden: true
+    - name: UserRestrictionSortItems.SortItem.SortField
+      href: toloka.client.search_requests.UserRestrictionSortItems.SortItem.SortField.md
+      hidden: true
+    - name: UserRestrictionSortItems.SortItem
+      href: toloka.client.search_requests.UserRestrictionSortItems.SortItem.md
+      hidden: true
+    - name: UserSkillSortItems.SortItem.SortField
+      href: toloka.client.search_requests.UserSkillSortItems.SortItem.SortField.md
+      hidden: true
+    - name: UserSkillSortItems.SortItem
+      href: toloka.client.search_requests.UserSkillSortItems.SortItem.md
+      hidden: true
+    - name: WebhookSubscriptionSortItems.SortItem.SortField
+      href: toloka.client.search_requests.WebhookSubscriptionSortItems.SortItem.SortField.md
+      hidden: true
+    - name: WebhookSubscriptionSortItems.SortItem
+      href: toloka.client.search_requests.WebhookSubscriptionSortItems.SortItem.md
+      hidden: true
+    - name: AggregatedSolutionSortItems
+      href: toloka.client.search_requests.AggregatedSolutionSortItems.md
+    - name: AppBatchSortItems
+      href: toloka.client.search_requests.AppBatchSortItems.md
+    - name: AppItemSortItems
+      href: toloka.client.search_requests.AppItemSortItems.md
+    - name: AppProjectSortItems
+      href: toloka.client.search_requests.AppProjectSortItems.md
+    - name: AppSortItems
+      href: toloka.client.search_requests.AppSortItems.md
+    - name: AssignmentSortItems
+      href: toloka.client.search_requests.AssignmentSortItems.md
+    - name: AttachmentSortItems
+      href: toloka.client.search_requests.AttachmentSortItems.md
+    - name: MessageThreadSortItems
+      href: toloka.client.search_requests.MessageThreadSortItems.md
+    - name: PoolSortItems
+      href: toloka.client.search_requests.PoolSortItems.md
+    - name: ProjectSortItems
+      href: toloka.client.search_requests.ProjectSortItems.md
+    - name: SkillSortItems
+      href: toloka.client.search_requests.SkillSortItems.md
+    - name: TaskSortItems
+      href: toloka.client.search_requests.TaskSortItems.md
+    - name: TaskSuiteSortItems
+      href: toloka.client.search_requests.TaskSuiteSortItems.md
+    - name: TrainingSortItems
+      href: toloka.client.search_requests.TrainingSortItems.md
+    - name: UserBonusSortItems
+      href: toloka.client.search_requests.UserBonusSortItems.md
+    - name: UserRestrictionSortItems
+      href: toloka.client.search_requests.UserRestrictionSortItems.md
+    - name: UserSkillSortItems
+      href: toloka.client.search_requests.UserSkillSortItems.md
+    - name: WebhookSubscriptionSortItems
+      href: toloka.client.search_requests.WebhookSubscriptionSortItems.md
+    - name: BaseSearchRequest
+      href: toloka.client.search_requests.BaseSearchRequest.md
+      hidden: true
+    - name: BaseSearchRequest.CompareFields
+      href: toloka.client.search_requests.BaseSearchRequest.CompareFields.md
+      hidden: true
+    - name: AggregatedSolutionSearchRequest
+      href: toloka.client.search_requests.AggregatedSolutionSearchRequest.md
+    - name: AggregatedSolutionSearchRequest.CompareFields
+      href: toloka.client.search_requests.AggregatedSolutionSearchRequest.CompareFields.md
+      hidden: true
+    - name: AppBatchSearchRequest
+      href: toloka.client.search_requests.AppBatchSearchRequest.md
+    - name: AppBatchSearchRequest.CompareFields
+      href: toloka.client.search_requests.AppBatchSearchRequest.CompareFields.md
+      hidden: true
+    - name: AppItemSearchRequest
+      href: toloka.client.search_requests.AppItemSearchRequest.md
+    - name: AppItemSearchRequest.CompareFields
+      href: toloka.client.search_requests.AppItemSearchRequest.CompareFields.md
+      hidden: true
+    - name: AppProjectSearchRequest
+      href: toloka.client.search_requests.AppProjectSearchRequest.md
+    - name: AppProjectSearchRequest.CompareFields
+      href: toloka.client.search_requests.AppProjectSearchRequest.CompareFields.md
+      hidden: true
+    - name: AppProjectSearchRequest.Scope
+      href: toloka.client.search_requests.AppProjectSearchRequest.Scope.md
+      hidden: true
+    - name: AppSearchRequest
+      href: toloka.client.search_requests.AppSearchRequest.md
+    - name: AppSearchRequest.CompareFields
+      href: toloka.client.search_requests.AppSearchRequest.CompareFields.md
+      hidden: true
+    - name: AssignmentSearchRequest
+      href: toloka.client.search_requests.AssignmentSearchRequest.md
+    - name: AssignmentSearchRequest.CompareFields
+      href: toloka.client.search_requests.AssignmentSearchRequest.CompareFields.md
+      hidden: true
+    - name: AttachmentSearchRequest
+      href: toloka.client.search_requests.AttachmentSearchRequest.md
+    - name: AttachmentSearchRequest.CompareFields
+      href: toloka.client.search_requests.AttachmentSearchRequest.CompareFields.md
+      hidden: true
+    - name: MessageThreadSearchRequest
+      href: toloka.client.search_requests.MessageThreadSearchRequest.md
+    - name: MessageThreadSearchRequest.CompareFields
+      href: toloka.client.search_requests.MessageThreadSearchRequest.CompareFields.md
+      hidden: true
+    - name: ProjectSearchRequest
+      href: toloka.client.search_requests.ProjectSearchRequest.md
+    - name: ProjectSearchRequest.CompareFields
+      href: toloka.client.search_requests.ProjectSearchRequest.CompareFields.md
+      hidden: true
+    - name: PoolSearchRequest
+      href: toloka.client.search_requests.PoolSearchRequest.md
+    - name: PoolSearchRequest.CompareFields
+      href: toloka.client.search_requests.PoolSearchRequest.CompareFields.md
+      hidden: true
+    - name: SkillSearchRequest
+      href: toloka.client.search_requests.SkillSearchRequest.md
+    - name: SkillSearchRequest.CompareFields
+      href: toloka.client.search_requests.SkillSearchRequest.CompareFields.md
+      hidden: true
+    - name: TaskSearchRequest
+      href: toloka.client.search_requests.TaskSearchRequest.md
+    - name: TaskSearchRequest.CompareFields
+      href: toloka.client.search_requests.TaskSearchRequest.CompareFields.md
+      hidden: true
+    - name: TaskSuiteSearchRequest
+      href: toloka.client.search_requests.TaskSuiteSearchRequest.md
+    - name: TaskSuiteSearchRequest.CompareFields
+      href: toloka.client.search_requests.TaskSuiteSearchRequest.CompareFields.md
+      hidden: true
+    - name: TrainingSearchRequest
+      href: toloka.client.search_requests.TrainingSearchRequest.md
+    - name: TrainingSearchRequest.CompareFields
+      href: toloka.client.search_requests.TrainingSearchRequest.CompareFields.md
+      hidden: true
+    - name: UserBonusSearchRequest
+      href: toloka.client.search_requests.UserBonusSearchRequest.md
+    - name: UserBonusSearchRequest.CompareFields
+      href: toloka.client.search_requests.UserBonusSearchRequest.CompareFields.md
+      hidden: true
+    - name: UserRestrictionSearchRequest
+      href: toloka.client.search_requests.UserRestrictionSearchRequest.md
+    - name: UserRestrictionSearchRequest.CompareFields
+      href: toloka.client.search_requests.UserRestrictionSearchRequest.CompareFields.md
+      hidden: true
+    - name: UserSkillSearchRequest
+      href: toloka.client.search_requests.UserSkillSearchRequest.md
+    - name: UserSkillSearchRequest.CompareFields
+      href: toloka.client.search_requests.UserSkillSearchRequest.CompareFields.md
+      hidden: true
+    - name: WebhookSubscriptionSearchRequest
+      href: toloka.client.search_requests.WebhookSubscriptionSearchRequest.md
+    - name: WebhookSubscriptionSearchRequest.CompareFields
+      href: toloka.client.search_requests.WebhookSubscriptionSearchRequest.CompareFields.md
+      hidden: true
+    - name: SearchRequestMetaclass
+      href: toloka.client.search_requests.SearchRequestMetaclass.md
+      hidden: true
+    - name: SortOrder
+      href: toloka.client.search_requests.SortOrder.md
+      hidden: true
+  - name: search_results
+    items:
+    - name: AggregatedSolutionSearchResult
+      href: toloka.client.search_results.AggregatedSolutionSearchResult.md
+    - name: AppBatchSearchResult
+      href: toloka.client.search_results.AppBatchSearchResult.md
+    - name: AppItemSearchResult
+      href: toloka.client.search_results.AppItemSearchResult.md
+    - name: AppProjectSearchResult
+      href: toloka.client.search_results.AppProjectSearchResult.md
+    - name: AppSearchResult
+      href: toloka.client.search_results.AppSearchResult.md
+    - name: AssignmentSearchResult
+      href: toloka.client.search_results.AssignmentSearchResult.md
+    - name: AttachmentSearchResult
+      href: toloka.client.search_results.AttachmentSearchResult.md
+    - name: MessageThreadSearchResult
+      href: toloka.client.search_results.MessageThreadSearchResult.md
+    - name: PoolSearchResult
+      href: toloka.client.search_results.PoolSearchResult.md
+    - name: ProjectSearchResult
+      href: toloka.client.search_results.ProjectSearchResult.md
+    - name: SkillSearchResult
+      href: toloka.client.search_results.SkillSearchResult.md
+    - name: TaskSearchResult
+      href: toloka.client.search_results.TaskSearchResult.md
+    - name: TaskSuiteSearchResult
+      href: toloka.client.search_results.TaskSuiteSearchResult.md
+    - name: TrainingSearchResult
+      href: toloka.client.search_results.TrainingSearchResult.md
+    - name: UserBonusSearchResult
+      href: toloka.client.search_results.UserBonusSearchResult.md
+    - name: UserRestrictionSearchResult
+      href: toloka.client.search_results.UserRestrictionSearchResult.md
+    - name: UserSkillSearchResult
+      href: toloka.client.search_results.UserSkillSearchResult.md
+    - name: WebhookSubscriptionSearchResult
+      href: toloka.client.search_results.WebhookSubscriptionSearchResult.md
+  - name: skill
+    items:
+    - name: Skill
+      href: toloka.client.skill.Skill.md
+  - name: solution
+    items:
+    - name: Solution
+      href: toloka.client.solution.Solution.md
+  - name: task
+    items:
+    - name: BaseTask
+      href: toloka.client.task.BaseTask.md
+      hidden: true
+    - name: BaseTask.KnownSolution
+      href: toloka.client.task.BaseTask.KnownSolution.md
+      hidden: true
+    - name: Task
+      href: toloka.client.task.Task.md
+    - name: Task.BaselineSolution
+      href: toloka.client.task.Task.BaselineSolution.md
+      hidden: true
+    - name: CreateTaskParameters
+      href: toloka.client.task.CreateTaskParameters.md
+    - name: CreateTaskAsyncParameters
+      href: toloka.client.task.CreateTaskAsyncParameters.md
+    - name: CreateTasksParameters
+      href: toloka.client.task.CreateTasksParameters.md
+    - name: TaskOverlapPatch
+      href: toloka.client.task.TaskOverlapPatch.md
+    - name: TaskPatch
+      href: toloka.client.task.TaskPatch.md
+  - name: task_distribution_function
+    items:
+    - name: TaskDistributionFunction
+      href: toloka.client.task_distribution_function.TaskDistributionFunction.md
+    - name: TaskDistributionFunction.Distribution
+      href: toloka.client.task_distribution_function.TaskDistributionFunction.Distribution.md
+      hidden: true
+    - name: TaskDistributionFunction.Interval
+      href: toloka.client.task_distribution_function.TaskDistributionFunction.Interval.md
+      hidden: true
+    - name: TaskDistributionFunction.Scope
+      href: toloka.client.task_distribution_function.TaskDistributionFunction.Scope.md
+      hidden: true
+  - name: task_suite
+    items:
+    - name: TaskSuite
+      href: toloka.client.task_suite.TaskSuite.md
+    - name: TaskSuite.add_base_task
+      href: toloka.client.task_suite.TaskSuite.add_base_task.md
+      hidden: true
+    - name: TaskSuiteCreateRequestParameters
+      href: toloka.client.task_suite.TaskSuiteCreateRequestParameters.md
+    - name: TaskSuiteOverlapPatch
+      href: toloka.client.task_suite.TaskSuiteOverlapPatch.md
+    - name: TaskSuitePatch
+      href: toloka.client.task_suite.TaskSuitePatch.md
+  - name: template_builder
+    items:
+    - name: get_input_and_output
+      href: toloka.client.project.template_builder.get_input_and_output.md
+    - name: TemplateBuilder
+      href: toloka.client.project.template_builder.TemplateBuilder.md
+    - name: actions
+      items:
+      - name: BaseActionV1
+        href: toloka.client.project.template_builder.actions.BaseActionV1.md
+        hidden: true
+      - name: BulkActionV1
+        href: toloka.client.project.template_builder.actions.BulkActionV1.md
+      - name: NotifyActionV1
+        href: toloka.client.project.template_builder.actions.NotifyActionV1.md
+      - name: NotifyActionV1.Payload
+        href: toloka.client.project.template_builder.actions.NotifyActionV1.Payload.md
+        hidden: true
+      - name: NotifyActionV1.Payload.Theme
+        href: toloka.client.project.template_builder.actions.NotifyActionV1.Payload.Theme.md
+        hidden: true
+      - name: OpenCloseActionV1
+        href: toloka.client.project.template_builder.actions.OpenCloseActionV1.md
+      - name: OpenLinkActionV1
+        href: toloka.client.project.template_builder.actions.OpenLinkActionV1.md
+      - name: PlayPauseActionV1
+        href: toloka.client.project.template_builder.actions.PlayPauseActionV1.md
+      - name: RotateActionV1
+        href: toloka.client.project.template_builder.actions.RotateActionV1.md
+      - name: RotateActionV1.Payload
+        href: toloka.client.project.template_builder.actions.RotateActionV1.Payload.md
+        hidden: true
+      - name: SetActionV1
+        href: toloka.client.project.template_builder.actions.SetActionV1.md
+      - name: ToggleActionV1
+        href: toloka.client.project.template_builder.actions.ToggleActionV1.md
+    - name: base
+      items:
+      - name: BaseComponent
+        href: toloka.client.project.template_builder.base.BaseComponent.md
+        hidden: true
+      - name: BaseComponentOr
+        href: toloka.client.project.template_builder.base.BaseComponentOr.md
+        hidden: true
+      - name: BaseTemplate
+        href: toloka.client.project.template_builder.base.BaseTemplate.md
+        hidden: true
+      - name: BaseTemplateMetaclass
+        href: toloka.client.project.template_builder.base.BaseTemplateMetaclass.md
+        hidden: true
+      - name: base_component_or
+        href: toloka.client.project.template_builder.base.base_component_or.md
+        hidden: true
+      - name: ComponentType
+        href: toloka.client.project.template_builder.base.ComponentType.md
+        hidden: true
+      - name: ListDirection
+        href: toloka.client.project.template_builder.base.ListDirection.md
+        hidden: true
+      - name: ListSize
+        href: toloka.client.project.template_builder.base.ListSize.md
+        hidden: true
+      - name: RefComponent
+        href: toloka.client.project.template_builder.base.RefComponent.md
+      - name: UnknownComponent
+        href: toloka.client.project.template_builder.base.UnknownComponent.md
+      - name: VersionedBaseComponentMetaclass
+        href: toloka.client.project.template_builder.base.VersionedBaseComponentMetaclass.md
+        hidden: true
+    - name: conditions
+      items:
+      - name: AllConditionV1
+        href: toloka.client.project.template_builder.conditions.AllConditionV1.md
+      - name: AnyConditionV1
+        href: toloka.client.project.template_builder.conditions.AnyConditionV1.md
+      - name: BaseConditionV1
+        href: toloka.client.project.template_builder.conditions.BaseConditionV1.md
+        hidden: true
+      - name: DistanceConditionV1
+        href: toloka.client.project.template_builder.conditions.DistanceConditionV1.md
+      - name: EmptyConditionV1
+        href: toloka.client.project.template_builder.conditions.EmptyConditionV1.md
+      - name: EqualsConditionV1
+        href: toloka.client.project.template_builder.conditions.EqualsConditionV1.md
+      - name: LinkOpenedConditionV1
+        href: toloka.client.project.template_builder.conditions.LinkOpenedConditionV1.md
+      - name: NotConditionV1
+        href: toloka.client.project.template_builder.conditions.NotConditionV1.md
+      - name: PlayedConditionV1
+        href: toloka.client.project.template_builder.conditions.PlayedConditionV1.md
+      - name: PlayedFullyConditionV1
+        href: toloka.client.project.template_builder.conditions.PlayedFullyConditionV1.md
+      - name: RequiredConditionV1
+        href: toloka.client.project.template_builder.conditions.RequiredConditionV1.md
+      - name: SameDomainConditionV1
+        href: toloka.client.project.template_builder.conditions.SameDomainConditionV1.md
+      - name: SchemaConditionV1
+        href: toloka.client.project.template_builder.conditions.SchemaConditionV1.md
+      - name: SubArrayConditionV1
+        href: toloka.client.project.template_builder.conditions.SubArrayConditionV1.md
+    - name: data
+      items:
+      - name: BaseData
+        href: toloka.client.project.template_builder.data.BaseData.md
+        hidden: true
+      - name: InputData
+        href: toloka.client.project.template_builder.data.InputData.md
+      - name: InternalData
+        href: toloka.client.project.template_builder.data.InternalData.md
+      - name: LocalData
+        href: toloka.client.project.template_builder.data.LocalData.md
+      - name: LocationData
+        href: toloka.client.project.template_builder.data.LocationData.md
+      - name: OutputData
+        href: toloka.client.project.template_builder.data.OutputData.md
+      - name: RelativeData
+        href: toloka.client.project.template_builder.data.RelativeData.md
+    - name: fields
+      items:
+      - name: BaseFieldV1
+        href: toloka.client.project.template_builder.fields.BaseFieldV1.md
+        hidden: true
+      - name: AudioFieldV1
+        href: toloka.client.project.template_builder.fields.AudioFieldV1.md
+      - name: ButtonRadioFieldV1
+        href: toloka.client.project.template_builder.fields.ButtonRadioFieldV1.md
+      - name: ButtonRadioGroupFieldV1
+        href: toloka.client.project.template_builder.fields.ButtonRadioGroupFieldV1.md
+      - name: CheckboxFieldV1
+        href: toloka.client.project.template_builder.fields.CheckboxFieldV1.md
+      - name: CheckboxGroupFieldV1
+        href: toloka.client.project.template_builder.fields.CheckboxGroupFieldV1.md
+      - name: DateFieldV1
+        href: toloka.client.project.template_builder.fields.DateFieldV1.md
+      - name: EmailFieldV1
+        href: toloka.client.project.template_builder.fields.EmailFieldV1.md
+      - name: FileFieldV1
+        href: toloka.client.project.template_builder.fields.FileFieldV1.md
+      - name: GroupFieldOption
+        href: toloka.client.project.template_builder.fields.GroupFieldOption.md
+        hidden: true
+      - name: ImageAnnotationFieldV1
+        href: toloka.client.project.template_builder.fields.ImageAnnotationFieldV1.md
+      - name: ImageAnnotationFieldV1.Label
+        href: toloka.client.project.template_builder.fields.ImageAnnotationFieldV1.Label.md
+        hidden: true
+      - name: ImageAnnotationFieldV1.Shape
+        href: toloka.client.project.template_builder.fields.ImageAnnotationFieldV1.Shape.md
+        hidden: true
+      - name: ListFieldV1
+        href: toloka.client.project.template_builder.fields.ListFieldV1.md
+      - name: MediaFileFieldV1
+        href: toloka.client.project.template_builder.fields.MediaFileFieldV1.md
+      - name: MediaFileFieldV1.Accept
+        href: toloka.client.project.template_builder.fields.MediaFileFieldV1.Accept.md
+        hidden: true
+      - name: NumberFieldV1
+        href: toloka.client.project.template_builder.fields.NumberFieldV1.md
+      - name: PhoneNumberFieldV1
+        href: toloka.client.project.template_builder.fields.PhoneNumberFieldV1.md
+      - name: RadioGroupFieldV1
+        href: toloka.client.project.template_builder.fields.RadioGroupFieldV1.md
+      - name: SelectFieldV1
+        href: toloka.client.project.template_builder.fields.SelectFieldV1.md
+      - name: SelectFieldV1.Option
+        href: toloka.client.project.template_builder.fields.SelectFieldV1.Option.md
+        hidden: true
+      - name: TextAnnotationFieldV1
+        href: toloka.client.project.template_builder.fields.TextAnnotationFieldV1.md
+      - name: TextAnnotationFieldV1.Label
+        href: toloka.client.project.template_builder.fields.TextAnnotationFieldV1.Label.md
+        hidden: true
+      - name: TextareaFieldV1
+        href: toloka.client.project.template_builder.fields.TextareaFieldV1.md
+      - name: TextFieldV1
+        href: toloka.client.project.template_builder.fields.TextFieldV1.md
+    - name: helpers
+      items:
+      - name: BaseHelperV1
+        href: toloka.client.project.template_builder.helpers.BaseHelperV1.md
+        hidden: true
+      - name: ConcatArraysHelperV1
+        href: toloka.client.project.template_builder.helpers.ConcatArraysHelperV1.md
+      - name: Entries2ObjectHelperV1
+        href: toloka.client.project.template_builder.helpers.Entries2ObjectHelperV1.md
+      - name: Entries2ObjectHelperV1.Entry
+        href: toloka.client.project.template_builder.helpers.Entries2ObjectHelperV1.Entry.md
+        hidden: true
+      - name: IfHelperV1
+        href: toloka.client.project.template_builder.helpers.IfHelperV1.md
+      - name: JoinHelperV1
+        href: toloka.client.project.template_builder.helpers.JoinHelperV1.md
+      - name: Object2EntriesHelperV1
+        href: toloka.client.project.template_builder.helpers.Object2EntriesHelperV1.md
+      - name: ReplaceHelperV1
+        href: toloka.client.project.template_builder.helpers.ReplaceHelperV1.md
+      - name: SearchQueryHelperV1
+        href: toloka.client.project.template_builder.helpers.SearchQueryHelperV1.md
+      - name: SearchQueryHelperV1.Engine
+        href: toloka.client.project.template_builder.helpers.SearchQueryHelperV1.Engine.md
+        hidden: true
+      - name: SwitchHelperV1
+        href: toloka.client.project.template_builder.helpers.SwitchHelperV1.md
+      - name: SwitchHelperV1.Case
+        href: toloka.client.project.template_builder.helpers.SwitchHelperV1.Case.md
+        hidden: true
+      - name: TextTransformHelperV1
+        href: toloka.client.project.template_builder.helpers.TextTransformHelperV1.md
+      - name: TextTransformHelperV1.Transformation
+        href: toloka.client.project.template_builder.helpers.TextTransformHelperV1.Transformation.md
+        hidden: true
+      - name: TransformHelperV1
+        href: toloka.client.project.template_builder.helpers.TransformHelperV1.md
+      - name: TranslateHelperV1
+        href: toloka.client.project.template_builder.helpers.TranslateHelperV1.md
+      - name: YandexDiskProxyHelperV1
+        href: toloka.client.project.template_builder.helpers.YandexDiskProxyHelperV1.md
+    - name: layouts
+      items:
+      - name: BarsLayoutV1
+        href: toloka.client.project.template_builder.layouts.BarsLayoutV1.md
+      - name: BaseLayoutV1
+        href: toloka.client.project.template_builder.layouts.BaseLayoutV1.md
+        hidden: true
+      - name: ColumnsLayoutV1
+        href: toloka.client.project.template_builder.layouts.ColumnsLayoutV1.md
+      - name: ColumnsLayoutV1.VerticalAlign
+        href: toloka.client.project.template_builder.layouts.ColumnsLayoutV1.VerticalAlign.md
+        hidden: true
+      - name: CompareLayoutV1
+        href: toloka.client.project.template_builder.layouts.CompareLayoutV1.md
+      - name: CompareLayoutItem
+        href: toloka.client.project.template_builder.layouts.CompareLayoutItem.md
+        hidden: true
+      - name: SidebarLayoutV1
+        href: toloka.client.project.template_builder.layouts.SidebarLayoutV1.md
+      - name: SideBySideLayoutV1
+        href: toloka.client.project.template_builder.layouts.SideBySideLayoutV1.md
+    - name: plugins
+      items:
+      - name: BasePluginV1
+        href: toloka.client.project.template_builder.plugins.BasePluginV1.md
+        hidden: true
+      - name: HotkeysPluginV1
+        href: toloka.client.project.template_builder.plugins.HotkeysPluginV1.md
+      - name: ImageAnnotationHotkeysPluginV1
+        href: toloka.client.project.template_builder.plugins.ImageAnnotationHotkeysPluginV1.md
+      - name: ImageAnnotationHotkeysPluginV1.Mode
+        href: toloka.client.project.template_builder.plugins.ImageAnnotationHotkeysPluginV1.Mode.md
+        hidden: true
+      - name: TextAnnotationHotkeysPluginV1
+        href: toloka.client.project.template_builder.plugins.TextAnnotationHotkeysPluginV1.md
+      - name: TolokaPluginV1
+        href: toloka.client.project.template_builder.plugins.TolokaPluginV1.md
+      - name: TolokaPluginV1.TolokaPluginLayout
+        href: toloka.client.project.template_builder.plugins.TolokaPluginV1.TolokaPluginLayout.md
+        hidden: true
+      - name: TolokaPluginV1.TolokaPluginLayout.Kind
+        href: toloka.client.project.template_builder.plugins.TolokaPluginV1.TolokaPluginLayout.Kind.md
+        hidden: true
+      - name: TriggerPluginV1
+        href: toloka.client.project.template_builder.plugins.TriggerPluginV1.md
+    - name: views
+      items:
+      - name: ActionButtonViewV1
+        href: toloka.client.project.template_builder.view.ActionButtonViewV1.md
+      - name: AlertViewV1
+        href: toloka.client.project.template_builder.view.AlertViewV1.md
+      - name: AlertViewV1.Theme
+        href: toloka.client.project.template_builder.view.AlertViewV1.Theme.md
+        hidden: true
+      - name: AudioViewV1
+        href: toloka.client.project.template_builder.view.AudioViewV1.md
+      - name: BaseViewV1
+        href: toloka.client.project.template_builder.view.BaseViewV1.md
+        hidden: true
+      - name: CollapseViewV1
+        href: toloka.client.project.template_builder.view.CollapseViewV1.md
+      - name: DeviceFrameViewV1
+        href: toloka.client.project.template_builder.view.DeviceFrameViewV1.md
+      - name: DividerViewV1
+        href: toloka.client.project.template_builder.view.DividerViewV1.md
+      - name: GroupViewV1
+        href: toloka.client.project.template_builder.view.GroupViewV1.md
+      - name: IframeViewV1
+        href: toloka.client.project.template_builder.view.IframeViewV1.md
+      - name: ImageViewV1
+        href: toloka.client.project.template_builder.view.ImageViewV1.md
+      - name: LabeledListViewV1.Item
+        href: toloka.client.project.template_builder.view.LabeledListViewV1.Item.md
+        hidden: true
+      - name: LabeledListViewV1
+        href: toloka.client.project.template_builder.view.LabeledListViewV1.md
+      - name: LinkViewV1
+        href: toloka.client.project.template_builder.view.LinkViewV1.md
+      - name: LinkGroupViewV1.Link
+        href: toloka.client.project.template_builder.view.LinkGroupViewV1.Link.md
+        hidden: true
+      - name: LinkGroupViewV1
+        href: toloka.client.project.template_builder.view.LinkGroupViewV1.md
+      - name: ListViewV1
+        href: toloka.client.project.template_builder.view.ListViewV1.md
+      - name: MapViewV1.Marker
+        href: toloka.client.project.template_builder.view.MapViewV1.Marker.md
+        hidden: true
+      - name: MapViewV1.Polygon
+        href: toloka.client.project.template_builder.view.MapViewV1.Polygon.md
+        hidden: true
+      - name: MapViewV1
+        href: toloka.client.project.template_builder.view.MapViewV1.md
+      - name: MarkdownViewV1
+        href: toloka.client.project.template_builder.view.MarkdownViewV1.md
+      - name: TextViewV1
+        href: toloka.client.project.template_builder.view.TextViewV1.md
+      - name: VideoViewV1
+        href: toloka.client.project.template_builder.view.VideoViewV1.md
+  - name: training
+    items:
+    - name: Training
+      href: toloka.client.training.Training.md
+    - name: Training.CloseReason
+      href: toloka.client.training.Training.CloseReason.md
+      hidden: true
+    - name: Training.is_archived
+      href: toloka.client.training.Training.is_archived.md
+      hidden: true
+    - name: Training.is_closed
+      href: toloka.client.training.Training.is_closed.md
+      hidden: true
+    - name: Training.is_locked
+      href: toloka.client.training.Training.is_locked.md
+      hidden: true
+    - name: Training.is_open
+      href: toloka.client.training.Training.is_open.md
+      hidden: true
+    - name: Training.Status
+      href: toloka.client.training.Training.Status.md
+      hidden: true
+    - name: codegen_setter_for_owner
+      href: toloka.client.training.codegen_setter_for_owner.md
+      hidden: true
+  - name: user_bonus
+    items:
+    - name: UserBonus
+      href: toloka.client.user_bonus.UserBonus.md
+    - name: UserBonusCreateRequestParameters
+      href: toloka.client.user_bonus.UserBonusCreateRequestParameters.md
+  - name: user_restriction
+    items:
+    - name: UserRestriction
+      href: toloka.client.user_restriction.UserRestriction.md
+      hidden: true
+    - name: UserRestriction.Scope
+      href: toloka.client.user_restriction.UserRestriction.Scope.md
+      hidden: true
+    - name: AllProjectsUserRestriction
+      href: toloka.client.user_restriction.AllProjectsUserRestriction.md
+    - name: DurationUnit
+      href: toloka.client.user_restriction.DurationUnit.md
+    - name: PoolUserRestriction
+      href: toloka.client.user_restriction.PoolUserRestriction.md
+    - name: ProjectUserRestriction
+      href: toloka.client.user_restriction.ProjectUserRestriction.md
+    - name: SystemUserRestriction
+      href: toloka.client.user_restriction.SystemUserRestriction.md
+  - name: user_skill
+    items:
+    - name: UserSkill
+      href: toloka.client.user_skill.UserSkill.md
+    - name: SetUserSkillRequest
+      href: toloka.client.user_skill.SetUserSkillRequest.md
+  - name: webhook_subscription
+    items:
+    - name: WebhookSubscription
+      href: toloka.client.webhook_subscription.WebhookSubscription.md
+    - name: WebhookSubscription.EventType
+      href: toloka.client.webhook_subscription.WebhookSubscription.EventType.md
+      hidden: true
+- name: toloka.async_client
+  items:
+  - name: AsyncTolokaClient
+    href: toloka.async_client.client.AsyncTolokaClient.md
+  - name: AsyncTolokaClient.from_sync_client
+    href: toloka.async_client.client.AsyncTolokaClient.from_sync_client.md
+    hidden: true
+  - name: AsyncTolokaClient.wait_operation
+    href: toloka.async_client.client.AsyncTolokaClient.wait_operation.md
+    hidden: true
+- name: toloka.metrics
+  items:
+  - name: collector
+    items:
+    - name: MetricCollector
+      href: toloka.metrics.collector.MetricCollector.md
+    - name: MetricCollector.create_async_tasks
+      href: toloka.metrics.collector.MetricCollector.create_async_tasks.md
+      hidden: true
+    - name: MetricCollector.run
+      href: toloka.metrics.collector.MetricCollector.run.md
+  - name: jupyter_dashboard
+    items:
+    - name: Chart
+      href: toloka.metrics.jupyter_dashboard.Chart.md
+    - name: Chart.create_async_tasks
+      href: toloka.metrics.jupyter_dashboard.Chart.create_async_tasks.md
+      hidden: true
+    - name: Chart.create_figure
+      href: toloka.metrics.jupyter_dashboard.Chart.create_figure.md
+      hidden: true
+    - name: Chart.update_metrics
+      href: toloka.metrics.jupyter_dashboard.Chart.update_metrics.md
+      hidden: true
+    - name: DashBoard
+      href: toloka.metrics.jupyter_dashboard.DashBoard.md
+    - name: DashBoard.run_dash
+      href: toloka.metrics.jupyter_dashboard.DashBoard.run_dash.md
+      hidden: true
+    - name: DashBoard.stop_dash
+      href: toloka.metrics.jupyter_dashboard.DashBoard.stop_dash.md
+      hidden: true
+    - name: DashBoard.update_charts
+      href: toloka.metrics.jupyter_dashboard.DashBoard.update_charts.md
+      hidden: true
+    - name: LineStats
+      href: toloka.metrics.jupyter_dashboard.LineStats.md
+      hidden: true
+  - name: metrics
+    items:
+    - name: BaseMetric.md
+      href: toloka.metrics.metrics.BaseMetric.md
+      hidden: true
+    - name: BaseMetric.get_lines
+      href: toloka.metrics.metrics.BaseMetric.get_lines.md
+      hidden: true
+    - name: BaseMetric.get_line_names
+      href: toloka.metrics.metrics.BaseMetric.get_line_names.md
+      hidden: true
+    - name: bind_client
+      href: toloka.metrics.metrics.bind_client.md
+    - name: Balance
+      href: toloka.metrics.metrics.Balance.md
+    - name: Balance.get_line_names
+      href: toloka.metrics.metrics.Balance.get_line_names.md
+      hidden: true
+    - name: NewMessageThreads
+      href: toloka.metrics.metrics.NewMessageThreads.md
+    - name: NewMessageThreads.get_line_names
+      href: toloka.metrics.metrics.NewMessageThreads.get_line_names.md
+      hidden: true
+    - name: NewUserBonuses
+      href: toloka.metrics.metrics.NewUserBonuses.md
+    - name: NewUserBonuses.get_line_names
+      href: toloka.metrics.metrics.NewUserBonuses.get_line_names.md
+      hidden: true
+    - name: NewUserSkills
+      href: toloka.metrics.metrics.NewUserSkills.md
+    - name: NewUserSkills.get_line_names
+      href: toloka.metrics.metrics.NewUserSkills.get_line_names.md
+      hidden: true
+  - name: pool_metrics
+    items:
+    - name: AssignmentEventsInPool
+      href: toloka.metrics.pool_metrics.AssignmentEventsInPool.md
+    - name: AssignmentEventsInPool.get_line_names
+      href: toloka.metrics.pool_metrics.AssignmentEventsInPool.get_line_names.md
+      hidden: true
+    - name: AssignmentsInPool
+      href: toloka.metrics.pool_metrics.AssignmentsInPool.md
+    - name: AssignmentsInPool.get_line_names
+      href: toloka.metrics.pool_metrics.AssignmentsInPool.get_line_names.md
+      hidden: true
+    - name: BansInPool
+      href: toloka.metrics.pool_metrics.BansInPool.md
+    - name: BansInPool.get_line_names
+      href: toloka.metrics.pool_metrics.BansInPool.get_line_names.md
+      hidden: true
+    - name: BasePoolMetric
+      href: toloka.metrics.pool_metrics.BasePoolMetric.md
+      hidden: true
+    - name: PoolCompletedPercentage
+      href: toloka.metrics.pool_metrics.PoolCompletedPercentage.md
+    - name: PoolCompletedPercentage.get_line_names
+      href: toloka.metrics.pool_metrics.PoolCompletedPercentage.get_line_names.md
+      hidden: true
+    - name: SpentBudgetOnPool
+      href: toloka.metrics.pool_metrics.SpentBudgetOnPool.md
+    - name: SpentBudgetOnPool.get_line_names
+      href: toloka.metrics.pool_metrics.SpentBudgetOnPool.get_line_names.md
+      hidden: true
+    - name: TasksInPool
+      href: toloka.metrics.pool_metrics.TasksInPool.md
+    - name: TasksInPool.get_line_names
+      href: toloka.metrics.pool_metrics.TasksInPool.get_line_names.md
+      hidden: true
+    - name: WorkersByFilterOnPool
+      href: toloka.metrics.pool_metrics.WorkersByFilterOnPool.md
+    - name: WorkersByFilterOnPool.get_line_names
+      href: toloka.metrics.pool_metrics.WorkersByFilterOnPool.get_line_names.md
+      hidden: true
+- name: toloka.streaming
+  items:
+  - name: cursor
+    items:
+    - name: BaseCursor.inject
+      href: toloka.streaming.cursor.BaseCursor.inject.md
+      hidden: true
+    - name: BaseCursor
+      href: toloka.streaming.cursor.BaseCursor.md
+      hidden: true
+    - name: BaseCursor.CursorFetchContext
+      href: toloka.streaming.cursor.BaseCursor.CursorFetchContext.md
+      hidden: true
+    - name: BaseCursor.try_fetch_all
+      href: toloka.streaming.cursor.BaseCursor.try_fetch_all.md
+      hidden: true
+    - name: AssignmentCursor
+      href: toloka.streaming.cursor.AssignmentCursor.md
+    - name: MessageThreadCursor
+      href: toloka.streaming.cursor.MessageThreadCursor.md
+    - name: TaskCursor
+      href: toloka.streaming.cursor.TaskCursor.md
+    - name: UserBonusCursor
+      href: toloka.streaming.cursor.UserBonusCursor.md
+    - name: UserRestrictionCursor
+      href: toloka.streaming.cursor.UserRestrictionCursor.md
+    - name: UserSkillCursor
+      href: toloka.streaming.cursor.UserSkillCursor.md
+  - name: locker
+    hidden: true
+    items:
+    - name: BaseLocker.cleanup
+      href: toloka.streaming.locker.BaseLocker.cleanup.md
+      hidden: true
+    - name: BaseLocker
+      href: toloka.streaming.locker.BaseLocker.md
+      hidden: true
+    - name: FileLocker.cleanup
+      href: toloka.streaming.locker.FileLocker.cleanup.md
+      hidden: true
+    - name: FileLocker
+      href: toloka.streaming.locker.FileLocker.md
+      hidden: true
+    - name: NewerInstanceDetectedError
+      href: toloka.streaming.locker.NewerInstanceDetectedError.md
+      hidden: true
+    - name: ZooKeeperLocker
+      href: toloka.streaming.locker.ZooKeeperLocker.md
+      hidden: true
+  - name: event
+    items:
+    - name: BaseEvent
+      href: toloka.streaming.event.BaseEvent.md
+      hidden: true
+    - name: AssignmentEvent
+      href: toloka.streaming.event.AssignmentEvent.md
+    - name: AssignmentEvent.Type
+      href: toloka.streaming.event.AssignmentEvent.Type.md
+      hidden: true
+    - name: MessageThreadEvent
+      href: toloka.streaming.event.MessageThreadEvent.md
+    - name: TaskEvent
+      href: toloka.streaming.event.TaskEvent.md
+    - name: UserBonusEvent
+      href: toloka.streaming.event.UserBonusEvent.md
+    - name: UserRestrictionEvent
+      href: toloka.streaming.event.UserRestrictionEvent.md
+    - name: UserSkillEvent
+      href: toloka.streaming.event.UserSkillEvent.md
+    - name: UserSkillEvent.Type
+      href: toloka.streaming.event.UserSkillEvent.Type.md
+      hidden: true
+  - name: observer
+    items:
+    - name: AssignmentsObserver.inject
+      href: toloka.streaming.observer.AssignmentsObserver.inject.md
+      hidden: true
+    - name: BaseObserver.inject
+      href: toloka.streaming.observer.BaseObserver.inject.md
+      hidden: true
+    - name: PoolStatusObserver.inject
+      href: toloka.streaming.observer.PoolStatusObserver.inject.md
+      hidden: true
+    - name: BaseObserver
+      href: toloka.streaming.observer.BaseObserver.md
+      hidden: true
+    - name: BaseObserver.delete
+      href: toloka.streaming.observer.BaseObserver.delete.md
+      hidden: true
+    - name: BaseObserver.disable
+      href: toloka.streaming.observer.BaseObserver.disable.md
+      hidden: true
+    - name: BaseObserver.enable
+      href: toloka.streaming.observer.BaseObserver.enable.md
+      hidden: true
+    - name: BaseObserver.run
+      href: toloka.streaming.observer.BaseObserver.run.md
+      hidden: true
+    - name: BaseObserver.should_resume
+      href: toloka.streaming.observer.BaseObserver.should_resume.md
+      hidden: true
+    - name: AssignmentsObserver
+      href: toloka.streaming.observer.AssignmentsObserver.md
+    - name: AssignmentsObserver.on_accepted
+      href: toloka.streaming.observer.AssignmentsObserver.on_accepted.md
+      hidden: true
+    - name: AssignmentsObserver.on_any_event
+      href: toloka.streaming.observer.AssignmentsObserver.on_any_event.md
+      hidden: true
+    - name: AssignmentsObserver.on_created
+      href: toloka.streaming.observer.AssignmentsObserver.on_created.md
+      hidden: true
+    - name: AssignmentsObserver.on_expired
+      href: toloka.streaming.observer.AssignmentsObserver.on_expired.md
+      hidden: true
+    - name: AssignmentsObserver.on_rejected
+      href: toloka.streaming.observer.AssignmentsObserver.on_rejected.md
+      hidden: true
+    - name: AssignmentsObserver.on_skipped
+      href: toloka.streaming.observer.AssignmentsObserver.on_skipped.md
+      hidden: true
+    - name: AssignmentsObserver.on_submitted
+      href: toloka.streaming.observer.AssignmentsObserver.on_submitted.md
+      hidden: true
+    - name: AssignmentsObserver.register_callback
+      href: toloka.streaming.observer.AssignmentsObserver.register_callback.md
+      hidden: true
+    - name: PoolStatusObserver
+      href: toloka.streaming.observer.PoolStatusObserver.md
+    - name: PoolStatusObserver.on_archieved
+      href: toloka.streaming.observer.PoolStatusObserver.on_archieved.md
+      hidden: true
+    - name: PoolStatusObserver.on_closed
+      href: toloka.streaming.observer.PoolStatusObserver.on_closed.md
+      hidden: true
+    - name: PoolStatusObserver.on_locked
+      href: toloka.streaming.observer.PoolStatusObserver.on_locked.md
+      hidden: true
+    - name: PoolStatusObserver.on_open
+      href: toloka.streaming.observer.PoolStatusObserver.on_open.md
+      hidden: true
+    - name: PoolStatusObserver.on_status_change
+      href: toloka.streaming.observer.PoolStatusObserver.on_status_change.md
+      hidden: true
+    - name: PoolStatusObserver.register_callback
+      href: toloka.streaming.observer.PoolStatusObserver.register_callback.md
+      hidden: true
+  - name: pipeline
+    items:
+    - name: Pipeline
+      href: toloka.streaming.pipeline.Pipeline.md
+    - name: Pipeline.observers_iter
+      href: toloka.streaming.pipeline.Pipeline.observers_iter.md
+      hidden: true
+    - name: Pipeline.register
+      href: toloka.streaming.pipeline.Pipeline.register.md
+      hidden: true
+    - name: Pipeline.run
+      href: toloka.streaming.pipeline.Pipeline.run.md
+      hidden: true
+  - name: storage
+    hidden: true
+    items:
+    - name: BaseStorage.cleanup
+      href: toloka.streaming.storage.BaseStorage.cleanup.md
+      hidden: true
+    - name: BaseStorage.load
+      href: toloka.streaming.storage.BaseStorage.load.md
+      hidden: true
+    - name: BaseStorage.lock
+      href: toloka.streaming.storage.BaseStorage.lock.md
+      hidden: true
+    - name: BaseStorage
+      href: toloka.streaming.storage.BaseStorage.md
+    - name: BaseStorage.save
+      href: toloka.streaming.storage.BaseStorage.save.md
+      hidden: true
+    - name: JSONLocalStorage.DefaultNearbyFileLocker
+      href: toloka.streaming.storage.JSONLocalStorage.DefaultNearbyFileLocker.md
+      hidden: true
+    - name: JSONLocalStorage.cleanup
+      href: toloka.streaming.storage.JSONLocalStorage.cleanup.md
+      hidden: true
+    - name: JSONLocalStorage.load
+      href: toloka.streaming.storage.JSONLocalStorage.load.md
+      hidden: true
+    - name: JSONLocalStorage
+      href: toloka.streaming.storage.JSONLocalStorage.md
+    - name: JSONLocalStorage.save
+      href: toloka.streaming.storage.JSONLocalStorage.save.md
+      hidden: true
+    - name: S3Storage.cleanup
+      href: toloka.streaming.storage.S3Storage.cleanup.md
+      hidden: true
+    - name: S3Storage.load
+      href: toloka.streaming.storage.S3Storage.load.md
+      hidden: true
+    - name: S3Storage
+      href: toloka.streaming.storage.S3Storage.md
+    - name: S3Storage.save
+      href: toloka.streaming.storage.S3Storage.save.md
+      hidden: true
+- name: toloka.util
+  hidden: true
+  items:
+  - name: add_headers
+    href: toloka.util._managing_headers.add_headers.md
+    hidden: true
+  - name: _codegen.attribute
+    href: toloka.util._codegen.attribute.md
+    hidden: true
+  - name: _codegen.fix_attrs_converters
+    href: toloka.util._codegen.fix_attrs_converters.md
+    hidden: true
+  - name: _docstrings.inherit_docstrings
+    href: toloka.util._docstrings.inherit_docstrings.md
+    hidden: true
+  - name: extend_enum
+    href: toloka.util._extendable_enum.extend_enum.md
+    hidden: true
+  - name: ExtendableStrEnum
+    href: toloka.util._extendable_enum.ExtendableStrEnum.md
+    hidden: true
+  - name: ExtendableStrEnumMetaclass
+    href: toloka.util._extendable_enum.ExtendableStrEnumMetaclass.md
+    hidden: true
+  - name: add_headers
+    href: toloka.util._managing_headers.async_add_headers.md
+    hidden: true
+  - name: AsyncInterfaceWrapper
+    href: toloka.util.async_utils.AsyncInterfaceWrapper.md
+  - name: AsyncMultithreadWrapper
+    href: toloka.util.async_utils.AsyncMultithreadWrapper.md
+  - name: Cooldown
+    href: toloka.util.async_utils.Cooldown.md
+  - name: ComplexException
+    href: toloka.util.async_utils.ComplexException.md
+  - name: ensure_async
+    href: toloka.util.async_utils.ensure_async.md
+  - name: get_task_traceback
+    href: toloka.util.async_utils.get_task_traceback.md
+  - name: get_signature
+    href: toloka.util.get_signature.md
+  - name: identity
+    href: toloka.util.identity.md
+  - name: get_base64_digest
+    href: toloka.util.stored.get_base64_digest.md
+    hidden: true
+  - name: get_stored_meta
+    href: toloka.util.stored.get_stored_meta.md
+    hidden: true
+  - name: pickle_dumps_base64
+    href: toloka.util.stored.pickle_dumps_base64.md
+    hidden: true
+  - name: pickle_loads_base64
+    href: toloka.util.stored.pickle_loads_base64.md
+    hidden: true

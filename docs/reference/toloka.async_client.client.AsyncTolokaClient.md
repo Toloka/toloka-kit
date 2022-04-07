@@ -1,7 +1,7 @@
 # AsyncTolokaClient
-`toloka.async_client.client.AsyncTolokaClient`
+`toloka.async_client.client.AsyncTolokaClient` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/async_client/client.py#L14)
 
-```
+```python
 AsyncTolokaClient(
     self,
     *args,
@@ -15,7 +15,7 @@ Class that implements interaction with [Toloka API](https://toloka.ai/docs/api/c
 All methods are wrapped as async. So all methods calls must be awaited.
 All arguments, same as in TolokaClient.
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

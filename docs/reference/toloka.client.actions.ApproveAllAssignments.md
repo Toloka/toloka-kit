@@ -1,7 +1,7 @@
 # ApproveAllAssignments
-`toloka.client.actions.ApproveAllAssignments`
+`toloka.client.actions.ApproveAllAssignments` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/actions.py#L208)
 
-```
+```python
 ApproveAllAssignments(self)
 ```
 

@@ -13,6 +13,7 @@ __all__ = [
     'LinkViewV1',
     'LinkGroupViewV1',
     'ListViewV1',
+    'MapViewV1',
     'MarkdownViewV1',
     'TextViewV1',
     'VideoViewV1'
@@ -424,3 +425,54 @@ class VideoViewV1(BaseViewV1, spec_value=ComponentType.VIEW_VIDEO):
     max_width: base_component_or(float) = attribute(origin='maxWidth', kw_only=True)
     min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
     ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)
+
+
+@inherit_docstrings
+class MapViewV1(BaseViewV1, spec_value=ComponentType.VIEW_MAP):
+    """Adds a map to your task.
+
+    Use this component to set the targets for the tasks with the markers, select the areas with polygons.
+    Specify the position and colors for the elements on the map.
+
+    You can set the following map properties: scale, position of the map center, label, and hint for the users.
+    Attributes:
+        center: Determines the position of the map center. Specify the coordinates in the string format, for example,
+            "29.748713,-95.404287", or use the data.location component to set the center of the map to the
+            Toloker's current position.
+        markers: Specifies the markers present on the map.
+        polygons: Specifies the polygonal objects that you can use to select areas on the map.
+        zoom: The map initial scale. Use the values from 0 to 19. Bigger values give a more detailed map view.
+    """
+
+    class Marker(BaseTemplate):
+        """Marker parameters.
+
+        Attributes:
+            position: Determines the marker position. Specify the coordinates in the string format, for example,
+                "29.748713,-95.404287", or use the data.location component to set the marker to the Toloker's current
+                position.
+            color: Determines the marker color. Use the hexadecimal values preceded by the # sign to specify the color.
+            label: The label for the marker that tells Tolokers what this marker is for and helps distinguish it
+                from other markers.
+        """
+        position: base_component_or(str)
+        color: base_component_or(str) = attribute(kw_only=True)
+        label: base_component_or(str) = attribute(kw_only=True)
+
+    class Polygon(BaseTemplate):
+        """Polygon parameters.
+
+        Attributes:
+            points: The list of the polygonal selection area points.
+                Specify the coordinates in the string format, for example, "29.748713,-95.404287".
+            color: Determines the polygonal selection area color. Use the hexadecimal values preceded by the # sign to
+                specify the color.
+        """
+        points: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrStr')
+        color: base_component_or(str) = attribute(kw_only=True)
+
+    center: base_component_or(str)
+    markers: base_component_or(List[base_component_or(Marker)], 'ListBaseComponentOrMarker') = attribute(kw_only=True)
+    polygons: base_component_or(List[base_component_or(Polygon)], 'ListBaseComponentOrPolygon') = attribute(
+        kw_only=True)
+    zoom: base_component_or(int) = attribute(kw_only=True)

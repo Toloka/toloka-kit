@@ -1,7 +1,7 @@
 # FilterAnd
-`toloka.client.filter.FilterAnd`
+`toloka.client.filter.FilterAnd` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/filter.py#L110)
 
-```
+```python
 FilterAnd(self, and_: List[FilterCondition])
 ```
 

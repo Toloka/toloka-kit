@@ -1,7 +1,7 @@
 # TrainingOpenOperation
-`toloka.client.operations.TrainingOpenOperation`
+`toloka.client.operations.TrainingOpenOperation` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/operations.py#L238)
 
-```
+```python
 TrainingOpenOperation(
     self,
     *,

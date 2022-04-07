@@ -195,7 +195,7 @@ class AppItem(toloka.client.primitives.base.BaseTolokaObject):
         updated: typing.Optional[datetime.datetime] = None,
         status: typing.Union[Status, str, None] = None,
         output_data: typing.Optional[typing.Dict[str, typing.Any]] = None,
-        errors: typing.Optional[_AppError] = None,
+        errors: typing.Optional[typing.List[_AppError]] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         started_at: typing.Optional[datetime.datetime] = None,
         finished_at: typing.Optional[datetime.datetime] = None
@@ -213,7 +213,7 @@ class AppItem(toloka.client.primitives.base.BaseTolokaObject):
     updated: typing.Optional[datetime.datetime]
     status: typing.Optional[Status]
     output_data: typing.Optional[typing.Dict[str, typing.Any]]
-    errors: typing.Optional[_AppError]
+    errors: typing.Optional[typing.List[_AppError]]
     created_at: typing.Optional[datetime.datetime]
     started_at: typing.Optional[datetime.datetime]
     finished_at: typing.Optional[datetime.datetime]

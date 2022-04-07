@@ -1,7 +1,7 @@
 # JSONLocalStorage
-`toloka.streaming.storage.JSONLocalStorage`
+`toloka.streaming.storage.JSONLocalStorage` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/storage.py#L56)
 
-```
+```python
 JSONLocalStorage(
     self,
     dirname: str = '/tmp',
@@ -34,7 +34,7 @@ Set locker explicitly.
 ```python
 storage = JSONLocalStorage('/store-data-here', locker=FileLocker('/store-locks-here'))
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

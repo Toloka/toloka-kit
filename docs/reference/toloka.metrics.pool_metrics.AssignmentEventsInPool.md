@@ -1,7 +1,7 @@
 # AssignmentEventsInPool
-`toloka.metrics.pool_metrics.AssignmentEventsInPool`
+`toloka.metrics.pool_metrics.AssignmentEventsInPool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/pool_metrics.py#L56)
 
-```
+```python
 AssignmentEventsInPool(
     self,
     pool_id: str,
@@ -13,7 +13,7 @@ AssignmentEventsInPool(
     expired_name: Optional[str] = None,
     join_events: bool = False,
     *,
-    toloka_client: TolokaClient = None,
+    toloka_client: Optional[TolokaClient] = None,
     timeout: timedelta = ...
 )
 ```
@@ -48,7 +48,7 @@ def print_metric(metric_dict):
 collector = MetricCollector([AssignmentEventsInPool(pool_id, toloka_client=toloka_client)], print_metric)
 asyncio.run(collector.run())
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

@@ -1,11 +1,11 @@
 # BaseMetric
-`toloka.metrics.metrics.BaseMetric`
+`toloka.metrics.metrics.BaseMetric` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/metrics.py#L65)
 
-```
+```python
 BaseMetric(
     self,
     *,
-    toloka_client: TolokaClient = None,
+    toloka_client: Optional[TolokaClient] = None,
     timeout: timedelta = ...
 )
 ```
@@ -15,7 +15,7 @@ Base class for all metrics.
 
 Stores TolokaClient instance for this metric.
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

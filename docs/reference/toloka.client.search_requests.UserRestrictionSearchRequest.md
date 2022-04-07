@@ -1,7 +1,7 @@
 # UserRestrictionSearchRequest
-`toloka.client.search_requests.UserRestrictionSearchRequest`
+`toloka.client.search_requests.UserRestrictionSearchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/search_requests.py#L741)
 
-```
+```python
 UserRestrictionSearchRequest(
     self,
     scope: Optional[UserRestriction.Scope] = None,

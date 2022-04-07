@@ -1,7 +1,7 @@
 # AssignmentsObserver
-`toloka.streaming.observer.AssignmentsObserver`
+`toloka.streaming.observer.AssignmentsObserver` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/observer.py#L306)
 
-```
+```python
 AssignmentsObserver(
     self,
     toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
@@ -44,7 +44,7 @@ def handle_submitted(evets: List[AssignmentEvent]) -> None:
 observer = AssignmentsObserver(toloka_client, pool_id='123')
 observer.on_submitted(handle_submitted)
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

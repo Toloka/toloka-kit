@@ -1,7 +1,7 @@
 # Pool
-`toloka.client.pool.Pool`
+`toloka.client.pool.Pool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/pool/__init__.py#L33)
 
-```
+```python
 Pool(
     self,
     *,
@@ -90,7 +90,7 @@ new_pool = toloka.pool.Pool(
     project_id=existing_project_id,
     private_name='Pool 1',
     may_contain_adult_content=False,
-    will_expire=datetime.datetime.utcnow() + datetime.timedelta(days=365),
+    will_expire=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=365),
     reward_per_assignment=0.01,
     assignment_max_duration_seconds=60*20,
     defaults=toloka.pool.Pool.Defaults(default_overlap_for_new_task_suites=3),
@@ -101,7 +101,7 @@ new_pool.quality_control.add_action(...)
 new_pool = toloka_client.create_pool(new_pool)
 print(new_pool.id)
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

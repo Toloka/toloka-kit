@@ -1,7 +1,7 @@
 # TolokaPluginV1
-`toloka.client.project.template_builder.plugins.TolokaPluginV1`
+`toloka.client.project.template_builder.plugins.TolokaPluginV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/plugins.py#L171)
 
-```
+```python
 TolokaPluginV1(
     self,
     kind: Optional[TolokaPluginLayout.Kind] = None,

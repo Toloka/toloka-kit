@@ -1,5 +1,5 @@
 # InternalApiError
-`toloka.client.exceptions.InternalApiError`
+`toloka.client.exceptions.InternalApiError` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/exceptions.py#L88)
 
 ## Parameters Description
 

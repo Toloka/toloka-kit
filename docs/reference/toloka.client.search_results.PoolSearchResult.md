@@ -1,7 +1,7 @@
 # PoolSearchResult
 `toloka.client.search_results.PoolSearchResult`
 
-```
+```python
 PoolSearchResult(
     self,
     *,

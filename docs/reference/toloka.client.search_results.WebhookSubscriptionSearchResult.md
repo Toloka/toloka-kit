@@ -1,7 +1,7 @@
 # WebhookSubscriptionSearchResult
 `toloka.client.search_results.WebhookSubscriptionSearchResult`
 
-```
+```python
 WebhookSubscriptionSearchResult(
     self,
     *,

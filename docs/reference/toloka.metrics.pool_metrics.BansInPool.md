@@ -1,7 +1,7 @@
 # BansInPool
-`toloka.metrics.pool_metrics.BansInPool`
+`toloka.metrics.pool_metrics.BansInPool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/pool_metrics.py#L420)
 
-```
+```python
 BansInPool(
     self,
     pool_id: str,
@@ -9,7 +9,7 @@ BansInPool(
     filter_by_comment: Optional[Dict[str, str]] = None,
     join_events: bool = False,
     *,
-    toloka_client: TolokaClient = None,
+    toloka_client: Optional[TolokaClient] = None,
     timeout: timedelta = ...
 )
 ```
@@ -52,7 +52,7 @@ collector = MetricCollector(
 )
 asyncio.run(collector.run())
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

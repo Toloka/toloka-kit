@@ -47,4 +47,5 @@ Find three most recently created task suites in a specified pool.
 toloka_client.find_task_suites(pool_id='1', sort=['-created', '-id'], limit=3)
 ```
 
-If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator
+`has_more=True`.

@@ -29,7 +29,6 @@ __all__ = [
     'UserAgentVersionMajor',
     'UserAgentVersionMinor',
     'UserAgentVersionBugfix',
-    'Rating'
 ]
 import inspect
 from enum import unique
@@ -192,7 +191,6 @@ class Computed(Condition, spec_value=Condition.Category.COMPUTED, spec_field='ke
 
         REGION_BY_PHONE = 'region_by_phone'
         REGION_BY_IP = 'region_by_ip'
-        RATING = 'rating'
         DEVICE_CATEGORY = 'device_category'
         OS_FAMILY = 'os_family'
         OS_VERSION = 'os_version'
@@ -384,6 +382,10 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
                 raise ValueError('"Language not in" filter does not support verified=True argument')
             return super().__new__(cls, *args, **kwargs)
 
+    def __getnewargs__(self):
+        """Due to redefined __new__ method class can't be deepcopied or pickled without __getnewargs__ definition"""
+        return self.operator, self.value
+
 
 # add fake parameter "verified: bool = False" to Languages.__init__ signature. This parameter will be consumed in
 # Languages.__new__ while the actual __init__ is managed by attrs.
@@ -392,6 +394,7 @@ languages_init_signature_parameters = dict(languages_init_signature.parameters)
 languages_init_signature_parameters['verified'] = inspect.Parameter(
     name='verified', kind=inspect.Parameter.POSITIONAL_OR_KEYWORD, default=False, annotation=bool,
 )
+Languages.__init__.__annotations__['verified'] = bool
 Languages.__init__.__signature__ = languages_init_signature.replace(parameters=languages_init_signature_parameters.values())
 
 
@@ -650,14 +653,3 @@ class UserAgentVersionBugfix(Computed, ComparableConditionMixin, spec_value=Comp
     """
 
     value: int
-
-
-@inherit_docstrings
-class Rating(Computed, ComparableConditionMixin, spec_value=Computed.Key.RATING):
-    """Use to select users by user rating.
-
-    Attributes:
-        value: User rating. Calculated based on earnings in all projects available to the user.
-    """
-
-    value: float

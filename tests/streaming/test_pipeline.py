@@ -8,7 +8,8 @@ from typing import List, Set, Tuple
 
 from toloka.client import unstructure
 from toloka.util.async_utils import ComplexException, AsyncMultithreadWrapper
-from toloka.streaming import AssignmentsObserver, PoolStatusObserver, Pipeline
+from toloka.streaming import Pipeline
+from toloka.streaming.observer import AssignmentsObserver, BaseObserver, PoolStatusObserver
 from toloka.streaming.storage import JSONLocalStorage
 from toloka.streaming.locker import NewerInstanceDetectedError
 
@@ -72,13 +73,15 @@ def test_pipeline_errored_callback(requests_mock, toloka_url, toloka_client, exi
     observer = pipeline.register(AssignmentsObserver(toloka_client, pool_id='100'))
     handler = observer.on_submitted(HandlerRaiseSometimes())
 
+    loop = asyncio.new_event_loop()
+
     with pytest.raises(ComplexException) as exc:
-        asyncio.get_event_loop().run_until_complete(pipeline.run())
+        loop.run_until_complete(pipeline.run())
     assert 'Raised from callback' in str(exc)
     assert 1 == handler.calls_count
     assert [] == handler.received
 
-    asyncio.get_event_loop().run_until_complete(pipeline.run())
+    loop.run_until_complete(pipeline.run())
     assert 2 == handler.calls_count
     events_expected = [{'assignment': item, 'event_type': 'SUBMITTED', 'event_time': item['submitted']}
                        for item in storage]
@@ -135,8 +138,7 @@ def test_pipeline(requests_mock, toloka_url, toloka_client, existing_backend_ass
             _expire_active_and_close_pool(after_sec=2),
         ))))
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(_main())
+    asyncio.new_event_loop().run_until_complete(_main())
 
     expected_saved = [item for item in backend.storage if item.get('submitted')]
     assert expected_saved == unstructure(save_submitted_here)
@@ -269,7 +271,7 @@ def test_save_and_load(
             _expire_active_and_close_pool(after_sec=2),
         ))))
 
-    res_old: Tuple[Set[asyncio.Task], Set] = asyncio.get_event_loop().run_until_complete(_main_old())
+    res_old: Tuple[Set[asyncio.Task], Set] = asyncio.new_event_loop().run_until_complete(_main_old())
 
     # There should be one successfull (with initial assignments) iteration.
     # and one failed (with new assignments).
@@ -306,7 +308,7 @@ def test_save_and_load(
             _expire_active_and_close_pool(after_sec=2),
         ))))
 
-    res_new = asyncio.get_event_loop().run_until_complete(_main_new())
+    res_new = asyncio.new_event_loop().run_until_complete(_main_new())
     assert all(task.exception() is None for task in res_new[0]), res_new
 
     assert 3 == handler_new.iteration  # One successfull iteration before restore + 2 after. The errored one wasn't saved.
@@ -356,7 +358,7 @@ def test_async_observers():
     pipeline.register(CountingObserver('fast', 0.10, enough_iterations=4))
     pipeline.register(CountingObserver('slow', 0.55, enough_iterations=1))
 
-    asyncio.get_event_loop().run_until_complete(pipeline.run())
+    asyncio.new_event_loop().run_until_complete(pipeline.run())
 
     assert [
         ('fast', 'start'),
@@ -439,7 +441,7 @@ def test_two_pipeline_instances_run(
             _expire_active_and_close_pool(after_sec=2.5),
         ))))
 
-    done, _ = asyncio.get_event_loop().run_until_complete(_main())
+    done, _ = asyncio.new_event_loop().run_until_complete(_main())
     first_run_task = next(task for task in done if '_run_1' in str(task))
     assert isinstance(first_run_task.exception(), NewerInstanceDetectedError), first_run_task.exception()
 
@@ -448,3 +450,46 @@ def test_two_pipeline_instances_run(
 
     assert 2 == handler_2.iterations
     assert 10 == len(handler_2.history)
+
+
+def test_disable_observer():
+    @attr.s
+    class ObserverToDisableSelf(BaseObserver):
+        count: int = attr.ib(default=0)
+
+        async def should_resume(self) -> bool:
+            return True
+
+        async def __call__(self) -> None:
+            self.count += 1
+            self.disable()
+
+    Pipeline.MIN_SLEEP_SECONDS = 0.01
+    pipeline = Pipeline(period=datetime.timedelta(seconds=Pipeline.MIN_SLEEP_SECONDS))
+    observer = pipeline.register(ObserverToDisableSelf())
+    asyncio.new_event_loop().run_until_complete(pipeline.run())
+
+    assert observer.count == 1
+
+
+def test_delete_observer():
+    @attr.s
+    class ObserverToDeleteSelf(BaseObserver):
+        count: int = attr.ib(default=0)
+
+        async def should_resume(self) -> bool:
+            return True
+
+        async def __call__(self) -> None:
+            self.count += 1
+            self.delete()
+
+    Pipeline.MIN_SLEEP_SECONDS = 0.01
+    pipeline = Pipeline(period=datetime.timedelta(seconds=Pipeline.MIN_SLEEP_SECONDS))
+    observer = pipeline.register(ObserverToDeleteSelf())
+    assert observer in pipeline.observers_iter()
+
+    asyncio.new_event_loop().run_until_complete(pipeline.run())
+
+    assert observer.count == 1
+    assert observer not in pipeline.observers_iter()

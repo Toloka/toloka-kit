@@ -1,7 +1,7 @@
 # InputData
-`toloka.client.project.template_builder.data.InputData`
+`toloka.client.project.template_builder.data.InputData` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/data.py#L42)
 
-```
+```python
 InputData(
     self,
     path: Optional[Any] = None,

@@ -1,3 +1,5 @@
+import pickle
+import copy
 import pytest
 from toloka.client.filter import Languages, FilterAnd, Skill
 
@@ -22,3 +24,17 @@ def test_language_multiple():
 
 def test_verified_language_multiple():
     assert Languages.in_(['EN', 'RU'], verified=True) == FilterAnd([Languages.in_(['EN', 'RU']), Skill('26366').eq(100), Skill('26296').eq(100)])
+
+
+@pytest.mark.parametrize(
+    'obj', [Languages.in_(['EN', 'RU'], verified=True), Languages.in_(['EN', 'RU'])]
+)
+def test_language_pickleable(obj):
+    assert obj == pickle.loads(pickle.dumps(obj))
+
+
+@pytest.mark.parametrize(
+    'obj', [Languages.in_(['EN', 'RU'], verified=True), Languages.in_(['EN', 'RU'])]
+)
+def test_language_deepcopyable(obj):
+    assert obj == copy.deepcopy(obj)

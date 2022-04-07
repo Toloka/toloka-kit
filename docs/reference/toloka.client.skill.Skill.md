@@ -1,7 +1,7 @@
 # Skill
-`toloka.client.skill.Skill`
+`toloka.client.skill.Skill` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/skill.py#L10)
 
-```
+```python
 Skill(
     self,
     *,

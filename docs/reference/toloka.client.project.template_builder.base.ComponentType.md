@@ -1,5 +1,5 @@
 # ComponentType
-`toloka.client.project.template_builder.base.ComponentType`
+`toloka.client.project.template_builder.base.ComponentType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/base.py#L24)
 
 An enumeration.
 
@@ -87,6 +87,7 @@ An enumeration.
 `VIEW_LINK`|'view.link'|<p></p>
 `VIEW_LINK_GROUP`|'view.link-group'|<p></p>
 `VIEW_LIST`|'view.list'|<p></p>
+`VIEW_MAP`|'view.map'|<p></p>
 `VIEW_MARKDOWN`|'view.markdown'|<p></p>
 `VIEW_TEXT`|'view.text'|<p></p>
 `VIEW_VIDEO`|'view.video'|<p></p>

@@ -1,11 +1,11 @@
 # BaseSortItems
-`toloka.client.search_requests.BaseSortItems`
+`toloka.client.search_requests.BaseSortItems` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/search_requests.py#L114)
 
-```
+```python
 BaseSortItems(self)
 ```
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

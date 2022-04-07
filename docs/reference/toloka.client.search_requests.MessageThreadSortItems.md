@@ -1,7 +1,7 @@
 # MessageThreadSortItems
 `toloka.client.search_requests.MessageThreadSortItems`
 
-```
+```python
 MessageThreadSortItems(self, items=None)
 ```
 

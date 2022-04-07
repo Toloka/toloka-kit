@@ -1,13 +1,13 @@
 # PoolCompletedPercentage
-`toloka.metrics.pool_metrics.PoolCompletedPercentage`
+`toloka.metrics.pool_metrics.PoolCompletedPercentage` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/pool_metrics.py#L154)
 
-```
+```python
 PoolCompletedPercentage(
     self,
     pool_id: str,
     percents_name: Optional[str] = None,
     *,
-    toloka_client: TolokaClient = None,
+    toloka_client: Optional[TolokaClient] = None,
     timeout: timedelta = ...
 )
 ```
@@ -23,7 +23,7 @@ You can't gather this metric from a pool with infinite task suites. For example,
 | :----------| :----| :-----------|
 `pool_id`|**str**|<p>From which pool track metrics.</p>
 `percents_name`|**Optional\[str\]**|<p>Metric name for pool completion percentage. Default &#x27;completion_percentage&#x27;.</p>
-`toloka_client`|**[TolokaClient](toloka.client.TolokaClient.md)**|<p>Client for connection to Toloka. You can set toloka_client for several metrics via &quot;bind_client&quot; function.</p>
+`toloka_client`|**Optional\[[TolokaClient](toloka.client.TolokaClient.md)\]**|<p>Client for connection to Toloka. You can set toloka_client for several metrics via &quot;bind_client&quot; function.</p>
 
 **Examples:**
 
@@ -34,7 +34,7 @@ def print_metric(metric_dict):
 collector = MetricCollector([PoolCompletedPercentage(pool_id, toloka_client=toloka_client)], print_metric)
 asyncio.run(collector.run())
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

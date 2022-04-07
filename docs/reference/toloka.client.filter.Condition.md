@@ -1,7 +1,7 @@
 # Condition
-`toloka.client.filter.Condition`
+`toloka.client.filter.Condition` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/filter.py#L134)
 
-```
+```python
 Condition(
     self,
     *,

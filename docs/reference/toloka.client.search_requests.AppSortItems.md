@@ -1,7 +1,7 @@
 # AppSortItems
 `toloka.client.search_requests.AppSortItems`
 
-```
+```python
 AppSortItems(self, items=None)
 ```
 

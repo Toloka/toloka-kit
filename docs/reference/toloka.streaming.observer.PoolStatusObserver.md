@@ -1,7 +1,7 @@
 # PoolStatusObserver
-`toloka.streaming.observer.PoolStatusObserver`
+`toloka.streaming.observer.PoolStatusObserver` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/observer.py#L151)
 
-```
+```python
 PoolStatusObserver(
     self,
     toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
@@ -49,7 +49,7 @@ Call something at any status change.
 ```python
 observer.on_status_change(lambda pool: ...)
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

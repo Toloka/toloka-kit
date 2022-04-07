@@ -1,7 +1,7 @@
 # TrainingSearchRequest
-`toloka.client.search_requests.TrainingSearchRequest`
+`toloka.client.search_requests.TrainingSearchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/search_requests.py#L282)
 
-```
+```python
 TrainingSearchRequest(
     self,
     status: Optional[Training.Status] = None,

@@ -1,7 +1,7 @@
 # JoinHelperV1
-`toloka.client.project.template_builder.helpers.JoinHelperV1`
+`toloka.client.project.template_builder.helpers.JoinHelperV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/helpers.py#L104)
 
-```
+```python
 JoinHelperV1(
     self,
     items: Optional[Union[BaseComponent, List[Union[BaseComponent, str]]]] = None,

@@ -1,7 +1,7 @@
 # DynamicPricingConfig
-`toloka.client.pool.dynamic_pricing_config.DynamicPricingConfig`
+`toloka.client.pool.dynamic_pricing_config.DynamicPricingConfig` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/pool/dynamic_pricing_config.py#L9)
 
-```
+```python
 DynamicPricingConfig(
     self,
     type: Union[Type, str, None] = None,

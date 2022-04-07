@@ -16,7 +16,7 @@ While iterating over the result, several requests to the Toloka server is possib
 `status`|**Optional\[[AppProject.Status](toloka.client.app.AppProject.Status.md)\]**|<p>project status.</p>
 `after_id`|**Optional\[str\]**|<p>ID of the project used for cursor pagination.</p>
 `scope`|**Optional\[[AppProjectSearchRequest.Scope](toloka.client.search_requests.AppProjectSearchRequest.Scope.md)\]**|<p>projects created by a specified range of requesters:<ul><li>MY - Only by me;</li><li>COMPANY - By anyone from the company;</li><li>REQUESTER_LIST - By requesters with the specified IDs.</li></ul></p>
-`requester_ids`|**Union\[str, List\[str\]\]**|<p>List of requester IDs separated by a comma, for scope = REQUESTER_LIST.</p>
+`requester_ids`|**Union\[str, List\[str\], None\]**|<p>List of requester IDs separated by a comma, for scope = REQUESTER_LIST.</p>
 `id_gt`|**Optional\[str\]**|<p>projects with an ID greater than the specified value.</p>
 `id_gte`|**Optional\[str\]**|<p>projects with an ID greater than or equal to the specified value.</p>
 `id_lt`|**Optional\[str\]**|<p>projects with an ID less than the specified value.</p>

@@ -1,7 +1,7 @@
 # Solution
-`toloka.client.solution.Solution`
+`toloka.client.solution.Solution` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/solution.py#L6)
 
-```
+```python
 Solution(self, output_values: Dict[str, Any])
 ```
 

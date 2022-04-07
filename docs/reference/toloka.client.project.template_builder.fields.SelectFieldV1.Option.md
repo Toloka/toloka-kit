@@ -1,7 +1,7 @@
 # Option
-`toloka.client.project.template_builder.fields.SelectFieldV1.Option`
+`toloka.client.project.template_builder.fields.SelectFieldV1.Option` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/fields.py#L466)
 
-```
+```python
 Option(
     self,
     label: Optional[Any] = None,

@@ -64,8 +64,8 @@ def test_find_user_skills(requests_mock, toloka_client, toloka_url, user_skill_m
     # Request object syntax
     request = client.search_requests.UserSkillSearchRequest(
         skill_id='skill-i1d',
-        created_gt=datetime.datetime(2016, 3, 25),
-        modified_lt=datetime.datetime(2017, 3, 25),
+        created_gt=datetime.datetime(2016, 3, 25, tzinfo=datetime.timezone.utc),
+        modified_lt=datetime.datetime(2017, 3, 25, tzinfo=datetime.timezone.utc),
     )
     sort = client.search_requests.UserSkillSortItems(['id'])
     result = toloka_client.find_user_skills(request, sort=sort, limit=100)
@@ -74,8 +74,8 @@ def test_find_user_skills(requests_mock, toloka_client, toloka_url, user_skill_m
     # Expanded syntax
     result = toloka_client.find_user_skills(
         skill_id='skill-i1d',
-        created_gt=datetime.datetime(2016, 3, 25),
-        modified_lt=datetime.datetime(2017, 3, 25),
+        created_gt=datetime.datetime(2016, 3, 25, tzinfo=datetime.timezone.utc),
+        modified_lt=datetime.datetime(2017, 3, 25, tzinfo=datetime.timezone.utc),
         sort=['id'],
         limit=100,
     )
@@ -111,8 +111,8 @@ def test_get_user_skills(requests_mock, toloka_client, toloka_url, user_skill_ma
     # Request object syntax
     request = client.search_requests.UserSkillSearchRequest(
         skill_id='skill-i1d',
-        created_gt=datetime.datetime(2016, 3, 25),
-        modified_lt=datetime.datetime(2017, 3, 25),
+        created_gt=datetime.datetime(2016, 3, 25, tzinfo=datetime.timezone.utc),
+        modified_lt=datetime.datetime(2017, 3, 25, tzinfo=datetime.timezone.utc),
     )
     result = toloka_client.get_user_skills(request)
     assert user_skills == client.unstructure(list(result))
@@ -120,8 +120,8 @@ def test_get_user_skills(requests_mock, toloka_client, toloka_url, user_skill_ma
     # Expanded syntax
     result = toloka_client.get_user_skills(
         skill_id='skill-i1d',
-        created_gt=datetime.datetime(2016, 3, 25),
-        modified_lt=datetime.datetime(2017, 3, 25),
+        created_gt=datetime.datetime(2016, 3, 25, tzinfo=datetime.timezone.utc),
+        modified_lt=datetime.datetime(2017, 3, 25, tzinfo=datetime.timezone.utc),
     )
     assert user_skills == client.unstructure(list(result))
 

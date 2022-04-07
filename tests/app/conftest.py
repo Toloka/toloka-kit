@@ -149,7 +149,8 @@ def app_item_map():
         'input_data': {
             'id': '124',
             'text': 'I smell bad after the last night.'
-        }
+        },
+        'errors': [],
     }
 
 
@@ -166,7 +167,8 @@ def app_item_map_with_readonly(app_item_map):
         },
         'created_at': '2021-09-28T15:56:25.193000',
         'started_at': '2021-09-28T15:56:30.309920',
-        'finished_at': '2021-09-28T16:07:12.307169'
+        'finished_at': '2021-09-28T16:07:12.307169',
+        'errors': [],
     }
 
 

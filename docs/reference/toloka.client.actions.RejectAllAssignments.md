@@ -1,7 +1,7 @@
 # RejectAllAssignments
-`toloka.client.actions.RejectAllAssignments`
+`toloka.client.actions.RejectAllAssignments` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/actions.py#L184)
 
-```
+```python
 RejectAllAssignments(self, *, public_comment: Optional[str] = None)
 ```
 

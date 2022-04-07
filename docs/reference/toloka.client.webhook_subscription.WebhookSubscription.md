@@ -1,7 +1,7 @@
 # WebhookSubscription
-`toloka.client.webhook_subscription.WebhookSubscription`
+`toloka.client.webhook_subscription.WebhookSubscription` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/webhook_subscription.py#L11)
 
-```
+```python
 WebhookSubscription(
     self,
     *,

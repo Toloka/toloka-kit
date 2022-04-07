@@ -1,7 +1,7 @@
 # FastSubmittedCount
-`toloka.client.conditions.FastSubmittedCount`
+`toloka.client.conditions.FastSubmittedCount` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/conditions.py#L165)
 
-```
+```python
 FastSubmittedCount(
     self,
     operator: CompareOperator,

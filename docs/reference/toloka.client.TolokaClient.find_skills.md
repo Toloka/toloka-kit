@@ -42,4 +42,5 @@ Find ten most recently created skills.
 toloka_client.find_skills(sort=['-created', '-id'], limit=10)
 ```
 
-If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator
+`has_more=True`.

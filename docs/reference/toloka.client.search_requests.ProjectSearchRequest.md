@@ -1,7 +1,7 @@
 # ProjectSearchRequest
-`toloka.client.search_requests.ProjectSearchRequest`
+`toloka.client.search_requests.ProjectSearchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/search_requests.py#L175)
 
-```
+```python
 ProjectSearchRequest(
     self,
     status: Optional[Project.ProjectStatus] = None,

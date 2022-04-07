@@ -1,7 +1,7 @@
 # VideoViewV1
-`toloka.client.project.template_builder.view.VideoViewV1`
+`toloka.client.project.template_builder.view.VideoViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/view.py#L403)
 
-```
+```python
 VideoViewV1(
     self,
     url: Optional[Any] = None,

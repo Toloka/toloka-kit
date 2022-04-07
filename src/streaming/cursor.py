@@ -10,6 +10,7 @@ __all__ = [
     'UserSkillCursor',
 ]
 
+import asyncio
 import attr
 import copy
 import functools
@@ -234,13 +235,21 @@ class AssignmentCursor(BaseCursor):
         ...
     """
 
+    BATCH_SIZE = 1000
+
     _event_type: AssignmentEvent.Type = attr.ib(converter=functools.partial(structure, cl=AssignmentEvent.Type))
     _request: search_requests.AssignmentSearchRequest = attr.ib(
         factory=search_requests.AssignmentSearchRequest,
     )
 
     def _get_fetcher(self) -> Callable[..., search_results.AssignmentSearchResult]:
-        return self.toloka_client.find_assignments
+        async def _async_fetcher(*args, **kwargs):
+            return await self.toloka_client.find_assignments(*args, limit=self.BATCH_SIZE, **kwargs)
+
+        method = self.toloka_client.find_assignments
+        if asyncio.iscoroutinefunction(method) or asyncio.iscoroutinefunction(getattr(method, '__call__', None)):
+            return _async_fetcher
+        return functools.partial(self.toloka_client.find_assignments, limit=self.BATCH_SIZE)
 
     def _get_time_field(self) -> str:
         return self._event_type.time_key

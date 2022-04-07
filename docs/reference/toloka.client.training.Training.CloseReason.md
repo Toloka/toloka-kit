@@ -1,5 +1,5 @@
 # CloseReason
-`toloka.client.training.Training.CloseReason`
+`toloka.client.training.Training.CloseReason` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/training.py#L49)
 
 The reason for closing the pool the last time:
 

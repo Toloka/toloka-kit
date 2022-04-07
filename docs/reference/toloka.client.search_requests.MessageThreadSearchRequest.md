@@ -1,11 +1,11 @@
 # MessageThreadSearchRequest
-`toloka.client.search_requests.MessageThreadSearchRequest`
+`toloka.client.search_requests.MessageThreadSearchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/search_requests.py#L842)
 
-```
+```python
 MessageThreadSearchRequest(
     self,
-    folder: Union[str, Folder, List[Union[str, Folder]]] = None,
-    folder_ne: Union[str, Folder, List[Union[str, Folder]]] = None,
+    folder: Union[str, Folder, List[Union[str, Folder]], None] = None,
+    folder_ne: Union[str, Folder, List[Union[str, Folder]], None] = None,
     id_lt: Optional[str] = None,
     id_lte: Optional[str] = None,
     id_gt: Optional[str] = None,

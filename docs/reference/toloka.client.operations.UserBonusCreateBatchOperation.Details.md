@@ -1,7 +1,7 @@
 # Details
-`toloka.client.operations.UserBonusCreateBatchOperation.Details`
+`toloka.client.operations.UserBonusCreateBatchOperation.Details` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/operations.py#L366)
 
-```
+```python
 Details(
     self,
     *,

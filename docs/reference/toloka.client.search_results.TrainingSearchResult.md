@@ -1,7 +1,7 @@
 # TrainingSearchResult
 `toloka.client.search_results.TrainingSearchResult`
 
-```
+```python
 TrainingSearchResult(
     self,
     *,

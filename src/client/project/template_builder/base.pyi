@@ -100,6 +100,7 @@ class ComponentType(toloka.util._extendable_enum.ExtendableStrEnum):
     VIEW_LINK = 'view.link'
     VIEW_LINK_GROUP = 'view.link-group'
     VIEW_LIST = 'view.list'
+    VIEW_MAP = 'view.map'
     VIEW_MARKDOWN = 'view.markdown'
     VIEW_TEXT = 'view.text'
     VIEW_VIDEO = 'view.video'

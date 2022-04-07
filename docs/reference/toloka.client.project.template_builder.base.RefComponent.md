@@ -1,7 +1,7 @@
 # RefComponent
-`toloka.client.project.template_builder.base.RefComponent`
+`toloka.client.project.template_builder.base.RefComponent` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/base.py#L191)
 
-```
+```python
 RefComponent(self, ref: Optional[str] = None)
 ```
 

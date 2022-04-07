@@ -30,10 +30,10 @@ The sent message is added to a new message thread.
 If you want to thank Toloka performers who have tried to complete your tasks, send them a nice message.
 
 ```python
-message_text = 'Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!'
+message_text = "Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!"
 toloka_client.compose_message_thread(
     recipients_select_type='ALL',
-    topic={'EN':'Thank you, performer!'},
+    topic={'EN': 'Thank you, performer!'},
     text={'EN': message_text},
     answerable=False
 )

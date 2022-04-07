@@ -1,7 +1,7 @@
 # PoolCloneOperation
-`toloka.client.operations.PoolCloneOperation`
+`toloka.client.operations.PoolCloneOperation` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/operations.py#L153)
 
-```
+```python
 PoolCloneOperation(
     self,
     *,

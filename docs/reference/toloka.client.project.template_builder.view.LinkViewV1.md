@@ -1,7 +1,7 @@
 # LinkViewV1
-`toloka.client.project.template_builder.view.LinkViewV1`
+`toloka.client.project.template_builder.view.LinkViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/view.py#L279)
 
-```
+```python
 LinkViewV1(
     self,
     url: Optional[Any] = None,

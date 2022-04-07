@@ -1,7 +1,7 @@
 # create_figure
-`toloka.metrics.jupyter_dashboard.Chart.create_figure`
+`toloka.metrics.jupyter_dashboard.Chart.create_figure` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/jupyter_dashboard.py#L126)
 
-```
+```python
 create_figure(self)
 ```
 

@@ -1,7 +1,7 @@
 # ensure_async
-`toloka.util.async_utils.ensure_async`
+`toloka.util.async_utils.ensure_async` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/util/async_utils.py#L61)
 
-```
+```python
 ensure_async(func: Callable)
 ```
 

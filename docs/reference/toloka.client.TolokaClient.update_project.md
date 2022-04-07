@@ -1,7 +1,7 @@
 # update_project
-`toloka.client.TolokaClient.update_project`
+`toloka.client.TolokaClient.update_project` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/__init__.py#L44)
 
-```
+```python
 update_project(
     self,
     project_id: str,

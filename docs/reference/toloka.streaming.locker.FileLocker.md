@@ -1,7 +1,7 @@
 # FileLocker
-`toloka.streaming.locker.FileLocker`
+`toloka.streaming.locker.FileLocker` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/locker.py#L49)
 
-```
+```python
 FileLocker(
     self,
     dirname: str = '/tmp',
@@ -46,7 +46,7 @@ with locker_2('some_key'):
 with locker_1('some_key'):  # raise an error: NewerInstanceDetectedError
     pass
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|
