@@ -1,5 +1,5 @@
 # Field
-`toloka.client.assignment.GetAssignmentsTsvParameters.Field` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/assignment.py#L134)
+`toloka.client.assignment.GetAssignmentsTsvParameters.Field` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/assignment.py#L134)
 
 An enumeration.
 

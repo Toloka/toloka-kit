@@ -1,5 +1,5 @@
 # CloneResults
-`toloka.client.clone_results.CloneResults` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/clone_results.py#L8)
+`toloka.client.clone_results.CloneResults` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/clone_results.py#L8)
 
 Objects created as a result of deep cloning of the project
 

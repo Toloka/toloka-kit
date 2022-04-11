@@ -1,5 +1,5 @@
 # TasksCreateOperation
-`toloka.client.operations.TasksCreateOperation` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/operations.py#L266)
+`toloka.client.operations.TasksCreateOperation` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/operations.py#L266)
 
 ```python
 TasksCreateOperation(

@@ -1,5 +1,5 @@
 # InternalErrorCodes
-`toloka.client.error_codes.InternalErrorCodes` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/error_codes.py#L23)
+`toloka.client.error_codes.InternalErrorCodes` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/error_codes.py#L23)
 
 Types of internal error codes returned by the API
 

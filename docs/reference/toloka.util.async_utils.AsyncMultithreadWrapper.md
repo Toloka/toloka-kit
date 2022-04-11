@@ -1,5 +1,5 @@
 # AsyncMultithreadWrapper
-`toloka.util.async_utils.AsyncMultithreadWrapper` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/util/async_utils.py#L102)
+`toloka.util.async_utils.AsyncMultithreadWrapper` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/util/async_utils.py#L102)
 
 ```python
 AsyncMultithreadWrapper(

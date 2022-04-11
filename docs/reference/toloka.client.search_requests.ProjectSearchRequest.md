@@ -1,5 +1,5 @@
 # ProjectSearchRequest
-`toloka.client.search_requests.ProjectSearchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/search_requests.py#L175)
+`toloka.client.search_requests.ProjectSearchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/search_requests.py#L175)
 
 ```python
 ProjectSearchRequest(

@@ -1,5 +1,5 @@
 # UserAgentType
-`toloka.client.filter.UserAgentType.UserAgentType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/filter.py#L557)
+`toloka.client.filter.UserAgentType.UserAgentType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/filter.py#L557)
 
 User agent type.
 

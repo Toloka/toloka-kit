@@ -1,5 +1,5 @@
 # MessageThreadReply
-`toloka.client.message_thread.MessageThreadReply` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/message_thread.py#L149)
+`toloka.client.message_thread.MessageThreadReply` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/message_thread.py#L149)
 
 ```python
 MessageThreadReply(self, *, text: Optional[Dict[str, str]] = None)

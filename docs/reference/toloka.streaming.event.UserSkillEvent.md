@@ -1,5 +1,5 @@
 # UserSkillEvent
-`toloka.streaming.event.UserSkillEvent` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/event.py#L75)
+`toloka.streaming.event.UserSkillEvent` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/streaming/event.py#L75)
 
 ```python
 UserSkillEvent(

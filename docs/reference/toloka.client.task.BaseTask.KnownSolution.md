@@ -1,5 +1,5 @@
 # KnownSolution
-`toloka.client.task.BaseTask.KnownSolution` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/task.py#L36)
+`toloka.client.task.BaseTask.KnownSolution` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/task.py#L36)
 
 ```python
 KnownSolution(

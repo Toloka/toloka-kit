@@ -1,5 +1,5 @@
 # InclusionOperator
-`toloka.client.primitives.operators.InclusionOperator` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/primitives/operators.py#L31)
+`toloka.client.primitives.operators.InclusionOperator` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/primitives/operators.py#L31)
 
 An enumeration.
 

@@ -1,5 +1,5 @@
 # SetUserSkillRequest
-`toloka.client.user_skill.SetUserSkillRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/user_skill.py#L12)
+`toloka.client.user_skill.SetUserSkillRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/user_skill.py#L12)
 
 ```python
 SetUserSkillRequest(

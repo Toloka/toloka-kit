@@ -1,5 +1,5 @@
 # PoolStatusObserver
-`toloka.streaming.observer.PoolStatusObserver` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/observer.py#L151)
+`toloka.streaming.observer.PoolStatusObserver` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/streaming/observer.py#L151)
 
 ```python
 PoolStatusObserver(

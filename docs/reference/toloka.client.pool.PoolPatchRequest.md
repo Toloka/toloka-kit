@@ -1,5 +1,5 @@
 # PoolPatchRequest
-`toloka.client.pool.PoolPatchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/pool/__init__.py#L270)
+`toloka.client.pool.PoolPatchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/pool/__init__.py#L270)
 
 ```python
 PoolPatchRequest(self, priority: Optional[int] = None)

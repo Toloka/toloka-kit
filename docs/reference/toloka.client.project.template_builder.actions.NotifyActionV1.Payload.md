@@ -1,5 +1,5 @@
 # Payload
-`toloka.client.project.template_builder.actions.NotifyActionV1.Payload` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/actions.py#L54)
+`toloka.client.project.template_builder.actions.NotifyActionV1.Payload` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/template_builder/actions.py#L54)
 
 ```python
 Payload(

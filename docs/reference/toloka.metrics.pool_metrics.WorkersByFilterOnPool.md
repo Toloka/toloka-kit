@@ -1,5 +1,5 @@
 # WorkersByFilterOnPool
-`toloka.metrics.pool_metrics.WorkersByFilterOnPool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/pool_metrics.py#L369)
+`toloka.metrics.pool_metrics.WorkersByFilterOnPool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/metrics/pool_metrics.py#L369)
 
 ```python
 WorkersByFilterOnPool(

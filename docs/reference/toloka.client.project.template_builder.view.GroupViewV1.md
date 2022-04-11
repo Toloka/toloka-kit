@@ -1,5 +1,5 @@
 # GroupViewV1
-`toloka.client.project.template_builder.view.GroupViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/view.py#L176)
+`toloka.client.project.template_builder.view.GroupViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/template_builder/view.py#L176)
 
 ```python
 GroupViewV1(

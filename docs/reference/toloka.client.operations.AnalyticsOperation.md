@@ -1,5 +1,5 @@
 # AnalyticsOperation
-`toloka.client.operations.AnalyticsOperation` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/operations.py#L120)
+`toloka.client.operations.AnalyticsOperation` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/operations.py#L120)
 
 ```python
 AnalyticsOperation(

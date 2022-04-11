@@ -1,5 +1,5 @@
 # EventType
-`toloka.client.webhook_subscription.WebhookSubscription.EventType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/webhook_subscription.py#L22)
+`toloka.client.webhook_subscription.WebhookSubscription.EventType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/webhook_subscription.py#L22)
 
 Webhook subscription event type:
 

@@ -1,5 +1,5 @@
 # RuleType
-`toloka.client.actions.RuleType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/actions.py#L20)
+`toloka.client.actions.RuleType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/actions.py#L20)
 
 An enumeration.
 
