@@ -39,14 +39,14 @@ class RuleAction(BaseParameters, spec_enum=RuleType, spec_field='type'):
 class Restriction(RuleAction, spec_value=RuleType.RESTRICTION):
     """Restricts performer's access to projects or pools.
 
-    To have better control over restriction period use `RestrictionV2`.
+    To have better control over restriction period use [RestrictionV2](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.actions.RestrictionV2).
 
     Attributes:
         parameters.scope:
-            * `POOL` - A performer can not access the pool if the action is applied. In this case the performer's rating is not affected.
-            * `PROJECT` - A performer can not access the entire project containing the pool. The performer's rating is affected.
-            * `ALL_PROJECTS` - A performer can not access any customer's project.
-        parameters.duration_days: Blocking period in days. By default, the block is permanent.
+            * `POOL` — A performer can't access the pool if the action is applied. In this case the performer's rating is not affected.
+            * `PROJECT` — A performer can't access the entire project containing the pool. The performer's rating is affected.
+            * `ALL_PROJECTS` — A performer can't access any customer's project.
+        parameters.duration_days: A blocking period in days. By default, the block is permanent.
         parameters.private_comment: A private comment. It is visible only for the customer.
     """
 
@@ -61,16 +61,16 @@ class RestrictionV2(RuleAction, spec_value=RuleType.RESTRICTION_V2):
 
     Attributes:
         parameters.scope:
-            * `POOL` - A performer can not access the pool if the action is applied. In this case the performer's rating is not affected.
-            * `PROJECT` - A performer can not access the entire project containing the pool. The performer's rating is affected.
-            * `ALL_PROJECTS` - A performer can not access any customer's project.
-        parameters.duration: The duration of the block period measured in `duration_unit`.
+            * `POOL` — A performer can't access the pool if the action is applied. In this case the performer's rating is not affected.
+            * `PROJECT` — A performer can't access the entire project containing the pool. The performer's rating is affected.
+            * `ALL_PROJECTS` — A performer can't access any customer's project.
+        parameters.duration: The duration of the blocking period measured in `duration_unit`.
         parameters.duration_unit: 
             * `MINUTES`;
             * `HOURS`;
             * `DAYS`;
             * `PERMANENT`.
-            `PERMANENT` means that block is is permanent.
+            `PERMANENT` means that blocking is permanent.
         parameters.private_comment: A private comment. It is visible only for the customer.
 
     Example:
@@ -100,16 +100,16 @@ class RestrictionV2(RuleAction, spec_value=RuleType.RESTRICTION_V2):
 class SetSkillFromOutputField(RuleAction, spec_value=RuleType.SET_SKILL_FROM_OUTPUT_FIELD):
     """Sets performer's skill value to the percentage of correct or incorrect answers.
 
-    This action can be used with [collectors.MajorityVote](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.MajorityVote) and [collectors.GoldenSet](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.GoldenSet).
+    This action can be used with [MajorityVote](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.MajorityVote) and [GoldenSet](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.GoldenSet) collectors.
 
     Attributes:
-        parameters.skill_id: ID of the skill to update.
+        parameters.skill_id: The ID of the skill to update.
         parameters.from_field: The value to assign to the skill:
-            * `correct_answers_rate` - Percentage of correct answers.
-            * `incorrect_answers_rate` - Percentage of incorrect answers.
+            * `correct_answers_rate` — Percentage of correct answers.
+            * `incorrect_answers_rate` — Percentage of incorrect answers.
 
     Example:
-        In the following example `MajorityVote` is used to update a skill value.
+        In the following example a `MajorityVote` collector is used to update a skill value.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -133,13 +133,13 @@ class SetSkillFromOutputField(RuleAction, spec_value=RuleType.SET_SKILL_FROM_OUT
 class ChangeOverlap(RuleAction, spec_value=RuleType.CHANGE_OVERLAP):
     """Increases the overlap of a task.
 
-    You can use this rule only with [collectors.UsersAssessment](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.UsersAssessment) and [collectors.AssignmentsAssessment](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.AssignmentsAssessment).
+    You can use this rule only with [UsersAssessment](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.UsersAssessment) and [AssignmentsAssessment](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.AssignmentsAssessment) collectors.
 
     Attributes:
         parameters.delta: An overlap increment.
         parameters.open_pool:
-            * True — Open the pool after changing the overlap value.
-            * False — Do not open the pool if it is already closed.
+            * `True` — Open the pool after changing the overlap value.
+            * `False` — Don't reopen the pool if it is closed.
 
     Example:
         The example shows, how to increase task overlap when you reject assignments manually.
@@ -185,8 +185,6 @@ class SetSkill(RuleAction, spec_value=RuleType.SET_SKILL):
 class RejectAllAssignments(RuleAction, spec_value=RuleType.REJECT_ALL_ASSIGNMENTS):
     """Rejects all performer's assignments in the pool. This action is available for pools with non-automatic acceptance.
 
-    The performer is not explicitly installed, the rejection occurs on the performer on which the rule will be triggered.
-
     Attributes:
         parameters.public_comment: The reason of the rejection. It is visible to the customer and to the performer.
 
@@ -209,10 +207,8 @@ class RejectAllAssignments(RuleAction, spec_value=RuleType.REJECT_ALL_ASSIGNMENT
 class ApproveAllAssignments(RuleAction, spec_value=RuleType.APPROVE_ALL_ASSIGNMENTS):
     """Accepts all performer's assignments in the pool.
 
-    The performer is not explicitly installed, the approval occurs on the performer on which the rule will be triggered.
-
     Example:
-        Accept all assignments if a performer gives correct responses for golden tasks. Note, that the pool must be configured with non-automatic response acceptance.
+        Accept all assignments if a performer gives correct responses for control tasks. Note, that the pool must be configured with non-automatic response acceptance.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
