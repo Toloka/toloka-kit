@@ -43,11 +43,11 @@ class Restriction(RuleAction, spec_value=RuleType.RESTRICTION):
 
     Attributes:
         parameters.scope:
-            * `POOL` — A performer can't access the pool if the action is applied. In this case the performer's rating is not affected.
-            * `PROJECT` — A performer can't access the entire project containing the pool. The performer's rating is affected.
-            * `ALL_PROJECTS` — A performer can't access any customer's project.
+            * `POOL` — A performer can't access the pool if the action is applied.
+            * `PROJECT` — A performer can't access the entire project containing the pool.
+            * `ALL_PROJECTS` — A performer can't access any requester's project.
         parameters.duration_days: A blocking period in days. By default, the block is permanent.
-        parameters.private_comment: A private comment. It is visible only for the customer.
+        parameters.private_comment: A private comment. It is visible only to the requester.
     """
 
     class Parameters(RuleAction.Parameters):
@@ -61,9 +61,9 @@ class RestrictionV2(RuleAction, spec_value=RuleType.RESTRICTION_V2):
 
     Attributes:
         parameters.scope:
-            * `POOL` — A performer can't access the pool if the action is applied. In this case the performer's rating is not affected.
-            * `PROJECT` — A performer can't access the entire project containing the pool. The performer's rating is affected.
-            * `ALL_PROJECTS` — A performer can't access any customer's project.
+            * `POOL` — A performer can't access the pool if the action is applied.
+            * `PROJECT` — A performer can't access the entire project containing the pool.
+            * `ALL_PROJECTS` — A performer can't access any requester's project.
         parameters.duration: The duration of the blocking period measured in `duration_unit`.
         parameters.duration_unit: 
             * `MINUTES`;
@@ -71,10 +71,10 @@ class RestrictionV2(RuleAction, spec_value=RuleType.RESTRICTION_V2):
             * `DAYS`;
             * `PERMANENT`.
             `PERMANENT` means that blocking is permanent.
-        parameters.private_comment: A private comment. It is visible only for the customer.
+        parameters.private_comment: A private comment. It is visible only to the requester.
 
     Example:
-        The following quality control rule disallows access to the project for 10 days, if a performer answers too fast.
+        The following quality control rule blocks access to the project for 10 days, if a performer answers too fast.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -166,7 +166,7 @@ class SetSkill(RuleAction, spec_value=RuleType.SET_SKILL):
         parameters.skill_value: The new value of the skill.
 
     Example:
-        When an answer is accepted, assign a skill to the performer. Later you can filter performers by that skill.
+        When an answer is accepted, the performer gets a skill. Later you can filter performers by that skill.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -186,7 +186,7 @@ class RejectAllAssignments(RuleAction, spec_value=RuleType.REJECT_ALL_ASSIGNMENT
     """Rejects all performer's assignments in the pool. This action is available for pools with non-automatic acceptance.
 
     Attributes:
-        parameters.public_comment: The reason of the rejection. It is visible to the customer and to the performer.
+        parameters.public_comment: The reason of the rejection. It is visible to the requester and to the performer.
 
     Example:
         Reject all assignments if a performer sends responses too fast. Note, that the pool must be configured with non-automatic response acceptance.
