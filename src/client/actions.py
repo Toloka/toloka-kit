@@ -100,7 +100,7 @@ class RestrictionV2(RuleAction, spec_value=RuleType.RESTRICTION_V2):
 class SetSkillFromOutputField(RuleAction, spec_value=RuleType.SET_SKILL_FROM_OUTPUT_FIELD):
     """Sets performer's skill value to the percentage of correct or incorrect answers.
 
-    This action can be used with [MajorityVote](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.MajorityVote) and [GoldenSet](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.GoldenSet) collectors.
+    You can use this action with [MajorityVote](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.MajorityVote) and [GoldenSet](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.GoldenSet) collectors.
 
     Attributes:
         parameters.skill_id: The ID of the skill to update.
@@ -109,7 +109,7 @@ class SetSkillFromOutputField(RuleAction, spec_value=RuleType.SET_SKILL_FROM_OUT
             * `incorrect_answers_rate` — Percentage of incorrect answers.
 
     Example:
-        In the following example a `MajorityVote` collector is used to update a skill value.
+        In the following example, a `MajorityVote` collector is used to update a skill value.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -142,7 +142,7 @@ class ChangeOverlap(RuleAction, spec_value=RuleType.CHANGE_OVERLAP):
             * `False` — Don't reopen the pool if it is closed.
 
     Example:
-        The example shows, how to increase task overlap when you reject assignments manually.
+        The example shows how to increase task overlap when you reject assignments manually.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -186,7 +186,7 @@ class RejectAllAssignments(RuleAction, spec_value=RuleType.REJECT_ALL_ASSIGNMENT
     """Rejects all performer's assignments in the pool. This action is available for pools with non-automatic acceptance.
 
     Attributes:
-        parameters.public_comment: The reason of the rejection. It is visible to the requester and to the performer.
+        parameters.public_comment: The reason of the rejection. It is visible both to the requester and to the performer.
 
     Example:
         Reject all assignments if a performer sends responses too fast. Note, that the pool must be configured with non-automatic response acceptance.
