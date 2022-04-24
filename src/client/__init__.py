@@ -205,7 +205,11 @@ class TolokaClient:
         >>> toloka_client = toloka.TolokaClient(your_oauth_token, 'PRODUCTION')  # Or switch to 'SANDBOX' environment
         ...
 
-        **Note**: `toloka_client` instance will be used to pass all API calls later on.
+        {% note info %}
+
+        `toloka_client` instance will be used to pass all API calls later on.
+
+        {% endnote %}
     """
 
     @unique
@@ -398,14 +402,21 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def aggregate_solutions_by_pool(self, request: aggregation.PoolAggregatedSolutionRequest) -> operations.AggregatedSolutionOperation:
+    def aggregate_solutions_by_pool(
+        self,
+        request: aggregation.PoolAggregatedSolutionRequest
+    ) -> operations.AggregatedSolutionOperation:
         """Starts aggregation of solutions in the pool
 
         Responses to all completed tasks will be aggregated.
         The method only starts the aggregation and returns the operation for further tracking.
 
-        **Note**: In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
+        {% note info %}
+
+        In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
         that have more aggregation methods and can perform on your computers.
+
+        {% endnote %}
 
         Args:
             request: Parameters describing in which pool to aggregate solutions and by what rules.
@@ -467,8 +478,12 @@ class TolokaClient:
         """Gets aggregated responses after the AggregatedSolutionOperation completes.
         It is better to use the "get_aggregated_solutions" method, that allows to iterate through all results.
 
-        **Note**: In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
+        {% note info %}
+
+        In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
         that have more aggregation methods and can perform on your computers.
+
+        {% endnote %}
 
         Args:
             operation_id: From what aggregation operation you want to get results.
@@ -502,11 +517,18 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_aggregated_solutions(self, operation_id: str, request: search_requests.AggregatedSolutionSearchRequest) -> Generator[AggregatedSolution, None, None]:
+    def get_aggregated_solutions(
+        self,
+        operation_id: str, request: search_requests.AggregatedSolutionSearchRequest
+    ) -> Generator[AggregatedSolution, None, None]:
         """Finds all aggregated responses after the AggregatedSolutionOperation completes
 
-        **Note**: In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
+        {% note info %}
+
+        In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
         that have more aggregation methods and can perform on your computers.
+
+        {% endnote %}
 
         Args:
             operation_id: From what aggregation operation you want to get results.
@@ -808,7 +830,7 @@ class TolokaClient:
         Example:
             If you want to thank Toloka performers who have tried to complete your tasks, send them a nice message.
 
-            >>> message_text = "Amazing job! We\'ve just trained our first model with the data YOU prepared for us. Thank you!"
+            >>> message_text = "Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!"
             >>> toloka_client.compose_message_thread(
             >>>     recipients_select_type='ALL',
             >>>     topic={'EN': 'Thank you, performer!'},
@@ -1331,7 +1353,10 @@ class TolokaClient:
         operation = self.clone_pool_async(pool_id)
         operation = self.wait_operation(operation)
         result = self.get_pool(operation.details.pool_id)
-        logger.info(f'A new pool with ID "{result.id}" has been cloned. Link to open in web interface: {self.url}/requester/project/{result.project_id}/pool/{result.id}')
+        logger.info(
+            f'A new pool with ID "{result.id}" has been cloned. Link to open in web interface: '
+            f'{self.url}/requester/project/{result.project_id}/pool/{result.id}'
+        )
         return result
 
     @add_headers('client')
@@ -1374,7 +1399,7 @@ class TolokaClient:
             >>>     project_id=existing_project_id,
             >>>     private_name='Pool 1',
             >>>     may_contain_adult_content=False,
-            >>>     will_expire=datetime.datetime.utcnow() + datetime.timedelta(days=365),
+            >>>     will_expire=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=365),
             >>>     reward_per_assignment=0.01,
             >>>     assignment_max_duration_seconds=60*20,
             >>>     defaults=toloka.pool.Pool.Defaults(default_overlap_for_new_task_suites=3),
@@ -1391,7 +1416,10 @@ class TolokaClient:
 
         response = self._request('post', '/v1/pools', json=unstructure(pool))
         result = structure(response, Pool)
-        logger.info(f'A new pool with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/project/{result.project_id}/pool/{result.id}')
+        logger.info(
+            f'A new pool with ID "{result.id}" has been created. Link to open in web interface: '
+            f'{self.url}/requester/project/{result.project_id}/pool/{result.id}'
+        )
         return result
 
     @expand('request')
@@ -1692,7 +1720,10 @@ class TolokaClient:
         operation = self.clone_training_async(training_id)
         operation = self.wait_operation(operation)
         result = self.get_training(operation.details.training_id)
-        logger.info(f'A new training with ID "{result.id}" has been cloned. Link to open in web interface: {self.url}/requester/project/{result.project_id}/training/{result.id}')
+        logger.info(
+            f'A new training with ID "{result.id}" has been cloned. Link to open in web interface: '
+            f'{self.url}/requester/project/{result.project_id}/training/{result.id}'
+        )
         return result
 
     @add_headers('client')
@@ -1748,7 +1779,10 @@ class TolokaClient:
         """
         response = self._request('post', '/v1/trainings', json=unstructure(training))
         result = structure(response, Training)
-        logger.info(f'A new training with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/project/{result.project_id}/training/{result.id}')
+        logger.info(
+            f'A new training with ID "{result.id}" has been created. Link to open in web interface: '
+            f'{self.url}/requester/project/{result.project_id}/training/{result.id}'
+        )
         return result
 
     @expand('request')
@@ -1931,7 +1965,10 @@ class TolokaClient:
         """
         response = self._request('post', '/v1/skills', json=unstructure(skill))
         result = structure(response, Skill)
-        logger.info(f'A new skill with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/quality/skill/{result.id}')
+        logger.info(
+            f'A new skill with ID "{result.id}" has been created. Link to open in web interface: '
+            f'{self.url}/requester/quality/skill/{result.id}'
+        )
         return result
 
     @expand('request')
@@ -2079,8 +2116,9 @@ class TolokaClient:
 
         Example:
             >>> task = toloka.task.Task(
-            >>>             input_values={'image': 'https://tlk.s3.yandex.net/dataset/cats_vs_dogs/dogs/048e5760fc5a46faa434922b2447a527.jpg'},
-            >>>             pool_id='1')
+            >>>     input_values={'image': 'https://tlk.s3.yandex.net/dataset/cats_vs_dogs/dogs/048e5760fc5a46faa434922b2447a527.jpg'},
+            >>>     pool_id='1'
+            >>> )
             >>> toloka_client.create_task(task=task, allow_defaults=True)
             ...
         """
@@ -2089,13 +2127,17 @@ class TolokaClient:
 
     @expand('parameters')
     @add_headers('client')
-    def create_tasks(self, tasks: List[Task], parameters: Optional[task.CreateTasksParameters] = None) -> batch_create_results.TaskBatchCreateResult:
+    def create_tasks(
+        self,
+        tasks: List[Task], parameters: Optional[task.CreateTasksParameters] = None
+    ) -> batch_create_results.TaskBatchCreateResult:
         """Creates several tasks in Toloka using a single request.
 
         Tasks can be added to different pools. You can add together regular tasks and control tasks.
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
-        
-        By default, `create_tasks` starts asynchronous operation internally and waits for the completion of it. Do not change `async_mode` to False, if you do not understand clearly why you need it.
+
+        By default, `create_tasks` starts asynchronous operation internally and waits for the completion of it. Do not
+        change `async_mode` to False, if you do not understand clearly why you need it.
 
         Args:
             tasks: List of tasks to be created.
@@ -2103,7 +2145,8 @@ class TolokaClient:
                 operations is used.
 
         Returns:
-            batch_create_results.TaskBatchCreateResult: An object with created tasks in `items` and invalid tasks in `validation_errors`.
+            batch_create_results.TaskBatchCreateResult: An object with created tasks in `items` and invalid tasks in
+                `validation_errors`.
 
         Raises:
             ValidationApiError: If no tasks were created, or skip_invalid_items==False and there is a problem when
@@ -2151,7 +2194,8 @@ class TolokaClient:
 
     @expand('parameters')
     @add_headers('client')
-    def create_tasks_async(self, tasks: List[Task], parameters: Optional[task.CreateTasksParameters] = None) -> operations.TasksCreateOperation:
+    def create_tasks_async(self, tasks: List[Task],
+                           parameters: Optional[task.CreateTasksParameters] = None) -> operations.TasksCreateOperation:
         """Creates tasks in Toloka asynchronously.
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
@@ -2283,7 +2327,11 @@ class TolokaClient:
             >>> toloka_client.patch_task_overlap_or_min(task_id='1', infinite_overlap=True)
             ...
 
-            **Note**: you can't set infinite overlap in a regular pool.
+            {% note info %}
+
+            You can't set infinite overlap in a regular pool.
+
+            {% endnote %}
         """
         response = self._request('patch', f'/v1/tasks/{task_id}/set-overlap-or-min', json=unstructure(patch))
         return structure(response, Task)
@@ -2292,7 +2340,10 @@ class TolokaClient:
 
     @expand('parameters')
     @add_headers('client')
-    def create_task_suite(self, task_suite: TaskSuite, parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None) -> TaskSuite:
+    def create_task_suite(
+        self,
+        task_suite: TaskSuite, parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None
+    ) -> TaskSuite:
         """Creates a new task suite
 
         Generally, you don't need to create a task set yourself, because you can create tasks and Toloka will create
@@ -2322,7 +2373,10 @@ class TolokaClient:
 
     @expand('parameters')
     @add_headers('client')
-    def create_task_suites(self, task_suites: List[TaskSuite], parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None) -> batch_create_results.TaskSuiteBatchCreateResult:
+    def create_task_suites(
+        self,
+        task_suites: List[TaskSuite], parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None
+    ) -> batch_create_results.TaskSuiteBatchCreateResult:
         """Creates many task suites in pools
 
         Generally, you don't need to create a task set yourself, because you can create tasks and Toloka will create
@@ -2377,8 +2431,10 @@ class TolokaClient:
 
     @expand('parameters')
     @add_headers('client')
-    def create_task_suites_async(self, task_suites: List[TaskSuite],
-                                 parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None) -> operations.TaskSuiteCreateBatchOperation:
+    def create_task_suites_async(
+        self,
+        task_suites: List[TaskSuite], parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None
+    ) -> operations.TaskSuiteCreateBatchOperation:
         """Creates many task suites in pools, asynchronous version
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
@@ -2414,9 +2470,10 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def find_task_suites(self, request: search_requests.TaskSuiteSearchRequest,
-                         sort: Union[List[str], search_requests.TaskSuiteSortItems, None] = None,
-                         limit: Optional[int] = None) -> search_results.TaskSuiteSearchResult:
+    def find_task_suites(
+        self, request: search_requests.TaskSuiteSearchRequest,
+        sort: Union[List[str], search_requests.TaskSuiteSortItems, None] = None, limit: Optional[int] = None
+    ) -> search_results.TaskSuiteSearchResult:
         """Finds all task suites that match certain rules
 
         As a result, it returns an object that contains the first part of the found task suites and whether there
@@ -2553,7 +2610,10 @@ class TolokaClient:
         return structure(response, operations.Operation)
 
     @add_headers('client')
-    def wait_operation(self, op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10)) -> operations.Operation:
+    def wait_operation(
+        self,
+        op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10)
+    ) -> operations.Operation:
         """Waits for the operation to complete, and return it
 
         Args:
@@ -2589,7 +2649,7 @@ class TolokaClient:
         if op.is_completed():
             return op
 
-        utcnow = datetime.datetime.utcnow()
+        utcnow = datetime.datetime.now(datetime.timezone.utc)
         wait_until_time = utcnow + timeout
 
         if not op.started or utcnow - op.started < default_initial_delay:
@@ -2600,7 +2660,7 @@ class TolokaClient:
             if op.is_completed():
                 return op
             time.sleep(default_time_to_wait.total_seconds())
-            if datetime.datetime.utcnow() > wait_until_time:
+            if datetime.datetime.now(datetime.timezone.utc) > wait_until_time:
                 raise TimeoutError
 
     @add_headers('client')
@@ -2628,7 +2688,10 @@ class TolokaClient:
 
     @expand('parameters')
     @add_headers('client')
-    def create_user_bonus(self, user_bonus: UserBonus, parameters: Optional[UserBonusCreateRequestParameters] = None) -> UserBonus:
+    def create_user_bonus(
+        self,
+        user_bonus: UserBonus, parameters: Optional[UserBonusCreateRequestParameters] = None
+    ) -> UserBonus:
         """Issues payments directly to the performer
 
         You can send a maximum of 10,000 requests of this kind per day.
@@ -2669,7 +2732,10 @@ class TolokaClient:
 
     @expand('parameters')
     @add_headers('client')
-    def create_user_bonuses(self, user_bonuses: List[UserBonus], parameters: Optional[UserBonusCreateRequestParameters] = None) -> batch_create_results.UserBonusBatchCreateResult:
+    def create_user_bonuses(
+        self,
+        user_bonuses: List[UserBonus], parameters: Optional[UserBonusCreateRequestParameters] = None
+    ) -> batch_create_results.UserBonusBatchCreateResult:
         """Creates many user bonuses
 
         Right now it's safer to use asynchronous version: "create_user_bonuses_async"
@@ -2722,7 +2788,9 @@ class TolokaClient:
 
     @expand('parameters')
     @add_headers('client')
-    def create_user_bonuses_async(self, user_bonuses: List[UserBonus], parameters: Optional[UserBonusCreateRequestParameters] = None) -> operations.UserBonusCreateBatchOperation:
+    def create_user_bonuses_async(
+        self, user_bonuses: List[UserBonus], parameters: Optional[UserBonusCreateRequestParameters] = None
+    ) -> operations.UserBonusCreateBatchOperation:
         """Issues payments directly to the performers, asynchronously creates many user bonuses
 
         You can send a maximum of 10,000 requests of this kind per day.
@@ -2892,7 +2960,10 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_user_restrictions(self, request: search_requests.UserRestrictionSearchRequest) -> Generator[UserRestriction, None, None]:
+    def get_user_restrictions(
+        self,
+        request: search_requests.UserRestrictionSearchRequest
+    ) -> Generator[UserRestriction, None, None]:
         """Finds all user restrictions that match certain rules and returns them in an iterable object
 
         Unlike find_user_restrictions, returns generator. Does not sort user restrictions.
@@ -3088,7 +3159,10 @@ class TolokaClient:
         self._raw_request('delete', f'/v1/user-skills/{user_skill_id}')
 
     @add_headers('client')
-    def upsert_webhook_subscriptions(self, subscriptions: List[WebhookSubscription]) -> batch_create_results.WebhookSubscriptionBatchCreateResult:
+    def upsert_webhook_subscriptions(
+        self,
+        subscriptions: List[WebhookSubscription]
+    ) -> batch_create_results.WebhookSubscriptionBatchCreateResult:
         """Creates (upsert) many webhook-subscriptions.
 
         Args:
@@ -3163,7 +3237,10 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_webhook_subscriptions(self, request: search_requests.WebhookSubscriptionSearchRequest) -> Generator[WebhookSubscription, None, None]:
+    def get_webhook_subscriptions(
+        self,
+        request: search_requests.WebhookSubscriptionSearchRequest
+    ) -> Generator[WebhookSubscription, None, None]:
         """Finds all webhook-subscriptions that match certain rules and returns them in an iterable object
 
         Unlike find_webhook-subscriptions, returns generator. Does not sort webhook-subscriptions.
@@ -3354,9 +3431,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def find_apps(self, request: search_requests.AppSearchRequest,
-                          sort: Union[List[str], search_requests.AppSortItems, None] = None,
-                          limit: Optional[int] = None) -> search_results.AppSearchResult:
+    def find_apps(
+        self,
+        request: search_requests.AppSearchRequest, sort: Union[List[str], search_requests.AppSortItems, None] = None,
+        limit: Optional[int] = None
+    ) -> search_results.AppSearchResult:
         """Finds all Apps that match certain rules.
 
         As a result, it returns an object that contains the first part of the found Apps and whether there
@@ -3421,10 +3500,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def find_app_items(self, app_project_id: str,
-                          request: search_requests.AppItemSearchRequest,
-                          sort: Union[List[str], search_requests.AppItemSortItems, None] = None,
-                          limit: Optional[int] = None) -> search_results.AppItemSearchResult:
+    def find_app_items(
+        self,
+        app_project_id: str, request: search_requests.AppItemSearchRequest,
+        sort: Union[List[str], search_requests.AppItemSortItems, None] = None, limit: Optional[int] = None
+    ) -> search_results.AppItemSearchResult:
         """Finds all work items in the App project that match certain rules.
 
         As a result, it returns an object that contains the first part of the found work items in the App project
@@ -3451,9 +3531,10 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_app_items(self,
-                      app_project_id: str,
-                      request: search_requests.AppItemSearchRequest) -> Generator[AppItem, None, None]:
+    def get_app_items(
+        self,
+        app_project_id: str, request: search_requests.AppItemSearchRequest
+    ) -> Generator[AppItem, None, None]:
         """Finds all work items in the App project that match certain rules and returns them in an iterable object.
 
         Unlike find_app_items, returns generator. Does not sort work items in the App project.
