@@ -46,7 +46,7 @@ class Restriction(RuleAction, spec_value=RuleType.RESTRICTION):
             * `POOL` — A performer can't access the pool if the action is applied.
             * `PROJECT` — A performer can't access the entire project containing the pool.
             * `ALL_PROJECTS` — A performer can't access any requester's project.
-        parameters.duration_days: A blocking period in days. By default, the block is permanent.
+        parameters.duration_days: A blocking period in days. If the `duration_days` is omitted, then the block is permanent.
         parameters.private_comment: A private comment. It is visible only to the requester.
     """
 
@@ -69,8 +69,7 @@ class RestrictionV2(RuleAction, spec_value=RuleType.RESTRICTION_V2):
             * `MINUTES`;
             * `HOURS`;
             * `DAYS`;
-            * `PERMANENT`.
-            `PERMANENT` means that blocking is permanent.
+            * `PERMANENT` — blocking is permanent. In this case the `duration` is ignored and may be omitted.
         parameters.private_comment: A private comment. It is visible only to the requester.
 
     Example:
