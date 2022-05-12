@@ -553,19 +553,17 @@ class TolokaClient:
 
     @add_headers('client')
     def accept_assignment(self, assignment_id: str, public_comment: str) -> Assignment:
-        """Marks one assignment as accepted
-
-        Used then your pool created with auto_accept_solutions=False parametr.
+        """Accepts an assignment.
 
         Args:
-            assignment_id: What assignment will be accepted.
-            public_comment: Message to the performer.
+            assignment_id: The ID of the assignment.
+            public_comment: A comment visible to the performer.
 
         Returns:
-            Assignment: Object with new status.
+            Assignment: The assignment object with updated status field.
 
         Example:
-            How to accept one assignment.
+            Accepting an assignment.
 
             >>> toloka_client.accept_assignment(assignment_id, 'Well done!')
             ...
@@ -577,29 +575,25 @@ class TolokaClient:
     def find_assignments(self, request: search_requests.AssignmentSearchRequest,
                          sort: Union[List[str], search_requests.AssignmentSortItems, None] = None,
                          limit: Optional[int] = None) -> search_results.AssignmentSearchResult:
-        """Finds all assignments that match certain rules
+        """Finds all assignments that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found assignments and whether there
-        are any more results.
-        It is better to use the "get_assignments" method, they allow to iterate trought all results
-        and not just the first output.
+        The number of returned assignments is limited. Find remaining matching assignments with subsequent `find_assignments` calls.
+        
+        To iterate over all matching assignments in one call use [get_assignments](toloka.client.TolokaClient.get_assignments.md). Note that `get_assignments` can't sort results.
 
         Args:
-            request: How to search assignments.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of assignments returned. The maximum is 100,000.
-                Defaults to None, in which case it returns first 50 results.
+            request: Search criteria.
+            sort: Sorting options. Default value: `None`.
+            limit: Returned assignments limit. The maximum value is 100,000. Default value: 50.
 
         Returns:
-            search_results.AssignmentSearchResult: The first `limit` assignments in `items`. And a mark that there is more.
+            search_results.AssignmentSearchResult: Found assignments and a flag showing whether there are more matching assignments.
 
         Example:
             Search for `SKIPPED` or `EXPIRED` assignments in the specified pool.
 
             >>> toloka_client.find_assignments(pool_id='1', status = ['SKIPPED', 'EXPIRED'])
             ...
-
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.AssignmentSortItems)
         response = self._search_request('get', '/v1/assignments', request, sort, limit)
@@ -607,13 +601,13 @@ class TolokaClient:
 
     @add_headers('client')
     def get_assignment(self, assignment_id: str) -> Assignment:
-        """Reads one specific assignment
+        """Gets an assignment from Toloka.
 
         Args:
-            assignment_id: ID of assignment.
+            assignment_id: The ID of the assignment.
 
         Returns:
-            Assignment: The solution read as a result.
+            Assignment: The assignment.
 
         Example:
             >>> toloka_client.get_assignment(assignment_id='1')
@@ -625,19 +619,21 @@ class TolokaClient:
     @expand('request')
     @add_headers('client')
     def get_assignments(self, request: search_requests.AssignmentSearchRequest) -> Generator[Assignment, None, None]:
-        """Finds all assignments that match certain rules and returns them in an iterable object
+        """Finds all assignments that match certain criteria.
 
-        Unlike find_assignments, returns generator. Does not sort assignments.
-        While iterating over the result, several requests to the Toloka server is possible.
+        `get_assignments` returns a generator. You can iterate over all found assignments using the generator. Several requests to the Toloka server are possible while iterating.
+
+        Note that assignments can not be sorted. If you need to sort assignments use [find_assignments](toloka.client.TolokaClient.find_assignments.md).
+
 
         Args:
-            request: How to search assignments.
+            request: Search criteria.
 
         Yields:
-            Assignment: The next object corresponding to the request parameters.
+            Assignment: Next matching assignment.
 
         Example:
-            Let’s make a list of `assignment_id` of all `SUBMITTED` assignments in the specified pool.
+            The following example creates the list with IDs of `SUBMITTED` assignments in the specified pool.
 
             >>> from toloka.client import Assignment
             >>> assignments = toloka_client.get_assignments(pool_id='1', status=Assignment.SUBMITTED)
@@ -651,19 +647,19 @@ class TolokaClient:
     @expand('patch')
     @add_headers('client')
     def patch_assignment(self, assignment_id: str, patch: AssignmentPatch) -> Assignment:
-        """Changes status and comment on assignment
+        """Changes an assignment status and associated public comment.
 
-        It's better to use methods "reject_assignment" and "accept_assignment".
+        See also [reject_assignment](toloka.client.TolokaClient.reject_assignment.md) and [accept_assignment](toloka.client.TolokaClient.accept_assignment.md).
 
         Args:
-            assignment_id: What assignment will be affected.
-            patch: Object with new status and comment.
+            assignment_id: The ID of the assignment.
+            patch: New status and comment.
 
         Returns:
-            Assignment: Object with new status.
+            Assignment: Assignment object with updated fields.
 
         Example:
-            >>> toloka_client.patch_assignment(assignment_id='1', public_comment='Some issues present, but work is acceptable', status='ACCEPTED')
+            >>> toloka_client.patch_assignment(assignment_id='1', public_comment='Accepted. Good job.', status='ACCEPTED')
             ...
         """
         response = self._request('patch', f'/v1/assignments/{assignment_id}', json=unstructure(patch))
@@ -671,21 +667,17 @@ class TolokaClient:
 
     @add_headers('client')
     def reject_assignment(self, assignment_id: str, public_comment: str) -> Assignment:
-        """Marks one assignment as rejected
-
-        Used then your pool created with auto_accept_solutions=False parametr.
+        """Rejects an assignment.
 
         Args:
-            assignment_id: What assignment will be rejected.
-            public_comment: Message to the performer.
+            assignment_id: The ID of the assignment.
+            public_comment: A public comment visible to the performer.
 
         Returns:
-            Assignment: Object with new status.
+            Assignment: Assignment object with updated fields.
 
         Example:
-            Reject an assignment that was completed too fast.
-
-            >>> toloka_client.reject_assignment(assignment_id='1', 'Assignment was completed too fast.')
+            >>> toloka_client.reject_assignment(assignment_id='1', 'Some questions skipped')
             ...
         """
         return self.patch_assignment(assignment_id, public_comment=public_comment, status=Assignment.REJECTED)
@@ -701,7 +693,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found attachments and whether there
         are any more results.
-        It is better to use the "get_attachments" method, they allow to iterate trought all results
+        It is better to use the "get_attachments" method, they allow you to iterate trough all results
         and not just the first output.
 
         Args:
@@ -851,7 +843,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found threads and whether there
         are any more results.
-        It is better to use the "get_message_threads" method, they allow to iterate trought all results
+        It is better to use the "get_message_threads" method, they allow you to iterate through all results
         and not just the first output.
 
         Args:
@@ -1027,7 +1019,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found projects and whether there
         are any more results.
-        It is better to use the "get_projects" method, they allow to iterate trought all results
+        It is better to use the "get_projects" method, they allow you to iterate through all results
         and not just the first output.
 
         Args:
@@ -1431,7 +1423,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found pools and whether there
         are any more results.
-        It is better to use the "get_pools" method, they allow to iterate trought all results
+        It is better to use the "get_pools" method, they allow you to iterate through all results
         and not just the first output.
 
         Args:
@@ -1794,7 +1786,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found trainings and whether there
         are any more results.
-        It is better to use the "get_trainings" method, they allow to iterate trought all results
+        It is better to use the "get_trainings" method, they allow you to iterate through all results
         and not just the first output.
 
         Args:
@@ -1980,7 +1972,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found skills and whether there
         are any more results.
-        It is better to use the "get_skills" method, they allow to iterate trought all results
+        It is better to use the "get_skills" method, they allow you to iterate through all results
         and not just the first output.
 
         Args:
@@ -2478,7 +2470,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found task suites and whether there
         are any more results.
-        It is better to use the "get_task_suites" method, they allow to iterate trought all results
+        It is better to use the "get_task_suites" method, they allow you to iterate through all results
         and not just the first output.
 
         Args:
@@ -2847,7 +2839,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found user bonuses and whether there
         are any more results.
-        It is better to use the "get_user_bonuses" method, they allow to iterate trought all results
+        It is better to use the "get_user_bonuses" method, they allow you to iterate through all results
         and not just the first output.
 
         Args:
@@ -2919,7 +2911,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found user restrictions and whether there
         are any more results.
-        It is better to use the "get_user_restriction" method, they allow to iterate trought all results
+        It is better to use the "get_user_restriction" method, they allow you to iterate through all results
         and not just the first output.
 
         Args:
@@ -3060,7 +3052,7 @@ class TolokaClient:
         UserSkill describe the skill value for a specific performer.
         As a result, it returns an object that contains the first part of the found user skills and whether there
         are any more results.
-        It is better to use the "get_user_skills" method, they allow to iterate trought all results
+        It is better to use the "get_user_skills" method, they allow you to iterate through all results
         and not just the first output.
 
         Args:
@@ -3218,7 +3210,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found webhook-subscriptions
         and whether there are any more results.
-        It is better to use the "get_webhook_subscriptions" method, they allow to iterate through all results
+        It is better to use the "get_webhook_subscriptions" method, they allow you to iterate through all results
         and not just the first output.
 
         Args:
@@ -3316,7 +3308,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found App projects and whether there
         are any more results.
-        It is better to use the "get_app_projects" method, they allow to iterate trought all results
+        It is better to use the "get_app_projects" method, they allow you to iterate through all results
         and not just the first output.
 
         Args:
@@ -3440,7 +3432,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found Apps and whether there
         are any more results.
-        It is better to use the "get_apps" method, they allow to iterate trought all results
+        It is better to use the "get_apps" method, they allow you to iterate through all results
         and not just the first output.
 
         Args:
@@ -3509,7 +3501,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found work items in the App project
         and whether there are any more results.
-        It is better to use the "get_app_items" method, they allow to iterate trought all results
+        It is better to use the "get_app_items" method, they allow you to iterate through all results
         and not just the first output.
 
         Args:
@@ -3617,7 +3609,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found batches in the App project
         and whether there are any more results.
-        It is better to use the "get_app_batches" method, they allow to iterate trought all results
+        It is better to use the "get_app_batches" method, they allow you to iterate through all results
         and not just the first output.
 
         Args:
