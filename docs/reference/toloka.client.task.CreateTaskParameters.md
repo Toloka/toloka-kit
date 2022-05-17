@@ -1,5 +1,5 @@
 # CreateTaskParameters
-`toloka.client.task.CreateTaskParameters` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/task.py#L112)
+`toloka.client.task.CreateTaskParameters` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/task.py#L112)
 
 ```python
 CreateTaskParameters(

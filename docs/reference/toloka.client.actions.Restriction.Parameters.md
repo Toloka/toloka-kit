@@ -1,5 +1,5 @@
 # Parameters
-`toloka.client.actions.Restriction.Parameters` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/actions.py#L52)
+`toloka.client.actions.Restriction.Parameters` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/actions.py#L52)
 
 ```python
 Parameters(

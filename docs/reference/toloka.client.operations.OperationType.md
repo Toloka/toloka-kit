@@ -1,5 +1,5 @@
 # OperationType
-`toloka.client.operations.OperationType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/operations.py#L31)
+`toloka.client.operations.OperationType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/operations.py#L31)
 
 An enumeration.
 

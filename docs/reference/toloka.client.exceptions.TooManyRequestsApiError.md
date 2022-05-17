@@ -1,5 +1,5 @@
 # TooManyRequestsApiError
-`toloka.client.exceptions.TooManyRequestsApiError` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/exceptions.py#L118)
+`toloka.client.exceptions.TooManyRequestsApiError` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/exceptions.py#L118)
 
 ## Parameters Description
 

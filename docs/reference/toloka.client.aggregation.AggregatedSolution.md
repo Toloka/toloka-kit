@@ -1,5 +1,5 @@
 # AggregatedSolution
-`toloka.client.aggregation.AggregatedSolution` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/aggregation.py#L95)
+`toloka.client.aggregation.AggregatedSolution` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/aggregation.py#L95)
 
 ```python
 AggregatedSolution(

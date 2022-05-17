@@ -1,5 +1,5 @@
 # cleanup
-`toloka.streaming.locker.FileLocker.cleanup` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/locker.py#L101)
+`toloka.streaming.locker.FileLocker.cleanup` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/streaming/locker.py#L101)
 
 ```python
 cleanup(self, lock: BaseFileLock)

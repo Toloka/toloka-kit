@@ -1,5 +1,5 @@
 # LinkOpenedConditionV1
-`toloka.client.project.template_builder.conditions.LinkOpenedConditionV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/project/template_builder/conditions.py#L166)
+`toloka.client.project.template_builder.conditions.LinkOpenedConditionV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/template_builder/conditions.py#L166)
 
 ```python
 LinkOpenedConditionV1(

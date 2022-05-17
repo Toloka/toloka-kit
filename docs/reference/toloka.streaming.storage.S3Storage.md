@@ -1,5 +1,5 @@
 # S3Storage
-`toloka.streaming.storage.S3Storage` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/streaming/storage.py#L141)
+`toloka.streaming.storage.S3Storage` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/streaming/storage.py#L141)
 
 ```python
 S3Storage(

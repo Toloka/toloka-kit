@@ -1,5 +1,5 @@
 # TaskSuiteCreateRequestParameters
-`toloka.client.task_suite.TaskSuiteCreateRequestParameters` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/task_suite.py#L77)
+`toloka.client.task_suite.TaskSuiteCreateRequestParameters` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/task_suite.py#L77)
 
 ```python
 TaskSuiteCreateRequestParameters(

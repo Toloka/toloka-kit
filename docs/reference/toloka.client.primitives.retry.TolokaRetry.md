@@ -1,5 +1,5 @@
 # TolokaRetry
-`toloka.client.primitives.retry.TolokaRetry` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/primitives/retry.py#L17)
+`toloka.client.primitives.retry.TolokaRetry` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/primitives/retry.py#L17)
 
 ```python
 TolokaRetry(

@@ -343,7 +343,8 @@ class Pipeline:
                 logger.info('Sleeping for %f seconds', sleep_time)
                 await asyncio.sleep(sleep_time)
 
-            new_observers = self._observers.keys() - {id(worker.observer) for worker in workers}
-            if new_observers:
-                logger.info('New observers found in quantity: %d', len(new_observers))
+            new_observers_ids = self._observers.keys() - {id(worker.observer) for worker in workers}
+            if new_observers_ids:
+                logger.info('New observers found in quantity: %d', len(new_observers_ids))
+                new_observers = (self._observers[id_] for id_ in new_observers_ids)
                 _add_new_observers(new_observers)

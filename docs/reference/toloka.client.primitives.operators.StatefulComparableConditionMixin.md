@@ -1,5 +1,5 @@
 # StatefulComparableConditionMixin
-`toloka.client.primitives.operators.StatefulComparableConditionMixin` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/primitives/operators.py#L145)
+`toloka.client.primitives.operators.StatefulComparableConditionMixin` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/primitives/operators.py#L145)
 
 ## Methods Summary
 

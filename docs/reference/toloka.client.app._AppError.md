@@ -1,5 +1,5 @@
 # _AppError
-`toloka.client.app._AppError` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/app/__init__.py#L19)
+`toloka.client.app._AppError` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/app/__init__.py#L19)
 
 ```python
 _AppError(

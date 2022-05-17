@@ -1,5 +1,5 @@
 # get_line_names
-`toloka.metrics.metrics.Balance.get_line_names` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/metrics/metrics.py#L154)
+`toloka.metrics.metrics.Balance.get_line_names` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/metrics/metrics.py#L154)
 
 ```python
 get_line_names(self)

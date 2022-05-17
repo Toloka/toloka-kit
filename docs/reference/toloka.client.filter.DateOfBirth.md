@@ -1,5 +1,5 @@
 # DateOfBirth
-`toloka.client.filter.DateOfBirth` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.24/src/client/filter.py#L302)
+`toloka.client.filter.DateOfBirth` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/filter.py#L302)
 
 ```python
 DateOfBirth(

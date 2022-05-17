@@ -1,4 +1,10 @@
-0.1.24
+0.1.25
+-------------------
+
+Fixes:
+* Fix add new observers error.
+
+0.1.24 [YANKED]
 -------------------
 
 Fixes:
