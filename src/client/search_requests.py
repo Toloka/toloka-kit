@@ -493,13 +493,13 @@ AssignmentSortItems = BaseSortItems.for_fields(
 
 
 class AggregatedSolutionSearchRequest(BaseSearchRequest):
-    """Parameters for searching aggregated solution
+    """Parameters for filtering aggregated responses.
 
     Attributes:
-        task_id_lt: Jobs with an ID greater than the specified value.
-        task_id_lte: Jobs with an ID greater than or equal to the specified value.
-        task_id_gt: Jobs with an ID less than the specified value.
-        task_id_gte: Jobs with an ID less than or equal to the specified value.
+        task_id_lt: Tasks with an ID less than the specified value.
+        task_id_lte: Tasks with an ID less than or equal to the specified value.
+        task_id_gt: Tasks with an ID greater than the specified value.
+        task_id_gte: Tasks with an ID greater than or equal to the specified value.
     """
 
     class CompareFields:
@@ -509,13 +509,13 @@ class AggregatedSolutionSearchRequest(BaseSearchRequest):
 AggregatedSolutionSortItems = BaseSortItems.for_fields(
     'AggregatedSolutionSortItems', ['task_id'],
     # docstring
-    """Parameters for sorting aggregated solution search results
+    """Parameters for sorting aggregated solution search results.
 
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    To sort in descending order add a hyphen before the parameter. For example, `sort=-task_id`.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * task_id - In ascending order.
+        items: Possible values:
+            * `task_id` - Sort by a task ID in ascending order.
     """
 )
 

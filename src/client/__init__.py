@@ -406,35 +406,33 @@ class TolokaClient:
         self,
         request: aggregation.PoolAggregatedSolutionRequest
     ) -> operations.AggregatedSolutionOperation:
-        """Starts aggregation of solutions in the pool
+        """Starts aggregation of responses in all completed tasks in a pool.
 
-        Responses to all completed tasks will be aggregated.
-        The method only starts the aggregation and returns the operation for further tracking.
+        The method starts the aggregation process on the Toloka server. To wait for the completion of the operation use the [wait_operation](toloka.client.TolokaClient.wait_operation) method.
 
         {% note info %}
 
-        In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
-        that have more aggregation methods and can perform on your computers.
+        Try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit). It has many aggregation methods and executes on your computer.
 
         {% endnote %}
 
         Args:
-            request: Parameters describing in which pool to aggregate solutions and by what rules.
+            request: Parameters describing in which pool to aggregate responses and by what rules.
 
         Returns:
-            operations.AggregatedSolutionOperation: An operation upon completion of which you can get the results of the aggregation.
+            operations.AggregatedSolutionOperation: An object to track the progress of the operation.
 
         Example:
-            How to start aggregating solutions by pool.
+            The example shows how to aggregate responses in a pool.
 
             >>> aggregation_operation = toloka_client.aggregate_solutions_by_pool(
             >>>         type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
-            >>>         pool_id=some_existing_pool_id,   # Aggregate in this pool
-            >>>         answer_weight_skill_id=some_skill_id,   # Aggregate by this skill
-            >>>         fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]  # Aggregate this field
+            >>>         pool_id=some_existing_pool_id,
+            >>>         answer_weight_skill_id=some_skill_id,
+            >>>         fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
             >>>     )
             >>> aggregation_operation = toloka_client.wait_operation(aggregation_operation)
-            >>> # Now you can call "find_aggregated_solutions"
+            >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
             ...
         """
         data = unstructure(request)
@@ -444,27 +442,31 @@ class TolokaClient:
     @expand('request')
     @add_headers('client')
     def aggregate_solutions_by_task(self, request: aggregation.WeightedDynamicOverlapTaskAggregatedSolutionRequest) -> AggregatedSolution:
-        """Starts aggregation of solutions to a single task
+        """Aggregates responses to a single task on the Toloka server.
 
-        The method only starts the aggregation and returns the operation for further tracking.
+        {% note info %}
+
+        Try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit). It has many aggregation methods and executes on your computer.
+
+        {% endnote %}
 
         Args:
-            request: Parameters describing on which task to aggregate solutions and by what rules.
+            request: Aggregation parameters.
 
         Returns:
-            AggregatedSolution: Result of aggregation. Also contains input parameters and result confidence.
+            AggregatedSolution: Aggregated response.
 
         Example:
-            How to aggregate solutions to a task.
+            The example shows how to aggregate responses to a single task.
 
-            >>> aggregation_operation = toloka_client.aggregate_solutions_by_task(
+            >>> aggregated_response = toloka_client.aggregate_solutions_by_task(
             >>>         type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
-            >>>         pool_id=some_existing_pool_id,   # Task in this pool
-            >>>         task_id=some_existing_task_id,   # Aggregate on this task
-            >>>         answer_weight_skill_id=some_skill_id,   # Aggregate by this skill
-            >>>         fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]  # Aggregate this field
+            >>>         pool_id=some_existing_pool_id,
+            >>>         task_id=some_existing_task_id,
+            >>>         answer_weight_skill_id=some_skill_id,
+            >>>         fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
             >>>     )
-            >>> print(aggregation_operation.output_values['result'])
+            >>> print(aggregated_response.output_values['result'])
             ...
         """
         response = self._request('post', '/v1/aggregated-solutions/aggregate-by-task', json=unstructure(request))
@@ -475,37 +477,34 @@ class TolokaClient:
     def find_aggregated_solutions(self, operation_id: str, request: search_requests.AggregatedSolutionSearchRequest,
                                   sort: Union[List[str], search_requests.AggregatedSolutionSortItems, None] = None,
                                   limit: Optional[int] = None) -> search_results.AggregatedSolutionSearchResult:
-        """Gets aggregated responses after the AggregatedSolutionOperation completes.
-        It is better to use the "get_aggregated_solutions" method, that allows to iterate through all results.
+        """Gets aggregated responses from Toloka that match certain criteria.
 
-        {% note info %}
+        Pass to the `find_aggregated_solutions` the ID of the operation started by the [aggregate_solutions_by_pool](toloka.client.TolokaClient.aggregate_solutions_by_pool.md) method.
 
-        In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
-        that have more aggregation methods and can perform on your computers.
-
-        {% endnote %}
+        The number of returned aggregated responses is limited. To find remaining matching responses, call `find_aggregated_solutions` with updated filter criteria.
+        
+        To iterate over all aggregated responses in one call use [get_aggregated_solutions](toloka.client.TolokaClient.get_aggregated_solutions.md).
 
         Args:
-            operation_id: From what aggregation operation you want to get results.
-            request: How to filter search results.
-            sort: How to sort results. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 100,000.
-                Defaults to None, in which case it returns first 50 results.
+            operation_id: The ID of the aggregation operation.
+            request: Filter criteria.
+            sort: Sorting options. Default value: `None`.
+            limit: Returned aggregated responses limit. The maximum value is 100,000. Default value: 50.
 
         Returns:
-            search_results.AggregatedSolutionSearchResult: The first `limit` solutions in `items`. And a mark that there is more.
+            search_results.AggregatedSolutionSearchResult: Found responses and a flag showing whether there are more matching responses.
 
         Example:
-            How to get all aggregated solutions from pool.
+            The example shows how to get all aggregated responses using the `find_aggregated_solutions` method.
 
-            >>> # run toloka_client.aggregate_solutions_by_pool and wait operation for closing.
+            >>> # run toloka_client.aggregate_solutions_by_pool and wait operation to complete.
             >>> current_result = toloka_client.find_aggregated_solutions(aggregation_operation.id)
             >>> aggregation_results = current_result.items
             >>> # If we have more results, let's get them
             >>> while current_result.has_more:
             >>>     current_result = toloka_client.find_aggregated_solutions(
             >>>         aggregation_operation.id,
-            >>>         task_id_gt=current_result.items[len(current_result.items) - 1].task_id,
+            >>>         task_id_gt=current_result.items[-1].task_id,
             >>>     )
             >>>     aggregation_results = aggregation_results + current_result.items
             >>> print(len(aggregation_results))
@@ -521,26 +520,35 @@ class TolokaClient:
         self,
         operation_id: str, request: search_requests.AggregatedSolutionSearchRequest
     ) -> Generator[AggregatedSolution, None, None]:
-        """Finds all aggregated responses after the AggregatedSolutionOperation completes
+        """Returns a generator that allows you to iterate over all aggregated responses.
 
+        Pass to the `get_aggregated_solutions` the ID of the operation started by the [aggregate_solutions_by_pool](toloka.client.TolokaClient.aggregate_solutions_by_pool.md) method.
+        Use the returned generator to iterate over aggregated responses.
+        Note that several calls to the Toloka API may be done while iterating.
+        
         {% note info %}
 
-        In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
-        that have more aggregation methods and can perform on your computers.
+        Try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit). It has many aggregation methods and executes on your computer.
 
         {% endnote %}
 
         Args:
-            operation_id: From what aggregation operation you want to get results.
-            request: How to filter search results.
+            operation_id: The ID of the aggregation operation.
+            request: Result filters.
 
         Yields:
-            AggregatedSolution: The next object corresponding to the request parameters.
+            AggregatedSolution: The next aggregated response matching the filter parameters.
 
         Example:
-            How to get all aggregated solutions from pool.
+            The example shows how to aggregate responses in a pool.
 
-            >>> # run toloka_client.aggregate_solutions_by_pool and wait operation for closing.
+            >>> aggregation_operation = toloka_client.aggregate_solutions_by_pool(
+            >>>         type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
+            >>>         pool_id=some_existing_pool_id,
+            >>>         answer_weight_skill_id=some_skill_id,
+            >>>         fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
+            >>>     )
+            >>> aggregation_operation = toloka_client.wait_operation(aggregation_operation)
             >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
             ...
         """
