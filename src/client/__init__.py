@@ -408,9 +408,9 @@ class TolokaClient:
     ) -> operations.AggregatedSolutionOperation:
         """Starts aggregation of responses in all completed tasks in a pool.
 
-        The method starts the aggregation process on the Toloka server. To wait for the completion of the operation use the [wait_operation](toloka.client.TolokaClient.wait_operation) method.
+        The method starts the aggregation process on the Toloka server. To wait for the completion of the operation use the [wait_operation](toloka.client.TolokaClient.wait_operation.md) method.
 
-        {% note info %}
+        {% note tip %}
 
         Try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit). It has many aggregation methods and executes on your computer.
 
@@ -444,7 +444,7 @@ class TolokaClient:
     def aggregate_solutions_by_task(self, request: aggregation.WeightedDynamicOverlapTaskAggregatedSolutionRequest) -> AggregatedSolution:
         """Aggregates responses to a single task on the Toloka server.
 
-        {% note info %}
+        {% note tip %}
 
         Try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit). It has many aggregation methods and executes on your computer.
 
@@ -497,7 +497,7 @@ class TolokaClient:
         Example:
             The example shows how to get all aggregated responses using the `find_aggregated_solutions` method.
 
-            >>> # run toloka_client.aggregate_solutions_by_pool and wait operation to complete.
+            >>> # run toloka_client.aggregate_solutions_by_pool and wait for the operation to complete.
             >>> current_result = toloka_client.find_aggregated_solutions(aggregation_operation.id)
             >>> aggregation_results = current_result.items
             >>> # If we have more results, let's get them
@@ -526,7 +526,7 @@ class TolokaClient:
         Use the returned generator to iterate over aggregated responses.
         Note that several calls to the Toloka API may be done while iterating.
         
-        {% note info %}
+        {% note tip %}
 
         Try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit). It has many aggregation methods and executes on your computer.
 
@@ -568,7 +568,7 @@ class TolokaClient:
             public_comment: A comment visible to the performer.
 
         Returns:
-            Assignment: The assignment object with updated status field.
+            Assignment: The assignment object with the updated status field.
 
         Example:
             Accepting an assignment.
@@ -701,7 +701,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found attachments and whether there
         are any more results.
-        It is better to use the "get_attachments" method, they allow you to iterate trough all results
+        It is better to use the [get_attachments](toloka.client.TolokaClient.get_attachments.md) method, it allows you to iterate trough all results
         and not just the first output.
 
         Args:
@@ -719,7 +719,7 @@ class TolokaClient:
             >>> toloka_client.find_attachments(pool_id='1', sort=['-created', '-id'], limit=10)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.AttachmentSortItems)
         response = self._search_request('get', '/v1/attachments', request, sort, limit)
@@ -851,7 +851,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found threads and whether there
         are any more results.
-        It is better to use the "get_message_threads" method, they allow you to iterate through all results
+        It is better to use the [get_message_threads](toloka.client.TolokaClient.get_message_threads.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
@@ -1027,7 +1027,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found projects and whether there
         are any more results.
-        It is better to use the "get_projects" method, they allow you to iterate through all results
+        It is better to use the [get_projects](toloka.client.TolokaClient.get_projects.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
@@ -1046,7 +1046,7 @@ class TolokaClient:
             >>> toloka_client.find_projects(created_lt='2021-06-01T00:00:00')
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.ProjectSortItems)
         response = self._search_request('get', '/v1/projects', request, sort, limit)
@@ -1431,7 +1431,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found pools and whether there
         are any more results.
-        It is better to use the "get_pools" method, they allow you to iterate through all results
+        It is better to use the [get_pools](toloka.client.TolokaClient.get_pools.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
@@ -1460,7 +1460,7 @@ class TolokaClient:
             >>> toloka_client.find_pools(status='OPEN', project_id='1')
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.PoolSortItems)
         response = self._search_request('get', '/v1/pools', request, sort, limit)
@@ -1794,7 +1794,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found trainings and whether there
         are any more results.
-        It is better to use the "get_trainings" method, they allow you to iterate through all results
+        It is better to use the [get_trainings](toloka.client.TolokaClient.get_trainings.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
@@ -1822,7 +1822,7 @@ class TolokaClient:
             >>> toloka_client.find_trainings(status='OPEN', project_id='1')
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.TrainingSortItems)
         response = self._search_request('get', '/v1/trainings', request, sort, limit)
@@ -1980,7 +1980,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found skills and whether there
         are any more results.
-        It is better to use the "get_skills" method, they allow you to iterate through all results
+        It is better to use the [get_skills](toloka.client.TolokaClient.get_skills.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
@@ -1998,7 +1998,7 @@ class TolokaClient:
             >>> toloka_client.find_skills(sort=['-created', '-id'], limit=10)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.SkillSortItems)
         response = self._search_request('get', '/v1/skills', request, sort, limit)
@@ -2478,7 +2478,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found task suites and whether there
         are any more results.
-        It is better to use the "get_task_suites" method, they allow you to iterate through all results
+        It is better to use the [get_task_suites](toloka.client.TolokaClient.get_task_suites.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
@@ -2496,7 +2496,7 @@ class TolokaClient:
             >>> toloka_client.find_task_suites(pool_id='1', sort=['-created', '-id'], limit=3)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.TaskSuiteSortItems)
         response = self._search_request('get', '/v1/task-suites', request, sort, limit)
@@ -2847,7 +2847,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found user bonuses and whether there
         are any more results.
-        It is better to use the "get_user_bonuses" method, they allow you to iterate through all results
+        It is better to use the [get_user_bonuses](toloka.client.TolokaClient.get_user_bonuses.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
@@ -2863,7 +2863,7 @@ class TolokaClient:
             >>> toloka_client.find_user_bonuses(user_id='1', sort=['-created', '-id'], limit=3)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.UserBonusSortItems)
         response = self._search_request('get', '/v1/user-bonuses', request, sort, limit)
@@ -2919,7 +2919,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found user restrictions and whether there
         are any more results.
-        It is better to use the "get_user_restriction" method, they allow you to iterate through all results
+        It is better to use the [get_user_restriction](toloka.client.TolokaClient.get_user_restriction.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
@@ -2935,7 +2935,7 @@ class TolokaClient:
             >>> toloka_client.find_user_restrictions(sort=['-created', '-id'], limit=10)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.UserRestrictionSortItems)
         response = self._search_request('get', '/v1/user-restrictions', request, sort, limit)
@@ -3060,7 +3060,7 @@ class TolokaClient:
         UserSkill describe the skill value for a specific performer.
         As a result, it returns an object that contains the first part of the found user skills and whether there
         are any more results.
-        It is better to use the "get_user_skills" method, they allow you to iterate through all results
+        It is better to use the [get_user_skills](toloka.client.TolokaClient.get_user_skills.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
@@ -3076,7 +3076,7 @@ class TolokaClient:
             >>> toloka_client.find_user_skills(limit=10)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.UserSkillSortItems)
         response = self._search_request('get', '/v1/user-skills', request, sort, limit)
@@ -3218,7 +3218,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found webhook-subscriptions
         and whether there are any more results.
-        It is better to use the "get_webhook_subscriptions" method, they allow you to iterate through all results
+        It is better to use the [get_webhook_subscriptions](toloka.client.TolokaClient.get_webhook_subscriptions.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
@@ -3316,7 +3316,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found App projects and whether there
         are any more results.
-        It is better to use the "get_app_projects" method, they allow you to iterate through all results
+        It is better to use the [get_app_projects](toloka.client.TolokaClient.get_app_projects.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
@@ -3440,7 +3440,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found Apps and whether there
         are any more results.
-        It is better to use the "get_apps" method, they allow you to iterate through all results
+        It is better to use the [get_apps](toloka.client.TolokaClient.get_apps.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
@@ -3509,7 +3509,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found work items in the App project
         and whether there are any more results.
-        It is better to use the "get_app_items" method, they allow you to iterate through all results
+        It is better to use the [get_app_items](toloka.client.TolokaClient.get_app_items.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
@@ -3617,7 +3617,7 @@ class TolokaClient:
 
         As a result, it returns an object that contains the first part of the found batches in the App project
         and whether there are any more results.
-        It is better to use the "get_app_batches" method, they allow you to iterate through all results
+        It is better to use the [get_app_batches](toloka.client.TolokaClient.get_app_batches.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:

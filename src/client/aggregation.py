@@ -32,8 +32,8 @@ class PoolAggregatedSolutionRequest(BaseTolokaObject):
 
     Attributes:
         type: Aggregation model:
-            `WEIGHTED_DYNAMIC_OVERLAP` — [Aggregation](https://toloka.ai/docs/guide/concepts/result-aggregation.html#aggr__aggr-by-skill) based on performers' skill in a pool with a dynamic overlap.
-            `DAWID_SKENE` — [Dawid-Skene aggregation model](https://toloka.ai/docs/guide/concepts/result-aggregation.html#aggr__dawid-skene). It is used in pools without a dynamic overlap.
+            * `WEIGHTED_DYNAMIC_OVERLAP` — [Aggregation](https://toloka.ai/docs/guide/concepts/result-aggregation.html#aggr__aggr-by-skill) based on performers' skill in a pool with a dynamic overlap.
+            * `DAWID_SKENE` — [Dawid-Skene aggregation model](https://toloka.ai/docs/guide/concepts/result-aggregation.html#aggr__dawid-skene). It is used in pools without a dynamic overlap.
         pool_id: The ID of the pool.
         answer_weight_skill_id: The ID of the skill that determines the weight of the performer's responses.
         fields: Output data fields to aggregate. For the best results, each of these fields should have limited number of response options.
@@ -65,7 +65,7 @@ class WeightedDynamicOverlapTaskAggregatedSolutionRequest(
     TaskAggregatedSolutionRequest,
     spec_value=AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP
 ):
-    """Parameters to run weighted aggregation for a single task with dynamic overlap.
+    """Parameters to run weighted aggregation for a single task with a dynamic overlap.
 
     Attributes:
         answer_weight_skill_id: The ID of the skill that determines the weight of the performer's responses.
