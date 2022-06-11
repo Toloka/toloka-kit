@@ -25,7 +25,18 @@ import toloka.util._extendable_enum
 import typing
 
 
-class BaseFieldV1(toloka.client.project.template_builder.base.BaseComponent):
+class BaseFieldV1Metaclass(toloka.client.project.template_builder.base.VersionedBaseComponentMetaclass):
+    @staticmethod
+    def __new__(
+        mcs,
+        name,
+        bases,
+        namespace,
+        **kwargs
+    ): ...
+
+
+class BaseFieldV1(toloka.client.project.template_builder.base.BaseComponent, metaclass=BaseFieldV1Metaclass):
     """Fields for entering data, such as a text field or drop-down list.
 
     Attributes:

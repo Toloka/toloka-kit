@@ -30,9 +30,10 @@ from ..client import (
 from ..util._managing_headers import async_add_headers
 from ..util.async_utils import Cooldown
 from ..streaming import cursor
+from ..streaming.cursor import TolokaClientSyncOrAsyncType
 
 
-def bind_client(metrics: List['BaseMetric'], toloka_client: TolokaClient) -> None:
+def bind_client(metrics: List['BaseMetric'], toloka_client: TolokaClientSyncOrAsyncType) -> None:
     """Sets/updates toloka_client for all metrics in list.
 
     Examples:
@@ -60,7 +61,9 @@ def bind_client(metrics: List['BaseMetric'], toloka_client: TolokaClient) -> Non
     for metric in metrics:
         if not isinstance(metric, BaseMetric):
             raise TypeError(f'One of element is not instance of BaseMetric: "{metric}"')
-        metric.toloka_client = toloka_client
+        if isinstance(toloka_client, TolokaClient):
+            toloka_client = AsyncTolokaClient.from_sync_client(toloka_client)
+        metric.set_client(toloka_client)
 
 
 @attr.s(auto_attribs=True)
@@ -70,12 +73,28 @@ class BaseMetric:
     Stores TolokaClient instance for this metric.
     """
     toloka_client: TolokaClient = attr.ib(kw_only=True, default=None)
+    atoloka_client: AsyncTolokaClient = attr.ib(kw_only=True, default=None)
     timeout: datetime.timedelta = attr.ib(kw_only=True, factory=lambda: datetime.timedelta(seconds=10))
 
-    @cached_property
-    def atoloka_client(self):
-        assert self.toloka_client is not None
-        return AsyncTolokaClient.from_sync_client(self.toloka_client)
+    def __attrs_post_init__(self):
+        assert not (self.toloka_client and self.atoloka_client),\
+            f"TolokaClient and AsyncTolokaClient can't be provided to {type(self)} at the same time. " \
+            f"Please provide either TolokaClient or AsyncTolokaClient (the other client will be implicitly created)."
+        if self.toloka_client or self.atoloka_client:
+            self.set_client(self.toloka_client or self.atoloka_client)
+
+    def set_client(self, toloka_client: TolokaClientSyncOrAsyncType):
+        """Sets both TolokaClient and AsyncTolokaClient for the object.
+
+        New instance of AsyncTolokaClient is created is case of TolokaClient being passed.
+        """
+
+        if isinstance(toloka_client, TolokaClient):
+            self.toloka_client = toloka_client
+            self.atoloka_client = AsyncTolokaClient.from_sync_client(toloka_client)
+        else:
+            self.toloka_client = toloka_client.sync_client
+            self.atoloka_client = toloka_client
 
     @async_add_headers('metrics')
     async def get_lines(self) -> Dict[str, List[Tuple[Any, Any]]]:
@@ -149,6 +168,7 @@ class Balance(BaseMetric):
     balance_name: Optional[str] = None
 
     def __attrs_post_init__(self):
+        super().__attrs_post_init__()
         if self.balance_name is None:
             self.balance_name = 'toloka_requester_balance'
 
@@ -190,6 +210,7 @@ class NewUserBonuses(BaseMetric):
     _join_events: bool = False
 
     def __attrs_post_init__(self):
+        super().__attrs_post_init__()
         metric_names = self.get_line_names()
         if not metric_names:
             self._count_name = 'bonus_count'
@@ -275,6 +296,7 @@ class NewUserSkills(BaseMetric):
     _join_events: bool = False
 
     def __attrs_post_init__(self):
+        super().__attrs_post_init__()
         metric_names = self.get_line_names()
         if not metric_names:
             self._value_name = 'skill_values'
@@ -368,6 +390,7 @@ class NewMessageThreads(BaseMetric):
     _join_events: bool = False
 
     def __attrs_post_init__(self):
+        super().__attrs_post_init__()
         metric_names = self.get_line_names()
         if not metric_names:
             self._count_name = 'messages_count'

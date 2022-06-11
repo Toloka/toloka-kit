@@ -1,4 +1,5 @@
 import datetime
+from copy import deepcopy
 from operator import itemgetter
 from urllib.parse import urlparse, parse_qs
 
@@ -49,9 +50,7 @@ def compose_details_direct_map():
 def compose_details_filter_map():
     return {
         'recipients_select_type': 'FILTER',
-        'recipients_filter': {'and': [
-            {'category': 'skill', 'key': '2022', 'operator': 'GT', 'value': 90},
-        ]},
+        'recipients_filter':  {'category': 'skill', 'key': '2022', 'operator': 'GT', 'value': 90}
     }
 
 
@@ -223,6 +222,8 @@ def test_compose_thread_filter(requests_mock, toloka_client, toloka_url, message
         'text': {'EN': 'Message text'},
         **compose_details_filter_map
     }
+    expected_request = deepcopy(raw_request)
+    expected_request['recipients_filter'] = {'and': [expected_request['recipients_filter']]}
     raw_result = {**message_thread_base_map, 'compose_details': compose_details_filter_map}
 
     def message_threads(request, context):
@@ -233,7 +234,7 @@ def test_compose_thread_filter(requests_mock, toloka_client, toloka_url, message
         }
         check_headers(request, expected_headers)
 
-        assert raw_request == request.json()
+        assert expected_request == request.json()
         return raw_result
 
     requests_mock.post(f'{toloka_url}/message-threads/compose', json=message_threads, status_code=201)

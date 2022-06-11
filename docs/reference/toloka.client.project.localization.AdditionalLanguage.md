@@ -1,5 +1,5 @@
 # AdditionalLanguage
-`toloka.client.project.localization.AdditionalLanguage` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/localization.py#L11)
+`toloka.client.project.localization.AdditionalLanguage` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/localization.py#L11)
 
 ```python
 AdditionalLanguage(

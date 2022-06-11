@@ -114,10 +114,18 @@ class BaseSortItems(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class SearchRequestMetaclass(toloka.client.primitives.base.BaseTolokaObjectMetaclass):
-    ...
+    @staticmethod
+    def __new__(
+        mcs,
+        name,
+        bases,
+        namespace,
+        kw_only=False,
+        **kwargs
+    ): ...
 
 
-class BaseSearchRequest(toloka.client.primitives.base.BaseTolokaObject):
+class BaseSearchRequest(toloka.client.primitives.base.BaseTolokaObject, metaclass=SearchRequestMetaclass):
     """Base class for all search request classes
     """
 
@@ -1397,6 +1405,7 @@ class UserBonusSearchRequest(BaseSearchRequest):
 
     Attributes:
         user_id: Performer ID.
+        assignment_id: ID of the performer's response to the task a reward is issued for.
         private_comment: Comments for the requester.
         id_lt: Bonuses with an ID less than the specified value.
         id_lte: Bonuses with an ID less than or equal to the specified value.
@@ -1415,6 +1424,7 @@ class UserBonusSearchRequest(BaseSearchRequest):
     def __init__(
         self,
         user_id: typing.Optional[str] = None,
+        assignment_id: typing.Optional[str] = None,
         private_comment: typing.Optional[str] = None,
         id_lt: typing.Optional[str] = None,
         id_lte: typing.Optional[str] = None,
@@ -1431,6 +1441,7 @@ class UserBonusSearchRequest(BaseSearchRequest):
 
     _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     user_id: typing.Optional[str]
+    assignment_id: typing.Optional[str]
     private_comment: typing.Optional[str]
     id_lt: typing.Optional[str]
     id_lte: typing.Optional[str]

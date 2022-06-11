@@ -1,5 +1,5 @@
 # Source
-`toloka.client.project.localization.AdditionalLanguage.FieldTranslation.Source` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/localization.py#L29)
+`toloka.client.project.localization.AdditionalLanguage.FieldTranslation.Source` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/localization.py#L29)
 
 Possible values of sources
 

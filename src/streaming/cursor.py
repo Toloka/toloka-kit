@@ -18,6 +18,7 @@ from datetime import datetime
 from typing import Any, AsyncIterator, Awaitable, Callable, Iterator, List, Optional, Set, Tuple, Union
 from typing_extensions import Protocol
 
+from ..async_client import AsyncTolokaClient
 from ..client import (
     Assignment,
     MessageThread,
@@ -34,7 +35,7 @@ from ..client import (
 from ..client.search_requests import BaseSearchRequest
 from ..util._codegen import fix_attrs_converters
 from .event import AssignmentEvent, BaseEvent, MessageThreadEvent, TaskEvent, UserBonusEvent, UserRestrictionEvent, UserSkillEvent
-from ..util.async_utils import AsyncMultithreadWrapper, ensure_async
+from ..util.async_utils import ensure_async
 
 
 class ResponseObjectType(Protocol):
@@ -42,7 +43,7 @@ class ResponseObjectType(Protocol):
     has_more: Optional[bool]
 
 
-TolokaClientSyncOrAsyncType = Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]]
+TolokaClientSyncOrAsyncType = Union[TolokaClient, AsyncTolokaClient]
 
 DATETIME_MIN = datetime.fromtimestamp(0)
 

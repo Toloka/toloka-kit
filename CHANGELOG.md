@@ -1,3 +1,7 @@
+0.1.26
+-------------------
+* Added `toloka.autoquality` - a tool for autogeneration of quality control rules
+
 0.1.25
 -------------------
 

@@ -1,5 +1,5 @@
 # Interval
-`toloka.client.pool.dynamic_pricing_config.DynamicPricingConfig.Interval` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/pool/dynamic_pricing_config.py#L25)
+`toloka.client.pool.dynamic_pricing_config.DynamicPricingConfig.Interval` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/pool/dynamic_pricing_config.py#L25)
 
 ```python
 Interval(

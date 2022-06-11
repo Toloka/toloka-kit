@@ -1,5 +1,5 @@
 # UserAgentFamily
-`toloka.client.filter.UserAgentFamily` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/filter.py#L573)
+`toloka.client.filter.UserAgentFamily` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/filter.py#L573)
 
 ```python
 UserAgentFamily(

@@ -1765,8 +1765,7 @@ class TolokaClient:
             >>> toloka_client.find_pools(status='OPEN', project_id='1')
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an
-            indicator `has_more=True`.
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
@@ -1823,8 +1822,7 @@ class TolokaClient:
             >>> toloka_client.find_pools(status='OPEN', project_id='1')
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an
-            indicator `has_more=True`.
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
@@ -2482,8 +2480,7 @@ class TolokaClient:
             >>> toloka_client.find_skills(sort=['-created', '-id'], limit=10)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator
-            `has_more=True`.
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
@@ -2524,8 +2521,7 @@ class TolokaClient:
             >>> toloka_client.find_skills(sort=['-created', '-id'], limit=10)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator
-            `has_more=True`.
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
@@ -2731,7 +2727,7 @@ class TolokaClient:
 
         Returns:
             batch_create_results.TaskBatchCreateResult: An object with created tasks in `items` and invalid tasks in
-            `validation_errors`.
+                `validation_errors`.
 
         Raises:
             ValidationApiError: If no tasks were created, or skip_invalid_items==False and there is a problem when
@@ -2793,7 +2789,7 @@ class TolokaClient:
 
         Returns:
             batch_create_results.TaskBatchCreateResult: An object with created tasks in `items` and invalid tasks in
-            `validation_errors`.
+                `validation_errors`.
 
         Raises:
             ValidationApiError: If no tasks were created, or skip_invalid_items==False and there is a problem when
@@ -2986,8 +2982,7 @@ class TolokaClient:
     def get_tasks(self, request: toloka.client.search_requests.TaskSearchRequest) -> typing.Generator[toloka.client.task.Task, None, None]:
         """Finds all tasks that match certain criteria.
 
-        `get_tasks` returns a generator and you can iterate over all found tasks. Several requests to the Toloka server
-        are possible while iterating.
+        `get_tasks` returns a generator and you can iterate over all found tasks. Several requests to the Toloka server are possible while iterating.
 
         Note that tasks can not be sorted. If you need to sort tasks use [find_tasks](toloka.client.TolokaClient.find_tasks.md).
 
@@ -3025,8 +3020,7 @@ class TolokaClient:
     ) -> typing.Generator[toloka.client.task.Task, None, None]:
         """Finds all tasks that match certain criteria.
 
-        `get_tasks` returns a generator and you can iterate over all found tasks. Several requests to the Toloka server
-        are possible while iterating.
+        `get_tasks` returns a generator and you can iterate over all found tasks. Several requests to the Toloka server are possible while iterating.
 
         Note that tasks can not be sorted. If you need to sort tasks use [find_tasks](toloka.client.TolokaClient.find_tasks.md).
 
@@ -3068,7 +3062,9 @@ class TolokaClient:
         *,
         overlap: typing.Optional[int] = None,
         infinite_overlap: typing.Optional[bool] = None,
-        baseline_solutions: typing.Optional[typing.List[toloka.client.task.Task.BaselineSolution]] = None
+        baseline_solutions: typing.Optional[typing.List[toloka.client.task.Task.BaselineSolution]] = None,
+        known_solutions: typing.Optional[typing.List[toloka.client.task.BaseTask.KnownSolution]] = None,
+        message_on_unknown_solution: typing.Optional[str] = None
     ) -> toloka.client.task.Task:
         """Changes a task overlap value.
 
@@ -3417,8 +3413,7 @@ class TolokaClient:
             >>> toloka_client.find_task_suites(pool_id='1', sort=['-created', '-id'], limit=3)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator
-            `has_more=True`.
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
@@ -3465,8 +3460,7 @@ class TolokaClient:
             >>> toloka_client.find_task_suites(pool_id='1', sort=['-created', '-id'], limit=3)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator
-            `has_more=True`.
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
@@ -4029,8 +4023,7 @@ class TolokaClient:
             >>> toloka_client.find_user_bonuses(user_id='1', sort=['-created', '-id'], limit=3)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator
-            `has_more=True`.
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
@@ -4038,6 +4031,7 @@ class TolokaClient:
     def find_user_bonuses(
         self,
         user_id: typing.Optional[str] = None,
+        assignment_id: typing.Optional[str] = None,
         private_comment: typing.Optional[str] = None,
         id_lt: typing.Optional[str] = None,
         id_lte: typing.Optional[str] = None,
@@ -4070,8 +4064,7 @@ class TolokaClient:
             >>> toloka_client.find_user_bonuses(user_id='1', sort=['-created', '-id'], limit=3)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator
-            `has_more=True`.
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
@@ -4113,6 +4106,7 @@ class TolokaClient:
     def get_user_bonuses(
         self,
         user_id: typing.Optional[str] = None,
+        assignment_id: typing.Optional[str] = None,
         private_comment: typing.Optional[str] = None,
         id_lt: typing.Optional[str] = None,
         id_lte: typing.Optional[str] = None,
@@ -4366,8 +4360,7 @@ class TolokaClient:
             >>> toloka_client.find_user_skills(limit=10)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator
-            `has_more=True`.
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
@@ -4412,8 +4405,7 @@ class TolokaClient:
             >>> toloka_client.find_user_skills(limit=10)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator
-            `has_more=True`.
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 

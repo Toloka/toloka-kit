@@ -1,5 +1,5 @@
 # PreloadingHTTPAdapter
-`toloka.client.primitives.retry.PreloadingHTTPAdapter` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/primitives/retry.py#L88)
+`toloka.client.primitives.retry.PreloadingHTTPAdapter` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/primitives/retry.py#L88)
 
 HTTPAdapter subclass that forces preload_content=True during requests
 

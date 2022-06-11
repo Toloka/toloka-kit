@@ -1,5 +1,5 @@
 # TextAnnotationFieldV1
-`toloka.client.project.template_builder.fields.TextAnnotationFieldV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/template_builder/fields.py#L494)
+`toloka.client.project.template_builder.fields.TextAnnotationFieldV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/fields.py#L494)
 
 ```python
 TextAnnotationFieldV1(

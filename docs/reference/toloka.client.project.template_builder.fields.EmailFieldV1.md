@@ -1,5 +1,5 @@
 # EmailFieldV1
-`toloka.client.project.template_builder.fields.EmailFieldV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/template_builder/fields.py#L214)
+`toloka.client.project.template_builder.fields.EmailFieldV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/fields.py#L214)
 
 ```python
 EmailFieldV1(

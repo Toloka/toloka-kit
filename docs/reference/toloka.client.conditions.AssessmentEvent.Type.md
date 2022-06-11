@@ -1,5 +1,5 @@
 # Type
-`toloka.client.conditions.AssessmentEvent.Type` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/conditions.py#L124)
+`toloka.client.conditions.AssessmentEvent.Type` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/conditions.py#L124)
 
 An enumeration.
 

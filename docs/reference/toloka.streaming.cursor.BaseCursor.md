@@ -1,10 +1,10 @@
 # BaseCursor
-`toloka.streaming.cursor.BaseCursor` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/streaming/cursor.py#L76)
+`toloka.streaming.cursor.BaseCursor` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/streaming/cursor.py#L77)
 
 ```python
 BaseCursor(
     self,
-    toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
+    toloka_client: Union[TolokaClient, AsyncTolokaClient],
     request: BaseSearchRequest
 )
 ```

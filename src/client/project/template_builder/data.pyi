@@ -11,7 +11,18 @@ import toloka.client.project.template_builder.base
 import typing
 
 
-class BaseData(toloka.client.project.template_builder.base.BaseComponent):
+class BaseDataMetaclass(toloka.client.project.template_builder.base.BaseTemplateMetaclass):
+    @staticmethod
+    def __new__(
+        mcs,
+        name,
+        bases,
+        namespace,
+        **kwargs
+    ): ...
+
+
+class BaseData(toloka.client.project.template_builder.base.BaseComponent, metaclass=BaseDataMetaclass):
     """Components used for working with data: input, output, or intermediate.
 
     Attributes:

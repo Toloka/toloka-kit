@@ -144,7 +144,7 @@ from .user_bonus import UserBonus, UserBonusCreateRequestParameters
 from .user_restriction import UserRestriction
 from .user_skill import SetUserSkillRequest, UserSkill
 from ..util import identity
-from ..util._managing_headers import add_headers, caller_context_var, low_level_method_var, top_level_method_var
+from ..util._managing_headers import add_headers, form_additional_headers
 from ..util._codegen import expand
 from .webhook_subscription import WebhookSubscription
 
@@ -301,12 +301,7 @@ class TolokaClient:
             kwargs['timeout'] = self.default_timeout
 
         # Add additional headers from contextvars
-        ctx = contextvars.copy_context()
-        additional_headers = {
-            'X-Caller-Context': ctx[caller_context_var],
-            'X-Top-Level-Method': ctx[top_level_method_var],
-            'X-Low-Level-Method': ctx[low_level_method_var],
-        }
+        additional_headers = form_additional_headers()
         headers = kwargs.get('headers', {})
         headers = {**headers, **additional_headers}
         kwargs['headers'] = headers
@@ -1460,8 +1455,7 @@ class TolokaClient:
             >>> toloka_client.find_pools(status='OPEN', project_id='1')
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an
-            indicator `has_more=True`.
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.PoolSortItems)
         response = self._search_request('get', '/v1/pools', request, sort, limit)
@@ -1999,8 +1993,7 @@ class TolokaClient:
             >>> toloka_client.find_skills(sort=['-created', '-id'], limit=10)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator
-            `has_more=True`.
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.SkillSortItems)
         response = self._search_request('get', '/v1/skills', request, sort, limit)
@@ -2148,7 +2141,7 @@ class TolokaClient:
 
         Returns:
             batch_create_results.TaskBatchCreateResult: An object with created tasks in `items` and invalid tasks in
-            `validation_errors`.
+                `validation_errors`.
 
         Raises:
             ValidationApiError: If no tasks were created, or skip_invalid_items==False and there is a problem when
@@ -2276,8 +2269,7 @@ class TolokaClient:
     def get_tasks(self, request: search_requests.TaskSearchRequest) -> Generator[Task, None, None]:
         """Finds all tasks that match certain criteria.
 
-        `get_tasks` returns a generator and you can iterate over all found tasks. Several requests to the Toloka server
-        are possible while iterating.
+        `get_tasks` returns a generator and you can iterate over all found tasks. Several requests to the Toloka server are possible while iterating.
 
         Note that tasks can not be sorted. If you need to sort tasks use [find_tasks](toloka.client.TolokaClient.find_tasks.md).
 
@@ -2499,8 +2491,7 @@ class TolokaClient:
             >>> toloka_client.find_task_suites(pool_id='1', sort=['-created', '-id'], limit=3)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator
-            `has_more=True`.
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.TaskSuiteSortItems)
         response = self._search_request('get', '/v1/task-suites', request, sort, limit)
@@ -2867,8 +2858,7 @@ class TolokaClient:
             >>> toloka_client.find_user_bonuses(user_id='1', sort=['-created', '-id'], limit=3)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator
-            `has_more=True`.
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.UserBonusSortItems)
         response = self._search_request('get', '/v1/user-bonuses', request, sort, limit)
@@ -3081,8 +3071,7 @@ class TolokaClient:
             >>> toloka_client.find_user_skills(limit=10)
             ...
 
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator
-            `has_more=True`.
+            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.UserSkillSortItems)
         response = self._search_request('get', '/v1/user-skills', request, sort, limit)

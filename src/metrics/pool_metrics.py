@@ -107,6 +107,7 @@ class AssignmentEventsInPool(BasePoolMetric):
     }
 
     def __attrs_post_init__(self):
+        super().__attrs_post_init__()
         metric_names = self.get_line_names()
         if not metric_names:
             self._submitted_name = 'submitted_events_in_pool'
@@ -177,6 +178,7 @@ class PoolCompletedPercentage(BasePoolMetric):
     _percents_name: Optional[str] = None
 
     def __attrs_post_init__(self):
+        super().__attrs_post_init__()
         if self._percents_name is None:
             self._percents_name = 'completion_percentage'
 
@@ -239,6 +241,7 @@ class AssignmentsInPool(BasePoolMetric):
     }
 
     def __attrs_post_init__(self):
+        super().__attrs_post_init__()
         metric_names = self.get_line_names()
         if not metric_names:
             self._submitted_name = 'submitted_assignments_in_pool'
@@ -303,6 +306,7 @@ class TasksInPool(BasePoolMetric):
     _tasks_name: Optional[str] = None
 
     def __attrs_post_init__(self):
+        super().__attrs_post_init__()
         if self._tasks_name is None:
             self._tasks_name = 'tasks_count'
 
@@ -346,6 +350,7 @@ class SpentBudgetOnPool(BasePoolMetric):
     _money_name: Optional[str] = None
 
     def __attrs_post_init__(self):
+        super().__attrs_post_init__()
         if self._money_name is None:
             self._money_name = 'spent_money'
 
@@ -391,6 +396,7 @@ class WorkersByFilterOnPool(BasePoolMetric):
     _interval_hours: int = attr.ib(default=1)
 
     def __attrs_post_init__(self):
+        super().__attrs_post_init__()
         if self._workers_name is None:
             self._workers_name = 'workers_count'
 
@@ -465,6 +471,7 @@ class BansInPool(BasePoolMetric):
     _join_events: bool = False
 
     def __attrs_post_init__(self):
+        super().__attrs_post_init__()
         metric_names = self.get_line_names()
         if not metric_names:
             self._count_name = 'bans_count'

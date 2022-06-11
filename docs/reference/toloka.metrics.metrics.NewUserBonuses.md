@@ -1,5 +1,5 @@
 # NewUserBonuses
-`toloka.metrics.metrics.NewUserBonuses` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/metrics/metrics.py#L165)
+`toloka.metrics.metrics.NewUserBonuses` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/metrics/metrics.py#L185)
 
 ```python
 NewUserBonuses(
@@ -9,6 +9,7 @@ NewUserBonuses(
     join_events: bool = False,
     *,
     toloka_client: Optional[TolokaClient] = None,
+    atoloka_client: Optional[AsyncTolokaClient] = None,
     timeout: timedelta = ...
 )
 ```

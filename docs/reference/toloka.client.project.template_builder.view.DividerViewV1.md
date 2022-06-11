@@ -1,5 +1,5 @@
 # DividerViewV1
-`toloka.client.project.template_builder.view.DividerViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/template_builder/view.py#L164)
+`toloka.client.project.template_builder.view.DividerViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/view.py#L164)
 
 ```python
 DividerViewV1(

@@ -1,5 +1,5 @@
 # MapProvider
-`toloka.client.project.Project.AssignmentsIssuingViewConfig.MapProvider` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/__init__.py#L151)
+`toloka.client.project.Project.AssignmentsIssuingViewConfig.MapProvider` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/__init__.py#L151)
 
 Map provider for assignments_issuing_view_config:
 
@@ -7,5 +7,5 @@ Map provider for assignments_issuing_view_config:
 
 | Name | Value | Description |
 | :------| :-----------| :----------| 
-`YANDEX`|'YANDEX'|<p>Use Yandex.Maps as a map provider</p>
+`YANDEX`|'YANDEX'|<p>Use Yandex Maps as a map provider</p>
 `GOOGLE`|'GOOGLE'|<p>Use Google Maps as a map provider</p>

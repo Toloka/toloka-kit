@@ -1,5 +1,5 @@
 # CompareLayoutV1
-`toloka.client.project.template_builder.layouts.CompareLayoutV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/template_builder/layouts.py#L112)
+`toloka.client.project.template_builder.layouts.CompareLayoutV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/layouts.py#L112)
 
 ```python
 CompareLayoutV1(

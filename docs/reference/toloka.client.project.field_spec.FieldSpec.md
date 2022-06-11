@@ -1,5 +1,5 @@
 # FieldSpec
-`toloka.client.project.field_spec.FieldSpec` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/field_spec.py#L48)
+`toloka.client.project.field_spec.FieldSpec` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/field_spec.py#L48)
 
 ```python
 FieldSpec(

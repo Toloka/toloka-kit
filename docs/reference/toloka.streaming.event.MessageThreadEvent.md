@@ -1,5 +1,5 @@
 # MessageThreadEvent
-`toloka.streaming.event.MessageThreadEvent` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/streaming/event.py#L106)
+`toloka.streaming.event.MessageThreadEvent` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/streaming/event.py#L106)
 
 ```python
 MessageThreadEvent(

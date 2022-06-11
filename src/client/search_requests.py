@@ -798,6 +798,7 @@ class UserBonusSearchRequest(BaseSearchRequest):
 
     Attributes:
         user_id: Performer ID.
+        assignment_id: ID of the performer's response to the task a reward is issued for.
         private_comment: Comments for the requester.
         id_lt: Bonuses with an ID less than the specified value.
         id_lte: Bonuses with an ID less than or equal to the specified value.
@@ -814,6 +815,7 @@ class UserBonusSearchRequest(BaseSearchRequest):
         created: datetime.datetime
 
     user_id: str
+    assignment_id: str
     private_comment: str
 
 

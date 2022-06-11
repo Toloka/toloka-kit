@@ -1,5 +1,5 @@
 # Country
-`toloka.client.filter.Country` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/filter.py#L245)
+`toloka.client.filter.Country` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/filter.py#L245)
 
 ```python
 Country(

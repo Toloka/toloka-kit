@@ -1,5 +1,5 @@
 # ListFieldV1
-`toloka.client.project.template_builder.fields.ListFieldV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/template_builder/fields.py#L306)
+`toloka.client.project.template_builder.fields.ListFieldV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/fields.py#L306)
 
 ```python
 ListFieldV1(

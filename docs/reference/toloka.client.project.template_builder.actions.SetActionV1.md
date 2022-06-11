@@ -1,5 +1,5 @@
 # SetActionV1
-`toloka.client.project.template_builder.actions.SetActionV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/template_builder/actions.py#L146)
+`toloka.client.project.template_builder.actions.SetActionV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/actions.py#L146)
 
 ```python
 SetActionV1(

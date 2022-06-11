@@ -1,5 +1,5 @@
 # TaskSpec
-`toloka.client.project.task_spec.TaskSpec` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/task_spec.py#L8)
+`toloka.client.project.task_spec.TaskSpec` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/task_spec.py#L8)
 
 ```python
 TaskSpec(

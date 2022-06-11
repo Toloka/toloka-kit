@@ -4,8 +4,7 @@
 Finds all tasks that match certain criteria.
 
 
-`get_tasks` returns a generator and you can iterate over all found tasks. Several requests to the Toloka server
-are possible while iterating.
+`get_tasks` returns a generator and you can iterate over all found tasks. Several requests to the Toloka server are possible while iterating.
 
 Note that tasks can not be sorted. If you need to sort tasks use [find_tasks](toloka.client.TolokaClient.find_tasks.md).
 

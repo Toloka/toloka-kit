@@ -907,6 +907,9 @@ items:
     - name: codegen_setter_for_quality_control_training_requirement
       href: toloka.client.pool.codegen_setter_for_quality_control_training_requirement.md
       hidden: true
+    - name: codegen_setter_for_speed_quality_balance
+      href: toloka.client.pool.codegen_setter_for_speed_quality_balance.md
+      hidden: true
     - name: codegen_setter_for_training_config
       href: toloka.client.pool.codegen_setter_for_training_config.md
       hidden: true
@@ -932,6 +935,18 @@ items:
       items:
       - name: MixerConfig
         href: toloka.client.pool.mixer_config.MixerConfig.md
+    - name: speed_qualitty_balance_config
+      items:
+      - name: SpeedQualityBalanceConfig
+        href: toloka.client.pool.speed_quality_balance_config.SpeedQualityBalanceConfig.md
+        hidden: true
+      - name: SpeedQualityBalanceConfig.Type
+        href: toloka.client.pool.speed_quality_balance_config.SpeedQualityBalanceConfig.Type.md
+        hidden: true
+      - name: TopPercentageByQuality
+        href: toloka.client.pool.speed_quality_balance_config.TopPercentageByQuality.md
+      - name: BestConcurrentUsersByQuality
+        href: toloka.client.pool.speed_quality_balance_config.BestConcurrentUsersByQuality.md
   - name: primitives
     items:
     - name: base
@@ -1918,6 +1933,30 @@ items:
   - name: AsyncTolokaClient.wait_operation
     href: toloka.async_client.client.AsyncTolokaClient.wait_operation.md
     hidden: true
+- name: toloka.autoquality
+  items:
+  - name: optimizer
+    items:
+    - name: AutoQuality
+      href: toloka.autoquality.optimizer.AutoQuality.md
+    - name: AutoQuality.archive_autoquality_pools
+      href: toloka.autoquality.optimizer.AutoQuality.archive_autoquality_pools.md
+      hidden: true
+    - name: AutoQuality.create_tasks
+      href: toloka.autoquality.optimizer.AutoQuality.create_tasks.md
+      hidden: true
+    - name: AutoQuality.run
+      href: toloka.autoquality.optimizer.AutoQuality.run.md
+      hidden: true
+    - name: AutoQuality.setup_pools
+      href: toloka.autoquality.optimizer.AutoQuality.setup_pools.md
+      hidden: true
+  - name: scoring
+    items:
+      - name: default_calc_ranks
+        href: toloka.autoquality.scoring.default_calc_ranks.md
+      - name: default_calc_scores
+        href: toloka.autoquality.scoring.default_calc_scores.md
 - name: toloka.metrics
   items:
   - name: collector

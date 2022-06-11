@@ -1,5 +1,5 @@
 # InterlocutorRole
-`toloka.client.message_thread.Interlocutor.InterlocutorRole` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/message_thread.py#L55)
+`toloka.client.message_thread.Interlocutor.InterlocutorRole` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/message_thread.py#L56)
 
 Role of the sender or recipient in Toloka.
 
