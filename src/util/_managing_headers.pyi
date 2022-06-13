@@ -1,18 +1,11 @@
 __all__ = [
     'add_headers',
     'async_add_headers',
-    'caller_context_var',
-    'top_level_method_var',
-    'low_level_method_var',
+    'form_additional_headers',
 ]
 import contextvars
+import typing
 
-
-caller_context_var: contextvars.ContextVar
-
-top_level_method_var: contextvars.ContextVar
-
-low_level_method_var: contextvars.ContextVar
 
 def add_headers(client: str):
     """This decorator add 3 headers into resulting http request:
@@ -36,3 +29,6 @@ def async_add_headers(client: str):
         client: name of high-level abstraction for X-Caller-Context
     """
     ...
+
+
+def form_additional_headers(ctx: contextvars.Context = None) -> typing.Dict[str, str]: ...

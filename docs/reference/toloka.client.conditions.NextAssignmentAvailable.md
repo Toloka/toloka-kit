@@ -1,5 +1,5 @@
 # NextAssignmentAvailable
-`toloka.client.conditions.NextAssignmentAvailable` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/conditions.py#L209)
+`toloka.client.conditions.NextAssignmentAvailable` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/conditions.py#L209)
 
 ```python
 NextAssignmentAvailable(

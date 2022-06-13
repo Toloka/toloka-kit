@@ -1,5 +1,5 @@
 # Owner
-`toloka.client.owner.Owner` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/owner.py#L4)
+`toloka.client.owner.Owner` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/owner.py#L4)
 
 ```python
 Owner(

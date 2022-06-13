@@ -1,5 +1,5 @@
 # add_action
-`toloka.client.quality_control.QualityControl.add_action` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/quality_control.py#L130)
+`toloka.client.quality_control.QualityControl.add_action` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/quality_control.py#L130)
 
 ```python
 add_action(

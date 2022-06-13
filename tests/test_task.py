@@ -624,6 +624,50 @@ def test_patch_task_with_baseline_solution(requests_mock, toloka_client, toloka_
     assert raw_result == client.unstructure(result)
 
 
+def test_patch_task_with_known_solutions(requests_mock, toloka_client, toloka_url, task_map_with_readonly):
+    raw_request = {
+        'known_solutions': [
+            {
+                'output_values': {'color': 'black'},
+                'correctness_weight': 1.0,
+            },
+        ],
+        'message_on_unknown_solution': 'Main color is black'
+    }
+    raw_result = {**task_map_with_readonly, **raw_request}
+
+    def tasks(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'patch_task',
+            'X-Low-Level-Method': 'patch_task',
+        }
+        check_headers(request, expected_headers)
+
+        assert raw_request == request.json()
+        return raw_result
+
+    requests_mock.patch(f'{toloka_url}/tasks/task-1', json=tasks)
+
+    # Request object syntax
+    request = client.structure(raw_request, client.task.TaskPatch)
+    result = toloka_client.patch_task('task-1', request)
+    assert raw_result == client.unstructure(result)
+
+    # Expanded syntax
+    result = toloka_client.patch_task(
+        'task-1',
+        known_solutions=[
+            client.task.Task.KnownSolution(
+                output_values={'color': 'black'},
+                correctness_weight=1.0,
+            )
+        ],
+        message_on_unknown_solution='Main color is black',
+    )
+    assert raw_result == client.unstructure(result)
+
+
 def test_task_overlap_or_min(requests_mock, toloka_client, toloka_url, task_map_with_readonly):
     raw_request = {'overlap': 10}
     raw_result = {**task_map_with_readonly, 'overlap': 12}

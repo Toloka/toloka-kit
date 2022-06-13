@@ -107,10 +107,16 @@ class ComponentType(toloka.util._extendable_enum.ExtendableStrEnum):
 
 
 class BaseTemplateMetaclass(toloka.client.primitives.base.BaseTolokaObjectMetaclass):
-    ...
+    @staticmethod
+    def __new__(
+        mcs,
+        *args,
+        kw_only=False,
+        **kwargs
+    ): ...
 
 
-class BaseTemplate(toloka.client.primitives.base.BaseTolokaObject):
+class BaseTemplate(toloka.client.primitives.base.BaseTolokaObject, metaclass=BaseTemplateMetaclass):
     @classmethod
     def structure(cls, data: dict): ...
 
@@ -150,7 +156,20 @@ def base_component_or(type_: typing.Type, class_name_suffix: typing.Optional[str
 
 
 class VersionedBaseComponentMetaclass(BaseTemplateMetaclass):
-    ...
+    def _validate_v1(
+        self,
+        attribute,
+        value: str
+    ) -> str: ...
+
+    @staticmethod
+    def __new__(
+        mcs,
+        name,
+        bases,
+        namespace,
+        **kwargs
+    ): ...
 
 
 class UnknownComponent(BaseTemplate):

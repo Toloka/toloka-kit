@@ -2,12 +2,18 @@ import random
 import uuid
 
 import pytest
+from toloka.async_client import AsyncTolokaClient
 from toloka.client import TolokaClient
 
 
 @pytest.fixture
 def toloka_client() -> TolokaClient:
     return TolokaClient('fake-token', 'SANDBOX')
+
+
+@pytest.fixture
+def async_toloka_client():
+    return AsyncTolokaClient('fake-token', 'SANDBOX')
 
 
 @pytest.fixture

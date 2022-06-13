@@ -1,5 +1,5 @@
 # TextViewV1
-`toloka.client.project.template_builder.view.TextViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/template_builder/view.py#L385)
+`toloka.client.project.template_builder.view.TextViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/view.py#L385)
 
 ```python
 TextViewV1(

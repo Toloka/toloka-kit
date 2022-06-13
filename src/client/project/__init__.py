@@ -154,7 +154,7 @@ class Project(BaseTolokaObject):
             """Map provider for assignments_issuing_view_config:
 
             Attributes:
-                YANDEX: Use Yandex.Maps as a map provider
+                YANDEX: Use Yandex Maps as a map provider
                 GOOGLE: Use Google Maps as a map provider
             """
 

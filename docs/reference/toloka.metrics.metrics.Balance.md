@@ -1,5 +1,5 @@
 # Balance
-`toloka.metrics.metrics.Balance` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/metrics/metrics.py#L124)
+`toloka.metrics.metrics.Balance` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/metrics/metrics.py#L143)
 
 ```python
 Balance(
@@ -7,6 +7,7 @@ Balance(
     balance_name: Optional[str] = None,
     *,
     toloka_client: Optional[TolokaClient] = None,
+    atoloka_client: Optional[AsyncTolokaClient] = None,
     timeout: timedelta = ...
 )
 ```

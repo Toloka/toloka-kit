@@ -1,5 +1,5 @@
 # SpentBudgetOnPool
-`toloka.metrics.pool_metrics.SpentBudgetOnPool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/metrics/pool_metrics.py#L326)
+`toloka.metrics.pool_metrics.SpentBudgetOnPool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/metrics/pool_metrics.py#L330)
 
 ```python
 SpentBudgetOnPool(
@@ -8,6 +8,7 @@ SpentBudgetOnPool(
     money_name: Optional[str] = None,
     *,
     toloka_client: Optional[TolokaClient] = None,
+    atoloka_client: Optional[AsyncTolokaClient] = None,
     timeout: timedelta = ...
 )
 ```

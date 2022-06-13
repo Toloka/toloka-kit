@@ -1,5 +1,5 @@
 # Task
-`toloka.client.task.Task` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/task.py#L65)
+`toloka.client.task.Task` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/task.py#L65)
 
 ```python
 Task(
@@ -47,7 +47,7 @@ TaskSuite may contain several Tasks.
 `traits_none_of_any`|**Optional\[List\[str\]\]**|<p></p>
 `origin_task_id`|**Optional\[str\]**|<p>ID of the task it was copied from.</p>
 `created`|**Optional\[datetime\]**|<p>The UTC date and time when the task was created.</p>
-`baseline_solutions`|**Optional\[List\[[BaselineSolution](toloka.client.task.Task.BaselineSolution.md)\]\]**|<p></p>
+`baseline_solutions`|**Optional\[List\[[BaselineSolution](toloka.client.task.Task.BaselineSolution.md)\]\]**|<p>Preliminary responses. This data simulates performer responses when calculating confidence in a response. It is used in dynamic overlap (also known as incremental relabeling or IRL) and aggregation of results by skill.</p>
 
 **Examples:**
 

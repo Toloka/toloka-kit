@@ -204,7 +204,7 @@ class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
             SCROLL = 'scroll'
 
         kind: Kind
-        task_width: float = attribute(origin='taskWidth', kw_only=True)
+        task_width: base_component_or(float) = attribute(origin='taskWidth', kw_only=True)
 
     layout: base_component_or(TolokaPluginLayout) = attribute(factory=TolokaPluginLayout)
     notifications: base_component_or(List[BaseComponent], 'ListBaseComponent') = attribute(kw_only=True)

@@ -1,5 +1,5 @@
 # IntegerSpec
-`toloka.client.project.field_spec.IntegerSpec` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/field_spec.py#L86)
+`toloka.client.project.field_spec.IntegerSpec` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/field_spec.py#L86)
 
 ```python
 IntegerSpec(

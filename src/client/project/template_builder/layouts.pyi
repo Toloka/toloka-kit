@@ -12,7 +12,18 @@ import toloka.util._extendable_enum
 import typing
 
 
-class BaseLayoutV1(toloka.client.project.template_builder.base.BaseComponent):
+class BaseLayoutV1Metaclass(toloka.client.project.template_builder.base.VersionedBaseComponentMetaclass):
+    @staticmethod
+    def __new__(
+        mcs,
+        name,
+        bases,
+        namespace,
+        **kwargs
+    ): ...
+
+
+class BaseLayoutV1(toloka.client.project.template_builder.base.BaseComponent, metaclass=BaseLayoutV1Metaclass):
     """Options for positioning elements in the interface, such as in columns or side-by-side.
 
     If you have more than one element in the interface, these components will help you arrange them the way you want.
