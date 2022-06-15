@@ -1,5 +1,5 @@
 # register
-`toloka.client.primitives.base.VariantRegistry.register` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/primitives/base.py#L33)
+`toloka.client.primitives.base.VariantRegistry.register` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/primitives/base.py#L33)
 
 ```python
 register(

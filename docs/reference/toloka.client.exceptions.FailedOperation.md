@@ -1,5 +1,5 @@
 # FailedOperation
-`toloka.client.exceptions.FailedOperation` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/exceptions.py#L38)
+`toloka.client.exceptions.FailedOperation` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/exceptions.py#L38)
 
 ```python
 FailedOperation(self, *, operation: Optional[Any] = None)

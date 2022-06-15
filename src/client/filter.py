@@ -328,8 +328,8 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
 
     Attributes:
         value: Languages specified by the user in the profile (two-letter ISO code of the standard ISO 639-1 in upper case).
-        verified: If set to True only users who have passed language test will be selected. Currently only following
-            ISO codes are supported: DE, EN, FR, JA, PT, SV, RU, AR, ES.
+        verified: If set to True, only the users who have passed a language test will be selected. Currently, you can
+            use this parameter only with the following ISO codes : `DE`, `EN`, `FR`, `JA`, `PT`, `SV`, `RU`, `AR`, `ES`.
     """
 
     verified_languages_to_skills: ClassVar[Dict[str, str]] = {

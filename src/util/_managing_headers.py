@@ -1,32 +1,28 @@
 __all__ = [
     'add_headers',
     'async_add_headers',
-    'caller_context_var',
-    'top_level_method_var',
-    'low_level_method_var',
+    'form_additional_headers',
 ]
+
+import contextvars
 from contextvars import ContextVar, copy_context
 import functools
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager
+from typing import Dict
 
 caller_context_var: ContextVar = ContextVar('caller_context')
 top_level_method_var: ContextVar = ContextVar('top_level_method')
 low_level_method_var: ContextVar = ContextVar('low_level_method')
 
 
-class SetVariable:
-
-    def __init__(self, var, value):
-        self.var = var
-        self.value = value
-        self.token = None
-
-    def __enter__(self):
-        self.token = self.var.set(self.value)
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if self.token:
-            self.var.reset(self.token)
+@contextmanager
+def set_variable(var, value):
+    token = var.set(value)
+    try:
+        yield copy_context()
+    finally:
+        if token:
+            var.reset(token)
 
 
 def add_headers(client: str):
@@ -46,11 +42,11 @@ def add_headers(client: str):
         def wrapped(*args, **kwargs):
             ctx = copy_context()
             with ExitStack() as stack:
-                stack.enter_context(SetVariable(low_level_method_var, func.__name__))
+                stack.enter_context(set_variable(low_level_method_var, func.__name__))
                 if caller_context_var not in ctx:
-                    stack.enter_context(SetVariable(caller_context_var, client))
+                    stack.enter_context(set_variable(caller_context_var, client))
                 if top_level_method_var not in ctx:
-                    stack.enter_context(SetVariable(top_level_method_var, func.__name__))
+                    stack.enter_context(set_variable(top_level_method_var, func.__name__))
 
                 return func(*args, **kwargs)
 
@@ -76,14 +72,24 @@ def async_add_headers(client: str):
         async def wrapped(*args, **kwargs):
             ctx = copy_context()
             with ExitStack() as stack:
-                stack.enter_context(SetVariable(low_level_method_var, func.__name__))
+                stack.enter_context(set_variable(low_level_method_var, func.__name__))
                 if caller_context_var not in ctx:
-                    stack.enter_context(SetVariable(caller_context_var, client))
+                    stack.enter_context(set_variable(caller_context_var, client))
                 if top_level_method_var not in ctx:
-                    stack.enter_context(SetVariable(top_level_method_var, func.__name__))
+                    stack.enter_context(set_variable(top_level_method_var, func.__name__))
 
                 return await func(*args, **kwargs)
 
         return wrapped
 
     return wrapper
+
+
+def form_additional_headers(ctx: contextvars.Context = None) -> Dict[str, str]:
+    if ctx is None:
+        ctx = copy_context()
+    return {
+        'X-Caller-Context': ctx.get(caller_context_var),
+        'X-Top-Level-Method': ctx.get(top_level_method_var),
+        'X-Low-Level-Method': ctx.get(low_level_method_var),
+    }

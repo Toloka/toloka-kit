@@ -47,7 +47,8 @@ setup(
         'ipyplot',
         'jupyter-dash',
     ],
-    extras_require={'dev': ['requests-mock']},
+    extras_require={'dev': ['requests-mock'],
+                    'autoquality': ['crowd-kit >= 1.0.0']},
     include_package_data=True,
     project_urls={
         'Documentation': 'https://yandex.com/dev/toloka/toloka-kit/doc/',

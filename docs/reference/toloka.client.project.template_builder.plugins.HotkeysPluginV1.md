@@ -1,5 +1,5 @@
 # HotkeysPluginV1
-`toloka.client.project.template_builder.plugins.HotkeysPluginV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/template_builder/plugins.py#L79)
+`toloka.client.project.template_builder.plugins.HotkeysPluginV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/plugins.py#L79)
 
 ```python
 HotkeysPluginV1(

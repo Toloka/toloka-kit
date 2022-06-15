@@ -1,5 +1,5 @@
 # Parameters
-`toloka.client.collectors.AssignmentSubmitTime.Parameters` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/collectors.py#L232)
+`toloka.client.collectors.AssignmentSubmitTime.Parameters` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/collectors.py#L232)
 
 ```python
 Parameters(

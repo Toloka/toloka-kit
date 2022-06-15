@@ -1,10 +1,11 @@
 # UserBonusSearchRequest
-`toloka.client.search_requests.UserBonusSearchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/search_requests.py#L795)
+`toloka.client.search_requests.UserBonusSearchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/search_requests.py#L795)
 
 ```python
 UserBonusSearchRequest(
     self,
     user_id: Optional[str] = None,
+    assignment_id: Optional[str] = None,
     private_comment: Optional[str] = None,
     id_lt: Optional[str] = None,
     id_lte: Optional[str] = None,
@@ -24,6 +25,7 @@ Parameters for searching user bonus
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
 `user_id`|**Optional\[str\]**|<p>Performer ID.</p>
+`assignment_id`|**Optional\[str\]**|<p>ID of the performer&#x27;s response to the task a reward is issued for.</p>
 `private_comment`|**Optional\[str\]**|<p>Comments for the requester.</p>
 `id_lt`|**Optional\[str\]**|<p>Bonuses with an ID less than the specified value.</p>
 `id_lte`|**Optional\[str\]**|<p>Bonuses with an ID less than or equal to the specified value.</p>

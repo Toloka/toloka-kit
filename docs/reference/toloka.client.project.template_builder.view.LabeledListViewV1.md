@@ -1,5 +1,5 @@
 # LabeledListViewV1
-`toloka.client.project.template_builder.view.LabeledListViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/template_builder/view.py#L247)
+`toloka.client.project.template_builder.view.LabeledListViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/view.py#L247)
 
 ```python
 LabeledListViewV1(

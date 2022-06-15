@@ -1,5 +1,5 @@
 # Assignment
-`toloka.client.assignment.Assignment` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/assignment.py#L19)
+`toloka.client.assignment.Assignment` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/assignment.py#L19)
 
 ```python
 Assignment(

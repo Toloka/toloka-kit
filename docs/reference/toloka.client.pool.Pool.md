@@ -1,5 +1,5 @@
 # Pool
-`toloka.client.pool.Pool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/pool/__init__.py#L33)
+`toloka.client.pool.Pool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/pool/__init__.py#L35)
 
 ```python
 Pool(
@@ -23,6 +23,7 @@ Pool(
     priority: Optional[int] = None,
     filter: Optional[FilterCondition] = None,
     quality_control: Optional[QualityControl] = ...,
+    speed_quality_balance: Optional[SpeedQualityBalanceConfig] = None,
     dynamic_overlap_config: Optional[DynamicOverlapConfig] = None,
     mixer_config: Optional[MixerConfig] = None,
     training_config: Optional[TrainingConfig] = None,
@@ -67,6 +68,7 @@ Tasks, golden tasks and assignments are related to a pool.
 `priority`|**Optional\[int\]**|<p>The priority of the pool in relation to other pools in the project with the same task price and set of filters. Users are assigned tasks with a higher priority first. Possible values: from -100 to 100. If the project has multiple pools, the order for completing them depends on the parameters:<ul><li>Pools with identical filter settings and price per task are assigned to users in the order     in which they were started. The pool that was started earlier will be completed sooner.     You can change the order for completing the pools.</li><li>Pools with different filter settings and/or a different price per task are sent out for completion     when the pool opens.</li></ul></p>
 `filter`|**Optional\[[FilterCondition](toloka.client.filter.FilterCondition.md)\]**|<p>Settings for user selection filters.</p>
 `quality_control`|**Optional\[[QualityControl](toloka.client.quality_control.QualityControl.md)\]**|<p>Settings for quality control rules and the ID of the pool with training tasks.</p>
+`speed_quality_balance`|**Optional\[[SpeedQualityBalanceConfig](toloka.client.pool.speed_quality_balance_config.SpeedQualityBalanceConfig.md)\]**|<p>Settings for balance between speed and quality of pool done.</p>
 `dynamic_overlap_config`|**Optional\[[DynamicOverlapConfig](toloka.client.pool.dynamic_overlap_config.DynamicOverlapConfig.md)\]**|<p>Dynamic overlap setting. Allows you to change the overlap depending on how well the performers handle the task.</p>
 `mixer_config`|**Optional\[[MixerConfig](toloka.client.pool.mixer_config.MixerConfig.md)\]**|<p>Parameters for automatically creating a task suite (“smart mixing”).</p>
 `training_config`|**Optional\[[TrainingConfig](toloka.client.pool.Pool.TrainingConfig.md)\]**|<p>Optional[TrainingConfig]</p>
@@ -120,5 +122,6 @@ print(new_pool.id)
 [set_owner](toloka.client.pool.codegen_setter_for_owner.md)| A shortcut setter for owner
 [set_quality_control](toloka.client.pool.codegen_setter_for_quality_control.md)| A shortcut setter for quality_control
 [set_quality_control_configs](toloka.client.pool.codegen_setter_for_quality_control_configs.md)| A shortcut method for setting 
+[set_speed_quality_balance](toloka.client.pool.codegen_setter_for_speed_quality_balance.md)| A shortcut setter for speed_quality_balance
 [set_training_config](toloka.client.pool.codegen_setter_for_training_config.md)| A shortcut setter for training_config
 [set_training_requirement](toloka.client.pool.codegen_setter_for_quality_control_training_requirement.md)| A shortcut setter for quality_control.training_requirement

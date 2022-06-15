@@ -1,5 +1,5 @@
 # Project
-`toloka.client.project.Project` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/__init__.py#L63)
+`toloka.client.project.Project` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/__init__.py#L63)
 
 ```python
 Project(

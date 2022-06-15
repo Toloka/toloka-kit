@@ -1,5 +1,5 @@
 # Marker
-`toloka.client.project.template_builder.view.MapViewV1.Marker` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/project/template_builder/view.py#L446)
+`toloka.client.project.template_builder.view.MapViewV1.Marker` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/view.py#L446)
 
 ```python
 Marker(

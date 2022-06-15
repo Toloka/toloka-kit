@@ -1,5 +1,5 @@
 # Key
-`toloka.client.filter.Computed.Key` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/filter.py#L184)
+`toloka.client.filter.Computed.Key` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/filter.py#L184)
 
 Possible criteria for filtering users by computed data.
 

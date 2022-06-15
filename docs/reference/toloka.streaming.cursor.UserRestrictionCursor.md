@@ -1,10 +1,10 @@
 # UserRestrictionCursor
-`toloka.streaming.cursor.UserRestrictionCursor` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/streaming/cursor.py#L368)
+`toloka.streaming.cursor.UserRestrictionCursor` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/streaming/cursor.py#L369)
 
 ```python
 UserRestrictionCursor(
     self,
-    toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
+    toloka_client: Union[TolokaClient, AsyncTolokaClient],
     scope: Optional[UserRestriction.Scope] = None,
     user_id: Optional[str] = None,
     project_id: Optional[str] = None,
@@ -26,7 +26,7 @@ Iterator over user restrictions by create time.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncMultithreadWrapper](toloka.util.async_utils.AsyncMultithreadWrapper.md)\[[TolokaClient](toloka.client.TolokaClient.md)\]\]**|<p>TolokaClient object that is being used to search user restrictions.</p>
+`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncTolokaClient](toloka.async_client.client.AsyncTolokaClient.md)\]**|<p>TolokaClient object that is being used to search user restrictions.</p>
 `request`|**[UserRestrictionSearchRequest](toloka.client.search_requests.UserRestrictionSearchRequest.md)**|<p>Base request to search user restrictions.</p>
 
 **Examples:**

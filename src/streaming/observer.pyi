@@ -4,6 +4,7 @@ __all__ = [
     'PoolStatusObserver',
 ]
 import datetime
+import toloka.async_client.client
 import toloka.client
 import toloka.client.pool
 import toloka.streaming.cursor
@@ -52,7 +53,7 @@ class BasePoolObserver(BaseObserver):
 
     def __init__(
         self,
-        toloka_client: typing.Union[toloka.client.TolokaClient, toloka.util.async_utils.AsyncMultithreadWrapper[toloka.client.TolokaClient]],
+        toloka_client: typing.Union[toloka.client.TolokaClient, toloka.async_client.client.AsyncTolokaClient],
         pool_id: str,
         *,
         name: typing.Optional[str] = None
@@ -64,7 +65,7 @@ class BasePoolObserver(BaseObserver):
     name: typing.Optional[str]
     _enabled: bool
     _deleted: bool
-    toloka_client: toloka.util.async_utils.AsyncInterfaceWrapper[typing.Union[toloka.client.TolokaClient, toloka.util.async_utils.AsyncMultithreadWrapper[toloka.client.TolokaClient]]]
+    toloka_client: toloka.util.async_utils.AsyncInterfaceWrapper[typing.Union[toloka.client.TolokaClient, toloka.async_client.client.AsyncTolokaClient]]
     pool_id: str
 
 
@@ -132,7 +133,7 @@ class PoolStatusObserver(BasePoolObserver):
 
     def __init__(
         self,
-        toloka_client: typing.Union[toloka.client.TolokaClient, toloka.util.async_utils.AsyncMultithreadWrapper[toloka.client.TolokaClient]],
+        toloka_client: typing.Union[toloka.client.TolokaClient, toloka.async_client.client.AsyncTolokaClient],
         pool_id: str,
         *,
         name: typing.Optional[str] = None
@@ -144,7 +145,7 @@ class PoolStatusObserver(BasePoolObserver):
     name: typing.Optional[str]
     _enabled: bool
     _deleted: bool
-    toloka_client: toloka.util.async_utils.AsyncInterfaceWrapper[typing.Union[toloka.client.TolokaClient, toloka.util.async_utils.AsyncMultithreadWrapper[toloka.client.TolokaClient]]]
+    toloka_client: toloka.util.async_utils.AsyncInterfaceWrapper[typing.Union[toloka.client.TolokaClient, toloka.async_client.client.AsyncTolokaClient]]
     pool_id: str
     _callbacks: typing.Dict[toloka.client.pool.Pool.Status, typing.List[typing.Callable[[toloka.client.pool.Pool], typing.Awaitable[None]]]]
     _previous_status: typing.Optional[toloka.client.pool.Pool.Status]
@@ -233,7 +234,7 @@ class AssignmentsObserver(BasePoolObserver):
 
     def __init__(
         self,
-        toloka_client: typing.Union[toloka.client.TolokaClient, toloka.util.async_utils.AsyncMultithreadWrapper[toloka.client.TolokaClient]],
+        toloka_client: typing.Union[toloka.client.TolokaClient, toloka.async_client.client.AsyncTolokaClient],
         pool_id: str,
         *,
         name: typing.Optional[str] = None
@@ -245,6 +246,6 @@ class AssignmentsObserver(BasePoolObserver):
     name: typing.Optional[str]
     _enabled: bool
     _deleted: bool
-    toloka_client: toloka.util.async_utils.AsyncInterfaceWrapper[typing.Union[toloka.client.TolokaClient, toloka.util.async_utils.AsyncMultithreadWrapper[toloka.client.TolokaClient]]]
+    toloka_client: toloka.util.async_utils.AsyncInterfaceWrapper[typing.Union[toloka.client.TolokaClient, toloka.async_client.client.AsyncTolokaClient]]
     pool_id: str
     _callbacks: typing.Dict[toloka.streaming.event.AssignmentEvent.Type, _CallbacksCursorConsumer]

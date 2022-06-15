@@ -132,7 +132,11 @@ def pool_map():
                     ]
                 }
             ]
-        }
+        },
+        'speed_quality_balance': {
+            'type': 'TOP_PERCENTAGE_BY_QUALITY',
+            'percent': 80,
+        },
     }
 
 

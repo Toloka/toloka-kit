@@ -1,5 +1,5 @@
 # RecipientsSelectType
-`toloka.client.message_thread.RecipientsSelectType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.25/src/client/message_thread.py#L19)
+`toloka.client.message_thread.RecipientsSelectType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/message_thread.py#L20)
 
 Method for specifying recipients.
 

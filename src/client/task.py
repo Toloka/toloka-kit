@@ -78,7 +78,8 @@ class Task(InfiniteOverlapParametersMixin, BaseTask):
         traits_any_of:
         traits_none_of_any:
         created: The UTC date and time when the task was created.
-        baseline_solutions:
+        baseline_solutions: Preliminary responses. This data simulates performer responses when calculating confidence in a response.
+            It is used in dynamic overlap (also known as incremental relabeling or IRL) and aggregation of results by skill.
         remaining_overlap: How many times will this task be issued to performers. Read Only field.
 
     Example:
@@ -170,7 +171,13 @@ class TaskPatch(TaskOverlapPatch):
     """Parameters for changing overlap or baseline_solutions of a specific Task
 
     Attributes:
-        baseline_solutions:
+        baseline_solutions: Preliminary responses. This data simulates performer responses when calculating confidence in a response.
+            It is used in dynamic overlap (also known as incremental relabeling or IRL) and aggregation of results by skill.
+        known_solutions: Responses and hints for control tasks and training tasks. If multiple output fields are included
+            in the validation, all combinations of the correct response must be specified.
+        message_on_unknown_solution: Hint for the task (for training tasks).
     """
 
     baseline_solutions: List[Task.BaselineSolution]
+    known_solutions: List[Task.KnownSolution]
+    message_on_unknown_solution: str

@@ -196,7 +196,7 @@ class Pipeline:
 
         Returns:
             An iterator over all registered observers except deleted ones.
-            May contain observers sheduled to deletion and not deleted yet.
+            Might contain observers scheduled for deletion and not deleted yet.
         """
         return iter(self._observers.values())
 

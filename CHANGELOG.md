@@ -1,3 +1,10 @@
+0.1.26
+-------------------
+
+Features:
+* Added `toloka.autoquality` - a tool for autogeneration of quality control rules
+* Added `speed_quality_balance` attribute to `Pool`
+
 0.1.25
 -------------------
 

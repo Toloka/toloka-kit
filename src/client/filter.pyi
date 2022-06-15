@@ -440,8 +440,8 @@ class Languages(Profile, toloka.client.primitives.operators.InclusionConditionMi
             For example, for a condition "The user must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Languages specified by the user in the profile (two-letter ISO code of the standard ISO 639-1 in upper case).
-        verified: If set to True only users who have passed language test will be selected. Currently only following
-            ISO codes are supported: DE, EN, FR, JA, PT, SV, RU, AR, ES.
+        verified: If set to True, only the users who have passed a language test will be selected. Currently, you can
+            use this parameter only with the following ISO codes : `DE`, `EN`, `FR`, `JA`, `PT`, `SV`, `RU`, `AR`, `ES`.
     """
 
     def __init__(
