@@ -2605,15 +2605,78 @@ class TolokaClient:
         return structure(response, operations.Operation)
 
     @add_headers('client')
+    def wait_operation_with_progress(
+            self,
+            op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10),
+    ) -> operations.Operation:
+        """Waits for the operation to complete, and return it. Showing progress bar while operation is in progress
+
+        Args:
+            op: ID of the operation.
+            timeout: How long to wait. Defaults to 10 minutes.
+
+        Raises:
+            TimeoutError: Raises it if the timeout has expired and the operation is still not completed.
+
+        Returns:
+            Operation: Completed operation.
+
+        Example:
+            Waiting for the pool to close can be running in the background.
+
+            >>> pool = toloka_client.get_pool(pool_id)
+            >>> while not pool.is_closed():
+            >>>     op = toloka_client.get_analytics([toloka.analytics_request.CompletionPercentagePoolAnalytics(subject_id=pool.id)])
+            >>>     op = toloka_client.wait_operation_with_progress(op)
+            >>>     percentage = op.details['value'][0]['result']['value']
+            >>>     print(
+            >>>         f'   {datetime.datetime.now().strftime("%H:%M:%S")}\t'
+            >>>         f'Pool {pool.id} - {percentage}%'
+            >>>         )
+            >>>     time.sleep(60 * minutes_to_wait)
+            >>>     pool = toloka_client.get_pool(pool.id)
+            >>> print('Pool was closed.')
+            ...
+        """
+        default_time_to_wait = datetime.timedelta(seconds=1)
+        default_initial_delay = datetime.timedelta(milliseconds=500)
+
+        if op.is_completed():
+            return op
+
+        utcnow = datetime.datetime.now(datetime.timezone.utc)
+        wait_until_time = utcnow + timeout
+
+        with logging_redirect_tqdm():
+            progress_bar = tqdm(total=100)
+            progress = 0
+
+            if not op.started or utcnow - op.started < default_initial_delay:
+                time.sleep(default_initial_delay.total_seconds())
+
+            while True:
+                op = self.get_operation(op.id)
+                progress_bar.update(op.progress - progress if op.progress else 0)
+                progress = op.progress if op.progress else 0
+                if op.is_completed():
+                    progress_bar.update(100 - progress)
+                    return op
+                time.sleep(default_time_to_wait.total_seconds())
+                if datetime.datetime.now(datetime.timezone.utc) > wait_until_time:
+                    raise TimeoutError
+
+    @add_headers('client')
     def wait_operation(
-        self,
-        op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10)
+            self,
+            op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10),
+            progress: bool = True
     ) -> operations.Operation:
         """Waits for the operation to complete, and return it
 
         Args:
             op: ID of the operation.
             timeout: How long to wait. Defaults to 10 minutes.
+            progress: Whether show progress bar or not. Defaults to True
 
         Raises:
             TimeoutError: Raises it if the timeout has expired and the operation is still not completed.
@@ -2647,16 +2710,19 @@ class TolokaClient:
         utcnow = datetime.datetime.now(datetime.timezone.utc)
         wait_until_time = utcnow + timeout
 
-        if not op.started or utcnow - op.started < default_initial_delay:
-            time.sleep(default_initial_delay.total_seconds())
+        if progress:
+            return self.wait_operation_with_progress(op, timeout)
+        else:
+            if not op.started or utcnow - op.started < default_initial_delay:
+                time.sleep(default_initial_delay.total_seconds())
 
-        while True:
-            op = self.get_operation(op.id)
-            if op.is_completed():
-                return op
-            time.sleep(default_time_to_wait.total_seconds())
-            if datetime.datetime.now(datetime.timezone.utc) > wait_until_time:
-                raise TimeoutError
+            while True:
+                op = self.get_operation(op.id)
+                if op.is_completed():
+                    return op
+                time.sleep(default_time_to_wait.total_seconds())
+                if datetime.datetime.now(datetime.timezone.utc) > wait_until_time:
+                    raise TimeoutError
 
     @add_headers('client')
     def get_operation_log(self, operation_id: str) -> List[OperationLogItem]:

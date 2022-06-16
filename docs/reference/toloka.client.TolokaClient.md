@@ -180,3 +180,4 @@ toloka_client = toloka.TolokaClient(your_oauth_token, 'PRODUCTION')  # Or switch
 [update_training](toloka.client.TolokaClient.update_training.md)| Makes changes to the training
 [upsert_webhook_subscriptions](toloka.client.TolokaClient.upsert_webhook_subscriptions.md)| Creates (upsert) many webhook-subscriptions.
 [wait_operation](toloka.client.TolokaClient.wait_operation.md)| Waits for the operation to complete, and return it
+[wait_operation_with_progress](toloka.client.TolokaClient.wait_operation_with_progress.md)| Waits for the operation to complete, and return it. Showing progress bar while operation is in progress

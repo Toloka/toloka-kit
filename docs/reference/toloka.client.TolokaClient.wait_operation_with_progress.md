@@ -1,16 +1,15 @@
-# wait_operation
-`toloka.client.TolokaClient.wait_operation` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/__init__.py#L40)
+# wait_operation_with_progress
+`toloka.client.TolokaClient.wait_operation_with_progress` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/__init__.py#L40)
 
 ```python
-wait_operation(
+wait_operation_with_progress(
     self,
     op: Operation,
-    timeout: timedelta = ...,
-    progress: bool = True
+    timeout: timedelta = ...
 )
 ```
 
-Waits for the operation to complete, and return it
+Waits for the operation to complete, and return it. Showing progress bar while operation is in progress
 
 ## Parameters Description
 
@@ -18,7 +17,6 @@ Waits for the operation to complete, and return it
 | :----------| :----| :-----------|
 `op`|**[Operation](toloka.client.operations.Operation.md)**|<p>ID of the operation.</p>
 `timeout`|**timedelta**|<p>How long to wait. Defaults to 10 minutes.</p>
-`progress`|**bool**|<p>Whether show progress bar or not. Defaults to True</p>
 
 * **Returns:**
 
@@ -36,7 +34,7 @@ Waiting for the pool to close can be running in the background.
 pool = toloka_client.get_pool(pool_id)
 while not pool.is_closed():
     op = toloka_client.get_analytics([toloka.analytics_request.CompletionPercentagePoolAnalytics(subject_id=pool.id)])
-    op = toloka_client.wait_operation(op)
+    op = toloka_client.wait_operation_with_progress(op)
     percentage = op.details['value'][0]['result']['value']
     print(
         f'   {datetime.datetime.now().strftime("%H:%M:%S")}     '
