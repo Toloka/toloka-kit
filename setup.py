@@ -46,6 +46,7 @@ setup(
         'docstring-parser',
         'ipyplot',
         'jupyter-dash',
+        'tqdm'
     ],
     extras_require={'dev': ['requests-mock'],
                     'autoquality': ['crowd-kit >= 1.0.0']},
