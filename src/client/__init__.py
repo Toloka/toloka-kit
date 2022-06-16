@@ -83,7 +83,8 @@ import contextvars
 
 from decimal import Decimal
 from enum import Enum, unique
-from tqdm import tqdm, logging_redirect_tqdm
+from tqdm import tqdm
+from tqdm.contrib.logging import logging_redirect_tqdm
 from typing import BinaryIO, Callable, Generator, List, Optional, Sequence, Tuple, Union
 from urllib3.util.retry import Retry
 
