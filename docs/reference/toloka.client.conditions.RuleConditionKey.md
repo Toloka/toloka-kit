@@ -1,5 +1,5 @@
 # RuleConditionKey
-`toloka.client.conditions.RuleConditionKey`
+`toloka.client.conditions.RuleConditionKey` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/conditions.py#L40)
 
 An enumeration.
 

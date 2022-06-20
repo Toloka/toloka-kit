@@ -1,7 +1,7 @@
 # SchemaConditionV1
-`toloka.client.project.template_builder.conditions.SchemaConditionV1`
+`toloka.client.project.template_builder.conditions.SchemaConditionV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/conditions.py#L265)
 
-```
+```python
 SchemaConditionV1(
     self,
     data: Optional[Any] = None,

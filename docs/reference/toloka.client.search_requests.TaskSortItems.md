@@ -1,7 +1,7 @@
 # TaskSortItems
 `toloka.client.search_requests.TaskSortItems`
 
-```
+```python
 TaskSortItems(self, items=None)
 ```
 

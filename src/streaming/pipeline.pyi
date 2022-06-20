@@ -83,6 +83,15 @@ class Pipeline:
         """
         ...
 
+    def observers_iter(self) -> typing.Iterator[toloka.streaming.observer.BaseObserver]:
+        """Iterate over registered observers.
+
+        Returns:
+            An iterator over all registered observers except deleted ones.
+            Might contain observers scheduled for deletion and not deleted yet.
+        """
+        ...
+
     def run(self) -> None: ...
 
     def __init__(
@@ -100,3 +109,4 @@ class Pipeline:
     storage: typing.Optional[toloka.streaming.storage.BaseStorage]
     name: typing.Optional[str]
     _observers: typing.Dict[int, toloka.streaming.observer.BaseObserver]
+    _got_sigint: bool

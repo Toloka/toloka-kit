@@ -1,7 +1,7 @@
 # OutputData
-`toloka.client.project.template_builder.data.OutputData`
+`toloka.client.project.template_builder.data.OutputData` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/data.py#L82)
 
-```
+```python
 OutputData(
     self,
     path: Optional[Any] = None,

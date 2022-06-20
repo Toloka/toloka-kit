@@ -1,7 +1,7 @@
 # Skill
-`toloka.client.filter.Skill`
+`toloka.client.filter.Skill` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/filter.py#L208)
 
-```
+```python
 Skill(
     self,
     key: str,

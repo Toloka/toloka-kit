@@ -114,10 +114,18 @@ class BaseSortItems(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class SearchRequestMetaclass(toloka.client.primitives.base.BaseTolokaObjectMetaclass):
-    ...
+    @staticmethod
+    def __new__(
+        mcs,
+        name,
+        bases,
+        namespace,
+        kw_only=False,
+        **kwargs
+    ): ...
 
 
-class BaseSearchRequest(toloka.client.primitives.base.BaseTolokaObject):
+class BaseSearchRequest(toloka.client.primitives.base.BaseTolokaObject, metaclass=SearchRequestMetaclass):
     """Base class for all search request classes
     """
 
@@ -832,7 +840,7 @@ class TaskSearchRequest(BaseSearchRequest):
     """Parameters for searching tasks
 
     Attributes:
-        pool_id: ID of the pool to get tasks from.
+        pool_id: The ID of the pool to get tasks from.
         overlap: Tasks with an overlap equal to the specified value.
         id_lt: Tasks with an ID less than the specified value.
         id_lte: Tasks with an ID less than or equal to the specified value.
@@ -843,9 +851,9 @@ class TaskSearchRequest(BaseSearchRequest):
         created_gt: Tasks created after the specified date.
         created_gte: Tasks created after or on the specified date.
         overlap_lt: Tasks with an overlap less than the specified value.
-        overlap_lte: Tasks with an overlap equal to the specified value.
+        overlap_lte: Tasks with an overlap less than or equal to the specified value.
         overlap_gt: Tasks with an overlap greater than the specified value.
-        overlap_gte: Tasks with an overlap equal to the specified value.
+        overlap_gte: Tasks with an overlap greater than or equal to the specified value.
     """
 
     class CompareFields:
@@ -1397,6 +1405,7 @@ class UserBonusSearchRequest(BaseSearchRequest):
 
     Attributes:
         user_id: Performer ID.
+        assignment_id: ID of the performer's response to the task a reward is issued for.
         private_comment: Comments for the requester.
         id_lt: Bonuses with an ID less than the specified value.
         id_lte: Bonuses with an ID less than or equal to the specified value.
@@ -1415,6 +1424,7 @@ class UserBonusSearchRequest(BaseSearchRequest):
     def __init__(
         self,
         user_id: typing.Optional[str] = None,
+        assignment_id: typing.Optional[str] = None,
         private_comment: typing.Optional[str] = None,
         id_lt: typing.Optional[str] = None,
         id_lte: typing.Optional[str] = None,
@@ -1431,6 +1441,7 @@ class UserBonusSearchRequest(BaseSearchRequest):
 
     _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     user_id: typing.Optional[str]
+    assignment_id: typing.Optional[str]
     private_comment: typing.Optional[str]
     id_lt: typing.Optional[str]
     id_lte: typing.Optional[str]

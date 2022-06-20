@@ -1,7 +1,7 @@
 # Requester
-`toloka.client.requester.Requester`
+`toloka.client.requester.Requester` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/requester.py#L9)
 
-```
+```python
 Requester(
     self,
     *,

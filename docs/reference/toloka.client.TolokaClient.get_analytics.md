@@ -1,7 +1,7 @@
 # get_analytics
-`toloka.client.TolokaClient.get_analytics`
+`toloka.client.TolokaClient.get_analytics` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/__init__.py#L40)
 
-```
+```python
 get_analytics(self, stats: List[AnalyticsRequest])
 ```
 

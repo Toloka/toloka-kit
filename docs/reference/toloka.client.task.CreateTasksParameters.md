@@ -1,7 +1,7 @@
 # CreateTasksParameters
-`toloka.client.task.CreateTasksParameters`
+`toloka.client.task.CreateTasksParameters` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/task.py#L134)
 
-```
+```python
 CreateTasksParameters(
     self,
     *,
@@ -22,7 +22,7 @@ Used when creating many Tasks.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`allow_defaults`|**Optional\[bool\]**|<p>Overlap settings:<ul><li>True - Use the overlap that is set in the pool parameters (in the defaults.default_overlap_for_new_task_suites key).</li><li>False - Use the overlap that is set in the task suite parameters (in the overlap field).</li></ul></p>
+`allow_defaults`|**Optional\[bool\]**|<p>Overlap setting:<ul><li>True — Use the overlap value that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.</li><li>False — Use the overlap value that is set in the `overlap` task suite parameter.</li></ul></p>
 `open_pool`|**Optional\[bool\]**|<p>Open the pool immediately after creating a task suite, if the pool is closed.</p>
-`skip_invalid_items`|**Optional\[bool\]**|<p>Validation parameters:<ul><li>True — Create the tasks that passed validation. Skip the rest of the tasks (errors will     be listed in the response to the request).</li><li>False — If at least one of the tasks didn&#x27;t pass validation, stop the operation and don&#x27;t create any tasks.</li></ul></p>
-`async_mode`|**Optional\[bool\]**|<p>How the request is processed:<ul><li>True — deferred. The query results in an asynchronous operation running in the background.     The response contains information about the operation (start and end time, status, number of sets).</li><li>False — synchronous. The response contains information about the created tasks.     A maximum of 5000 tasks can be sent in a single request.</li></ul></p>
+`skip_invalid_items`|**Optional\[bool\]**|<p>Task validation option:<ul><li>True — All valid tasks are added. If a task does not pass validation, then it is not added to Toloka. All such tasks are listed in the response.</li><li>False — If any task does not pass validation, then operation is cancelled and no tasks are added to Toloka.</li></ul></p>
+`async_mode`|**Optional\[bool\]**|<p>Request processing mode:<ul><li>True — Asynchronous operation is started internally and `create_tasks` waits for the completion of it. It is recommended to create no more than 10,000 tasks per request in this mode.</li><li>False — The request is processed synchronously. A maximum of 5000 tasks can be added in a single request in this mode.</li></ul></p>

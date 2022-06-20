@@ -1,5 +1,5 @@
 # Key
-`toloka.client.filter.Computed.Key`
+`toloka.client.filter.Computed.Key` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/filter.py#L184)
 
 Possible criteria for filtering users by computed data.
 
@@ -10,7 +10,6 @@ Possible criteria for filtering users by computed data.
 `CLIENT_TYPE`|'client_type'|<p></p>
 `REGION_BY_PHONE`|'region_by_phone'|<p></p>
 `REGION_BY_IP`|'region_by_ip'|<p></p>
-`RATING`|'rating'|<p></p>
 `DEVICE_CATEGORY`|'device_category'|<p></p>
 `OS_FAMILY`|'os_family'|<p></p>
 `OS_VERSION`|'os_version'|<p></p>

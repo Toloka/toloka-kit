@@ -1,7 +1,7 @@
 # BaseTolokaObject
-`toloka.client.primitives.base.BaseTolokaObject`
+`toloka.client.primitives.base.BaseTolokaObject` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/primitives/base.py#L146)
 
-```
+```python
 BaseTolokaObject(self)
 ```
 
@@ -13,7 +13,7 @@ Subclasses of BaseTolokaObject will:
   if not explicitly configured otherwise
 * Skip missing optional fields during unstructuring with client's cattr converter
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

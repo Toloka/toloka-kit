@@ -1,7 +1,7 @@
 # get_requester
-`toloka.client.TolokaClient.get_requester`
+`toloka.client.TolokaClient.get_requester` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/__init__.py#L40)
 
-```
+```python
 get_requester(self)
 ```
 
@@ -31,5 +31,5 @@ requester = toloka_client.get_requester()
 if requester.balance >= approx_pipeline_price:
     print('You have enough money on your account!')
 else:
-    print('You haven't got enough money on your account!')
+    print("You haven't got enough money on your account!")
 ```

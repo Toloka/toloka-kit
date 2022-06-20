@@ -1,5 +1,5 @@
 # Education
-`toloka.client.filter.Education.Education`
+`toloka.client.filter.Education.Education` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/filter.py#L275)
 
 User education.
 

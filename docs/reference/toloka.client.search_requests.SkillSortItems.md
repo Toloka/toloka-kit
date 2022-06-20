@@ -1,7 +1,7 @@
 # SkillSortItems
 `toloka.client.search_requests.SkillSortItems`
 
-```
+```python
 SkillSortItems(self, items=None)
 ```
 

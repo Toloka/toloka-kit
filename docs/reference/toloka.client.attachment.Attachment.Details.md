@@ -1,7 +1,7 @@
 # Details
-`toloka.client.attachment.Attachment.Details`
+`toloka.client.attachment.Attachment.Details` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/attachment.py#L33)
 
-```
+```python
 Details(
     self,
     *,

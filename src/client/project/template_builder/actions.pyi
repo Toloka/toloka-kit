@@ -14,7 +14,7 @@ import toloka.util._extendable_enum
 import typing
 
 
-class BaseActionV1(toloka.client.project.template_builder.base.BaseComponent):
+class BaseActionV1(toloka.client.project.template_builder.base.BaseComponent, metaclass=toloka.client.project.template_builder.base.VersionedBaseComponentMetaclass):
     """Perform various actions, such as showing notifications.
     """
 

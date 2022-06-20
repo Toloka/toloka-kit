@@ -1,7 +1,7 @@
 # Operation
-`toloka.client.operations.Operation`
+`toloka.client.operations.Operation` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/operations.py#L50)
 
-```
+```python
 Operation(
     self,
     *,
@@ -34,7 +34,7 @@ awarding bonuses) are processed as asynchronous operations that run in the backg
 `finished`|**Optional\[datetime\]**|<p>The UTC date and time the operation finished.</p>
 `progress`|**Optional\[int\]**|<p>The percentage of the operation completed.</p>
 `details`|**Optional\[Any\]**|<p>Details of the operation completion.</p>
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

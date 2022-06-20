@@ -144,7 +144,7 @@ from .user_bonus import UserBonus, UserBonusCreateRequestParameters
 from .user_restriction import UserRestriction
 from .user_skill import SetUserSkillRequest, UserSkill
 from ..util import identity
-from ..util._managing_headers import add_headers, caller_context_var, low_level_method_var, top_level_method_var
+from ..util._managing_headers import add_headers, form_additional_headers
 from ..util._codegen import expand
 from .webhook_subscription import WebhookSubscription
 
@@ -301,12 +301,7 @@ class TolokaClient:
             kwargs['timeout'] = self.default_timeout
 
         # Add additional headers from contextvars
-        ctx = contextvars.copy_context()
-        additional_headers = {
-            'X-Caller-Context': ctx[caller_context_var],
-            'X-Top-Level-Method': ctx[top_level_method_var],
-            'X-Low-Level-Method': ctx[low_level_method_var],
-        }
+        additional_headers = form_additional_headers()
         headers = kwargs.get('headers', {})
         headers = {**headers, **additional_headers}
         kwargs['headers'] = headers

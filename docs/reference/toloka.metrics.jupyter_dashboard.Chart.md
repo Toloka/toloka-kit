@@ -1,7 +1,7 @@
 # Chart
-`toloka.metrics.jupyter_dashboard.Chart`
+`toloka.metrics.jupyter_dashboard.Chart` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/metrics/jupyter_dashboard.py#L44)
 
-```
+```python
 Chart(
     self,
     name: Optional[str],
@@ -32,7 +32,7 @@ Chart(
     [
 )
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

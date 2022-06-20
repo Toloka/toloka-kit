@@ -1,7 +1,7 @@
 # PendingAssignmentsCount
-`toloka.client.conditions.PendingAssignmentsCount`
+`toloka.client.conditions.PendingAssignmentsCount` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/conditions.py#L213)
 
-```
+```python
 PendingAssignmentsCount(
     self,
     operator: CompareOperator,

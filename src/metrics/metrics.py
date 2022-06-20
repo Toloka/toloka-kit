@@ -30,9 +30,10 @@ from ..client import (
 from ..util._managing_headers import async_add_headers
 from ..util.async_utils import Cooldown
 from ..streaming import cursor
+from ..streaming.cursor import TolokaClientSyncOrAsyncType
 
 
-def bind_client(metrics: List['BaseMetric'], toloka_client: TolokaClient) -> None:
+def bind_client(metrics: List['BaseMetric'], toloka_client: TolokaClientSyncOrAsyncType) -> None:
     """Sets/updates toloka_client for all metrics in list.
 
     Examples:
@@ -60,7 +61,9 @@ def bind_client(metrics: List['BaseMetric'], toloka_client: TolokaClient) -> Non
     for metric in metrics:
         if not isinstance(metric, BaseMetric):
             raise TypeError(f'One of element is not instance of BaseMetric: "{metric}"')
-        metric.toloka_client = toloka_client
+        if isinstance(toloka_client, TolokaClient):
+            toloka_client = AsyncTolokaClient.from_sync_client(toloka_client)
+        metric.set_client(toloka_client)
 
 
 @attr.s(auto_attribs=True)
@@ -70,12 +73,28 @@ class BaseMetric:
     Stores TolokaClient instance for this metric.
     """
     toloka_client: TolokaClient = attr.ib(kw_only=True, default=None)
+    atoloka_client: AsyncTolokaClient = attr.ib(kw_only=True, default=None)
     timeout: datetime.timedelta = attr.ib(kw_only=True, factory=lambda: datetime.timedelta(seconds=10))
 
-    @cached_property
-    def atoloka_client(self):
-        assert self.toloka_client is not None
-        return AsyncTolokaClient.from_sync_client(self.toloka_client)
+    def __attrs_post_init__(self):
+        assert not (self.toloka_client and self.atoloka_client),\
+            f"TolokaClient and AsyncTolokaClient can't be provided to {type(self)} at the same time. " \
+            f"Please provide either TolokaClient or AsyncTolokaClient (the other client will be implicitly created)."
+        if self.toloka_client or self.atoloka_client:
+            self.set_client(self.toloka_client or self.atoloka_client)
+
+    def set_client(self, toloka_client: TolokaClientSyncOrAsyncType):
+        """Sets both TolokaClient and AsyncTolokaClient for the object.
+
+        New instance of AsyncTolokaClient is created is case of TolokaClient being passed.
+        """
+
+        if isinstance(toloka_client, TolokaClient):
+            self.toloka_client = toloka_client
+            self.atoloka_client = AsyncTolokaClient.from_sync_client(toloka_client)
+        else:
+            self.toloka_client = toloka_client.sync_client
+            self.atoloka_client = toloka_client
 
     @async_add_headers('metrics')
     async def get_lines(self) -> Dict[str, List[Tuple[Any, Any]]]:
@@ -149,6 +168,7 @@ class Balance(BaseMetric):
     balance_name: Optional[str] = None
 
     def __attrs_post_init__(self):
+        super().__attrs_post_init__()
         if self.balance_name is None:
             self.balance_name = 'toloka_requester_balance'
 
@@ -159,7 +179,7 @@ class Balance(BaseMetric):
 
     async def _get_lines_impl(self) -> Dict[str, List[Tuple[Any, Any]]]:
         requester: Requester = await self.atoloka_client.get_requester()
-        result = {self.balance_name: [(datetime.datetime.utcnow(), requester.balance)]}
+        result = {self.balance_name: [(datetime.datetime.now(datetime.timezone.utc), requester.balance)]}
         return result
 
 
@@ -190,6 +210,7 @@ class NewUserBonuses(BaseMetric):
     _join_events: bool = False
 
     def __attrs_post_init__(self):
+        super().__attrs_post_init__()
         metric_names = self.get_line_names()
         if not metric_names:
             self._count_name = 'bonus_count'
@@ -206,7 +227,7 @@ class NewUserBonuses(BaseMetric):
     def _cursor(self) -> cursor.UserBonusCursor:
         return cursor.UserBonusCursor(
             toloka_client=self.atoloka_client,
-            created_gte=datetime.datetime.utcnow(),
+            created_gte=datetime.datetime.now(datetime.timezone.utc),
         )
 
     async def _get_lines_impl(self) -> Dict[str, List[Tuple[Any, Any]]]:
@@ -218,9 +239,9 @@ class NewUserBonuses(BaseMetric):
             count = len(event_list)
             money = sum(event.user_bonus.amount for event in event_list)
             if self._count_name is not None:
-                result[self._count_name] = [(event_list[-1].event_time, count)] if count else [(datetime.datetime.utcnow(), 0)]
+                result[self._count_name] = [(event_list[-1].event_time, count)] if count else [(datetime.datetime.now(datetime.timezone.utc), 0)]
             if self._money_name is not None:
-                result[self._money_name] = [(event_list[-1].event_time, money)] if money else [(datetime.datetime.utcnow(), Decimal(0))]
+                result[self._money_name] = [(event_list[-1].event_time, money)] if money else [(datetime.datetime.now(datetime.timezone.utc), Decimal(0))]
         else:
             if self._count_name is not None:
                 result[self._count_name] = [
@@ -275,6 +296,7 @@ class NewUserSkills(BaseMetric):
     _join_events: bool = False
 
     def __attrs_post_init__(self):
+        super().__attrs_post_init__()
         metric_names = self.get_line_names()
         if not metric_names:
             self._value_name = 'skill_values'
@@ -291,7 +313,7 @@ class NewUserSkills(BaseMetric):
         return cursor.UserSkillCursor(
             toloka_client=self.atoloka_client,
             skill_id=self._skill_id,
-            created_gte=datetime.datetime.utcnow(),
+            created_gte=datetime.datetime.now(datetime.timezone.utc),
             event_type='MODIFIED',
         )
 
@@ -303,7 +325,7 @@ class NewUserSkills(BaseMetric):
         if self._count_name is not None:
             if self._join_events:
                 count = len(event_list)
-                result[self._count_name] = [(event_list[-1].event_time, count)] if count else [(datetime.datetime.utcnow(), 0)]
+                result[self._count_name] = [(event_list[-1].event_time, count)] if count else [(datetime.datetime.now(datetime.timezone.utc), 0)]
             else:
                 result[self._count_name] = [
                     (event_time, len(events))
@@ -327,9 +349,9 @@ class NewMessageThreads(BaseMetric):
 
     Args:
         count_name: Metric name for a count of new messages.
-        projects_name: Dictyonary that allows count messages on exact projects. {project_id: line_name}
-        pools_name: Dictyonary that allows count messages on exact pools. {pool_id: line_name}
-        join_events: Count all events in one point.  Default False. "Values" never join.
+        projects_name: Dictionary that allows count messages on exact projects. {project_id: line_name}
+        pools_name: Dictionary that allows count messages on exact pools. {pool_id: line_name}
+        join_events: Count all events in one point. Default False. "Values" never join.
 
     Example:
         How to collect this metrics:
@@ -355,7 +377,7 @@ class NewMessageThreads(BaseMetric):
             'messages_count': [(datetime.datetime(2021, 11, 19, 9, 40, 15, 970000), 10)],
             # messages on this exact pool
             'my_train_pool': [(datetime.datetime(2021, 11, 19, 12, 42, 50, 554830), 4)],
-            # with 'join_evants=True' it will be zero if no messages
+            # with 'join_events=True' it will be zero if no messages
             'my_working_pool': [(datetime.datetime(2021, 11, 19, 12, 42, 50, 554830), 0)],
             'pedestrian_proj': [(datetime.datetime(2021, 11, 19, 12, 42, 50, 554830), 1)],
             # total count != sum of other counts, because could exist different pools and projects
@@ -368,6 +390,7 @@ class NewMessageThreads(BaseMetric):
     _join_events: bool = False
 
     def __attrs_post_init__(self):
+        super().__attrs_post_init__()
         metric_names = self.get_line_names()
         if not metric_names:
             self._count_name = 'messages_count'
@@ -390,7 +413,7 @@ class NewMessageThreads(BaseMetric):
     def _cursor(self) -> cursor.MessageThreadCursor:
         return cursor.MessageThreadCursor(
             toloka_client=self.atoloka_client,
-            created_gte=datetime.datetime.utcnow(),
+            created_gte=datetime.datetime.now(datetime.timezone.utc),
         )
 
     async def _get_lines_impl(self) -> Dict[str, List[Tuple[Any, Any]]]:
@@ -400,7 +423,7 @@ class NewMessageThreads(BaseMetric):
         event_list = [event async for event in it]
         if self._join_events:
             if self._count_name is not None:
-                result[self._count_name] = [(event_list[-1].event_time, len(event_list))] if event_list else [(datetime.datetime.utcnow(), 0)]
+                result[self._count_name] = [(event_list[-1].event_time, len(event_list))] if event_list else [(datetime.datetime.now(datetime.timezone.utc), 0)]
 
             if self._projects_name or self._pools_name:
                 pools_count = defaultdict(int)
@@ -412,10 +435,12 @@ class NewMessageThreads(BaseMetric):
                         pools_count[pool_id] += 1
                     if project_id in self._projects_name:
                         projects_count[project_id] += 1
+
+                datetime_now = datetime.datetime.now(datetime.timezone.utc)
                 for project_id, line_name in self._projects_name.items():
-                    result[line_name] = [(datetime.datetime.utcnow(), projects_count[project_id] if project_id in projects_count else 0)]
+                    result[line_name] = [(datetime_now, projects_count.get(project_id, 0))]
                 for pool_id, line_name in self._pools_name.items():
-                    result[line_name] = [(datetime.datetime.utcnow(), pools_count[pool_id] if pool_id in pools_count else 0)]
+                    result[line_name] = [(datetime_now, pools_count.get(pool_id, 0))]
         else:
             if self._count_name is not None:
                 result[self._count_name] = [

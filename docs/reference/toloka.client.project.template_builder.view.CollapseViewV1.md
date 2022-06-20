@@ -1,7 +1,7 @@
 # CollapseViewV1
-`toloka.client.project.template_builder.view.CollapseViewV1`
+`toloka.client.project.template_builder.view.CollapseViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/view.py#L121)
 
-```
+```python
 CollapseViewV1(
     self,
     content: Optional[BaseComponent] = None,

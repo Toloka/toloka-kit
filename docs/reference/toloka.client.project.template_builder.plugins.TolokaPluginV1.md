@@ -1,12 +1,12 @@
 # TolokaPluginV1
-`toloka.client.project.template_builder.plugins.TolokaPluginV1`
+`toloka.client.project.template_builder.plugins.TolokaPluginV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/plugins.py#L171)
 
-```
+```python
 TolokaPluginV1(
     self,
     kind: Optional[TolokaPluginLayout.Kind] = None,
     *,
-    task_width: Optional[float] = None,
+    task_width: Optional[Union[BaseComponent, float]] = None,
     notifications: Optional[Union[BaseComponent, List[BaseComponent]]] = None,
     version: Optional[str] = '1.0.0'
 )

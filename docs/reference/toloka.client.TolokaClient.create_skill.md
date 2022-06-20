@@ -37,7 +37,7 @@ new_skill = toloka_client.create_skill(
     name='Area selection of road signs',
     public_requester_description={
         'EN': 'Performer is annotating road signs',
-        'FR': 'L'exécuteur marque les signaux routier',
+        'FR': "L'exécuteur marque les signaux routier",
     },
 )
 print(new_skill.id)

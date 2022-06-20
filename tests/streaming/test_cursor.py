@@ -103,7 +103,7 @@ def fetch_async(cursor):
     async def _fetch():
         return [item async for item in cursor]
 
-    loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
     return unstructure(loop.run_until_complete(_fetch()))
 
 

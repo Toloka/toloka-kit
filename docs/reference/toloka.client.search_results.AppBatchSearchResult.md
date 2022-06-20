@@ -1,7 +1,7 @@
 # AppBatchSearchResult
 `toloka.client.search_results.AppBatchSearchResult`
 
-```
+```python
 AppBatchSearchResult(
     self,
     *,

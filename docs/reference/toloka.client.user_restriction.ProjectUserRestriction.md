@@ -1,7 +1,7 @@
 # ProjectUserRestriction
-`toloka.client.user_restriction.ProjectUserRestriction`
+`toloka.client.user_restriction.ProjectUserRestriction` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/user_restriction.py#L104)
 
-```
+```python
 ProjectUserRestriction(
     self,
     *,

@@ -1,5 +1,5 @@
 # VerticalAlign
-`toloka.client.project.template_builder.layouts.ColumnsLayoutV1.VerticalAlign`
+`toloka.client.project.template_builder.layouts.ColumnsLayoutV1.VerticalAlign` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/layouts.py#L78)
 
 Vertical alignment of column content.
 

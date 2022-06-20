@@ -18,7 +18,18 @@ import toloka.client.project.template_builder.base
 import typing
 
 
-class BaseConditionV1(toloka.client.project.template_builder.base.BaseComponent):
+class BaseConditionV1Metaclass(toloka.client.project.template_builder.base.VersionedBaseComponentMetaclass):
+    @staticmethod
+    def __new__(
+        mcs,
+        name,
+        bases,
+        namespace,
+        **kwargs
+    ): ...
+
+
+class BaseConditionV1(toloka.client.project.template_builder.base.BaseComponent, metaclass=BaseConditionV1Metaclass):
     """Check an expression against a condition.
 
     For example, you can check that a text field is filled in.

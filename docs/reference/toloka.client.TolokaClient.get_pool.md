@@ -1,7 +1,7 @@
 # get_pool
-`toloka.client.TolokaClient.get_pool`
+`toloka.client.TolokaClient.get_pool` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/__init__.py#L40)
 
-```
+```python
 get_pool(self, pool_id: str)
 ```
 

@@ -1,7 +1,7 @@
 # S3Storage
-`toloka.streaming.storage.S3Storage`
+`toloka.streaming.storage.S3Storage` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/streaming/storage.py#L141)
 
-```
+```python
 S3Storage(
     self,
     bucket: Type,
@@ -44,7 +44,7 @@ pipeline = Pipeline(storage=storage)
 ...
 await pipeline.run()  # Will load from storage at the start and save after each iteration.
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

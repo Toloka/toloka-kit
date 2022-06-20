@@ -1,7 +1,7 @@
 # register
-`toloka.streaming.pipeline.Pipeline.register`
+`toloka.streaming.pipeline.Pipeline.register` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/streaming/pipeline.py#L168)
 
-```
+```python
 register(self, observer: BaseObserver)
 ```
 

@@ -1,7 +1,7 @@
 # open_training_async
-`toloka.client.TolokaClient.open_training_async`
+`toloka.client.TolokaClient.open_training_async` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/__init__.py#L40)
 
-```
+```python
 open_training_async(self, training_id: str)
 ```
 

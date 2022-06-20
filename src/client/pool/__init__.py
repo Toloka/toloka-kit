@@ -8,6 +8,7 @@ __all__ = [
     'DynamicOverlapConfig',
     'DynamicPricingConfig',
     'MixerConfig',
+    'SpeedQualityBalanceConfig',
 ]
 import datetime
 from enum import unique
@@ -22,6 +23,7 @@ from . import mixer_config
 from .dynamic_overlap_config import DynamicOverlapConfig
 from .dynamic_pricing_config import DynamicPricingConfig
 from .mixer_config import MixerConfig
+from .speed_quality_balance_config import SpeedQualityBalanceConfig
 from .._converter import unstructure
 from ..filter import FilterCondition, FilterOr, FilterAnd
 from ..owner import Owner
@@ -80,6 +82,7 @@ class Pool(BaseTolokaObject):
                 when the pool opens.
         filter: Settings for user selection filters.
         quality_control: Settings for quality control rules and the ID of the pool with training tasks.
+        speed_quality_balance: Settings for balance between speed and quality of pool done.
         dynamic_overlap_config: Dynamic overlap setting. Allows you to change the overlap depending on
             how well the performers handle the task.
         mixer_config: Parameters for automatically creating a task suite (“smart mixing”).
@@ -102,7 +105,7 @@ class Pool(BaseTolokaObject):
         >>>     project_id=existing_project_id,
         >>>     private_name='Pool 1',
         >>>     may_contain_adult_content=False,
-        >>>     will_expire=datetime.datetime.utcnow() + datetime.timedelta(days=365),
+        >>>     will_expire=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=365),
         >>>     reward_per_assignment=0.01,
         >>>     assignment_max_duration_seconds=60*20,
         >>>     defaults=toloka.pool.Pool.Defaults(default_overlap_for_new_task_suites=3),
@@ -212,6 +215,7 @@ class Pool(BaseTolokaObject):
     priority: int
     filter: FilterCondition
     quality_control: QualityControl = attr.attrib(factory=QualityControl)
+    speed_quality_balance: SpeedQualityBalanceConfig
     dynamic_overlap_config: DynamicOverlapConfig
     mixer_config: MixerConfig
     training_config: TrainingConfig

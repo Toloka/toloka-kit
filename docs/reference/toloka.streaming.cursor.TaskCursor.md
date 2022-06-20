@@ -1,10 +1,10 @@
 # TaskCursor
-`toloka.streaming.cursor.TaskCursor`
+`toloka.streaming.cursor.TaskCursor` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/streaming/cursor.py#L263)
 
-```
+```python
 TaskCursor(
     self,
-    toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
+    toloka_client: Union[TolokaClient, AsyncTolokaClient],
     pool_id: Optional[str] = None,
     overlap: Optional[int] = None,
     id_lt: Optional[str] = None,
@@ -28,7 +28,7 @@ Iterator over tasks by create time.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncMultithreadWrapper](toloka.util.async_utils.AsyncMultithreadWrapper.md)\[[TolokaClient](toloka.client.TolokaClient.md)\]\]**|<p>TolokaClient object that is being used to search tasks.</p>
+`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncTolokaClient](toloka.async_client.client.AsyncTolokaClient.md)\]**|<p>TolokaClient object that is being used to search tasks.</p>
 `request`|**[TaskSearchRequest](toloka.client.search_requests.TaskSearchRequest.md)**|<p>Base request to search tasks by.</p>
 
 **Examples:**

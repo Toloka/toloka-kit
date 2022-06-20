@@ -1,7 +1,7 @@
 # get_app
-`toloka.client.TolokaClient.get_app`
+`toloka.client.TolokaClient.get_app` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/__init__.py#L40)
 
-```
+```python
 get_app(self, app_id: str)
 ```
 

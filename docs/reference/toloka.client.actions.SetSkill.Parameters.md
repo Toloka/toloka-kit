@@ -1,7 +1,7 @@
 # Parameters
-`toloka.client.actions.SetSkill.Parameters`
+`toloka.client.actions.SetSkill.Parameters` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/actions.py#L179)
 
-```
+```python
 Parameters(
     self,
     *,

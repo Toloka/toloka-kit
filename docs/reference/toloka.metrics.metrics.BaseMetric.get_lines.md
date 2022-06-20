@@ -1,7 +1,7 @@
 # get_lines
-`toloka.metrics.metrics.BaseMetric.get_lines`
+`toloka.metrics.metrics.BaseMetric.get_lines` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/metrics/metrics.py#L70)
 
-```
+```python
 get_lines(self)
 ```
 

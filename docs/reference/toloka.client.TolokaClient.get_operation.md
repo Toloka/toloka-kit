@@ -1,7 +1,7 @@
 # get_operation
-`toloka.client.TolokaClient.get_operation`
+`toloka.client.TolokaClient.get_operation` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/__init__.py#L40)
 
-```
+```python
 get_operation(self, operation_id: str)
 ```
 

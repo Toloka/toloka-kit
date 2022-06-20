@@ -1,7 +1,7 @@
 # TolokaClient
-`toloka.client.TolokaClient`
+`toloka.client.TolokaClient` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/__init__.py#L153)
 
-```
+```python
 TolokaClient(
     self,
     token: str,
@@ -47,8 +47,12 @@ your_oauth_token = input('Enter your token:')
 toloka_client = toloka.TolokaClient(your_oauth_token, 'PRODUCTION')  # Or switch to 'SANDBOX' environment
 ```
 
-**Note**: `toloka_client` instance will be used to pass all API calls later on.
-## Methods summary
+{% note info %}
+
+`toloka_client` instance will be used to pass all API calls later on.
+
+{% endnote %}
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|
@@ -82,12 +86,12 @@ toloka_client = toloka.TolokaClient(your_oauth_token, 'PRODUCTION')  # Or switch
 [create_pool](toloka.client.TolokaClient.create_pool.md)| Creates a new pool
 [create_project](toloka.client.TolokaClient.create_project.md)| Creates a new project
 [create_skill](toloka.client.TolokaClient.create_skill.md)| Creates a new Skill
-[create_task](toloka.client.TolokaClient.create_task.md)| Creates a new task
+[create_task](toloka.client.TolokaClient.create_task.md)| Creates a new task in Toloka.
 [create_task_suite](toloka.client.TolokaClient.create_task_suite.md)| Creates a new task suite
 [create_task_suites](toloka.client.TolokaClient.create_task_suites.md)| Creates many task suites in pools
 [create_task_suites_async](toloka.client.TolokaClient.create_task_suites_async.md)| Creates many task suites in pools, asynchronous version
-[create_tasks](toloka.client.TolokaClient.create_tasks.md)| Creates many tasks in pools
-[create_tasks_async](toloka.client.TolokaClient.create_tasks_async.md)| Creates many tasks in pools, asynchronous version
+[create_tasks](toloka.client.TolokaClient.create_tasks.md)| Creates several tasks in Toloka using a single request.
+[create_tasks_async](toloka.client.TolokaClient.create_tasks_async.md)| Creates tasks in Toloka asynchronously.
 [create_training](toloka.client.TolokaClient.create_training.md)| Creates a new training
 [create_user_bonus](toloka.client.TolokaClient.create_user_bonus.md)| Issues payments directly to the performer
 [create_user_bonuses](toloka.client.TolokaClient.create_user_bonuses.md)| Creates many user bonuses
@@ -108,7 +112,7 @@ toloka_client = toloka.TolokaClient(your_oauth_token, 'PRODUCTION')  # Or switch
 [find_projects](toloka.client.TolokaClient.find_projects.md)| Finds all projects that match certain rules
 [find_skills](toloka.client.TolokaClient.find_skills.md)| Finds all skills that match certain rules
 [find_task_suites](toloka.client.TolokaClient.find_task_suites.md)| Finds all task suites that match certain rules
-[find_tasks](toloka.client.TolokaClient.find_tasks.md)| Finds all tasks that match certain rules
+[find_tasks](toloka.client.TolokaClient.find_tasks.md)| Finds tasks that match certain criteria.
 [find_trainings](toloka.client.TolokaClient.find_trainings.md)| Finds all trainings that match certain rules
 [find_user_bonuses](toloka.client.TolokaClient.find_user_bonuses.md)| Finds all user bonuses that match certain rules
 [find_user_restrictions](toloka.client.TolokaClient.find_user_restrictions.md)| Finds all user restrictions that match certain rules
@@ -139,10 +143,10 @@ toloka_client = toloka.TolokaClient(your_oauth_token, 'PRODUCTION')  # Or switch
 [get_requester](toloka.client.TolokaClient.get_requester.md)| Reads information about the customer and the account balance
 [get_skill](toloka.client.TolokaClient.get_skill.md)| Reads one specific skill
 [get_skills](toloka.client.TolokaClient.get_skills.md)| Finds all skills that match certain rules and returns them in an iterable object
-[get_task](toloka.client.TolokaClient.get_task.md)| Reads one specific task
+[get_task](toloka.client.TolokaClient.get_task.md)| Gets a task with specified ID from Toloka.
 [get_task_suite](toloka.client.TolokaClient.get_task_suite.md)| Reads one specific task suite
 [get_task_suites](toloka.client.TolokaClient.get_task_suites.md)| Finds all task suites that match certain rules and returns them in an iterable object
-[get_tasks](toloka.client.TolokaClient.get_tasks.md)| Finds all tasks that match certain rules and returns them in an iterable object
+[get_tasks](toloka.client.TolokaClient.get_tasks.md)| Finds all tasks that match certain criteria.
 [get_training](toloka.client.TolokaClient.get_training.md)| Reads one specific training
 [get_trainings](toloka.client.TolokaClient.get_trainings.md)| Finds all trainings that match certain rules and returns them in an iterable object
 [get_user_bonus](toloka.client.TolokaClient.get_user_bonus.md)| Reads one specific user bonus
@@ -159,8 +163,8 @@ toloka_client = toloka.TolokaClient(your_oauth_token, 'PRODUCTION')  # Or switch
 [open_training_async](toloka.client.TolokaClient.open_training_async.md)| Starts distributing tasks from the training, asynchronous version
 [patch_assignment](toloka.client.TolokaClient.patch_assignment.md)| Changes status and comment on assignment
 [patch_pool](toloka.client.TolokaClient.patch_pool.md)| Changes the priority of the pool issue
-[patch_task](toloka.client.TolokaClient.patch_task.md)| Changes the task overlap
-[patch_task_overlap_or_min](toloka.client.TolokaClient.patch_task_overlap_or_min.md)| Stops issuing the task
+[patch_task](toloka.client.TolokaClient.patch_task.md)| Changes a task overlap value.
+[patch_task_overlap_or_min](toloka.client.TolokaClient.patch_task_overlap_or_min.md)| Stops assigning a task to users.
 [patch_task_suite](toloka.client.TolokaClient.patch_task_suite.md)| Changes the task suite overlap or priority
 [patch_task_suite_overlap_or_min](toloka.client.TolokaClient.patch_task_suite_overlap_or_min.md)| Stops issuing the task suites
 [reject_assignment](toloka.client.TolokaClient.reject_assignment.md)| Marks one assignment as rejected

@@ -24,14 +24,15 @@ class AsyncTolokaClient:
     def __getattr__(self, name):
         return getattr(self._async_wrapped_client, name)
 
+    @property
+    def sync_client(self) -> TolokaClient:
+        return self._async_wrapped_client.__wrapped__
+
     @classmethod
     def from_sync_client(cls, client: TolokaClient) -> 'AsyncTolokaClient':
-        return AsyncTolokaClient(
-            token=client.token,
-            url=client.url,
-            timeout=client.default_timeout,
-            retryer_factory=client.retryer_factory,
-        )
+        async_client = AsyncTolokaClient.__new__(AsyncTolokaClient)
+        async_client._async_wrapped_client = AsyncMultithreadWrapper(client)
+        return async_client
 
     async def wait_operation(self, op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10), logger=logger) -> operations.Operation:
         """Asynchronous version of wait_operation
@@ -42,7 +43,7 @@ class AsyncTolokaClient:
         if op.is_completed():
             return op
 
-        utcnow = datetime.datetime.utcnow()
+        utcnow = datetime.datetime.now(datetime.timezone.utc)
         wait_until_time = utcnow + timeout
 
         if not op.started or utcnow - op.started < default_initial_delay:
@@ -53,5 +54,5 @@ class AsyncTolokaClient:
             if op.is_completed():
                 return op
             await asyncio.sleep(default_time_to_wait.total_seconds())
-            if datetime.datetime.utcnow() > wait_until_time:
+            if datetime.datetime.now(datetime.timezone.utc) > wait_until_time:
                 raise TimeoutError

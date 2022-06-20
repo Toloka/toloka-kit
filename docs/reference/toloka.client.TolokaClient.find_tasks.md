@@ -1,19 +1,17 @@
 # find_tasks
 `toloka.client.TolokaClient.find_tasks`
 
-Finds all tasks that match certain rules
+Finds tasks that match certain criteria.
 
 
-As a result, it returns an object that contains the first part of the found tasks and whether there
-are any more results.
-It is better to use the "get_tasks" method, they allow to iterate trought all results
-and not just the first output.
+The number of returned tasks is limited. `find_tasks` additionally returns a flag showing whether there are more matching tasks.
+Consider using [get_tasks](./toloka.client.TolokaClient.get_tasks.md) to iterate over all matching tasks.
 
 ## Parameters Description
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`pool_id`|**Optional\[str\]**|<p>ID of the pool to get tasks from.</p>
+`pool_id`|**Optional\[str\]**|<p>The ID of the pool to get tasks from.</p>
 `overlap`|**Optional\[int\]**|<p>Tasks with an overlap equal to the specified value.</p>
 `id_lt`|**Optional\[str\]**|<p>Tasks with an ID less than the specified value.</p>
 `id_lte`|**Optional\[str\]**|<p>Tasks with an ID less than or equal to the specified value.</p>
@@ -24,15 +22,15 @@ and not just the first output.
 `created_gt`|**Optional\[datetime\]**|<p>Tasks created after the specified date.</p>
 `created_gte`|**Optional\[datetime\]**|<p>Tasks created after or on the specified date.</p>
 `overlap_lt`|**Optional\[int\]**|<p>Tasks with an overlap less than the specified value.</p>
-`overlap_lte`|**Optional\[int\]**|<p>Tasks with an overlap equal to the specified value.</p>
+`overlap_lte`|**Optional\[int\]**|<p>Tasks with an overlap less than or equal to the specified value.</p>
 `overlap_gt`|**Optional\[int\]**|<p>Tasks with an overlap greater than the specified value.</p>
-`overlap_gte`|**Optional\[int\]**|<p>Tasks with an overlap equal to the specified value.</p>
-`sort`|**Union\[List\[str\], [TaskSortItems](toloka.client.search_requests.TaskSortItems.md), None\]**|<p>How to sort result. Defaults to None.</p>
-`limit`|**Optional\[int\]**|<p>Limit on the number of results returned. The maximum is 100 000. Defaults to None, in which case it returns first 50 results.</p>
+`overlap_gte`|**Optional\[int\]**|<p>Tasks with an overlap greater than or equal to the specified value.</p>
+`sort`|**Union\[List\[str\], [TaskSortItems](toloka.client.search_requests.TaskSortItems.md), None\]**|<p>Sorting options. </p><p>Default value: `None`.</p>
+`limit`|**Optional\[int\]**|<p>Returned tasks limit. The maximum value is 100,000. </p><p>Default value: 50.</p>
 
 * **Returns:**
 
-  The first `limit` tasks in `items`. And a mark that there is more.
+  Found tasks and a flag showing whether there are more matching tasks.
 
 * **Return type:**
 
@@ -40,10 +38,8 @@ and not just the first output.
 
 **Examples:**
 
-Find three most recently created tasks in a specified pool.
+To find three most recently created tasks in a pool, call the method with the following parameters:
 
 ```python
 toloka_client.find_tasks(pool_id='1', sort=['-created', '-id'], limit=3)
 ```
-
-If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.

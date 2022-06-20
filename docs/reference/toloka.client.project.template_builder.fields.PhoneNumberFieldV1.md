@@ -1,7 +1,7 @@
 # PhoneNumberFieldV1
-`toloka.client.project.template_builder.fields.PhoneNumberFieldV1`
+`toloka.client.project.template_builder.fields.PhoneNumberFieldV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/fields.py#L408)
 
-```
+```python
 PhoneNumberFieldV1(
     self,
     data: Optional[BaseComponent] = None,

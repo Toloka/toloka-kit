@@ -1,7 +1,7 @@
 # DashBoard
-`toloka.metrics.jupyter_dashboard.DashBoard`
+`toloka.metrics.jupyter_dashboard.DashBoard` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/metrics/jupyter_dashboard.py#L174)
 
-```
+```python
 DashBoard(
     self,
     metrics: List[Union[BaseMetric, Chart]],
@@ -49,7 +49,7 @@ metrics.bind_client(new_dash.metrics, toloka_client)
 new_dash.run_dash()
 new_dash.stop_dash()
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

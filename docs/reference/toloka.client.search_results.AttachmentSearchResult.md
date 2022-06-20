@@ -1,7 +1,7 @@
 # AttachmentSearchResult
 `toloka.client.search_results.AttachmentSearchResult`
 
-```
+```python
 AttachmentSearchResult(
     self,
     *,

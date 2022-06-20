@@ -255,6 +255,8 @@ class MessageThreadCompose(toloka.client.primitives.base.BaseTolokaObject):
         recipients_filter: Filter to select recipients.
     """
 
+    def unstructure(self) -> typing.Optional[dict]: ...
+
     def __init__(
         self,
         *,

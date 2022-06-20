@@ -1,7 +1,7 @@
 # AppBatchSortItems
 `toloka.client.search_requests.AppBatchSortItems`
 
-```
+```python
 AppBatchSortItems(self, items=None)
 ```
 

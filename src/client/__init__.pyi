@@ -30,20 +30,34 @@ __all__ = [
     'user_restriction',
     'user_skill',
     'webhook_subscription',
+    'structure',
+    'unstructure',
     'TolokaClient',
+    'AggregatedSolution',
+    'AnalyticsRequest',
     'Assignment',
+    'AssignmentPatch',
+    'CloneResults',
+    'GetAssignmentsTsvParameters',
     'Attachment',
     'Folder',
     'MessageThread',
     'MessageThreadReply',
     'MessageThreadFolders',
     'MessageThreadCompose',
+    'OperationLogItem',
+    'Requester',
     'Skill',
+    'SetUserSkillRequest',
     'TaskSuite',
     'Task',
     'Training',
     'UserBonus',
+    'UserBonusCreateRequestParameters',
+    'UserRestriction',
+    'UserSkill',
     'Pool',
+    'PoolPatchRequest',
     'Project',
     'AppProject',
     'App',
@@ -117,6 +131,8 @@ from toloka.client import (
     user_skill,
     webhook_subscription,
 )
+from toloka.client.aggregation import AggregatedSolution
+from toloka.client.analytics_request import AnalyticsRequest
 from toloka.client.app import (
     App,
     AppBatch,
@@ -125,8 +141,13 @@ from toloka.client.app import (
     AppItemsCreateRequest,
     AppProject,
 )
-from toloka.client.assignment import Assignment
+from toloka.client.assignment import (
+    Assignment,
+    AssignmentPatch,
+    GetAssignmentsTsvParameters,
+)
 from toloka.client.attachment import Attachment
+from toloka.client.clone_results import CloneResults
 from toloka.client.message_thread import (
     Folder,
     MessageThread,
@@ -134,13 +155,26 @@ from toloka.client.message_thread import (
     MessageThreadFolders,
     MessageThreadReply,
 )
-from toloka.client.pool import Pool
+from toloka.client.operation_log import OperationLogItem
+from toloka.client.pool import (
+    Pool,
+    PoolPatchRequest,
+)
 from toloka.client.project import Project
+from toloka.client.requester import Requester
 from toloka.client.skill import Skill
 from toloka.client.task import Task
 from toloka.client.task_suite import TaskSuite
 from toloka.client.training import Training
-from toloka.client.user_bonus import UserBonus
+from toloka.client.user_bonus import (
+    UserBonus,
+    UserBonusCreateRequestParameters,
+)
+from toloka.client.user_restriction import UserRestriction
+from toloka.client.user_skill import (
+    SetUserSkillRequest,
+    UserSkill,
+)
 
 
 class TolokaClient:
@@ -197,7 +231,11 @@ class TolokaClient:
         >>> toloka_client = toloka.TolokaClient(your_oauth_token, 'PRODUCTION')  # Or switch to 'SANDBOX' environment
         ...
 
-        **Note**: `toloka_client` instance will be used to pass all API calls later on.
+        {% note info %}
+
+        `toloka_client` instance will be used to pass all API calls later on.
+
+        {% endnote %}
     """
 
     class Environment(enum.Enum):
@@ -225,8 +263,12 @@ class TolokaClient:
         Responses to all completed tasks will be aggregated.
         The method only starts the aggregation and returns the operation for further tracking.
 
-        **Note**: In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
+        {% note info %}
+
+        In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
         that have more aggregation methods and can perform on your computers.
+
+        {% endnote %}
 
         Args:
             request: Parameters describing in which pool to aggregate solutions and by what rules.
@@ -263,8 +305,12 @@ class TolokaClient:
         Responses to all completed tasks will be aggregated.
         The method only starts the aggregation and returns the operation for further tracking.
 
-        **Note**: In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
+        {% note info %}
+
+        In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
         that have more aggregation methods and can perform on your computers.
+
+        {% endnote %}
 
         Args:
             request: Parameters describing in which pool to aggregate solutions and by what rules.
@@ -359,8 +405,12 @@ class TolokaClient:
         """Gets aggregated responses after the AggregatedSolutionOperation completes.
         It is better to use the "get_aggregated_solutions" method, that allows to iterate through all results.
 
-        **Note**: In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
+        {% note info %}
+
+        In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
         that have more aggregation methods and can perform on your computers.
+
+        {% endnote %}
 
         Args:
             operation_id: From what aggregation operation you want to get results.
@@ -404,8 +454,12 @@ class TolokaClient:
         """Gets aggregated responses after the AggregatedSolutionOperation completes.
         It is better to use the "get_aggregated_solutions" method, that allows to iterate through all results.
 
-        **Note**: In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
+        {% note info %}
+
+        In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
         that have more aggregation methods and can perform on your computers.
+
+        {% endnote %}
 
         Args:
             operation_id: From what aggregation operation you want to get results.
@@ -443,8 +497,12 @@ class TolokaClient:
     ) -> typing.Generator[toloka.client.aggregation.AggregatedSolution, None, None]:
         """Finds all aggregated responses after the AggregatedSolutionOperation completes
 
-        **Note**: In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
+        {% note info %}
+
+        In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
         that have more aggregation methods and can perform on your computers.
+
+        {% endnote %}
 
         Args:
             operation_id: From what aggregation operation you want to get results.
@@ -473,8 +531,12 @@ class TolokaClient:
     ) -> typing.Generator[toloka.client.aggregation.AggregatedSolution, None, None]:
         """Finds all aggregated responses after the AggregatedSolutionOperation completes
 
-        **Note**: In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
+        {% note info %}
+
+        In all aggregation purposes we are strongly recommending using our [crowd-kit library](https://github.com/Toloka/crowd-kit),
         that have more aggregation methods and can perform on your computers.
+
+        {% endnote %}
 
         Args:
             operation_id: From what aggregation operation you want to get results.
@@ -995,10 +1057,10 @@ class TolokaClient:
         Example:
             If you want to thank Toloka performers who have tried to complete your tasks, send them a nice message.
 
-            >>> message_text = 'Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!'
+            >>> message_text = "Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!"
             >>> toloka_client.compose_message_thread(
             >>>     recipients_select_type='ALL',
-            >>>     topic={'EN':'Thank you, performer!'},
+            >>>     topic={'EN': 'Thank you, performer!'},
             >>>     text={'EN': message_text},
             >>>     answerable=False
             >>> )
@@ -1030,10 +1092,10 @@ class TolokaClient:
         Example:
             If you want to thank Toloka performers who have tried to complete your tasks, send them a nice message.
 
-            >>> message_text = 'Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!'
+            >>> message_text = "Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!"
             >>> toloka_client.compose_message_thread(
             >>>     recipients_select_type='ALL',
-            >>>     topic={'EN':'Thank you, performer!'},
+            >>>     topic={'EN': 'Thank you, performer!'},
             >>>     text={'EN': message_text},
             >>>     answerable=False
             >>> )
@@ -1649,7 +1711,7 @@ class TolokaClient:
             >>>     project_id=existing_project_id,
             >>>     private_name='Pool 1',
             >>>     may_contain_adult_content=False,
-            >>>     will_expire=datetime.datetime.utcnow() + datetime.timedelta(days=365),
+            >>>     will_expire=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=365),
             >>>     reward_per_assignment=0.01,
             >>>     assignment_max_duration_seconds=60*20,
             >>>     defaults=toloka.pool.Pool.Defaults(default_overlap_for_new_task_suites=3),
@@ -2344,7 +2406,7 @@ class TolokaClient:
             >>>     name='Area selection of road signs',
             >>>     public_requester_description={
             >>>         'EN': 'Performer is annotating road signs',
-            >>>         'FR': 'L'exécuteur marque les signaux routier',
+            >>>         'FR': "L'exécuteur marque les signaux routier",
             >>>     },
             >>> )
             >>> print(new_skill.id)
@@ -2381,7 +2443,7 @@ class TolokaClient:
             >>>     name='Area selection of road signs',
             >>>     public_requester_description={
             >>>         'EN': 'Performer is annotating road signs',
-            >>>         'FR': 'L'exécuteur marque les signaux routier',
+            >>>         'FR': "L'exécuteur marque les signaux routier",
             >>>     },
             >>> )
             >>> print(new_skill.id)
@@ -2590,23 +2652,24 @@ class TolokaClient:
         task: toloka.client.task.Task,
         parameters: typing.Optional[toloka.client.task.CreateTaskParameters] = None
     ) -> toloka.client.task.Task:
-        """Creates a new task
+        """Creates a new task in Toloka.
 
-        It's better to use "create_tasks", if you need to insert several tasks.
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
+        To create several tasks at once use [create_tasks](./toloka.client.TolokaClient.create_tasks.md).
 
         Args:
-            task: Task that need to be created.
+            task: Task to be created.
             parameters: Parameters for Task creation controlling. Defaults to None.
                 Allows you to use default overlap and start pool after task creation.
 
         Returns:
-            Task: Created task.
+            Task: The created task.
 
         Example:
             >>> task = toloka.task.Task(
-            >>>             input_values={'image': 'https://tlk.s3.yandex.net/dataset/cats_vs_dogs/dogs/048e5760fc5a46faa434922b2447a527.jpg'},
-            >>>             pool_id='1')
+            >>>     input_values={'image': 'https://tlk.s3.yandex.net/dataset/cats_vs_dogs/dogs/048e5760fc5a46faa434922b2447a527.jpg'},
+            >>>     pool_id='1'
+            >>> )
             >>> toloka_client.create_task(task=task, allow_defaults=True)
             ...
         """
@@ -2620,23 +2683,24 @@ class TolokaClient:
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None
     ) -> toloka.client.task.Task:
-        """Creates a new task
+        """Creates a new task in Toloka.
 
-        It's better to use "create_tasks", if you need to insert several tasks.
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
+        To create several tasks at once use [create_tasks](./toloka.client.TolokaClient.create_tasks.md).
 
         Args:
-            task: Task that need to be created.
+            task: Task to be created.
             parameters: Parameters for Task creation controlling. Defaults to None.
                 Allows you to use default overlap and start pool after task creation.
 
         Returns:
-            Task: Created task.
+            Task: The created task.
 
         Example:
             >>> task = toloka.task.Task(
-            >>>             input_values={'image': 'https://tlk.s3.yandex.net/dataset/cats_vs_dogs/dogs/048e5760fc5a46faa434922b2447a527.jpg'},
-            >>>             pool_id='1')
+            >>>     input_values={'image': 'https://tlk.s3.yandex.net/dataset/cats_vs_dogs/dogs/048e5760fc5a46faa434922b2447a527.jpg'},
+            >>>     pool_id='1'
+            >>> )
             >>> toloka_client.create_task(task=task, allow_defaults=True)
             ...
         """
@@ -2648,29 +2712,29 @@ class TolokaClient:
         tasks: typing.List[toloka.client.task.Task],
         parameters: typing.Optional[toloka.client.task.CreateTasksParameters] = None
     ) -> toloka.client.batch_create_results.TaskBatchCreateResult:
-        """Creates many tasks in pools
+        """Creates several tasks in Toloka using a single request.
 
-        By default uses asynchronous operation inside. It's better not to set "async_mode=False", if you not understand
-        clearly why you need it.
-        Tasks can be from different pools. You can insert both regular tasks and golden-tasks.
+        Tasks can be added to different pools. You can add together regular tasks and control tasks.
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
-        Recomended maximum of 10,000 task per request if async_mode is True.
+
+        By default, `create_tasks` starts asynchronous operation internally and waits for the completion of it. Do not
+        change `async_mode` to False, if you do not understand clearly why you need it.
 
         Args:
-            tasks: List of tasks, that will be created.
+            tasks: List of tasks to be created.
             parameters: Parameters for Tasks creation controlling. Defaults to None, in which case the asynchronous
                 operations is used.
 
         Returns:
-            batch_create_results.TaskBatchCreateResult: Result of tasks creating. Contains created tasks in `items` and
-                problems in "validation_errors".
+            batch_create_results.TaskBatchCreateResult: An object with created tasks in `items` and invalid tasks in
+                `validation_errors`.
 
         Raises:
             ValidationApiError: If no tasks were created, or skip_invalid_items==False and there is a problem when
                 checking any task.
 
         Example:
-            How to create regular tasks from tsv.
+            The first example shows how to create regular tasks using a TSV file.
 
             >>> dataset = pandas.read_csv('dataset.tsv', sep='  ')
             >>> tasks = [
@@ -2681,7 +2745,7 @@ class TolokaClient:
             >>> print(len(created_result.items))
             ...
 
-            How to create golden-tasks.
+            The second example shows how to create control tasks.
 
             >>> dataset = pd.read_csv('dateset.tsv', sep=';')
             >>> golden_tasks = []
@@ -2710,29 +2774,29 @@ class TolokaClient:
         operation_id: typing.Optional[uuid.UUID] = None,
         async_mode: typing.Optional[bool] = True
     ) -> toloka.client.batch_create_results.TaskBatchCreateResult:
-        """Creates many tasks in pools
+        """Creates several tasks in Toloka using a single request.
 
-        By default uses asynchronous operation inside. It's better not to set "async_mode=False", if you not understand
-        clearly why you need it.
-        Tasks can be from different pools. You can insert both regular tasks and golden-tasks.
+        Tasks can be added to different pools. You can add together regular tasks and control tasks.
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
-        Recomended maximum of 10,000 task per request if async_mode is True.
+
+        By default, `create_tasks` starts asynchronous operation internally and waits for the completion of it. Do not
+        change `async_mode` to False, if you do not understand clearly why you need it.
 
         Args:
-            tasks: List of tasks, that will be created.
+            tasks: List of tasks to be created.
             parameters: Parameters for Tasks creation controlling. Defaults to None, in which case the asynchronous
                 operations is used.
 
         Returns:
-            batch_create_results.TaskBatchCreateResult: Result of tasks creating. Contains created tasks in `items` and
-                problems in "validation_errors".
+            batch_create_results.TaskBatchCreateResult: An object with created tasks in `items` and invalid tasks in
+                `validation_errors`.
 
         Raises:
             ValidationApiError: If no tasks were created, or skip_invalid_items==False and there is a problem when
                 checking any task.
 
         Example:
-            How to create regular tasks from tsv.
+            The first example shows how to create regular tasks using a TSV file.
 
             >>> dataset = pandas.read_csv('dataset.tsv', sep='  ')
             >>> tasks = [
@@ -2743,7 +2807,7 @@ class TolokaClient:
             >>> print(len(created_result.items))
             ...
 
-            How to create golden-tasks.
+            The second example shows how to create control tasks.
 
             >>> dataset = pd.read_csv('dateset.tsv', sep=';')
             >>> golden_tasks = []
@@ -2767,17 +2831,16 @@ class TolokaClient:
         tasks: typing.List[toloka.client.task.Task],
         parameters: typing.Optional[toloka.client.task.CreateTasksParameters] = None
     ) -> toloka.client.operations.TasksCreateOperation:
-        """Creates many tasks in pools, asynchronous version
+        """Creates tasks in Toloka asynchronously.
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
-        Recomended maximum of 10,000 task per request if async_mode is True.
 
         Args:
-            tasks: List of tasks, that will be created.
+            tasks: List of tasks to be created.
             parameters: Parameters for Tasks creation controlling. Defaults to None.
 
         Returns:
-            TasksCreateOperation: An operation upon completion of which you can get the created tasks.
+            TasksCreateOperation: An object to track the progress of the operation.
 
         Example:
             >>> training_tasks = [
@@ -2805,17 +2868,16 @@ class TolokaClient:
         operation_id: typing.Optional[uuid.UUID] = None,
         async_mode: typing.Optional[bool] = True
     ) -> toloka.client.operations.TasksCreateOperation:
-        """Creates many tasks in pools, asynchronous version
+        """Creates tasks in Toloka asynchronously.
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
-        Recomended maximum of 10,000 task per request if async_mode is True.
 
         Args:
-            tasks: List of tasks, that will be created.
+            tasks: List of tasks to be created.
             parameters: Parameters for Tasks creation controlling. Defaults to None.
 
         Returns:
-            TasksCreateOperation: An operation upon completion of which you can get the created tasks.
+            TasksCreateOperation: An object to track the progress of the operation.
 
         Example:
             >>> training_tasks = [
@@ -2839,29 +2901,24 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.TaskSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.TaskSearchResult:
-        """Finds all tasks that match certain rules
+        """Finds tasks that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found tasks and whether there
-        are any more results.
-        It is better to use the "get_tasks" method, they allow to iterate trought all results
-        and not just the first output.
+        The number of returned tasks is limited. `find_tasks` additionally returns a flag showing whether there are more matching tasks.
+        Consider using [get_tasks](./toloka.client.TolokaClient.get_tasks.md) to iterate over all matching tasks.
 
         Args:
             request: How to search tasks.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 100 000.
-                Defaults to None, in which case it returns first 50 results.
+            sort: Sorting options. Default value: `None`.
+            limit: Returned tasks limit. The maximum value is 100,000. Default value: 50.
 
         Returns:
-            TaskSearchResult: The first `limit` tasks in `items`. And a mark that there is more.
+            TaskSearchResult: Found tasks and a flag showing whether there are more matching tasks.
 
         Example:
-            Find three most recently created tasks in a specified pool.
+            To find three most recently created tasks in a pool, call the method with the following parameters:
 
             >>> toloka_client.find_tasks(pool_id='1', sort=['-created', '-id'], limit=3)
             ...
-
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
@@ -2885,40 +2942,35 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.TaskSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.TaskSearchResult:
-        """Finds all tasks that match certain rules
+        """Finds tasks that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found tasks and whether there
-        are any more results.
-        It is better to use the "get_tasks" method, they allow to iterate trought all results
-        and not just the first output.
+        The number of returned tasks is limited. `find_tasks` additionally returns a flag showing whether there are more matching tasks.
+        Consider using [get_tasks](./toloka.client.TolokaClient.get_tasks.md) to iterate over all matching tasks.
 
         Args:
             request: How to search tasks.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 100 000.
-                Defaults to None, in which case it returns first 50 results.
+            sort: Sorting options. Default value: `None`.
+            limit: Returned tasks limit. The maximum value is 100,000. Default value: 50.
 
         Returns:
-            TaskSearchResult: The first `limit` tasks in `items`. And a mark that there is more.
+            TaskSearchResult: Found tasks and a flag showing whether there are more matching tasks.
 
         Example:
-            Find three most recently created tasks in a specified pool.
+            To find three most recently created tasks in a pool, call the method with the following parameters:
 
             >>> toloka_client.find_tasks(pool_id='1', sort=['-created', '-id'], limit=3)
             ...
-
-            If method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         ...
 
     def get_task(self, task_id: str) -> toloka.client.task.Task:
-        """Reads one specific task
+        """Gets a task with specified ID from Toloka.
 
         Args:
-            task_id: ID of the task.
+            task_id: The ID of the task.
 
         Returns:
-            Task: The task.
+            Task: The task with the ID specified in the request.
 
         Example:
             >>> toloka_client.get_task(task_id='1')
@@ -2928,19 +2980,20 @@ class TolokaClient:
 
     @typing.overload
     def get_tasks(self, request: toloka.client.search_requests.TaskSearchRequest) -> typing.Generator[toloka.client.task.Task, None, None]:
-        """Finds all tasks that match certain rules and returns them in an iterable object
+        """Finds all tasks that match certain criteria.
 
-        Unlike find_tasks, returns generator. Does not sort tasks.
-        While iterating over the result, several requests to the Toloka server is possible.
+        `get_tasks` returns a generator and you can iterate over all found tasks. Several requests to the Toloka server are possible while iterating.
+
+        Note that tasks can not be sorted. If you need to sort tasks use [find_tasks](toloka.client.TolokaClient.find_tasks.md).
 
         Args:
             request: How to search tasks.
 
         Yields:
-            Task: The next object corresponding to the request parameters.
+            Task: An iterable with found tasks.
 
         Example:
-            Get tasks from a specific pool.
+            Getting all tasks from a single pool.
 
             >>> results_list = [task for task in toloka_client.get_tasks(pool_id='1')]
             ...
@@ -2965,19 +3018,20 @@ class TolokaClient:
         overlap_gt: typing.Optional[int] = None,
         overlap_gte: typing.Optional[int] = None
     ) -> typing.Generator[toloka.client.task.Task, None, None]:
-        """Finds all tasks that match certain rules and returns them in an iterable object
+        """Finds all tasks that match certain criteria.
 
-        Unlike find_tasks, returns generator. Does not sort tasks.
-        While iterating over the result, several requests to the Toloka server is possible.
+        `get_tasks` returns a generator and you can iterate over all found tasks. Several requests to the Toloka server are possible while iterating.
+
+        Note that tasks can not be sorted. If you need to sort tasks use [find_tasks](toloka.client.TolokaClient.find_tasks.md).
 
         Args:
             request: How to search tasks.
 
         Yields:
-            Task: The next object corresponding to the request parameters.
+            Task: An iterable with found tasks.
 
         Example:
-            Get tasks from a specific pool.
+            Getting all tasks from a single pool.
 
             >>> results_list = [task for task in toloka_client.get_tasks(pool_id='1')]
             ...
@@ -2990,14 +3044,14 @@ class TolokaClient:
         task_id: str,
         patch: toloka.client.task.TaskPatch
     ) -> toloka.client.task.Task:
-        """Changes the task overlap
+        """Changes a task overlap value.
 
         Args:
-            task_id: ID of the task that will be changed.
+            task_id: The ID of the task.
             patch: New overlap value.
 
         Returns:
-            Task: Task with updated fields.
+            Task: The task with updated fields.
         """
         ...
 
@@ -3008,16 +3062,18 @@ class TolokaClient:
         *,
         overlap: typing.Optional[int] = None,
         infinite_overlap: typing.Optional[bool] = None,
-        baseline_solutions: typing.Optional[typing.List[toloka.client.task.Task.BaselineSolution]] = None
+        baseline_solutions: typing.Optional[typing.List[toloka.client.task.Task.BaselineSolution]] = None,
+        known_solutions: typing.Optional[typing.List[toloka.client.task.BaseTask.KnownSolution]] = None,
+        message_on_unknown_solution: typing.Optional[str] = None
     ) -> toloka.client.task.Task:
-        """Changes the task overlap
+        """Changes a task overlap value.
 
         Args:
-            task_id: ID of the task that will be changed.
+            task_id: The ID of the task.
             patch: New overlap value.
 
         Returns:
-            Task: Task with updated fields.
+            Task: The task with updated fields.
         """
         ...
 
@@ -3027,22 +3083,26 @@ class TolokaClient:
         task_id: str,
         patch: toloka.client.task.TaskOverlapPatch
     ) -> toloka.client.task.Task:
-        """Stops issuing the task
+        """Stops assigning a task to users.
 
         Args:
-            task_id: ID of the task.
+            task_id: The ID of the task.
             patch: New overlap value.
 
         Returns:
-            Task: Task with updated fields.
+            Task: The task with updated fields.
 
         Example:
-            Set an infinite overlap for a specific task in training.
+            Setting an infinite overlap for a training task.
 
             >>> toloka_client.patch_task_overlap_or_min(task_id='1', infinite_overlap=True)
             ...
 
-            **Note**: you can't set infinite overlap in a regular pool.
+            {% note info %}
+
+            You can't set infinite overlap in a regular pool.
+
+            {% endnote %}
         """
         ...
 
@@ -3054,22 +3114,26 @@ class TolokaClient:
         overlap: typing.Optional[int] = None,
         infinite_overlap: typing.Optional[bool] = None
     ) -> toloka.client.task.Task:
-        """Stops issuing the task
+        """Stops assigning a task to users.
 
         Args:
-            task_id: ID of the task.
+            task_id: The ID of the task.
             patch: New overlap value.
 
         Returns:
-            Task: Task with updated fields.
+            Task: The task with updated fields.
 
         Example:
-            Set an infinite overlap for a specific task in training.
+            Setting an infinite overlap for a training task.
 
             >>> toloka_client.patch_task_overlap_or_min(task_id='1', infinite_overlap=True)
             ...
 
-            **Note**: you can't set infinite overlap in a regular pool.
+            {% note info %}
+
+            You can't set infinite overlap in a regular pool.
+
+            {% endnote %}
         """
         ...
 
@@ -3967,6 +4031,7 @@ class TolokaClient:
     def find_user_bonuses(
         self,
         user_id: typing.Optional[str] = None,
+        assignment_id: typing.Optional[str] = None,
         private_comment: typing.Optional[str] = None,
         id_lt: typing.Optional[str] = None,
         id_lte: typing.Optional[str] = None,
@@ -4041,6 +4106,7 @@ class TolokaClient:
     def get_user_bonuses(
         self,
         user_id: typing.Optional[str] = None,
+        assignment_id: typing.Optional[str] = None,
         private_comment: typing.Optional[str] = None,
         id_lt: typing.Optional[str] = None,
         id_lte: typing.Optional[str] = None,
@@ -4261,7 +4327,7 @@ class TolokaClient:
             >>> if requester.balance >= approx_pipeline_price:
             >>>     print('You have enough money on your account!')
             >>> else:
-            >>>     print('You haven't got enough money on your account!')
+            >>>     print("You haven't got enough money on your account!")
             ...
         """
         ...

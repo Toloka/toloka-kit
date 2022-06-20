@@ -1,7 +1,7 @@
 # Project
-`toloka.client.project.Project`
+`toloka.client.project.Project` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/__init__.py#L63)
 
-```
+```python
 Project(
     self,
     *,
@@ -78,7 +78,7 @@ new_project = toloka.project.Project(
 new_project = toloka_client.create_project(new_project)
 print(new_project.id)
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

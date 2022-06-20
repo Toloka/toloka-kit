@@ -1,7 +1,7 @@
 # IfHelperV1
-`toloka.client.project.template_builder.helpers.IfHelperV1`
+`toloka.client.project.template_builder.helpers.IfHelperV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/helpers.py#L72)
 
-```
+```python
 IfHelperV1(
     self,
     condition: Optional[BaseComponent] = None,

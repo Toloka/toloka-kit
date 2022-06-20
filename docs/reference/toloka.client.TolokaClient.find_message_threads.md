@@ -13,8 +13,8 @@ and not just the first output.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`folder`|**Union\[str, [Folder](toloka.client.message_thread.Folder.md), List\[Union\[str, [Folder](toloka.client.message_thread.Folder.md)\]\]\]**|<p>Folders to search for the thread</p>
-`folder_ne`|**Union\[str, [Folder](toloka.client.message_thread.Folder.md), List\[Union\[str, [Folder](toloka.client.message_thread.Folder.md)\]\]\]**|<p>Folders to not search for the thread</p>
+`folder`|**Union\[str, [Folder](toloka.client.message_thread.Folder.md), List\[Union\[str, [Folder](toloka.client.message_thread.Folder.md)\]\], None\]**|<p>Folders to search for the thread</p>
+`folder_ne`|**Union\[str, [Folder](toloka.client.message_thread.Folder.md), List\[Union\[str, [Folder](toloka.client.message_thread.Folder.md)\]\], None\]**|<p>Folders to not search for the thread</p>
 `id_lt`|**Optional\[str\]**|<p>Threads with an ID less than the specified value.</p>
 `id_lte`|**Optional\[str\]**|<p>Threads with an ID less than or equal to the specified value.</p>
 `id_gt`|**Optional\[str\]**|<p>Threads with an ID greater than the specified value.</p>

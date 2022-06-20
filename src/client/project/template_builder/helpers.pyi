@@ -18,7 +18,7 @@ import toloka.util._extendable_enum
 import typing
 
 
-class BaseHelperV1(toloka.client.project.template_builder.base.BaseComponent):
+class BaseHelperV1(toloka.client.project.template_builder.base.BaseComponent, metaclass=toloka.client.project.template_builder.base.VersionedBaseComponentMetaclass):
     """Perform various operations, such as if-then-else or switch-case.
     """
 

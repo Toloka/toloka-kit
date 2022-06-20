@@ -1,7 +1,7 @@
 # LocalData
-`toloka.client.project.template_builder.data.LocalData`
+`toloka.client.project.template_builder.data.LocalData` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/data.py#L63)
 
-```
+```python
 LocalData(
     self,
     path: Optional[Any] = None,

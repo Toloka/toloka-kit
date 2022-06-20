@@ -62,7 +62,7 @@ def test_find_attachments(requests_mock, toloka_client, toloka_url, assignment_a
         owner_company_id='company-1',
         name='ExampleAttachment.txt',
         user_id='user-1',
-        created_gt=datetime.datetime(2000, 1, 1, 12, 57, 1),
+        created_gt=datetime.datetime(2000, 1, 1, 12, 57, 1, tzinfo=datetime.timezone.utc),
     )
     sort = client.search_requests.AttachmentSortItems(['id'])
     result = toloka_client.find_attachments(request, sort=sort, limit=50)
@@ -75,7 +75,7 @@ def test_find_attachments(requests_mock, toloka_client, toloka_url, assignment_a
         owner_company_id='company-1',
         name='ExampleAttachment.txt',
         user_id='user-1',
-        created_gt=datetime.datetime(2000, 1, 1, 12, 57, 1),
+        created_gt=datetime.datetime(2000, 1, 1, 12, 57, 1, tzinfo=datetime.timezone.utc),
         sort=['id'],
         limit=50
     )
@@ -118,7 +118,7 @@ def test_get_attachments(requests_mock, toloka_client, toloka_url, assignment_at
         owner_company_id='company-1',
         name='ExampleAttachment.txt',
         user_id='user-1',
-        created_gt=datetime.datetime(2000, 1, 1, 12, 57, 1),
+        created_gt=datetime.datetime(2000, 1, 1, 12, 57, 1, tzinfo=datetime.timezone.utc),
     )
     result = toloka_client.get_attachments(request)
     assert attachments == client.unstructure(list(result))
@@ -130,7 +130,7 @@ def test_get_attachments(requests_mock, toloka_client, toloka_url, assignment_at
         owner_company_id='company-1',
         name='ExampleAttachment.txt',
         user_id='user-1',
-        created_gt=datetime.datetime(2000, 1, 1, 12, 57, 1),
+        created_gt=datetime.datetime(2000, 1, 1, 12, 57, 1, tzinfo=datetime.timezone.utc),
     )
     assert attachments == client.unstructure(list(result))
 

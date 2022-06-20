@@ -1,7 +1,7 @@
 # SystemUserRestriction
-`toloka.client.user_restriction.SystemUserRestriction`
+`toloka.client.user_restriction.SystemUserRestriction` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/user_restriction.py#L115)
 
-```
+```python
 SystemUserRestriction(
     self,
     *,

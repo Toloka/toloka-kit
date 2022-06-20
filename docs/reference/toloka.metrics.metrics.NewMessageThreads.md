@@ -1,7 +1,7 @@
 # NewMessageThreads
-`toloka.metrics.metrics.NewMessageThreads`
+`toloka.metrics.metrics.NewMessageThreads` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/metrics/metrics.py#L342)
 
-```
+```python
 NewMessageThreads(
     self,
     count_name: Optional[str] = None,
@@ -9,7 +9,8 @@ NewMessageThreads(
     pools_name: Dict[str, str] = ...,
     join_events: bool = False,
     *,
-    toloka_client: TolokaClient = None,
+    toloka_client: Optional[TolokaClient] = None,
+    atoloka_client: Optional[AsyncTolokaClient] = None,
     timeout: timedelta = ...
 )
 ```
@@ -25,9 +26,9 @@ NewMessageThreads instance. You can gather all in one instance.
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
 `count_name`|**Optional\[str\]**|<p>Metric name for a count of new messages.</p>
-`projects_name`|**Dict\[str, str\]**|<p>Dictyonary that allows count messages on exact projects. {project_id: line_name}</p>
-`pools_name`|**Dict\[str, str\]**|<p>Dictyonary that allows count messages on exact pools. {pool_id: line_name}</p>
-`join_events`|**bool**|<p>Count all events in one point.  Default False. &quot;Values&quot; never join.</p>
+`projects_name`|**Dict\[str, str\]**|<p>Dictionary that allows count messages on exact projects. {project_id: line_name}</p>
+`pools_name`|**Dict\[str, str\]**|<p>Dictionary that allows count messages on exact pools. {pool_id: line_name}</p>
+`join_events`|**bool**|<p>Count all events in one point. Default False. &quot;Values&quot; never join.</p>
 
 **Examples:**
 
@@ -50,7 +51,7 @@ collector = MetricCollector
 )
 asyncio.run(collector.run())
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

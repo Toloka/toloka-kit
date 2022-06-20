@@ -1,7 +1,7 @@
 # EstimatedAssignmentsCountPoolAnalytics
-`toloka.client.analytics_request.EstimatedAssignmentsCountPoolAnalytics`
+`toloka.client.analytics_request.EstimatedAssignmentsCountPoolAnalytics` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/analytics_request.py#L157)
 
-```
+```python
 EstimatedAssignmentsCountPoolAnalytics(self, *, subject_id: str)
 ```
 

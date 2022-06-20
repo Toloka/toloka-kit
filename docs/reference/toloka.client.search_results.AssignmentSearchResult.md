@@ -1,7 +1,7 @@
 # AssignmentSearchResult
 `toloka.client.search_results.AssignmentSearchResult`
 
-```
+```python
 AssignmentSearchResult(
     self,
     *,

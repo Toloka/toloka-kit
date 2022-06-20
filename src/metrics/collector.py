@@ -3,7 +3,6 @@ __all__ = [
 ]
 
 import asyncio
-import datetime
 import logging
 
 from typing import Any, Callable, Dict, List, Tuple
@@ -94,7 +93,7 @@ class MetricCollector:
                 for name, points in done_task.result().items():
                     if name in metrics_points:
                         logger.error(f'Duplicated metrics name detected: "{name}". Only one metric was returned.')
-                    metrics_points[name] = [(dt.replace(tzinfo=datetime.timezone.utc), val) for dt, val in points]
+                    metrics_points[name] = points
 
             if metrics_points:
                 self._callback(metrics_points)

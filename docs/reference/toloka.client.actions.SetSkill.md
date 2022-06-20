@@ -1,7 +1,7 @@
 # SetSkill
-`toloka.client.actions.SetSkill`
+`toloka.client.actions.SetSkill` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/actions.py#L160)
 
-```
+```python
 SetSkill(
     self,
     *,

@@ -1,7 +1,7 @@
 # MetricCollector
-`toloka.metrics.collector.MetricCollector`
+`toloka.metrics.collector.MetricCollector` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/metrics/collector.py#L18)
 
-```
+```python
 MetricCollector(
     self,
     metrics: List[BaseMetric],
@@ -32,7 +32,7 @@ collector = MetricCollector(
 bind_client(collector.metrics, toloka_client)
 asyncio.run(collector.run())
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

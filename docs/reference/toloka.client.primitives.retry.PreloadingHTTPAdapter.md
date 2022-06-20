@@ -1,5 +1,5 @@
 # PreloadingHTTPAdapter
-`toloka.client.primitives.retry.PreloadingHTTPAdapter`
+`toloka.client.primitives.retry.PreloadingHTTPAdapter` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/primitives/retry.py#L88)
 
 HTTPAdapter subclass that forces preload_content=True during requests
 
@@ -12,7 +12,7 @@ retrying failed body read can be achieved by passing preload_content=False to ur
 this using HTTPAdapter we need to use HTTP(S)ConnectionPool.urlopen with preload_content=True during send method and
 override build_response method to populate requests Response wrapper with content.
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

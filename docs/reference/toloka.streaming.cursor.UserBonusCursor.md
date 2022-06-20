@@ -1,11 +1,12 @@
 # UserBonusCursor
-`toloka.streaming.cursor.UserBonusCursor`
+`toloka.streaming.cursor.UserBonusCursor` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/streaming/cursor.py#L297)
 
-```
+```python
 UserBonusCursor(
     self,
-    toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
+    toloka_client: Union[TolokaClient, AsyncTolokaClient],
     user_id: Optional[str] = None,
+    assignment_id: Optional[str] = None,
     private_comment: Optional[str] = None,
     id_lt: Optional[str] = None,
     id_lte: Optional[str] = None,
@@ -24,7 +25,7 @@ Iterator over user bonuses by create time.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncMultithreadWrapper](toloka.util.async_utils.AsyncMultithreadWrapper.md)\[[TolokaClient](toloka.client.TolokaClient.md)\]\]**|<p>TolokaClient object that is being used to search user bonuses.</p>
+`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncTolokaClient](toloka.async_client.client.AsyncTolokaClient.md)\]**|<p>TolokaClient object that is being used to search user bonuses.</p>
 `request`|**[UserBonusSearchRequest](toloka.client.search_requests.UserBonusSearchRequest.md)**|<p>Base request to search user bonuses by.</p>
 
 **Examples:**

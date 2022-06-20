@@ -169,6 +169,23 @@ def list_view(text_view, add_label_hint_validation):
 
 
 @pytest.fixture
+def map_view(add_label_hint_validation):
+    return add_label_hint_validation(tb.MapViewV1)(
+        '29.748713,-95.404287',
+        markers=[tb.MapViewV1.Marker(
+            position='29.748713,-95.404287',
+            color='red',
+            label='label'
+        )],
+        polygons=[tb.MapViewV1.Polygon(
+            points=['29.748713,-95.404287', '29.748713,-95.404287'],
+            color='blue'
+        )],
+        zoom=1
+    )
+
+
+@pytest.fixture
 def markdown_view(add_label_hint_validation):
     return add_label_hint_validation(tb.MarkdownViewV1)(
         '## i am markdown header',
@@ -204,6 +221,7 @@ def video_view(add_label_hint_validation):
         lazy_fixture('link_view'),
         lazy_fixture('link_group_view'),
         lazy_fixture('list_view'),
+        lazy_fixture('map_view'),
         lazy_fixture('markdown_view'),
         lazy_fixture('text_view'),
         lazy_fixture('video_view'),

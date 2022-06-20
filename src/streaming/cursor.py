@@ -10,6 +10,7 @@ __all__ = [
     'UserSkillCursor',
 ]
 
+import asyncio
 import attr
 import copy
 import functools
@@ -17,6 +18,7 @@ from datetime import datetime
 from typing import Any, AsyncIterator, Awaitable, Callable, Iterator, List, Optional, Set, Tuple, Union
 from typing_extensions import Protocol
 
+from ..async_client import AsyncTolokaClient
 from ..client import (
     Assignment,
     MessageThread,
@@ -33,7 +35,7 @@ from ..client import (
 from ..client.search_requests import BaseSearchRequest
 from ..util._codegen import fix_attrs_converters
 from .event import AssignmentEvent, BaseEvent, MessageThreadEvent, TaskEvent, UserBonusEvent, UserRestrictionEvent, UserSkillEvent
-from ..util.async_utils import AsyncMultithreadWrapper, ensure_async
+from ..util.async_utils import ensure_async
 
 
 class ResponseObjectType(Protocol):
@@ -41,7 +43,7 @@ class ResponseObjectType(Protocol):
     has_more: Optional[bool]
 
 
-TolokaClientSyncOrAsyncType = Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]]
+TolokaClientSyncOrAsyncType = Union[TolokaClient, AsyncTolokaClient]
 
 DATETIME_MIN = datetime.fromtimestamp(0)
 
@@ -234,13 +236,21 @@ class AssignmentCursor(BaseCursor):
         ...
     """
 
+    BATCH_SIZE = 1000
+
     _event_type: AssignmentEvent.Type = attr.ib(converter=functools.partial(structure, cl=AssignmentEvent.Type))
     _request: search_requests.AssignmentSearchRequest = attr.ib(
         factory=search_requests.AssignmentSearchRequest,
     )
 
     def _get_fetcher(self) -> Callable[..., search_results.AssignmentSearchResult]:
-        return self.toloka_client.find_assignments
+        async def _async_fetcher(*args, **kwargs):
+            return await self.toloka_client.find_assignments(*args, limit=self.BATCH_SIZE, **kwargs)
+
+        method = self.toloka_client.find_assignments
+        if asyncio.iscoroutinefunction(method) or asyncio.iscoroutinefunction(getattr(method, '__call__', None)):
+            return _async_fetcher
+        return functools.partial(self.toloka_client.find_assignments, limit=self.BATCH_SIZE)
 
     def _get_time_field(self) -> str:
         return self._event_type.time_key

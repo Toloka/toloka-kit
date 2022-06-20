@@ -108,7 +108,8 @@ class Task(toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMi
         traits_none_of_any: 
         origin_task_id: ID of the task it was copied from.
         created: The UTC date and time when the task was created.
-        baseline_solutions: 
+        baseline_solutions: Preliminary responses. This data simulates performer responses when calculating confidence in a response.
+            It is used in dynamic overlap (also known as incremental relabeling or IRL) and aggregation of results by skill.
 
     Examples:
         How to create tasks.
@@ -186,9 +187,9 @@ class CreateTaskParameters(toloka.client.primitives.parameter.Parameters):
     Used when creating one Task.
 
     Attributes:
-        allow_defaults: Overlap settings:
-            * True - Use the overlap that is set in the pool parameters (in the defaults.default_overlap_for_new_task_suites key).
-            * False - Use the overlap that is set in the task suite parameters (in the overlap field).
+        allow_defaults: Overlap setting:
+            * True — Use the overlap value that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
+            * False — Use the overlap value that is set in the `overlap` task suite parameter.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
     """
 
@@ -209,9 +210,9 @@ class CreateTaskParameters(toloka.client.primitives.parameter.Parameters):
 
 class CreateTaskAsyncParameters(CreateTaskParameters):
     """Attributes:
-        allow_defaults: Overlap settings:
-            * True - Use the overlap that is set in the pool parameters (in the defaults.default_overlap_for_new_task_suites key).
-            * False - Use the overlap that is set in the task suite parameters (in the overlap field).
+        allow_defaults: Overlap setting:
+            * True — Use the overlap value that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
+            * False — Use the overlap value that is set in the `overlap` task suite parameter.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
     """
 
@@ -238,19 +239,16 @@ class CreateTasksParameters(CreateTaskParameters):
     Used when creating many Tasks.
 
     Attributes:
-        allow_defaults: Overlap settings:
-            * True - Use the overlap that is set in the pool parameters (in the defaults.default_overlap_for_new_task_suites key).
-            * False - Use the overlap that is set in the task suite parameters (in the overlap field).
+        allow_defaults: Overlap setting:
+            * True — Use the overlap value that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
+            * False — Use the overlap value that is set in the `overlap` task suite parameter.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
-        skip_invalid_items: Validation parameters:
-            * True — Create the tasks that passed validation. Skip the rest of the tasks (errors will
-                be listed in the response to the request).
-            * False — If at least one of the tasks didn't pass validation, stop the operation and don't create any tasks.
-        async_mode: How the request is processed:
-            * True — deferred. The query results in an asynchronous operation running in the background.
-                The response contains information about the operation (start and end time, status, number of sets).
-            * False — synchronous. The response contains information about the created tasks.
-                A maximum of 5000 tasks can be sent in a single request.
+        skip_invalid_items: Task validation option:
+            * True — All valid tasks are added. If a task does not pass validation, then it is not added to Toloka. All such tasks are listed in the response.
+            * False — If any task does not pass validation, then operation is cancelled and no tasks are added to Toloka.
+        async_mode: Request processing mode:
+            * True — Asynchronous operation is started internally and `create_tasks` waits for the completion of it. It is recommended to create no more than 10,000 tasks per request in this mode.
+            * False — The request is processed synchronously. A maximum of 5000 tasks can be added in a single request in this mode.
     """
 
     def __init__(
@@ -278,10 +276,10 @@ class TaskOverlapPatch(toloka.client.primitives.base.BaseTolokaObject):
     """Parameters for changing the overlap of a specific Task
 
     Attributes:
-        overlap: Overlapping a set of tasks.
-        infinite_overlap: Issue a task with infinite overlap. Used, for example, for sets of training tasks to give them to all users:
-            * True - Set infinite overlap.
-            * False - Leave the overlap specified for the task or pool. Default Behaviour.
+        overlap: Overlap value.
+        infinite_overlap: Infinite overlap:
+            * True — Assign the task to all users. It is useful for training tasks.
+            * False — Overlap value specified for the task or for the pool is used. Default value: False.
     """
 
     def __init__(
@@ -303,11 +301,15 @@ class TaskPatch(TaskOverlapPatch):
     """Parameters for changing overlap or baseline_solutions of a specific Task
 
     Attributes:
-        overlap: Overlapping a set of tasks.
-        infinite_overlap: Issue a task with infinite overlap. Used, for example, for sets of training tasks to give them to all users:
-            * True - Set infinite overlap.
-            * False - Leave the overlap specified for the task or pool. Default Behaviour.
-        baseline_solutions:
+        overlap: Overlap value.
+        infinite_overlap: Infinite overlap:
+            * True — Assign the task to all users. It is useful for training tasks.
+            * False — Overlap value specified for the task or for the pool is used. Default value: False.
+        baseline_solutions: Preliminary responses. This data simulates performer responses when calculating confidence in a response.
+            It is used in dynamic overlap (also known as incremental relabeling or IRL) and aggregation of results by skill.
+        known_solutions: Responses and hints for control tasks and training tasks. If multiple output fields are included
+            in the validation, all combinations of the correct response must be specified.
+        message_on_unknown_solution: Hint for the task (for training tasks).
     """
 
     def __init__(
@@ -315,7 +317,9 @@ class TaskPatch(TaskOverlapPatch):
         *,
         overlap: typing.Optional[int] = None,
         infinite_overlap: typing.Optional[bool] = None,
-        baseline_solutions: typing.Optional[typing.List[Task.BaselineSolution]] = None
+        baseline_solutions: typing.Optional[typing.List[Task.BaselineSolution]] = None,
+        known_solutions: typing.Optional[typing.List[BaseTask.KnownSolution]] = None,
+        message_on_unknown_solution: typing.Optional[str] = None
     ) -> None:
         """Method generated by attrs for class TaskPatch.
         """
@@ -325,3 +329,5 @@ class TaskPatch(TaskOverlapPatch):
     overlap: typing.Optional[int]
     infinite_overlap: typing.Optional[bool]
     baseline_solutions: typing.Optional[typing.List[Task.BaselineSolution]]
+    known_solutions: typing.Optional[typing.List[BaseTask.KnownSolution]]
+    message_on_unknown_solution: typing.Optional[str]

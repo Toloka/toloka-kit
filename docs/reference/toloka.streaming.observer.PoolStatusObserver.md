@@ -1,10 +1,10 @@
 # PoolStatusObserver
-`toloka.streaming.observer.PoolStatusObserver`
+`toloka.streaming.observer.PoolStatusObserver` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/streaming/observer.py#L151)
 
-```
+```python
 PoolStatusObserver(
     self,
-    toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
+    toloka_client: Union[TolokaClient, AsyncTolokaClient],
     pool_id: str,
     *,
     name: Optional[str] = None
@@ -29,7 +29,7 @@ The Pool object will be passed to the triggered callbacks.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`toloka_client`|**[AsyncInterfaceWrapper](toloka.util.async_utils.AsyncInterfaceWrapper.md)\[Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncMultithreadWrapper](toloka.util.async_utils.AsyncMultithreadWrapper.md)\[[TolokaClient](toloka.client.TolokaClient.md)\]\]\]**|<p>TolokaClient instance or async wrapper around it.</p>
+`toloka_client`|**[AsyncInterfaceWrapper](toloka.util.async_utils.AsyncInterfaceWrapper.md)\[Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncTolokaClient](toloka.async_client.client.AsyncTolokaClient.md)\]\]**|<p>TolokaClient instance or async wrapper around it.</p>
 `pool_id`|**str**|<p>Pool ID.</p>
 
 **Examples:**
@@ -49,7 +49,7 @@ Call something at any status change.
 ```python
 observer.on_status_change(lambda pool: ...)
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

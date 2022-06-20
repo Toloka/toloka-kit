@@ -1,7 +1,7 @@
 # UserAgentType
-`toloka.client.filter.UserAgentType`
+`toloka.client.filter.UserAgentType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/filter.py#L549)
 
-```
+```python
 UserAgentType(
     self,
     operator: IdentityOperator,

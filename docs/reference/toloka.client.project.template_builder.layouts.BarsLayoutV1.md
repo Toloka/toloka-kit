@@ -1,7 +1,7 @@
 # BarsLayoutV1
-`toloka.client.project.template_builder.layouts.BarsLayoutV1`
+`toloka.client.project.template_builder.layouts.BarsLayoutV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/layouts.py#L39)
 
-```
+```python
 BarsLayoutV1(
     self,
     content: Optional[BaseComponent] = None,

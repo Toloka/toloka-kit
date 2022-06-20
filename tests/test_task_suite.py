@@ -404,7 +404,7 @@ def test_find_task_suites(requests_mock, toloka_client, toloka_url, task_suite_m
     # Request object syntax
     request = client.search_requests.TaskSuiteSearchRequest(
         pool_id=21,
-        created_lte=datetime.datetime(2020, 2, 1),
+        created_lte=datetime.datetime(2020, 2, 1, tzinfo=datetime.timezone.utc),
         overlap_gte=42,
     )
     sort = client.search_requests.TaskSuiteSortItems(['-created'])
@@ -414,7 +414,7 @@ def test_find_task_suites(requests_mock, toloka_client, toloka_url, task_suite_m
     # Expanded syntax
     result = toloka_client.find_task_suites(
         pool_id=21,
-        created_lte=datetime.datetime(2020, 2, 1),
+        created_lte=datetime.datetime(2020, 2, 1, tzinfo=datetime.timezone.utc),
         overlap_gte=42,
         sort=['-created'],
         limit=100,
@@ -452,7 +452,7 @@ def test_get_task_suites(requests_mock, toloka_client, toloka_url, task_suite_ma
     # Request object syntax
     request = client.search_requests.TaskSuiteSearchRequest(
         pool_id=21,
-        created_lte=datetime.datetime(2020, 2, 1),
+        created_lte=datetime.datetime(2020, 2, 1, tzinfo=datetime.timezone.utc),
         overlap_gte=42,
     )
     result = toloka_client.get_task_suites(request)
@@ -461,7 +461,7 @@ def test_get_task_suites(requests_mock, toloka_client, toloka_url, task_suite_ma
     # Expanded syntax
     result = toloka_client.get_task_suites(
         pool_id=21,
-        created_lte=datetime.datetime(2020, 2, 1),
+        created_lte=datetime.datetime(2020, 2, 1, tzinfo=datetime.timezone.utc),
         overlap_gte=42,
     )
     assert task_suites == client.unstructure(list(result))

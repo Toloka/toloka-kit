@@ -1,12 +1,12 @@
 # MessageThreadCursor
-`toloka.streaming.cursor.MessageThreadCursor`
+`toloka.streaming.cursor.MessageThreadCursor` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/streaming/cursor.py#L403)
 
-```
+```python
 MessageThreadCursor(
     self,
-    toloka_client: Union[TolokaClient, AsyncMultithreadWrapper[TolokaClient]],
-    folder: Union[str, Folder, List[Union[str, Folder]]] = None,
-    folder_ne: Union[str, Folder, List[Union[str, Folder]]] = None,
+    toloka_client: Union[TolokaClient, AsyncTolokaClient],
+    folder: Union[str, Folder, List[Union[str, Folder]], None] = None,
+    folder_ne: Union[str, Folder, List[Union[str, Folder]], None] = None,
     id_lt: Optional[str] = None,
     id_lte: Optional[str] = None,
     id_gt: Optional[str] = None,
@@ -24,7 +24,7 @@ Iterator over messages by create time.
 
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
-`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncMultithreadWrapper](toloka.util.async_utils.AsyncMultithreadWrapper.md)\[[TolokaClient](toloka.client.TolokaClient.md)\]\]**|<p>TolokaClient object that is being used to search messages.</p>
+`toloka_client`|**Union\[[TolokaClient](toloka.client.TolokaClient.md), [AsyncTolokaClient](toloka.async_client.client.AsyncTolokaClient.md)\]**|<p>TolokaClient object that is being used to search messages.</p>
 `request`|**[MessageThreadSearchRequest](toloka.client.search_requests.MessageThreadSearchRequest.md)**|<p>Base request to search messages.</p>
 
 **Examples:**

@@ -1,7 +1,7 @@
 # inject
-`toloka.streaming.observer.PoolStatusObserver.inject`
+`toloka.streaming.observer.PoolStatusObserver.inject` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/streaming/observer.py#L195)
 
-```
-inject(self, injection: 'PoolStatusObserver')
+```python
+inject(self, injection: PoolStatusObserver)
 ```
 

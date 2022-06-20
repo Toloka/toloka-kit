@@ -9,9 +9,10 @@ __all__ = [
 ]
 import datetime
 from enum import unique
-from typing import Dict, List
+from typing import Dict, List, Optional
 
-from .filter import FilterCondition
+from ._converter import unstructure
+from .filter import FilterCondition, FilterOr, FilterAnd
 from .primitives.base import BaseTolokaObject
 from ..util._codegen import attribute
 from ..util._extendable_enum import ExtendableStrEnum
@@ -190,3 +191,9 @@ class MessageThreadCompose(BaseTolokaObject):
     answerable: bool
     recipients_ids: List[str]
     recipients_filter: FilterCondition
+
+    def unstructure(self) -> Optional[dict]:
+        self_unstructured_dict = super().unstructure()
+        if self.recipients_filter is not None and not isinstance(self.recipients_filter, (FilterOr, FilterAnd)):
+            self_unstructured_dict['recipients_filter'] = unstructure(FilterAnd([self.recipients_filter]))
+        return self_unstructured_dict

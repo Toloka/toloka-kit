@@ -1,7 +1,7 @@
 # Entries2ObjectHelperV1
-`toloka.client.project.template_builder.helpers.Entries2ObjectHelperV1`
+`toloka.client.project.template_builder.helpers.Entries2ObjectHelperV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/helpers.py#L45)
 
-```
+```python
 Entries2ObjectHelperV1(
     self,
     entries: Optional[Union[BaseComponent, List[Union[BaseComponent, Entry]]]] = None,

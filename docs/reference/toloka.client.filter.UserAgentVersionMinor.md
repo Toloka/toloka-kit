@@ -1,7 +1,7 @@
 # UserAgentVersionMinor
-`toloka.client.filter.UserAgentVersionMinor`
+`toloka.client.filter.UserAgentVersionMinor` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/filter.py#L635)
 
-```
+```python
 UserAgentVersionMinor(
     self,
     operator: CompareOperator,

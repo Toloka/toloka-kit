@@ -1,7 +1,7 @@
 # ClientType
-`toloka.client.filter.ClientType`
+`toloka.client.filter.ClientType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/filter.py#L448)
 
-```
+```python
 ClientType(
     self,
     operator: IdentityOperator,

@@ -1,10 +1,10 @@
 # AssignmentSearchRequest
-`toloka.client.search_requests.AssignmentSearchRequest`
+`toloka.client.search_requests.AssignmentSearchRequest` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/search_requests.py#L384)
 
-```
+```python
 AssignmentSearchRequest(
     self,
-    status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]]] = None,
+    status: Union[str, Assignment.Status, List[Union[str, Assignment.Status]], None] = None,
     task_id: Optional[str] = None,
     task_suite_id: Optional[str] = None,
     pool_id: Optional[str] = None,

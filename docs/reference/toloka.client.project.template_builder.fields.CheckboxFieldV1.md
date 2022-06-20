@@ -1,7 +1,7 @@
 # CheckboxFieldV1
-`toloka.client.project.template_builder.fields.CheckboxFieldV1`
+`toloka.client.project.template_builder.fields.CheckboxFieldV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/fields.py#L142)
 
-```
+```python
 CheckboxFieldV1(
     self,
     data: Optional[BaseComponent] = None,

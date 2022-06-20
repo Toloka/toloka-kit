@@ -1,5 +1,10 @@
+import asyncio
+import datetime
+
 import pytest
 from toloka.client.project import Project
+from ..template_builder import compare_view_specs
+from toloka.metrics import TasksInPool
 
 
 def test_project_is_created(client, empty_project):
@@ -28,6 +33,10 @@ def test_clone_project(cloned_project_with_pool, project_with_pool):
         sorted(project_with_pool.unstructure().items())
     ):
         if key1 not in {'status', 'created', 'id'}:
+            if key1 == 'task_spec':
+                compare_view_specs(value1['view_spec'], value2['view_spec'])
+                value1.pop('view_spec')
+                value2.pop('view_spec')
             assert value1 == value2, f'Projects are different in {key1}'
 
 
@@ -45,3 +54,8 @@ def test_update_project(client, cloned_project_with_pool):
     cloned_project_with_pool.public_name = 'Updated public name'
     client.update_project(cloned_project_with_pool.id, cloned_project_with_pool)
     assert client.get_project(cloned_project_with_pool.id).public_name == 'Updated public name'
+
+
+def test_metrics_time_format(client, pool_in_project_with_pool):
+    lines = asyncio.run(TasksInPool(pool_in_project_with_pool.id, tasks_name='test', toloka_client=client).get_lines())
+    assert lines['test'][0][0].tzinfo == datetime.timezone.utc

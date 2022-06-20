@@ -1,7 +1,7 @@
 # SortItem
 `toloka.client.search_requests.UserBonusSortItems.SortItem`
 
-```
+```python
 SortItem(
     self,
     field: Optional[SortField] = None,

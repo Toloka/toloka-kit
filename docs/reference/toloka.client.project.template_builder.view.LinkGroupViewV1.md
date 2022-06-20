@@ -1,7 +1,7 @@
 # LinkGroupViewV1
-`toloka.client.project.template_builder.view.LinkGroupViewV1`
+`toloka.client.project.template_builder.view.LinkGroupViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/view.py#L299)
 
-```
+```python
 LinkGroupViewV1(
     self,
     links: Optional[Union[BaseComponent, List[Union[BaseComponent, Link]]]] = None,

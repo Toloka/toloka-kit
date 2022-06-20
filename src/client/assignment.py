@@ -133,6 +133,7 @@ class GetAssignmentsTsvParameters(Parameters):
     class Field(ExtendableStrEnum):
         LINK = 'ASSIGNMENT:link'
         ASSIGNMENT_ID = 'ASSIGNMENT:assignment_id'
+        TASK_ID = 'ASSIGNMENT:task_id'
         TASK_SUITE_ID = 'ASSIGNMENT:task_suite_id'
         WORKER_ID = 'ASSIGNMENT:worker_id'
         STATUS = 'ASSIGNMENT:status'

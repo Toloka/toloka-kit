@@ -1,7 +1,7 @@
 # TaskSuiteBatchCreateResult
 `toloka.client.batch_create_results.TaskSuiteBatchCreateResult`
 
-```
+```python
 TaskSuiteBatchCreateResult(
     self,
     *,

@@ -1,7 +1,7 @@
 # BaseStorage
-`toloka.streaming.storage.BaseStorage`
+`toloka.streaming.storage.BaseStorage` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/streaming/storage.py#L21)
 
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

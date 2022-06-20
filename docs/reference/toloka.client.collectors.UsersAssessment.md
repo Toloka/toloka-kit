@@ -1,7 +1,7 @@
 # UsersAssessment
-`toloka.client.collectors.UsersAssessment`
+`toloka.client.collectors.UsersAssessment` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/collectors.py#L483)
 
-```
+```python
 UsersAssessment(self, *, uuid: Optional[UUID] = None)
 ```
 

@@ -1,7 +1,7 @@
 # UserAgentVersionBugfix
-`toloka.client.filter.UserAgentVersionBugfix`
+`toloka.client.filter.UserAgentVersionBugfix` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/filter.py#L646)
 
-```
+```python
 UserAgentVersionBugfix(
     self,
     operator: CompareOperator,

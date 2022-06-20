@@ -1,5 +1,5 @@
 # FieldType
-`toloka.client.project.field_spec.FieldType`
+`toloka.client.project.field_spec.FieldType` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/field_spec.py#L27)
 
 An enumeration.
 

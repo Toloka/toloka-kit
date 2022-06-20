@@ -1,14 +1,15 @@
 # NewUserBonuses
-`toloka.metrics.metrics.NewUserBonuses`
+`toloka.metrics.metrics.NewUserBonuses` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/metrics/metrics.py#L185)
 
-```
+```python
 NewUserBonuses(
     self,
     count_name: Optional[str] = None,
     money_name: Optional[str] = None,
     join_events: bool = False,
     *,
-    toloka_client: TolokaClient = None,
+    toloka_client: Optional[TolokaClient] = None,
+    atoloka_client: Optional[AsyncTolokaClient] = None,
     timeout: timedelta = ...
 )
 ```
@@ -32,7 +33,7 @@ def print_metric(metric_dict):
 collector = MetricCollector([NewUserBonuses(toloka_client=toloka_client)], print_metric)
 asyncio.run(collector.run())
 ```
-## Methods summary
+## Methods Summary
 
 | Method | Description |
 | :------| :-----------|

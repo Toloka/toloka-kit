@@ -1,7 +1,7 @@
 # FieldTranslation
-`toloka.client.project.localization.AdditionalLanguage.FieldTranslation`
+`toloka.client.project.localization.AdditionalLanguage.FieldTranslation` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/localization.py#L21)
 
-```
+```python
 FieldTranslation(
     self,
     *,

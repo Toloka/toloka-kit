@@ -1,7 +1,7 @@
 # Parameters
-`toloka.client.actions.ChangeOverlap.Parameters`
+`toloka.client.actions.ChangeOverlap.Parameters` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/actions.py#L155)
 
-```
+```python
 Parameters(
     self,
     *,

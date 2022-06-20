@@ -1,7 +1,7 @@
 # Computed
-`toloka.client.filter.Computed`
+`toloka.client.filter.Computed` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/filter.py#L179)
 
-```
+```python
 Computed(
     self,
     *,

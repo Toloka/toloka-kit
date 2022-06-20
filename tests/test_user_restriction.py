@@ -52,7 +52,7 @@ def test_find_user_restrictions(requests_mock, toloka_client, toloka_url):
     request = client.search_requests.UserRestrictionSearchRequest(
         scope=client.user_restriction.UserRestriction.PROJECT,
         id_gt='123',
-        created_lte=datetime.datetime(2017, 12, 9, 12, 10, 0),
+        created_lte=datetime.datetime(2017, 12, 9, 12, 10, 0, tzinfo=datetime.timezone.utc),
     )
     sort = client.search_requests.UserRestrictionSortItems(['-created', 'id'])
     result = toloka_client.find_user_restrictions(request, sort=sort, limit=50)
@@ -62,7 +62,7 @@ def test_find_user_restrictions(requests_mock, toloka_client, toloka_url):
     result = toloka_client.find_user_restrictions(
         scope=client.user_restriction.UserRestriction.PROJECT,
         id_gt='123',
-        created_lte=datetime.datetime(2017, 12, 9, 12, 10, 0),
+        created_lte=datetime.datetime(2017, 12, 9, 12, 10, 0, tzinfo=datetime.timezone.utc),
         sort=['-created', 'id'],
         limit=50,
     )
@@ -114,7 +114,7 @@ def test_all_find_user_restrictions(requests_mock, toloka_client, toloka_url):
     request = client.search_requests.UserRestrictionSearchRequest(
         scope=client.user_restriction.UserRestriction.PROJECT,
         id_gt='123',
-        created_lte=datetime.datetime(2017, 12, 9, 12, 10, 0),
+        created_lte=datetime.datetime(2017, 12, 9, 12, 10, 0, tzinfo=datetime.timezone.utc),
     )
     result = toloka_client.get_user_restrictions(request)
     assert restrictions == client.unstructure(list(result))
@@ -123,7 +123,7 @@ def test_all_find_user_restrictions(requests_mock, toloka_client, toloka_url):
     result = toloka_client.get_user_restrictions(
         scope=client.user_restriction.UserRestriction.PROJECT,
         id_gt='123',
-        created_lte=datetime.datetime(2017, 12, 9, 12, 10, 0),
+        created_lte=datetime.datetime(2017, 12, 9, 12, 10, 0, tzinfo=datetime.timezone.utc),
     )
     assert restrictions == client.unstructure(list(result))
 

@@ -14,6 +14,7 @@ and not just the first output.
 | Parameters | Type | Description |
 | :----------| :----| :-----------|
 `user_id`|**Optional\[str\]**|<p>Performer ID.</p>
+`assignment_id`|**Optional\[str\]**|<p>ID of the performer&#x27;s response to the task a reward is issued for.</p>
 `private_comment`|**Optional\[str\]**|<p>Comments for the requester.</p>
 `id_lt`|**Optional\[str\]**|<p>Bonuses with an ID less than the specified value.</p>
 `id_lte`|**Optional\[str\]**|<p>Bonuses with an ID less than or equal to the specified value.</p>

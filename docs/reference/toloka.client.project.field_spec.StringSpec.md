@@ -1,7 +1,7 @@
 # StringSpec
-`toloka.client.project.field_spec.StringSpec`
+`toloka.client.project.field_spec.StringSpec` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/field_spec.py#L72)
 
-```
+```python
 StringSpec(
     self,
     *,

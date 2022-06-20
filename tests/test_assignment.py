@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from operator import itemgetter
 from urllib.parse import urlparse, parse_qs
 from decimal import Decimal
@@ -78,8 +78,8 @@ def test_find_assignments(requests_mock, toloka_client, toloka_url, assignment_m
         status=client.assignment.Assignment.ACCEPTED,
         pool_id='21',
         user_id='user-i1d',
-        created_gte=datetime(2015, 12, 1),
-        created_lt=datetime(2016, 6, 1),
+        created_gte=datetime(2015, 12, 1, tzinfo=timezone.utc),
+        created_lt=datetime(2016, 6, 1, tzinfo=timezone.utc),
     )
     sort = client.search_requests.AssignmentSortItems(['-submitted'])
     result = toloka_client.find_assignments(request, sort=sort)
@@ -90,8 +90,8 @@ def test_find_assignments(requests_mock, toloka_client, toloka_url, assignment_m
         status=client.assignment.Assignment.ACCEPTED,
         pool_id='21',
         user_id='user-i1d',
-        created_gte=datetime(2015, 12, 1),
-        created_lt=datetime(2016, 6, 1),
+        created_gte=datetime(2015, 12, 1, tzinfo=timezone.utc),
+        created_lt=datetime(2016, 6, 1, tzinfo=timezone.utc),
         sort=['-submitted']
     )
     assert raw_result == client.unstructure(result)
@@ -130,8 +130,8 @@ def test_get_assignments(requests_mock, toloka_client, toloka_url, assignment_ma
         status=client.assignment.Assignment.ACCEPTED,
         pool_id='21',
         user_id='user-i1d',
-        created_gte=datetime(2015, 12, 1),
-        created_lt=datetime(2016, 6, 1),
+        created_gte=datetime(2015, 12, 1, tzinfo=timezone.utc),
+        created_lt=datetime(2016, 6, 1, tzinfo=timezone.utc),
     )
     result = toloka_client.get_assignments(request)
     assert assignments == client.unstructure(list(result))
@@ -141,8 +141,8 @@ def test_get_assignments(requests_mock, toloka_client, toloka_url, assignment_ma
         status=client.assignment.Assignment.ACCEPTED,
         pool_id='21',
         user_id='user-i1d',
-        created_gte=datetime(2015, 12, 1),
-        created_lt=datetime(2016, 6, 1),
+        created_gte=datetime(2015, 12, 1, tzinfo=timezone.utc),
+        created_lt=datetime(2016, 6, 1, tzinfo=timezone.utc),
     )
     assert assignments == client.unstructure(list(result))
 

@@ -1,5 +1,5 @@
 # Type
-`toloka.client.conditions.PoolAccessRevokedReason.Type`
+`toloka.client.conditions.PoolAccessRevokedReason.Type` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/conditions.py#L230)
 
 An enumeration.
 

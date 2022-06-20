@@ -1,7 +1,7 @@
 # RelativeData
-`toloka.client.project.template_builder.data.RelativeData`
+`toloka.client.project.template_builder.data.RelativeData` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/data.py#L92)
 
-```
+```python
 RelativeData(
     self,
     path: Optional[Any] = None,

@@ -1,7 +1,7 @@
 # AssignmentsAcceptedCount
-`toloka.client.conditions.AssignmentsAcceptedCount`
+`toloka.client.conditions.AssignmentsAcceptedCount` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/conditions.py#L137)
 
-```
+```python
 AssignmentsAcceptedCount(
     self,
     operator: CompareOperator,

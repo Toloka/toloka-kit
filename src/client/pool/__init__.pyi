@@ -7,6 +7,7 @@ __all__ = [
     'DynamicOverlapConfig',
     'DynamicPricingConfig',
     'MixerConfig',
+    'SpeedQualityBalanceConfig',
 ]
 import datetime
 import toloka.client.filter
@@ -14,6 +15,7 @@ import toloka.client.owner
 import toloka.client.pool.dynamic_overlap_config
 import toloka.client.pool.dynamic_pricing_config
 import toloka.client.pool.mixer_config
+import toloka.client.pool.speed_quality_balance_config
 import toloka.client.primitives.base
 import toloka.client.quality_control
 import toloka.client.task_distribution_function
@@ -28,6 +30,7 @@ from toloka.client.pool import (
 from toloka.client.pool.dynamic_overlap_config import DynamicOverlapConfig
 from toloka.client.pool.dynamic_pricing_config import DynamicPricingConfig
 from toloka.client.pool.mixer_config import MixerConfig
+from toloka.client.pool.speed_quality_balance_config import SpeedQualityBalanceConfig
 
 
 class Pool(toloka.client.primitives.base.BaseTolokaObject):
@@ -78,6 +81,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
                 when the pool opens.
         filter: Settings for user selection filters.
         quality_control: Settings for quality control rules and the ID of the pool with training tasks.
+        speed_quality_balance: Settings for balance between speed and quality of pool done.
         dynamic_overlap_config: Dynamic overlap setting. Allows you to change the overlap depending on
             how well the performers handle the task.
         mixer_config: Parameters for automatically creating a task suite (“smart mixing”).
@@ -100,7 +104,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
         >>>     project_id=existing_project_id,
         >>>     private_name='Pool 1',
         >>>     may_contain_adult_content=False,
-        >>>     will_expire=datetime.datetime.utcnow() + datetime.timedelta(days=365),
+        >>>     will_expire=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=365),
         >>>     reward_per_assignment=0.01,
         >>>     assignment_max_duration_seconds=60*20,
         >>>     defaults=toloka.pool.Pool.Defaults(default_overlap_for_new_task_suites=3),
@@ -294,6 +298,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
         priority: typing.Optional[int] = None,
         filter: typing.Optional[toloka.client.filter.FilterCondition] = None,
         quality_control: typing.Optional[toloka.client.quality_control.QualityControl] = ...,
+        speed_quality_balance: typing.Optional[toloka.client.pool.speed_quality_balance_config.SpeedQualityBalanceConfig] = None,
         dynamic_overlap_config: typing.Optional[toloka.client.pool.dynamic_overlap_config.DynamicOverlapConfig] = None,
         mixer_config: typing.Optional[toloka.client.pool.mixer_config.MixerConfig] = None,
         training_config: typing.Optional[TrainingConfig] = None,
@@ -385,6 +390,18 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
         checkpoints_config: typing.Optional[toloka.client.quality_control.QualityControl.CheckpointsConfig] = None
     ):
         """A shortcut setter for quality_control
+        """
+        ...
+
+    @typing.overload
+    def set_speed_quality_balance(self, speed_quality_balance: toloka.client.pool.speed_quality_balance_config.SpeedQualityBalanceConfig):
+        """A shortcut setter for speed_quality_balance
+        """
+        ...
+
+    @typing.overload
+    def set_speed_quality_balance(self):
+        """A shortcut setter for speed_quality_balance
         """
         ...
 
@@ -484,6 +501,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
     priority: typing.Optional[int]
     filter: typing.Optional[toloka.client.filter.FilterCondition]
     quality_control: typing.Optional[toloka.client.quality_control.QualityControl]
+    speed_quality_balance: typing.Optional[toloka.client.pool.speed_quality_balance_config.SpeedQualityBalanceConfig]
     dynamic_overlap_config: typing.Optional[toloka.client.pool.dynamic_overlap_config.DynamicOverlapConfig]
     mixer_config: typing.Optional[toloka.client.pool.mixer_config.MixerConfig]
     training_config: typing.Optional[TrainingConfig]

@@ -1,7 +1,7 @@
 # UserSkillSearchResult
 `toloka.client.search_results.UserSkillSearchResult`
 
-```
+```python
 UserSkillSearchResult(
     self,
     *,

@@ -1,7 +1,7 @@
 # AudioViewV1
-`toloka.client.project.template_builder.view.AudioViewV1`
+`toloka.client.project.template_builder.view.AudioViewV1` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/project/template_builder/view.py#L107)
 
-```
+```python
 AudioViewV1(
     self,
     url: Optional[Any] = None,

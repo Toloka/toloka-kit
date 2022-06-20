@@ -1,5 +1,5 @@
 # Status
-`toloka.client.assignment.Assignment.Status`
+`toloka.client.assignment.Assignment.Status` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/assignment.py#L56)
 
 An enumeration.
 

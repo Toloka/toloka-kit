@@ -12,6 +12,7 @@ import attr
 import functools
 import pickle
 from concurrent import futures
+import contextvars
 from io import StringIO
 import time
 from typing import Awaitable, Callable, Dict, Generic, List, Optional, Type, TypeVar
@@ -118,9 +119,9 @@ class AsyncMultithreadWrapper(Generic[T]):
 
     def __init__(self, wrapped: T, pool_size: int = 10, loop: Optional[asyncio.AbstractEventLoop] = None):
         self.__wrapped__ = wrapped
-        self.__executor = futures.ThreadPoolExecutor(max_workers=pool_size)
         self.__loop = loop
         self.__pool_size = pool_size
+        self.__executor = futures.ThreadPoolExecutor(max_workers=pool_size)
 
     @property
     def _loop(self):
@@ -142,7 +143,18 @@ class AsyncMultithreadWrapper(Generic[T]):
 
         @functools.wraps(attribute)
         async def _wrapper(*args, **kwargs):
-            return await self._loop.run_in_executor(self.__executor, functools.partial(attribute, *args, **kwargs))
+
+            def func_with_init_vars(*args, **kwargs):
+                func, ctx_vars, *args_for_func = args
+                for var, value in ctx_vars.items():
+                    var.set(value)
+                return func(*args_for_func, **kwargs)
+
+            ctx = contextvars.copy_context()
+            return await self._loop.run_in_executor(
+                self.__executor,
+                functools.partial(func_with_init_vars, attribute, ctx, *args, **kwargs)
+            )
 
         return _wrapper
 
