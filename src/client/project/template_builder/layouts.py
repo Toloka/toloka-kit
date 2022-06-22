@@ -90,10 +90,10 @@ class ColumnsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COLUMNS):
         MIDDLE = 'middle'
         TOP = 'top'
 
-    items: base_component_or(List[BaseComponent], 'ListBaseComponent')
+    items: base_component_or(List[BaseComponent], 'ListBaseComponent')  # noqa: F821
     full_height: base_component_or(bool) = attribute(origin='fullHeight', kw_only=True)
     min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
-    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)  # noqa: F821
     vertical_align: base_component_or(VerticalAlign) = attribute(origin='verticalAlign', kw_only=True)
 
 
@@ -134,7 +134,7 @@ class CompareLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COMPARE):
     """
 
     common_controls: BaseComponent = attribute(origin='commonControls')
-    items: base_component_or(List[base_component_or(CompareLayoutItem)], 'ListBaseComponentOrCompareLayoutItem')
+    items: base_component_or(List[base_component_or(CompareLayoutItem)], 'ListBaseComponentOrCompareLayoutItem')  # noqa: F821
     min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
     wide_common_controls: base_component_or(bool) = attribute(origin='wideCommonControls', kw_only=True)
 
@@ -154,7 +154,7 @@ class SideBySideLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_SIDE_BY_S
     """
 
     controls: BaseComponent
-    items: base_component_or(List[BaseComponent], 'ListBaseComponent')
+    items: base_component_or(List[BaseComponent], 'ListBaseComponent')  # noqa: F821
     min_item_width: base_component_or(float) = attribute(origin='minItemWidth', kw_only=True)
 
 
