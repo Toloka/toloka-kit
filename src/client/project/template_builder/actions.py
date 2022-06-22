@@ -41,7 +41,7 @@ class BulkActionV1(BaseActionV1, spec_value=ComponentType.ACTION_BULK):
         payload: An array of actions that you want to call.
     """
 
-    payload: base_component_or(List[BaseComponent], 'ListBaseComponent')
+    payload: base_component_or(List[BaseComponent], 'ListBaseComponent')  # noqa: F821
 
 
 class NotifyActionV1(BaseActionV1, spec_value=ComponentType.ACTION_NOTIFY):
