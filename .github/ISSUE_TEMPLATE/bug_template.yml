@@ -49,6 +49,8 @@ body:
         - 3.8
         - 3.9
         - 3.10
+    validations:
+      required: true
   - type: input
     id: toloka-kit_version
     attributes:
