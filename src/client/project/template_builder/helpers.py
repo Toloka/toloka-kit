@@ -40,7 +40,7 @@ class ConcatArraysHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_CONCAT_
         items: Arrays to combine.
     """
 
-    items: base_component_or(List[base_component_or(Any)], 'ListBaseComponentOrAny')
+    items: base_component_or(List[base_component_or(Any)], 'ListBaseComponentOrAny')  # noqa: F821
 
 
 class Entries2ObjectHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_ENTRIES2OBJECT):
@@ -67,7 +67,7 @@ class Entries2ObjectHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_ENTRI
         key: base_component_or(str)
         value: base_component_or(Any)
 
-    entries: base_component_or(List[base_component_or(Entry)], 'ListBaseComponentOrEntry')
+    entries: base_component_or(List[base_component_or(Entry)], 'ListBaseComponentOrEntry')  # noqa: F821
 
 
 class IfHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_IF):
@@ -111,7 +111,7 @@ class JoinHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_JOIN):
         by: Delimiter for joining strings. You can use any number of characters in the delimiter.
     """
 
-    items: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrStr')
+    items: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrStr')  # noqa: F821
     by: base_component_or(Any)
 
 
@@ -220,7 +220,7 @@ class SwitchHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_SWITCH):
         condition: BaseComponent
         result: base_component_or(Any)
 
-    cases: base_component_or(List[base_component_or(Case)], 'ListBaseComponentOrCase')
+    cases: base_component_or(List[base_component_or(Case)], 'ListBaseComponentOrCase')  # noqa: F821
     default: base_component_or(Any)
 
 
@@ -262,7 +262,7 @@ class TransformHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_TRANSFORM)
     """
 
     into: base_component_or(Any)
-    items: base_component_or(List[base_component_or(Any)], 'ListBaseComponentOrAny')
+    items: base_component_or(List[base_component_or(Any)], 'ListBaseComponentOrAny')  # noqa: F821
 
 
 class TranslateHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_TRANSLATE):

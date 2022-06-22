@@ -56,7 +56,7 @@ class ImageAnnotationHotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUG
 
     cancel: base_component_or(str) = attribute(kw_only=True)
     confirm: base_component_or(str) = attribute(kw_only=True)
-    labels: base_component_or(List[str], 'ListStr') = attribute(kw_only=True)
+    labels: base_component_or(List[str], 'ListStr') = attribute(kw_only=True)  # noqa: F821
     modes: base_component_or(Mode) = attribute(kw_only=True)
 
 ImageAnnotationHotkeysPluginV1.__init__ = \
@@ -73,7 +73,7 @@ class TextAnnotationHotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGI
             assign to this property will deselect.
     """
 
-    labels: base_component_or(List[str], 'ListStr')
+    labels: base_component_or(List[str], 'ListStr')  # noqa: F821
     remove: base_component_or(str)
 
 
@@ -207,6 +207,6 @@ class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
         task_width: base_component_or(float) = attribute(origin='taskWidth', kw_only=True)
 
     layout: base_component_or(TolokaPluginLayout) = attribute(factory=TolokaPluginLayout)
-    notifications: base_component_or(List[BaseComponent], 'ListBaseComponent') = attribute(kw_only=True)
+    notifications: base_component_or(List[BaseComponent], 'ListBaseComponent') = attribute(kw_only=True)  # noqa: F821
 
 TolokaPluginV1.__init__ = expand('layout', TolokaPluginV1.TolokaPluginLayout)(TolokaPluginV1.__init__)
