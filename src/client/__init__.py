@@ -67,6 +67,7 @@ __all__ = [
     'AppItemsCreateRequest',
     'AppBatch',
     'AppBatchCreateRequest',
+    'AppBatchStartResponse',
 ]
 
 import attr
@@ -122,7 +123,7 @@ from ..__version__ import __version__
 from ._converter import structure, unstructure
 from .aggregation import AggregatedSolution
 from .analytics_request import AnalyticsRequest
-from .app import App, AppItem, AppProject, AppBatch, AppBatchCreateRequest, AppItemsCreateRequest
+from .app import App, AppItem, AppProject, AppBatch, AppBatchCreateRequest, AppItemsCreateRequest, AppBatchStartResponse
 from .assignment import Assignment, AssignmentPatch, GetAssignmentsTsvParameters
 from .attachment import Attachment
 from .clone_results import CloneResults
@@ -133,7 +134,7 @@ from .message_thread import (
 from .operation_log import OperationLogItem
 from .pool import Pool, PoolPatchRequest
 from .primitives.retry import TolokaRetry, PreloadingHTTPAdapter, STATUSES_TO_RETRY
-from .primitives.base import autocast_to_enum
+from .primitives.base import autocast_to_enum, BaseTolokaObject
 from .project import Project
 from .training import Training
 from .requester import Requester
@@ -2604,6 +2605,63 @@ class TolokaClient:
         response = self._request('get', f'/v1/operations/{operation_id}')
         return structure(response, operations.Operation)
 
+    def _wait_toloka_object(
+        self,
+        obj: BaseTolokaObject,
+        timeout: datetime.timedelta, is_ready: Callable[[operations.Operation], bool],
+        update: Callable[[BaseTolokaObject], BaseTolokaObject], start: datetime.datetime
+    ) -> BaseTolokaObject:
+        """Waits for BaseTolokaObject till it gets ready and return it.
+
+        Args:
+            obj: BaseTolokaObject to wait for.
+            timeout: How long to wait. Defaults to 10 minutes.
+            is_ready: Checks if object is ready and operation shoul be finished.
+            update: Updates data about current object.
+            start: Datetime of starting/creating of the obj.
+
+        Returns:
+            BaseTolokaObject: Ready VaseTolokaObject.
+        """
+        default_time_to_wait = datetime.timedelta(seconds=1)
+        default_initial_delay = datetime.timedelta(milliseconds=500)
+
+        if is_ready(obj):
+            return obj
+
+        utcnow = datetime.datetime.now(datetime.timezone.utc)
+        wait_until_time = utcnow + timeout
+
+        if not start or utcnow - start < default_initial_delay:
+            time.sleep(default_initial_delay.total_seconds())
+
+        while True:
+            obj = update(obj)
+            if is_ready(obj):
+                return obj
+            time.sleep(default_time_to_wait.total_seconds())
+            if datetime.datetime.now(datetime.timezone.utc) > wait_until_time:
+                raise TimeoutError
+
+    @add_headers('client')
+    def wait_app_batch(
+        self,
+        batch: AppBatch, timeout: datetime.timedelta = datetime.timedelta(minutes=10)
+    ) -> AppBatch:
+        """Waits for the app batch to complete, and return it
+
+        Args:
+            batch: AppBatch object to wait for.
+            timeout: How long to wait. Defaults to 10 minutes.
+
+        Returns:
+            AppBatch: Completed AppBatch
+        """
+        return self._wait_toloka_object(
+            batch, timeout, lambda x: x.is_completed(),
+            lambda x: self.get_app_batch(x.app_project_id, x.id),
+            batch.started_at)
+
     @add_headers('client')
     def wait_operation(
         self,
@@ -2612,7 +2670,7 @@ class TolokaClient:
         """Waits for the operation to complete, and return it
 
         Args:
-            op: ID of the operation.
+            op: Operation to wait for.
             timeout: How long to wait. Defaults to 10 minutes.
 
         Raises:
@@ -2638,25 +2696,10 @@ class TolokaClient:
             >>> print('Pool was closed.')
             ...
         """
-        default_time_to_wait = datetime.timedelta(seconds=1)
-        default_initial_delay = datetime.timedelta(milliseconds=500)
-
-        if op.is_completed():
-            return op
-
-        utcnow = datetime.datetime.now(datetime.timezone.utc)
-        wait_until_time = utcnow + timeout
-
-        if not op.started or utcnow - op.started < default_initial_delay:
-            time.sleep(default_initial_delay.total_seconds())
-
-        while True:
-            op = self.get_operation(op.id)
-            if op.is_completed():
-                return op
-            time.sleep(default_time_to_wait.total_seconds())
-            if datetime.datetime.now(datetime.timezone.utc) > wait_until_time:
-                raise TimeoutError
+        return self._wait_toloka_object(
+            op, timeout, lambda x: x.is_completed(),
+            lambda x: self.get_operation(x.id),
+            op.started)
 
     @add_headers('client')
     def get_operation_log(self, operation_id: str) -> List[OperationLogItem]:
@@ -3695,7 +3738,7 @@ class TolokaClient:
         return structure(response, AppBatch)
 
     @add_headers('client')
-    def start_app_batch(self, app_project_id: str, app_batch_id: str):
+    def start_app_batch(self, app_project_id: str, app_batch_id: str) -> AppBatchStartResponse:
         """Start processing the batch.
 
         Starts asynchronously.
@@ -3708,5 +3751,7 @@ class TolokaClient:
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
 
-        self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/batches/{app_batch_id}/start')
-        return
+        response = AppBatchStartResponse()
+        response.code = str(self._raw_request(
+            'post', f'/app/v0/app-projects/{app_project_id}/batches/{app_batch_id}/start').status_code)
+        return response

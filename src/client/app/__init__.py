@@ -4,7 +4,8 @@ __all__ = [
     'AppItem',
     'AppItemsCreateRequest',
     'AppBatch',
-    'AppBatchCreateRequest'
+    'AppBatchCreateRequest',
+    'AppBatchStartResponse'
 ]
 import datetime
 import decimal
@@ -195,6 +196,11 @@ class AppBatch(BaseTolokaObject):
         ARCHIVE = 'ARCHIVE'
         NO_MONEY = 'NO_MONEY'
 
+    def is_completed(self):
+        """Returns True if the batch is completed. Status equals COMPLETED, ERROR or CANCELLED."""
+        return self.status in [
+            AppBatch.Status.COMPLETED, AppBatch.Status.ERROR, AppBatch.Status.CANCELLED]
+
     id: str
     app_project_id: str
     name: str
@@ -215,3 +221,7 @@ class AppBatchCreateRequest(BaseTolokaObject):
     """
 
     items: List[Dict[str, Any]]
+
+
+class AppBatchStartResponse(BaseTolokaObject):
+    code: str

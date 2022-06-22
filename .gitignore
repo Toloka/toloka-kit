@@ -3,6 +3,7 @@
 
 # Unignore dirs
 !*/
+.tox/
 
 # Unignore specific files without extensions
 !AUTHORS

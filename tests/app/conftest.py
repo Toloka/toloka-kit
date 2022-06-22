@@ -187,3 +187,10 @@ def app_batch_map():
         'finished_at': '2021-09-28T16:07:13.400000',
         'read_only': False
     }
+
+
+@pytest.fixture
+def app_batch_start_response():
+    return {
+        'code': '201',
+    }

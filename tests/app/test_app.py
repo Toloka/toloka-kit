@@ -614,7 +614,8 @@ def test_create_app_batch(requests_mock, toloka_client_prod, toloka_app_url, app
     assert app_batch_map == client.unstructure(result)
 
 
-def test_start_app_batch(requests_mock, toloka_client_prod, toloka_app_url):
+def test_start_app_batch(requests_mock, toloka_client_prod, toloka_app_url,
+                         app_batch_start_response, app_batch_map):
 
     def start_app_batch(request, context):
         expected_headers = {
@@ -625,4 +626,26 @@ def test_start_app_batch(requests_mock, toloka_client_prod, toloka_app_url):
         check_headers(request, expected_headers)
 
     requests_mock.post(f'{toloka_app_url}/app-projects/123/batches/321/start', text=start_app_batch, status_code=201)
-    toloka_client_prod.start_app_batch('123', '321')
+    result = toloka_client_prod.start_app_batch('123', '321')
+    assert app_batch_start_response == client.unstructure(result)
+
+    expected_headers = iter([{
+        'X-Caller-Context': 'client',
+        'X-Top-Level-Method': 'get_app_batch',
+        'X-Low-Level-Method': 'get_app_batch',
+    },
+        {
+        'X-Caller-Context': 'client',
+        'X-Top-Level-Method': 'wait_app_batch',
+        'X-Low-Level-Method': 'get_app_batch',
+    }])
+
+    def get_app_batch(request, context):
+        check_headers(request, next(expected_headers))
+
+        return app_batch_map
+
+    requests_mock.get(f'{toloka_app_url}/app-projects/123/batches/321', json=get_app_batch)
+    requests_mock.get(f'{toloka_app_url}/app-projects/123/batches/123', json=get_app_batch)
+    app_batch_obj = toloka_client_prod.get_app_batch('123', '321')
+    assert app_batch_map == client.unstructure(toloka_client_prod.wait_app_batch(app_batch_obj))
