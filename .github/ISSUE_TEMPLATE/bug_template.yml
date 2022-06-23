@@ -8,7 +8,7 @@ body:
       value: "# Bug report"
   - type: markdown
     attributes:
-      value: Thank you for reporting a bug and helping us improve Toloka-Kit! Please provide as much information as it possible.
+      value: Thank you for reporting a bug and helping us improve Toloka-Kit! Please provide as much information as possible.
   - type: markdown
     attributes:
       value: >
