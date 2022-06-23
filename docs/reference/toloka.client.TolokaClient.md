@@ -1,5 +1,5 @@
 # TolokaClient
-`toloka.client.TolokaClient` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/__init__.py#L153)
+`toloka.client.TolokaClient` | [Source code](https://github.com/Toloka/toloka-kit/blob/v0.1.26/src/client/__init__.py#L155)
 
 ```python
 TolokaClient(
@@ -180,4 +180,3 @@ toloka_client = toloka.TolokaClient(your_oauth_token, 'PRODUCTION')  # Or switch
 [update_training](toloka.client.TolokaClient.update_training.md)| Makes changes to the training
 [upsert_webhook_subscriptions](toloka.client.TolokaClient.upsert_webhook_subscriptions.md)| Creates (upsert) many webhook-subscriptions.
 [wait_operation](toloka.client.TolokaClient.wait_operation.md)| Waits for the operation to complete, and return it
-[wait_operation_with_progress](toloka.client.TolokaClient.wait_operation_with_progress.md)| Waits for the operation to complete, and return it. Showing progress bar while operation is in progress

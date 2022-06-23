@@ -2581,7 +2581,7 @@ class TolokaClient:
         """Finds all skills that match certain rules and returns them in an iterable object
 
         Unlike find_skills, returns generator. Does not sort skills.
-        While iterating over the result, several requests to the Toloka server is possible.
+        While iterawait_operationting over the result, several requests to the Toloka server is possible.
 
         Args:
             request: How to search skills.
@@ -3649,54 +3649,18 @@ class TolokaClient:
         """
         ...
 
-    def wait_operation_with_progress(
-        self,
-        op: toloka.client.operations.Operation,
-        timeout: datetime.timedelta = ...
-    ) -> toloka.client.operations.Operation:
-        """Waits for the operation to complete, and return it. Showing progress bar while operation is in progress
-
-        Args:
-            op: ID of the operation.
-            timeout: How long to wait. Defaults to 10 minutes.
-
-        Raises:
-            TimeoutError: Raises it if the timeout has expired and the operation is still not completed.
-
-        Returns:
-            Operation: Completed operation.
-
-        Example:
-            Waiting for the pool to close can be running in the background.
-
-            >>> pool = toloka_client.get_pool(pool_id)
-            >>> while not pool.is_closed():
-            >>>     op = toloka_client.get_analytics([toloka.analytics_request.CompletionPercentagePoolAnalytics(subject_id=pool.id)])
-            >>>     op = toloka_client.wait_operation_with_progress(op)
-            >>>     percentage = op.details['value'][0]['result']['value']
-            >>>     print(
-            >>>         f'   {datetime.datetime.now().strftime("%H:%M:%S")}     '
-            >>>         f'Pool {pool.id} - {percentage}%'
-            >>>         )
-            >>>     time.sleep(60 * minutes_to_wait)
-            >>>     pool = toloka_client.get_pool(pool.id)
-            >>> print('Pool was closed.')
-            ...
-        """
-        ...
-
     def wait_operation(
         self,
         op: toloka.client.operations.Operation,
         timeout: datetime.timedelta = ...,
-        progress: bool = True
+        disable_progress: bool = False
     ) -> toloka.client.operations.Operation:
         """Waits for the operation to complete, and return it
 
         Args:
             op: ID of the operation.
             timeout: How long to wait. Defaults to 10 minutes.
-            progress: Whether show progress bar or not. Defaults to True
+            disable_progress: Whether disable progress bar or enable. Defaults to False (meaning progress bar is shown).
 
         Raises:
             TimeoutError: Raises it if the timeout has expired and the operation is still not completed.

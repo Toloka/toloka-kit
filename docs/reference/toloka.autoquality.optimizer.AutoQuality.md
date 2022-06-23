@@ -16,7 +16,7 @@ AutoQuality(
     score_func: Callable = default_calc_scores,
     ranking_func: Callable = default_calc_ranks,
     create_autoquality_pool_func: Callable = _create_autoquality_pool_default,
-    run_id: str = 'AutoQuality Project 2022-06-10 16:05:10'
+    run_id: str = 'AutoQuality Project 2022-06-23 09:46:19'
 )
 ```
 

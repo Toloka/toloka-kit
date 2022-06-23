@@ -109,8 +109,6 @@ items:
         href: toloka.client.TolokaClient.get_operation_log.md
       - name: wait_operation
         href: toloka.client.TolokaClient.wait_operation.md
-      - name: wait_operation_with_progress
-          href: toloka.client.TolokaClient.wait_operation_with_progress.md
     - name: pools
       items:
       - name: archive_pool
