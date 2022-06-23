@@ -83,6 +83,8 @@ import contextvars
 
 from decimal import Decimal
 from enum import Enum, unique
+from tqdm import tqdm
+from tqdm.contrib.logging import logging_redirect_tqdm
 from typing import BinaryIO, Callable, Generator, List, Optional, Sequence, Tuple, Union
 from urllib3.util.retry import Retry
 
@@ -2085,7 +2087,7 @@ class TolokaClient:
             >>> from toloka.client.analytics_request import CompletionPercentagePoolAnalytics
             >>> operation = toloka_client.get_analytics([CompletionPercentagePoolAnalytics(subject_id=pool_id)])
             >>> operation = toloka_client.wait_operation(operation)
-            >>> print(op.details['value'][0]['result']['value'])
+            >>> print(operation.details['value'][0]['result']['value'])
             ...
         """
         response = self._request('post', '/staging/analytics-2', json=unstructure(stats))
@@ -2604,16 +2606,19 @@ class TolokaClient:
         response = self._request('get', f'/v1/operations/{operation_id}')
         return structure(response, operations.Operation)
 
+
     @add_headers('client')
     def wait_operation(
-        self,
-        op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10)
+            self,
+            op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10),
+            disable_progress: bool = False
     ) -> operations.Operation:
         """Waits for the operation to complete, and return it
 
         Args:
             op: ID of the operation.
             timeout: How long to wait. Defaults to 10 minutes.
+            disable_progress: Whether disable progress bar or enable. Defaults to False (meaning progress bar is shown).
 
         Raises:
             TimeoutError: Raises it if the timeout has expired and the operation is still not completed.
@@ -2647,16 +2652,23 @@ class TolokaClient:
         utcnow = datetime.datetime.now(datetime.timezone.utc)
         wait_until_time = utcnow + timeout
 
-        if not op.started or utcnow - op.started < default_initial_delay:
-            time.sleep(default_initial_delay.total_seconds())
+        with logging_redirect_tqdm():
+            with tqdm(total=100, disable=disable_progress) as progress_bar:
+                progress = 0
 
-        while True:
-            op = self.get_operation(op.id)
-            if op.is_completed():
-                return op
-            time.sleep(default_time_to_wait.total_seconds())
-            if datetime.datetime.now(datetime.timezone.utc) > wait_until_time:
-                raise TimeoutError
+                if not op.started or utcnow - op.started < default_initial_delay:
+                    time.sleep(default_initial_delay.total_seconds())
+
+                while True:
+                    op = self.get_operation(op.id)
+                    progress_bar.update(op.progress - progress if op.progress else 0)
+                    progress = op.progress if op.progress else 0
+                    if op.is_completed():
+                        progress_bar.update(100 - progress)
+                        return op
+                    time.sleep(default_time_to_wait.total_seconds())
+                    if datetime.datetime.now(datetime.timezone.utc) > wait_until_time:
+                        raise TimeoutError
 
     @add_headers('client')
     def get_operation_log(self, operation_id: str) -> List[OperationLogItem]:
