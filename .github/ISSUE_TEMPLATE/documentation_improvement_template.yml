@@ -8,7 +8,7 @@ body:
       value: "# Documentation fix"
   - type: markdown
     attributes:
-      value: Thank you for helping us improve Toloka-Kit! Please provide as much information as it possible.
+      value: Thank you for helping us improve Toloka-Kit! Please provide as much information as possible.
   - type: markdown
     attributes:
       value: >
