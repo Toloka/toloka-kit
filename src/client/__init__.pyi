@@ -2581,7 +2581,7 @@ class TolokaClient:
         """Finds all skills that match certain rules and returns them in an iterable object
 
         Unlike find_skills, returns generator. Does not sort skills.
-        While iterawait_operationting over the result, several requests to the Toloka server is possible.
+        While iterating over the result, several requests to the Toloka server is possible.
 
         Args:
             request: How to search skills.
