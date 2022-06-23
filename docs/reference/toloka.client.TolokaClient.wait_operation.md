@@ -5,7 +5,8 @@
 wait_operation(
     self,
     op: Operation,
-    timeout: timedelta = ...
+    timeout: timedelta = ...,
+    disable_progress: bool = False
 )
 ```
 
@@ -17,6 +18,7 @@ Waits for the operation to complete, and return it
 | :----------| :----| :-----------|
 `op`|**[Operation](toloka.client.operations.Operation.md)**|<p>ID of the operation.</p>
 `timeout`|**timedelta**|<p>How long to wait. Defaults to 10 minutes.</p>
+`disable_progress`|**bool**|<p>Whether disable progress bar or enable. Defaults to False (meaning progress bar is shown).</p>
 
 * **Returns:**
 
