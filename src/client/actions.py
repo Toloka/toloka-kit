@@ -141,7 +141,7 @@ class ChangeOverlap(RuleAction, spec_value=RuleType.CHANGE_OVERLAP):
             * `False` — Don't reopen the pool if it is closed.
 
     Example:
-        The example shows how to increase task overlap when you reject assignments manually.
+        The example shows how to increase task overlap when you reject assignments.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
