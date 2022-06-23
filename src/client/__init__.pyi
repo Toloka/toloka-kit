@@ -3652,13 +3652,15 @@ class TolokaClient:
     def wait_operation(
         self,
         op: toloka.client.operations.Operation,
-        timeout: datetime.timedelta = ...
+        timeout: datetime.timedelta = ...,
+        disable_progress: bool = False
     ) -> toloka.client.operations.Operation:
         """Waits for the operation to complete, and return it
 
         Args:
             op: ID of the operation.
             timeout: How long to wait. Defaults to 10 minutes.
+            disable_progress: Whether disable progress bar or enable. Defaults to False (meaning progress bar is shown).
 
         Raises:
             TimeoutError: Raises it if the timeout has expired and the operation is still not completed.
