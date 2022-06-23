@@ -74,20 +74,21 @@ class AppProject(BaseTolokaObject):
 
 
 class App(BaseTolokaObject):
-    """An example of a standard task that you want to solve using Toloka. Unlike project templates, you don't have to
-    set up everything yourself.
+    """A [ready-to-go](https://toloka.ai/en/docs/toloka-apps/concepts/) solution.
+    
+    Each ready-to-go solution targets one type of tasks which can be solved using Toloka. 
 
     Attributes:
-        id: ID of the App.
-        name:
-        image: Image.
-        description: Overview.
-        constraints_description: Description of limitations.
-        default_item_price: Default processing cost per work item.
-        param_spec: Specification of parameters for creating a project.
-        input_spec: Schema of input data in Toloka format.
-        output_spec: Schema of output data in Toloka format.
-        examples: Task examples.
+        id: The ID of the ready-to-go solution.
+        name: The solution name.
+        image: A link to the solution interface preview image.
+        description: The solution description.
+        constraints_description: The description of limitations.
+        default_item_price: The default cost of one annotated item.
+        param_spec: The specification of parameters used to create a project.
+        input_spec: The schema of solution input data.
+        output_spec: The schema of solution output data.
+        examples: Examples of tasks suitable to the solution.
     """
 
     id: str
@@ -103,27 +104,27 @@ class App(BaseTolokaObject):
 
 
 class AppItem(BaseTolokaObject):
-    """A work item with data. It's uploaded into the batch with other items to be collectively sent for labeling.
-    In a TSV file with tasks, each line is a work item.
+    """A work item with data.
+    
+    Items are uploaded to Toloka and are grouped in batches. Then the entire batch is sent for labeling.
 
     Attributes:
-        batch_id: ID of the batch that includes the item.
-        input_data: The item data following the App schema.
-        id: Item ID.
-        app_project_id: ID of the app project that includes the batch with this item.
+        id: The ID of the item.
+        app_project_id: The ID of the project that contains the item.
+        batch_id: The ID of the batch that contains the item.
+        input_data: Input data. It must follow the solution schema described in `App.input_spec`.
         created:
-        updated:
-        status: Processing status. If the item has the NEW status, it can be edited. In other statuses, the item is
-            immutable. Allowed values:
-            * NEW - new;
-            * PROCESSING - being processed;
-            * COMPLETED - processing complete;
-            * ERROR - error during processing;
-            * CANCELLED - processing canceled;
-            * ARCHIVE - item has been archived;
-            * NO_MONEY - not enough money for processing.
-        output_data: Processing result.
-        errors:
+        updated: 
+        status: A processing status. Only items in `NEW` status can be edited.
+            * `NEW` — New item.
+            * `PROCESSING` — The item is being processed.
+            * `COMPLETED` — The item is annotated.
+            * `ERROR` — An error occurred during processing.
+            * `CANCELLED` — Item processing canceled.
+            * `ARCHIVE` — Archived item.
+            * `NO_MONEY` — There are not enough money for processing.
+        output_data: Annotated data.
+        errors: Errors occurred during annotation.
         created_at: Date and time when the item was created.
         started_at: Date and time when the item processing started.
         finished_at: Date and time when the item processing was completed.
@@ -155,11 +156,11 @@ class AppItem(BaseTolokaObject):
 
 
 class AppItemsCreateRequest(BaseTolokaObject):
-    """Request Body.
+    """Parameters of a request for creating multiple items.
 
     Attributes:
-        batch_id: Batch ID.
-        items: list of items.
+        batch_id: The ID of the batch to place items to.
+        items: The list of items. The items must follow the solution schema described in `App.input_spec`.
     """
 
     batch_id: str
@@ -167,23 +168,25 @@ class AppItemsCreateRequest(BaseTolokaObject):
 
 
 class AppBatch(BaseTolokaObject):
-    """A batch of data that you send for labeling at a time. The batch consists of work items.
+    """A batch.
+    
+    A batch contains items that are sent for labeling together.
 
     Attributes:
-        id: Batch ID.
-        app_project_id: Project ID.
-        name:
-        status: The state of the batch, calculated based on the states of items comprising it. Allowed values:
-            * NEW
-            * PROCESSING
-            * COMPLETED
-            * ERROR
-            * CANCELLED
-            * ARCHIVE
-            * NO_MONEY
-        items_count: Number of items in the batch.
-        item_price: The cost of processing per item in a batch.
-        cost: The cost of processing per batch.
+        id: The ID of the Batch.
+        app_project_id: The ID of the project.
+        name: The batch name.
+        status: The batch status:
+            * `NEW`
+            * `PROCESSING`
+            * `COMPLETED`
+            * `ERROR`
+            * `CANCELLED`
+            * `ARCHIVE`
+            * `NO_MONEY`
+        items_count: The number of items in the batch.
+        item_price: The cost of processing single item.
+        cost: The cost of processing the batch.
         created_at: Date and time when the batch was created.
         started_at: Date and time when batch processing started.
         finished_at: Date and time when batch processing was completed.
@@ -212,10 +215,10 @@ class AppBatch(BaseTolokaObject):
 
 
 class AppBatchCreateRequest(BaseTolokaObject):
-    """Request Body.
+    """Parameters of a request for creating multiple items in a batch.
 
     Attributes:
-        items: The item data following the App schema.
+        items: The list of items. The items must follow the solution schema described in `App.input_spec`.
     """
 
     items: List[Dict[str, Any]]
