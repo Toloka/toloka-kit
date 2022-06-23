@@ -2611,7 +2611,6 @@ class TolokaClient:
         response = self._request('get', f'/v1/operations/{operation_id}')
         return structure(response, operations.Operation)
 
-
     @add_headers('client')
     def wait_operation(
             self,
