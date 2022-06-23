@@ -19,10 +19,12 @@ from ...util._codegen import attribute
 
 class _AppError(BaseTolokaObject):
     """
+    A structure for describing errors which may appear while working with ready-to-go solutions.
+
     Attributes:
-        code: String error code.
-        message: Detailed description of the error.
-        payload: Additional information about the error. May have different structure for different errors.
+        code: The short name of the error.
+        message: The detailed description of the error.
+        payload: Additional data provided with the error.
     """
     code: str
     message: str
@@ -30,24 +32,26 @@ class _AppError(BaseTolokaObject):
 
 
 class AppProject(BaseTolokaObject):
-    """An App project with the parameters that you specify when creating it. It will have the interface and quality
-    control already pre-configured, decomposition done, and everything ready to use: all you need is to upload batches
-    and send them for labeling.
+    """A [ready-to-go](https://toloka.ai/en/docs/toloka-apps/concepts/) project.
+    
+    A ready-to-go project is based on one of ready-to-go solutions. It is created with a template interface and preconfigured data specification and quality control rules.
+
+    To get available ready-to-go solutions use the [get_apps](toloka.client.TolokaClient.get_apps.md) method.
 
     Attributes:
-        app_id:
-        parent_app_project_id:
-        name:
-        parameters:
-        id:
-        status: Project statuses for asynchronous creation. Allowed values:
-            * CREATING
-            * READY
-            * ARCHIVE
-            * ERROR
-        created:
-        item_price:
-        errors:
+        app_id: The ID of the ready-to-go solution used to create the project.
+        parent_app_project_id The ID of the parent project. It is set if this project is a clone of other project. Otherwise it is empty.
+        name: The project name.
+        parameters: Parameters of the solution. The parameters should follow a schema described in the `param_spec` field of the [App](toloka.client.app.App.md).
+        id: The ID of the project.
+        status: The project status:
+            * `CREATING` — Toloka is checking the project.
+            * `READY` — The project is active.
+            * `ARCHIVED` — The project was archived.
+            * `ERROR` — Project creation failed due to errors.
+        created: Time when the project was created.
+        item_price: The price you pay for a processed item.
+        errors: Errors found during a project check.
     """
 
     @unique
