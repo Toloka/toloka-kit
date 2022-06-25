@@ -3319,20 +3319,18 @@ class TolokaClient:
     def find_app_projects(self, request: search_requests.AppProjectSearchRequest,
                           sort: Union[List[str], search_requests.AppProjectSortItems, None] = None,
                           limit: Optional[int] = None) -> search_results.AppProjectSearchResult:
-        """Finds all App projects that match certain rules.
+        """Finds ready-to-go projects that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found App projects and whether there
-        are any more results.
-        It is better to use the "get_app_projects" method, they allow to iterate trought all results
-        and not just the first output.
+        The number of returned projects is limited. `find_app_projects` also returns a flag showing whether there are more matching projects.
+        Use [get_app_projects](./toloka.client.TolokaClient.get_app_projects.md) to iterate over all matching projects.
 
         Args:
-            request: How to search app projects.
+            request: Search criteria.
             sort: The order and direction of sorting the results.
-            limit: number of objects per page.
+            limit: Returned projects limit. The default limit is 50. The maximum limit is 100,000.
 
         Returns:
-            AppProjectSearchResult: The first `limit` App projects in `content`. And a mark that there is more.
+            AppProjectSearchResult: Found projects and a flag showing whether there are more matching projects.
         """
 
         if self.url != self.Environment.PRODUCTION.value:
