@@ -106,28 +106,26 @@ class App(BaseTolokaObject):
 class AppItem(BaseTolokaObject):
     """A work item with data.
     
-    Items are uploaded to Toloka and are grouped in batches. Then the entire batch is sent for labeling.
+    Items are uploaded to Toloka and are grouped in batches. After uploading the status of items is set to `NEW`. Items with that status can be edited. Then entire batches are sent for labeling.
 
     Attributes:
         id: The ID of the item.
         app_project_id: The ID of the project that contains the item.
         batch_id: The ID of the batch that contains the item.
         input_data: Input data. It must follow the solution schema described in `App.input_spec`.
-        created:
-        updated: 
-        status: A processing status. Only items in `NEW` status can be edited.
-            * `NEW` — New item.
-            * `PROCESSING` — The item is being processed.
-            * `COMPLETED` — The item is annotated.
+        status: The item status:
+            * `NEW` — The item is uploaded to Toloka and ready for processing.
+            * `PROCESSING` — The item is being processed by Tolokers.
+            * `COMPLETED` — Item annotation is completed.
             * `ERROR` — An error occurred during processing.
-            * `CANCELLED` — Item processing canceled.
-            * `ARCHIVE` — Archived item.
+            * `CANCELLED` — Item processing cancelled.
+            * `ARCHIVE` — The item is archived.
             * `NO_MONEY` — There are not enough money for processing.
         output_data: Annotated data.
         errors: Errors occurred during annotation.
-        created_at: Date and time when the item was created.
-        started_at: Date and time when the item processing started.
-        finished_at: Date and time when the item processing was completed.
+        created_at: The date and time when the item was created.
+        started_at: The date and time when the item processing started.
+        finished_at: The date and time when the item processing was completed.
     """
 
     @unique
@@ -173,23 +171,23 @@ class AppBatch(BaseTolokaObject):
     A batch contains items that are sent for labeling together.
 
     Attributes:
-        id: The ID of the Batch.
+        id: The ID of the batch.
         app_project_id: The ID of the project.
         name: The batch name.
         status: The batch status:
-            * `NEW`
-            * `PROCESSING`
-            * `COMPLETED`
-            * `ERROR`
-            * `CANCELLED`
-            * `ARCHIVE`
-            * `NO_MONEY`
+            * `NEW` — The processing of the batch items is not started.
+            * `PROCESSING` — Batch items are being processed by Tolokers.
+            * `COMPLETED` — Annotation of all batch items is completed.
+            * `ERROR` — An error occurred during processing.
+            * `CANCELLED` — Batch processing cancelled.
+            * `ARCHIVE` — The batch is archived.
+            * `NO_MONEY` — There are not enough money for processing.
         items_count: The number of items in the batch.
-        item_price: The cost of processing single item.
+        item_price: The cost of processing a single item in the batch.
         cost: The cost of processing the batch.
-        created_at: Date and time when the batch was created.
-        started_at: Date and time when batch processing started.
-        finished_at: Date and time when batch processing was completed.
+        created_at: The date and time when the batch was created.
+        started_at: The date and time when batch processing started.
+        finished_at: The date and time when batch processing was completed.
     """
 
     @unique
