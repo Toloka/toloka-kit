@@ -74,12 +74,17 @@ import datetime
 import functools
 import io
 import logging
-import pandas as pd
 import requests
 import time
 import threading
 import uuid
 import contextvars
+
+try:
+    import pandas as pd
+    PANDAS_INSTALLED = True
+except ImportError:
+    PANDAS_INSTALLED = False
 
 from decimal import Decimal
 from enum import Enum, unique
@@ -3274,43 +3279,44 @@ class TolokaClient:
 
     # Experimental section
 
-    @expand('parameters')
-    @add_headers('client')
-    def get_assignments_df(self, pool_id: str, parameters: GetAssignmentsTsvParameters) -> pd.DataFrame:
-        """Downloads assignments as pandas.DataFrame
+    if PANDAS_INSTALLED:
+        @expand('parameters')
+        @add_headers('client')
+        def get_assignments_df(self, pool_id: str, parameters: GetAssignmentsTsvParameters) -> pd.DataFrame:
+            """Downloads assignments as pandas.DataFrame. Requires toloka-kit[pandas] extras.
 
-        Experimental method.
-        Implements the same behavior as if you download results in web-interface and then read it by pandas.
+            Experimental method.
+            Implements the same behavior as if you download results in web-interface and then read it by pandas.
 
-        Args:
-            pool_id: From which pool the results are loaded.
-            parameters: Filters for the results and the set of fields that will be in the dataframe.
+            Args:
+                pool_id: From which pool the results are loaded.
+                parameters: Filters for the results and the set of fields that will be in the dataframe.
 
-        Returns:
-            pd.DataFrame: DataFrame with all results. Contains groups of fields with prefixes:
-                * "INPUT" - Fields that were at the input in the task.
-                * "OUTPUT" - Fields that were received as a result of execution.
-                * "GOLDEN" - Fields with correct answers. Filled in only for golden tasks and training tasks.
-                * "HINT" - Hints for completing tasks. Filled in for training tasks.
-                * "ACCEPT" - Fields describing the deferred acceptance of tasks.
-                * "ASSIGNMENT" - fields describing additional information about the Assignment.
+            Returns:
+                pd.DataFrame: DataFrame with all results. Contains groups of fields with prefixes:
+                    * "INPUT" - Fields that were at the input in the task.
+                    * "OUTPUT" - Fields that were received as a result of execution.
+                    * "GOLDEN" - Fields with correct answers. Filled in only for golden tasks and training tasks.
+                    * "HINT" - Hints for completing tasks. Filled in for training tasks.
+                    * "ACCEPT" - Fields describing the deferred acceptance of tasks.
+                    * "ASSIGNMENT" - fields describing additional information about the Assignment.
 
-        Example:
-            Get all assignments from the specified pool by `pool_id` to [pandas.DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html).
-            And apply the native pandas `rename` method to change columns' names.
+            Example:
+                Get all assignments from the specified pool by `pool_id` to [pandas.DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html).
+                And apply the native pandas `rename` method to change columns' names.
 
-            >>> answers_df = toloka_client.get_assignments_df(pool_id='1')
-            >>> answers_df = answers_df.rename(columns={
-            >>>     'INPUT:image': 'task',
-            >>>     'OUTPUT:result': 'label',
-            >>>     'ASSIGNMENT:worker_id': 'performer'
-            >>> })
-            ...
-        """
-        logger.warning('Experimental method')
-        response = self._raw_request('get', f'/new/requester/pools/{pool_id}/assignments.tsv',
-                                     params=unstructure(parameters))
-        return pd.read_csv(io.StringIO(response.text), delimiter='\t')
+                >>> answers_df = toloka_client.get_assignments_df(pool_id='1')
+                >>> answers_df = answers_df.rename(columns={
+                >>>     'INPUT:image': 'task',
+                >>>     'OUTPUT:result': 'label',
+                >>>     'ASSIGNMENT:worker_id': 'performer'
+                >>> })
+                ...
+            """
+            logger.warning('Experimental method')
+            response = self._raw_request('get', f'/new/requester/pools/{pool_id}/assignments.tsv',
+                                         params=unstructure(parameters))
+            return pd.read_csv(io.StringIO(response.text), delimiter='\t')
 
     # toloka apps
 

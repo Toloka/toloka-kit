@@ -2,7 +2,6 @@ __all__ = [
     'BaseLocker',
     'FileLocker',
     'NewerInstanceDetectedError',
-    'ZooKeeperLocker',
 ]
 
 import attr
@@ -10,10 +9,17 @@ import filelock
 import json
 import os
 from contextlib import contextmanager
-from kazoo.client import KazooClient, Lock as KazooLock
 from typing import Any, ContextManager, Optional
 
 from ..util.stored import get_base64_digest, get_stored_meta
+
+
+try:
+    from kazoo.client import KazooClient, Lock as KazooLock
+    __all__.append('ZooKeeperLocker')
+    KAZOO_INSTALLED = True
+except ImportError:
+    KAZOO_INSTALLED = False
 
 
 class NewerInstanceDetectedError(Exception):
@@ -107,65 +113,66 @@ class FileLocker(BaseSequentialIdLocker):
                 pass
 
 
-@attr.s
-class ZooKeeperLocker(BaseSequentialIdLocker):
-    """Apache ZooKeeper-based locker to use with a storage.
+if KAZOO_INSTALLED:
+    @attr.s
+    class ZooKeeperLocker(BaseSequentialIdLocker):
+        """Apache ZooKeeper-based locker to use with a storage. Requires toloka-kit[zookeeper] extras.
 
-    Two locks cannot be taken simultaneously with the same key.
-    If the instance detects that the lock was taken by a newer version, it throws an error.
+        Two locks cannot be taken simultaneously with the same key.
+        If the instance detects that the lock was taken by a newer version, it throws an error.
 
-    Attributes:
-        client: KazooClient object.
-        dirname: Base node path to put locks in.
-        timeout: Time in seconds to wait in case of lock being already acquired. Infinite by default.
-        identifier: Optional lock identifier.
+        Attributes:
+            client: KazooClient object.
+            dirname: Base node path to put locks in.
+            timeout: Time in seconds to wait in case of lock being already acquired. Infinite by default.
+            identifier: Optional lock identifier.
 
-    Example:
-        Create lock object.
+        Example:
+            Create lock object.
 
-        >>> !pip install kazoo
-        >>> from kazoo.client import KazooClient
-        >>> zk = KazooClient('127.0.0.1:2181')
-        >>> zk.start()
-        >>> locker = ZooKeeperLocker(zk, '/my-locks')
+            >>> pip install toloka-kit[zookeeper]
+            >>> from kazoo.client import KazooClient
+            >>> zk = KazooClient('127.0.0.1:2181')
+            >>> zk.start()
+            >>> locker = ZooKeeperLocker(zk, '/my-locks')
 
-        Try to lock the same key at the same time..
+            Try to lock the same key at the same time..
 
-        >>> locker_1 = ZooKeeperLocker(zk, '/locks')
-        >>> locker_2 = ZooKeeperLocker(zk, '/locks', timeout=0)
-        >>> with locker_1('some_key') as lock_1:
-        ...     with locker_2('some_key') as lock_2:  # => raise an error: timeout
-        ...         pass
-        ...
+            >>> locker_1 = ZooKeeperLocker(zk, '/locks')
+            >>> locker_2 = ZooKeeperLocker(zk, '/locks', timeout=0)
+            >>> with locker_1('some_key') as lock_1:
+            ...     with locker_2('some_key') as lock_2:  # => raise an error: timeout
+            ...         pass
+            ...
 
-        Try to lock the same key sequentially.
+            Try to lock the same key sequentially.
 
-        >>> locker_1 = ZooKeeperLocker(zk, '/locks')
-        >>> locker_2 = ZooKeeperLocker(zk, '/locks')
-        >>> with locker_1('some_key'):
-        ...     pass
-        >>> with locker_2('some_key'):
-        ...     pass
-        >>> with locker_1('some_key'):  # raise an error: NewerInstanceDetectedError
-        ...     pass
-        ...
-    """
+            >>> locker_1 = ZooKeeperLocker(zk, '/locks')
+            >>> locker_2 = ZooKeeperLocker(zk, '/locks')
+            >>> with locker_1('some_key'):
+            ...     pass
+            >>> with locker_2('some_key'):
+            ...     pass
+            >>> with locker_1('some_key'):  # raise an error: NewerInstanceDetectedError
+            ...     pass
+            ...
+        """
 
-    client: KazooClient = attr.ib()
-    dirname: str = attr.ib()
-    timeout: Optional[int] = attr.ib(default=None)
-    identifier: str = attr.ib(default='lock')
+        client: KazooClient = attr.ib()
+        dirname: str = attr.ib()
+        timeout: Optional[int] = attr.ib(default=None)
+        identifier: str = attr.ib(default='lock')
 
-    @contextmanager
-    def __call__(self, key: str) -> ContextManager[KazooLock]:
-        path = os.path.join(self.dirname, get_base64_digest(key))
-        lock = self.client.Lock(path, self.identifier)
-        lock.acquire(timeout=self.timeout)
-        try:
-            updated: bytes = self._process_lock_info(key, self.client.get(path)[0])
-            self.client.set(path, updated)
-        except Exception:
+        @contextmanager
+        def __call__(self, key: str) -> ContextManager[KazooLock]:
+            path = os.path.join(self.dirname, get_base64_digest(key))
+            lock = self.client.Lock(path, self.identifier)
+            lock.acquire(timeout=self.timeout)
+            try:
+                updated: bytes = self._process_lock_info(key, self.client.get(path)[0])
+                self.client.set(path, updated)
+            except Exception:
+                lock.release()
+                raise
+            yield lock
             lock.release()
-            raise
-        yield lock
-        lock.release()

@@ -78,7 +78,7 @@ class FileLocker(BaseSequentialIdLocker):
 
 
 class ZooKeeperLocker(BaseSequentialIdLocker):
-    """Apache ZooKeeper-based locker to use with a storage.
+    """Apache ZooKeeper-based locker to use with a storage. Requires toloka-kit[zookeeper] extras.
 
     Two locks cannot be taken simultaneously with the same key.
     If the instance detects that the lock was taken by a newer version, it throws an error.
@@ -92,7 +92,7 @@ class ZooKeeperLocker(BaseSequentialIdLocker):
     Example:
         Create lock object.
 
-        >>> !pip install kazoo
+        >>> pip install toloka-kit[zookeeper]
         >>> from kazoo.client import KazooClient
         >>> zk = KazooClient('127.0.0.1:2181')
         >>> zk.start()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf8
-
+import itertools
 import os
 
 from setuptools import setup, find_packages
@@ -18,6 +18,16 @@ with open(version_module_path) as f:
 with open('README.md') as f:
     readme = f.read()
 
+EXTRAS_REQUIRE = {
+    'dev': ['requests-mock'],
+    'pandas': ['pandas'],
+    'autoquality': ['crowd-kit >= 1.0.0'],
+    's3': ['boto3 >= 1.4.7'],
+    'zookeeper': ['kazoo >= 2.6.1'],
+    'jupyter-metrics': ['plotly', 'ipyplot', 'jupyter-dash'],
+}
+EXTRAS_REQUIRE['all'] = sum(EXTRAS_REQUIRE.values(), [])
+
 setup(
     name=about['__title__'],
     package_dir={PREFIX: 'src'},
@@ -32,24 +42,17 @@ setup(
     python_requires='>=3.7.0',
     install_requires=[
         'attrs >= 20.3.0',
-        'boto3 >= 1.4.7',
         'cattrs >= 1.1.1',
         'cached-property; python_version < "3.8.0"',
         'filelock >= 3.2.0',
-        'kazoo >= 2.6.1',
         'requests',
         'typing-extensions',
         'urllib3 >= 1.26.0',
-        'pandas',
-        'plotly',
         'simplejson',
         'docstring-parser',
-        'ipyplot',
-        'jupyter-dash',
-        'tqdm'
+        'tqdm',
     ],
-    extras_require={'dev': ['requests-mock'],
-                    'autoquality': ['crowd-kit >= 1.0.0']},
+    extras_require=EXTRAS_REQUIRE,
     include_package_data=True,
     project_urls={
         'Documentation': 'https://yandex.com/dev/toloka/toloka-kit/doc/',

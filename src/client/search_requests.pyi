@@ -578,22 +578,21 @@ class AssignmentSearchRequest(BaseSearchRequest):
     """Parameters for searching assignment
 
     Attributes:
-        status: Status of an assigned task suite (Detailed status description in Assignment.Status):
-            * ACTIVE
-            * SUBMITTED
-            * ACCEPTED
-            * REJECTED
-            * SKIPPED
-            * EXPIRED
-        task_id: The task ID in suites generated automatically using "smart mixing".
-            You will get responses for task suites that contain the specified task.
-        task_suite_id: ID of a task suite.
-        pool_id: Pool ID.
-        user_id: Performer ID.
-        id_lt: Task suites with an assignment ID less than the specified value.
-        id_lte: Task suites with an assignment ID less than or equal to the specified value.
-        id_gt: Task suites with an assignment ID greater than the specified value.
-        id_gte: Task suites with an assignment ID greater than or equal to the specified value.
+        status: The status of an assigned task suite:
+            * `ACTIVE` — Assigned but not completed.
+            * `SUBMITTED` — Completed but not checked.
+            * `ACCEPTED` — Accepted by the requester.
+            * `REJECTED` — Rejected by the requester.
+            * `SKIPPED` — Skipped by the performer.
+            * `EXPIRED` — Time for completing tasks has expired.
+        task_id: The ID of a task. The task suite containing that task, matches this search criteria.
+        task_suite_id: The ID of a task suite.
+        pool_id: Task suites in the pool with the specified ID.
+        user_id: Task suites assigned to the performer with the specified ID.
+        id_lt: Task suites with assignment IDs less than the specified value.
+        id_lte: Task suites with assignment IDs less than or equal to the specified value.
+        id_gt: Task suites with assignment IDs greater than the specified value.
+        id_gte: Task suites with assignment IDs greater than or equal to the specified value.
         created_lt: Task suites assigned before the specified date.
         created_lte: Task suites assigned before or on the specified date.
         created_gt: Task suites assigned after the specified date.
@@ -767,13 +766,13 @@ class AssignmentSortItems(BaseSortItems):
 
 
 class AggregatedSolutionSearchRequest(BaseSearchRequest):
-    """Parameters for searching aggregated solution
+    """Parameters for filtering aggregated responses.
 
     Attributes:
-        task_id_lt: Jobs with an ID greater than the specified value.
-        task_id_lte: Jobs with an ID greater than or equal to the specified value.
-        task_id_gt: Jobs with an ID less than the specified value.
-        task_id_gte: Jobs with an ID less than or equal to the specified value.
+        task_id_lt: Tasks with an ID less than the specified value.
+        task_id_lte: Tasks with an ID less than or equal to the specified value.
+        task_id_gt: Tasks with an ID greater than the specified value.
+        task_id_gte: Tasks with an ID greater than or equal to the specified value.
     """
 
     class CompareFields:
@@ -798,13 +797,13 @@ class AggregatedSolutionSearchRequest(BaseSearchRequest):
 
 
 class AggregatedSolutionSortItems(BaseSortItems):
-    """Parameters for sorting aggregated solution search results
+    """Parameters for sorting aggregated solution search results.
 
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    To sort in descending order add a hyphen before the parameter. For example, `sort=-task_id`.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * task_id - In ascending order.
+        items: Possible values:
+            * `task_id` - Sort by a task ID in ascending order.
     """
 
     class SortItem(BaseSortItem):

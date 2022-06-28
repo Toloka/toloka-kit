@@ -15,5 +15,5 @@ from . import util
 try:
     from . import autoquality
     __all__.append('autoquality')
-except:
+except ImportError:
     pass

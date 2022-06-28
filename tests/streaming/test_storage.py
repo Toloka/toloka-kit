@@ -174,7 +174,7 @@ def test_s3_storage(tmp_path, obj_to_store, base_encoded, key_encoded, json_stor
     dirname = tmp_path / 'storage'
     dirname.mkdir()
 
-    bucket = BucketMock(dirname)
+    bucket = BucketMock(str(dirname))
 
     storage_kwargs = {}
     if lock_dirname:

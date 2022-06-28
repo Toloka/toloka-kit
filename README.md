@@ -41,7 +41,13 @@ Installing toloka-kit is as easy as:
 ```
 $ pip install toloka-kit
 ```
-Note: this project is still under heavy development and interfaces may change slightly. For production environments please specify exact package version. For example: `toloka-kit==0.1.8`
+Note: this project is still under heavy development and interfaces may change slightly. For production environments please specify exact package version. For example: `toloka-kit==0.1.26`
+
+If you want to install toloka-kit with all additional dependencies:
+
+```
+$ pip install toloka-kit[all]
+```
 
 **Try your first program and checks the validity of the OAuth token:**
 ```python
