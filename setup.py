@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # coding: utf8
-import itertools
 import os
 
 from setuptools import setup, find_packages

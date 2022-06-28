@@ -130,7 +130,7 @@ if KAZOO_INSTALLED:
         Example:
             Create lock object.
 
-            >>> pip install toloka-kit[zookeeper]
+            >>> !pip install toloka-kit[zookeeper]
             >>> from kazoo.client import KazooClient
             >>> zk = KazooClient('127.0.0.1:2181')
             >>> zk.start()
