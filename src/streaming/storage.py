@@ -4,17 +4,19 @@ __all__ = [
     'S3Storage',
 ]
 
-import attr
 import collections
 import json
 import os
 import shutil
 from contextlib import contextmanager
 from io import BytesIO
-from typing import Any, ContextManager, Dict, Optional, Sequence, Type, TypeVar
-from ..util.stored import get_base64_digest, get_stored_meta, pickle_dumps_base64, pickle_loads_base64
-from .locker import BaseLocker, FileLocker
+from typing import Any, ContextManager, Dict, Optional, Sequence, TypeVar
+from typing_extensions import Protocol
 
+import attr
+
+from .locker import BaseLocker, FileLocker
+from ..util.stored import get_base64_digest, get_stored_meta, pickle_dumps_base64, pickle_loads_base64
 
 Pickleable = TypeVar('Pickleable')
 
@@ -136,12 +138,37 @@ class JSONLocalStorage(BaseExternalLockerStorage):
             self.locker.cleanup(lock)
 
 
-BucketType = Type
+class ObjectSummaryCollection(Protocol):
+    def filter(self, Prefix, **kwargs) -> 'ObjectSummaryCollection':
+        ...
+
+    def delete(self, **kwargs):
+        ...
+
+
+class BucketType(Protocol):
+    def upload_fileobj(self, Fileobj, Key, ExtraArgs=None, **kwargs):
+        ...
+
+    def download_fileobj(self, Fileobj, ExtraArgs=None, **kwargs):
+        ...
+
+    objects: ObjectSummaryCollection
 
 
 @attr.s
 class S3Storage(BaseExternalLockerStorage):
     """Storage that save to AWS S3 using given boto3 client.
+
+    {% note warning %}
+
+    Requires toloka-kit[s3] extras. Install it with the following command:
+
+    ```shell
+    pip install toloka-kit[s3]
+    ```
+
+    {% endnote %}
 
     Attributes:
         bucket: Boto3 bucket object.
@@ -150,7 +177,7 @@ class S3Storage(BaseExternalLockerStorage):
     Examples:
         Create new instance.
 
-        >>> !pip install boto3
+        >>> !pip install toloka-kit[s3]
         >>> import boto3
         >>> import os
         >>> session = boto3.Session(

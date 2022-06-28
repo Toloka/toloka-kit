@@ -1,4 +1,5 @@
-"""Classes for creating online dashboards with tolokas metrics in jupyter notebooks.
+"""Classes for creating online dashboards with tolokas metrics in jupyter notebooks. Requires
+toloka-kit[jupyter-metrics] extras.
 
 For usage examples see DashBoard.
 """
