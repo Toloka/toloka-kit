@@ -484,7 +484,7 @@ class TolokaClient:
         Pass to the `find_aggregated_solutions` the ID of the operation started by the [aggregate_solutions_by_pool](toloka.client.TolokaClient.aggregate_solutions_by_pool.md) method.
 
         The number of returned aggregated responses is limited. To find remaining matching responses, call `find_aggregated_solutions` with updated filter criteria.
-        
+
         To iterate over all aggregated responses in one call use [get_aggregated_solutions](toloka.client.TolokaClient.get_aggregated_solutions.md).
 
         Args:
@@ -527,7 +527,7 @@ class TolokaClient:
         Pass to the `get_aggregated_solutions` the ID of the operation started by the [aggregate_solutions_by_pool](toloka.client.TolokaClient.aggregate_solutions_by_pool.md) method.
         Use the returned generator to iterate over aggregated responses.
         Note that several calls to the Toloka API may be done while iterating.
-        
+
         {% note tip %}
 
         Try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit). It has many aggregation methods and executes on your computer.
@@ -588,7 +588,7 @@ class TolokaClient:
         """Finds all assignments that match certain criteria.
 
         The number of returned assignments is limited. Find remaining matching assignments with subsequent `find_assignments` calls.
-        
+
         To iterate over all matching assignments in one call use [get_assignments](toloka.client.TolokaClient.get_assignments.md). Note that `get_assignments` can't sort results.
 
         Args:
