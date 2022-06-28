@@ -4,17 +4,19 @@ __all__ = [
     'S3Storage',
 ]
 
-import attr
 import collections
 import json
 import os
 import shutil
 from contextlib import contextmanager
 from io import BytesIO
-from typing import Any, ContextManager, Dict, Optional, Sequence, Type, TypeVar, Protocol, Collection
-from ..util.stored import get_base64_digest, get_stored_meta, pickle_dumps_base64, pickle_loads_base64
-from .locker import BaseLocker, FileLocker
+from typing import Any, ContextManager, Dict, Optional, Sequence, TypeVar
+from typing_extensions import Protocol
 
+import attr
+
+from .locker import BaseLocker, FileLocker
+from ..util.stored import get_base64_digest, get_stored_meta, pickle_dumps_base64, pickle_loads_base64
 
 Pickleable = TypeVar('Pickleable')
 
