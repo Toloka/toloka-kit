@@ -3283,7 +3283,17 @@ class TolokaClient:
         @expand('parameters')
         @add_headers('client')
         def get_assignments_df(self, pool_id: str, parameters: GetAssignmentsTsvParameters) -> pd.DataFrame:
-            """Downloads assignments as pandas.DataFrame. Requires toloka-kit[pandas] extras.
+            """Downloads assignments as pandas.DataFrame.
+
+            {% note warning %}
+
+            Requires toloka-kit[pandas] extras. Install it with the following command:
+
+            ```shell
+            pip install toloka-kit[pandas]
+            ```
+
+            {% endnote %}
 
             Experimental method.
             Implements the same behavior as if you download results in web-interface and then read it by pandas.
@@ -3317,6 +3327,9 @@ class TolokaClient:
             response = self._raw_request('get', f'/new/requester/pools/{pool_id}/assignments.tsv',
                                          params=unstructure(parameters))
             return pd.read_csv(io.StringIO(response.text), delimiter='\t')
+    else:
+        def get_assignments_df(self, *args, **kwargs):
+            raise NotImplementedError('Please install toloka-kit[pandas] extras.')
 
     # toloka apps
 

@@ -71,7 +71,7 @@ items:
         href: toloka.client.TolokaClient.get_assignment.md
       - name: get_assignments
         href: toloka.client.TolokaClient.get_assignments.md
-      - name: get_assignments_df
+      - name: get_assignments_df [pandas]
         href: toloka.client.TolokaClient.get_assignments_df.md
       - name: patch_assignment
         href: toloka.client.TolokaClient.patch_assignment.md
@@ -1933,7 +1933,7 @@ items:
   - name: AsyncTolokaClient.wait_operation
     href: toloka.async_client.client.AsyncTolokaClient.wait_operation.md
     hidden: true
-- name: toloka.autoquality
+- name: toloka.autoquality [autoquality]
   items:
   - name: optimizer
     items:
@@ -1968,7 +1968,7 @@ items:
       hidden: true
     - name: MetricCollector.run
       href: toloka.metrics.collector.MetricCollector.run.md
-  - name: jupyter_dashboard
+  - name: jupyter_dashboard [jupyter-metrics]
     items:
     - name: Chart
       href: toloka.metrics.jupyter_dashboard.Chart.md
@@ -2005,6 +2005,9 @@ items:
       hidden: true
     - name: BaseMetric.get_line_names
       href: toloka.metrics.metrics.BaseMetric.get_line_names.md
+      hidden: true
+    - name: BaseMetric.set_client
+      href: toloka.metrics.metrics.BaseMetric.set_client.md
       hidden: true
     - name: bind_client
       href: toloka.metrics.metrics.bind_client.md
@@ -2114,7 +2117,7 @@ items:
     - name: NewerInstanceDetectedError
       href: toloka.streaming.locker.NewerInstanceDetectedError.md
       hidden: true
-    - name: ZooKeeperLocker
+    - name: ZooKeeperLocker [zookeeper]
       href: toloka.streaming.locker.ZooKeeperLocker.md
       hidden: true
   - name: event
@@ -2245,6 +2248,15 @@ items:
     - name: BaseStorage.save
       href: toloka.streaming.storage.BaseStorage.save.md
       hidden: true
+    - name: BucketType
+      href: toloka.streaming.storage.BaseStorage.md
+      hidden: true
+    - name: BucketType.download_fileobj
+      href: toloka.streaming.storage.BaseStorage.download_fileobj.md
+      hidden: true
+    - name: BucketType.upload_fileobj
+      href: toloka.streaming.storage.BaseStorage.upload_fileobj.md
+      hidden: true
     - name: JSONLocalStorage.DefaultNearbyFileLocker
       href: toloka.streaming.storage.JSONLocalStorage.DefaultNearbyFileLocker.md
       hidden: true
@@ -2265,7 +2277,7 @@ items:
     - name: S3Storage.load
       href: toloka.streaming.storage.S3Storage.load.md
       hidden: true
-    - name: S3Storage
+    - name: S3Storage [s3]
       href: toloka.streaming.storage.S3Storage.md
     - name: S3Storage.save
       href: toloka.streaming.storage.S3Storage.save.md

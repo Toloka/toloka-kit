@@ -116,7 +116,17 @@ class FileLocker(BaseSequentialIdLocker):
 if KAZOO_INSTALLED:
     @attr.s
     class ZooKeeperLocker(BaseSequentialIdLocker):
-        """Apache ZooKeeper-based locker to use with a storage. Requires toloka-kit[zookeeper] extras.
+        """Apache ZooKeeper-based locker to use with a storage.
+
+        {% note warning %}
+
+        Requires toloka-kit[zookeeper] extras. Install it with the following command:
+
+        ```shell
+        pip install toloka-kit[zookeeper]
+        ```
+
+        {% endnote %}
 
         Two locks cannot be taken simultaneously with the same key.
         If the instance detects that the lock was taken by a newer version, it throws an error.
@@ -176,3 +186,7 @@ if KAZOO_INSTALLED:
                 raise
             yield lock
             lock.release()
+else:
+    class ZooKeeperLocker:
+        def __init__(self, *args, **kwargs):
+            raise NotImplementedError('Please install toloka-kit[zookeeper] extras.')

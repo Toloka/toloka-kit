@@ -22,7 +22,16 @@ DEFAULT_DISTRIBUTIONS = ...
 
 class AutoQuality:
     """This class implements a tool to help set up quality control for Toloka project.
-    To use `toloka.autoquality` install toloka-kit via `pip install toloka-kit[autoquality]`
+
+    {% note warning %}
+
+    Requires toloka-kit[autoquality] extras. Install it with the following command:
+
+    ```shell
+    pip install toloka-kit[autoquality]
+    ```
+
+    {% endnote %}
 
     Attributes:
         toloka_client: TolokaClient instance to interact with requester's account

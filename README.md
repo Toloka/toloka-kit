@@ -44,9 +44,12 @@ $ pip install toloka-kit
 Note: this project is still under heavy development and interfaces may change slightly. For production environments please specify exact package version. For example: `toloka-kit==0.1.26`
 
 If you want to install toloka-kit with all additional dependencies:
-
-```
+```shell
 $ pip install toloka-kit[all]
+```
+or install only required extra dependencies (see our [documentation](https://toloka.ai/docs/toloka-kit/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)):
+```shell
+$ pip install toloka-kit[pandas,autoquality,s3,zookeeper,jupyter-metrics]  # remove unnecessary requirements from the list
 ```
 
 **Try your first program and checks the validity of the OAuth token:**
