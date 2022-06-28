@@ -1,13 +1,8 @@
 """Module for aggregating results
 
-For example, when you need to decide whether a cat or a dog is in the picture, and you ask more than one performers.
-In this case, you need to decide on the final answer and sometimes calculate the probability. This module will help you do this.
-Aggregation works on the Toloka server side.
+This module has methods to aggregate answers and to estimate confidence in aggregated labels. Use it when each task is assigned to several performers.  Note, that aggregation runs on the Toloka server.
 
-In these cases, we strongly recommend using our [crowd-kit](https://github.com/Toloka/crowd-kit) solution.
-It will allow you to:
-- use more different aggregation methods,
-- perform aggregation on your side
+If you need advanced aggregation methods or want to run aggregation algorithms locally on your computer, try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit).
 """
 
 __all__ = [
@@ -31,23 +26,15 @@ class AggregatedSolutionType(toloka.util._extendable_enum.ExtendableStrEnum):
 
 
 class PoolAggregatedSolutionRequest(toloka.client.primitives.base.BaseTolokaObject):
-    """Request that allows you to aggregate results in a specific pool
-
-    Responses to all completed tasks will be aggregated.
-    See an example of how to use it in "TolokaClient.aggregate_solutions_by_pool".
+    """Parameters for aggregating results in a pool using the [aggregate_solutions_by_pool](toloka.client.TolokaClient.aggregate_solutions_by_pool.md) method.
 
     Attributes:
-        type: Aggregation type.
-            WEIGHTED_DYNAMIC_OVERLAP - Aggregation of responses in a pool with dynamic overlap.
-            DAWID_SKENE - Dawid-Skene aggregation model.
-                A. Philip Dawid and Allan M. Skene. 1979.
-                Maximum Likelihood Estimation of Observer Error-Rates Using the EM Algorithm.
-                Journal of the Royal Statistical Society. Series C (Applied Statistics), Vol. 28, 1 (1979), 20–28.
-                [https://doi.org/10.2307/2346806](https://doi.org/10.2307/2346806)
-        pool_id: In which pool to aggregate the results.
-        answer_weight_skill_id: A skill that determines the weight of the performer's response.
-        fields: Output data fields to use for aggregating responses. For best results, each of these fields
-            must have a limited number of response options.
+        type: Aggregation model:
+            * `WEIGHTED_DYNAMIC_OVERLAP` — [Aggregation](https://toloka.ai/docs/guide/concepts/result-aggregation.html#aggr__aggr-by-skill) based on performers' skill in a pool with a dynamic overlap.
+            * `DAWID_SKENE` — [Dawid-Skene aggregation model](https://toloka.ai/docs/guide/concepts/result-aggregation.html#aggr__dawid-skene). It is used in pools without a dynamic overlap.
+        pool_id: The ID of the pool.
+        answer_weight_skill_id: The ID of the skill that determines the weight of the performer's responses.
+        fields: Output data fields to aggregate. For the best results, each of these fields should have limited number of response options.
     """
 
     class Field(toloka.client.primitives.base.BaseTolokaObject):
@@ -79,11 +66,11 @@ class PoolAggregatedSolutionRequest(toloka.client.primitives.base.BaseTolokaObje
 
 
 class TaskAggregatedSolutionRequest(toloka.client.primitives.base.BaseTolokaObject):
-    """Base class for run aggregation on a single task
+    """Base class with parameters to run aggregation for a single task.
 
     Attributes:
-        task_id: Answers for which task to aggregate.
-        pool_id: In which pool this task.
+        task_id: The ID of the task.
+        pool_id: The ID of the pool containing the task.
     """
 
     def __init__(
@@ -102,14 +89,13 @@ class TaskAggregatedSolutionRequest(toloka.client.primitives.base.BaseTolokaObje
 
 
 class WeightedDynamicOverlapTaskAggregatedSolutionRequest(TaskAggregatedSolutionRequest):
-    """Request that allows you to run WeightedDynamicOverlap aggregation on a single task
+    """Parameters to run weighted aggregation for a single task with a dynamic overlap.
 
     Attributes:
-        task_id: Answers for which task to aggregate.
-        pool_id: In which pool this task.
-        answer_weight_skill_id: A skill that determines the weight of the performer's response.
-        fields: Output data fields to use for aggregating responses. For best results, each of these fields
-            must have a limited number of response options.
+        task_id: The ID of the task.
+        pool_id: The ID of the pool containing the task.
+        answer_weight_skill_id: The ID of the skill that determines the weight of the performer's responses.
+        fields: Output data fields to aggregate. For the best results, each of these fields should have limited number of response options.
     """
 
     class Field(toloka.client.primitives.base.BaseTolokaObject):
@@ -141,13 +127,13 @@ class WeightedDynamicOverlapTaskAggregatedSolutionRequest(TaskAggregatedSolution
 
 
 class AggregatedSolution(toloka.client.primitives.base.BaseTolokaObject):
-    """Aggregated response to the task
+    """An aggregated response to a task.
 
     Attributes:
-        pool_id: In which pool the results were aggregated.
-        task_id: The answer for which task was aggregated.
-        confidence: Confidence in the aggregate response.
-        output_values: Output data fields and aggregate response.
+        pool_id: The ID of the pool containing the task.
+        task_id: The ID of the task.
+        confidence: The confidence level for the aggregated response.
+        output_values: Output data fields with aggregated responses.
     """
 
     def __init__(
