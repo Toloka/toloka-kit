@@ -3339,8 +3339,8 @@ class TolokaClient:
                           limit: Optional[int] = None) -> search_results.AppProjectSearchResult:
         """Finds ready-to-go projects that match certain criteria.
 
-        The number of returned projects is limited. `find_app_projects` also returns a flag showing whether there are more matching projects.
-        Use [get_app_projects](./toloka.client.TolokaClient.get_app_projects.md) to iterate over all matching projects.
+        The number of returned projects is limited. Find remaining matching projects with subsequent `find_app_projects` calls.
+        To iterate over all matching projects you may use the [get_app_projects](toloka.client.TolokaClient.get_app_projects.md) method.
 
         Args:
             request: Search criteria.
