@@ -29,6 +29,7 @@ EXAMPLES = [
             "showTimer": True,
             "showTitle": True
         },
+        "infer_data_spec": True,
         "type": "tb",
         "assets": {
             "script_urls": [
@@ -69,6 +70,7 @@ EXAMPLES = [
             "showTimer": True,
             "showTitle": True
         },
+        "infer_data_spec": False,
         "type": "tb",
         "assets": {
             "script_urls": [
