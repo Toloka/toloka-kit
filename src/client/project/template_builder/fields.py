@@ -137,7 +137,7 @@ class ButtonRadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON
         ...
     """
 
-    options: base_component_or(List[base_component_or(GroupFieldOption)], 'ListBaseComponentOrGroupFieldOption')
+    options: base_component_or(List[base_component_or(GroupFieldOption)], 'ListBaseComponentOrGroupFieldOption')  # noqa: F821
 
 
 @inherit_docstrings
@@ -167,7 +167,7 @@ class CheckboxGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_CHECKBOX_
             "preserveFalse": true.
     """
 
-    options: base_component_or(List[base_component_or(GroupFieldOption)], 'ListBaseComponentOrGroupFieldOption')
+    options: base_component_or(List[base_component_or(GroupFieldOption)], 'ListBaseComponentOrGroupFieldOption')  # noqa: F821
     disabled: base_component_or(bool) = attribute(kw_only=True)
     preserve_false: base_component_or(bool) = attribute(origin='preserveFalse', kw_only=True)
 
@@ -203,7 +203,7 @@ class DateFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_DATE):
     """
 
     format: base_component_or(Any)
-    block_list: base_component_or(List[base_component_or(Any)], 'ListBaseComponentOrAny') = attribute(
+    block_list: base_component_or(List[base_component_or(Any)], 'ListBaseComponentOrAny') = attribute(  # noqa: F821
         origin='blockList',
         kw_only=True
     )
@@ -242,7 +242,7 @@ class FileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_FILE):
             * true — allowed.
     """
 
-    accept: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrStr')
+    accept: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrStr')  # noqa: F821
     multiple: base_component_or(bool) = attribute(kw_only=True)
 
 
@@ -297,11 +297,11 @@ class ImageAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_IMAGE_A
     image: base_component_or(str)
     disabled: base_component_or(bool) = attribute(kw_only=True)
     full_height: base_component_or(bool) = attribute(origin='fullHeight', kw_only=True)
-    labels: base_component_or(List[base_component_or(Label)], 'ListBaseComponentOrLabel') = attribute(kw_only=True)
+    labels: base_component_or(List[base_component_or(Label)], 'ListBaseComponentOrLabel') = attribute(kw_only=True)  # noqa: F821
     min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
-    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)  # noqa: F821
     shapes: base_component_or(Dict[base_component_or(Shape), base_component_or(bool)],
-                              'DictBaseComponentOrShapeBaseComponentOrBool') = attribute(kw_only=True)
+                              'DictBaseComponentOrShapeBaseComponentOrBool') = attribute(kw_only=True)  # noqa: F821
 
 
 @inherit_docstrings
@@ -445,7 +445,7 @@ class RadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_RADIO_GROUP)
         ...
     """
 
-    options: base_component_or(List[base_component_or(GroupFieldOption)], 'ListBaseComponentOrGroupFieldOption')
+    options: base_component_or(List[base_component_or(GroupFieldOption)], 'ListBaseComponentOrGroupFieldOption')  # noqa: F821
     disabled: base_component_or(bool) = attribute(kw_only=True)
 
 
@@ -475,7 +475,7 @@ class SelectFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_SELECT):
         label: base_component_or(Any)
         value: base_component_or(Any)
 
-    options: base_component_or(List[base_component_or(Option)], 'ListBaseComponentOrOption')
+    options: base_component_or(List[base_component_or(Option)], 'ListBaseComponentOrOption')  # noqa: F821
     placeholder: base_component_or(Any) = attribute(kw_only=True)
 
 
@@ -523,7 +523,7 @@ class TextAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXT_ANN
     adjust: base_component_or(str) = attribute(kw_only=True)
     content: base_component_or(str) = attribute(kw_only=True)
     disabled: base_component_or(bool) = attribute(kw_only=True)
-    labels: base_component_or(List[base_component_or(Label)], 'ListBaseComponentOrLabel') = attribute(kw_only=True)
+    labels: base_component_or(List[base_component_or(Label)], 'ListBaseComponentOrLabel') = attribute(kw_only=True)  # noqa: F821
 
 
 @inherit_docstrings

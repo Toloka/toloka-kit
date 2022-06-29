@@ -6,12 +6,12 @@ __all__ = [
     'Pipeline',
     'PoolStatusObserver',
     'S3Storage',
-    'ZooKeeperLocker',
     'cursor',
     'locker',
     'observer',
     'pipeline',
     'storage',
+    'ZooKeeperLocker',
 ]
 from toloka.streaming import (
     cursor,

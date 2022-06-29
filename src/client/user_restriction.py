@@ -24,14 +24,13 @@ class DurationUnit(Enum):
 
 
 class UserRestriction(BaseTolokaObject, spec_enum='Scope', spec_field='scope'):
-    """Allows you to control the performer's access to your projects and pools
+    """Controls access to projects and pools.
 
-    You can close user access to one or more projects. This allows you to control which users will perform tasks.
-    For example, you can select users with a skill value below N and block them from accessing tasks.
-    You can also unlock access.
+    You can restrict access to any project for a performer. Then he can't do tasks in the project. You may set the duration of restriction or apply permanent restriction.
+    To unlock access pass the restriction ID to the `delete_user_restriction`.
 
     Attributes:
-        user_id: Which performer is denied access.
+        user_id: The ID of the performer.
         private_comment: A comment for you why access to this performer was restricted.
         will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
         id: The identifier of a specific fact of access restriction. Read only.
