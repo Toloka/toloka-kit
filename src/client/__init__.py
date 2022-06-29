@@ -3534,7 +3534,7 @@ class TolokaClient:
         The number of returned items is limited. Find remaining matching items with subsequent `find_app_items` calls.
 
         To iterate over all matching items you may use the [get_app_items](toloka.client.TolokaClient.get_app_items.md) method.
-
+        
         Args:
             app_project_id: The ID of the ready-to-go project.
             request: Search criteria.
