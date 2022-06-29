@@ -19,7 +19,7 @@ from ...util._codegen import attribute
 
 class _AppError(BaseTolokaObject):
     """
-    A structure for describing errors which may appear while working with ready-to-go solutions.
+    A structure for describing errors which may appear while working with ready-to-go projects.
 
     Attributes:
         code: The short name of the error.
@@ -42,14 +42,14 @@ class AppProject(BaseTolokaObject):
         app_id: The ID of the ready-to-go solution used to create the project.
         parent_app_project_id The ID of the parent project. It is set if this project is a clone of other project. Otherwise it is empty.
         name: The project name.
-        parameters: Parameters of the solution. The parameters should follow a schema described in the `param_spec` field of the [App](toloka.client.app.App.md).
+        parameters: Parameters of the solution. The parameters should follow the schema described in the `param_spec` field of the [solution](toloka.client.app.App.md).
         id: The ID of the project.
         status: The project status:
             * `CREATING` — Toloka is checking the project.
             * `READY` — The project is active.
             * `ARCHIVED` — The project was archived.
             * `ERROR` — Project creation failed due to errors.
-        created: Time when the project was created.
+        created: The date and time when the project was created.
         item_price: The price you pay for a processed item.
         errors: Errors found during a project check.
     """
@@ -76,7 +76,7 @@ class AppProject(BaseTolokaObject):
 class App(BaseTolokaObject):
     """A [ready-to-go](https://toloka.ai/en/docs/toloka-apps/concepts/) solution.
     
-    Each ready-to-go solution targets one type of tasks which can be solved using Toloka. 
+    Each ready-to-go solution targets specific type of tasks which can be solved using Toloka. 
 
     Attributes:
         id: The ID of the ready-to-go solution.
@@ -88,7 +88,7 @@ class App(BaseTolokaObject):
         param_spec: The specification of parameters used to create a project.
         input_spec: The schema of solution input data.
         output_spec: The schema of solution output data.
-        examples: Examples of tasks suitable to the solution.
+        examples: Example description of tasks which can be solved with this solution.
     """
 
     id: str
@@ -104,7 +104,7 @@ class App(BaseTolokaObject):
 
 
 class AppItem(BaseTolokaObject):
-    """A work item with data.
+    """A task item.
     
     Items are uploaded to Toloka and are grouped in batches. After uploading the status of items is set to `NEW`. Items with that status can be edited. Then entire batches are sent for labeling.
 
@@ -158,7 +158,7 @@ class AppItemsCreateRequest(BaseTolokaObject):
 
     Attributes:
         batch_id: The ID of the batch to place items to.
-        items: The list of items. The items must follow the solution schema described in `App.input_spec`.
+        items: A list with items. The items must follow the solution schema described in `App.input_spec`.
     """
 
     batch_id: str
@@ -166,13 +166,13 @@ class AppItemsCreateRequest(BaseTolokaObject):
 
 
 class AppBatch(BaseTolokaObject):
-    """A batch.
+    """A ready-to-go batch.
     
-    A batch contains items that are sent for labeling together.
+    A batch contains task items that are sent for labeling together.
 
     Attributes:
         id: The ID of the batch.
-        app_project_id: The ID of the project.
+        app_project_id: The ID of the project containing the batch.
         name: The batch name.
         status: The batch status:
             * `NEW` — The processing of the batch items is not started.
@@ -213,10 +213,10 @@ class AppBatch(BaseTolokaObject):
 
 
 class AppBatchCreateRequest(BaseTolokaObject):
-    """Parameters of a request for creating multiple items in a batch.
+    """Parameters of a request for creating multiple ready-to-go task items in a batch.
 
     Attributes:
-        items: The list of items. The items must follow the solution schema described in `App.input_spec`.
+        items: A list with task items. The items must follow the solution schema described in `App.input_spec`.
     """
 
     items: List[Dict[str, Any]]
