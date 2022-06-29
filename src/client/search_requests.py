@@ -951,34 +951,33 @@ WebhookSubscriptionSortItems = BaseSortItems.for_fields(
 
 
 class AppProjectSearchRequest(BaseSearchRequest):
-    """Parameters for searching App projects.
+    """Parameters for searching ready-to-go projects.
 
     Attributes:
-        app_id: App ID that the projects belong to.
-        parent_app_project_id: ID of the App project used for cloning. It's specified only if you created an App project
-            by cloning another App project. You can clone projects in the web version of Toloka.
-        status: project status.
-        after_id: ID of the project used for cursor pagination.
-        scope: projects created by a specified range of requesters:
-            * MY - Only by me;
-            * COMPANY - By anyone from the company;
-            * REQUESTER_LIST - By requesters with the specified IDs.
-        requester_ids: List of requester IDs separated by a comma, for scope = REQUESTER_LIST.
-        id_gt: projects with an ID greater than the specified value.
-        id_gte: projects with an ID greater than or equal to the specified value.
-        id_lt: projects with an ID less than the specified value.
-        id_lte: projects with an ID less than or equal to the specified value.
-        name_gt: projects with a name lexicographically greater than the specified value.
-        name_gte: projects with a name lexicographically greater than or equal to the specified value.
-        name_lt: projects with a name lexicographically less than the specified value.
-        name_lte: projects with a name lexicographically less than or equal to the specified value.
-        created_gt: projects created after the specified date. The date is specified in UTC in ISO 8601 format:
+        app_id: Projects created using the solution with the specified ID.
+        parent_app_project_id: Projects cloned from the project with the specified ID. Projects can be cloned in the web version of Toloka.
+        status: Projects with the specified status.
+        after_id: The ID of a project used for cursor pagination.
+        scope: Values:
+            * `MY` — Projects created by you.
+            * `COMPANY` — Projects created by requesters from your company.
+            * `REQUESTER_LIST` — Projects created by requesters in the `requester_ids` list.
+        requester_ids: A list with requester IDs separated by a comma. Use the list with parameter `scope = REQUESTER_LIST`.
+        id_gt: Projects with IDs greater than the specified value.
+        id_gte: Projects with IDs greater than or equal to the specified value.
+        id_lt: Projects with IDs less than the specified value.
+        id_lte: Projects with IDs less than or equal to the specified value.
+        name_gt: Projects with a name lexicographically greater than the specified value.
+        name_gte: Projects with a name lexicographically greater than or equal to the specified value.
+        name_lt: Projects with a name lexicographically less than the specified value.
+        name_lte: Projects with a name lexicographically less than or equal to the specified value.
+        created_gt: Projects created after the specified date. The date is specified in UTC in ISO 8601 format:
             YYYY-MM-DDThh:mm:ss[.sss].
-        created_gte: projects created after or on the specified date. The date is specified in UTC in ISO 8601 format:
+        created_gte: Projects created after or on the specified date. The date is specified in UTC in ISO 8601 format:
             YYYY-MM-DDThh:mm:ss[.sss].
-        created_lt: projects created before the specified date. The date is specified in UTC in ISO 8601 format:
+        created_lt: Projects created before the specified date. The date is specified in UTC in ISO 8601 format:
             YYYY-MM-DDThh:mm:ss[.sss].
-        created_lte: projects created before or on the specified date. The date is specified in UTC in ISO 8601 format:
+        created_lte: Projects created before or on the specified date. The date is specified in UTC in ISO 8601 format:
             YYYY-MM-DDThh:mm:ss[.sss].
     """
 
@@ -1013,33 +1012,33 @@ class AppProjectSearchRequest(BaseSearchRequest):
 AppProjectSortItems = BaseSortItems.for_fields(
     'AppProjectSortItems', ['id', 'name', 'created'],
     # docstring
-    """Parameters for sorting App projects search results.
+    """Keys for sorting ready-to-go projects in search results.
 
-    You can specify multiple parameters separated by a comma. To change the sorting direction to descending, add the
-    minus sign before the parameter. For example, sort=-id.
+    You can specify multiple keys separated by a comma. To sort in descending order, add the
+    sign `-` before a key. Example: `sort='-created,id'`.
 
     Attributes:
-        items: The order and direction of sorting the results. Available parameters:
-            * id - by id;
-            * name - by name;
-            * created — by the creation date. The date is specified in UTC in the YYYY-MM-DD format.
+        key: The sorting key. Supported keys:
+            * `id` — A ready-to-go project ID.
+            * `name` — A ready-to-go project name.
+            * `created` — A project creation date.
     """
 )
 
 
 class AppSearchRequest(BaseSearchRequest):
-    """Parameters for searching Apps.
+    """Parameters for searching ready-to-go solutions.
 
     Attributes:
-        after_id: The ID of the App used for cursor pagination.
-        id_gt: only with an ID greater than the specified value.
-        id_gte: only with an ID greater than or equal to the specified value.
-        id_lt: only with an ID less than the specified value.
-        id_lte: only with an ID less than or equal to the specified value.
-        name_gt: only with a name lexicographically greater than the specified value.
-        name_gte: only with a name lexicographically greater than or equal to the specified value.
-        name_lt: only with a name lexicographically less than the specified value.
-        name_lte: only with a name lexicographically less than or equal to the specified value.
+        after_id: The ID of a solution used for cursor pagination.
+        id_gt: Solutions with IDs greater than the specified value.
+        id_gte: Solutions with IDs greater than or equal to the specified value.
+        id_lt: Solutions with IDs less than the specified value.
+        id_lte: Solutions with IDs less than or equal to the specified value.
+        name_gt: Solutions with names lexicographically greater than the specified value.
+        name_gte: Solutions with names lexicographically greater than or equal to the specified value.
+        name_lt: Solutions with names lexicographically less than the specified value.
+        name_lte: Solutions with names lexicographically less than or equal to the specified value.
     """
 
     class CompareFields:
@@ -1052,37 +1051,37 @@ class AppSearchRequest(BaseSearchRequest):
 AppSortItems = BaseSortItems.for_fields(
     'AppSortItems', ['id', 'name'],
     # docstring
-    """Parameters for sorting Apps search results.
+    """Keys for sorting ready-to-go solutions in search results.
 
-    You can specify multiple parameters separated by a comma. To change the sorting direction to descending, add the
-    minus sign before the parameter. For example, sort=-id.
+    You can specify multiple keys separated by a comma. To sort in descending order, add the
+    sign `-` before a key. Example: `sort='-name,id'`.
 
     Attributes:
-        items: The order and direction of sorting the results. Available parameters:
-            * id - by id;
-            * name - by name;
+        key: The sorting key. Supported keys:
+            * `id` - A ready-to-go solution ID.
+            * `name` - A ready-to-go solution name.
     """
 )
 
 
 class AppItemSearchRequest(BaseSearchRequest):
-    """Parameters for searching App items.
+    """Parameters for searching ready-to-go task items.
 
     Attributes:
-        after_id: ID of the item used for cursor pagination.
-        batch_id: Batch ID.
-        status: items in this status.
-        id_gt: items with an ID greater than the specified value.
-        id_gte: items with an ID greater than or equal to the specified value.
-        id_lt: items with an ID less than the specified value.
-        id_lte: items with an ID less than or equal to the specified value.
-        created_gt: items created after the specified date. The date is specified in UTC in ISO 8601 format:
+        after_id: The ID of the item used for cursor pagination.
+        batch_id: The ID of the batch to look in.
+        status: Items with the specified status.
+        id_gt: Items with IDs greater than the specified value.
+        id_gte: Items with IDs greater than or equal to the specified value.
+        id_lt: Items with IDs less than the specified value.
+        id_lte: Items with IDs less than or equal to the specified value.
+        created_gt: Items created after the specified date. The date is specified in UTC in ISO 8601 format:
             YYYY-MM-DDThh:mm:ss[.sss].
-        created_gte: items created after the specified date, inclusive. The date is specified in UTC in ISO 8601 format:
+        created_gte: Items created after or on the specified date. The date is specified in UTC in ISO 8601 format:
             YYYY-MM-DDThh:mm:ss[.sss].
-        created_lt: items created before the specified date. The date is specified in UTC in ISO 8601 format:
+        created_lt: Items created before the specified date. The date is specified in UTC in ISO 8601 format:
             YYYY-MM-DDThh:mm:ss[.sss].
-        created_lte: items created before the specified date, inclusive. The date is specified in UTC in ISO 8601
+        created_lte: Items created before or on the specified date. The date is specified in UTC in ISO 8601
             format: YYYY-MM-DDThh:mm:ss[.sss].
 
     """
@@ -1099,40 +1098,40 @@ class AppItemSearchRequest(BaseSearchRequest):
 AppItemSortItems = BaseSortItems.for_fields(
     'AppItemSortItems', ['id', 'created_at'],
     # docstring
-    """Parameters for sorting App items search results.
+    """Keys for sorting ready-to-go task items in search results.
 
-    You can specify multiple parameters separated by a comma. To change the sorting direction to descending, add the
-    minus sign before the parameter. For example, sort=-id.
+    You can specify multiple keys separated by a comma. To sort in descending order, add the
+    sign `-` before a key. Example: `sort='-created,id'`.
 
     Attributes:
-        items: The order and direction of sorting the results. Available parameters:
-            * id - by id;
-            * created — by creation date. The date is specified in UTC in the YYYY-MM-DD format.
+        key: The sorting key. Supported keys:
+            * `id` — A task item ID.
+            * `created_at` — A task item creation date.
     """
 )
 
 
 class AppBatchSearchRequest(BaseSearchRequest):
-    """Parameters for searching batches in the App project.
+    """Parameters for searching batches in a ready-to-go project.
 
     Attributes:
-        after_id: ID of the batch used for cursor pagination
-        status: batches with this status.
-        id_gt: batches with an ID greater than the specified value.
-        id_gte: batches with an ID greater than or equal to the specified value.
-        id_lt: batches with an ID less than the specified value.
-        id_lte: batches with an ID less than or equal to the specified value.
-        name_gt: batches with the name lexicographically greater than the specified value.
-        name_gte: batches with a name lexicographically greater than or equal to the specified value.
-        name_lt: batches with a name lexicographically less than the specified value.
-        name_lte: batches with a name lexicographically less than or equal to the specified value.
-        created_gt: batches created after the specified date. The date is specified in UTC in ISO 8601 format:
+        after_id: The ID of the batch used for cursor pagination.
+        status: Batches with the specified status.
+        id_gt: Batches with IDs greater than the specified value.
+        id_gte: Batches with IDs greater than or equal to the specified value.
+        id_lt: Batches with IDs less than the specified value.
+        id_lte: Batches with IDs less than or equal to the specified value.
+        name_gt: Batches with names lexicographically greater than the specified value.
+        name_gte: Batches with names lexicographically greater than or equal to the specified value.
+        name_lt: Batches with names lexicographically less than the specified value.
+        name_lte: Batches with names lexicographically less than or equal to the specified value.
+        created_gt: Batches created after the specified date. The date is specified in UTC in ISO 8601 format:
             YYYY-MM-DDThh:mm:ss[.sss].
-        created_gte: batches created after the specified date, inclusive. The date is specified in UTC in ISO 8601
+        created_gte: Batches created after or on the specified date. The date is specified in UTC in ISO 8601
             format: YYYY-MM-DDThh:mm:ss[.sss].
-        created_lt: batches created before the specified date. The date is specified in UTC in ISO 8601 format:
+        created_lt: Batches created before the specified date. The date is specified in UTC in ISO 8601 format:
             YYYY-MM-DDThh:mm:ss[.sss].
-        created_lte: batches created before the specified date, inclusive. The date is specified in UTC in ISO 8601
+        created_lte: Batches created before or on the specified date. The date is specified in UTC in ISO 8601
             format: YYYY-MM-DDThh:mm:ss[.sss].
     """
 
@@ -1148,15 +1147,15 @@ class AppBatchSearchRequest(BaseSearchRequest):
 AppBatchSortItems = BaseSortItems.for_fields(
     'AppBatchSortItems', ['id', 'name', 'created_at'],
     # docstring
-    """Parameters for sorting App batch search results.
+    """Keys for sorting ready-to-go batches in search results.
 
-    You can specify multiple parameters separated by a comma. To change the sorting direction to descending, add the
-    minus sign before the parameter. For example, sort=-id.
+    You can specify multiple keys separated by a comma. To sort in descending order, add the
+    sign `-` before a key. Example: `sort='-created,id'`.
 
     Attributes:
-        items: The order and direction of sorting the results. Available parameters:
-            * id - by id;
-            * name - by name;
-            * created — by creation date. The date is specified in UTC in the YYYY-MM-DD format.
+        key: The sorting key. Supported keys:
+            * `id` — A batch ID.
+            * `name` — A batch name.
+            * `created_at` — A batch creation date.
     """
 )
