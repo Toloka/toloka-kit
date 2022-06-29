@@ -117,7 +117,7 @@ class CreateTaskParameters(Parameters):
     Used when creating one Task.
 
     Attributes:
-        allow_defaults: Overlap setting:
+        allow_defaults: Active overlap setting:
             * True — Use the overlap value that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
             * False — Use the overlap value that is set in the `overlap` task suite parameter.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.

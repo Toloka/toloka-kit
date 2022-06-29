@@ -159,7 +159,7 @@ class DeviceFrameViewV1(BaseViewV1, spec_value=ComponentType.VIEW_DEVICE_FRAME):
     full_height: base_component_or(bool) = attribute(origin='fullHeight', kw_only=True)
     max_width: base_component_or(float) = attribute(origin='maxWidth', kw_only=True)
     min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
-    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)  # noqa: F821
 
 
 @inherit_docstrings
@@ -206,7 +206,7 @@ class IframeViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IFRAME):
     full_height: base_component_or(bool) = attribute(origin='fullHeight', kw_only=True)
     max_width: base_component_or(float) = attribute(origin='maxWidth', kw_only=True)
     min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
-    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)  # noqa: F821
 
 
 @inherit_docstrings
@@ -240,7 +240,7 @@ class ImageViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IMAGE):
     no_border: base_component_or(bool) = attribute(origin='noBorder', kw_only=True)
     no_lazy_load: base_component_or(bool) = attribute(origin='noLazyLoad', kw_only=True)
     popup: base_component_or(bool) = attribute(kw_only=True)
-    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)  # noqa: F821
     rotatable: base_component_or(bool) = attribute(kw_only=True)
     scrollable: base_component_or(bool) = attribute(kw_only=True)
 
@@ -273,7 +273,7 @@ class LabeledListViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LABELED_LIST):
         center_label: base_component_or(bool) = attribute(origin='centerLabel', kw_only=True)
         hint: base_component_or(Any) = attribute(kw_only=True)
 
-    items: base_component_or(List[base_component_or(Item)], 'ListBaseComponentOrItem')
+    items: base_component_or(List[base_component_or(Item)], 'ListBaseComponentOrItem')  # noqa: F821
     min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
 
 
@@ -338,7 +338,7 @@ class LinkGroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK_GROUP):
         content: base_component_or(str)
         theme: base_component_or(str) = attribute(kw_only=True)
 
-    links: base_component_or(List[base_component_or(Link)], 'ListBaseComponentOrLink')
+    links: base_component_or(List[base_component_or(Link)], 'ListBaseComponentOrLink')  # noqa: F821
 
 
 @inherit_docstrings
@@ -352,7 +352,7 @@ class ListViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LIST):
             value).
     """
 
-    items: base_component_or(List[BaseComponent], 'ListBaseComponent')
+    items: base_component_or(List[BaseComponent], 'ListBaseComponent')  # noqa: F821
     direction: base_component_or(ListDirection) = attribute(kw_only=True)
     size: base_component_or(ListSize) = attribute(kw_only=True)
 
@@ -424,7 +424,7 @@ class VideoViewV1(BaseViewV1, spec_value=ComponentType.VIEW_VIDEO):
     full_height: base_component_or(bool) = attribute(origin='fullHeight', kw_only=True)
     max_width: base_component_or(float) = attribute(origin='maxWidth', kw_only=True)
     min_width: base_component_or(float) = attribute(origin='minWidth', kw_only=True)
-    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)
+    ratio: base_component_or(List[base_component_or(float)], 'ListBaseComponentOrFloat') = attribute(kw_only=True)  # noqa: F821
 
 
 @inherit_docstrings
@@ -468,11 +468,11 @@ class MapViewV1(BaseViewV1, spec_value=ComponentType.VIEW_MAP):
             color: Determines the polygonal selection area color. Use the hexadecimal values preceded by the # sign to
                 specify the color.
         """
-        points: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrStr')
+        points: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrStr')  # noqa: F821
         color: base_component_or(str) = attribute(kw_only=True)
 
     center: base_component_or(str)
-    markers: base_component_or(List[base_component_or(Marker)], 'ListBaseComponentOrMarker') = attribute(kw_only=True)
-    polygons: base_component_or(List[base_component_or(Polygon)], 'ListBaseComponentOrPolygon') = attribute(
+    markers: base_component_or(List[base_component_or(Marker)], 'ListBaseComponentOrMarker') = attribute(kw_only=True)  # noqa: F821
+    polygons: base_component_or(List[base_component_or(Polygon)], 'ListBaseComponentOrPolygon') = attribute(  # noqa: F821
         kw_only=True)
     zoom: base_component_or(int) = attribute(kw_only=True)

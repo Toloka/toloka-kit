@@ -1,5 +1,15 @@
 """Classes for creating online dashboards with tolokas metrics in jupyter notebooks.
 
+{% note warning %}
+
+Requires toloka-kit[jupyter-metrics] extras. Install it with the following command:
+
+```shell
+pip install toloka-kit[jupyter-metrics]
+```
+
+{% endnote %}
+
 For usage examples see DashBoard.
 """
 
@@ -137,7 +147,7 @@ class Chart:
             self._name = self.metrics[0].beautiful_name
 
         figure = go.Figure()
-        for x_points, y_points, line_name  in self._lines.values():
+        for x_points, y_points, line_name in self._lines.values():
             figure.add_trace(
                 go.Scatter(
                     x=x_points if x_points else [datetime.datetime.now(datetime.timezone.utc)],

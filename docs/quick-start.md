@@ -7,7 +7,13 @@ To start with Toloka-Kit:
 2. Install the Toloka-Kit package:
 
     ```shell
-    $ pip install toloka-kit
+   $ pip install toloka-kit[all]
+   ```
+   or install only required dependencies:
+   ```shell
+   $ pip install toloka-kit[pandas,autoquality,s3,zookeeper,jupyter-metrics]
+   # or just the core version
+   $ pip install toloka-kit
     ```
 
 3. Check access to the API with the following Python script. The script:
