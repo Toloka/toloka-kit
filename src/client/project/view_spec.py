@@ -148,7 +148,7 @@ class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
 
     config: TemplateBuilder
     core_version: str = '1.0.0'
-    infer_data_spec: bool = attribute(origin='inferDataSpec')
+    infer_data_spec: bool = attribute(default=False, origin='inferDataSpec')
 
     def unstructure(self):
         data = super().unstructure()
