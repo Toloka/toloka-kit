@@ -232,60 +232,48 @@ WebhookSubscriptionSearchResult = _create_search_result_class_for(
 AppProjectSearchResult = _create_search_result_class_for(
     AppProject,
     items_field='content',
-    docstring="""The list of found App projects and whether there is something else on the original request.
-
-    It's better to use TolokaClient.get_app_projects(),
-    which already implements the correct handling of the search result.
+    docstring="""The result of searching ready-to-go projects.
 
     Attributes:
-        items: List of found App projects.
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        content: A list with found ready-to-go projects.
+        has_more: A flag showing whether there are more matching projects.
+            * True — There are more matching projects, not included in `content` due to the limit set in the search request.
+            * False — `content` contains all matching projects.
     """
 )
 AppSearchResult = _create_search_result_class_for(
     App,
     items_field='content',
-    docstring="""The list of found Apps and whether there is something else on the original request.
-
-    It's better to use TolokaClient.get_apps(),
-    which already implements the correct handling of the search result.
+    docstring="""The result of searching ready-to-go projects.
 
     Attributes:
-        items: List of found Apps.
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        content: A list with found ready-to-go solutions.
+        has_more: A flag showing whether there are more matching solutions.
+            * True — There are more matching solutions, not included in `content` due to the limit set in the search request.
+            * False — `content` contains all matching solutions.
     """
 )
 AppItemSearchResult = _create_search_result_class_for(
     AppItem,
     items_field='content',
-    docstring="""The list of found work items in the App project and whether there is something else on the original request.
-
-    It's better to use TolokaClient.get_app_items(),
-    which already implements the correct handling of the search result.
+    docstring="""The result of searching ready-to-go task items.
 
     Attributes:
-        items: List of found work items in the App project.
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        content: A list with found ready-to-go task items.
+        has_more: A flag showing whether there are more matching task items.
+            * True — There are more matching task items, not included in `content` due to the limit set in the search request.
+            * False — `content` contains all matching task items.
     """
 )
 AppBatchSearchResult = _create_search_result_class_for(
     AppBatch,
     items_field='content',
-    docstring="""The list of found batches in the App project and whether there is something else on the original request.
-
-    It's better to use TolokaClient.get_app_batches(),
-    which already implements the correct handling of the search result.
+    docstring="""The result of searching ready-to-go batches.
 
     Attributes:
-        items: List of found batches in the App project.
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        content: A list with found ready-to-go batches.
+        has_more: A flag showing whether there are more matching batches.
+            * True — There are more matching batches, not included in `content` due to the limit set in the search request.
+            * False — `content` contains all matching batches.
     """
 )
