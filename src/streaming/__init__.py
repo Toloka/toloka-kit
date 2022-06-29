@@ -24,7 +24,7 @@ from .observer import AssignmentsObserver, PoolStatusObserver
 from .storage import BaseStorage, JSONLocalStorage, S3Storage
 from .locker import FileLocker
 try:
-    from .locker import ZooKeeperLocker
+    from .locker import ZooKeeperLocker  # noqa: F401
     __all__.append('ZooKeeperLocker')
 except ImportError:
     pass

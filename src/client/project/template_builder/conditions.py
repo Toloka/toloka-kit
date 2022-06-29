@@ -74,7 +74,7 @@ class AllConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ALL):
         ...
     """
 
-    conditions: base_component_or(List[BaseComponent], 'ListBaseComponent')
+    conditions: base_component_or(List[BaseComponent], 'ListBaseComponent')  # noqa: F821
 
 
 @inherit_docstrings
@@ -88,7 +88,7 @@ class AnyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ANY):
         conditions: A set of conditions, at least one of which must be met.
     """
 
-    conditions: base_component_or(List[BaseComponent], 'ListBaseComponent')
+    conditions: base_component_or(List[BaseComponent], 'ListBaseComponent')  # noqa: F821
 
 
 @inherit_docstrings

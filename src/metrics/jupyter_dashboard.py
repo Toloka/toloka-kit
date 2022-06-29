@@ -147,7 +147,7 @@ class Chart:
             self._name = self.metrics[0].beautiful_name
 
         figure = go.Figure()
-        for x_points, y_points, line_name  in self._lines.values():
+        for x_points, y_points, line_name in self._lines.values():
             figure.add_trace(
                 go.Scatter(
                     x=x_points if x_points else [datetime.datetime.now(datetime.timezone.utc)],
