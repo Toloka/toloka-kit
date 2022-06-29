@@ -20,6 +20,7 @@ def view_spec_map():
         'settings': {
             'resolution': 1024,
         },
+        'inferDataSpec': False,
         'type': 'tb',
         'config': json.dumps({
             "vars": {
