@@ -1013,8 +1013,8 @@ AppProjectSortItems = BaseSortItems.for_fields(
     # docstring
     """Keys for sorting ready-to-go projects in search results.
 
-    You can specify multiple keys separated by a comma. To sort in descending order, add the
-    sign `-` before a key. Example: `sort='-created,id'`.
+    You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
+    Example: `sort='-created,id'`.
 
     Attributes:
         key: The sorting key. Supported keys:
@@ -1052,8 +1052,8 @@ AppSortItems = BaseSortItems.for_fields(
     # docstring
     """Keys for sorting ready-to-go solutions in search results.
 
-    You can specify multiple keys separated by a comma. To sort in descending order, add the
-    sign `-` before a key. Example: `sort='-name,id'`.
+    You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
+    Example: `sort='-name,id'`.
 
     Attributes:
         key: The sorting key. Supported keys:
@@ -1099,8 +1099,8 @@ AppItemSortItems = BaseSortItems.for_fields(
     # docstring
     """Keys for sorting ready-to-go task items in search results.
 
-    You can specify multiple keys separated by a comma. To sort in descending order, add the
-    sign `-` before a key. Example: `sort='-created,id'`.
+    You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
+    Example: `sort='-created,id'`.
 
     Attributes:
         key: The sorting key. Supported keys:
@@ -1148,8 +1148,8 @@ AppBatchSortItems = BaseSortItems.for_fields(
     # docstring
     """Keys for sorting ready-to-go batches in search results.
 
-    You can specify multiple keys separated by a comma. To sort in descending order, add the
-    sign `-` before a key. Example: `sort='-created,id'`.
+    You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
+    Example: `sort='-created,id'`.
 
     Attributes:
         key: The sorting key. Supported keys:
