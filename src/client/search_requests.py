@@ -1018,8 +1018,8 @@ AppProjectSortItems = BaseSortItems.for_fields(
 
     Attributes:
         key: The sorting key. Supported keys:
-            * `id` — an App project ID.
-            * `name` — an App project name.
+            * `id` — An App project ID.
+            * `name` — An App project name.
             * `created` — A project creation date.
     """
 )
@@ -1057,8 +1057,8 @@ AppSortItems = BaseSortItems.for_fields(
 
     Attributes:
         key: The sorting key. Supported keys:
-            * `id` - an App solution ID.
-            * `name` - an App solution name.
+            * `id` — An App solution ID.
+            * `name` — An App solution name.
     """
 )
 
