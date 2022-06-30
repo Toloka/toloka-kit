@@ -950,7 +950,7 @@ WebhookSubscriptionSortItems = BaseSortItems.for_fields(
 
 
 class AppProjectSearchRequest(BaseSearchRequest):
-    """Parameters for searching ready-to-go projects.
+    """Parameters for searching App projects.
 
     Attributes:
         app_id: Projects created using the solution with the specified ID.
@@ -1011,22 +1011,22 @@ class AppProjectSearchRequest(BaseSearchRequest):
 AppProjectSortItems = BaseSortItems.for_fields(
     'AppProjectSortItems', ['id', 'name', 'created'],
     # docstring
-    """Keys for sorting ready-to-go projects in search results.
+    """Keys for sorting App projects in search results.
 
     You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
     Example: `sort='-created,id'`.
 
     Attributes:
         key: The sorting key. Supported keys:
-            * `id` — A ready-to-go project ID.
-            * `name` — A ready-to-go project name.
+            * `id` — an App project ID.
+            * `name` — an App project name.
             * `created` — A project creation date.
     """
 )
 
 
 class AppSearchRequest(BaseSearchRequest):
-    """Parameters for searching ready-to-go solutions.
+    """Parameters for searching App solutions.
 
     Attributes:
         after_id: The ID of a solution used for cursor pagination.
@@ -1050,21 +1050,21 @@ class AppSearchRequest(BaseSearchRequest):
 AppSortItems = BaseSortItems.for_fields(
     'AppSortItems', ['id', 'name'],
     # docstring
-    """Keys for sorting ready-to-go solutions in search results.
+    """Keys for sorting App solutions in search results.
 
     You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
     Example: `sort='-name,id'`.
 
     Attributes:
         key: The sorting key. Supported keys:
-            * `id` - A ready-to-go solution ID.
-            * `name` - A ready-to-go solution name.
+            * `id` - an App solution ID.
+            * `name` - an App solution name.
     """
 )
 
 
 class AppItemSearchRequest(BaseSearchRequest):
-    """Parameters for searching ready-to-go task items.
+    """Parameters for searching App task items.
 
     Attributes:
         after_id: The ID of the item used for cursor pagination.
@@ -1097,7 +1097,7 @@ class AppItemSearchRequest(BaseSearchRequest):
 AppItemSortItems = BaseSortItems.for_fields(
     'AppItemSortItems', ['id', 'created_at'],
     # docstring
-    """Keys for sorting ready-to-go task items in search results.
+    """Keys for sorting App task items in search results.
 
     You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
     Example: `sort='-created,id'`.
@@ -1111,7 +1111,7 @@ AppItemSortItems = BaseSortItems.for_fields(
 
 
 class AppBatchSearchRequest(BaseSearchRequest):
-    """Parameters for searching batches in a ready-to-go project.
+    """Parameters for searching batches in an App project.
 
     Attributes:
         after_id: The ID of the batch used for cursor pagination.
@@ -1146,7 +1146,7 @@ class AppBatchSearchRequest(BaseSearchRequest):
 AppBatchSortItems = BaseSortItems.for_fields(
     'AppBatchSortItems', ['id', 'name', 'created_at'],
     # docstring
-    """Keys for sorting ready-to-go batches in search results.
+    """Keys for sorting App batches in search results.
 
     You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
     Example: `sort='-created,id'`.

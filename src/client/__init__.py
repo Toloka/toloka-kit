@@ -3337,7 +3337,7 @@ class TolokaClient:
     def find_app_projects(self, request: search_requests.AppProjectSearchRequest,
                           sort: Union[List[str], search_requests.AppProjectSortItems, None] = None,
                           limit: Optional[int] = None) -> search_results.AppProjectSearchResult:
-        """Finds ready-to-go projects that match certain criteria.
+        """Finds App projects that match certain criteria.
 
         The number of returned projects is limited. Find remaining matching projects with subsequent `find_app_projects` calls.
         To iterate over all matching projects you may use the [get_app_projects](toloka.client.TolokaClient.get_app_projects.md) method.
@@ -3361,7 +3361,7 @@ class TolokaClient:
     @expand('request')
     @add_headers('client')
     def get_app_projects(self, request: search_requests.AppProjectSearchRequest) -> Generator[AppProject, None, None]:
-        """Finds all ready-to-go projects that match certain criteria.
+        """Finds all App projects that match certain criteria.
 
         `get_app_projects` returns a generator. You can iterate over all found projects using the generator. Several requests to the Toloka server are possible while iterating.
 
@@ -3383,13 +3383,13 @@ class TolokaClient:
 
     @add_headers('client')
     def create_app_project(self, app_project: AppProject) -> AppProject:
-        """Creates a ready-to-go project in Toloka.
+        """Creates an App project in Toloka.
 
         Args:
             app_project: The project with parameters.
 
         Returns:
-            AppProject: Created ready-to-go project with updated parameters.
+            AppProject: Created App project with updated parameters.
         """
 
         if self.url != self.Environment.PRODUCTION.value:
@@ -3400,13 +3400,13 @@ class TolokaClient:
 
     @add_headers('client')
     def get_app_project(self, app_project_id: str) -> AppProject:
-        """Gets information from Toloka about a ready-to-go project.
+        """Gets information from Toloka about an App project.
 
         Args:
             app_project_id: The ID of the project.
 
         Returns:
-            AppProject: The ready-to-go project.
+            AppProject: The App project.
         """
 
         if self.url != self.Environment.PRODUCTION.value:
@@ -3417,7 +3417,7 @@ class TolokaClient:
 
     @add_headers('client')
     def archive_app_project(self, app_project_id: str) -> AppProject:
-        """Archives a ready-to-go project.
+        """Archives an App project.
 
         The project changes its status to `ARCHIVED`.
 
@@ -3425,7 +3425,7 @@ class TolokaClient:
             app_project_id: The ID of the project.
 
         Returns:
-            AppProject: The ready-to-go project with updated status.
+            AppProject: The App project with updated status.
         """
 
         if self.url != self.Environment.PRODUCTION.value:
@@ -3436,7 +3436,7 @@ class TolokaClient:
 
     @add_headers('client')
     def unarchive_app_project(self, app_project_id: str) -> AppProject:
-        """Unarchives a ready-to-go project.
+        """Unarchives an App project.
 
         Previous project status, which was before archiving, is restored.
 
@@ -3444,7 +3444,7 @@ class TolokaClient:
             app_project_id: The ID of the project.
 
         Returns:
-            AppProject: The ready-to-go project with updated status.
+            AppProject: The App project with updated status.
         """
 
         if self.url != self.Environment.PRODUCTION.value:
@@ -3460,7 +3460,7 @@ class TolokaClient:
         request: search_requests.AppSearchRequest, sort: Union[List[str], search_requests.AppSortItems, None] = None,
         limit: Optional[int] = None
     ) -> search_results.AppSearchResult:
-        """Finds ready-to-go solutions that match certain criteria.
+        """Finds App solutions that match certain criteria.
 
         The number of returned solutions is limited. Find remaining matching solutions with subsequent `find_apps` calls.
 
@@ -3485,7 +3485,7 @@ class TolokaClient:
     @expand('request')
     @add_headers('client')
     def get_apps(self, request: search_requests.AppSearchRequest) -> Generator[App, None, None]:
-        """Finds all ready-to-go solutions that match certain criteria.
+        """Finds all App solutions that match certain criteria.
 
         `get_apps` returns a generator. You can iterate over all found solutions using the generator. Several requests to the Toloka server are possible while iterating.
 
@@ -3507,13 +3507,13 @@ class TolokaClient:
 
     @add_headers('client')
     def get_app(self, app_id: str) -> App:
-        """Gets information from Toloka about a ready-to-go solution.
+        """Gets information from Toloka about an App solution.
 
         Args:
             app_id: The ID of the solution.
 
         Returns:
-            App: The ready-to-go solution.
+            App: The App solution.
         """
 
         if self.url != self.Environment.PRODUCTION.value:
@@ -3529,14 +3529,14 @@ class TolokaClient:
         app_project_id: str, request: search_requests.AppItemSearchRequest,
         sort: Union[List[str], search_requests.AppItemSortItems, None] = None, limit: Optional[int] = None
         ) -> search_results.AppItemSearchResult:
-        """Finds task items that match certain criteria in a ready-to-go project.
+        """Finds task items that match certain criteria in an App project.
 
         The number of returned items is limited. Find remaining matching items with subsequent `find_app_items` calls.
 
         To iterate over all matching items you may use the [get_app_items](toloka.client.TolokaClient.get_app_items.md) method.
 
         Args:
-            app_project_id: The ID of the ready-to-go project.
+            app_project_id: The ID of the App project.
             request: Search criteria.
             sort: Sorting options. Default: `None`.
             limit: Returned items limit. The default limit is 50. The maximum allowed limit is 100,000.
@@ -3558,14 +3558,14 @@ class TolokaClient:
         self,
         app_project_id: str, request: search_requests.AppItemSearchRequest
     ) -> Generator[AppItem, None, None]:
-        """Finds all ready-to-go task items that match certain criteria in a ready-to-go project.
+        """Finds all App task items that match certain criteria in an App project.
 
         `get_app_items` returns a generator. You can iterate over all found items using the generator. Several requests to the Toloka server are possible while iterating.
 
         If you need to sort items use the [find_app_items](toloka.client.TolokaClient.find_app_items.md) method.
 
         Args:
-            app_project_id: The ID of the ready-to-go project.
+            app_project_id: The ID of the App project.
             request: Search criteria.
 
         Yields:
@@ -3582,14 +3582,14 @@ class TolokaClient:
 
     @add_headers('client')
     def create_app_item(self, app_project_id: str, app_item: AppItem) -> AppItem:
-        """Creates a ready-to-go task item in Toloka.
+        """Creates an App task item in Toloka.
 
         Args:
-            app_project_id: The ID of the ready-to-go project to create the item in.
+            app_project_id: The ID of the App project to create the item in.
             app_item: The task item with parameters.
 
         Returns:
-            AppItem: Created ready-to-go task item with updated parameters.
+            AppItem: Created App task item with updated parameters.
         """
 
         if self.url != self.Environment.PRODUCTION.value:
@@ -3601,10 +3601,10 @@ class TolokaClient:
     @expand('request')
     @add_headers('client')
     def create_app_items(self, app_project_id: str, request: AppItemsCreateRequest):
-        """Creates task items in a ready-to-go project in Toloka and adds them to an existing batch.
+        """Creates task items in an App project in Toloka and adds them to an existing batch.
 
         Args:
-            app_project_id: The ID of the ready-to-go project.
+            app_project_id: The ID of the App project.
             request: The request parameters.
         """
 
@@ -3616,14 +3616,14 @@ class TolokaClient:
 
     @add_headers('client')
     def get_app_item(self, app_project_id: str, app_item_id: str) -> AppItem:
-        """Gets information from Toloka about a ready-to-go task item.
+        """Gets information from Toloka about an App task item.
 
         Args:
-            app_project_id: The ID of the ready-to-go project.
+            app_project_id: The ID of the App project.
             app_item_id: The ID of the item.
 
         Returns:
-            AppItem: The ready-to-go task item.
+            AppItem: The App task item.
         """
 
         if self.url != self.Environment.PRODUCTION.value:
@@ -3638,14 +3638,14 @@ class TolokaClient:
                          request: search_requests.AppBatchSearchRequest,
                          sort: Union[List[str], search_requests.AppBatchSortItems, None] = None,
                          limit: Optional[int] = None) -> search_results.AppBatchSearchResult:
-        """Finds batches that match certain criteria in a ready-to-go project.
+        """Finds batches that match certain criteria in an App project.
 
         The number of returned batches is limited. Find remaining matching batches with subsequent `find_app_batches` calls.
 
         To iterate over all matching batches you may use the [get_app_batches](toloka.client.TolokaClient.get_app_batches.md) method.
 
         Args:
-            app_project_id: The ID of the ready-to-go project.
+            app_project_id: The ID of the App project.
             request: Search criteria.
             sort: Sorting options. Default: `None`.
             limit: Returned batches limit. The default limit is 50. The maximum allowed limit is 100,000.
@@ -3666,14 +3666,14 @@ class TolokaClient:
     def get_app_batches(self,
                         app_project_id: str,
                         request: search_requests.AppBatchSearchRequest) -> Generator[AppBatch, None, None]:
-        """Finds all batches that match certain criteria in a ready-to-go project.
+        """Finds all batches that match certain criteria in an App project.
 
         `get_app_batches` returns a generator. You can iterate over all found batches using the generator. Several requests to the Toloka server are possible while iterating.
 
         If you need to sort batches use the [find_app_batches](toloka.client.TolokaClient.find_app_batches.md) method.
 
         Args:
-            app_project_id: The ID of the ready-to-go project.
+            app_project_id: The ID of the App project.
             request: Search criteria.
 
         Yields:
@@ -3691,7 +3691,7 @@ class TolokaClient:
     @expand('request')
     @add_headers('client')
     def create_app_batch(self, app_project_id: str, request: AppBatchCreateRequest) -> AppBatch:
-        """Creates a batch with task items in a ready-to-go project in Toloka.
+        """Creates a batch with task items in an App project in Toloka.
 
         Args:
             app_project_id: The ID of the project.
@@ -3709,14 +3709,14 @@ class TolokaClient:
 
     @add_headers('client')
     def get_app_batch(self, app_project_id: str, app_batch_id: str) -> AppBatch:
-        """"Gets information from Toloka about a batch in a ready-to-go project.
+        """"Gets information from Toloka about a batch in an App project.
 
         Args:
             app_project_id: The ID of the project.
             app_batch_id: The ID of the batch.
 
         Returns:
-            AppBatch: The ready-to-go batch.
+            AppBatch: The App batch.
         """
 
         if self.url != self.Environment.PRODUCTION.value:
@@ -3727,7 +3727,7 @@ class TolokaClient:
 
     @add_headers('client')
     def start_app_batch(self, app_project_id: str, app_batch_id: str):
-        """Launches annotation of a batch of task items in a ready-to-go project.
+        """Launches annotation of a batch of task items in an App project.
 
         Args:
             app_project_id: The ID of the project.

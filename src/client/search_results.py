@@ -232,10 +232,10 @@ WebhookSubscriptionSearchResult = _create_search_result_class_for(
 AppProjectSearchResult = _create_search_result_class_for(
     AppProject,
     items_field='content',
-    docstring="""The result of searching ready-to-go projects.
+    docstring="""The result of searching App projects.
 
     Attributes:
-        content: A list with found ready-to-go projects.
+        content: A list with found App projects.
         has_more: A flag showing whether there are more matching projects.
             * True — There are more matching projects, not included in `content` due to the limit set in the search request.
             * False — `content` contains all matching projects.
@@ -244,10 +244,10 @@ AppProjectSearchResult = _create_search_result_class_for(
 AppSearchResult = _create_search_result_class_for(
     App,
     items_field='content',
-    docstring="""The result of searching ready-to-go projects.
+    docstring="""The result of searching App projects.
 
     Attributes:
-        content: A list with found ready-to-go solutions.
+        content: A list with found App solutions.
         has_more: A flag showing whether there are more matching solutions.
             * True — There are more matching solutions, not included in `content` due to the limit set in the search request.
             * False — `content` contains all matching solutions.
@@ -256,10 +256,10 @@ AppSearchResult = _create_search_result_class_for(
 AppItemSearchResult = _create_search_result_class_for(
     AppItem,
     items_field='content',
-    docstring="""The result of searching ready-to-go task items.
+    docstring="""The result of searching App task items.
 
     Attributes:
-        content: A list with found ready-to-go task items.
+        content: A list with found App task items.
         has_more: A flag showing whether there are more matching task items.
             * True — There are more matching task items, not included in `content` due to the limit set in the search request.
             * False — `content` contains all matching task items.
@@ -268,10 +268,10 @@ AppItemSearchResult = _create_search_result_class_for(
 AppBatchSearchResult = _create_search_result_class_for(
     AppBatch,
     items_field='content',
-    docstring="""The result of searching ready-to-go batches.
+    docstring="""The result of searching batches in an App project.
 
     Attributes:
-        content: A list with found ready-to-go batches.
+        content: A list with found App batches.
         has_more: A flag showing whether there are more matching batches.
             * True — There are more matching batches, not included in `content` due to the limit set in the search request.
             * False — `content` contains all matching batches.

@@ -19,7 +19,7 @@ from ...util._codegen import attribute
 
 class _AppError(BaseTolokaObject):
     """
-    A structure for describing errors which may appear while working with ready-to-go projects.
+    A structure for describing errors which may appear while working with App projects.
 
     Attributes:
         code: The short name of the error.
@@ -32,14 +32,14 @@ class _AppError(BaseTolokaObject):
 
 
 class AppProject(BaseTolokaObject):
-    """A [ready-to-go](https://toloka.ai/en/docs/toloka-apps/concepts/) project.
+    """An [App](https://toloka.ai/en/docs/toloka-apps/concepts/) project.
 
-    A ready-to-go project is based on one of ready-to-go solutions. It is created with a template interface and preconfigured data specification and quality control rules.
+    An App project is based on one of App solutions. It is created with a template interface and preconfigured data specification and quality control rules.
 
-    To get available ready-to-go solutions use the [get_apps](toloka.client.TolokaClient.get_apps.md) method.
+    To get available App solutions use the [get_apps](toloka.client.TolokaClient.get_apps.md) method.
 
     Attributes:
-        app_id: The ID of the ready-to-go solution used to create the project.
+        app_id: The ID of the App solution used to create the project.
         parent_app_project_id The ID of the parent project. It is set if this project is a clone of other project. Otherwise it is empty.
         name: The project name.
         parameters: Parameters of the solution. The parameters should follow the schema described in the `param_spec` field of the [solution](toloka.client.app.App.md).
@@ -74,12 +74,12 @@ class AppProject(BaseTolokaObject):
 
 
 class App(BaseTolokaObject):
-    """A [ready-to-go](https://toloka.ai/en/docs/toloka-apps/concepts/) solution.
+    """An [App](https://toloka.ai/en/docs/toloka-apps/concepts/) solution.
 
-    Each ready-to-go solution targets specific type of tasks which can be solved using Toloka.
+    Each App solution targets specific type of tasks which can be solved using Toloka.
 
     Attributes:
-        id: The ID of the ready-to-go solution.
+        id: The ID of the App solution.
         name: The solution name.
         image: A link to the solution interface preview image.
         description: The solution description.
@@ -166,7 +166,7 @@ class AppItemsCreateRequest(BaseTolokaObject):
 
 
 class AppBatch(BaseTolokaObject):
-    """A ready-to-go batch.
+    """An App batch.
 
     A batch contains task items that are sent for labeling together.
 
@@ -213,7 +213,7 @@ class AppBatch(BaseTolokaObject):
 
 
 class AppBatchCreateRequest(BaseTolokaObject):
-    """Parameters of a request for creating multiple ready-to-go task items in a batch.
+    """Parameters of a request for creating multiple App task items in a batch.
 
     Attributes:
         items: A list with task items. The items must follow the solution schema described in `App.input_spec`.
