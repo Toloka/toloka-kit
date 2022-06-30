@@ -33,7 +33,7 @@ class _AppError(BaseTolokaObject):
 
 class AppProject(BaseTolokaObject):
     """A [ready-to-go](https://toloka.ai/en/docs/toloka-apps/concepts/) project.
-    
+
     A ready-to-go project is based on one of ready-to-go solutions. It is created with a template interface and preconfigured data specification and quality control rules.
 
     To get available ready-to-go solutions use the [get_apps](toloka.client.TolokaClient.get_apps.md) method.
@@ -75,8 +75,8 @@ class AppProject(BaseTolokaObject):
 
 class App(BaseTolokaObject):
     """A [ready-to-go](https://toloka.ai/en/docs/toloka-apps/concepts/) solution.
-    
-    Each ready-to-go solution targets specific type of tasks which can be solved using Toloka. 
+
+    Each ready-to-go solution targets specific type of tasks which can be solved using Toloka.
 
     Attributes:
         id: The ID of the ready-to-go solution.
@@ -105,7 +105,7 @@ class App(BaseTolokaObject):
 
 class AppItem(BaseTolokaObject):
     """A task item.
-    
+
     Items are uploaded to Toloka and are grouped in batches. After uploading the status of items is set to `NEW`. Items with that status can be edited. Then entire batches are sent for labeling.
 
     Attributes:
@@ -167,7 +167,7 @@ class AppItemsCreateRequest(BaseTolokaObject):
 
 class AppBatch(BaseTolokaObject):
     """A ready-to-go batch.
-    
+
     A batch contains task items that are sent for labeling together.
 
     Attributes:

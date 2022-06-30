@@ -3362,14 +3362,14 @@ class TolokaClient:
     @add_headers('client')
     def get_app_projects(self, request: search_requests.AppProjectSearchRequest) -> Generator[AppProject, None, None]:
         """Finds all ready-to-go projects that match certain criteria.
-        
+
         `get_app_projects` returns a generator. You can iterate over all found projects using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
         If you need to sort projects use the [find_app_projects](toloka.client.TolokaClient.find_app_projects.md) method.
-        
+
         Args:
             request: Search criteria.
-            
+
         Yields:
             AppProject: Next matching project.
         """
@@ -3486,14 +3486,14 @@ class TolokaClient:
     @add_headers('client')
     def get_apps(self, request: search_requests.AppSearchRequest) -> Generator[App, None, None]:
         """Finds all ready-to-go solutions that match certain criteria.
-        
+
         `get_apps` returns a generator. You can iterate over all found solutions using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
         If you need to sort solutions use the [find_apps](toloka.client.TolokaClient.find_apps.md) method.
-        
+
         Args:
             request: Search criteria.
-            
+
         Yields:
             App: Next matching solution.
         """
@@ -3534,7 +3534,7 @@ class TolokaClient:
         The number of returned items is limited. Find remaining matching items with subsequent `find_app_items` calls.
 
         To iterate over all matching items you may use the [get_app_items](toloka.client.TolokaClient.get_app_items.md) method.
-        
+
         Args:
             app_project_id: The ID of the ready-to-go project.
             request: Search criteria.
@@ -3559,15 +3559,15 @@ class TolokaClient:
         app_project_id: str, request: search_requests.AppItemSearchRequest
     ) -> Generator[AppItem, None, None]:
         """Finds all ready-to-go task items that match certain criteria in a ready-to-go project.
-        
+
         `get_app_items` returns a generator. You can iterate over all found items using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
         If you need to sort items use the [find_app_items](toloka.client.TolokaClient.find_app_items.md) method.
-        
+
         Args:
             app_project_id: The ID of the ready-to-go project.
             request: Search criteria.
-            
+
         Yields:
             AppItem: Next matching item.
         """
@@ -3667,15 +3667,15 @@ class TolokaClient:
                         app_project_id: str,
                         request: search_requests.AppBatchSearchRequest) -> Generator[AppBatch, None, None]:
         """Finds all batches that match certain criteria in a ready-to-go project.
-        
+
         `get_app_batches` returns a generator. You can iterate over all found batches using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
         If you need to sort batches use the [find_app_batches](toloka.client.TolokaClient.find_app_batches.md) method.
-        
+
         Args:
             app_project_id: The ID of the ready-to-go project.
             request: Search criteria.
-            
+
         Yields:
             AppBatch: Next matching batch.
         """
