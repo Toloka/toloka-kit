@@ -339,7 +339,9 @@ class AutoQuality:
 
     @property
     def best_pool(self):
-        return self.autoquality_pools[self.best_pool_id]
+        for pool in self.autoquality_pools:
+            if pool.id == self.best_pool_id:
+                return pool
 
     @property
     def best_pool_params(self):
