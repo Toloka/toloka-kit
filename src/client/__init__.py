@@ -3528,7 +3528,7 @@ class TolokaClient:
         self,
         app_project_id: str, request: search_requests.AppItemSearchRequest,
         sort: Union[List[str], search_requests.AppItemSortItems, None] = None, limit: Optional[int] = None
-        ) -> search_results.AppItemSearchResult:
+    ) -> search_results.AppItemSearchResult:
         """Finds task items that match certain criteria in an App project.
 
         The number of returned items is limited. Find remaining matching items with subsequent `find_app_items` calls.
