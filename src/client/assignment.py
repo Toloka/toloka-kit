@@ -9,6 +9,7 @@ from decimal import Decimal
 from enum import unique
 from typing import List, Optional
 
+from .owner import Owner
 from .primitives.base import BaseTolokaObject
 from .primitives.parameter import Parameters
 from .solution import Solution
@@ -33,6 +34,7 @@ class Assignment(BaseTolokaObject):
             * SKIPPED - Skipped by the performer.
             * EXPIRED - The time for completing the tasks expired.
         reward: Payment received by the performer.
+        bonus_ids: IDs of rewards issued for the task.
         tasks: Data for the tasks.
         automerged: Flag of the response received as a result of merging identical tasks. Value:
             * True - The response was recorded when identical tasks were merged.
@@ -51,6 +53,7 @@ class Assignment(BaseTolokaObject):
         mixed: Type of operation for creating a task suite:
             * True - Automatic ("smart mixing").
             * False - Manually.
+        owner: Properties of Requester.
         public_comment: Public comment about an assignment. Why it was accepted or rejected.
     """
 
@@ -76,6 +79,7 @@ class Assignment(BaseTolokaObject):
     user_id: str
     status: Status = attribute(autocast=True)
     reward: Decimal = attribute(validator=optional(instance_of(Decimal)))
+    bonus_ids: List[str]
     tasks: List[Task]
     automerged: bool
 
@@ -90,6 +94,7 @@ class Assignment(BaseTolokaObject):
     solutions: List[Solution]
     mixed: bool
 
+    owner: Owner
     public_comment: str
 
 

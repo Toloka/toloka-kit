@@ -23,7 +23,15 @@ def skill_header():
 
 @pytest.fixture
 def skill_sample(skill_header):
-    return dict(skill_header, id='21', created='2015-12-16T12:55:01')
+    return {
+        **skill_header,
+        'id': '21',
+        'created': '2015-12-16T12:55:01',
+        'owner': {
+            'id': 'c3a50f44cd3e1b8202465569ced289eb',
+            'myself': True,
+        },
+    }
 
 
 def test_find_skills(skill_sample, requests_mock, toloka_client, toloka_url):
