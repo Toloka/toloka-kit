@@ -61,15 +61,15 @@ AggregatedSolutionSearchResult = _create_search_result_class_for(
 )
 AssignmentSearchResult = _create_search_result_class_for(
     Assignment,
-    """The list of found assignments and whether there is something else on the original request
+    """The list of found assignments.
 
-    It's better to use TolokaClient.get_assignments(), which already implements the correct handling of the search result.
+    The number of assignments in the list is limited by the [find_assignments](toloka.client.TolokaClient.find_assignments.md) method.
 
     Attributes:
-        items: List of found assignments
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        items: The list of found assignments.
+        has_more: More items flag:
+            * `True` — Not all assignments matching search criteria are returned in the `items` due to the limit.
+            * `False` — All matching assignments are in the `items`.
     """
 )
 AttachmentSearchResult = _create_search_result_class_for(
@@ -232,60 +232,48 @@ WebhookSubscriptionSearchResult = _create_search_result_class_for(
 AppProjectSearchResult = _create_search_result_class_for(
     AppProject,
     items_field='content',
-    docstring="""The list of found App projects and whether there is something else on the original request.
-
-    It's better to use TolokaClient.get_app_projects(),
-    which already implements the correct handling of the search result.
+    docstring="""The result of searching App projects.
 
     Attributes:
-        items: List of found App projects.
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        content: A list with found App projects.
+        has_more: A flag showing whether there are more matching projects.
+            * True — There are more matching projects, not included in `content` due to the limit set in the search request.
+            * False — `content` contains all matching projects.
     """
 )
 AppSearchResult = _create_search_result_class_for(
     App,
     items_field='content',
-    docstring="""The list of found Apps and whether there is something else on the original request.
-
-    It's better to use TolokaClient.get_apps(),
-    which already implements the correct handling of the search result.
+    docstring="""The result of searching App projects.
 
     Attributes:
-        items: List of found Apps.
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        content: A list with found App solutions.
+        has_more: A flag showing whether there are more matching solutions.
+            * True — There are more matching solutions, not included in `content` due to the limit set in the search request.
+            * False — `content` contains all matching solutions.
     """
 )
 AppItemSearchResult = _create_search_result_class_for(
     AppItem,
     items_field='content',
-    docstring="""The list of found work items in the App project and whether there is something else on the original request.
-
-    It's better to use TolokaClient.get_app_items(),
-    which already implements the correct handling of the search result.
+    docstring="""The result of searching App task items.
 
     Attributes:
-        items: List of found work items in the App project.
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        content: A list with found App task items.
+        has_more: A flag showing whether there are more matching task items.
+            * True — There are more matching task items, not included in `content` due to the limit set in the search request.
+            * False — `content` contains all matching task items.
     """
 )
 AppBatchSearchResult = _create_search_result_class_for(
     AppBatch,
     items_field='content',
-    docstring="""The list of found batches in the App project and whether there is something else on the original request.
-
-    It's better to use TolokaClient.get_app_batches(),
-    which already implements the correct handling of the search result.
+    docstring="""The result of searching batches in an App project.
 
     Attributes:
-        items: List of found batches in the App project.
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        content: A list with found App batches.
+        has_more: A flag showing whether there are more matching batches.
+            * True — There are more matching batches, not included in `content` due to the limit set in the search request.
+            * False — `content` contains all matching batches.
     """
 )

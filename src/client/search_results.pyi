@@ -63,15 +63,15 @@ class AggregatedSolutionSearchResult(toloka.client.primitives.base.BaseTolokaObj
 
 
 class AssignmentSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found assignments and whether there is something else on the original request
+    """The list of found assignments.
 
-    It's better to use TolokaClient.get_assignments(), which already implements the correct handling of the search result.
+    The number of assignments in the list is limited by the [find_assignments](toloka.client.TolokaClient.find_assignments.md) method.
 
     Attributes:
-        items: List of found assignments
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        items: The list of found assignments.
+        has_more: More items flag:
+            * `True` — Not all assignments matching search criteria are returned in the `items` due to the limit.
+            * `False` — All matching assignments are in the `items`.
     """
 
     def __init__(

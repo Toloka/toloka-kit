@@ -13,7 +13,7 @@ from . import streaming
 from . import util
 
 try:
-    from . import autoquality
+    from . import autoquality  # noqa: F401
     __all__.append('autoquality')
-except:
+except ImportError:
     pass

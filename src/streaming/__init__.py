@@ -6,7 +6,6 @@ __all__ = [
     'Pipeline',
     'PoolStatusObserver',
     'S3Storage',
-    'ZooKeeperLocker',
     'cursor',
     'locker',
     'observer',
@@ -23,4 +22,9 @@ from . import storage
 from .pipeline import Pipeline
 from .observer import AssignmentsObserver, PoolStatusObserver
 from .storage import BaseStorage, JSONLocalStorage, S3Storage
-from .locker import FileLocker, ZooKeeperLocker
+from .locker import FileLocker
+try:
+    from .locker import ZooKeeperLocker  # noqa: F401
+    __all__.append('ZooKeeperLocker')
+except ImportError:
+    pass

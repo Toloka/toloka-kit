@@ -292,7 +292,7 @@ class AutoQuality:
         for pool in self.autoquality_pools:
             self._create_tasks(pool.id, tasks)
 
-        logger.info(f'Setup complete, please verify')
+        logger.info('Setup complete, please verify')
         return
 
     def run(self):
@@ -339,7 +339,9 @@ class AutoQuality:
 
     @property
     def best_pool(self):
-        return self.autoquality_pools[self.best_pool_id]
+        for pool in self.autoquality_pools:
+            if pool.id == self.best_pool_id:
+                return pool
 
     @property
     def best_pool_params(self):
