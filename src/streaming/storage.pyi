@@ -107,8 +107,49 @@ class JSONLocalStorage(BaseExternalLockerStorage):
     dirname: str
 
 
+class ObjectSummaryCollection(typing.Protocol):
+    def filter(
+        self,
+        Prefix,
+        **kwargs
+    ) -> 'ObjectSummaryCollection': ...
+
+    def delete(self, **kwargs): ...
+
+    def __init__(
+        self,
+        *args,
+        **kwargs
+    ): ...
+
+
+class BucketType(typing.Protocol):
+    def upload_fileobj(
+        self,
+        Fileobj,
+        Key,
+        ExtraArgs=None,
+        **kwargs
+    ): ...
+
+    def download_fileobj(
+        self,
+        Fileobj,
+        ExtraArgs=None,
+        **kwargs
+    ): ...
+
+    def __init__(
+        self,
+        *args,
+        **kwargs
+    ): ...
+
+    objects: ObjectSummaryCollection
+
+
 class S3Storage(BaseExternalLockerStorage):
-    """Storage that save to AWS S3 using given boto3 client.
+    """Storage that save to AWS S3 using given boto3 client. Requires toloka-kit[s3] extras.
 
     Attributes:
         bucket: Boto3 bucket object.
@@ -117,7 +158,7 @@ class S3Storage(BaseExternalLockerStorage):
     Examples:
         Create new instance.
 
-        >>> !pip install boto3
+        >>> !pip install toloka-kit[s3]
         >>> import boto3
         >>> import os
         >>> session = boto3.Session(
@@ -159,7 +200,7 @@ class S3Storage(BaseExternalLockerStorage):
 
     def __init__(
         self,
-        bucket: typing.Type,
+        bucket: BucketType,
         *,
         locker: typing.Optional[toloka.streaming.locker.BaseLocker] = None
     ) -> None:
@@ -168,4 +209,4 @@ class S3Storage(BaseExternalLockerStorage):
         ...
 
     locker: typing.Optional[toloka.streaming.locker.BaseLocker]
-    bucket: typing.Type
+    bucket: BucketType

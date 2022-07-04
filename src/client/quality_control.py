@@ -133,7 +133,7 @@ class QualityControl(BaseTolokaObject):
 
         See example in QualityControl class.
 
-        Arg:
+        Args:
             collector: Parameters for collecting statistics (for example, the number of task skips in the pool).
             action: Action if conditions are met (for example, close access to the project).
             conditions: Conditions (for example, skipping 10 sets of tasks in a row).

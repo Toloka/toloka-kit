@@ -292,7 +292,7 @@ class AutoQuality:
         for pool in self.autoquality_pools:
             self._create_tasks(pool.id, tasks)
 
-        logger.info(f'Setup complete, please verify')
+        logger.info('Setup complete, please verify')
         return
 
     def run(self):

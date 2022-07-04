@@ -18,40 +18,39 @@ from ..util._extendable_enum import ExtendableStrEnum
 
 
 class Assignment(BaseTolokaObject):
-    """Contains information about an assigned task suite and the results
+    """Information about an assigned task suite.
 
     Attributes:
-        id: ID of the task suite assignment to a performer.
-        task_suite_id: ID of a task suite.
-        pool_id: ID of the pool that the task suite belongs to.
-        user_id: ID of the performer who was assigned the task suite.
-        status: Status of an assigned task suite.
-            * ACTIVE - In the process of execution by the performer.
-            * SUBMITTED - Completed but not checked.
-            * ACCEPTED - Accepted by the requester.
-            * REJECTED - Rejected by the requester.
-            * SKIPPED - Skipped by the performer.
-            * EXPIRED - The time for completing the tasks expired.
+        id: The ID of the assignment.
+        task_suite_id: The ID of the assigned task suite.
+        pool_id: The ID of the pool containing the task suite.
+        user_id: The ID of the performer who was assigned the task suite.
+        status: Status of the assignment.
+            * `ACTIVE` — The task suite is assigned but it isn't completed yet.
+            * `SUBMITTED` — The task suite is completed but it isn't checked.
+            * `ACCEPTED` — The task suite is accepted by the requester.
+            * `REJECTED` — The task suite is rejected by the requester.
+            * `SKIPPED` — The task suite is skipped by the performer.
+            * `EXPIRED` — Time for completing the tasks has expired.
         reward: Payment received by the performer.
-        tasks: Data for the tasks.
-        automerged: Flag of the response received as a result of merging identical tasks. Value:
-            * True - The response was recorded when identical tasks were merged.
-            * False - Normal performer response.
-        created: The date and time when the task suite was assigned to a performer.
-        submitted: The date and time when the task suite was completed by a performer.
+        tasks: All tasks in the task suite.
+        automerged: A flag showing merged tasks:
+            * `True` — The response was obtained by merging identical tasks.
+            * `False` — No task merging occurred.
+        created: The date and time when the task suite was assigned to the performer.
+        submitted: The date and time when the task suite was completed by the performer.
         accepted: The date and time when the responses for the task suite were accepted by the requester.
         rejected: The date and time when the responses for the task suite were rejected by the requester.
         skipped: The date and time when the task suite was skipped by the performer.
-        expired: The date and time when the time for completing the task suite expired.
-        first_declined_solution_attempt: For training tasks. The performer's first responses in the training task
-            (only if these were the wrong answers). If the performer answered correctly on the first try, the
-            first_declined_solution_attempt array is omitted.
-            Arrays with the responses (output_values) are arranged in the same order as the task data in the tasks array.
-        solutions: performer responses. Arranged in the same order as the data for tasks in the tasks array.
-        mixed: Type of operation for creating a task suite:
-            * True - Automatic ("smart mixing").
-            * False - Manually.
-        public_comment: Public comment about an assignment. Why it was accepted or rejected.
+        expired: The date and time when time for completing the task suite expired.
+        first_declined_solution_attempt: The performer's first try responses in training tasks if the responses are wrong. If the performer answers correctly on the first try, the
+            `first_declined_solution_attempt` is omitted.
+            The order of the responses is the same as the order of `tasks`.
+        solutions: The performer's responses. The order of the responses is the same as the order of `tasks`.
+        mixed: The method of grouping tasks in the task suite:
+            * `True` — Smart mixing was used.
+            * `False` — The tasks were grouped manually, smart mixing was not used.
+        public_comment: A public comment that is set when accepting or rejecting the assignment.
     """
 
     @unique
@@ -94,33 +93,31 @@ class Assignment(BaseTolokaObject):
 
 
 class AssignmentPatch(BaseTolokaObject):
-    """Allows you to accept or reject tasks, and leave a comment
+    """The new status of an assignment.
 
-    Used in "TolokaClient.patch_assignment" method.
+    It is used in the [patch_assignment](toloka.client.TolokaClient.patch_assignment.md) method to accept or reject an assignment and to leave a comment.
 
     Attributes:
-        public_comment: Public comment about an assignment. Why it was accepted or rejected.
-        status: Status of an assigned task suite.
-            * ACCEPTED - Accepted by the requester.
-            * REJECTED - Rejected by the requester.
+        public_comment: The public comment.
+        status: The new status of an assignment:
+            * `ACCEPTED` — Accepted by the requester.
+            * `REJECTED` — Rejected by the requester.
     """
     public_comment: str
     status: Assignment.Status
 
 
 class GetAssignmentsTsvParameters(Parameters):
-    """Allows you to downloads assignments as pandas.DataFrame
+    """Parameters for downloading assignments.
 
-    Used in "TolokaClient.get_assignments_df" method.
-    Implements the same behavior as if you download results in web-interface and then read it by pandas.
+    These parameters are used in the [TolokaClient.get_assignments_df](toloka.client.TolokaClient.get_assignments_df.md) method.
 
     Attributes:
-        status: Assignments in which statuses will be downloaded.
-        start_time_from: Upload assignments submitted after the specified date and time.
-        start_time_to: Upload assignments submitted before the specified date and time.
-        exclude_banned: Exclude answers from banned performers, even if assignments in suitable status "ACCEPTED".
-        field: The names of the fields to be unloaded. Only the field names from the Assignment class, all other fields
-            are added by default.
+        status: Statuses of assignments to download.
+        start_time_from: Download assignments submitted after the specified date and time.
+        start_time_to: Download assignments submitted before the specified date and time.
+        exclude_banned: Exclude answers from banned performers, even if their assignments have suitable status.
+        field: Names of `Assignment` fields to be downloaded. Fields other then from `Assignment` class are always downloaded.
     """
 
     @unique
