@@ -67,7 +67,7 @@ class Skill(BaseTolokaObject):
     public_name: Dict[LangIso639, str]
     public_requester_description: Dict[LangIso639, str]
     owner: Owner
-    
+
     # Readonly
     id: str = attribute(readonly=True)
     created: datetime.datetime = attribute(readonly=True)
