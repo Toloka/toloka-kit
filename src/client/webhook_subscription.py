@@ -29,10 +29,10 @@ class WebhookSubscription(BaseTolokaObject):
             DYNAMIC_OVERLAP_COMPLETED: There is an aggregated estimate for dynamic overlap.
             ASSIGNMENT_CREATED: Task created.
             ASSIGNMENT_SUBMITTED: The task has been completed and is waiting for acceptance by the customer.
-            ASSIGNMENT_SKIPPED: The task was taken to work, but the performer missed it and will not return to it.
-            ASSIGNMENT_EXPIRED: The task was taken to work, but the performer did not have time to complete it in the allotted time or refused it before the end of the term.
-            ASSIGNMENT_APPROVED: The task was performed by the performer and confirmed by the customer.
-            ASSIGNMENT_REJECTED: The task was completed by the performer, but rejected by the customer.
+            ASSIGNMENT_SKIPPED: The task was taken to work, but the Toloker skipped it and did not return to it.
+            ASSIGNMENT_EXPIRED: The task was taken to work, but the Toloker did not have time to complete it in the allotted time or refused it before the end of the term.
+            ASSIGNMENT_APPROVED: The task was performed by the Toloker and confirmed by the customer.
+            ASSIGNMENT_REJECTED: The task was completed by the Toloker, but rejected by the customer.
         """
 
         POOL_CLOSED = 'POOL_CLOSED'

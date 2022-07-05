@@ -114,14 +114,14 @@ class ClassicViewSpec(ViewSpec, spec_value=ViewSpec.CLASSIC):
 
 
 class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
-    """A template builder view scpecification that defines an interface with
+    """A template builder view specification that defines an interface with
     template builder components
 
     Attributes:
         view:
         plugins:
         vars:
-        core_version: Default template components version. Most users will not need to change this parameter.
+        core_version: Default template components version. Most likely you do not need to change this parameter.
         infer_data_spec: You can configure the data specification automatically or manually. You can change the way the
             specification is configured using the infer_data_spec option:
             * True – The specifications of input and output data are generated automatically depending on the task interface settings.

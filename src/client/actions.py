@@ -37,15 +37,15 @@ class RuleAction(BaseParameters, spec_enum=RuleType, spec_field='type'):
 
 
 class Restriction(RuleAction, spec_value=RuleType.RESTRICTION):
-    """Restricts performer's access to projects or pools.
+    """Restricts Toloker's access to projects or pools.
 
     To have better control over restriction period use [RestrictionV2](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.actions.RestrictionV2).
 
     Attributes:
         parameters.scope:
-            * `POOL` — A performer can't access the pool if the action is applied.
-            * `PROJECT` — A performer can't access the entire project containing the pool.
-            * `ALL_PROJECTS` — A performer can't access any requester's project.
+            * `POOL` — A Toloker can't access the pool if the action is applied.
+            * `PROJECT` — A Toloker can't access the entire project containing the pool.
+            * `ALL_PROJECTS` — A Toloker can't access any requester's project.
         parameters.duration_days: A blocking period in days. If the `duration_days` is omitted, then the block is permanent.
         parameters.private_comment: A private comment. It is visible only to the requester.
     """
@@ -57,13 +57,13 @@ class Restriction(RuleAction, spec_value=RuleType.RESTRICTION):
 
 
 class RestrictionV2(RuleAction, spec_value=RuleType.RESTRICTION_V2):
-    """Restricts performer's access to projects or pools.
+    """Restricts Toloker's access to projects or pools.
 
     Attributes:
         parameters.scope:
-            * `POOL` — A performer can't access the pool if the action is applied.
-            * `PROJECT` — A performer can't access the entire project containing the pool.
-            * `ALL_PROJECTS` — A performer can't access any requester's project.
+            * `POOL` — A Toloker can't access the pool if the action is applied.
+            * `PROJECT` — A Toloker can't access the entire project containing the pool.
+            * `ALL_PROJECTS` — A Toloker can't access any requester's project.
         parameters.duration: The duration of the blocking period measured in `duration_unit`.
         parameters.duration_unit:
             * `MINUTES`;
@@ -73,7 +73,7 @@ class RestrictionV2(RuleAction, spec_value=RuleType.RESTRICTION_V2):
         parameters.private_comment: A private comment. It is visible only to the requester.
 
     Example:
-        The following quality control rule blocks access to the project for 10 days, if a performer answers too fast.
+        The following quality control rule blocks access to the project for 10 days, if a Toloker answers too fast.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -97,7 +97,7 @@ class RestrictionV2(RuleAction, spec_value=RuleType.RESTRICTION_V2):
 
 
 class SetSkillFromOutputField(RuleAction, spec_value=RuleType.SET_SKILL_FROM_OUTPUT_FIELD):
-    """Sets performer's skill value to the percentage of correct or incorrect answers.
+    """Sets Toloker's skill value to the percentage of correct or incorrect answers.
 
     You can use this action with [MajorityVote](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.MajorityVote) and [GoldenSet](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.GoldenSet) collectors.  # noqa: E501
 
@@ -158,14 +158,14 @@ class ChangeOverlap(RuleAction, spec_value=RuleType.CHANGE_OVERLAP):
 
 
 class SetSkill(RuleAction, spec_value=RuleType.SET_SKILL):
-    """Sets performer's skill value.
+    """Sets Toloker's skill value.
 
     Attributes:
         parameters.skill_id: The ID of the skill.
         parameters.skill_value: The new value of the skill.
 
     Example:
-        When an answer is accepted, the performer gets a skill. Later you can filter performers by that skill.
+        When an answer is accepted, the Toloker gets a skill. Later you can filter Tolokers by that skill.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -182,13 +182,13 @@ class SetSkill(RuleAction, spec_value=RuleType.SET_SKILL):
 
 
 class RejectAllAssignments(RuleAction, spec_value=RuleType.REJECT_ALL_ASSIGNMENTS):
-    """Rejects all performer's assignments in the pool. This action is available for pools with non-automatic acceptance.
+    """Rejects all Toloker's assignments in the pool. This action is available for pools with non-automatic acceptance.
 
     Attributes:
-        parameters.public_comment: The reason of the rejection. It is visible both to the requester and to the performer.
+        parameters.public_comment: The reason of the rejection. It is visible both to the requester and to the Toloker.
 
     Example:
-        Reject all assignments if a performer sends responses too fast. Note, that the pool must be configured with non-automatic response acceptance.
+        Reject all assignments if a Toloker sends responses too fast. Note, that the pool must be configured with non-automatic response acceptance.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -204,10 +204,10 @@ class RejectAllAssignments(RuleAction, spec_value=RuleType.REJECT_ALL_ASSIGNMENT
 
 
 class ApproveAllAssignments(RuleAction, spec_value=RuleType.APPROVE_ALL_ASSIGNMENTS):
-    """Accepts all performer's assignments in the pool.
+    """Accepts all Toloker's assignments in the pool.
 
     Example:
-        Accept all assignments if a performer gives correct responses for control tasks. Note, that the pool must be configured with non-automatic response acceptance.
+        Accept all assignments if a Toloker gives correct responses for control tasks. Note, that the pool must be configured with non-automatic response acceptance.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(

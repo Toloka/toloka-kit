@@ -12,11 +12,11 @@ class TaskDistributionFunction(BaseTolokaObject):
 
     Can be used for:
     - Distribution of tasks with majority opinion verification.
-    - Issuing control tasks with uneven frequency. Allows you to change the frequency of verification as the user completes tasks.
-    - Issuing training tasks with uneven frequency. Allows you to change the frequency of training tasks as the user completes tasks.
+    - Issuing control tasks with uneven frequency. Allows you to change the frequency of verification as the Toloker completes tasks.
+    - Issuing training tasks with uneven frequency. Allows you to change the frequency of training tasks as the Toloker completes tasks.
 
     Attributes:
-        scope: How to count tasks completed by the user:
+        scope: How to count tasks completed by the Toloker:
             * POOL - Count completed pool tasks.
             * PROJECT - Count completed project tasks.
         distribution: Distribution of tasks within an interval. Parameter has only one possible:
@@ -38,8 +38,8 @@ class TaskDistributionFunction(BaseTolokaObject):
         """Interval borders and number of tasks in an interval
 
         Attributes:
-            from_: Start of the interval (number of task completed by the user in the project or in the pool).
-            to: End of the interval (number of task completed by the user in the project or in the pool).
+            from_: Start of the interval (number of task completed by the Toloker in the project or in the pool).
+            to: End of the interval (number of task completed by the Toloker in the project or in the pool).
             frequency: Frequency of tasks in an interval. The first task in an interval is a distributed task.
                 For example, if you set frequency: 3 tasks number 1, 4, 7 and so on will be distributed tasks.
         """

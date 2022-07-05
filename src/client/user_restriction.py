@@ -26,18 +26,18 @@ class DurationUnit(Enum):
 class UserRestriction(BaseTolokaObject, spec_enum='Scope', spec_field='scope'):
     """Controls access to projects and pools.
 
-    You can restrict access to any project for a performer. Then he can't do tasks in the project. You may set the duration of restriction or apply permanent restriction.
+    You can restrict access to any project for a Toloker. Then he can't do tasks in the project. You may set the duration of restriction or apply permanent restriction.
     To unlock access pass the restriction ID to the `delete_user_restriction`.
 
     Attributes:
-        user_id: The ID of the performer.
-        private_comment: A comment for you why access to this performer was restricted.
+        user_id: The ID of the Toloker.
+        private_comment: A comment for you why access to this Toloker was restricted.
         will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
         id: The identifier of a specific fact of access restriction. Read only.
         created: Date and time when the fact of access restriction was created. Read only.
 
     Example:
-        How you can lock access for one user on one project.
+        How you can lock access for one Toloker on one project.
 
         >>> new_restrict = toloka_client.set_user_restriction(
         >>>     ProjectUserRestriction(
@@ -84,7 +84,7 @@ class UserRestriction(BaseTolokaObject, spec_enum='Scope', spec_field='scope'):
 
 @inherit_docstrings
 class AllProjectsUserRestriction(UserRestriction, spec_value=UserRestriction.ALL_PROJECTS):
-    """Forbid the performer from doing tasks from all your projects
+    """Forbid the Toloker to do tasks from all your projects
     """
 
     pass
@@ -92,7 +92,7 @@ class AllProjectsUserRestriction(UserRestriction, spec_value=UserRestriction.ALL
 
 @inherit_docstrings
 class PoolUserRestriction(UserRestriction, spec_value=UserRestriction.POOL):
-    """Forbid the performer from doing tasks from a specific pool
+    """Forbid the Toloker to do tasks from a specific pool
 
     Attributes:
         pool_id: Pool identifier to which access will be denied.
@@ -103,7 +103,7 @@ class PoolUserRestriction(UserRestriction, spec_value=UserRestriction.POOL):
 
 @inherit_docstrings
 class ProjectUserRestriction(UserRestriction, spec_value=UserRestriction.PROJECT):
-    """Forbid the performer from doing tasks from a specific project
+    """Forbid the Toloker to do tasks from a specific project
 
     Attributes:
         project_id: Project identifier to which access will be denied.

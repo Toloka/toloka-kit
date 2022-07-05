@@ -48,13 +48,13 @@ class FieldType(ExtendableStrEnum):
 
 class FieldSpec(BaseTolokaObject, spec_enum=FieldType, spec_field='type'):
     """A base class for field specifications used in project's `input_spec` and `output_spec`
-    for input and respose data validation specification respectively. Use subclasses of this
+    for input and response data validation specification respectively. Use subclasses of this
     class defined below to define the data type (string, integer, URL, etc.) and specify
     validation parameters (such as string length).
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
     """
     required: bool = True
     hidden: bool = False
@@ -127,7 +127,7 @@ class CoordinatesSpec(FieldSpec, spec_value=FieldType.COORDINATES):
     """Geographical coordinates field specification, such as “53.910236,27.531110
 
     Attributes:
-        current_location: put the user's current coordinates in the field (true/false).
+        current_location: put the Toloker's current coordinates in the field (true/false).
             Used in tasks for the mobile app.
     """
     current_location: bool

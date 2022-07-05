@@ -11,14 +11,14 @@ from ..util._codegen import attribute
 
 
 class SetUserSkillRequest(BaseTolokaObject):
-    """Parameters for setting the skill value of a specific performer
+    """Parameters for setting the skill value of a specific Toloker.
 
-    Used for grouping the fields required for setting the user's skill.
+    Used for grouping the fields required for setting the Toloker's skill.
     Usually, when calling TolokaClient.set_user_skill, you can use the expand version, passing all the class attributes to the call.
 
     Attributes:
         skill_id: Skill ID. What skill to set.
-        user_id: User ID. Which user.
+        user_id: Toloker ID.
         value: Fractional value of the skill. Minimum - 0, maximum - 100.
     """
 
@@ -28,16 +28,16 @@ class SetUserSkillRequest(BaseTolokaObject):
 
 
 class UserSkill(BaseTolokaObject):
-    """Describes the value of a specific skill for a specific performer
+    """Describes the value of a specific skill for a specific Toloker.
 
     Attributes:
-        id: Internal identifier of the user's skill value.
+        id: Internal identifier of the Toloker's skill value.
         skill_id: Skill identifier, which skill is installed.
-        user_id: User identifier, to which performer the skill is installed.
+        user_id: Toloker identifier, to which Toloker the skill is installed.
         value: Skill value (from 0 to 100). Rough presentation.
         exact_value: Skill value (from 0 to 100). Exact representation.
-        created: Date and time when this skill was created for the performer.
-        modified: Date and time of the last skill change for the performer.
+        created: Date and time when this skill was created for the Toloker.
+        modified: Date and time of the last skill change for the Toloker.
     """
 
     id: str

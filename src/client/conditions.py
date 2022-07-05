@@ -93,7 +93,7 @@ class AcceptedAssignmentsCount(ComparableRuleCondition, spec_value=RuleCondition
 
 
 class AcceptedAssignmentsRate(ComparableRuleCondition, spec_value=RuleConditionKey.ACCEPTED_ASSIGNMENTS_RATE):
-    """Percentage of how many assignments were accepted from this performer out of all checked assignment
+    """Percentage of how many assignments were accepted from this Toloker out of all checked assignment
     """
 
     value: float
@@ -136,7 +136,7 @@ class AssessmentEvent(IdentityRuleCondition, spec_value=RuleConditionKey.ASSESSM
 
 
 class AssignmentsAcceptedCount(ComparableRuleCondition, spec_value=RuleConditionKey.ASSIGNMENTS_ACCEPTED_COUNT):
-    """How many assignment was accepted from performer
+    """How many assignment was accepted from a Toloker
 
     Don't be confused!!!
     This condition used only with 'AnswerCount' controller.
@@ -157,14 +157,14 @@ class CorrectAnswersRate(ComparableRuleCondition, spec_value=RuleConditionKey.CO
 
 
 class FailRate(ComparableRuleCondition, spec_value=RuleConditionKey.FAIL_RATE):
-    """Percentage of wrong answers of the performer to the captcha
+    """Percentage of wrong answers of the Toloker to the captcha
     """
 
     value: float
 
 
 class FastSubmittedCount(ComparableRuleCondition, spec_value=RuleConditionKey.FAST_SUBMITTED_COUNT):
-    """The number of assignments a specific performer completed too fast
+    """The number of assignments a specific Toloker completed too fast
     """
 
     value: int
@@ -192,7 +192,7 @@ class GoldenSetIncorrectAnswersRate(ComparableRuleCondition, spec_value=RuleCond
 
 
 class IncomeSumForLast24Hours(ComparableRuleCondition, spec_value=RuleConditionKey.INCOME_SUM_FOR_LAST_24_HOURS):
-    """The performer earnings for completed tasks in the pool over the last 24 hours
+    """The Toloker's earnings for completed tasks in the pool over the last 24 hours
     """
 
     value: float
@@ -219,12 +219,12 @@ class PendingAssignmentsCount(ComparableRuleCondition, spec_value=RuleConditionK
 
 
 class PoolAccessRevokedReason(IdentityRuleCondition, spec_value=RuleConditionKey.POOL_ACCESS_REVOKED_REASON):
-    """Reason for loss of access of the performer to the current pool
+    """Reason for loss of access of the Toloker to the current pool
 
     Attributes:
         value: exact reason
-            * SKILL_CHANGE - The performer no longer meets one or more filters.
-            * RESTRICTION - The performer's access to tasks is blocked by a quality control rule (such as control tasks,
+            * SKILL_CHANGE - The Toloker no longer meets one or more filters.
+            * RESTRICTION - The Toloker's access to tasks is blocked by a quality control rule (such as control tasks,
                 majority vote, fast answers, skipped assignments, or captcha).
     """
 
@@ -247,28 +247,28 @@ class RejectedAssignmentsCount(ComparableRuleCondition, spec_value=RuleCondition
 
 
 class RejectedAssignmentsRate(ComparableRuleCondition, spec_value=RuleConditionKey.REJECTED_ASSIGNMENTS_RATE):
-    """Percentage of how many assignments were rejected from this performer out of all checked assignment
+    """Percentage of how many assignments were rejected from this Toloker out of all checked assignment
     """
 
     value: float
 
 
 class SkillId(IdentityRuleCondition, spec_value=RuleConditionKey.SKILL_ID):
-    """The performer no longer meets the specific skill filter
+    """The Toloker no longer meets the specific skill filter
     """
 
     value: str
 
 
 class SkippedInRowCount(ComparableRuleCondition, spec_value=RuleConditionKey.SKIPPED_IN_ROW_COUNT):
-    """How many tasks in a row the performer skipped
+    """How many tasks in a row the Toloker skipped
     """
 
     value: int
 
 
 class StoredResultsCount(ComparableRuleCondition, spec_value=RuleConditionKey.STORED_RESULTS_COUNT):
-    """How many times the performer entered captcha
+    """How many times the Toloker entered captcha
     """
 
     value: int
@@ -279,14 +279,14 @@ class SubmittedAssignmentsCount(ComparableRuleCondition, spec_value=RuleConditio
 
 
 class SuccessRate(ComparableRuleCondition, spec_value=RuleConditionKey.SUCCESS_RATE):
-    """Percentage of correct answers of the performer to the captcha
+    """Percentage of correct answers of the Toloker to the captcha
     """
 
     value: float
 
 
 class TotalAnswersCount(ComparableRuleCondition, spec_value=RuleConditionKey.TOTAL_ANSWERS_COUNT):
-    """The number of completed tasks by the performer
+    """The number of completed tasks by the Toloker
 
     Be careful, it may have different meanings in different collectors.
     """
@@ -295,14 +295,14 @@ class TotalAnswersCount(ComparableRuleCondition, spec_value=RuleConditionKey.TOT
 
 
 class TotalAssignmentsCount(ComparableRuleCondition, spec_value=RuleConditionKey.TOTAL_ASSIGNMENTS_COUNT):
-    """How many assignments from this performer were checked
+    """How many assignments from this Toloker were checked
     """
 
     value: int
 
 
 class TotalSubmittedCount(ComparableRuleCondition, spec_value=RuleConditionKey.TOTAL_SUBMITTED_COUNT):
-    """The number of assignments a specific performer completed
+    """The number of assignments a specific Toloker completed
     """
 
     value: int

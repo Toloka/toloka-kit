@@ -37,7 +37,7 @@ class BaseConditionV1(BaseComponent, metaclass=BaseConditionV1Metaclass):
     For example, you can check that a text field is filled in.
 
     Attributes:
-        hint: Validation error message that the user will see.
+        hint: Validation error message that a Toloker will see.
     """
 
     pass
@@ -95,7 +95,7 @@ class AnyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ANY):
 class DistanceConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_YANDEX_DISTANCE):
     """This component checks whether the sent coordinates match the ones that you specified
 
-    For example, you want the user to take a photo of a specific place. The condition.distance component checks whether
+    For example, you want a Toloker to take a photo of a specific place. The condition.distance component checks whether
     the photo was taken at the location that you specified.
 
     Attributes:
@@ -104,7 +104,7 @@ class DistanceConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_YA
         max: The distance in meters by which the X and Y coordinates may differ.
 
     Example:
-        How to check that performer is in the right place.
+        How to check that a Toloker is in the right place.
 
         >>> distance_condition = tb.conditions.DistanceConditionV1(
         >>>     tb.data.LocationData(),
@@ -166,10 +166,10 @@ class EqualsConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_EQUA
 
 @inherit_docstrings
 class LinkOpenedConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_LINK_OPENED):
-    """Checks that the user clicked the link.
+    """Checks that the Toloker clicked the link.
 
-    Important: To trigger the condition, the user must follow the link from the Toloka interface — you must give users
-    this option. The condition will not work if the user opens the link from the browser address bar.
+    Important: To trigger the condition, the Toloker must follow the link from the Toloka interface — you must give Tolokers
+    this option. The condition will not work if the Toloker opens the link from the browser address bar.
 
     This condition can be used in the view.link component and also anywhere you can use (conditions).
     Attributes:
@@ -215,7 +215,7 @@ class PlayedFullyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION
 
 @inherit_docstrings
 class RequiredConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_REQUIRED):
-    """Checks that the data is filled in. This way you can get the user to answer all the required questions.
+    """Checks that the data is filled in. This way you can get the Toloker to answer all the required questions.
 
     If used inside the validation property, you can omit the data property and the same property will be used from the
     parent component field (the one that contains the condition.required component).
