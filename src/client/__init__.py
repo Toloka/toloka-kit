@@ -2747,7 +2747,7 @@ class TolokaClient:
         self,
         user_bonuses: List[UserBonus], parameters: Optional[UserBonusCreateRequestParameters] = None
     ) -> batch_create_results.UserBonusBatchCreateResult:
-        """Creates many `UserBonus` instances[?]
+        """Creates rewards for Tolokers.
 
         Right now it's safer to use asynchronous version: "create_user_bonuses_async"
         You can send a maximum of 10,000 requests of this kind per day.
@@ -2757,7 +2757,7 @@ class TolokaClient:
             parameters: Parameters for UserBonus creation controlling.
 
         Returns:
-            UserBonusBatchCreateResult: Result of `UserBonus`[?] creating. Contains created `UserBonus` instances[?] in `items` and
+            UserBonusBatchCreateResult: Result of creating rewards. Contains `UserBonus` instances in `items` and
                 problems in `validation_errors`.
 
         Example:
@@ -2854,15 +2854,15 @@ class TolokaClient:
     def find_user_bonuses(self, request: search_requests.UserBonusSearchRequest,
                           sort: Union[List[str], search_requests.UserBonusSortItems, None] = None,
                           limit: Optional[int] = None) -> search_results.UserBonusSearchResult:
-        """Finds all `UserBonus`'s[?] that match certain rules
+        """Finds all Tolokers' rewards that match certain rules.
 
-        As a result, it returns an object that contains the first part of the found `UserBonus`'s[?] and whether there
+        As a result, it returns an object that contains the first part of the found `UserBonus` instances and whether there
         are any more results.
         It is better to use the [get_user_bonuses](toloka.client.TolokaClient.get_user_bonuses.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
-            request: How to search `UserBonus`'s.
+            request: How to search rewards.
             sort: How to sort result. Defaults to None.
             limit: Limit on the number of results returned.
 
