@@ -35,21 +35,22 @@ class Assignment(BaseTolokaObject):
             * `EXPIRED` — Time for completing the tasks has expired.
         reward: Payment received by the Toloker.
         bonus_ids: IDs of rewards issued for the task.
-        tasks: All tasks in the task suite.
-        automerged: A flag showing merged tasks:
-            * `True` — The response was obtained by merging identical tasks.
-            * `False` — No task merging occurred.
-        created: The date and time when the task suite was assigned to the Toloker.
-        submitted: The date and time when the task suite was completed by the Toloker.
+        tasks: Data for the tasks.
+        automerged: Flag of the response received as a result of merging identical tasks. Value:
+            * True — The response was recorded when identical tasks were merged.
+            * False — Normal Toloker response.
+        created: The date and time when the task suite was assigned to a Toloker.
+        submitted: The date and time when the task suite was completed by a Toloker.
         accepted: The date and time when the responses for the task suite were accepted by the requester.
         rejected: The date and time when the responses for the task suite were rejected by the requester.
         skipped: The date and time when the task suite was skipped by the Toloker.
-        expired: The date and time when time for completing the task suite expired.
-        first_declined_solution_attempt: The Toloker's first try responses in training tasks if the responses are wrong. If the Toloker answers correctly on the first try, the
-            `first_declined_solution_attempt` is omitted.
-            The order of the responses is the same as the order of `tasks`.
-        solutions: The Toloker's responses. The order of the responses is the same as the order of `tasks`.
-        mixed: The method of grouping tasks in the task suite:
+        expired: The date and time when the time for completing the task suite expired.
+        first_declined_solution_attempt: For training tasks. The Toloker's first responses in the training task
+            (only if these were the wrong answers). If the Toloker answered correctly on the first try, the
+            first_declined_solution_attempt array is omitted.
+            Arrays with the responses (output_values) are arranged in the same order as the task data in the tasks array.
+        solutions: Toloker responses. Arranged in the same order as the data for tasks in the tasks array.
+        mixed: Type of operation for creating a task suite:
             * `True` — Smart mixing was used.
             * `False` — The tasks were grouped manually, smart mixing was not used.
         owner: Properties of Requester.
