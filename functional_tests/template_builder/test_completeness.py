@@ -32,6 +32,7 @@ UNDOCUMENTED_COMPONENTS = {
     'field.button-checkbox',
     'field.map',
     'field.tumbler',
+    'field.map',  # TODO: possibly should be supported
 }
 
 
