@@ -9,6 +9,7 @@ from decimal import Decimal
 from enum import unique
 from typing import List, Optional
 
+from .owner import Owner
 from .primitives.base import BaseTolokaObject
 from .primitives.parameter import Parameters
 from .solution import Solution
@@ -50,6 +51,7 @@ class Assignment(BaseTolokaObject):
         mixed: The method of grouping tasks in the task suite:
             * `True` — Smart mixing was used.
             * `False` — The tasks were grouped manually, smart mixing was not used.
+        owner: Properties of Requester.
         public_comment: A public comment that is set when accepting or rejecting the assignment.
     """
 
@@ -75,6 +77,7 @@ class Assignment(BaseTolokaObject):
     user_id: str
     status: Status = attribute(autocast=True)
     reward: Decimal = attribute(validator=optional(instance_of(Decimal)))
+    bonus_ids: List[str]
     tasks: List[Task]
     automerged: bool
 
@@ -89,6 +92,7 @@ class Assignment(BaseTolokaObject):
     solutions: List[Solution]
     mixed: bool
 
+    owner: Owner
     public_comment: str
 
 

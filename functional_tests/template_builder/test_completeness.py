@@ -30,7 +30,9 @@ UNDOCUMENTED_COMPONENTS = {
     'view.web-phone-next',
     'view.with-label',
     'field.button-checkbox',
+    'field.map',
     'field.tumbler',
+    'field.map',  # TODO: possibly should be supported
 }
 
 

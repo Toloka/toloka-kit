@@ -2,6 +2,7 @@ __all__ = ['Skill']
 import datetime
 from typing import Dict
 
+from .owner import Owner
 from .primitives.base import BaseTolokaObject
 from ..util._codegen import attribute
 
@@ -27,8 +28,9 @@ class Skill(BaseTolokaObject):
         training: Whether the skill is related to a training pool:
             * True - The skill level is calculated from training pool tasks.
             * False - The skill isn't related to a training pool.
-        public_name: Skill name for Tolokers. You can provide a name in several languages (the message will come in the Toloker's language).
-        public_requester_description: Skill description text for Tolokers. You can provide text in several languages (the message will come in the Toloker's language).
+        public_name: Skill name for other Tolokers. You can provide a name in several languages (the message will come in the Toloker's language).
+        public_requester_description: Skill description text for other Tolokers. You can provide text in several languages (the message will come in the Toloker's language).
+        owner: Skill owner.
         id: Skill ID. Read only field.
         created: The UTC date and time when the skill was created. Read only field.
 
@@ -64,6 +66,7 @@ class Skill(BaseTolokaObject):
 
     public_name: Dict[LangIso639, str]
     public_requester_description: Dict[LangIso639, str]
+    owner: Owner
 
     # Readonly
     id: str = attribute(readonly=True)
