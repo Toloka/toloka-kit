@@ -19,6 +19,7 @@ def assignment_map():
         'user_id': 'user-i1d',
         'status': 'ACCEPTED',
         'reward': Decimal('0.05'),
+        'bonus_ids': ['reward_id_1', 'reward_id_2'],
         'mixed': True,
         'automerged': True,
         'created': '2015-12-15T14:52:00',
@@ -27,6 +28,10 @@ def assignment_map():
         'tasks': [{'pool_id': '21', 'input_values': {'image': 'http://images.com/1.png'}, 'origin_task_id': '42'}],
         'first_declined_solution_attempt': [{'output_values': {'color': 'black', 'comment': 'So белый'}}],
         'solutions': [{'output_values': {'color': 'white', 'comment': 'So белый'}}],
+        'owner': {
+            'id': 'ac1e4701364b4ccef8a4fe10a8980cff',
+            'myself': True,
+        }
     }
 
 

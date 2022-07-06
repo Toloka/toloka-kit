@@ -9,6 +9,7 @@ from decimal import Decimal
 from enum import unique
 from typing import List, Optional
 
+from .owner import Owner
 from .primitives.base import BaseTolokaObject
 from .primitives.parameter import Parameters
 from .solution import Solution
@@ -33,24 +34,27 @@ class Assignment(BaseTolokaObject):
             * `SKIPPED` — The task suite is skipped by the performer.
             * `EXPIRED` — Time for completing the tasks has expired.
         reward: Payment received by the performer.
-        tasks: All tasks in the task suite.
-        automerged: A flag showing merged tasks:
-            * `True` — The response was obtained by merging identical tasks.
-            * `False` — No task merging occurred.
-        created: The date and time when the task suite was assigned to the performer.
-        submitted: The date and time when the task suite was completed by the performer.
+        bonus_ids: IDs of rewards issued for the task.
+        tasks: Data for the tasks.
+        automerged: Flag of the response received as a result of merging identical tasks. Value:
+            * True - The response was recorded when identical tasks were merged.
+            * False - Normal performer response.
+        created: The date and time when the task suite was assigned to a performer.
+        submitted: The date and time when the task suite was completed by a performer.
         accepted: The date and time when the responses for the task suite were accepted by the requester.
         rejected: The date and time when the responses for the task suite were rejected by the requester.
         skipped: The date and time when the task suite was skipped by the performer.
-        expired: The date and time when time for completing the task suite expired.
-        first_declined_solution_attempt: The performer's first try responses in training tasks if the responses are wrong. If the performer answers correctly on the first try, the
-            `first_declined_solution_attempt` is omitted.
-            The order of the responses is the same as the order of `tasks`.
-        solutions: The performer's responses. The order of the responses is the same as the order of `tasks`.
-        mixed: The method of grouping tasks in the task suite:
-            * `True` — Smart mixing was used.
-            * `False` — The tasks were grouped manually, smart mixing was not used.
-        public_comment: A public comment that is set when accepting or rejecting the assignment.
+        expired: The date and time when the time for completing the task suite expired.
+        first_declined_solution_attempt: For training tasks. The performer's first responses in the training task
+            (only if these were the wrong answers). If the performer answered correctly on the first try, the
+            first_declined_solution_attempt array is omitted.
+            Arrays with the responses (output_values) are arranged in the same order as the task data in the tasks array.
+        solutions: performer responses. Arranged in the same order as the data for tasks in the tasks array.
+        mixed: Type of operation for creating a task suite:
+            * True - Automatic ("smart mixing").
+            * False - Manually.
+        owner: Properties of Requester.
+        public_comment: Public comment about an assignment. Why it was accepted or rejected.
     """
 
     @unique
@@ -75,6 +79,7 @@ class Assignment(BaseTolokaObject):
     user_id: str
     status: Status = attribute(autocast=True)
     reward: Decimal = attribute(validator=optional(instance_of(Decimal)))
+    bonus_ids: List[str]
     tasks: List[Task]
     automerged: bool
 
@@ -89,6 +94,7 @@ class Assignment(BaseTolokaObject):
     solutions: List[Solution]
     mixed: bool
 
+    owner: Owner
     public_comment: str
 
 
