@@ -689,7 +689,7 @@ class UserSkillSearchRequest(BaseSearchRequest):
     """Parameters for searching Toloker skill
 
     Attributes:
-        user_id: Toloker ID.
+        user_id: Toloker's ID.
         skill_id: Skill ID.
         id_lt: Skills with an ID less than the specified value.
         id_lte: Skills with an ID less than or equal to the specified value.
@@ -746,7 +746,7 @@ class UserRestrictionSearchRequest(BaseSearchRequest):
             * ALL_PROJECTS
             * PROJECT
             * POOL
-        user_id: Toloker ID.
+        user_id: Toloker's ID.
         project_id: The ID of the project that is blocked.
         pool_id: The ID of the pool that is blocked.
         id_lt: Bans with an ID less than the specified value.

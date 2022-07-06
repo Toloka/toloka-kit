@@ -1527,7 +1527,7 @@ class TolokaClient:
             Pool: Pool object with new status.
 
         Example:
-            Open the pool for .
+            Open the pool for Tolokers.
 
             >>> toloka_client.open_pool(pool_id='1')
             ...
@@ -2867,7 +2867,7 @@ class TolokaClient:
             limit: Limit on the number of results returned.
 
         Returns:
-            UserBonusSearchResult: The first `limit` `UserBonus`'s in `items`.
+            UserBonusSearchResult: The first `limit` `UserBonus` instances in `items`.
                 And a mark that there is more.
 
         Example:
@@ -2996,13 +2996,13 @@ class TolokaClient:
 
     @add_headers('client')
     def set_user_restriction(self, user_restriction: UserRestriction) -> UserRestriction:
-        """Closes a Toloker's access to one or more projects
+        """Restricts access to projects or pools for a Toloker.
 
         Args:
-            user_restriction: To whom and what to prohibit.
+            user_restriction: Restriction parameters.
 
         Returns:
-            UserRestriction: Created restriction object.
+            UserRestriction: Updated restriction object.
 
         Example:
             If a Toloker often makes mistakes, we will restrict access to all our projects.
@@ -3068,7 +3068,7 @@ class TolokaClient:
                          limit: Optional[int] = None) -> search_results.UserSkillSearchResult:
         """Finds all Toloker's skills that match certain rules
 
-        UserSkill describe the skill value for a specific Toloker.
+        `UserSkill` describes the skill value for a specific Toloker.
         As a result, it returns an object that contains the first part of the found Toloker's skills and whether there
         are any more results.
         It is better to use the [get_user_skills](toloka.client.TolokaClient.get_user_skills.md) method, it allows you to iterate through all results
@@ -3097,10 +3097,10 @@ class TolokaClient:
     def get_user_skill(self, user_skill_id: str) -> UserSkill:
         """Gets the value of a Toloker's skill
 
-        UserSkill describe the skill value for a specific Toloker.
+        `UserSkill` describes the skill value for a specific Toloker.
 
         Args:
-            user_skill_id: ID of the Toloker skill.
+            user_skill_id: The ID of the Toloker skill.
 
         Returns:
             UserSkill: The skill value.
@@ -3117,7 +3117,7 @@ class TolokaClient:
     def get_user_skills(self, request: search_requests.UserSkillSearchRequest) -> Generator[UserSkill, None, None]:
         """Finds all Toloker's skills that match certain rules and returns them in an iterable object
 
-        UserSkill describe the skill value for a specific Toloker.
+        `UserSkill` describes the skill value for a specific Toloker.
         Unlike find_user_skills, returns generator. Does not sort Toloker's skills.
         While iterating over the result, several requests to the Toloka server is possible.
 
@@ -3138,13 +3138,13 @@ class TolokaClient:
     @expand('request')
     @add_headers('client')
     def set_user_skill(self, request: SetUserSkillRequest) -> UserSkill:
-        """Sets the skill value to the Toloker.
+        """Assigns a skill to a Toloker.
 
         Args:
-            request: To whom and what value of the skill to set.
+            request: Skill parameters.
 
         Returns:
-            UserSkill: Created fact of skill installation.
+            UserSkill: Updated skill information.
 
         Example:
             >>> from decimal import *
@@ -3158,7 +3158,7 @@ class TolokaClient:
     def delete_user_skill(self, user_skill_id: str) -> None:
         """Drop specific UserSkill
 
-        UserSkill describe the skill value for a specific Toloker.
+        `UserSkill` describes the skill value for a specific Toloker.
 
         Args:
             user_skill_id: ID of the fact that the Toloker has a skill to delete.

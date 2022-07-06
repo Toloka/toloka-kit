@@ -32,7 +32,7 @@ class Attachment(BaseTolokaObject, spec_enum='Type', spec_field='attachment_type
     ASSIGNMENT_ATTACHMENT = Type.ASSIGNMENT_ATTACHMENT
 
     class Details(BaseTolokaObject):
-        """Information about the pool, task, and Toloker from which the file was received.
+        """Information about the pool, task, and the Toloker from which the file was received.
 
         Attributes:
             user_id: ID of the Toloker from whom the file was received.

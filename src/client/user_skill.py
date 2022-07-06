@@ -18,7 +18,7 @@ class SetUserSkillRequest(BaseTolokaObject):
 
     Attributes:
         skill_id: Skill ID. What skill to set.
-        user_id: Toloker ID.
+        user_id: Toloker's ID.
         value: Fractional value of the skill. Minimum - 0, maximum - 100.
     """
 

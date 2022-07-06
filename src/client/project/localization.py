@@ -49,7 +49,7 @@ class LocalizationConfig(BaseTolokaObject):
     """Translates the part of the project visible to Tolokers into different languages
 
     It is used to make it easier for Tolokers from other countries who do not speak the necessary language to
-    understand and perform tasks.
+    understand and do tasks.
 
     Args:
         default_language: The source language used in the fields public_name, public_description, and public_instructions.

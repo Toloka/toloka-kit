@@ -317,7 +317,7 @@ class GoldenSet(CollectorConfig, spec_value=CollectorConfig.Type.GOLDEN_SET):
         parameters.history_size: The number of the Toloker's last responses to control tasks.
 
     Example:
-        How to approve all assignments if Toloker doing well with golden tasks.
+        How to approve all assignments if the Toloker gives correct answers in control tasks.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -384,7 +384,7 @@ class MajorityVote(CollectorConfig, spec_value=CollectorConfig.Type.MAJORITY_VOT
     """Majority vote is a quality control method based on coinciding responses from the majority
 
     The response chosen by the majority is considered correct, and other responses are considered incorrect.
-    Depending on the percentage of correct responses, you can either increase the Toloker's skill value, or ban the Toloker from tasks.
+    Depending on the percentage of correct responses, you can either increase the Toloker's skill value, or ban the Toloker.
 
     Used with conditions:
     * TotalAnswersCount - The number of completed tasks by the Toloker.
