@@ -50,7 +50,7 @@ Why it may be usefull:
 
 
 # Need more examples?
-If you have an example of data labeling using toloka-kit, do not hesitate to send it. Add a link to your GitHub repository and a description to this table via a [pool request](https://github.com/Toloka/toloka-kit/pulls).
+If you have an example of data labeling using toloka-kit, do not hesitate to send it. Add a link to your GitHub repository and a description to this table via a [pull request](https://github.com/Toloka/toloka-kit/pulls).
 
 Ideally, a great example should contain the following aspects:
 - Problem statement;
