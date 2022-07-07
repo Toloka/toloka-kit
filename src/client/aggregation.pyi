@@ -1,8 +1,10 @@
 """Module for aggregating results
 
-This module has methods to aggregate answers and to estimate confidence in aggregated labels. Use it when each task is assigned to several performers.  Note, that aggregation runs on the Toloka server.
+This module has methods to aggregate answers and to estimate confidence in aggregated labels.
+Use it when each task is assigned to several performers.  Note, that aggregation runs on the Toloka server.
 
-If you need advanced aggregation methods or want to run aggregation algorithms locally on your computer, try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit).
+If you need advanced aggregation methods or want to run aggregation algorithms locally on your computer,
+try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit).
 """
 
 __all__ = [

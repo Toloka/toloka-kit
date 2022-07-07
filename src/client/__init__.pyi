@@ -81,6 +81,7 @@ import toloka.client.filter
 import toloka.client.message_thread
 import toloka.client.operation_log
 import toloka.client.operations
+import toloka.client.owner
 import toloka.client.pool
 import toloka.client.project
 import toloka.client.requester
@@ -2430,7 +2431,8 @@ class TolokaClient:
         skill_ttl_hours: typing.Optional[int] = None,
         training: typing.Optional[bool] = None,
         public_name: typing.Optional[typing.Dict[str, str]] = None,
-        public_requester_description: typing.Optional[typing.Dict[str, str]] = None
+        public_requester_description: typing.Optional[typing.Dict[str, str]] = None,
+        owner: typing.Optional[toloka.client.owner.Owner] = None
     ) -> toloka.client.skill.Skill:
         """Creates a new Skill
 
@@ -4705,7 +4707,17 @@ class TolokaClient:
         pool_id: str,
         parameters: toloka.client.assignment.GetAssignmentsTsvParameters
     ) -> pandas.DataFrame:
-        """Downloads assignments as pandas.DataFrame. Requires toloka-kit[pandas] extras.
+        """Downloads assignments as pandas.DataFrame.
+
+        {% note warning %}
+
+        Requires toloka-kit[pandas] extras. Install it with the following command:
+
+        ```shell
+        pip install toloka-kit[pandas]
+        ```
+
+        {% endnote %}
 
         Experimental method.
         Implements the same behavior as if you download results in web-interface and then read it by pandas.
@@ -4748,7 +4760,17 @@ class TolokaClient:
         exclude_banned: typing.Optional[bool] = None,
         field: typing.Optional[typing.List[toloka.client.assignment.GetAssignmentsTsvParameters.Field]] = ...
     ) -> pandas.DataFrame:
-        """Downloads assignments as pandas.DataFrame. Requires toloka-kit[pandas] extras.
+        """Downloads assignments as pandas.DataFrame.
+
+        {% note warning %}
+
+        Requires toloka-kit[pandas] extras. Install it with the following command:
+
+        ```shell
+        pip install toloka-kit[pandas]
+        ```
+
+        {% endnote %}
 
         Experimental method.
         Implements the same behavior as if you download results in web-interface and then read it by pandas.
@@ -4787,20 +4809,18 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.AppProjectSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.AppProjectSearchResult:
-        """Finds all App projects that match certain rules.
+        """Finds App projects that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found App projects and whether there
-        are any more results.
-        It is better to use the [get_app_projects](toloka.client.TolokaClient.get_app_projects.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned projects is limited. Find remaining matching projects with subsequent `find_app_projects` calls.
+        To iterate over all matching projects you may use the [get_app_projects](toloka.client.TolokaClient.get_app_projects.md) method.
 
         Args:
-            request: How to search app projects.
+            request: Search criteria.
             sort: The order and direction of sorting the results.
-            limit: number of objects per page.
+            limit: Returned projects limit. The default limit is 50. The maximum limit is 100,000.
 
         Returns:
-            AppProjectSearchResult: The first `limit` App projects in `content`. And a mark that there is more.
+            AppProjectSearchResult: Found projects and a flag showing whether there are more matching projects.
         """
         ...
 
@@ -4828,35 +4848,34 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.AppProjectSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.AppProjectSearchResult:
-        """Finds all App projects that match certain rules.
+        """Finds App projects that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found App projects and whether there
-        are any more results.
-        It is better to use the [get_app_projects](toloka.client.TolokaClient.get_app_projects.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned projects is limited. Find remaining matching projects with subsequent `find_app_projects` calls.
+        To iterate over all matching projects you may use the [get_app_projects](toloka.client.TolokaClient.get_app_projects.md) method.
 
         Args:
-            request: How to search app projects.
+            request: Search criteria.
             sort: The order and direction of sorting the results.
-            limit: number of objects per page.
+            limit: Returned projects limit. The default limit is 50. The maximum limit is 100,000.
 
         Returns:
-            AppProjectSearchResult: The first `limit` App projects in `content`. And a mark that there is more.
+            AppProjectSearchResult: Found projects and a flag showing whether there are more matching projects.
         """
         ...
 
     @typing.overload
     def get_app_projects(self, request: toloka.client.search_requests.AppProjectSearchRequest) -> typing.Generator[toloka.client.app.AppProject, None, None]:
-        """Finds all App projects that match certain rules and returns them in an iterable object.
+        """Finds all App projects that match certain criteria.
 
-        Unlike find_app_projects, returns generator. Does not sort App projects.
-        While iterating over the result, several requests to the Toloka server is possible.
+        `get_app_projects` returns a generator. You can iterate over all found projects using the generator. Several requests to the Toloka server are possible while iterating.
+
+        If you need to sort projects use the [find_app_projects](toloka.client.TolokaClient.find_app_projects.md) method.
 
         Args:
-            request: How to search app projects.
+            request: Search criteria.
 
         Yields:
-            AppProject: The next object corresponding to the request parameters.
+            AppProject: Next matching project.
         """
         ...
 
@@ -4882,64 +4901,65 @@ class TolokaClient:
         created_gt: typing.Optional[datetime.datetime] = None,
         created_gte: typing.Optional[datetime.datetime] = None
     ) -> typing.Generator[toloka.client.app.AppProject, None, None]:
-        """Finds all App projects that match certain rules and returns them in an iterable object.
+        """Finds all App projects that match certain criteria.
 
-        Unlike find_app_projects, returns generator. Does not sort App projects.
-        While iterating over the result, several requests to the Toloka server is possible.
+        `get_app_projects` returns a generator. You can iterate over all found projects using the generator. Several requests to the Toloka server are possible while iterating.
+
+        If you need to sort projects use the [find_app_projects](toloka.client.TolokaClient.find_app_projects.md) method.
 
         Args:
-            request: How to search app projects.
+            request: Search criteria.
 
         Yields:
-            AppProject: The next object corresponding to the request parameters.
+            AppProject: Next matching project.
         """
         ...
 
     def create_app_project(self, app_project: toloka.client.app.AppProject) -> toloka.client.app.AppProject:
-        """Creating a new App project.
+        """Creates an App project in Toloka.
 
         Args:
-            app_project: New AppProject with setted parameters.
+            app_project: The project with parameters.
 
         Returns:
-            UserBonusBatchCreateResult: Created AppProject.
+            AppProject: Created App project with updated parameters.
         """
         ...
 
     def get_app_project(self, app_project_id: str) -> toloka.client.app.AppProject:
-        """Project information.
+        """Gets information from Toloka about an App project.
 
         Args:
-            app_project_id: Project ID.
+            app_project_id: The ID of the project.
 
         Returns:
-            AppProject: the AppProject.
+            AppProject: The App project.
         """
         ...
 
     def archive_app_project(self, app_project_id: str) -> toloka.client.app.AppProject:
-        """Archiving the project.
+        """Archives an App project.
 
-        The project changes its status to ARCHIVE.
+        The project changes its status to `ARCHIVED`.
 
         Args:
-            app_project_id: Project ID.
+            app_project_id: The ID of the project.
 
         Returns:
-            AppProject: Object with updated status.
+            AppProject: The App project with updated status.
         """
         ...
 
     def unarchive_app_project(self, app_project_id: str) -> toloka.client.app.AppProject:
-        """Unarchiving the project.
+        """Unarchives an App project.
 
-        The project changes its status to the last one it had before archiving.
+        Previous project status, which was before archiving, is restored.
 
         Args:
-            app_project_id: Project ID.
+            app_project_id: The ID of the project.
 
         Returns:
-            AppProject: Object with updated status.
+            AppProject: The App project with updated status.
         """
         ...
 
@@ -4950,20 +4970,19 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.AppSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.AppSearchResult:
-        """Finds all Apps that match certain rules.
+        """Finds App solutions that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found Apps and whether there
-        are any more results.
-        It is better to use the [get_apps](toloka.client.TolokaClient.get_apps.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned solutions is limited. Find remaining matching solutions with subsequent `find_apps` calls.
+
+        To iterate over all matching solutions you may use the [get_apps](toloka.client.TolokaClient.get_apps.md) method.
 
         Args:
-            request: How to search Apps.
-            sort: The order and direction of sorting the results.
-            limit: number of objects per page.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned solutions limit. The default limit is 50. The maximum allowed limit is 100,000.
 
         Returns:
-            AppSearchResult: The first `limit` Apps in `content`. And a mark that there is more.
+            AppSearchResult: Found solutions and a flag showing whether there are more matching solutions.
         """
         ...
 
@@ -4982,35 +5001,35 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.AppSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.AppSearchResult:
-        """Finds all Apps that match certain rules.
+        """Finds App solutions that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found Apps and whether there
-        are any more results.
-        It is better to use the [get_apps](toloka.client.TolokaClient.get_apps.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned solutions is limited. Find remaining matching solutions with subsequent `find_apps` calls.
+
+        To iterate over all matching solutions you may use the [get_apps](toloka.client.TolokaClient.get_apps.md) method.
 
         Args:
-            request: How to search Apps.
-            sort: The order and direction of sorting the results.
-            limit: number of objects per page.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned solutions limit. The default limit is 50. The maximum allowed limit is 100,000.
 
         Returns:
-            AppSearchResult: The first `limit` Apps in `content`. And a mark that there is more.
+            AppSearchResult: Found solutions and a flag showing whether there are more matching solutions.
         """
         ...
 
     @typing.overload
     def get_apps(self, request: toloka.client.search_requests.AppSearchRequest) -> typing.Generator[toloka.client.app.App, None, None]:
-        """Finds all Apps that match certain rules and returns them in an iterable object.
+        """Finds all App solutions that match certain criteria.
 
-        Unlike find_apps, returns generator. Does not sort Apps.
-        While iterating over the result, several requests to the Toloka server is possible.
+        `get_apps` returns a generator. You can iterate over all found solutions using the generator. Several requests to the Toloka server are possible while iterating.
+
+        If you need to sort solutions use the [find_apps](toloka.client.TolokaClient.find_apps.md) method.
 
         Args:
-            request: How to search Apps.
+            request: Search criteria.
 
         Yields:
-            App: The next object corresponding to the request parameters.
+            App: Next matching solution.
         """
         ...
 
@@ -5027,27 +5046,28 @@ class TolokaClient:
         name_gt: typing.Optional[str] = None,
         name_gte: typing.Optional[str] = None
     ) -> typing.Generator[toloka.client.app.App, None, None]:
-        """Finds all Apps that match certain rules and returns them in an iterable object.
+        """Finds all App solutions that match certain criteria.
 
-        Unlike find_apps, returns generator. Does not sort Apps.
-        While iterating over the result, several requests to the Toloka server is possible.
+        `get_apps` returns a generator. You can iterate over all found solutions using the generator. Several requests to the Toloka server are possible while iterating.
+
+        If you need to sort solutions use the [find_apps](toloka.client.TolokaClient.find_apps.md) method.
 
         Args:
-            request: How to search Apps.
+            request: Search criteria.
 
         Yields:
-            App: The next object corresponding to the request parameters.
+            App: Next matching solution.
         """
         ...
 
     def get_app(self, app_id: str) -> toloka.client.app.App:
-        """Information about the App.
+        """Gets information from Toloka about an App solution.
 
         Args:
-            app_id: App ID.
+            app_id: The ID of the solution.
 
         Returns:
-            App: the App.
+            App: The App solution.
         """
         ...
 
@@ -5059,21 +5079,20 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.AppItemSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.AppItemSearchResult:
-        """Finds all work items in the App project that match certain rules.
+        """Finds task items that match certain criteria in an App project.
 
-        As a result, it returns an object that contains the first part of the found work items in the App project
-        and whether there are any more results.
-        It is better to use the [get_app_items](toloka.client.TolokaClient.get_app_items.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned items is limited. Find remaining matching items with subsequent `find_app_items` calls.
+
+        To iterate over all matching items you may use the [get_app_items](toloka.client.TolokaClient.get_app_items.md) method.
 
         Args:
-            app_project_id: Project ID.
-            request: How to search App items.
-            sort: The order and direction of sorting the results.
-            limit: number of objects per page.
+            app_project_id: The ID of the App project.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned items limit. The default limit is 50. The maximum allowed limit is 100,000.
 
         Returns:
-            AppItemSearchResult: The first `limit` App items in `content`. And a mark that there is more.
+            AppItemSearchResult: Found task items and a flag showing whether there are more matching items.
         """
         ...
 
@@ -5095,21 +5114,20 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.AppItemSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.AppItemSearchResult:
-        """Finds all work items in the App project that match certain rules.
+        """Finds task items that match certain criteria in an App project.
 
-        As a result, it returns an object that contains the first part of the found work items in the App project
-        and whether there are any more results.
-        It is better to use the [get_app_items](toloka.client.TolokaClient.get_app_items.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned items is limited. Find remaining matching items with subsequent `find_app_items` calls.
+
+        To iterate over all matching items you may use the [get_app_items](toloka.client.TolokaClient.get_app_items.md) method.
 
         Args:
-            app_project_id: Project ID.
-            request: How to search App items.
-            sort: The order and direction of sorting the results.
-            limit: number of objects per page.
+            app_project_id: The ID of the App project.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned items limit. The default limit is 50. The maximum allowed limit is 100,000.
 
         Returns:
-            AppItemSearchResult: The first `limit` App items in `content`. And a mark that there is more.
+            AppItemSearchResult: Found task items and a flag showing whether there are more matching items.
         """
         ...
 
@@ -5119,16 +5137,18 @@ class TolokaClient:
         app_project_id: str,
         request: toloka.client.search_requests.AppItemSearchRequest
     ) -> typing.Generator[toloka.client.app.AppItem, None, None]:
-        """Finds all work items in the App project that match certain rules and returns them in an iterable object.
+        """Finds all App task items that match certain criteria in an App project.
 
-        Unlike find_app_items, returns generator. Does not sort work items in the App project.
-        While iterating over the result, several requests to the Toloka server is possible.
+        `get_app_items` returns a generator. You can iterate over all found items using the generator. Several requests to the Toloka server are possible while iterating.
+
+        If you need to sort items use the [find_app_items](toloka.client.TolokaClient.find_app_items.md) method.
 
         Args:
-            request: How to search App items.
+            app_project_id: The ID of the App project.
+            request: Search criteria.
 
         Yields:
-            AppItem: The next object corresponding to the request parameters.
+            AppItem: Next matching item.
         """
         ...
 
@@ -5148,16 +5168,18 @@ class TolokaClient:
         created_at_gt: typing.Optional[datetime.datetime] = None,
         created_at_gte: typing.Optional[datetime.datetime] = None
     ) -> typing.Generator[toloka.client.app.AppItem, None, None]:
-        """Finds all work items in the App project that match certain rules and returns them in an iterable object.
+        """Finds all App task items that match certain criteria in an App project.
 
-        Unlike find_app_items, returns generator. Does not sort work items in the App project.
-        While iterating over the result, several requests to the Toloka server is possible.
+        `get_app_items` returns a generator. You can iterate over all found items using the generator. Several requests to the Toloka server are possible while iterating.
+
+        If you need to sort items use the [find_app_items](toloka.client.TolokaClient.find_app_items.md) method.
 
         Args:
-            request: How to search App items.
+            app_project_id: The ID of the App project.
+            request: Search criteria.
 
         Yields:
-            AppItem: The next object corresponding to the request parameters.
+            AppItem: Next matching item.
         """
         ...
 
@@ -5166,14 +5188,14 @@ class TolokaClient:
         app_project_id: str,
         app_item: toloka.client.app.AppItem
     ) -> toloka.client.app.AppItem:
-        """Adding a new work item.
+        """Creates an App task item in Toloka.
 
         Args:
-            app_project_id: Project ID.
-            app_item: New AppItem with setted parameters.
+            app_project_id: The ID of the App project to create the item in.
+            app_item: The task item with parameters.
 
         Returns:
-            UserBonusBatchCreateResult: Created AppItem.
+            AppItem: Created App task item with updated parameters.
         """
         ...
 
@@ -5183,11 +5205,11 @@ class TolokaClient:
         app_project_id: str,
         request: toloka.client.app.AppItemsCreateRequest
     ):
-        """Creating a batch of new items.
+        """Creates task items in an App project in Toloka and adds them to an existing batch.
 
         Args:
-            app_project_id: Project ID.
-            request: request for App items creation controlling.
+            app_project_id: The ID of the App project.
+            request: The request parameters.
         """
         ...
 
@@ -5199,11 +5221,11 @@ class TolokaClient:
         batch_id: typing.Optional[str] = None,
         items: typing.Optional[typing.List[typing.Dict[str, typing.Any]]] = None
     ):
-        """Creating a batch of new items.
+        """Creates task items in an App project in Toloka and adds them to an existing batch.
 
         Args:
-            app_project_id: Project ID.
-            request: request for App items creation controlling.
+            app_project_id: The ID of the App project.
+            request: The request parameters.
         """
         ...
 
@@ -5212,14 +5234,14 @@ class TolokaClient:
         app_project_id: str,
         app_item_id: str
     ) -> toloka.client.app.AppItem:
-        """Information about one work item.
+        """Gets information from Toloka about an App task item.
 
         Args:
-            app_project_id: Project ID.
-            app_item_id: Item ID
+            app_project_id: The ID of the App project.
+            app_item_id: The ID of the item.
 
         Returns:
-            AppItem: the AppItem.
+            AppItem: The App task item.
         """
         ...
 
@@ -5231,21 +5253,20 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.AppBatchSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.AppBatchSearchResult:
-        """Finds all batches in the App project that match certain rules.
+        """Finds batches that match certain criteria in an App project.
 
-        As a result, it returns an object that contains the first part of the found batches in the App project
-        and whether there are any more results.
-        It is better to use the [get_app_batches](toloka.client.TolokaClient.get_app_batches.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned batches is limited. Find remaining matching batches with subsequent `find_app_batches` calls.
+
+        To iterate over all matching batches you may use the [get_app_batches](toloka.client.TolokaClient.get_app_batches.md) method.
 
         Args:
-            app_project_id: Project ID.
-            request: How to search batches.
-            sort: The order and direction of sorting the results.
-            limit: number of objects per page.
+            app_project_id: The ID of the App project.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned batches limit. The default limit is 50. The maximum allowed limit is 100,000.
 
         Returns:
-            AppBatchSearchResult: The first `limit` batches in `content`. And a mark that there is more.
+            AppBatchSearchResult: Found batches and a flag showing whether there are more matching batches.
         """
         ...
 
@@ -5270,21 +5291,20 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.AppBatchSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.AppBatchSearchResult:
-        """Finds all batches in the App project that match certain rules.
+        """Finds batches that match certain criteria in an App project.
 
-        As a result, it returns an object that contains the first part of the found batches in the App project
-        and whether there are any more results.
-        It is better to use the [get_app_batches](toloka.client.TolokaClient.get_app_batches.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned batches is limited. Find remaining matching batches with subsequent `find_app_batches` calls.
+
+        To iterate over all matching batches you may use the [get_app_batches](toloka.client.TolokaClient.get_app_batches.md) method.
 
         Args:
-            app_project_id: Project ID.
-            request: How to search batches.
-            sort: The order and direction of sorting the results.
-            limit: number of objects per page.
+            app_project_id: The ID of the App project.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned batches limit. The default limit is 50. The maximum allowed limit is 100,000.
 
         Returns:
-            AppBatchSearchResult: The first `limit` batches in `content`. And a mark that there is more.
+            AppBatchSearchResult: Found batches and a flag showing whether there are more matching batches.
         """
         ...
 
@@ -5294,16 +5314,18 @@ class TolokaClient:
         app_project_id: str,
         request: toloka.client.search_requests.AppBatchSearchRequest
     ) -> typing.Generator[toloka.client.app.AppBatch, None, None]:
-        """Finds all batches in the App project that match certain rules and returns them in an iterable object.
+        """Finds all batches that match certain criteria in an App project.
 
-        Unlike find_app_batches, returns generator. Does not sort batches in the App project.
-        While iterating over the result, several requests to the Toloka server is possible.
+        `get_app_batches` returns a generator. You can iterate over all found batches using the generator. Several requests to the Toloka server are possible while iterating.
+
+        If you need to sort batches use the [find_app_batches](toloka.client.TolokaClient.find_app_batches.md) method.
 
         Args:
-            request: How to search batches.
+            app_project_id: The ID of the App project.
+            request: Search criteria.
 
         Yields:
-            AppBatch: The next object corresponding to the request parameters.
+            AppBatch: Next matching batch.
         """
         ...
 
@@ -5326,16 +5348,18 @@ class TolokaClient:
         created_at_gt: typing.Optional[datetime.datetime] = None,
         created_at_gte: typing.Optional[datetime.datetime] = None
     ) -> typing.Generator[toloka.client.app.AppBatch, None, None]:
-        """Finds all batches in the App project that match certain rules and returns them in an iterable object.
+        """Finds all batches that match certain criteria in an App project.
 
-        Unlike find_app_batches, returns generator. Does not sort batches in the App project.
-        While iterating over the result, several requests to the Toloka server is possible.
+        `get_app_batches` returns a generator. You can iterate over all found batches using the generator. Several requests to the Toloka server are possible while iterating.
+
+        If you need to sort batches use the [find_app_batches](toloka.client.TolokaClient.find_app_batches.md) method.
 
         Args:
-            request: How to search batches.
+            app_project_id: The ID of the App project.
+            request: Search criteria.
 
         Yields:
-            AppBatch: The next object corresponding to the request parameters.
+            AppBatch: Next matching batch.
         """
         ...
 
@@ -5345,14 +5369,14 @@ class TolokaClient:
         app_project_id: str,
         request: toloka.client.app.AppBatchCreateRequest
     ) -> toloka.client.app.AppBatch:
-        """Creating a new batch.
+        """Creates a batch with task items in an App project in Toloka.
 
         Args:
-            app_project_id: Project ID.
-            request: request for AppBatch creation controlling.
+            app_project_id: The ID of the project.
+            request: The request parameters.
 
         Returns:
-            UserBonusBatchCreateResult: Created AppItem.
+            AppBatch: Created batch with updated parameters.
         """
         ...
 
@@ -5363,14 +5387,14 @@ class TolokaClient:
         *,
         items: typing.Optional[typing.List[typing.Dict[str, typing.Any]]] = None
     ) -> toloka.client.app.AppBatch:
-        """Creating a new batch.
+        """Creates a batch with task items in an App project in Toloka.
 
         Args:
-            app_project_id: Project ID.
-            request: request for AppBatch creation controlling.
+            app_project_id: The ID of the project.
+            request: The request parameters.
 
         Returns:
-            UserBonusBatchCreateResult: Created AppItem.
+            AppBatch: Created batch with updated parameters.
         """
         ...
 
@@ -5379,14 +5403,14 @@ class TolokaClient:
         app_project_id: str,
         app_batch_id: str
     ) -> toloka.client.app.AppBatch:
-        """Batch information.
+        """"Gets information from Toloka about a batch in an App project.
 
         Args:
-            app_project_id: Project ID.
-            app_batch_id: Batch ID
+            app_project_id: The ID of the project.
+            app_batch_id: The ID of the batch.
 
         Returns:
-            AppBatch: the AppBatch.
+            AppBatch: The App batch.
         """
         ...
 
@@ -5395,13 +5419,11 @@ class TolokaClient:
         app_project_id: str,
         app_batch_id: str
     ):
-        """Start processing the batch.
-
-        Starts asynchronously.
+        """Launches annotation of a batch of task items in an App project.
 
         Args:
-            app_project_id: Project ID.
-            app_batch_id: Batch ID.
+            app_project_id: The ID of the project.
+            app_batch_id: The ID of the batch.
         """
         ...
 

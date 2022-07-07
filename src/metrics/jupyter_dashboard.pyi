@@ -1,5 +1,14 @@
-"""Classes for creating online dashboards with tolokas metrics in jupyter notebooks. Requires
-toloka-kit[jupyter-metrics] extras.
+"""Classes for creating online dashboards with tolokas metrics in jupyter notebooks.
+
+{% note warning %}
+
+Requires toloka-kit[jupyter-metrics] extras. Install it with the following command:
+
+```shell
+pip install toloka-kit[jupyter-metrics]
+```
+
+{% endnote %}
 
 For usage examples see DashBoard.
 """
