@@ -15,7 +15,7 @@ class Skill(BaseTolokaObject):
     Skill is a general grouping entity, for example "image annotation", which is created once and then used.
     To set the Skill value for a specific Toloker, use UserSkill.
     You can set up skill calculation in a quality control rule, or manually set the skill level for a Toloker.
-    You can use skills to select Tolokers which are allowed to do your tasks.
+    You can use skills to select Tolokers which are allowed to complete your tasks.
 
     Attributes:
         name: Skill name.

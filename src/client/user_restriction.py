@@ -84,7 +84,7 @@ class UserRestriction(BaseTolokaObject, spec_enum='Scope', spec_field='scope'):
 
 @inherit_docstrings
 class AllProjectsUserRestriction(UserRestriction, spec_value=UserRestriction.ALL_PROJECTS):
-    """Forbid the Toloker to do tasks from all your projects
+    """Forbid the Toloker to complete tasks from all your projects
     """
 
     pass
@@ -92,7 +92,7 @@ class AllProjectsUserRestriction(UserRestriction, spec_value=UserRestriction.ALL
 
 @inherit_docstrings
 class PoolUserRestriction(UserRestriction, spec_value=UserRestriction.POOL):
-    """Forbid the Toloker to do tasks from a specific pool
+    """Forbid the Toloker to complete tasks from a specific pool
 
     Attributes:
         pool_id: Pool identifier to which access will be denied.
@@ -103,7 +103,7 @@ class PoolUserRestriction(UserRestriction, spec_value=UserRestriction.POOL):
 
 @inherit_docstrings
 class ProjectUserRestriction(UserRestriction, spec_value=UserRestriction.PROJECT):
-    """Forbid the Toloker to do tasks from a specific project
+    """Forbid the Toloker to complete tasks from a specific project
 
     Attributes:
         project_id: Project identifier to which access will be denied.

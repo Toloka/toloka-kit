@@ -116,7 +116,7 @@ class AcceptanceRate(CollectorConfig, spec_value=CollectorConfig.Type.ACCEPTANCE
 
 @inherit_docstrings
 class AnswerCount(CollectorConfig, spec_value=CollectorConfig.Type.ANSWER_COUNT):
-    """How many assignments was accepted from a Toloker.
+    """How many assignments were accepted from a Toloker.
 
     Use this rule if you want to:
     - Get responses from as many Tolokers as possible (for this purpose, set a low threshold, such as one task suite).
@@ -124,7 +124,7 @@ class AnswerCount(CollectorConfig, spec_value=CollectorConfig.Type.ANSWER_COUNT)
     - Mark Tolokers completing a task so that you can filter them later in the checking project.
 
     Used with conditions:
-    * AssignmentsAcceptedCount - How many assignments was accepted from Toloker.
+    * AssignmentsAcceptedCount - How many assignments were accepted from a Toloker.
 
     Used with actions:
     * RestrictionV2 - Block access to projects or pools.
