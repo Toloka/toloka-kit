@@ -15,10 +15,12 @@ import typing
 
 
 class _AppError(toloka.client.primitives.base.BaseTolokaObject):
-    """Attributes:
-        code: String error code.
-        message: Detailed description of the error.
-        payload: Additional information about the error. May have different structure for different errors.
+    """A structure for describing errors which may appear while working with App projects.
+
+    Attributes:
+        code: The short name of the error.
+        message: The detailed description of the error.
+        payload: Additional data provided with the error.
     """
 
     def __init__(
@@ -39,24 +41,26 @@ class _AppError(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppProject(toloka.client.primitives.base.BaseTolokaObject):
-    """An App project with the parameters that you specify when creating it. It will have the interface and quality
-    control already pre-configured, decomposition done, and everything ready to use: all you need is to upload batches
-    and send them for labeling.
+    """An [App](https://toloka.ai/en/docs/toloka-apps/concepts/) project.
+
+    An App project is based on one of App solutions. It is created with a template interface and preconfigured data specification and quality control rules.
+
+    To get available App solutions use the [get_apps](toloka.client.TolokaClient.get_apps.md) method.
 
     Attributes:
-        app_id:
-        parent_app_project_id:
-        name:
-        parameters:
-        id:
-        status: Project statuses for asynchronous creation. Allowed values:
-            * CREATING
-            * READY
-            * ARCHIVE
-            * ERROR
-        created:
-        item_price:
-        errors:
+        app_id: The ID of the App solution used to create the project.
+        parent_app_project_id The ID of the parent project. It is set if this project is a clone of other project. Otherwise it is empty.
+        name: The project name.
+        parameters: Parameters of the solution. The parameters should follow the schema described in the `param_spec` field of the [solution](toloka.client.app.App.md).
+        id: The ID of the project.
+        status: The project status:
+            * `CREATING` — Toloka is checking the project.
+            * `READY` — The project is active.
+            * `ARCHIVED` — The project was archived.
+            * `ERROR` — Project creation failed due to errors.
+        created: The date and time when the project was created.
+        item_price: The price you pay for a processed item.
+        errors: Errors found during a project check.
     """
 
     class Status(toloka.util._extendable_enum.ExtendableStrEnum):
@@ -98,20 +102,21 @@ class AppProject(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class App(toloka.client.primitives.base.BaseTolokaObject):
-    """An example of a standard task that you want to solve using Toloka. Unlike project templates, you don't have to
-    set up everything yourself.
+    """An [App](https://toloka.ai/en/docs/toloka-apps/concepts/) solution.
+
+    Each App solution targets specific type of tasks which can be solved using Toloka.
 
     Attributes:
-        id: ID of the App.
-        name:
-        image: Image.
-        description: Overview.
-        constraints_description: Description of limitations.
-        default_item_price: Default processing cost per work item.
-        param_spec: Specification of parameters for creating a project.
-        input_spec: Schema of input data in Toloka format.
-        output_spec: Schema of output data in Toloka format.
-        examples: Task examples.
+        id: The ID of the App solution.
+        name: The solution name.
+        image: A link to the solution interface preview image.
+        description: The solution description.
+        constraints_description: The description of limitations.
+        default_item_price: The default cost of one annotated item.
+        param_spec: The specification of parameters used to create a project.
+        input_spec: The schema of solution input data.
+        output_spec: The schema of solution output data.
+        examples: Example description of tasks which can be solved with this solution.
     """
 
     def __init__(
@@ -146,30 +151,28 @@ class App(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppItem(toloka.client.primitives.base.BaseTolokaObject):
-    """A work item with data. It's uploaded into the batch with other items to be collectively sent for labeling.
-    In a TSV file with tasks, each line is a work item.
+    """A task item.
+
+    Items are uploaded to Toloka and are grouped in batches. After uploading the status of items is set to `NEW`. Items with that status can be edited. Then entire batches are sent for labeling.
 
     Attributes:
-        batch_id: ID of the batch that includes the item.
-        input_data: The item data following the App schema.
-        id: Item ID.
-        app_project_id: ID of the app project that includes the batch with this item.
-        created:
-        updated:
-        status: Processing status. If the item has the NEW status, it can be edited. In other statuses, the item is
-            immutable. Allowed values:
-            * NEW - new;
-            * PROCESSING - being processed;
-            * COMPLETED - processing complete;
-            * ERROR - error during processing;
-            * CANCELLED - processing canceled;
-            * ARCHIVE - item has been archived;
-            * NO_MONEY - not enough money for processing.
-        output_data: Processing result.
-        errors:
-        created_at: Date and time when the item was created.
-        started_at: Date and time when the item processing started.
-        finished_at: Date and time when the item processing was completed.
+        id: The ID of the item.
+        app_project_id: The ID of the project that contains the item.
+        batch_id: The ID of the batch that contains the item.
+        input_data: Input data. It must follow the solution schema described in `App.input_spec`.
+        status: The item status:
+            * `NEW` — The item is uploaded to Toloka and ready for processing.
+            * `PROCESSING` — The item is being processed by Tolokers.
+            * `COMPLETED` — Item annotation is completed.
+            * `ERROR` — An error occurred during processing.
+            * `CANCELLED` — Item processing cancelled.
+            * `ARCHIVE` — The item is archived.
+            * `NO_MONEY` — There are not enough money for processing.
+        output_data: Annotated data.
+        errors: Errors occurred during annotation.
+        created_at: The date and time when the item was created.
+        started_at: The date and time when the item processing started.
+        finished_at: The date and time when the item processing was completed.
     """
 
     class Status(toloka.util._extendable_enum.ExtendableStrEnum):
@@ -220,11 +223,11 @@ class AppItem(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppItemsCreateRequest(toloka.client.primitives.base.BaseTolokaObject):
-    """Request Body.
+    """Parameters of a request for creating multiple items.
 
     Attributes:
-        batch_id: Batch ID.
-        items: list of items.
+        batch_id: The ID of the batch to place items to.
+        items: A list with items. The items must follow the solution schema described in `App.input_spec`.
     """
 
     def __init__(
@@ -243,26 +246,28 @@ class AppItemsCreateRequest(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppBatch(toloka.client.primitives.base.BaseTolokaObject):
-    """A batch of data that you send for labeling at a time. The batch consists of work items.
+    """An App batch.
+
+    A batch contains task items that are sent for labeling together.
 
     Attributes:
-        id: Batch ID.
-        app_project_id: Project ID.
-        name:
-        status: The state of the batch, calculated based on the states of items comprising it. Allowed values:
-            * NEW
-            * PROCESSING
-            * COMPLETED
-            * ERROR
-            * CANCELLED
-            * ARCHIVE
-            * NO_MONEY
-        items_count: Number of items in the batch.
-        item_price: The cost of processing per item in a batch.
-        cost: The cost of processing per batch.
-        created_at: Date and time when the batch was created.
-        started_at: Date and time when batch processing started.
-        finished_at: Date and time when batch processing was completed.
+        id: The ID of the batch.
+        app_project_id: The ID of the project containing the batch.
+        name: The batch name.
+        status: The batch status:
+            * `NEW` — The processing of the batch items is not started.
+            * `PROCESSING` — Batch items are being processed by Tolokers.
+            * `COMPLETED` — Annotation of all batch items is completed.
+            * `ERROR` — An error occurred during processing.
+            * `CANCELLED` — Batch processing cancelled.
+            * `ARCHIVE` — The batch is archived.
+            * `NO_MONEY` — There are not enough money for processing.
+        items_count: The number of items in the batch.
+        item_price: The cost of processing a single item in the batch.
+        cost: The cost of processing the batch.
+        created_at: The date and time when the batch was created.
+        started_at: The date and time when batch processing started.
+        finished_at: The date and time when batch processing was completed.
     """
 
     class Status(toloka.util._extendable_enum.ExtendableStrEnum):
@@ -309,10 +314,10 @@ class AppBatch(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppBatchCreateRequest(toloka.client.primitives.base.BaseTolokaObject):
-    """Request Body.
+    """Parameters of a request for creating multiple App task items in a batch.
 
     Attributes:
-        items: The item data following the App schema.
+        items: A list with task items. The items must follow the solution schema described in `App.input_spec`.
     """
 
     def __init__(self, *, items: typing.Optional[typing.List[typing.Dict[str, typing.Any]]] = None) -> None:

@@ -2,6 +2,7 @@ __all__ = [
     'Skill',
 ]
 import datetime
+import toloka.client.owner
 import toloka.client.primitives.base
 import typing
 
@@ -27,6 +28,7 @@ class Skill(toloka.client.primitives.base.BaseTolokaObject):
             * False - The skill isn't related to a training pool.
         public_name: Skill name for other users. You can provide a name in several languages (the message will come in the user's language).
         public_requester_description: Skill description text for other users. You can provide text in several languages (the message will come in the user's language).
+        owner: Skill owner.
         id: Skill ID. Read only field.
         created: The UTC date and time when the skill was created. Read only field.
 
@@ -63,6 +65,7 @@ class Skill(toloka.client.primitives.base.BaseTolokaObject):
         training: typing.Optional[bool] = None,
         public_name: typing.Optional[typing.Dict[str, str]] = None,
         public_requester_description: typing.Optional[typing.Dict[str, str]] = None,
+        owner: typing.Optional[toloka.client.owner.Owner] = None,
         id: typing.Optional[str] = None,
         created: typing.Optional[datetime.datetime] = None
     ) -> None:
@@ -78,5 +81,6 @@ class Skill(toloka.client.primitives.base.BaseTolokaObject):
     training: typing.Optional[bool]
     public_name: typing.Optional[typing.Dict[str, str]]
     public_requester_description: typing.Optional[typing.Dict[str, str]]
+    owner: typing.Optional[toloka.client.owner.Owner]
     id: typing.Optional[str]
     created: typing.Optional[datetime.datetime]

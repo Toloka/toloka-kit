@@ -104,7 +104,7 @@ class RestrictionV2(RuleAction):
             * `PROJECT` — A performer can't access the entire project containing the pool.
             * `ALL_PROJECTS` — A performer can't access any requester's project.
         parameters.duration: The duration of the blocking period measured in `duration_unit`.
-        parameters.duration_unit: 
+        parameters.duration_unit:
             * `MINUTES`;
             * `HOURS`;
             * `DAYS`;
@@ -173,7 +173,7 @@ class RestrictionV2(RuleAction):
 class SetSkillFromOutputField(RuleAction):
     """Sets performer's skill value to the percentage of correct or incorrect answers.
 
-    You can use this action with [MajorityVote](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.MajorityVote) and [GoldenSet](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.GoldenSet) collectors.
+    You can use this action with [MajorityVote](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.MajorityVote) and [GoldenSet](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.GoldenSet) collectors.  # noqa: E501
 
     Attributes:
         parameters.skill_id: The ID of the skill to update.
@@ -237,7 +237,7 @@ class SetSkillFromOutputField(RuleAction):
 class ChangeOverlap(RuleAction):
     """Increases the overlap of a task.
 
-    You can use this rule only with [UsersAssessment](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.UsersAssessment) and [AssignmentsAssessment](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.AssignmentsAssessment) collectors.
+    You can use this rule only with [UsersAssessment](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.UsersAssessment) and [AssignmentsAssessment](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.AssignmentsAssessment) collectors.  # noqa: E501
 
     Attributes:
         parameters.delta: An overlap increment.

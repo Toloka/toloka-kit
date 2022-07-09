@@ -415,16 +415,13 @@ class WebhookSubscriptionSearchResult(toloka.client.primitives.base.BaseTolokaOb
 
 
 class AppProjectSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found App projects and whether there is something else on the original request.
-
-    It's better to use TolokaClient.get_app_projects(),
-    which already implements the correct handling of the search result.
+    """The result of searching App projects.
 
     Attributes:
-        items: List of found App projects.
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        content: A list with found App projects.
+        has_more: A flag showing whether there are more matching projects.
+            * True — There are more matching projects, not included in `content` due to the limit set in the search request.
+            * False — `content` contains all matching projects.
     """
 
     def __init__(
@@ -443,16 +440,13 @@ class AppProjectSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found Apps and whether there is something else on the original request.
-
-    It's better to use TolokaClient.get_apps(),
-    which already implements the correct handling of the search result.
+    """The result of searching App projects.
 
     Attributes:
-        items: List of found Apps.
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        content: A list with found App solutions.
+        has_more: A flag showing whether there are more matching solutions.
+            * True — There are more matching solutions, not included in `content` due to the limit set in the search request.
+            * False — `content` contains all matching solutions.
     """
 
     def __init__(
@@ -471,16 +465,13 @@ class AppSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppItemSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found work items in the App project and whether there is something else on the original request.
-
-    It's better to use TolokaClient.get_app_items(),
-    which already implements the correct handling of the search result.
+    """The result of searching App task items.
 
     Attributes:
-        items: List of found work items in the App project.
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        content: A list with found App task items.
+        has_more: A flag showing whether there are more matching task items.
+            * True — There are more matching task items, not included in `content` due to the limit set in the search request.
+            * False — `content` contains all matching task items.
     """
 
     def __init__(
@@ -499,16 +490,13 @@ class AppItemSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppBatchSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found batches in the App project and whether there is something else on the original request.
-
-    It's better to use TolokaClient.get_app_batches(),
-    which already implements the correct handling of the search result.
+    """The result of searching batches in an App project.
 
     Attributes:
-        items: List of found batches in the App project.
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        content: A list with found App batches.
+        has_more: A flag showing whether there are more matching batches.
+            * True — There are more matching batches, not included in `content` due to the limit set in the search request.
+            * False — `content` contains all matching batches.
     """
 
     def __init__(
