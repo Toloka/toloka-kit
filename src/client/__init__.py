@@ -479,22 +479,22 @@ class TolokaClient:
     def find_aggregated_solutions(self, operation_id: str, request: search_requests.AggregatedSolutionSearchRequest,
                                   sort: Union[List[str], search_requests.AggregatedSolutionSortItems, None] = None,
                                   limit: Optional[int] = None) -> search_results.AggregatedSolutionSearchResult:
-        """Gets aggregated responses from Toloka that match certain criteria.
+        """Finds aggregated responses that match certain criteria.
 
-        Pass to the `find_aggregated_solutions` the ID of the operation started by the [aggregate_solutions_by_pool](toloka.client.TolokaClient.aggregate_solutions_by_pool.md) method.
+        Pass the ID of the operation started by the [aggregate_solutions_by_pool](toloka.client.TolokaClient.aggregate_solutions_by_pool.md) method to the `find_aggregated_solutions`.
 
-        The number of returned aggregated responses is limited. To find remaining matching responses, call `find_aggregated_solutions` with updated filter criteria.
+        The number of returned aggregated responses is limited. Find remaining matching responses with subsequent `find_aggregated_solutions` calls.
 
-        To iterate over all aggregated responses in one call use [get_aggregated_solutions](toloka.client.TolokaClient.get_aggregated_solutions.md).
+        To iterate over all matching aggregated responses you may use the [get_aggregated_solutions](toloka.client.TolokaClient.get_aggregated_solutions.md) method.
 
         Args:
             operation_id: The ID of the aggregation operation.
-            request: Filter criteria.
-            sort: Sorting options. Default value: `None`.
-            limit: Returned aggregated responses limit. The maximum value is 100,000. Default value: 50.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned aggregated responses limit. The default limit is 50. The maximum allowed limit is 100,000.
 
         Returns:
-            search_results.AggregatedSolutionSearchResult: Found responses and a flag showing whether there are more matching responses.
+            AggregatedSolutionSearchResult: Found responses and a flag showing whether there are more matching responses exceeding the limit.
 
         Example:
             The example shows how to get all aggregated responses using the `find_aggregated_solutions` method.
@@ -585,19 +585,19 @@ class TolokaClient:
     def find_assignments(self, request: search_requests.AssignmentSearchRequest,
                          sort: Union[List[str], search_requests.AssignmentSortItems, None] = None,
                          limit: Optional[int] = None) -> search_results.AssignmentSearchResult:
-        """Finds all assignments that match certain criteria.
+        """Finds assignments that match certain criteria.
 
         The number of returned assignments is limited. Find remaining matching assignments with subsequent `find_assignments` calls.
 
-        To iterate over all matching assignments in one call use [get_assignments](toloka.client.TolokaClient.get_assignments.md). Note that `get_assignments` can't sort results.
+        To iterate over all matching assignments you may use [get_assignments](toloka.client.TolokaClient.get_assignments.md).
 
         Args:
             request: Search criteria.
-            sort: Sorting options. Default value: `None`.
-            limit: Returned assignments limit. The maximum value is 100,000. Default value: 50.
+            sort: Sorting options. Default: `None`.
+            limit: Returned assignments limit. The default limit is 50. The maximum allowed limit is 100,000.
 
         Returns:
-            search_results.AssignmentSearchResult: Found assignments and a flag showing whether there are more matching assignments.
+            AssignmentSearchResult: Found assignments and a flag showing whether there are more matching assignments.
 
         Example:
             Search for `SKIPPED` or `EXPIRED` assignments in the specified pool.
@@ -699,29 +699,27 @@ class TolokaClient:
     def find_attachments(self, request: search_requests.AttachmentSearchRequest,
                          sort: Union[List[str], search_requests.AttachmentSortItems, None] = None,
                          limit: Optional[int] = None) -> search_results.AttachmentSearchResult:
-        """Finds all attachments that match certain rules
+        """Finds attachments that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found attachments and whether there
-        are any more results.
-        It is better to use the [get_attachments](toloka.client.TolokaClient.get_attachments.md) method, it allows you to iterate trough all results
-        and not just the first output.
+        The number of returned attachments is limited. Find remaining matching attachments with subsequent `find_attachments` calls.
+
+        To iterate over all matching attachments you may use the [get_attachments](toloka.client.TolokaClient.get_attachments.md) method.
 
         Args:
-            request: How to search attachments.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 100,000.
-                Defaults to None, in which case it returns first 50 results.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned attachments limit. The default limit is 50. The maximum allowed limit is 100,000.
 
         Returns:
-            search_results.AttachmentSearchResult: The first `limit` assignments in `items`. And a mark that there is more.
+            AttachmentSearchResult: Found attachments and a flag showing whether there are more matching attachments exceeding the limit.
 
         Example:
-            Let's find attachments in the pool and sort them by id and date of creation.
+            Let's find attachments in the pool and sort them by the ID and the date of creation in descending order.
 
-            >>> toloka_client.find_attachments(pool_id='1', sort=['-created', '-id'], limit=10)
+            >>> attachments = toloka_client.find_attachments(pool_id='1', sort=['-created', '-id'], limit=10)
             ...
 
-            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+            If there are attachments exceeding the `limit`, then `attachments.has_more` is set to `True`.
         """
         sort = None if sort is None else structure(sort, search_requests.AttachmentSortItems)
         response = self._search_request('get', '/v1/attachments', request, sort, limit)
@@ -849,22 +847,19 @@ class TolokaClient:
     def find_message_threads(self, request: search_requests.MessageThreadSearchRequest,
                              sort: Union[List[str], search_requests.MessageThreadSortItems, None] = None,
                              limit: Optional[int] = None) -> search_results.MessageThreadSearchResult:
-        """Finds all message threads that match certain rules
+        """Finds message threads that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found threads and whether there
-        are any more results.
-        It is better to use the [get_message_threads](toloka.client.TolokaClient.get_message_threads.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned message threads is limited. Find remaining matching threads with subsequent `find_message_threads` calls.
+
+        To iterate over all matching threads you may use the [get_message_threads](toloka.client.TolokaClient.get_message_threads.md) method.
 
         Args:
-            request:  How to search threads.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 300.
-                Defaults to None, in which case it returns first 50 results.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned message threads limit. The default limit is 50. The maximum allowed limit is 300.
 
         Returns:
-            search_results.MessageThreadSearchResult: The first `limit` message threads in `items`.
-                And a mark that there is more.
+            MessageThreadSearchResult: Found message threads and a flag showing whether there are more matching threads.
 
         Example:
             Find all message threads in the Inbox folder.
@@ -1025,30 +1020,27 @@ class TolokaClient:
     def find_projects(self, request: search_requests.ProjectSearchRequest,
                       sort: Union[List[str], search_requests.ProjectSortItems, None] = None,
                       limit: Optional[int] = None) -> search_results.ProjectSearchResult:
-        """Finds all projects that match certain rules
+        """Finds projects that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found projects and whether there
-        are any more results.
-        It is better to use the [get_projects](toloka.client.TolokaClient.get_projects.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned projects is limited. Find remaining matching projects with subsequent `find_projects` calls.
+
+        To iterate over all matching projects you may use the [get_projects](toloka.client.TolokaClient.get_projects.md) method.
 
         Args:
-            request: How to search projects.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 300.
-                Defaults to None, in which case it returns first 20 results.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned projects limit. The default limit is 20. The maximum allowed limit is 300.
 
         Returns:
-            search_results.ProjectSearchResult: The first `limit` projects in `items`.
-                And a mark that there is more.
+            ProjectSearchResult: Found projects and a flag showing whether there are more matching projects exceeding the limit.
 
         Example:
-            Find projects that were created before a specific date.
+            The example shows how to find projects created before a specific date.
 
-            >>> toloka_client.find_projects(created_lt='2021-06-01T00:00:00')
+            >>> projects = toloka_client.find_projects(created_lt='2021-06-01T00:00:00')
             ...
 
-            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+            If there are projects exceeding the `limit`, then `projects.has_more` is set to `True`.
         """
         sort = None if sort is None else structure(sort, search_requests.ProjectSortItems)
         response = self._search_request('get', '/v1/projects', request, sort, limit)
@@ -1429,40 +1421,37 @@ class TolokaClient:
     def find_pools(self, request: search_requests.PoolSearchRequest,
                    sort: Union[List[str], search_requests.PoolSortItems, None] = None,
                    limit: Optional[int] = None) -> search_results.PoolSearchResult:
-        """Finds all pools that match certain rules
+        """Finds pools that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found pools and whether there
-        are any more results.
-        It is better to use the [get_pools](toloka.client.TolokaClient.get_pools.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned pools is limited. Find remaining matching pools with subsequent `find_pools` calls.
+
+        To iterate over all matching pools you may use the [get_pools](toloka.client.TolokaClient.get_pools.md) method.
 
         Args:
-            request: How to search pools.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 300.
-                Defaults to None, in which case it returns first 20 results.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned pools limit. The default limit is ???. The maximum allowed limit is 300.
 
         Returns:
-            search_results.PoolSearchResult: The first `limit` pools in `items`.
-                And a mark that there is more.
+           PoolSearchResult Found pools and a flag showing whether there are more matching pools exceeding the limit.
 
         Examples:
             Find all pools in all projects.
 
-            >>> toloka_client.find_pools()
+            >>> pools = toloka_client.find_pools()
             ...
 
             Find all open pools in all projects.
 
-            >>> toloka_client.find_pools(status='OPEN')
+            >>> pools = toloka_client.find_pools(status='OPEN')
             ...
 
             Find open pools in a specific project.
 
-            >>> toloka_client.find_pools(status='OPEN', project_id='1')
+            >>> pools = toloka_client.find_pools(status='OPEN', project_id='1')
             ...
 
-            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+            If there are pools exceeding the `limit`, then `pools.has_more` is set to `True`.
         """
         sort = None if sort is None else structure(sort, search_requests.PoolSortItems)
         response = self._search_request('get', '/v1/pools', request, sort, limit)
@@ -1792,39 +1781,37 @@ class TolokaClient:
     def find_trainings(self, request: search_requests.TrainingSearchRequest,
                        sort: Union[List[str], search_requests.TrainingSortItems, None] = None,
                        limit: Optional[int] = None) -> search_results.TrainingSearchResult:
-        """Finds all trainings that match certain rules
+        """Finds training pools that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found trainings and whether there
-        are any more results.
-        It is better to use the [get_trainings](toloka.client.TolokaClient.get_trainings.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned pools is limited. Find remaining matching pools with subsequent `find_trainings` calls.
+
+        To iterate over all matching training pools you may use the [get_training](toloka.client.TolokaClient.get_training.md) method.
 
         Args:
-            request: How to search trainings.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned training pools limit. The default limit is ???. The maximum allowed limit is 300.
 
         Returns:
-            search_results.TrainingSearchResult: The first `limit` trainings in `items`.
-                And a mark that there is more.
+           TrainingSearchResult: Found training pools and a flag showing whether there are more matching pools exceeding the limit.
 
         Examples:
-            Find all trainings in all projects.
+            Find all training pools in all projects.
 
-            >>> toloka_client.find_trainings()
+            >>> pools = toloka_client.find_trainings()
             ...
 
-            Find all open trainings in all projects.
+            Find all open training pools in all projects.
 
-            >>> toloka_client.find_trainings(status='OPEN')
+            >>> pools = toloka_client.find_trainings(status='OPEN')
             ...
 
-            Find all open trainings in a specific project.
+            Find all open training pools in a specific project.
 
-            >>> toloka_client.find_trainings(status='OPEN', project_id='1')
+            >>> pools = toloka_client.find_trainings(status='OPEN', project_id='1')
             ...
 
-            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+            If there are pools exceeding the `limit`, then `pools.has_more` is set to `True`.
         """
         sort = None if sort is None else structure(sort, search_requests.TrainingSortItems)
         response = self._search_request('get', '/v1/trainings', request, sort, limit)
@@ -1978,29 +1965,25 @@ class TolokaClient:
     def find_skills(self, request: search_requests.SkillSearchRequest,
                     sort: Union[List[str], search_requests.SkillSortItems, None] = None,
                     limit: Optional[int] = None) -> search_results.SkillSearchResult:
-        """Finds all skills that match certain rules
+        """Finds skills that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found skills and whether there
-        are any more results.
-        It is better to use the [get_skills](toloka.client.TolokaClient.get_skills.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned skills is limited. Find remaining matching skills with subsequent `find_skills` calls.
+
+        To iterate over all matching skills you may use the [get_skills](toloka.client.TolokaClient.get_skills.md) method.
 
         Args:
-            request: How to search skills.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned skills limit. The default limit is ???. The maximum allowed limit is 100.
 
         Returns:
-            SkillSearchResult: The first `limit` skills in `items`.
-                And a mark that there is more.
+           SkillSearchResult: Found skills and a flag showing whether there are more matching skills exceeding the limit.
 
         Example:
-            Find ten most recently created skills.
+            The example shows how to find ten most recently created skills.
 
             >>> toloka_client.find_skills(sort=['-created', '-id'], limit=10)
             ...
-
-            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.SkillSortItems)
         response = self._search_request('get', '/v1/skills', request, sort, limit)
@@ -2233,16 +2216,17 @@ class TolokaClient:
                    limit: Optional[int] = None) -> search_results.TaskSearchResult:
         """Finds tasks that match certain criteria.
 
-        The number of returned tasks is limited. `find_tasks` additionally returns a flag showing whether there are more matching tasks.
-        Consider using [get_tasks](./toloka.client.TolokaClient.get_tasks.md) to iterate over all matching tasks.
+        The number of returned tasks is limited. Find remaining matching tasks with subsequent `find_tasks` calls.
+
+        To iterate over all matching tasks you may use the [get_tasks](toloka.client.TolokaClient.get_tasks.md) method.
 
         Args:
-            request: How to search tasks.
-            sort: Sorting options. Default value: `None`.
-            limit: Returned tasks limit. The maximum value is 100,000. Default value: 50.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned tasks limit. The default limit is 50. The maximum allowed limit is 100,000.
 
         Returns:
-            TaskSearchResult: Found tasks and a flag showing whether there are more matching tasks.
+            TaskSearchResult: Found tasks and a flag showing whether there are more matching tasks exceeding the limit.
 
         Example:
             To find three most recently created tasks in a pool, call the method with the following parameters:
@@ -2476,29 +2460,25 @@ class TolokaClient:
         self, request: search_requests.TaskSuiteSearchRequest,
         sort: Union[List[str], search_requests.TaskSuiteSortItems, None] = None, limit: Optional[int] = None
     ) -> search_results.TaskSuiteSearchResult:
-        """Finds all task suites that match certain rules
+        """Finds task suites that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found task suites and whether there
-        are any more results.
-        It is better to use the [get_task_suites](toloka.client.TolokaClient.get_task_suites.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned task suites is limited. Find remaining matching task suites with subsequent `find_task_suites` calls.
+
+        To iterate over all matching task suites you may use the [get_task_suites](toloka.client.TolokaClient.get_task_suites.md) method.
 
         Args:
-            request: How to search task suites.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 100 000.
-                Defaults to None, in which case it returns first 50 results.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned task suites limit. The default limit is 50. The maximum allowed limit is 100,000.
 
         Returns:
-            TaskSuiteSearchResult: The first `limit` task suites in `items`. And a mark that there is more.
+            TaskSuiteSearchResult: Found task suites and a flag showing whether there are more matching task suites exceeding the limit.
 
         Example:
             Find three most recently created task suites in a specified pool.
 
             >>> toloka_client.find_task_suites(pool_id='1', sort=['-created', '-id'], limit=3)
             ...
-
-            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.TaskSuiteSortItems)
         response = self._search_request('get', '/v1/task-suites', request, sort, limit)
@@ -2854,27 +2834,23 @@ class TolokaClient:
     def find_user_bonuses(self, request: search_requests.UserBonusSearchRequest,
                           sort: Union[List[str], search_requests.UserBonusSortItems, None] = None,
                           limit: Optional[int] = None) -> search_results.UserBonusSearchResult:
-        """Finds all Tolokers' rewards that match certain rules.
+        """Finds Tolokers' rewards that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found `UserBonus` instances and whether there
-        are any more results.
-        It is better to use the [get_user_bonuses](toloka.client.TolokaClient.get_user_bonuses.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned rewards is limited. Find remaining matching rewards with subsequent `find_user_bonuses` calls.
+
+        To iterate over all matching Tolokers' rewards you may use the [get_user_bonuses](toloka.client.TolokaClient.get_user_bonuses.md) method.
 
         Args:
-            request: How to search rewards.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned Tolokers' rewards limit. The default limit is ???. The maximum allowed limit is ???.
 
         Returns:
-            UserBonusSearchResult: The first `limit` `UserBonus` instances in `items`.
-                And a mark that there is more.
+            UserBonusSearchResult: Found Tolokers' rewards and a flag showing whether there are more matching rewards exceeding the limit.
 
         Example:
             >>> toloka_client.find_user_bonuses(user_id='1', sort=['-created', '-id'], limit=3)
             ...
-
-            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
         """
         sort = None if sort is None else structure(sort, search_requests.UserBonusSortItems)
         response = self._search_request('get', '/v1/user-bonuses', request, sort, limit)
@@ -2926,27 +2902,25 @@ class TolokaClient:
     def find_user_restrictions(self, request: search_requests.UserRestrictionSearchRequest,
                                sort: Union[List[str], search_requests.UserRestrictionSortItems, None] = None,
                                limit: Optional[int] = None) -> search_results.UserRestrictionSearchResult:
-        """Finds all Toloker restrictions that match certain rules
+        """Finds Toloker restrictions that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found Toloker restrictions and whether there
-        are any more results.
-        It is better to use the [get_user_restriction](toloka.client.TolokaClient.get_user_restriction.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned restrictions is limited. Find remaining matching restrictions with subsequent `find_user_restrictions` calls.
+
+        To iterate over all matching Toloker restrictions you may use the [get_user_restrictions](toloka.client.TolokaClient.get_user_restrictions.md) method.
 
         Args:
-            request: How to search Toloker restrictions.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned Toloker restrictions limit. The default limit is +++. The maximum allowed limit is ===.
 
         Returns:
-            UserRestrictionSearchResult: The first `limit` Toloker restrictions in `items`.
-                And a mark that there is more.
+            UserRestrictionSearchResult: Found Toloker restrictions and a flag showing whether there are more matching restrictions exceeding the limit.
 
         Example:
-            >>> toloka_client.find_user_restrictions(sort=['-created', '-id'], limit=10)
+            >>> restrictions = toloka_client.find_user_restrictions(sort=['-created', '-id'], limit=10)
             ...
 
-            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+            If there are restrictions exceeding the `limit`, then `restrictions.has_more` is set to `True`.
         """
         sort = None if sort is None else structure(sort, search_requests.UserRestrictionSortItems)
         response = self._search_request('get', '/v1/user-restrictions', request, sort, limit)
@@ -3066,28 +3040,25 @@ class TolokaClient:
     def find_user_skills(self, request: search_requests.UserSkillSearchRequest,
                          sort: Union[List[str], search_requests.UserSkillSortItems, None] = None,
                          limit: Optional[int] = None) -> search_results.UserSkillSearchResult:
-        """Finds all Toloker's skills that match certain rules
+        """Finds Toloker's skills that match certain criteria.
 
-        `UserSkill` describes the skill value for a specific Toloker.
-        As a result, it returns an object that contains the first part of the found Toloker's skills and whether there
-        are any more results.
-        It is better to use the [get_user_skills](toloka.client.TolokaClient.get_user_skills.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned Toloker's skills is limited. Find remaining matching skills with subsequent `find_user_skills` calls.
+
+        To iterate over all matching skills you may use the [get_user_skills](toloka.client.TolokaClient.get_user_skills.md) method.
 
         Args:
-            request: How to search Toloker's skills.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned skills limit. The default limit is +++. The maximum allowed limit is ===.
 
         Returns:
-            UserSkillSearchResult: The first `limit` Toloker's skills in `items`.
-                And a mark that there is more.
+            UserSkillSearchResult: Found Toloker's skills and a flag showing whether there are more matching skills exceeding the limit.
 
         Example:
-            >>> toloka_client.find_user_skills(limit=10)
+            >>> skills = toloka_client.find_user_skills(limit=10)
             ...
 
-            If the method finds more objects than custom or system `limit` allows to operate, it will also show an indicator `has_more=True`.
+            If there are skills exceeding the `limit`, then `skills.has_more` is set to `True`.
         """
         sort = None if sort is None else structure(sort, search_requests.UserSkillSortItems)
         response = self._search_request('get', '/v1/user-skills', request, sort, limit)
@@ -3225,22 +3196,19 @@ class TolokaClient:
     def find_webhook_subscriptions(self, request: search_requests.WebhookSubscriptionSearchRequest,
                                    sort: Union[List[str], search_requests.WebhookSubscriptionSortItems, None] = None,
                                    limit: Optional[int] = None) -> search_results.WebhookSubscriptionSearchResult:
-        """Finds all webhook-subscriptions that match certain rules
+        """Finds webhook subscriptions that match certain criteria.
 
-        As a result, it returns an object that contains the first part of the found webhook-subscriptions
-        and whether there are any more results.
-        It is better to use the [get_webhook_subscriptions](toloka.client.TolokaClient.get_webhook_subscriptions.md) method, it allows you to iterate through all results
-        and not just the first output.
+        The number of returned webhook subscriptions is limited. Find remaining matching webhook subscriptions with subsequent `find_webhook_subscriptions` calls.
+
+        To iterate over all matching webhook subscriptions you may use the [get_webhook_subscriptions](toloka.client.TolokaClient.get_webhook_subscriptions.md) method.
 
         Args:
-            request: How to search webhook-subscriptions.
-            sort: How to sort result. Defaults to None.
-            limit: Limit on the number of results returned. The maximum is 100 000.
-                Defaults to None, in which case it returns first 50 results.
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned webhook subscriptions limit. The default limit is 50. The maximum allowed limit is 100,000.
 
         Returns:
-            WebhookSubscriptionSearchResult: The first `limit` webhook-subscriptions in `items`.
-                And a mark that there is more.
+            WebhookSubscriptionSearchResult: Found webhook subscriptions and a flag showing whether there are more matching webhook subscriptions exceeding the limit.
         """
         sort = None if sort is None else structure(sort, search_requests.WebhookSubscriptionSortItems)
         response = self._search_request('get', '/v1/webhook-subscriptions', request, sort, limit)
@@ -3348,7 +3316,7 @@ class TolokaClient:
             limit: Returned projects limit. The default limit is 50. The maximum limit is 100,000.
 
         Returns:
-            AppProjectSearchResult: Found projects and a flag showing whether there are more matching projects.
+            AppProjectSearchResult: Found projects and a flag showing whether there are more matching projects exceeding the limit.
         """
 
         if self.url != self.Environment.PRODUCTION.value:
@@ -3472,7 +3440,7 @@ class TolokaClient:
             limit: Returned solutions limit. The default limit is 50. The maximum allowed limit is 100,000.
 
         Returns:
-            AppSearchResult: Found solutions and a flag showing whether there are more matching solutions.
+            AppSearchResult: Found solutions and a flag showing whether there are more matching solutions exceeding the limit.
         """
 
         if self.url != self.Environment.PRODUCTION.value:
@@ -3542,7 +3510,7 @@ class TolokaClient:
             limit: Returned items limit. The default limit is 50. The maximum allowed limit is 100,000.
 
         Returns:
-            AppItemSearchResult: Found task items and a flag showing whether there are more matching items.
+            AppItemSearchResult: Found task items and a flag showing whether there are more matching items exceeding the limit.
         """
 
         if self.url != self.Environment.PRODUCTION.value:
@@ -3651,7 +3619,7 @@ class TolokaClient:
             limit: Returned batches limit. The default limit is 50. The maximum allowed limit is 100,000.
 
         Returns:
-            AppBatchSearchResult: Found batches and a flag showing whether there are more matching batches.
+            AppBatchSearchResult: Found batches and a flag showing whether there are more matching batches exceeding the limit.
         """
 
         if self.url != self.Environment.PRODUCTION.value:
