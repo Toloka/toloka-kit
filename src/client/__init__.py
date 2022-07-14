@@ -709,7 +709,7 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned attachments limit. The default limit is 50. The maximum allowed limit is 100,000.
+            limit: Returned attachments limit. The maximum allowed limit is 100.
 
         Returns:
             AttachmentSearchResult: Found attachments and a flag showing whether there are more matching attachments exceeding the limit.
@@ -1433,10 +1433,10 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned pools limit. The default limit is ???. The maximum allowed limit is 300.
+            limit: Returned pools limit. The maximum allowed limit is 300.
 
         Returns:
-           PoolSearchResult Found pools and a flag showing whether there are more matching pools exceeding the limit.
+           PoolSearchResult: Found pools and a flag showing whether there are more matching pools exceeding the limit.
 
         Examples:
             Find all pools in all projects.
@@ -1794,7 +1794,7 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned training pools limit. The default limit is ???. The maximum allowed limit is 300.
+            limit: Returned training pools limit. The maximum allowed limit is 300.
 
         Returns:
            TrainingSearchResult: Found training pools and a flag showing whether there are more matching pools exceeding the limit.
@@ -1979,7 +1979,7 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned skills limit. The default limit is ???. The maximum allowed limit is 100.
+            limit: Returned skills limit. The maximum allowed limit is 100.
 
         Returns:
            SkillSearchResult: Found skills and a flag showing whether there are more matching skills exceeding the limit.
@@ -2850,7 +2850,7 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned Tolokers' rewards limit. The default limit is ???. The maximum allowed limit is ???.
+            limit: Returned Tolokers' rewards limit. The maximum allowed limit is 300.
 
         Returns:
             UserBonusSearchResult: Found Tolokers' rewards and a flag showing whether there are more matching rewards exceeding the limit.
@@ -2919,7 +2919,7 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned Toloker restrictions limit. The default limit is +++. The maximum allowed limit is ===.
+            limit: Returned Toloker restrictions limit. The maximum allowed limit is 500.
 
         Returns:
             UserRestrictionSearchResult: Found Toloker restrictions and a flag showing whether there are more matching restrictions exceeding the limit.
@@ -3058,7 +3058,7 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned skills limit. The default limit is +++. The maximum allowed limit is ===.
+            limit: Returned skills limit. The maximum allowed limit is 1000.
 
         Returns:
             UserSkillSearchResult: Found Toloker's skills and a flag showing whether there are more matching skills exceeding the limit.
@@ -3214,7 +3214,7 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned webhook subscriptions limit. The default limit is 50. The maximum allowed limit is 100,000.
+            limit: Returned webhook subscriptions limit. The maximum allowed limit is 300.
 
         Returns:
             WebhookSubscriptionSearchResult: Found webhook subscriptions and a flag showing whether there are more matching webhook subscriptions exceeding the limit.
@@ -3323,7 +3323,7 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: The order and direction of sorting the results.
-            limit: Returned projects limit. The default limit is 50. The maximum limit is 100,000.
+            limit: Returned projects limit. The maximum limit is 5000.
 
         Returns:
             AppProjectSearchResult: Found projects and a flag showing whether there are more matching projects exceeding the limit.
@@ -3447,7 +3447,7 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned solutions limit. The default limit is 50. The maximum allowed limit is 100,000.
+            limit: Returned solutions limit. The maximum allowed limit is 1000.
 
         Returns:
             AppSearchResult: Found solutions and a flag showing whether there are more matching solutions exceeding the limit.
@@ -3517,7 +3517,7 @@ class TolokaClient:
             app_project_id: The ID of the App project.
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned items limit. The default limit is 50. The maximum allowed limit is 100,000.
+            limit: Returned items limit. The maximum allowed limit is 1000.
 
         Returns:
             AppItemSearchResult: Found task items and a flag showing whether there are more matching items exceeding the limit.
@@ -3626,7 +3626,7 @@ class TolokaClient:
             app_project_id: The ID of the App project.
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned batches limit. The default limit is 50. The maximum allowed limit is 100,000.
+            limit: Returned batches limit. The maximum allowed limit is 1000.
 
         Returns:
             AppBatchSearchResult: Found batches and a flag showing whether there are more matching batches exceeding the limit.
