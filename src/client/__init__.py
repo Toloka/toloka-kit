@@ -481,7 +481,7 @@ class TolokaClient:
                                   limit: Optional[int] = None) -> search_results.AggregatedSolutionSearchResult:
         """Finds aggregated responses that match certain criteria.
 
-        Pass the ID of the operation started by the [aggregate_solutions_by_pool](toloka.client.TolokaClient.aggregate_solutions_by_pool.md) method to the `find_aggregated_solutions`.
+        Pass to the `find_aggregated_solutions` the ID of the operation started by the [aggregate_solutions_by_pool](toloka.client.TolokaClient.aggregate_solutions_by_pool.md) method.
 
         The number of returned aggregated responses is limited. Find remaining matching responses with subsequent `find_aggregated_solutions` calls.
 
@@ -525,9 +525,9 @@ class TolokaClient:
         """Finds all aggregated responses that match certain criteria.
 
         Pass to the `get_aggregated_solutions` the ID of the operation started by the [aggregate_solutions_by_pool](toloka.client.TolokaClient.aggregate_solutions_by_pool.md) method.
-        
-        `get_get_aggregated_solutions` returns a generator. You can iterate over all found aggregated responses using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
+        `get_aggregated_solutions` returns a generator. You can iterate over all found aggregated responses using the generator. Several requests to the Toloka server are possible while iterating.
+
         If you need to sort aggregated responses use the [find_aggregated_solutions](toloka.client.TolokaClient.find_aggregated_solutions.md) method.
 
         {% note tip %}
@@ -700,7 +700,7 @@ class TolokaClient:
     def find_attachments(self, request: search_requests.AttachmentSearchRequest,
                          sort: Union[List[str], search_requests.AttachmentSortItems, None] = None,
                          limit: Optional[int] = None) -> search_results.AttachmentSearchResult:
-        """Finds attachments that match certain criteria.
+        """Finds attachments that match certain criteria and returns their metadata.
 
         The number of returned attachments is limited. Find remaining matching attachments with subsequent `find_attachments` calls.
 
@@ -750,17 +750,17 @@ class TolokaClient:
     @expand('request')
     @add_headers('client')
     def get_attachments(self, request: search_requests.AttachmentSearchRequest) -> Generator[Attachment, None, None]:
-        """Finds attachments that match certain criteria and returns their metadata.
-        
+        """Finds all attachments that match certain criteria and returns their metadata.
+
         `get_attachments` returns a generator. You can iterate over all found attachments using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
         If you need to sort attachments use the [find_attachments](toloka.client.TolokaClient.find_attachments.md) method.
-        
+
         Args:
             request: Search criteria.
-            
+
         Yields:
-            Attachment: The next matching attachment.            
+            Attachment: The next matching attachment.
 
         Example:
             Make a list of all received attachments in the specified pool.
@@ -898,14 +898,14 @@ class TolokaClient:
     @add_headers('client')
     def get_message_threads(self, request: search_requests.MessageThreadSearchRequest) -> Generator[MessageThread, None, None]:
         """Finds all message threads that match certain criteria.
-        
+
         `get_message_threads` returns a generator. You can iterate over all found message threads using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
         If you need to sort message threads use the [find_message_threads](toloka.client.TolokaClient.find_message_threads.md) method.
-        
+
         Args:
             request: Search criteria.
-            
+
         Yields:
             MessageThread: The next matching message thread.
 
@@ -1070,16 +1070,16 @@ class TolokaClient:
     @add_headers('client')
     def get_projects(self, request: search_requests.ProjectSearchRequest) -> Generator[Project, None, None]:
         """Finds all projects that match certain criteria.
-        
+
         `get_projects` returns a generator. You can iterate over all found projects using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
         If you need to sort projects use the [find_projects](toloka.client.TolokaClient.find_projects.md) method.
-        
+
         Args:
             request: Search criteria.
-            
+
         Yields:
-            Project: The next matching project.            
+            Project: The next matching project.
         Example:
             Get all active projects.
 
@@ -1433,7 +1433,7 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned pools limit. The maximum allowed limit is 300.
+            limit: Returned pools limit. The default limit is 20. The maximum allowed limit is 300.
 
         Returns:
            PoolSearchResult: Found pools and a flag showing whether there are more matching pools exceeding the limit.
@@ -1481,24 +1481,24 @@ class TolokaClient:
     @add_headers('client')
     def get_pools(self, request: search_requests.PoolSearchRequest) -> Generator[Pool, None, None]:
         """Finds all pools that match certain criteria.
-        
+
         `get_pools` returns a generator. You can iterate over all found pools using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
         If you need to sort pools use the [find_pools](toloka.client.TolokaClient.find_pools.md) method.
-        
+
         Args:
             request: Search criteria.
-            
+
         Yields:
-            Pool: The next matching pool.            
+            Pool: The next matching pool.
 
         Example:
-            How to get all open pools from the project.
+            How to get all open pools from a project.
 
             >>> open_pools = toloka_client.get_pools(project_id='1', status='OPEN')
             ...
 
-            How to get all pools from the project.
+            How to get all pools from a project.
 
             >>> all_pools = toloka_client.get_pools(project_id='1')
             ...
@@ -1789,7 +1789,7 @@ class TolokaClient:
 
         The number of returned pools is limited. Find remaining matching pools with subsequent `find_trainings` calls.
 
-        To iterate over all matching training pools you may use the [get_training](toloka.client.TolokaClient.get_training.md) method.
+        To iterate over all matching training pools you may use the [get_trainings](toloka.client.TolokaClient.get_trainings.md) method.
 
         Args:
             request: Search criteria.
@@ -1841,20 +1841,20 @@ class TolokaClient:
     @expand('request')
     @add_headers('client')
     def get_trainings(self, request: search_requests.TrainingSearchRequest) -> Generator[Training, None, None]:
-        """ Finds all training tasks that match certain criteria.
-        
-        `get_trainings` returns a generator. You can iterate over all found training tasks using the generator. Several requests to the Toloka server are possible while iterating.
-        
-        If you need to sort training tasks use the [find_trainings](toloka.client.TolokaClient.find_trainings.md) method.
-        
+        """Finds all training pools that match certain criteria.
+
+        `get_trainings` returns a generator. You can iterate over all found training pools using the generator. Several requests to the Toloka server are possible while iterating.
+
+        If you need to sort training pools use the [find_trainings](toloka.client.TolokaClient.find_trainings.md) method.
+
         Args:
             request: Search criteria.
-            
+
         Yields:
-            Training The next matching training task.
+            Training: The next matching training pool.
 
         Example:
-            How to get all trainings in the project.
+            How to get all training pools in a project.
 
             >>> trainings = toloka_client.get_trainings(project_id=project_id)
             ...
@@ -2015,16 +2015,16 @@ class TolokaClient:
     @add_headers('client')
     def get_skills(self, request: search_requests.SkillSearchRequest) -> Generator[Skill, None, None]:
         """Finds all skills that match certain criteria.
-        
+
         `get_skills` returns a generator. You can iterate over all found skills using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
         If you need to sort skills use the [find_skills](toloka.client.TolokaClient.find_skills.md) method.
-        
+
         Args:
             request: Search criteria.
-            
+
         Yields:
-            Skill: The next matching skills.
+            Skill: The next matching skill.
 
         Example:
             How to check that a skill exists.
@@ -2267,12 +2267,12 @@ class TolokaClient:
         """Finds all tasks that match certain criteria.
 
         `get_tasks` returns a generator. You can iterate over all found tasks using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
         If you need to sort tasks use the [find_tasks](toloka.client.TolokaClient.find_tasks.md) method.
-        
+
         Args:
             request: Search criteria.
-            
+
         Yields:
             Task: The next matching task.
 
@@ -2511,16 +2511,16 @@ class TolokaClient:
     @add_headers('client')
     def get_task_suites(self, request: search_requests.TaskSuiteSearchRequest) -> Generator[TaskSuite, None, None]:
         """Finds all task suites that match certain criteria.
-        
+
         `get_task_suites` returns a generator. You can iterate over all found task suites using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
         If you need to sort task suites use the [find_task_suites](toloka.client.TolokaClient.find_task_suites.md) method.
-        
+
         Args:
             request: Search criteria.
-            
+
         Yields:
-            !!!: The next matching task suite.
+            TaskSuite: The next matching task suite.
 
         Example:
             Get task suites from a specific pool.
@@ -2886,12 +2886,12 @@ class TolokaClient:
         """Finds all Tolokers' rewards that match certain rules and returns them in an iterable object
 
        `get_user_bonuses` returns a generator. You can iterate over all found Tolokers' rewards using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
         If you need to sort rewards use the [find_user_bonuses](toloka.client.TolokaClient.find_user_bonuses.md) method.
-        
+
         Args:
             request: Search criteria.
-            
+
         Yields:
             UserBonus: The next matching Toloker's reward.
 
@@ -2958,14 +2958,14 @@ class TolokaClient:
         request: search_requests.UserRestrictionSearchRequest
     ) -> Generator[UserRestriction, None, None]:
         """Finds all Toloker restrictions that match certain criteria.
-        
+
         `get_user_restrictions` returns a generator. You can iterate over all found Toloker restrictions using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
         If you need to sort Toloker restrictions use the [find_user_restrictions](toloka.client.TolokaClient.find_user_restrictions.md) method.
-        
+
         Args:
             request: Search criteria.
-            
+
         Yields:
             UserRestriction: The next matching Toloker restriction.
 
@@ -3096,14 +3096,14 @@ class TolokaClient:
     @add_headers('client')
     def get_user_skills(self, request: search_requests.UserSkillSearchRequest) -> Generator[UserSkill, None, None]:
         """Finds all Toloker's skills that match certain criteria.
-        
+
         `get_user_skills` returns a generator. You can iterate over all found Toloker's skills using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
         If you need to sort Toloker's skills use the [find_user_skills](toloka.client.TolokaClient.find_user_skills.md) method.
-        
+
         Args:
             request: Search criteria.
-            
+
         Yields:
             UserSkill: The next matching Toloker's skill.
 
@@ -3230,14 +3230,14 @@ class TolokaClient:
         request: search_requests.WebhookSubscriptionSearchRequest
     ) -> Generator[WebhookSubscription, None, None]:
         """Finds all webhook subscriptions that match certain criteria.
-        
+
         `get_webhook_subscriptions` returns a generator. You can iterate over all found webhook subscriptions using the generator. Several requests to the Toloka server are possible while iterating.
-        
+
         If you need to sort webhook subscriptions use the [find_webhook_subscriptions](toloka.client.TolokaClient.find_webhook_subscriptions.md) method.
-        
+
         Args:
             request: Search criteria.
-            
+
         Yields:
             WebhookSubscription: The next matching webhook subscription.
         """
