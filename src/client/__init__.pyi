@@ -4990,14 +4990,11 @@ class TolokaClient:
     def find_apps(
         self,
         after_id: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
         id_lt: typing.Optional[str] = None,
         id_lte: typing.Optional[str] = None,
         id_gt: typing.Optional[str] = None,
         id_gte: typing.Optional[str] = None,
-        name_lt: typing.Optional[str] = None,
-        name_lte: typing.Optional[str] = None,
-        name_gt: typing.Optional[str] = None,
-        name_gte: typing.Optional[str] = None,
         sort: typing.Union[typing.List[str], toloka.client.search_requests.AppSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.AppSearchResult:
@@ -5037,14 +5034,11 @@ class TolokaClient:
     def get_apps(
         self,
         after_id: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
         id_lt: typing.Optional[str] = None,
         id_lte: typing.Optional[str] = None,
         id_gt: typing.Optional[str] = None,
-        id_gte: typing.Optional[str] = None,
-        name_lt: typing.Optional[str] = None,
-        name_lte: typing.Optional[str] = None,
-        name_gt: typing.Optional[str] = None,
-        name_gte: typing.Optional[str] = None
+        id_gte: typing.Optional[str] = None
     ) -> typing.Generator[toloka.client.app.App, None, None]:
         """Finds all App solutions that match certain criteria.
 
@@ -5060,11 +5054,16 @@ class TolokaClient:
         """
         ...
 
-    def get_app(self, app_id: str) -> toloka.client.app.App:
+    def get_app(
+        self,
+        app_id: str,
+        lang: typing.Optional[str] = None
+    ) -> toloka.client.app.App:
         """Gets information from Toloka about an App solution.
 
         Args:
             app_id: The ID of the solution.
+            lang: ISO 639 language code.
 
         Returns:
             App: The App solution.
@@ -5107,10 +5106,14 @@ class TolokaClient:
         id_lte: typing.Optional[str] = None,
         id_gt: typing.Optional[str] = None,
         id_gte: typing.Optional[str] = None,
-        created_at_lt: typing.Optional[datetime.datetime] = None,
-        created_at_lte: typing.Optional[datetime.datetime] = None,
-        created_at_gt: typing.Optional[datetime.datetime] = None,
-        created_at_gte: typing.Optional[datetime.datetime] = None,
+        created_lt: typing.Optional[datetime.datetime] = None,
+        created_lte: typing.Optional[datetime.datetime] = None,
+        created_gt: typing.Optional[datetime.datetime] = None,
+        created_gte: typing.Optional[datetime.datetime] = None,
+        finished_lt: typing.Optional[datetime.datetime] = None,
+        finished_lte: typing.Optional[datetime.datetime] = None,
+        finished_gt: typing.Optional[datetime.datetime] = None,
+        finished_gte: typing.Optional[datetime.datetime] = None,
         sort: typing.Union[typing.List[str], toloka.client.search_requests.AppItemSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.AppItemSearchResult:
@@ -5163,10 +5166,14 @@ class TolokaClient:
         id_lte: typing.Optional[str] = None,
         id_gt: typing.Optional[str] = None,
         id_gte: typing.Optional[str] = None,
-        created_at_lt: typing.Optional[datetime.datetime] = None,
-        created_at_lte: typing.Optional[datetime.datetime] = None,
-        created_at_gt: typing.Optional[datetime.datetime] = None,
-        created_at_gte: typing.Optional[datetime.datetime] = None
+        created_lt: typing.Optional[datetime.datetime] = None,
+        created_lte: typing.Optional[datetime.datetime] = None,
+        created_gt: typing.Optional[datetime.datetime] = None,
+        created_gte: typing.Optional[datetime.datetime] = None,
+        finished_lt: typing.Optional[datetime.datetime] = None,
+        finished_lte: typing.Optional[datetime.datetime] = None,
+        finished_gt: typing.Optional[datetime.datetime] = None,
+        finished_gte: typing.Optional[datetime.datetime] = None
     ) -> typing.Generator[toloka.client.app.AppItem, None, None]:
         """Finds all App task items that match certain criteria in an App project.
 
@@ -5183,16 +5190,36 @@ class TolokaClient:
         """
         ...
 
+    @typing.overload
     def create_app_item(
         self,
         app_project_id: str,
-        app_item: toloka.client.app.AppItem
+        request: toloka.client.app.AppItemCreateRequest
     ) -> toloka.client.app.AppItem:
         """Creates an App task item in Toloka.
 
         Args:
             app_project_id: The ID of the App project to create the item in.
-            app_item: The task item with parameters.
+            request: The request parameters.
+
+        Returns:
+            AppItem: Created App task item with updated parameters.
+        """
+        ...
+
+    @typing.overload
+    def create_app_item(
+        self,
+        app_project_id: str,
+        *,
+        batch_id: typing.Optional[str] = None,
+        input_data: typing.Optional[typing.Dict[str, typing.Any]] = None
+    ) -> toloka.client.app.AppItem:
+        """Creates an App task item in Toloka.
+
+        Args:
+            app_project_id: The ID of the App project to create the item in.
+            request: The request parameters.
 
         Returns:
             AppItem: Created App task item with updated parameters.
@@ -5284,10 +5311,10 @@ class TolokaClient:
         name_lte: typing.Optional[str] = None,
         name_gt: typing.Optional[str] = None,
         name_gte: typing.Optional[str] = None,
-        created_at_lt: typing.Optional[datetime.datetime] = None,
-        created_at_lte: typing.Optional[datetime.datetime] = None,
-        created_at_gt: typing.Optional[datetime.datetime] = None,
-        created_at_gte: typing.Optional[datetime.datetime] = None,
+        created_lt: typing.Optional[datetime.datetime] = None,
+        created_lte: typing.Optional[datetime.datetime] = None,
+        created_gt: typing.Optional[datetime.datetime] = None,
+        created_gte: typing.Optional[datetime.datetime] = None,
         sort: typing.Union[typing.List[str], toloka.client.search_requests.AppBatchSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.AppBatchSearchResult:
@@ -5343,10 +5370,10 @@ class TolokaClient:
         name_lte: typing.Optional[str] = None,
         name_gt: typing.Optional[str] = None,
         name_gte: typing.Optional[str] = None,
-        created_at_lt: typing.Optional[datetime.datetime] = None,
-        created_at_lte: typing.Optional[datetime.datetime] = None,
-        created_at_gt: typing.Optional[datetime.datetime] = None,
-        created_at_gte: typing.Optional[datetime.datetime] = None
+        created_lt: typing.Optional[datetime.datetime] = None,
+        created_lte: typing.Optional[datetime.datetime] = None,
+        created_gt: typing.Optional[datetime.datetime] = None,
+        created_gte: typing.Optional[datetime.datetime] = None
     ) -> typing.Generator[toloka.client.app.AppBatch, None, None]:
         """Finds all batches that match certain criteria in an App project.
 
@@ -5385,6 +5412,7 @@ class TolokaClient:
         self,
         app_project_id: str,
         *,
+        name: typing.Optional[str] = None,
         items: typing.Optional[typing.List[typing.Dict[str, typing.Any]]] = None
     ) -> toloka.client.app.AppBatch:
         """Creates a batch with task items in an App project in Toloka.
@@ -5401,13 +5429,52 @@ class TolokaClient:
     def get_app_batch(
         self,
         app_project_id: str,
-        app_batch_id: str
+        batch_id: str
     ) -> toloka.client.app.AppBatch:
         """"Gets information from Toloka about a batch in an App project.
 
         Args:
             app_project_id: The ID of the project.
-            app_batch_id: The ID of the batch.
+            batch_id: The ID of the batch.
+
+        Returns:
+            AppBatch: The App batch.
+        """
+        ...
+
+    @typing.overload
+    def patch_app_batch(
+        self,
+        app_project_id: str,
+        batch_id: str,
+        patch: toloka.client.app.AppBatchPatch
+    ) -> toloka.client.app.AppBatch:
+        """Update app batch name
+
+        Args:
+            app_project_id: The ID of the project.
+            batch_id: The ID of the batch.
+            patch: New name value.
+
+        Returns:
+            AppBatch: The App batch.
+        """
+        ...
+
+    @typing.overload
+    def patch_app_batch(
+        self,
+        app_project_id: str,
+        batch_id: str,
+        *,
+        name: typing.Optional[str] = None
+    ) -> toloka.client.app.AppBatch:
+        """Update app batch name
+
+        Args:
+            app_project_id: The ID of the project.
+            batch_id: The ID of the batch.
+            patch: New name value.
 
         Returns:
             AppBatch: The App batch.
@@ -5417,13 +5484,43 @@ class TolokaClient:
     def start_app_batch(
         self,
         app_project_id: str,
-        app_batch_id: str
+        batch_id: str
     ):
         """Launches annotation of a batch of task items in an App project.
 
         Args:
             app_project_id: The ID of the project.
-            app_batch_id: The ID of the batch.
+            batch_id: The ID of the batch.
+        """
+        ...
+
+    def stop_app_batch(
+        self,
+        app_project_id: str,
+        batch_id: str
+    ):
+        """Stops annotation of a batch of task items in an App project.
+
+        Processing can be stopped only for the batch with the PROCESSING status.
+
+        Args:
+            app_project_id: The ID of the project.
+            batch_id: The ID of the batch.
+        """
+        ...
+
+    def resume_app_batch(
+        self,
+        app_project_id: str,
+        batch_id: str
+    ):
+        """Resumes annotation of a batch of task items in an App project.
+
+        Processing can be resumed only for the batch with the STOPPING or STOPPED status.
+
+        Args:
+            app_project_id: The ID of the project.
+            batch_id: The ID of the batch.
         """
         ...
 
