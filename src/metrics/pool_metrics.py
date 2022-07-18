@@ -234,7 +234,7 @@ class AssignmentsInPool(BasePoolMetric):
     _skipped_name: Optional[str] = None
 
     _analytics_dict = {
-        '_submitted_name': analytics_request.SubmitedAssignmentsCountPoolAnalytics,
+        '_submitted_name': analytics_request.SubmittedAssignmentsCountPoolAnalytics,
         '_accepted_name': analytics_request.ApprovedAssignmentsCountPoolAnalytics,
         '_rejected_name': analytics_request.RejectedAssignmentsCountPoolAnalytics,
         '_skipped_name': analytics_request.SkippedAssignmentsCountPoolAnalytics,

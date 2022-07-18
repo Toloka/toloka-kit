@@ -2,7 +2,7 @@ __all__ = [
     'AnalyticsRequest',
     'PoolAnalyticsRequest',
     'RealTasksCountPoolAnalytics',
-    'SubmitedAssignmentsCountPoolAnalytics',
+    'SubmittedAssignmentsCountPoolAnalytics',
     'SkippedAssignmentsCountPoolAnalytics',
     'RejectedAssignmentsCountPoolAnalytics',
     'ApprovedAssignmentsCountPoolAnalytics',
@@ -75,7 +75,7 @@ class RealTasksCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalytics
 
 
 @inherit_docstrings
-class SubmitedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.SUBMITTED_ASSIGNMENTS_COUNT):
+class SubmittedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.SUBMITTED_ASSIGNMENTS_COUNT):
     """Number of assignments in the "submitted" status in the pool
 
     Do not confuse it with the approved status.

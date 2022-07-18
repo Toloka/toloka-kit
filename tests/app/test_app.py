@@ -1,7 +1,9 @@
+import copy
 import datetime
 from operator import itemgetter
 from urllib.parse import urlparse, parse_qs
 
+import pytest
 import simplejson
 import toloka.client as client
 
@@ -20,8 +22,7 @@ def test_find_apps(requests_mock, toloka_client_prod, toloka_app_url, app_map):
         check_headers(request, expected_headers)
 
         assert {
-            'after_id': ['123'],
-            'sort': ['name,-id'],
+            'after_id': ['123'], 'lang': ['en'], 'sort': ['-id']
         } == parse_qs(urlparse(request.url).query)
         return simplejson.dumps(raw_result)
 
@@ -29,16 +30,16 @@ def test_find_apps(requests_mock, toloka_client_prod, toloka_app_url, app_map):
 
     # Request object syntax
     request = client.search_requests.AppSearchRequest(
-        after_id='123',
+        after_id='123', lang='en'
     )
-    sort = client.search_requests.AppSortItems(['name', '-id'])
+    sort = client.search_requests.AppSortItems(['-id'])
     result = toloka_client_prod.find_apps(request, sort=sort)
     assert raw_result == client.unstructure(result)
 
     # Expanded syntax
     result = toloka_client_prod.find_apps(
-        after_id='123',
-        sort=['name', '-id'],
+        after_id='123', lang='en',
+        sort=['-id'],
     )
     assert raw_result == client.unstructure(result)
 
@@ -60,7 +61,6 @@ def test_get_apps(requests_mock, toloka_client_prod, toloka_app_url, app_map):
         id_gt = params.pop('id_gt')[0]
         assert {
             'sort': ['id'],
-            'name_gt': ['name']
         } == params
 
         items = [app for app in apps if id_gt is None or app['id'] > id_gt][:3]
@@ -71,7 +71,6 @@ def test_get_apps(requests_mock, toloka_client_prod, toloka_app_url, app_map):
     # Request object syntax
     request = client.search_requests.AppSearchRequest(
         id_gt='20',
-        name_gt='name'
     )
     result = toloka_client_prod.get_apps(request)
     assert expected_apps == client.unstructure(list(result))
@@ -79,7 +78,6 @@ def test_get_apps(requests_mock, toloka_client_prod, toloka_app_url, app_map):
     # Expanded syntax
     result = toloka_client_prod.get_apps(
         id_gt='20',
-        name_gt='name'
     )
     assert expected_apps == client.unstructure(list(result))
 
@@ -121,7 +119,7 @@ def test_get_app(requests_mock, toloka_client_prod, toloka_app_url, app_map):
         return simplejson.dumps(app_map)
 
     requests_mock.get(f'{toloka_app_url}/apps/21', text=get_app)
-    assert app_map == client.unstructure(toloka_client_prod.get_app('21'))
+    assert app_map == client.unstructure(toloka_client_prod.get_app('21', 'en'))
 
 
 def test_find_app_projects(requests_mock, toloka_client_prod, toloka_app_url, app_project_map_with_readonly):
@@ -326,7 +324,7 @@ def test_find_app_items(requests_mock, toloka_client_prod, toloka_app_url, app_i
 
         assert {
             'after_id': ['123'],
-            'sort': ['created_at,-id'],
+            'sort': ['created,-id,finished'],
         } == parse_qs(urlparse(request.url).query)
         return simplejson.dumps(raw_result)
 
@@ -336,7 +334,7 @@ def test_find_app_items(requests_mock, toloka_client_prod, toloka_app_url, app_i
     request = client.search_requests.AppItemSearchRequest(
         after_id='123',
     )
-    sort = client.search_requests.AppItemSortItems(['created_at', '-id'])
+    sort = client.search_requests.AppItemSortItems(['created', '-id', 'finished'])
     result = toloka_client_prod.find_app_items('123', request, sort=sort)
     assert raw_result == client.unstructure(result)
 
@@ -344,7 +342,7 @@ def test_find_app_items(requests_mock, toloka_client_prod, toloka_app_url, app_i
     result = toloka_client_prod.find_app_items(
         '123',
         after_id='123',
-        sort=['created_at', '-id'],
+        sort=['created', '-id', 'finished'],
     )
     assert raw_result == client.unstructure(result)
 
@@ -366,7 +364,7 @@ def test_get_app_items(requests_mock, toloka_client_prod, toloka_app_url, app_it
         id_gt = params.pop('id_gt')[0]
         assert {
             'sort': ['id'],
-            'created_at_gt':  ['2016-03-23T12:59:00']
+            'created_gt':  ['2016-03-23T12:59:00']
         } == params
 
         items = [app_item for app_item in app_items if id_gt is None or app_item['id'] > id_gt][:3]
@@ -377,7 +375,7 @@ def test_get_app_items(requests_mock, toloka_client_prod, toloka_app_url, app_it
     # Request object syntax
     request = client.search_requests.AppItemSearchRequest(
         id_gt='20',
-        created_at_gt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc)
+        created_gt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc)
     )
     result = toloka_client_prod.get_app_items('123', request)
     assert expected_app_items == client.unstructure(list(result))
@@ -386,7 +384,7 @@ def test_get_app_items(requests_mock, toloka_client_prod, toloka_app_url, app_it
     result = toloka_client_prod.get_app_items(
         '123',
         id_gt='20',
-        created_at_gt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc)
+        created_gt=datetime.datetime(2016, 3, 23, 12, 59, 0, tzinfo=datetime.timezone.utc)
     )
     assert expected_app_items == client.unstructure(list(result))
 
@@ -486,17 +484,17 @@ def test_find_app_batches(requests_mock, toloka_client_prod, toloka_app_url, app
 
         assert {
             'after_id': ['123'],
-            'sort': ['created_at,-id'],
+            'sort': ['created,-id'],
         } == parse_qs(urlparse(request.url).query)
-        return raw_result
+        return simplejson.dumps(raw_result)
 
-    requests_mock.get(f'{toloka_app_url}/app-projects/123/batches', json=app_batches)
+    requests_mock.get(f'{toloka_app_url}/app-projects/123/batches', text=app_batches)
 
     # Request object syntax
     request = client.search_requests.AppBatchSearchRequest(
         after_id='123',
     )
-    sort = client.search_requests.AppBatchSortItems(['created_at', '-id'])
+    sort = client.search_requests.AppBatchSortItems(['created', '-id'])
     result = toloka_client_prod.find_app_batches('123', request, sort=sort)
     assert raw_result == client.unstructure(result)
 
@@ -504,7 +502,7 @@ def test_find_app_batches(requests_mock, toloka_client_prod, toloka_app_url, app
     result = toloka_client_prod.find_app_batches(
         '123',
         after_id='123',
-        sort=['created_at', '-id'],
+        sort=['created', '-id'],
     )
     assert raw_result == client.unstructure(result)
 
@@ -530,9 +528,9 @@ def test_get_app_batches(requests_mock, toloka_client_prod, toloka_app_url, app_
         } == params
 
         items = [app_batch for app_batch in app_batches if id_gt is None or app_batch['id'] > id_gt][:3]
-        return {'content': items, 'has_more': items[-1]['id'] != app_batches[-1]['id']}
+        return simplejson.dumps({'content': items, 'has_more': items[-1]['id'] != app_batches[-1]['id']})
 
-    requests_mock.get(f'{toloka_app_url}/app-projects/123/batches', json=get_app_batches)
+    requests_mock.get(f'{toloka_app_url}/app-projects/123/batches', text=get_app_batches)
 
     # Request object syntax
     request = client.search_requests.AppBatchSearchRequest(
@@ -566,9 +564,9 @@ def test_get_app_batches_one_params(requests_mock, toloka_client_prod, toloka_ap
 
         params = parse_qs(urlparse(request.url).query)
         assert {'after_id': ['1'], 'sort': ['id']} == params
-        return {'content': [app_batch for app_batch in app_batches], 'has_more': False}
+        return simplejson.dumps({'content': [app_batch for app_batch in app_batches], 'has_more': False})
 
-    requests_mock.get(f'{toloka_app_url}/app-projects/123/batches', json=get_app_batches)
+    requests_mock.get(f'{toloka_app_url}/app-projects/123/batches', text=get_app_batches)
 
     # Expanded positional syntax
     result = toloka_client_prod.get_app_batches('123', after_id='1')
@@ -585,10 +583,10 @@ def test_get_app_batch(requests_mock, toloka_client_prod, toloka_app_url, app_ba
         }
         check_headers(request, expected_headers)
 
-        return app_batch_map
+        return simplejson.dumps(app_batch_map)
 
-    requests_mock.get(f'{toloka_app_url}/app-projects/21/batches/123', json=get_app_batch)
-    assert app_batch_map == client.unstructure(toloka_client_prod.get_app_batch('21', '123'))
+    requests_mock.get(f'{toloka_app_url}/app-projects/21/batches/123', text=get_app_batch)
+    assert app_batch_map == client.unstructure(toloka_client_prod.get_app_batch(app_project_id='21', batch_id='123'))
 
 
 def test_create_app_batch(requests_mock, toloka_client_prod, toloka_app_url, app_item_map, app_batch_map):
@@ -606,23 +604,56 @@ def test_create_app_batch(requests_mock, toloka_client_prod, toloka_app_url, app
         check_headers(request, expected_headers)
 
         assert app_batch_create_request == request.json()
-        return app_batch_map
+        return simplejson.dumps(app_batch_map)
 
-    requests_mock.post(f'{toloka_app_url}/app-projects/123/batches', json=app_batch, status_code=201)
+    requests_mock.post(f'{toloka_app_url}/app-projects/123/batches', text=app_batch, status_code=201)
     app_batch_create_request_obj = client.structure(app_batch_create_request, client.app.AppBatchCreateRequest)
     result = toloka_client_prod.create_app_batch('123', app_batch_create_request_obj)
     assert app_batch_map == client.unstructure(result)
 
 
-def test_start_app_batch(requests_mock, toloka_client_prod, toloka_app_url):
+def test_patch_app_batch(requests_mock, toloka_client_prod, toloka_app_url, app_batch_map):
 
-    def start_app_batch(request, context):
+    app_batch_patch_request = {
+        'name': 'new_name'
+    }
+    app_batch_map_patched = copy.deepcopy(app_batch_map)
+    app_batch_map_patched['name'] = 'new_name'
+
+    def patch_app_batch(request, context):
         expected_headers = {
             'X-Caller-Context': 'client',
-            'X-Top-Level-Method': 'start_app_batch',
-            'X-Low-Level-Method': 'start_app_batch',
+            'X-Top-Level-Method': 'patch_app_batch',
+            'X-Low-Level-Method': 'patch_app_batch',
         }
         check_headers(request, expected_headers)
 
-    requests_mock.post(f'{toloka_app_url}/app-projects/123/batches/321/start', text=start_app_batch, status_code=201)
-    toloka_client_prod.start_app_batch('123', '321')
+        assert app_batch_patch_request == request.json()
+        app_batch_map_copy = copy.deepcopy(app_batch_map)
+        app_batch_map_copy['name'] = 'new_name'
+        return simplejson.dumps(app_batch_map_copy)
+
+    requests_mock.patch(f'{toloka_app_url}/app-projects/123/batches/123', text=patch_app_batch)
+    assert toloka_client_prod.patch_app_batch(
+        '123', app_batch_map['id'], name='new_name'
+    ).unstructure() == app_batch_map_patched
+
+
+@pytest.mark.parametrize(
+    'method_name', ('start_app_batch', 'stop_app_batch', 'resume_app_batch')
+)
+def test_change_app_batch_status(requests_mock, toloka_client_prod, toloka_app_url, method_name):
+
+    def change_status(request, context):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': method_name,
+            'X-Low-Level-Method': method_name,
+        }
+        check_headers(request, expected_headers)
+
+    requests_mock.post(
+        f'{toloka_app_url}/app-projects/123/batches/321/{method_name.split("_")[0]}',
+        text=change_status, status_code=201
+    )
+    getattr(toloka_client_prod, method_name)('123', '321')
