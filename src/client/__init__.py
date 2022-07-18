@@ -129,7 +129,10 @@ from ..__version__ import __version__
 from ._converter import structure, unstructure
 from .aggregation import AggregatedSolution
 from .analytics_request import AnalyticsRequest
-from .app import App, AppItem, AppProject, AppBatch, AppBatchCreateRequest, AppItemsCreateRequest
+from .app import (
+    App, AppItem, AppProject, AppBatch, AppBatchPatch, AppBatchCreateRequest,
+    AppItemsCreateRequest,
+)
 from .assignment import Assignment, AssignmentPatch, GetAssignmentsTsvParameters
 from .attachment import Attachment
 from .clone_results import CloneResults
@@ -3484,11 +3487,12 @@ class TolokaClient:
         return generator
 
     @add_headers('client')
-    def get_app(self, app_id: str) -> App:
+    def get_app(self, app_id: str, lang: Optional[str] = None) -> App:
         """Gets information from Toloka about an App solution.
 
         Args:
             app_id: The ID of the solution.
+            lang: ISO 639 language code.
 
         Returns:
             App: The App solution.
@@ -3497,7 +3501,7 @@ class TolokaClient:
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
 
-        response = self._request('get', f'/app/v0/apps/{app_id}')
+        response = self._request('get', f'/app/v0/apps/{app_id}', params={'lang': lang})
         return structure(response, App)
 
     @expand('request')
@@ -3558,6 +3562,7 @@ class TolokaClient:
         generator.send(None)
         return generator
 
+    @expand('app_item')
     @add_headers('client')
     def create_app_item(self, app_project_id: str, app_item: AppItem) -> AppItem:
         """Creates an App task item in Toloka.
@@ -3686,12 +3691,12 @@ class TolokaClient:
         return structure(response, AppBatch)
 
     @add_headers('client')
-    def get_app_batch(self, app_project_id: str, app_batch_id: str) -> AppBatch:
+    def get_app_batch(self, app_project_id: str, batch_id: str) -> AppBatch:
         """"Gets information from Toloka about a batch in an App project.
 
         Args:
             app_project_id: The ID of the project.
-            app_batch_id: The ID of the batch.
+            batch_id: The ID of the batch.
 
         Returns:
             AppBatch: The App batch.
@@ -3700,20 +3705,76 @@ class TolokaClient:
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
 
-        response = self._request('get', f'/app/v0/app-projects/{app_project_id}/batches/{app_batch_id}')
+        response = self._request('get', f'/app/v0/app-projects/{app_project_id}/batches/{batch_id}')
         return structure(response, AppBatch)
 
+    @expand('patch')
     @add_headers('client')
-    def start_app_batch(self, app_project_id: str, app_batch_id: str):
-        """Launches annotation of a batch of task items in an App project.
+    def patch_app_batch(self, app_project_id: str, batch_id: str, patch: AppBatchPatch) -> AppBatch:
+        """Update app batch name
 
         Args:
             app_project_id: The ID of the project.
-            app_batch_id: The ID of the batch.
+            batch_id: The ID of the batch.
+            patch: New name value.
+
+        Returns:
+            AppBatch: The App batch.
         """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
 
-        self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/batches/{app_batch_id}/start')
+        response = self._request(
+            'patch', f'/app/v0/app-projects/{app_project_id}/batches/{batch_id}', json=unstructure(patch)
+        )
+        return structure(response, AppBatch)
+
+    @add_headers('client')
+    def start_app_batch(self, app_project_id: str, batch_id: str):
+        """Launches annotation of a batch of task items in an App project.
+
+        Args:
+            app_project_id: The ID of the project.
+            batch_id: The ID of the batch.
+        """
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/batches/{batch_id}/start')
+        return
+
+    @add_headers('client')
+    def stop_app_batch(self, app_project_id: str, batch_id: str):
+        """Stops annotation of a batch of task items in an App project.
+
+        Processing can be stopped only for the batch with the PROCESSING status.
+
+        Args:
+            app_project_id: The ID of the project.
+            batch_id: The ID of the batch.
+        """
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/batches/{batch_id}/stop')
+        return
+
+    @add_headers('client')
+    def resume_app_batch(self, app_project_id: str, batch_id: str):
+        """Resumes annotation of a batch of task items in an App project.
+
+        Processing can be resumed only for the batch with the STOPPING or STOPPED status.
+
+        Args:
+            app_project_id: The ID of the project.
+            batch_id: The ID of the batch.
+        """
+
+        if self.url != self.Environment.PRODUCTION.value:
+            raise RuntimeError('this method supports only production environment')
+
+        self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/batches/{batch_id}/resume')
         return

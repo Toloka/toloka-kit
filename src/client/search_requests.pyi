@@ -583,12 +583,12 @@ class AssignmentSearchRequest(BaseSearchRequest):
             * `SUBMITTED` — Completed but not checked.
             * `ACCEPTED` — Accepted by the requester.
             * `REJECTED` — Rejected by the requester.
-            * `SKIPPED` — Skipped by the performer.
+            * `SKIPPED` — Skipped by the Toloker.
             * `EXPIRED` — Time for completing tasks has expired.
         task_id: The ID of a task. The task suite containing that task, matches this search criteria.
         task_suite_id: The ID of a task suite.
         pool_id: Task suites in the pool with the specified ID.
-        user_id: Task suites assigned to the performer with the specified ID.
+        user_id: Task suites assigned to the Toloker with the specified ID.
         id_lt: Task suites with assignment IDs less than the specified value.
         id_lte: Task suites with assignment IDs less than or equal to the specified value.
         id_gt: Task suites with assignment IDs greater than the specified value.
@@ -1069,7 +1069,7 @@ class AttachmentSearchRequest(BaseSearchRequest):
     Attributes:
         name: File name.
         type: Attachment type. Currently the key can have only one value - ASSIGNMENT_ATTACHMENT.
-        user_id: ID of the user who uploaded the file(s).
+        user_id: ID of the Toloker who uploaded the file(s).
         assignment_id: Assignment ID.
         pool_id: Pool ID.
         owner_id: Optional[str]
@@ -1078,10 +1078,10 @@ class AttachmentSearchRequest(BaseSearchRequest):
         id_lte: Files with an ID less than or equal to the specified value.
         id_gt: Files with an ID greater than the specified value.
         id_gte: Files with an ID greater than or equal to the specified value.
-        created_lt: Files uploaded by users before the specified date.
-        created_lte: Files uploaded by users before or on the specified date.
-        created_gt: Files uploaded by users after the specified date.
-        created_gte: Files uploaded by users after or on the specified date.
+        created_lt: Files uploaded by Tolokers before the specified date.
+        created_lte: Files uploaded by Tolokers before or on the specified date.
+        created_gt: Files uploaded by Tolokers after the specified date.
+        created_gte: Files uploaded by Tolokers after or on the specified date.
     """
 
     class CompareFields:
@@ -1178,10 +1178,10 @@ class AttachmentSortItems(BaseSortItems):
 
 
 class UserSkillSearchRequest(BaseSearchRequest):
-    """Parameters for searching user skill
+    """Parameters for searching Toloker skill
 
     Attributes:
-        user_id: Performer ID.
+        user_id: Toloker's ID.
         skill_id: Skill ID.
         id_lt: Skills with an ID less than the specified value.
         id_lte: Skills with an ID less than or equal to the specified value.
@@ -1241,7 +1241,7 @@ class UserSkillSearchRequest(BaseSearchRequest):
 
 
 class UserSkillSortItems(BaseSortItems):
-    """Parameters for sorting user skill search results
+    """Parameters for sorting Toloker skill search results
 
     You can specify multiple parameters.
     To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
@@ -1292,14 +1292,14 @@ class UserSkillSortItems(BaseSortItems):
 
 
 class UserRestrictionSearchRequest(BaseSearchRequest):
-    """Parameters for searching user restriction
+    """Parameters for searching Toloker restriction
 
     Attributes:
         scope: The scope of the ban
             * ALL_PROJECTS
             * PROJECT
             * POOL
-        user_id: Performer ID.
+        user_id: Toloker's ID.
         project_id: The ID of the project that is blocked.
         pool_id: The ID of the pool that is blocked.
         id_lt: Bans with an ID less than the specified value.
@@ -1351,15 +1351,15 @@ class UserRestrictionSearchRequest(BaseSearchRequest):
 
 
 class UserRestrictionSortItems(BaseSortItems):
-    """Parameters for sorting user restriction search results
+    """Parameters for sorting Toloker restriction search results
 
     You can specify multiple parameters.
     To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
 
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - User restriction ID in ascending order.
-            * created - Creation date in UTC format yyyy-MM-DD (ascending).
+            * id - Restriction IDs.
+            * created - Creation date in UTC format yyyy-MM-DD.
 
     Example:
         How to specify and use SortItems.
@@ -1400,11 +1400,11 @@ class UserRestrictionSortItems(BaseSortItems):
 
 
 class UserBonusSearchRequest(BaseSearchRequest):
-    """Parameters for searching user bonus
+    """Parameters for searching `UserBonus` instances.
 
     Attributes:
-        user_id: Performer ID.
-        assignment_id: ID of the performer's response to the task a reward is issued for.
+        user_id: The ID of the Toloker.
+        assignment_id: The ID of the Toloker's response to the task a reward is issued for.
         private_comment: Comments for the requester.
         id_lt: Bonuses with an ID less than the specified value.
         id_lte: Bonuses with an ID less than or equal to the specified value.
@@ -1453,7 +1453,7 @@ class UserBonusSearchRequest(BaseSearchRequest):
 
 
 class UserBonusSortItems(BaseSortItems):
-    """Parameters for sorting user bonus search results
+    """Parameters for sorting `UserBonus` search results
 
     You can specify multiple parameters.
     To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
@@ -1833,6 +1833,7 @@ class AppSearchRequest(BaseSearchRequest):
 
     Attributes:
         after_id: The ID of a solution used for cursor pagination.
+        lang: ISO 639 language code.
         id_gt: Solutions with IDs greater than the specified value.
         id_gte: Solutions with IDs greater than or equal to the specified value.
         id_lt: Solutions with IDs less than the specified value.
@@ -1845,19 +1846,15 @@ class AppSearchRequest(BaseSearchRequest):
 
     class CompareFields:
         id: str
-        name: str
 
     def __init__(
         self,
         after_id: typing.Optional[str] = None,
+        lang: typing.Optional[str] = None,
         id_lt: typing.Optional[str] = None,
         id_lte: typing.Optional[str] = None,
         id_gt: typing.Optional[str] = None,
-        id_gte: typing.Optional[str] = None,
-        name_lt: typing.Optional[str] = None,
-        name_lte: typing.Optional[str] = None,
-        name_gt: typing.Optional[str] = None,
-        name_gte: typing.Optional[str] = None
+        id_gte: typing.Optional[str] = None
     ) -> None:
         """Method generated by attrs for class AppSearchRequest.
         """
@@ -1865,26 +1862,22 @@ class AppSearchRequest(BaseSearchRequest):
 
     _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
     after_id: typing.Optional[str]
+    lang: typing.Optional[str]
     id_lt: typing.Optional[str]
     id_lte: typing.Optional[str]
     id_gt: typing.Optional[str]
     id_gte: typing.Optional[str]
-    name_lt: typing.Optional[str]
-    name_lte: typing.Optional[str]
-    name_gt: typing.Optional[str]
-    name_gte: typing.Optional[str]
 
 
 class AppSortItems(BaseSortItems):
     """Keys for sorting App solutions in search results.
 
     You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
-    Example: `sort='-name,id'`.
+    Example: `sort='-id'`.
 
     Attributes:
         key: The sorting key. Supported keys:
             * `id` — An App solution ID.
-            * `name` — An App solution name.
     """
 
     class SortItem(BaseSortItem):
@@ -1893,7 +1886,6 @@ class AppSortItems(BaseSortItems):
             """
 
             ID = 'id'
-            NAME = 'name'
 
         def __init__(
             self,
@@ -1936,11 +1928,16 @@ class AppItemSearchRequest(BaseSearchRequest):
             YYYY-MM-DDThh:mm:ss[.sss].
         created_lte: Items created before or on the specified date. The date is specified in UTC in ISO 8601
             format: YYYY-MM-DDThh:mm:ss[.sss].
+        finished_gt: Items labeled after the specified date.
+        finished_gte: Items labeled after or on the specified date.
+        finished_lt: Items labeled before the specified date.
+        finished_lte: Items labeled before or on the specified date.
     """
 
     class CompareFields:
         id: str
-        created_at: datetime.datetime
+        created: datetime.datetime
+        finished: datetime.datetime
 
     def __init__(
         self,
@@ -1951,10 +1948,14 @@ class AppItemSearchRequest(BaseSearchRequest):
         id_lte: typing.Optional[str] = None,
         id_gt: typing.Optional[str] = None,
         id_gte: typing.Optional[str] = None,
-        created_at_lt: typing.Optional[datetime.datetime] = None,
-        created_at_lte: typing.Optional[datetime.datetime] = None,
-        created_at_gt: typing.Optional[datetime.datetime] = None,
-        created_at_gte: typing.Optional[datetime.datetime] = None
+        created_lt: typing.Optional[datetime.datetime] = None,
+        created_lte: typing.Optional[datetime.datetime] = None,
+        created_gt: typing.Optional[datetime.datetime] = None,
+        created_gte: typing.Optional[datetime.datetime] = None,
+        finished_lt: typing.Optional[datetime.datetime] = None,
+        finished_lte: typing.Optional[datetime.datetime] = None,
+        finished_gt: typing.Optional[datetime.datetime] = None,
+        finished_gte: typing.Optional[datetime.datetime] = None
     ) -> None:
         """Method generated by attrs for class AppItemSearchRequest.
         """
@@ -1968,10 +1969,14 @@ class AppItemSearchRequest(BaseSearchRequest):
     id_lte: typing.Optional[str]
     id_gt: typing.Optional[str]
     id_gte: typing.Optional[str]
-    created_at_lt: typing.Optional[datetime.datetime]
-    created_at_lte: typing.Optional[datetime.datetime]
-    created_at_gt: typing.Optional[datetime.datetime]
-    created_at_gte: typing.Optional[datetime.datetime]
+    created_lt: typing.Optional[datetime.datetime]
+    created_lte: typing.Optional[datetime.datetime]
+    created_gt: typing.Optional[datetime.datetime]
+    created_gte: typing.Optional[datetime.datetime]
+    finished_lt: typing.Optional[datetime.datetime]
+    finished_lte: typing.Optional[datetime.datetime]
+    finished_gt: typing.Optional[datetime.datetime]
+    finished_gte: typing.Optional[datetime.datetime]
 
 
 class AppItemSortItems(BaseSortItems):
@@ -1983,7 +1988,9 @@ class AppItemSortItems(BaseSortItems):
     Attributes:
         key: The sorting key. Supported keys:
             * `id` — A task item ID.
-            * `created_at` — A task item creation date.
+            * `created` — The date and time when the item was created.
+            * `finished` — The date and time when the item processing was completed.
+            * `status` — The item status.
     """
 
     class SortItem(BaseSortItem):
@@ -1992,7 +1999,9 @@ class AppItemSortItems(BaseSortItems):
             """
 
             ID = 'id'
-            CREATED_AT = 'created_at'
+            CREATED = 'created'
+            FINISHED = 'finished'
+            STATUS = 'status'
 
         def __init__(
             self,
@@ -2043,7 +2052,7 @@ class AppBatchSearchRequest(BaseSearchRequest):
     class CompareFields:
         id: str
         name: str
-        created_at: datetime.datetime
+        created: datetime.datetime
 
     def __init__(
         self,
@@ -2057,10 +2066,10 @@ class AppBatchSearchRequest(BaseSearchRequest):
         name_lte: typing.Optional[str] = None,
         name_gt: typing.Optional[str] = None,
         name_gte: typing.Optional[str] = None,
-        created_at_lt: typing.Optional[datetime.datetime] = None,
-        created_at_lte: typing.Optional[datetime.datetime] = None,
-        created_at_gt: typing.Optional[datetime.datetime] = None,
-        created_at_gte: typing.Optional[datetime.datetime] = None
+        created_lt: typing.Optional[datetime.datetime] = None,
+        created_lte: typing.Optional[datetime.datetime] = None,
+        created_gt: typing.Optional[datetime.datetime] = None,
+        created_gte: typing.Optional[datetime.datetime] = None
     ) -> None:
         """Method generated by attrs for class AppBatchSearchRequest.
         """
@@ -2077,10 +2086,10 @@ class AppBatchSearchRequest(BaseSearchRequest):
     name_lte: typing.Optional[str]
     name_gt: typing.Optional[str]
     name_gte: typing.Optional[str]
-    created_at_lt: typing.Optional[datetime.datetime]
-    created_at_lte: typing.Optional[datetime.datetime]
-    created_at_gt: typing.Optional[datetime.datetime]
-    created_at_gte: typing.Optional[datetime.datetime]
+    created_lt: typing.Optional[datetime.datetime]
+    created_lte: typing.Optional[datetime.datetime]
+    created_gt: typing.Optional[datetime.datetime]
+    created_gte: typing.Optional[datetime.datetime]
 
 
 class AppBatchSortItems(BaseSortItems):
@@ -2093,7 +2102,8 @@ class AppBatchSortItems(BaseSortItems):
         key: The sorting key. Supported keys:
             * `id` — A batch ID.
             * `name` — A batch name.
-            * `created_at` — A batch creation date.
+            * `created` — A batch creation date.
+            * `status` — The item status.
     """
 
     class SortItem(BaseSortItem):
@@ -2103,7 +2113,8 @@ class AppBatchSortItems(BaseSortItems):
 
             ID = 'id'
             NAME = 'name'
-            CREATED_AT = 'created_at'
+            CREATED = 'created'
+            STATUS = 'status'
 
         def __init__(
             self,

@@ -67,10 +67,10 @@ class AdditionalLanguage(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class LocalizationConfig(toloka.client.primitives.base.BaseTolokaObject):
-    """Translates the part of the project visible to the performers into different languages
+    """Translates the part of the project visible to Tolokers into different languages
 
-    It is used to make it easier for performers from other countries who do not speak the necessary language to
-    understand and perform tasks.
+    It is used to make it easier for Tolokers from other countries who do not speak the necessary language to
+    understand and complete tasks.
 
     Args:
         default_language: The source language used in the fields public_name, public_description, and public_instructions.

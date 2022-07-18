@@ -1030,6 +1030,7 @@ class AppSearchRequest(BaseSearchRequest):
 
     Attributes:
         after_id: The ID of a solution used for cursor pagination.
+        lang: ISO 639 language code.
         id_gt: Solutions with IDs greater than the specified value.
         id_gte: Solutions with IDs greater than or equal to the specified value.
         id_lt: Solutions with IDs less than the specified value.
@@ -1042,23 +1043,22 @@ class AppSearchRequest(BaseSearchRequest):
 
     class CompareFields:
         id: str
-        name: str
 
     after_id: str
+    lang: str
 
 
 AppSortItems = BaseSortItems.for_fields(
-    'AppSortItems', ['id', 'name'],
+    'AppSortItems', ['id'],
     # docstring
     """Keys for sorting App solutions in search results.
 
     You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
-    Example: `sort='-name,id'`.
+    Example: `sort='-id'`.
 
     Attributes:
         key: The sorting key. Supported keys:
             * `id` — An App solution ID.
-            * `name` — An App solution name.
     """
 )
 
@@ -1082,12 +1082,16 @@ class AppItemSearchRequest(BaseSearchRequest):
             YYYY-MM-DDThh:mm:ss[.sss].
         created_lte: Items created before or on the specified date. The date is specified in UTC in ISO 8601
             format: YYYY-MM-DDThh:mm:ss[.sss].
-
+        finished_gt: Items labeled after the specified date.
+        finished_gte: Items labeled after or on the specified date.
+        finished_lt: Items labeled before the specified date.
+        finished_lte: Items labeled before or on the specified date.
     """
 
     class CompareFields:
         id: str
-        created_at: datetime.datetime
+        created: datetime.datetime
+        finished: datetime.datetime
 
     after_id: str
     batch_id: str
@@ -1095,7 +1099,7 @@ class AppItemSearchRequest(BaseSearchRequest):
 
 
 AppItemSortItems = BaseSortItems.for_fields(
-    'AppItemSortItems', ['id', 'created_at'],
+    'AppItemSortItems', ['id', 'created', 'finished', 'status'],
     # docstring
     """Keys for sorting App task items in search results.
 
@@ -1105,7 +1109,9 @@ AppItemSortItems = BaseSortItems.for_fields(
     Attributes:
         key: The sorting key. Supported keys:
             * `id` — A task item ID.
-            * `created_at` — A task item creation date.
+            * `created` — The date and time when the item was created.
+            * `finished` — The date and time when the item processing was completed.
+            * `status` — The item status.
     """
 )
 
@@ -1137,14 +1143,14 @@ class AppBatchSearchRequest(BaseSearchRequest):
     class CompareFields:
         id: str
         name: str
-        created_at: datetime.datetime
+        created: datetime.datetime
 
     after_id: str
     status: AppBatch.Status
 
 
 AppBatchSortItems = BaseSortItems.for_fields(
-    'AppBatchSortItems', ['id', 'name', 'created_at'],
+    'AppBatchSortItems', ['id', 'name', 'created', 'status'],
     # docstring
     """Keys for sorting App batches in search results.
 
@@ -1155,6 +1161,7 @@ AppBatchSortItems = BaseSortItems.for_fields(
         key: The sorting key. Supported keys:
             * `id` — A batch ID.
             * `name` — A batch name.
-            * `created_at` — A batch creation date.
+            * `created` — A batch creation date.
+            * `status` — The item status.
     """
 )

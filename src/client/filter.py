@@ -333,15 +333,18 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
     """
 
     verified_languages_to_skills: ClassVar[Dict[str, str]] = {
+        'AR': '30724',
         'DE': '26377',
         'EN': '26366',
+        'ES': '32346',
         'FR': '26711',
+        'HE': '44954',
+        'ID': '39821',
         'JA': '26513',
         'PT': '26714',
-        'SV': '29789',
         'RU': '26296',
-        'AR': '30724',
-        'ES': '32346',
+        'SV': '29789',
+        'ZH-HANS': '44742',
     }
 
     VERIFIED_LANGUAGE_SKILL_VALUE: ClassVar[int] = 100
