@@ -26,18 +26,18 @@ class DurationUnit(enum.Enum):
 class UserRestriction(toloka.client.primitives.base.BaseTolokaObject):
     """Controls access to projects and pools.
 
-    You can restrict access to any project for a performer. Then he can't do tasks in the project. You may set the duration of restriction or apply permanent restriction.
+    You can restrict access to any project for a Toloker. Then he can't do tasks in the project. You may set the duration of restriction or apply permanent restriction.
     To unlock access pass the restriction ID to the `delete_user_restriction`.
 
     Attributes:
-        user_id: The ID of the performer.
-        private_comment: A comment for you why access to this performer was restricted.
+        user_id: The ID of the Toloker.
+        private_comment: A comment for you why access to this Toloker was restricted.
         will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
         id: The identifier of a specific fact of access restriction. Read only.
         created: Date and time when the fact of access restriction was created. Read only.
 
     Example:
-        How you can lock access for one user on one project.
+        How you can lock access for one Toloker on one project.
 
         >>> new_restrict = toloka_client.set_user_restriction(
         >>>     ProjectUserRestriction(
@@ -89,11 +89,11 @@ class UserRestriction(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AllProjectsUserRestriction(UserRestriction):
-    """Forbid the performer from doing tasks from all your projects
+    """Forbid the Toloker to complete tasks from all your projects
 
     Attributes:
-        user_id: The ID of the performer.
-        private_comment: A comment for you why access to this performer was restricted.
+        user_id: The ID of the Toloker.
+        private_comment: A comment for you why access to this Toloker was restricted.
         will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
         id: The identifier of a specific fact of access restriction. Read only.
         created: Date and time when the fact of access restriction was created. Read only.
@@ -121,11 +121,11 @@ class AllProjectsUserRestriction(UserRestriction):
 
 
 class PoolUserRestriction(UserRestriction):
-    """Forbid the performer from doing tasks from a specific pool
+    """Forbid the Toloker to complete tasks from a specific pool
 
     Attributes:
-        user_id: The ID of the performer.
-        private_comment: A comment for you why access to this performer was restricted.
+        user_id: The ID of the Toloker.
+        private_comment: A comment for you why access to this Toloker was restricted.
         will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
         id: The identifier of a specific fact of access restriction. Read only.
         created: Date and time when the fact of access restriction was created. Read only.
@@ -156,11 +156,11 @@ class PoolUserRestriction(UserRestriction):
 
 
 class ProjectUserRestriction(UserRestriction):
-    """Forbid the performer from doing tasks from a specific project
+    """Forbid the Toloker to complete tasks from a specific project
 
     Attributes:
-        user_id: The ID of the performer.
-        private_comment: A comment for you why access to this performer was restricted.
+        user_id: The ID of the Toloker.
+        private_comment: A comment for you why access to this Toloker was restricted.
         will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
         id: The identifier of a specific fact of access restriction. Read only.
         created: Date and time when the fact of access restriction was created. Read only.
@@ -194,8 +194,8 @@ class SystemUserRestriction(UserRestriction):
     """DEPRECATED
 
     Attributes:
-        user_id: The ID of the performer.
-        private_comment: A comment for you why access to this performer was restricted.
+        user_id: The ID of the Toloker.
+        private_comment: A comment for you why access to this Toloker was restricted.
         will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
         id: The identifier of a specific fact of access restriction. Read only.
         created: Date and time when the fact of access restriction was created. Read only.

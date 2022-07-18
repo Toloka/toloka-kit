@@ -205,19 +205,19 @@ class TaskCursor(BaseCursor):
 
 
 class UserBonusCursor(BaseCursor):
-    """Iterator over user bonuses by create time.
+    """Iterator over `UserBonus` instances by create time.
 
     Args:
-        toloka_client: TolokaClient object that is being used to search user bonuses.
-        request: Base request to search user bonuses by.
+        toloka_client: TolokaClient object that is being used to search `UserBonus` instances.
+        request: Base request to search `UserBonus` instances by.
 
     Examples:
-        Iterate over user bonuses.
+        Iterate over `UserBonus` instances.
 
         >>> it = UserBonusCursor(toloka_client=toloka_client)
         >>> current_bonuses = list(it)
-        >>> # ... new user bonuses could appear ...
-        >>> new_bonuses = list(it)  # Contains only new user bonuses, appeared since the previous call.
+        >>> # ... new `UserBonus` instances could appear ...
+        >>> new_bonuses = list(it)  # Contains only new `UserBonus` instances, appeared since the previous call.
         ...
     """
 
@@ -258,20 +258,20 @@ class UserBonusCursor(BaseCursor):
 
 
 class UserSkillCursor(BaseCursor):
-    """Iterator over UserSkillEvent objects of seleted event_type.
+    """Iterator over UserSkillEvent objects of a selected event_type.
 
     Args:
-        toloka_client: TolokaClient object that is being used to search user skills.
-        request: Base request to search user skills by.
-        event_type: User skill event's type to search.
+        toloka_client: TolokaClient object that is being used to search skills.
+        request: Base request to search skills by.
+        event_type: Skill event type to search.
 
     Examples:
-        Iterate over user skills acceptances events.
+        Iterate over skills acceptances events.
 
         >>> it = UserSkillCursor(event_type='MODIFIED', toloka_client=toloka_client)
         >>> current_events = list(it)
-        >>> # ... new user skills could be set ...
-        >>> new_events = list(it)  # Contains only new events, occured since the previous call.
+        >>> # ... new skills could be set ...
+        >>> new_events = list(it)  # Contains only new events, occurred since the previous call.
         ...
     """
 
@@ -318,19 +318,19 @@ class UserSkillCursor(BaseCursor):
 
 
 class UserRestrictionCursor(BaseCursor):
-    """Iterator over user restrictions by create time.
+    """Iterator over Toloker restrictions by create time.
 
     Args:
-        toloka_client: TolokaClient object that is being used to search user restrictions.
-        request: Base request to search user restrictions.
+        toloka_client: TolokaClient object that is being used to search Toloker restrictions.
+        request: Base request to search Toloker restrictions.
 
     Examples:
-        Iterate over user restrictions in project.
+        Iterate over Toloker restrictions in a project.
 
         >>> it = UserRestrictionCursor(toloka_client=toloka_client, project_id=my_proj_id)
         >>> current_restrictions = list(it)
         >>> # ... new restrictions could appear ...
-        >>> new_restrictions = list(it)  # Contains only new user restrictions, appeared since the previous call.
+        >>> new_restrictions = list(it)  # Contains only new restrictions, appeared since the previous call.
         ...
     """
 

@@ -9,7 +9,7 @@ import typing
 class DynamicOverlapConfig(toloka.client.primitives.base.BaseTolokaObject):
     """Dynamic overlap setting.
 
-    Allows you to change the overlap depending on how well the performers handle the task.
+    Allows you to change the overlap depending on how well Tolokers handle the task.
     Set the closing interval (auto_close_after_complete_delay_seconds). It should be enough to complete tasks
     with an overlap higher than the minimum.
     When all pool tasks are completed, aggregate the responses.
@@ -17,7 +17,7 @@ class DynamicOverlapConfig(toloka.client.primitives.base.BaseTolokaObject):
         type: The algorithm for dynamic overlap.
         max_overlap: Maximum overlap. Must be higher than the values in defaults. Minimum — 1. Maximum — 30000.
         min_confidence: Minimum confidence of the aggregated response. Values from 0 to 1.
-        answer_weight_skill_id: A skill that determines the weight of the performer's response. For best results, use
+        answer_weight_skill_id: A skill that determines the weight of the Toloker's response. For best results, use
             a skill calculated as percentage of correct responses in control tasks.
         fields: Output data fields to use for aggregating responses.
     """
@@ -25,8 +25,8 @@ class DynamicOverlapConfig(toloka.client.primitives.base.BaseTolokaObject):
     class Type(toloka.util._extendable_enum.ExtendableStrEnum):
         """The algorithm for dynamic overlap.
 
-        Atttributes:
-            BASIC: Each response is assigned a weight depending on the performer's skill value.
+        Attributes:
+            BASIC: Each response is assigned a weight depending on the Toloker's skill value.
                 The aggregated response confidence is calculated based on the probability algorithm. The task overlap
                 increases until it reaches max_overlap or until the confidence of the aggregated response
                 exceeds min_confidence.

@@ -36,7 +36,7 @@ from toloka.client.pool.speed_quality_balance_config import SpeedQualityBalanceC
 class Pool(toloka.client.primitives.base.BaseTolokaObject):
     """A set of tasks that are issued and checked according to the same rules within the project
 
-    Groups tasks by the following criteria: one-time start-up, which performers can perform tasks, quality control,
+    Groups tasks by the following criteria: one-time start-up, which Tolokers can perform tasks, quality control,
     price for TaskSuite's, overlap.
     Tasks, golden tasks and assignments are related to a pool.
 
@@ -48,15 +48,15 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
             The minimum payment is $0.01.
             Only training and control tasks can be uploaded to zero-price pools.
         assignment_max_duration_seconds: The time allowed for completing a task suite, in seconds.
-            Tasks not completed within this time are reassigned to other users.
+            Tasks not completed within this time are reassigned to other Tolokers.
             We recommend allowing no more than 60 seconds per task suite (including the time for page loading
             and sending responses).
         defaults: Settings that are applied by default when uploading new task suites to a pool.
         will_expire: The date and time in UTC when the pool should be closed (even if all the task suites haven't
             been completed).
         private_comment: Comments on the pool (only visible to the requester).
-        public_description: Description for users. If it is filled in, the text will be displayed instead of
-            the project's public_description in the list of tasks for performers.
+        public_description: Description for Tolokers. If it is filled in, the text will be displayed instead of
+            the project's public_description in the list of tasks for Tolokers.
         public_instructions: Optional[str]
         auto_close_after_complete_delay_seconds: Waiting time (in seconds) before automatic closure of the pool
             after all tasks are completed. Minimum — 0, maximum — 259200 seconds (three days).
@@ -71,19 +71,19 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
         auto_accept_period_day: Optional[int]
         assignments_issuing_config: Settings for assigning tasks in the pool.
         priority: The priority of the pool in relation to other pools in the project with the same task
-            price and set of filters. Users are assigned tasks with a higher priority first.
+            price and set of filters. Tolokers are assigned tasks with a higher priority first.
             Possible values: from -100 to 100.
             If the project has multiple pools, the order for completing them depends on the parameters:
-            * Pools with identical filter settings and price per task are assigned to users in the order
+            * Pools with identical filter settings and price per task are assigned to Tolokers in the order
                 in which they were started. The pool that was started earlier will be completed sooner.
                 You can change the order for completing the pools.
             * Pools with different filter settings and/or a different price per task are sent out for completion
                 when the pool opens.
-        filter: Settings for user selection filters.
+        filter: Settings for Toloker selection filters.
         quality_control: Settings for quality control rules and the ID of the pool with training tasks.
         speed_quality_balance: Settings for balance between speed and quality of pool done.
         dynamic_overlap_config: Dynamic overlap setting. Allows you to change the overlap depending on
-            how well the performers handle the task.
+            how well Tolokers handle the task.
         mixer_config: Parameters for automatically creating a task suite (“smart mixing”).
         training_config: Optional[TrainingConfig]
         metadata: Optional[Dict[str, List[str]]]
@@ -123,7 +123,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
         Attributes:
             issue_task_suites_in_creation_order: For pools that don't use “smart mixing”.
                 Assign task suites in the order in which they were uploaded. For example, for a pool with an
-                overlap of 5, the first task suite is assigned to five users, then the second task suite, and so on.
+                overlap of 5, the first task suite is assigned to five Tolokers, then the second task suite, and so on.
                 This parameter is available when the project has "assignments_issuing_type": "AUTOMATED".
         """
 
@@ -523,7 +523,7 @@ class PoolPatchRequest(toloka.client.primitives.base.BaseTolokaObject):
 
     Attributes:
         priority: The priority of the pool in relation to other pools in the project with the same task
-            price and set of filters. Users are assigned tasks with a higher priority first.
+            price and set of filters. Tolokers are assigned tasks with a higher priority first.
             Possible values: from -100 to 100.
 
     Example:

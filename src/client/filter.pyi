@@ -37,12 +37,12 @@ import typing
 
 
 class FilterCondition(toloka.client.primitives.base.BaseTolokaObject):
-    """You can select users to access pool tasks.
+    """You can select Tolokers to access pool tasks.
 
-    For example, you can select users by region, skill, or browser type (desktop or mobile).
+    For example, you can select Tolokers by region, skill, or browser type (desktop or mobile).
 
     Example:
-        How to setup filter for selecting users.
+        How to setup filter for selecting Tolokers.
 
         >>> # you can combine filters using bitwise operators '|' and  '&'
         >>> filter = (
@@ -102,11 +102,11 @@ class FilterAnd(FilterCondition):
 
 
 class Condition(FilterCondition):
-    """Condition to select users.
+    """Condition to select Tolokers.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Attribute value from the field key. For example, the ID of the region specified in the profile,
             or the minimum skill value.
@@ -139,18 +139,18 @@ class Condition(FilterCondition):
 
 
 class Profile(Condition):
-    """Use to select users based on profile data.
+    """Use to select Tolokers based on profile data.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Attribute value from the field key. For example, the ID of the region specified in the profile,
             or the minimum skill value.
     """
 
     class Key(toloka.util._extendable_enum.ExtendableStrEnum):
-        """Possible criteria for filtering users by profile.
+        """Possible criteria for filtering Tolokers by profile.
         """
 
         GENDER = 'gender'
@@ -178,18 +178,18 @@ class Profile(Condition):
 
 
 class Computed(Condition):
-    """Use to select users based on data received or calculated by Toloka.
+    """Use to select Tolokers based on data received or calculated by Toloka.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Attribute value from the field key. For example, the ID of the region specified in the profile,
             or the minimum skill value.
     """
 
     class Key(toloka.util._extendable_enum.ExtendableStrEnum):
-        """Possible criteria for filtering users by computed data.
+        """Possible criteria for filtering Tolokers by computed data.
         """
 
         CLIENT_TYPE = 'client_type'
@@ -224,9 +224,9 @@ class Computed(Condition):
 
 
 class Skill(toloka.client.primitives.operators.StatefulComparableConditionMixin, Condition):
-    """Use to select users by skill value.
+    """Use to select Tolokers by skill value.
 
-    To select users without a skill set the parameter value operator=CompareOperator.EQ and exclude the parameter value.
+    To select Tolokers without a skill set the parameter value operator=CompareOperator.EQ and exclude the parameter value.
     Attributes:
         key: Skill ID.
         operator: Comparison operator in the condition.
@@ -250,17 +250,17 @@ class Skill(toloka.client.primitives.operators.StatefulComparableConditionMixin,
 
 
 class Gender(Profile, toloka.client.primitives.operators.IdentityConditionMixin):
-    """Use to select users by gender.
+    """Use to select Tolokers by gender.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
-        value: User gender.
+        value: Toloker's gender.
     """
 
     class Gender(toloka.util._extendable_enum.ExtendableStrEnum):
-        """User gender.
+        """Toloker's gender.
         """
 
         MALE = 'MALE'
@@ -281,13 +281,13 @@ class Gender(Profile, toloka.client.primitives.operators.IdentityConditionMixin)
 
 
 class Country(Profile, toloka.client.primitives.operators.IdentityConditionMixin):
-    """Use to select users by country.
+    """Use to select Tolokers by country.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
-        value: Country of the user (two-letter code of the standard ISO 3166-1 alpha-2).
+        value: Country of the Toloker (two-letter code of the standard ISO 3166-1 alpha-2).
     """
 
     def __init__(
@@ -305,13 +305,13 @@ class Country(Profile, toloka.client.primitives.operators.IdentityConditionMixin
 
 
 class Citizenship(Profile, toloka.client.primitives.operators.IdentityConditionMixin):
-    """Use to select users by citizenship.
+    """Use to select Tolokers by citizenship.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
-        value: User citizenship (two-letter country code) ISO 3166-1 alpha-2
+        value: Toloker's citizenship (two-letter country code) ISO 3166-1 alpha-2
     """
 
     def __init__(
@@ -329,17 +329,17 @@ class Citizenship(Profile, toloka.client.primitives.operators.IdentityConditionM
 
 
 class Education(Profile, toloka.client.primitives.operators.IdentityConditionMixin):
-    """Use to select users by education.
+    """Use to select Tolokers by education.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
-        value: User education.
+        value: Toloker's education.
     """
 
     class Education(toloka.util._extendable_enum.ExtendableStrEnum):
-        """User education.
+        """Toloker's education.
         """
 
         BASIC = 'BASIC'
@@ -361,13 +361,13 @@ class Education(Profile, toloka.client.primitives.operators.IdentityConditionMix
 
 
 class AdultAllowed(Profile, toloka.client.primitives.operators.IdentityConditionMixin):
-    """Use to select users by their agreement to perform tasks that contain adult content.
+    """Use to select Tolokers by their agreement to perform tasks that contain adult content.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
-        value: User agreement.
+        value: Toloker's agreement.
     """
 
     def __init__(
@@ -385,13 +385,13 @@ class AdultAllowed(Profile, toloka.client.primitives.operators.IdentityCondition
 
 
 class DateOfBirth(Profile, toloka.client.primitives.operators.ComparableConditionMixin):
-    """Use to select users by date of birth.
+    """Use to select Tolokers by date of birth.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
-        value: The user's date of birth (UNIX time in seconds).
+        value: The Toloker's date of birth (UNIX time in seconds).
     """
 
     def __init__(
@@ -409,13 +409,13 @@ class DateOfBirth(Profile, toloka.client.primitives.operators.ComparableConditio
 
 
 class City(Profile, toloka.client.primitives.operators.InclusionConditionMixin):
-    """Use to select users by city.
+    """Use to select Tolokers by city.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
-        value: User city(ID of the region).
+        value: Toloker's city(ID of the region).
     """
 
     def __init__(
@@ -433,14 +433,14 @@ class City(Profile, toloka.client.primitives.operators.InclusionConditionMixin):
 
 
 class Languages(Profile, toloka.client.primitives.operators.InclusionConditionMixin):
-    """Use to select users by languages specified by the user in the profile.
+    """Use to select Tolokers by languages specified by the Toloker in the profile.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
-        value: Languages specified by the user in the profile (two-letter ISO code of the standard ISO 639-1 in upper case).
-        verified: If set to True, only the users who have passed a language test will be selected. Currently, you can
+        value: Languages specified by the Toloker in the profile (two-letter ISO code of the standard ISO 639-1 in upper case).
+        verified: If set to True, only the Tolokers who have passed a language test will be selected. Currently, you can
             use this parameter only with the following ISO codes : `DE`, `EN`, `FR`, `JA`, `PT`, `SV`, `RU`, `AR`, `ES`.
     """
 
@@ -460,13 +460,13 @@ class Languages(Profile, toloka.client.primitives.operators.InclusionConditionMi
 
 
 class RegionByPhone(Computed, toloka.client.primitives.operators.InclusionConditionMixin):
-    """Use to select users by their region determined by the mobile phone number.
+    """Use to select Tolokers by their region determined by the mobile phone number.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
-        value: The user's region.
+        value: The Toloker's region.
     """
 
     def __init__(
@@ -484,13 +484,13 @@ class RegionByPhone(Computed, toloka.client.primitives.operators.InclusionCondit
 
 
 class RegionByIp(Computed, toloka.client.primitives.operators.InclusionConditionMixin):
-    """Use to select users by their region determined by IP address.
+    """Use to select Tolokers by their region determined by IP address.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
-        value: The user's region.
+        value: The Toloker's region.
     """
 
     def __init__(
@@ -508,13 +508,13 @@ class RegionByIp(Computed, toloka.client.primitives.operators.InclusionCondition
 
 
 class DeviceCategory(Computed, toloka.client.primitives.operators.IdentityConditionMixin):
-    """Use to select users by their device category.
+    """Use to select Tolokers by their device category.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
-        value: The user's device category.
+        value: The Toloker's device category.
     """
 
     class DeviceCategory(toloka.util._extendable_enum.ExtendableStrEnum):
@@ -541,11 +541,11 @@ class DeviceCategory(Computed, toloka.client.primitives.operators.IdentityCondit
 
 
 class ClientType(Computed, toloka.client.primitives.operators.IdentityConditionMixin):
-    """Use to select users by their application type.
+    """Use to select Tolokers by their application type.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Client application type.
     """
@@ -572,11 +572,11 @@ class ClientType(Computed, toloka.client.primitives.operators.IdentityConditionM
 
 
 class OSFamily(Computed, toloka.client.primitives.operators.IdentityConditionMixin):
-    """Use to select users by their OS family.
+    """Use to select Tolokers by their OS family.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: The operating system family.
     """
@@ -609,13 +609,13 @@ class OSFamily(Computed, toloka.client.primitives.operators.IdentityConditionMix
 
 
 class OSVersion(Computed, toloka.client.primitives.operators.ComparableConditionMixin):
-    """Use to select users by OS full version.
+    """Use to select Tolokers by OS full version.
 
     For example: 14.4
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Full version of the operating system.
     """
@@ -635,13 +635,13 @@ class OSVersion(Computed, toloka.client.primitives.operators.ComparableCondition
 
 
 class OSVersionMajor(Computed, toloka.client.primitives.operators.ComparableConditionMixin):
-    """Use to select users by OS major version.
+    """Use to select Tolokers by OS major version.
 
     For example: 14
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Major version of the operating system.
     """
@@ -661,13 +661,13 @@ class OSVersionMajor(Computed, toloka.client.primitives.operators.ComparableCond
 
 
 class OSVersionMinor(Computed, toloka.client.primitives.operators.ComparableConditionMixin):
-    """Use to select users by OS minor version.
+    """Use to select Tolokers by OS minor version.
 
     For example: 4
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Minor version of the operating system.
     """
@@ -687,13 +687,13 @@ class OSVersionMinor(Computed, toloka.client.primitives.operators.ComparableCond
 
 
 class OSVersionBugfix(Computed, toloka.client.primitives.operators.ComparableConditionMixin):
-    """Use to select users by build number (bugfix version) of the operating system.
+    """Use to select Tolokers by build number (bugfix version) of the operating system.
 
     For example: 1
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Build number (bugfix version) of the operating system.
     """
@@ -713,11 +713,11 @@ class OSVersionBugfix(Computed, toloka.client.primitives.operators.ComparableCon
 
 
 class UserAgentType(Computed, toloka.client.primitives.operators.IdentityConditionMixin):
-    """Use to select users by user agent type:
+    """Use to select Tolokers by user agent type:
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: User agent type.
     """
@@ -745,11 +745,11 @@ class UserAgentType(Computed, toloka.client.primitives.operators.IdentityConditi
 
 
 class UserAgentFamily(Computed, toloka.client.primitives.operators.IdentityConditionMixin):
-    """Use to select users by user agent family.
+    """Use to select Tolokers by user agent family.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: User agent family.
     """
@@ -784,11 +784,11 @@ class UserAgentFamily(Computed, toloka.client.primitives.operators.IdentityCondi
 
 
 class UserAgentVersion(Computed, toloka.client.primitives.operators.ComparableConditionMixin):
-    """Use to select users by full browser version.
+    """Use to select Tolokers by full browser version.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Full browser version. <Major version>.<Minor version>.
     """
@@ -808,11 +808,11 @@ class UserAgentVersion(Computed, toloka.client.primitives.operators.ComparableCo
 
 
 class UserAgentVersionMajor(Computed, toloka.client.primitives.operators.ComparableConditionMixin):
-    """Use to select users by major browser version.
+    """Use to select Tolokers by major browser version.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Major browser version.
     """
@@ -832,11 +832,11 @@ class UserAgentVersionMajor(Computed, toloka.client.primitives.operators.Compara
 
 
 class UserAgentVersionMinor(Computed, toloka.client.primitives.operators.ComparableConditionMixin):
-    """Use to select users by minor browser version.
+    """Use to select Tolokers by minor browser version.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Minor browser version.
     """
@@ -856,11 +856,11 @@ class UserAgentVersionMinor(Computed, toloka.client.primitives.operators.Compara
 
 
 class UserAgentVersionBugfix(Computed, toloka.client.primitives.operators.ComparableConditionMixin):
-    """Use to select users by build number (bugfix version) of the browser.
+    """Use to select Tolokers by build number (bugfix version) of the browser.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Build number (bugfix version) of the browser.
     """

@@ -35,7 +35,7 @@ class BaseConditionV1(toloka.client.project.template_builder.base.BaseComponent,
     For example, you can check that a text field is filled in.
 
     Attributes:
-        hint: Validation error message that the user will see.
+        hint: Validation error message that a Toloker will see.
     """
 
     def __init__(
@@ -63,7 +63,7 @@ class AllConditionV1(BaseConditionV1):
 
     Attributes:
         conditions: A set of conditions that must be met.
-        hint: Validation error message that the user will see.
+        hint: Validation error message that a Toloker will see.
 
     Examples:
         How to check several conditions.
@@ -111,7 +111,7 @@ class AnyConditionV1(BaseConditionV1):
 
     Attributes:
         conditions: A set of conditions, at least one of which must be met.
-        hint: Validation error message that the user will see.
+        hint: Validation error message that a Toloker will see.
     """
 
     def __init__(
@@ -134,17 +134,17 @@ class AnyConditionV1(BaseConditionV1):
 class DistanceConditionV1(BaseConditionV1):
     """This component checks whether the sent coordinates match the ones that you specified
 
-    For example, you want the user to take a photo of a specific place. The condition.distance component checks whether
+    For example, you want a Toloker to take a photo of a specific place. The condition.distance component checks whether
     the photo was taken at the location that you specified.
 
     Attributes:
         from_: First point.
         to_: Second point.
         max: The distance in meters by which the X and Y coordinates may differ.
-        hint: Validation error message that the user will see.
+        hint: Validation error message that a Toloker will see.
 
     Examples:
-        How to check that performer is in the right place.
+        How to check that a Toloker is in the right place.
 
         >>> distance_condition = tb.conditions.DistanceConditionV1(
         >>>     tb.data.LocationData(),
@@ -187,7 +187,7 @@ class EmptyConditionV1(BaseConditionV1):
 
     Attributes:
         data: Data to check. If not specified, data is checked in the component that contains condition.empty.
-        hint: Validation error message that the user will see.
+        hint: Validation error message that a Toloker will see.
     """
 
     def __init__(
@@ -229,7 +229,7 @@ class EqualsConditionV1(BaseConditionV1):
                 * Get the value from your data.
                 * Refer to another element using $ref.
                 * Use helpers and conditions to get the value.
-        hint: Validation error message that the user will see.
+        hint: Validation error message that a Toloker will see.
     """
 
     def __init__(
@@ -252,16 +252,16 @@ class EqualsConditionV1(BaseConditionV1):
 
 
 class LinkOpenedConditionV1(BaseConditionV1):
-    """Checks that the user clicked the link.
+    """Checks that the Toloker clicked the link.
 
-    Important: To trigger the condition, the user must follow the link from the Toloka interface — you must give users
-    this option. The condition will not work if the user opens the link from the browser address bar.
+    Important: To trigger the condition, the Toloker must follow the link from the Toloka interface — you must give Tolokers
+    this option. The condition will not work if the Toloker opens the link from the browser address bar.
 
     This condition can be used in the view.link component and also anywhere you can use (conditions).
 
     Attributes:
         url: The link that must be clicked.
-        hint: Validation error message that the user will see.
+        hint: Validation error message that a Toloker will see.
     """
 
     def __init__(
@@ -288,7 +288,7 @@ class NotConditionV1(BaseConditionV1):
 
     Attributes:
         condition: The condition for which the inverse is returned.
-        hint: Validation error message that the user will see.
+        hint: Validation error message that a Toloker will see.
     """
 
     def __init__(
@@ -315,7 +315,7 @@ class PlayedConditionV1(BaseConditionV1):
     view.audio and view.video. The condition.played check only works in the player's validation property.
 
     Attributes:
-        hint: Validation error message that the user will see.
+        hint: Validation error message that a Toloker will see.
     """
 
     def __init__(
@@ -340,7 +340,7 @@ class PlayedFullyConditionV1(BaseConditionV1):
     view.audio and view.video. The condition.played-fully check only works in the player's validation property.
 
     Attributes:
-        hint: Validation error message that the user will see.
+        hint: Validation error message that a Toloker will see.
     """
 
     def __init__(
@@ -359,7 +359,7 @@ class PlayedFullyConditionV1(BaseConditionV1):
 
 
 class RequiredConditionV1(BaseConditionV1):
-    """Checks that the data is filled in. This way you can get the user to answer all the required questions.
+    """Checks that the data is filled in. This way you can get the Toloker to answer all the required questions.
 
     If used inside the validation property, you can omit the data property and the same property will be used from the
     parent component field (the one that contains the condition.required component).
@@ -367,7 +367,7 @@ class RequiredConditionV1(BaseConditionV1):
     Attributes:
         data: Data to be filled in. If the property is not specified, the data of the parent component (the one that
             contains condition.required) is used.
-        hint: Validation error message that the user will see.
+        hint: Validation error message that a Toloker will see.
 
     Examples:
         How to check that image is uploaded.
@@ -416,7 +416,7 @@ class SameDomainConditionV1(BaseConditionV1):
         data: The link address to be checked. If you don't specify it, the value returned by the parent component
             (the one that contains condition.same-domain) is used.
         original: The link address that your link is compared to.
-        hint: Validation error message that the user will see.
+        hint: Validation error message that a Toloker will see.
     """
 
     def __init__(
@@ -451,7 +451,7 @@ class SchemaConditionV1(BaseConditionV1):
     Attributes:
         data: Data that should be checked.
         schema: The schema for validating data.
-        hint: Validation error message that the user will see.
+        hint: Validation error message that a Toloker will see.
     """
 
     def __init__(
@@ -479,7 +479,7 @@ class SubArrayConditionV1(BaseConditionV1):
     Attributes:
         data: Subarray that is checked for in parent.
         parent: The array where data is searched for.
-        hint: Validation error message that the user will see.
+        hint: Validation error message that a Toloker will see.
     """
 
     def __init__(

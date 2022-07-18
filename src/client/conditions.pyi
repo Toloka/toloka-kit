@@ -138,7 +138,7 @@ class AcceptedAssignmentsCount(ComparableRuleCondition):
 
 
 class AcceptedAssignmentsRate(ComparableRuleCondition):
-    """Percentage of how many assignments were accepted from this performer out of all checked assignment
+    """Percentage of how many assignments were accepted from this Toloker out of all checked assignment
     """
 
     def __init__(
@@ -201,7 +201,7 @@ class AssessmentEvent(IdentityRuleCondition):
 
 
 class AssignmentsAcceptedCount(ComparableRuleCondition):
-    """How many assignment was accepted from performer
+    """How many assignment was accepted from a Toloker
 
     Don't be confused!!!
     This condition used only with 'AnswerCount' controller.
@@ -244,7 +244,7 @@ class CorrectAnswersRate(ComparableRuleCondition):
 
 
 class FailRate(ComparableRuleCondition):
-    """Percentage of wrong answers of the performer to the captcha
+    """Percentage of wrong answers of the Toloker to the captcha
     """
 
     def __init__(
@@ -262,7 +262,7 @@ class FailRate(ComparableRuleCondition):
 
 
 class FastSubmittedCount(ComparableRuleCondition):
-    """The number of assignments a specific performer completed too fast
+    """The number of assignments a specific Toloker completed too fast
     """
 
     def __init__(
@@ -334,7 +334,7 @@ class GoldenSetIncorrectAnswersRate(ComparableRuleCondition):
 
 
 class IncomeSumForLast24Hours(ComparableRuleCondition):
-    """The performer earnings for completed tasks in the pool over the last 24 hours
+    """The Toloker's earnings for completed tasks in the pool over the last 24 hours
     """
 
     def __init__(
@@ -405,12 +405,12 @@ class PendingAssignmentsCount(ComparableRuleCondition):
 
 
 class PoolAccessRevokedReason(IdentityRuleCondition):
-    """Reason for loss of access of the performer to the current pool
+    """Reason for loss of access of the Toloker to the current pool
 
     Attributes:
         value: exact reason
-            * SKILL_CHANGE - The performer no longer meets one or more filters.
-            * RESTRICTION - The performer's access to tasks is blocked by a quality control rule (such as control tasks,
+            * SKILL_CHANGE - The Toloker no longer meets one or more filters.
+            * RESTRICTION - The Toloker's access to tasks is blocked by a quality control rule (such as control tasks,
                 majority vote, fast answers, skipped assignments, or captcha).
     """
 
@@ -454,7 +454,7 @@ class RejectedAssignmentsCount(ComparableRuleCondition):
 
 
 class RejectedAssignmentsRate(ComparableRuleCondition):
-    """Percentage of how many assignments were rejected from this performer out of all checked assignment
+    """Percentage of how many assignments were rejected from this Toloker out of all checked assignment
     """
 
     def __init__(
@@ -472,7 +472,7 @@ class RejectedAssignmentsRate(ComparableRuleCondition):
 
 
 class SkillId(IdentityRuleCondition):
-    """The performer no longer meets the specific skill filter
+    """The Toloker no longer meets the specific skill filter
     """
 
     def __init__(
@@ -490,7 +490,7 @@ class SkillId(IdentityRuleCondition):
 
 
 class SkippedInRowCount(ComparableRuleCondition):
-    """How many tasks in a row the performer skipped
+    """How many tasks in a row the Toloker skipped
     """
 
     def __init__(
@@ -508,7 +508,7 @@ class SkippedInRowCount(ComparableRuleCondition):
 
 
 class StoredResultsCount(ComparableRuleCondition):
-    """How many times the performer entered captcha
+    """How many times the Toloker entered captcha
     """
 
     def __init__(
@@ -541,7 +541,7 @@ class SubmittedAssignmentsCount(ComparableRuleCondition):
 
 
 class SuccessRate(ComparableRuleCondition):
-    """Percentage of correct answers of the performer to the captcha
+    """Percentage of correct answers of the Toloker to the captcha
     """
 
     def __init__(
@@ -559,7 +559,7 @@ class SuccessRate(ComparableRuleCondition):
 
 
 class TotalAnswersCount(ComparableRuleCondition):
-    """The number of completed tasks by the performer
+    """The number of completed tasks by the Toloker
 
     Be careful, it may have different meanings in different collectors.
     """
@@ -579,7 +579,7 @@ class TotalAnswersCount(ComparableRuleCondition):
 
 
 class TotalAssignmentsCount(ComparableRuleCondition):
-    """How many assignments from this performer were checked
+    """How many assignments from this Toloker were checked
     """
 
     def __init__(
@@ -597,7 +597,7 @@ class TotalAssignmentsCount(ComparableRuleCondition):
 
 
 class TotalSubmittedCount(ComparableRuleCondition):
-    """The number of assignments a specific performer completed
+    """The number of assignments a specific Toloker completed
     """
 
     def __init__(

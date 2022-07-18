@@ -872,7 +872,7 @@ class AggregatedSolutionOperation(Operation):
 
 
 class UserBonusCreateBatchOperation(Operation):
-    """Operation returned by an asynchronous creating user bonuses via TolokaClient.create_user_bonuses_async()
+    """Operation returned by the `TolokaClient.create_user_bonuses_async()` method.
 
     All parameters are for reference only and describe the initial parameters of the request that this operation monitors.
 
@@ -886,9 +886,9 @@ class UserBonusCreateBatchOperation(Operation):
         parameters: Operation parameters (depending on the operation type).
         details: Details of the operation completion.
         parameters.skip_invalid_items: Validation parameters for JSON objects:
-            * True - Create the user bonuses that passed validation. Skip the rest of the user bonuses.
-            * False - If at least one of the user bonus didn't pass validation, stop the operation and
-                don't create any user bonus.
+            * True - Create rewards using `UserBonus` instances that passed validation. Skip the rest of the `UserBonus` instances.
+            * False - If at least one of the `UserBonus` instances didn't pass validation, stop the operation and
+                don't create any rewards.
         details.pool_id: 
         details.total_count: The number of bonuses in the request.
         details.valid_count: The number of JSON objects with bonus information that have passed validation.
