@@ -178,12 +178,12 @@ TrainingSearchResult = _create_search_result_class_for(
 )
 UserBonusSearchResult = _create_search_result_class_for(
     UserBonus,
-    """The list of found user bonuses and whether there is something else on the original request
+    """The list of found `UserBonus` instances and whether there is something else on the original request
 
     It's better to use TolokaClient.get_user_bonuses(), which already implements the correct handling of the search result.
 
     Attributes:
-        items: List of found user bonuses
+        items: List of found `UserBonus` instances
         has_more: Whether the list is complete:
             * True - Not all elements are included in the output due to restrictions in the limit parameter.
             * False - The output lists all the items.
@@ -191,12 +191,12 @@ UserBonusSearchResult = _create_search_result_class_for(
 )
 UserRestrictionSearchResult = _create_search_result_class_for(
     UserRestriction,
-    """The list of found user restrictions and whether there is something else on the original request
+    """The list of found Toloker restrictions and whether there is something else on the original request
 
     It's better to use TolokaClient.get_user_restrictions(), which already implements the correct handling of the search result.
 
     Attributes:
-        items: List of found user restrictions
+        items: List of found Toloker restrictions
         has_more: Whether the list is complete:
             * True - Not all elements are included in the output due to restrictions in the limit parameter.
             * False - The output lists all the items.
@@ -204,12 +204,12 @@ UserRestrictionSearchResult = _create_search_result_class_for(
 )
 UserSkillSearchResult = _create_search_result_class_for(
     UserSkill,
-    """The list of found user skills and whether there is something else on the original request
+    """The list of found Toloker skills and whether there is something else on the original request
 
     It's better to use TolokaClient.get_user_skills(), which already implements the correct handling of the search result.
 
     Attributes:
-        items: List of found user skills
+        items: List of found Toloker skills
         has_more: Whether the list is complete:
             * True - Not all elements are included in the output due to restrictions in the limit parameter.
             * False - The output lists all the items.

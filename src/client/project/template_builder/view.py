@@ -109,7 +109,7 @@ class AlertViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ALERT):
 class AudioViewV1(BaseViewV1, spec_value=ComponentType.VIEW_AUDIO):
     """The component plays audio.
 
-    Format support depends on the user's browser, OS, and device. We recommend using MP3.
+    Format support depends on the Toloker's browser, OS, and device. We recommend using MP3.
     Attributes:
         url: Audio link.
         loop: Automatically replay audio.
@@ -223,7 +223,7 @@ class ImageViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IMAGE):
             to display the frame.
         no_lazy_load: Disables lazy loading. If true, images start loading immediately, even if they aren't in the
             viewport. Useful for icons. By default, false (lazy loading is enabled). In this mode, images start loading
-            only when they get in the user's field of view.
+            only when a Toloker scrolls to them.
         popup: Specifies whether opening a full-size image with a click is allowed. By default, it is true (allowed).
         ratio: An array of two numbers that sets the relative dimensions of the sides: width (first number) to
             height (second number). Not valid if full_height=true.
@@ -290,7 +290,7 @@ class LinkViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK):
     To insert a link with a search query, use helper.search-query.
     Attributes:
         url: Link URL.
-        content: Link text displayed to the user.
+        content: Link text displayed to the Toloker.
     """
 
     url: base_component_or(Any)
@@ -330,7 +330,7 @@ class LinkGroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK_GROUP):
 
         Attributes:
             url: Link address
-            content: Link text that's displayed to the user. Unviewed links are blue and underlined, and clicked links are purple.
+            content: Link text that's displayed to a Toloker. Unvisited links are blue and underlined, and visited links are purple.
             theme: Defines the appearance of the link. If you specify "theme": "primary", it's a button, otherwise it's a text link.
         """
 
@@ -364,7 +364,7 @@ class MarkdownViewV1(BaseViewV1, spec_value=ComponentType.VIEW_MARKDOWN):
     The contents of the block are written to the content property in a single line. To insert line breaks, use \\n
     Straight quotation marks (") must be escaped like this: \\".
 
-    Note that the view.markdown component is resource-intensive and might overload weak user devices.
+    Note that the view.markdown component is resource-intensive and might overload weak devices.
     Do not use this component to display plain text. If you need to display text without formatting, use the view.text
     component. If you need to insert a link, use view.link, and for an image use view.image.
     Links with Markdown are appended with target="_blank" (the link opens in a new tab), as well as
@@ -434,7 +434,7 @@ class MapViewV1(BaseViewV1, spec_value=ComponentType.VIEW_MAP):
     Use this component to set the targets for the tasks with the markers, select the areas with polygons.
     Specify the position and colors for the elements on the map.
 
-    You can set the following map properties: scale, position of the map center, label, and hint for the users.
+    You can set the following map properties: scale, position of the map center, label, and hint for Tolokers.
     Attributes:
         center: Determines the position of the map center. Specify the coordinates in the string format, for example,
             "29.748713,-95.404287", or use the data.location component to set the center of the map to the

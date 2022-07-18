@@ -323,7 +323,7 @@ class DashBoard:
         figures = []
         for chart in self._charts.values():
             chart.update_metrics()
-            # TODO: right now all times in utc. May be we can auto-set user current time-zone.
+            # TODO: right now all times in utc. May be we can auto-set Toloker current time-zone.
             new_figure = chart.create_figure()
             new_figure.update_layout(xaxis_range=[time_from, time_to])
             figures.append(new_figure)

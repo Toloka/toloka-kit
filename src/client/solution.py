@@ -6,7 +6,7 @@ import attr
 
 @attr.attrs(auto_attribs=True)
 class Solution:
-    """Performer response for one task
+    """Toloker's response for a task.
 
     Attributes:
         output_values: Dictionary "field name" - "response value", by the number of fields that should be in the response.

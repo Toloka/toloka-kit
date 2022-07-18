@@ -17,8 +17,8 @@ class SpeedQualityBalanceConfig(BaseTolokaObject, spec_enum='Type', spec_field='
         """The type of speed quality balance:
 
         Attributes:
-            TOP_PERCENTAGE_BY_QUALITY: get top XX% performers by quality.
-            BEST_CONCURRENT_USERS_BY_QUALITY: get top x performers by quality.
+            TOP_PERCENTAGE_BY_QUALITY: get top XX% Tolokers by quality.
+            BEST_CONCURRENT_USERS_BY_QUALITY: get top x Tolokers by quality.
         """
         TOP_PERCENTAGE_BY_QUALITY = 'TOP_PERCENTAGE_BY_QUALITY'
         BEST_CONCURRENT_USERS_BY_QUALITY = 'BEST_CONCURRENT_USERS_BY_QUALITY'
@@ -26,13 +26,13 @@ class SpeedQualityBalanceConfig(BaseTolokaObject, spec_enum='Type', spec_field='
 
 class TopPercentageByQuality(SpeedQualityBalanceConfig,
                              spec_value=SpeedQualityBalanceConfig.Type.TOP_PERCENTAGE_BY_QUALITY):
-    """The percentage of performers ordered by quality that will work on pool.
+    """The percentage of Tolokers ordered by quality that will work on pool.
     """
     percent: int
 
 
 class BestConcurrentUsersByQuality(SpeedQualityBalanceConfig,
                                    spec_value=SpeedQualityBalanceConfig.Type.BEST_CONCURRENT_USERS_BY_QUALITY):
-    """How many concurrent performers ordered by quality will work on pool.
+    """How many concurrent Tolokers ordered by quality will work on pool.
     """
     count: int

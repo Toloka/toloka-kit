@@ -14,8 +14,8 @@ class Training(BaseTolokaObject):
     """Training pool
 
     Allows:
-     - Select for the main pool only those performers who successfully complete the training tasks.
-     - Practice performers before the main pool and figure out how to respond correctly.
+     - Select for the main pool only those Tolokers who successfully complete the training tasks.
+     - Practice Tolokers before the main pool and figure out how to respond correctly.
 
     Attributes:
         project_id: ID of the project to which the training pool belongs.
@@ -25,10 +25,10 @@ class Training(BaseTolokaObject):
             It is recommended to allocate at least 60 seconds for a set of tasks
             (taking into account the time for loading the page, sending responses).
         mix_tasks_in_creation_order: The order in which tasks are included in sets:
-            * True - Default Behaviour. Include tasks in sets in the order they were loaded.
+            * True - Default behaviour. Include tasks in sets in the order they were loaded.
             * False - Include tasks in sets in random order.
         shuffle_tasks_in_task_suite: Order of tasks within the task set:
-            * true - Random. Default Behaviour.
+            * true - Random. Default behaviour.
             * false - The order in which the tasks were loaded.
         training_tasks_in_task_suite_count: The number of tasks in the set.
         task_suites_required_to_pass: The number of task suites that must be successfully completed to assign a skill

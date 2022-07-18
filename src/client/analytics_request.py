@@ -76,10 +76,10 @@ class RealTasksCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalytics
 
 @inherit_docstrings
 class SubmitedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.SUBMITTED_ASSIGNMENTS_COUNT):
-    """Number of assignments in the "submited" status in the pool
+    """Number of assignments in the "submitted" status in the pool
 
     Do not confuse it with the approved status.
-    "Submited" status means that the task was completed by the performer and send for review.
+    "Submitted" status means that the task was completed by a Toloker and sent for review.
     "Approved" status means that the task has passed review and money has been paid for it.
     """
     pass
@@ -103,8 +103,8 @@ class RejectedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=Poo
 class ApprovedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.APPROVED_ASSIGNMENTS_COUNT):
     """Number of assignments in the "approved" status in the pool
 
-    Do not confuse it with the submited status.
-    "Submited" status means that the task was completed by the performer and send for review.
+    Do not confuse it with the submitted status.
+    "Submitted" status means that the task was completed by a Toloker and sent for review.
     "Approved" status means that the task has passed review and money has been paid for it.
     """
     pass
@@ -133,21 +133,21 @@ class SpentBudgetPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsReq
 
 @inherit_docstrings
 class UniqueWorkersCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.UNIQUE_WORKERS_COUNT):
-    """The number of unique performers who took tasks from the pool
+    """The number of unique Tolokers who took tasks from the pool
     """
     pass
 
 
 @inherit_docstrings
 class UniqueSubmittersCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.UNIQUE_SUBMITTERS_COUNT):
-    """The number of unique performers who have submitted to the pool
+    """The number of unique Tolokers who have submitted to the pool
     """
     pass
 
 
 @inherit_docstrings
 class ActiveWorkersByFilterCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.ACTIVE_WORKERS_BY_FILTER_COUNT):
-    """The number of active performers matching the pool filters for the last hours
+    """The number of active Tolokers matching the pool filters for the last hours
 
     Attributes:
         interval_hours: The number of hours to take into account when collecting statistics.

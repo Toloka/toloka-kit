@@ -49,12 +49,12 @@ from ..util._extendable_enum import ExtendableStrEnum
 
 
 class FilterCondition(BaseTolokaObject):
-    """You can select users to access pool tasks.
+    """You can select Tolokers to access pool tasks.
 
-    For example, you can select users by region, skill, or browser type (desktop or mobile).
+    For example, you can select Tolokers by region, skill, or browser type (desktop or mobile).
 
     Example:
-        How to setup filter for selecting users.
+        How to setup filter for selecting Tolokers.
 
         >>> # you can combine filters using bitwise operators '|' and  '&'
         >>> filter = (
@@ -133,11 +133,11 @@ class FilterAnd(FilterCondition, kw_only=False):
 
 
 class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
-    """Condition to select users.
+    """Condition to select Tolokers.
 
     Attributes:
         operator: Comparison operator in the condition.
-            For example, for a condition "The user must be 18 years old or older» used date of birth and operator
+            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
         value: Attribute value from the field key. For example, the ID of the region specified in the profile,
             or the minimum skill value.
@@ -159,12 +159,12 @@ class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
 
 @inherit_docstrings
 class Profile(Condition, spec_value=Condition.Category.PROFILE, spec_field='key', spec_enum='Key'):
-    """Use to select users based on profile data.
+    """Use to select Tolokers based on profile data.
     """
 
     @unique
     class Key(ExtendableStrEnum):
-        """Possible criteria for filtering users by profile.
+        """Possible criteria for filtering Tolokers by profile.
         """
 
         GENDER = 'gender'
@@ -179,12 +179,12 @@ class Profile(Condition, spec_value=Condition.Category.PROFILE, spec_field='key'
 
 @inherit_docstrings
 class Computed(Condition, spec_value=Condition.Category.COMPUTED, spec_field='key', spec_enum='Key'):
-    """Use to select users based on data received or calculated by Toloka.
+    """Use to select Tolokers based on data received or calculated by Toloka.
     """
 
     @unique
     class Key(ExtendableStrEnum):
-        """Possible criteria for filtering users by computed data.
+        """Possible criteria for filtering Tolokers by computed data.
         """
 
         CLIENT_TYPE = 'client_type'
@@ -207,9 +207,9 @@ class Computed(Condition, spec_value=Condition.Category.COMPUTED, spec_field='ke
 
 
 class Skill(StatefulComparableConditionMixin, Condition, order=False, eq=False, kw_only=False, spec_value=Condition.Category.SKILL):
-    """Use to select users by skill value.
+    """Use to select Tolokers by skill value.
 
-    To select users without a skill set the parameter value operator=CompareOperator.EQ and exclude the parameter value.
+    To select Tolokers without a skill set the parameter value operator=CompareOperator.EQ and exclude the parameter value.
     Attributes:
         key: Skill ID.
         operator: Comparison operator in the condition.
@@ -223,15 +223,15 @@ class Skill(StatefulComparableConditionMixin, Condition, order=False, eq=False, 
 
 @inherit_docstrings
 class Gender(Profile, IdentityConditionMixin, spec_value=Profile.Key.GENDER):
-    """Use to select users by gender.
+    """Use to select Tolokers by gender.
 
     Attributes:
-        value: User gender.
+        value: Toloker's gender.
     """
 
     @unique
     class Gender(ExtendableStrEnum):
-        """User gender.
+        """Toloker's gender.
         """
 
         MALE = 'MALE'
@@ -245,10 +245,10 @@ class Gender(Profile, IdentityConditionMixin, spec_value=Profile.Key.GENDER):
 
 @inherit_docstrings
 class Country(Profile, IdentityConditionMixin, spec_value=Profile.Key.COUNTRY):
-    """Use to select users by country.
+    """Use to select Tolokers by country.
 
     Attributes:
-        value: Country of the user (two-letter code of the standard ISO 3166-1 alpha-2).
+        value: Country of the Toloker (two-letter code of the standard ISO 3166-1 alpha-2).
     """
 
     value: str = attribute(required=True)  # ISO 3166-1 alpha-2
@@ -256,10 +256,10 @@ class Country(Profile, IdentityConditionMixin, spec_value=Profile.Key.COUNTRY):
 
 @inherit_docstrings
 class Citizenship(Profile, IdentityConditionMixin, spec_value=Profile.Key.CITIZENSHIP):
-    """Use to select users by citizenship.
+    """Use to select Tolokers by citizenship.
 
     Attributes:
-        value: User citizenship (two-letter country code) ISO 3166-1 alpha-2
+        value: Toloker's citizenship (two-letter country code) ISO 3166-1 alpha-2
     """
 
     value: str = attribute(required=True)  # ISO 3166-1 alpha-2
@@ -267,15 +267,15 @@ class Citizenship(Profile, IdentityConditionMixin, spec_value=Profile.Key.CITIZE
 
 @inherit_docstrings
 class Education(Profile, IdentityConditionMixin, spec_value=Profile.Key.EDUCATION):
-    """Use to select users by education.
+    """Use to select Tolokers by education.
 
     Attributes:
-        value: User education.
+        value: Toloker's education.
     """
 
     @unique
     class Education(ExtendableStrEnum):
-        """User education.
+        """Toloker's education.
         """
 
         BASIC = 'BASIC'
@@ -291,10 +291,10 @@ class Education(Profile, IdentityConditionMixin, spec_value=Profile.Key.EDUCATIO
 
 @inherit_docstrings
 class AdultAllowed(Profile, IdentityConditionMixin, spec_value=Profile.Key.ADULT_ALLOWED):
-    """Use to select users by their agreement to perform tasks that contain adult content.
+    """Use to select Tolokers by their agreement to perform tasks that contain adult content.
 
     Attributes:
-        value: User agreement.
+        value: Toloker's agreement.
     """
 
     value: bool = attribute(required=True)
@@ -302,10 +302,10 @@ class AdultAllowed(Profile, IdentityConditionMixin, spec_value=Profile.Key.ADULT
 
 @inherit_docstrings
 class DateOfBirth(Profile, ComparableConditionMixin, spec_value=Profile.Key.DATE_OF_BIRTH):
-    """Use to select users by date of birth.
+    """Use to select Tolokers by date of birth.
 
     Attributes:
-        value: The user's date of birth (UNIX time in seconds).
+        value: The Toloker's date of birth (UNIX time in seconds).
     """
 
     value: int = attribute(required=True)
@@ -313,10 +313,10 @@ class DateOfBirth(Profile, ComparableConditionMixin, spec_value=Profile.Key.DATE
 
 @inherit_docstrings
 class City(Profile, InclusionConditionMixin, spec_value=Profile.Key.CITY):
-    """Use to select users by city.
+    """Use to select Tolokers by city.
 
     Attributes:
-        value: User city(ID of the region).
+        value: Toloker's city(ID of the region).
     """
 
     value: int = attribute(required=True)
@@ -324,11 +324,11 @@ class City(Profile, InclusionConditionMixin, spec_value=Profile.Key.CITY):
 
 @inherit_docstrings
 class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAGES):
-    """Use to select users by languages specified by the user in the profile.
+    """Use to select Tolokers by languages specified by the Toloker in the profile.
 
     Attributes:
-        value: Languages specified by the user in the profile (two-letter ISO code of the standard ISO 639-1 in upper case).
-        verified: If set to True, only the users who have passed a language test will be selected. Currently, you can
+        value: Languages specified by the Toloker in the profile (two-letter ISO code of the standard ISO 639-1 in upper case).
+        verified: If set to True, only the Tolokers who have passed a language test will be selected. Currently, you can
             use this parameter only with the following ISO codes : `DE`, `EN`, `FR`, `JA`, `PT`, `SV`, `RU`, `AR`, `ES`.
     """
 
@@ -403,10 +403,10 @@ Languages.__init__.__signature__ = languages_init_signature.replace(parameters=l
 
 @inherit_docstrings
 class RegionByPhone(Computed, InclusionConditionMixin, spec_value=Computed.Key.REGION_BY_PHONE):
-    """Use to select users by their region determined by the mobile phone number.
+    """Use to select Tolokers by their region determined by the mobile phone number.
 
     Attributes:
-        value: The user's region.
+        value: The Toloker's region.
     """
 
     value: int = attribute(required=True)
@@ -414,10 +414,10 @@ class RegionByPhone(Computed, InclusionConditionMixin, spec_value=Computed.Key.R
 
 @inherit_docstrings
 class RegionByIp(Computed, InclusionConditionMixin, spec_value=Computed.Key.REGION_BY_IP):
-    """Use to select users by their region determined by IP address.
+    """Use to select Tolokers by their region determined by IP address.
 
     Attributes:
-        value: The user's region.
+        value: The Toloker's region.
     """
 
     value: int = attribute(required=True)
@@ -425,10 +425,10 @@ class RegionByIp(Computed, InclusionConditionMixin, spec_value=Computed.Key.REGI
 
 @inherit_docstrings
 class DeviceCategory(Computed, IdentityConditionMixin, spec_value=Computed.Key.DEVICE_CATEGORY):
-    """Use to select users by their device category.
+    """Use to select Tolokers by their device category.
 
     Attributes:
-        value: The user's device category.
+        value: The Toloker's device category.
     """
 
     @unique
@@ -451,7 +451,7 @@ class DeviceCategory(Computed, IdentityConditionMixin, spec_value=Computed.Key.D
 
 @inherit_docstrings
 class ClientType(Computed, IdentityConditionMixin, spec_value=Computed.Key.CLIENT_TYPE):
-    """Use to select users by their application type.
+    """Use to select Tolokers by their application type.
 
     Attributes:
         value: Client application type.
@@ -470,7 +470,7 @@ class ClientType(Computed, IdentityConditionMixin, spec_value=Computed.Key.CLIEN
 
 @inherit_docstrings
 class OSFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.OS_FAMILY):
-    """Use to select users by their OS family.
+    """Use to select Tolokers by their OS family.
 
     Attributes:
         value: The operating system family.
@@ -504,7 +504,7 @@ class OSFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.OS_FAMI
 
 @inherit_docstrings
 class OSVersion(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION):
-    """Use to select users by OS full version.
+    """Use to select Tolokers by OS full version.
 
     For example: 14.4
     Attributes:
@@ -516,7 +516,7 @@ class OSVersion(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_V
 
 @inherit_docstrings
 class OSVersionMajor(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION_MAJOR):
-    """Use to select users by OS major version.
+    """Use to select Tolokers by OS major version.
 
     For example: 14
     Attributes:
@@ -528,7 +528,7 @@ class OSVersionMajor(Computed, ComparableConditionMixin, spec_value=Computed.Key
 
 @inherit_docstrings
 class OSVersionMinor(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION_MINOR):
-    """Use to select users by OS minor version.
+    """Use to select Tolokers by OS minor version.
 
     For example: 4
     Attributes:
@@ -540,7 +540,7 @@ class OSVersionMinor(Computed, ComparableConditionMixin, spec_value=Computed.Key
 
 @inherit_docstrings
 class OSVersionBugfix(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION_BUGFIX):
-    """Use to select users by build number (bugfix version) of the operating system.
+    """Use to select Tolokers by build number (bugfix version) of the operating system.
 
     For example: 1
     Attributes:
@@ -552,7 +552,7 @@ class OSVersionBugfix(Computed, ComparableConditionMixin, spec_value=Computed.Ke
 
 @inherit_docstrings
 class UserAgentType(Computed, IdentityConditionMixin, spec_value=Computed.Key.USER_AGENT_TYPE):
-    """Use to select users by user agent type:
+    """Use to select Tolokers by user agent type:
 
     Attributes:
         value: User agent type.
@@ -576,7 +576,7 @@ class UserAgentType(Computed, IdentityConditionMixin, spec_value=Computed.Key.US
 
 @inherit_docstrings
 class UserAgentFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.USER_AGENT_FAMILY):
-    """Use to select users by user agent family.
+    """Use to select Tolokers by user agent family.
 
     Attributes:
         value: User agent family.
@@ -616,7 +616,7 @@ class UserAgentFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.
 
 @inherit_docstrings
 class UserAgentVersion(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION):
-    """Use to select users by full browser version.
+    """Use to select Tolokers by full browser version.
 
     Attributes:
         value: Full browser version. <Major version>.<Minor version>.
@@ -627,7 +627,7 @@ class UserAgentVersion(Computed, ComparableConditionMixin, spec_value=Computed.K
 
 @inherit_docstrings
 class UserAgentVersionMajor(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION_MAJOR):
-    """Use to select users by major browser version.
+    """Use to select Tolokers by major browser version.
 
     Attributes:
         value: Major browser version.
@@ -638,7 +638,7 @@ class UserAgentVersionMajor(Computed, ComparableConditionMixin, spec_value=Compu
 
 @inherit_docstrings
 class UserAgentVersionMinor(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION_MINOR):
-    """Use to select users by minor browser version.
+    """Use to select Tolokers by minor browser version.
 
     Attributes:
         value: Minor browser version.
@@ -649,7 +649,7 @@ class UserAgentVersionMinor(Computed, ComparableConditionMixin, spec_value=Compu
 
 @inherit_docstrings
 class UserAgentVersionBugfix(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION_BUGFIX):
-    """Use to select users by build number (bugfix version) of the browser.
+    """Use to select Tolokers by build number (bugfix version) of the browser.
 
     Attributes:
         value: Build number (bugfix version) of the browser.

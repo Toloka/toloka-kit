@@ -185,7 +185,7 @@ class Balance(BaseMetric):
 
 @attr.s(auto_attribs=True)
 class NewUserBonuses(BaseMetric):
-    """Tracking the new user bonuses - count or money amount.
+    """Tracking rewards for Tolokers: reward count or money amount.
 
     Args:
         count_name: Metric name for a count of new bonuses.
@@ -259,7 +259,7 @@ class NewUserBonuses(BaseMetric):
 
 @attr.s(auto_attribs=True)
 class NewUserSkills(BaseMetric):
-    """Tracking the new user skill values
+    """Tracking Tolokers' skills.
 
     Args:
         skill_id: Which skill we will be tracking.
