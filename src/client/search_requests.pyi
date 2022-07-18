@@ -583,12 +583,12 @@ class AssignmentSearchRequest(BaseSearchRequest):
             * `SUBMITTED` — Completed but not checked.
             * `ACCEPTED` — Accepted by the requester.
             * `REJECTED` — Rejected by the requester.
-            * `SKIPPED` — Skipped by the performer.
+            * `SKIPPED` — Skipped by the Toloker.
             * `EXPIRED` — Time for completing tasks has expired.
         task_id: The ID of a task. The task suite containing that task, matches this search criteria.
         task_suite_id: The ID of a task suite.
         pool_id: Task suites in the pool with the specified ID.
-        user_id: Task suites assigned to the performer with the specified ID.
+        user_id: Task suites assigned to the Toloker with the specified ID.
         id_lt: Task suites with assignment IDs less than the specified value.
         id_lte: Task suites with assignment IDs less than or equal to the specified value.
         id_gt: Task suites with assignment IDs greater than the specified value.
@@ -1069,7 +1069,7 @@ class AttachmentSearchRequest(BaseSearchRequest):
     Attributes:
         name: File name.
         type: Attachment type. Currently the key can have only one value - ASSIGNMENT_ATTACHMENT.
-        user_id: ID of the user who uploaded the file(s).
+        user_id: ID of the Toloker who uploaded the file(s).
         assignment_id: Assignment ID.
         pool_id: Pool ID.
         owner_id: Optional[str]
@@ -1078,10 +1078,10 @@ class AttachmentSearchRequest(BaseSearchRequest):
         id_lte: Files with an ID less than or equal to the specified value.
         id_gt: Files with an ID greater than the specified value.
         id_gte: Files with an ID greater than or equal to the specified value.
-        created_lt: Files uploaded by users before the specified date.
-        created_lte: Files uploaded by users before or on the specified date.
-        created_gt: Files uploaded by users after the specified date.
-        created_gte: Files uploaded by users after or on the specified date.
+        created_lt: Files uploaded by Tolokers before the specified date.
+        created_lte: Files uploaded by Tolokers before or on the specified date.
+        created_gt: Files uploaded by Tolokers after the specified date.
+        created_gte: Files uploaded by Tolokers after or on the specified date.
     """
 
     class CompareFields:
@@ -1178,10 +1178,10 @@ class AttachmentSortItems(BaseSortItems):
 
 
 class UserSkillSearchRequest(BaseSearchRequest):
-    """Parameters for searching user skill
+    """Parameters for searching Toloker skill
 
     Attributes:
-        user_id: Performer ID.
+        user_id: Toloker's ID.
         skill_id: Skill ID.
         id_lt: Skills with an ID less than the specified value.
         id_lte: Skills with an ID less than or equal to the specified value.
@@ -1241,7 +1241,7 @@ class UserSkillSearchRequest(BaseSearchRequest):
 
 
 class UserSkillSortItems(BaseSortItems):
-    """Parameters for sorting user skill search results
+    """Parameters for sorting Toloker skill search results
 
     You can specify multiple parameters.
     To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
@@ -1292,14 +1292,14 @@ class UserSkillSortItems(BaseSortItems):
 
 
 class UserRestrictionSearchRequest(BaseSearchRequest):
-    """Parameters for searching user restriction
+    """Parameters for searching Toloker restriction
 
     Attributes:
         scope: The scope of the ban
             * ALL_PROJECTS
             * PROJECT
             * POOL
-        user_id: Performer ID.
+        user_id: Toloker's ID.
         project_id: The ID of the project that is blocked.
         pool_id: The ID of the pool that is blocked.
         id_lt: Bans with an ID less than the specified value.
@@ -1351,15 +1351,15 @@ class UserRestrictionSearchRequest(BaseSearchRequest):
 
 
 class UserRestrictionSortItems(BaseSortItems):
-    """Parameters for sorting user restriction search results
+    """Parameters for sorting Toloker restriction search results
 
     You can specify multiple parameters.
     To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
 
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - User restriction ID in ascending order.
-            * created - Creation date in UTC format yyyy-MM-DD (ascending).
+            * id - Restriction IDs.
+            * created - Creation date in UTC format yyyy-MM-DD.
 
     Example:
         How to specify and use SortItems.
@@ -1400,11 +1400,11 @@ class UserRestrictionSortItems(BaseSortItems):
 
 
 class UserBonusSearchRequest(BaseSearchRequest):
-    """Parameters for searching user bonus
+    """Parameters for searching `UserBonus` instances.
 
     Attributes:
-        user_id: Performer ID.
-        assignment_id: ID of the performer's response to the task a reward is issued for.
+        user_id: The ID of the Toloker.
+        assignment_id: The ID of the Toloker's response to the task a reward is issued for.
         private_comment: Comments for the requester.
         id_lt: Bonuses with an ID less than the specified value.
         id_lte: Bonuses with an ID less than or equal to the specified value.
@@ -1453,7 +1453,7 @@ class UserBonusSearchRequest(BaseSearchRequest):
 
 
 class UserBonusSortItems(BaseSortItems):
-    """Parameters for sorting user bonus search results
+    """Parameters for sorting `UserBonus` search results
 
     You can specify multiple parameters.
     To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.

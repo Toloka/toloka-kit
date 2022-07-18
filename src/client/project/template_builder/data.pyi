@@ -49,7 +49,7 @@ class BaseData(toloka.client.project.template_builder.base.BaseComponent, metacl
 class InputData(BaseData):
     """The input data.
 
-    For example, links to images that will be shown to users. In the Template Builder sandbox, you can
+    For example, links to images that will be shown to Tolokers. In the Template Builder sandbox, you can
     set an example of input data.
 
     Attributes:

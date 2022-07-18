@@ -194,7 +194,7 @@ class TolokaClient:
         token: Your OAuth token for Toloka. You can learn more about how to get it [here](https://toloka.ai/docs/api/concepts/access.html#access__token)
         environment: There are two environments in Toloka:
             * `SANDBOX` – [Testing environment](https://sandbox.toloka.yandex.com) for Toloka requesters.
-            You can test complex projects before starting them on real performers. Nobody will see your tasks, and it's free.
+            You can test complex projects before assigning tasks to Tolokers. Nobody will see your tasks, and it's free.
             * `PRODUCTION` – [Production environment](https://toloka.yandex.com) for Toloka requesters.
             You spend money there and get the results.
             You need to register in each environment separately. OAuth tokens are generated in each environment separately too.
@@ -580,7 +580,7 @@ class TolokaClient:
 
         Args:
             assignment_id: The ID of the assignment.
-            public_comment: A comment visible to the performer.
+            public_comment: A comment visible to Tolokers.
 
         Returns:
             Assignment: The assignment object with the updated status field.
@@ -840,7 +840,7 @@ class TolokaClient:
 
         Args:
             assignment_id: The ID of the assignment.
-            public_comment: A public comment visible to the performer.
+            public_comment: A public comment visible to Tolokers.
 
         Returns:
             Assignment: Assignment object with updated fields.
@@ -1051,7 +1051,7 @@ class TolokaClient:
 
     @typing.overload
     def compose_message_thread(self, compose: toloka.client.message_thread.MessageThreadCompose) -> toloka.client.message_thread.MessageThread:
-        """Sends message to performer
+        """Sends a message to a Toloker.
 
         The sent message is added to a new message thread.
 
@@ -1062,12 +1062,12 @@ class TolokaClient:
             MessageThread: New created thread.
 
         Example:
-            If you want to thank Toloka performers who have tried to complete your tasks, send them a nice message.
+            If you want to thank Tolokers who have tried to complete your tasks, send them a nice message.
 
             >>> message_text = "Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!"
             >>> toloka_client.compose_message_thread(
             >>>     recipients_select_type='ALL',
-            >>>     topic={'EN': 'Thank you, performer!'},
+            >>>     topic={'EN': 'Thank you!'},
             >>>     text={'EN': message_text},
             >>>     answerable=False
             >>> )
@@ -1086,7 +1086,7 @@ class TolokaClient:
         recipients_ids: typing.Optional[typing.List[str]] = None,
         recipients_filter: typing.Optional[toloka.client.filter.FilterCondition] = None
     ) -> toloka.client.message_thread.MessageThread:
-        """Sends message to performer
+        """Sends a message to a Toloker.
 
         The sent message is added to a new message thread.
 
@@ -1097,12 +1097,12 @@ class TolokaClient:
             MessageThread: New created thread.
 
         Example:
-            If you want to thank Toloka performers who have tried to complete your tasks, send them a nice message.
+            If you want to thank Tolokers who have tried to complete your tasks, send them a nice message.
 
             >>> message_text = "Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!"
             >>> toloka_client.compose_message_thread(
             >>>     recipients_select_type='ALL',
-            >>>     topic={'EN': 'Thank you, performer!'},
+            >>>     topic={'EN': 'Thank you!'},
             >>>     text={'EN': message_text},
             >>>     answerable=False
             >>> )
@@ -1919,7 +1919,7 @@ class TolokaClient:
     def open_pool(self, pool_id: str) -> toloka.client.pool.Pool:
         """Starts distributing tasks from the pool
 
-        Performers will see your tasks only after that call.
+        Tolokers will see your tasks only after that call.
 
         Args:
             pool_id: ID of the pool that will be started.
@@ -1928,7 +1928,7 @@ class TolokaClient:
             Pool: Pool object with new status.
 
         Example:
-            Open the pool for performers.
+            Open the pool for Tolokers.
 
             >>> toloka_client.open_pool(pool_id='1')
             ...
@@ -1938,7 +1938,7 @@ class TolokaClient:
     def open_pool_async(self, pool_id: str) -> typing.Optional[toloka.client.operations.PoolOpenOperation]:
         """Starts distributing tasks from the pool, asynchronous version
 
-        Performers will see your tasks only after that call.
+        Tolokers will see your tasks only after that call.
 
         Args:
             pool_id: ID of the pool that will be started.
@@ -1948,7 +1948,7 @@ class TolokaClient:
                 already opened then None is returned.
 
         Example:
-            Open the pool for performers.
+            Open the pool for Tolokers.
 
             >>> open_pool = toloka_client.open_pool(pool_id='1')
             >>> toloka_client.wait_operation(open_pool)
@@ -2346,7 +2346,7 @@ class TolokaClient:
             Training: Training object with new status.
 
         Example:
-            Open the training for performers.
+            Open the training for Tolokers.
 
             >>> toloka_client.open_training(training_id='1')
             ...
@@ -2364,7 +2364,7 @@ class TolokaClient:
                 training is already opened then None is returned.
 
         Example:
-            Open the training for performers.
+            Open the training for Tolokers.
 
             >>> open_training = toloka_client.open_training_async(training_id='1')
             >>> toloka_client.wait_operation(open_training)
@@ -2401,7 +2401,7 @@ class TolokaClient:
         You can send a maximum of 10 requests of this kind per minute and 100 requests per day.
 
         Args:
-            skill: New Skill with setted parameters.
+            skill: New Skill with set parameters.
 
         Returns:
             Skill: Created skill. With read-only fields.
@@ -2412,8 +2412,8 @@ class TolokaClient:
             >>> new_skill = toloka_client.create_skill(
             >>>     name='Area selection of road signs',
             >>>     public_requester_description={
-            >>>         'EN': 'Performer is annotating road signs',
-            >>>         'FR': "L'exécuteur marque les signaux routier",
+            >>>         'EN': 'Tolokers annotate road signs',
+            >>>         'FR': "Les Tolokers annotent les signaux routier",
             >>>     },
             >>> )
             >>> print(new_skill.id)
@@ -2439,7 +2439,7 @@ class TolokaClient:
         You can send a maximum of 10 requests of this kind per minute and 100 requests per day.
 
         Args:
-            skill: New Skill with setted parameters.
+            skill: New Skill with set parameters.
 
         Returns:
             Skill: Created skill. With read-only fields.
@@ -2450,8 +2450,8 @@ class TolokaClient:
             >>> new_skill = toloka_client.create_skill(
             >>>     name='Area selection of road signs',
             >>>     public_requester_description={
-            >>>         'EN': 'Performer is annotating road signs',
-            >>>         'FR': "L'exécuteur marque les signaux routier",
+            >>>         'EN': 'Tolokers annotate road signs',
+            >>>         'FR': "Les Tolokers annotent les signaux routier",
             >>>     },
             >>> )
             >>> print(new_skill.id)
@@ -3091,7 +3091,7 @@ class TolokaClient:
         task_id: str,
         patch: toloka.client.task.TaskOverlapPatch
     ) -> toloka.client.task.Task:
-        """Stops assigning a task to users.
+        """Stops assigning a task to Tolokers.
 
         Args:
             task_id: The ID of the task.
@@ -3122,7 +3122,7 @@ class TolokaClient:
         overlap: typing.Optional[int] = None,
         infinite_overlap: typing.Optional[bool] = None
     ) -> toloka.client.task.Task:
-        """Stops assigning a task to users.
+        """Stops assigning a task to Tolokers.
 
         Args:
             task_id: The ID of the task.
@@ -3720,7 +3720,7 @@ class TolokaClient:
         user_bonus: toloka.client.user_bonus.UserBonus,
         parameters: typing.Optional[toloka.client.user_bonus.UserBonusCreateRequestParameters] = None
     ) -> toloka.client.user_bonus.UserBonus:
-        """Issues payments directly to the performer
+        """Issues payments directly to a Toloker.
 
         You can send a maximum of 10,000 requests of this kind per day.
 
@@ -3744,7 +3744,7 @@ class TolokaClient:
             >>>             'RU': 'Прекрасная работа!',
             >>>         },
             >>>         public_message={
-            >>>             'EN': 'You are the best performer!',
+            >>>             'EN': 'You are the best!',
             >>>             'RU': 'Молодец!',
             >>>         },
             >>>         assignment_id='012345'
@@ -3762,7 +3762,7 @@ class TolokaClient:
         operation_id: typing.Optional[str] = None,
         skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.user_bonus.UserBonus:
-        """Issues payments directly to the performer
+        """Issues payments directly to a Toloker.
 
         You can send a maximum of 10,000 requests of this kind per day.
 
@@ -3786,7 +3786,7 @@ class TolokaClient:
             >>>             'RU': 'Прекрасная работа!',
             >>>         },
             >>>         public_message={
-            >>>             'EN': 'You are the best performer!',
+            >>>             'EN': 'You are the best!',
             >>>             'RU': 'Молодец!',
             >>>         },
             >>>         assignment_id='012345'
@@ -3802,7 +3802,7 @@ class TolokaClient:
         user_bonuses: typing.List[toloka.client.user_bonus.UserBonus],
         parameters: typing.Optional[toloka.client.user_bonus.UserBonusCreateRequestParameters] = None
     ) -> toloka.client.batch_create_results.UserBonusBatchCreateResult:
-        """Creates many user bonuses
+        """Creates rewards for Tolokers.
 
         Right now it's safer to use asynchronous version: "create_user_bonuses_async"
         You can send a maximum of 10,000 requests of this kind per day.
@@ -3812,8 +3812,8 @@ class TolokaClient:
             parameters: Parameters for UserBonus creation controlling.
 
         Returns:
-            UserBonusBatchCreateResult: Result of user bonuses creating. Contains created user bonuses in `items` and
-                problems in "validation_errors".
+            UserBonusBatchCreateResult: Result of creating rewards. Contains `UserBonus` instances in `items` and
+                problems in `validation_errors`.
 
         Example:
             >>> import decimal
@@ -3826,7 +3826,7 @@ class TolokaClient:
             >>>             'RU': 'Прекрасная работа!',
             >>>         },
             >>>         public_message={
-            >>>             'EN': 'You are the best performer!',
+            >>>             'EN': 'You are the best!',
             >>>             'RU': 'Молодец!',
             >>>         },
             >>>         assignment_id='1'),
@@ -3856,7 +3856,7 @@ class TolokaClient:
         operation_id: typing.Optional[str] = None,
         skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.batch_create_results.UserBonusBatchCreateResult:
-        """Creates many user bonuses
+        """Creates rewards for Tolokers.
 
         Right now it's safer to use asynchronous version: "create_user_bonuses_async"
         You can send a maximum of 10,000 requests of this kind per day.
@@ -3866,8 +3866,8 @@ class TolokaClient:
             parameters: Parameters for UserBonus creation controlling.
 
         Returns:
-            UserBonusBatchCreateResult: Result of user bonuses creating. Contains created user bonuses in `items` and
-                problems in "validation_errors".
+            UserBonusBatchCreateResult: Result of creating rewards. Contains `UserBonus` instances in `items` and
+                problems in `validation_errors`.
 
         Example:
             >>> import decimal
@@ -3880,7 +3880,7 @@ class TolokaClient:
             >>>             'RU': 'Прекрасная работа!',
             >>>         },
             >>>         public_message={
-            >>>             'EN': 'You are the best performer!',
+            >>>             'EN': 'You are the best!',
             >>>             'RU': 'Молодец!',
             >>>         },
             >>>         assignment_id='1'),
@@ -3908,7 +3908,7 @@ class TolokaClient:
         user_bonuses: typing.List[toloka.client.user_bonus.UserBonus],
         parameters: typing.Optional[toloka.client.user_bonus.UserBonusCreateRequestParameters] = None
     ) -> toloka.client.operations.UserBonusCreateBatchOperation:
-        """Issues payments directly to the performers, asynchronously creates many user bonuses
+        """Issues payments directly to Tolokers, asynchronously creates many `UserBonus` instances.
 
         You can send a maximum of 10,000 requests of this kind per day.
 
@@ -3930,7 +3930,7 @@ class TolokaClient:
             >>>             'RU': 'Прекрасная работа!',
             >>>         },
             >>>         public_message={
-            >>>             'EN': 'You are the best performer!',
+            >>>             'EN': 'You are the best!',
             >>>             'RU': 'Молодец!',
             >>>         },
             >>>         assignment_id='1'),
@@ -3961,7 +3961,7 @@ class TolokaClient:
         operation_id: typing.Optional[str] = None,
         skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.operations.UserBonusCreateBatchOperation:
-        """Issues payments directly to the performers, asynchronously creates many user bonuses
+        """Issues payments directly to Tolokers, asynchronously creates many `UserBonus` instances.
 
         You can send a maximum of 10,000 requests of this kind per day.
 
@@ -3983,7 +3983,7 @@ class TolokaClient:
             >>>             'RU': 'Прекрасная работа!',
             >>>         },
             >>>         public_message={
-            >>>             'EN': 'You are the best performer!',
+            >>>             'EN': 'You are the best!',
             >>>             'RU': 'Молодец!',
             >>>         },
             >>>         assignment_id='1'),
@@ -4013,20 +4013,20 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.UserBonusSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.UserBonusSearchResult:
-        """Finds all user bonuses that match certain rules
+        """Finds all Tolokers' rewards that match certain rules.
 
-        As a result, it returns an object that contains the first part of the found user bonuses and whether there
+        As a result, it returns an object that contains the first part of the found `UserBonus` instances and whether there
         are any more results.
         It is better to use the [get_user_bonuses](toloka.client.TolokaClient.get_user_bonuses.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
-            request: How to search user bonuses.
+            request: How to search rewards.
             sort: How to sort result. Defaults to None.
             limit: Limit on the number of results returned.
 
         Returns:
-            UserBonusSearchResult: The first `limit` user bonuses in `items`.
+            UserBonusSearchResult: The first `limit` `UserBonus` instances in `items`.
                 And a mark that there is more.
 
         Example:
@@ -4054,20 +4054,20 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.UserBonusSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.UserBonusSearchResult:
-        """Finds all user bonuses that match certain rules
+        """Finds all Tolokers' rewards that match certain rules.
 
-        As a result, it returns an object that contains the first part of the found user bonuses and whether there
+        As a result, it returns an object that contains the first part of the found `UserBonus` instances and whether there
         are any more results.
         It is better to use the [get_user_bonuses](toloka.client.TolokaClient.get_user_bonuses.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
-            request: How to search user bonuses.
+            request: How to search rewards.
             sort: How to sort result. Defaults to None.
             limit: Limit on the number of results returned.
 
         Returns:
-            UserBonusSearchResult: The first `limit` user bonuses in `items`.
+            UserBonusSearchResult: The first `limit` `UserBonus` instances in `items`.
                 And a mark that there is more.
 
         Example:
@@ -4079,13 +4079,13 @@ class TolokaClient:
         ...
 
     def get_user_bonus(self, user_bonus_id: str) -> toloka.client.user_bonus.UserBonus:
-        """Reads one specific user bonus
+        """Gets information about a Toloker's reward.
 
         Args:
-            user_bonus_id: ID of the user bonus.
+            user_bonus_id: The ID of the reward.
 
         Returns:
-            UserBonus: The user bonus.
+            UserBonus: The information about the reward.
 
         Example:
             >>> toloka_client.get_user_bonus(user_bonus_id='1')
@@ -4095,13 +4095,13 @@ class TolokaClient:
 
     @typing.overload
     def get_user_bonuses(self, request: toloka.client.search_requests.UserBonusSearchRequest) -> typing.Generator[toloka.client.user_bonus.UserBonus, None, None]:
-        """Finds all user bonuses that match certain rules and returns them in an iterable object
+        """Finds all Tolokers' rewards that match certain rules and returns them in an iterable object
 
-        Unlike find_user_bonuses, returns generator. Does not sort user bonuses.
+        Unlike find_user_bonuses, returns generator. Does not sort `UserBonus` instances.
         While iterating over the result, several requests to the Toloka server is possible.
 
         Args:
-            request: How to search user bonus.
+            request: How to search Tolokers' rewards.
 
         Yields:
             UserBonus: The next object corresponding to the request parameters.
@@ -4127,13 +4127,13 @@ class TolokaClient:
         created_gt: typing.Optional[datetime.datetime] = None,
         created_gte: typing.Optional[datetime.datetime] = None
     ) -> typing.Generator[toloka.client.user_bonus.UserBonus, None, None]:
-        """Finds all user bonuses that match certain rules and returns them in an iterable object
+        """Finds all Tolokers' rewards that match certain rules and returns them in an iterable object
 
-        Unlike find_user_bonuses, returns generator. Does not sort user bonuses.
+        Unlike find_user_bonuses, returns generator. Does not sort `UserBonus` instances.
         While iterating over the result, several requests to the Toloka server is possible.
 
         Args:
-            request: How to search user bonus.
+            request: How to search Tolokers' rewards.
 
         Yields:
             UserBonus: The next object corresponding to the request parameters.
@@ -4151,20 +4151,20 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.UserRestrictionSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.UserRestrictionSearchResult:
-        """Finds all user restrictions that match certain rules
+        """Finds all Toloker restrictions that match certain rules
 
-        As a result, it returns an object that contains the first part of the found user restrictions and whether there
+        As a result, it returns an object that contains the first part of the found Toloker restrictions and whether there
         are any more results.
         It is better to use the [get_user_restriction](toloka.client.TolokaClient.get_user_restriction.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
-            request: How to search user restrictions.
+            request: How to search Toloker restrictions.
             sort: How to sort result. Defaults to None.
             limit: Limit on the number of results returned.
 
         Returns:
-            UserRestrictionSearchResult: The first `limit` user restrictions in `items`.
+            UserRestrictionSearchResult: The first `limit` Toloker restrictions in `items`.
                 And a mark that there is more.
 
         Example:
@@ -4193,20 +4193,20 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.UserRestrictionSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.UserRestrictionSearchResult:
-        """Finds all user restrictions that match certain rules
+        """Finds all Toloker restrictions that match certain rules
 
-        As a result, it returns an object that contains the first part of the found user restrictions and whether there
+        As a result, it returns an object that contains the first part of the found Toloker restrictions and whether there
         are any more results.
         It is better to use the [get_user_restriction](toloka.client.TolokaClient.get_user_restriction.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
-            request: How to search user restrictions.
+            request: How to search Toloker restrictions.
             sort: How to sort result. Defaults to None.
             limit: Limit on the number of results returned.
 
         Returns:
-            UserRestrictionSearchResult: The first `limit` user restrictions in `items`.
+            UserRestrictionSearchResult: The first `limit` Toloker restrictions in `items`.
                 And a mark that there is more.
 
         Example:
@@ -4218,13 +4218,13 @@ class TolokaClient:
         ...
 
     def get_user_restriction(self, user_restriction_id: str) -> toloka.client.user_restriction.UserRestriction:
-        """Reads one specific user restriction
+        """Gets information about a Toloker restriction.
 
         Args:
-            user_restriction_id: ID of the user restriction.
+            user_restriction_id: ID of the Toloker restriction.
 
         Returns:
-            UserRestriction: The user restriction.
+            UserRestriction: The Toloker restriction.
 
         Example:
             >>> toloka_client.get_user_restriction(user_restriction_id='1')
@@ -4234,13 +4234,13 @@ class TolokaClient:
 
     @typing.overload
     def get_user_restrictions(self, request: toloka.client.search_requests.UserRestrictionSearchRequest) -> typing.Generator[toloka.client.user_restriction.UserRestriction, None, None]:
-        """Finds all user restrictions that match certain rules and returns them in an iterable object
+        """Finds all Toloker restrictions that match certain rules and returns them in an iterable object
 
-        Unlike find_user_restrictions, returns generator. Does not sort user restrictions.
+        Unlike find_user_restrictions, returns generator. Does not sort Toloker restrictions.
         While iterating over the result, several requests to the Toloka server is possible.
 
         Args:
-            request: How to search user restrictions.
+            request: How to search Toloker restrictions.
 
         Yields:
             UserRestriction: The next object corresponding to the request parameters.
@@ -4267,13 +4267,13 @@ class TolokaClient:
         created_gt: typing.Optional[datetime.datetime] = None,
         created_gte: typing.Optional[datetime.datetime] = None
     ) -> typing.Generator[toloka.client.user_restriction.UserRestriction, None, None]:
-        """Finds all user restrictions that match certain rules and returns them in an iterable object
+        """Finds all Toloker restrictions that match certain rules and returns them in an iterable object
 
-        Unlike find_user_restrictions, returns generator. Does not sort user restrictions.
+        Unlike find_user_restrictions, returns generator. Does not sort Toloker restrictions.
         While iterating over the result, several requests to the Toloka server is possible.
 
         Args:
-            request: How to search user restrictions.
+            request: How to search Toloker restrictions.
 
         Yields:
             UserRestriction: The next object corresponding to the request parameters.
@@ -4285,21 +4285,21 @@ class TolokaClient:
         ...
 
     def set_user_restriction(self, user_restriction: toloka.client.user_restriction.UserRestriction) -> toloka.client.user_restriction.UserRestriction:
-        """Closes the performer's access to one or more projects
+        """Restricts access to projects or pools for a Toloker.
 
         Args:
-            user_restriction: To whom and what to prohibit.
+            user_restriction: Restriction parameters.
 
         Returns:
-            UserRestriction: Created restriction object.
+            UserRestriction: Updated restriction object.
 
         Example:
-            If performer often makes mistakes, we will restrict access to all our projects.
+            If a Toloker often makes mistakes, we will restrict access to all our projects.
 
             >>> new_restriction = toloka_client.set_user_restriction(
             >>>     toloka.user_restriction.ProjectUserRestriction(
             >>>         user_id='1',
-            >>>         private_comment='Performer often makes mistakes',
+            >>>         private_comment='The Toloker often makes mistakes',
             >>>         project_id='5'
             >>>     )
             >>> )
@@ -4349,21 +4349,21 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.UserSkillSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.UserSkillSearchResult:
-        """Finds all user skills that match certain rules
+        """Finds all Toloker's skills that match certain rules
 
-        UserSkill describe the skill value for a specific performer.
-        As a result, it returns an object that contains the first part of the found user skills and whether there
+        `UserSkill` describes the skill value for a specific Toloker.
+        As a result, it returns an object that contains the first part of the found Toloker's skills and whether there
         are any more results.
         It is better to use the [get_user_skills](toloka.client.TolokaClient.get_user_skills.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
-            request: How to search user skills.
+            request: How to search Toloker's skills.
             sort: How to sort result. Defaults to None.
             limit: Limit on the number of results returned.
 
         Returns:
-            UserSkillSearchResult: The first `limit` user skills in `items`.
+            UserSkillSearchResult: The first `limit` Toloker's skills in `items`.
                 And a mark that there is more.
 
         Example:
@@ -4394,21 +4394,21 @@ class TolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.UserSkillSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.UserSkillSearchResult:
-        """Finds all user skills that match certain rules
+        """Finds all Toloker's skills that match certain rules
 
-        UserSkill describe the skill value for a specific performer.
-        As a result, it returns an object that contains the first part of the found user skills and whether there
+        `UserSkill` describes the skill value for a specific Toloker.
+        As a result, it returns an object that contains the first part of the found Toloker's skills and whether there
         are any more results.
         It is better to use the [get_user_skills](toloka.client.TolokaClient.get_user_skills.md) method, it allows you to iterate through all results
         and not just the first output.
 
         Args:
-            request: How to search user skills.
+            request: How to search Toloker's skills.
             sort: How to sort result. Defaults to None.
             limit: Limit on the number of results returned.
 
         Returns:
-            UserSkillSearchResult: The first `limit` user skills in `items`.
+            UserSkillSearchResult: The first `limit` Toloker's skills in `items`.
                 And a mark that there is more.
 
         Example:
@@ -4420,12 +4420,12 @@ class TolokaClient:
         ...
 
     def get_user_skill(self, user_skill_id: str) -> toloka.client.user_skill.UserSkill:
-        """Gets the value of the user's skill
+        """Gets the value of a Toloker's skill
 
-        UserSkill describe the skill value for a specific performer.
+        `UserSkill` describes the skill value for a specific Toloker.
 
         Args:
-            user_skill_id: ID of the user skill.
+            user_skill_id: The ID of the Toloker skill.
 
         Returns:
             UserSkill: The skill value.
@@ -4438,14 +4438,14 @@ class TolokaClient:
 
     @typing.overload
     def get_user_skills(self, request: toloka.client.search_requests.UserSkillSearchRequest) -> typing.Generator[toloka.client.user_skill.UserSkill, None, None]:
-        """Finds all user skills that match certain rules and returns them in an iterable object
+        """Finds all Toloker's skills that match certain rules and returns them in an iterable object
 
-        UserSkill describe the skill value for a specific performer.
-        Unlike find_user_skills, returns generator. Does not sort user skills.
+        `UserSkill` describes the skill value for a specific Toloker.
+        Unlike find_user_skills, returns generator. Does not sort Toloker's skills.
         While iterating over the result, several requests to the Toloka server is possible.
 
         Args:
-            request: How to search user skills.
+            request: How to search Toloker's skills.
 
         Yields:
             UserSkill: The next object corresponding to the request parameters.
@@ -4474,14 +4474,14 @@ class TolokaClient:
         modified_gt: typing.Optional[datetime.datetime] = None,
         modified_gte: typing.Optional[datetime.datetime] = None
     ) -> typing.Generator[toloka.client.user_skill.UserSkill, None, None]:
-        """Finds all user skills that match certain rules and returns them in an iterable object
+        """Finds all Toloker's skills that match certain rules and returns them in an iterable object
 
-        UserSkill describe the skill value for a specific performer.
-        Unlike find_user_skills, returns generator. Does not sort user skills.
+        `UserSkill` describes the skill value for a specific Toloker.
+        Unlike find_user_skills, returns generator. Does not sort Toloker's skills.
         While iterating over the result, several requests to the Toloka server is possible.
 
         Args:
-            request: How to search user skills.
+            request: How to search Toloker's skills.
 
         Yields:
             UserSkill: The next object corresponding to the request parameters.
@@ -4494,13 +4494,13 @@ class TolokaClient:
 
     @typing.overload
     def set_user_skill(self, request: toloka.client.user_skill.SetUserSkillRequest) -> toloka.client.user_skill.UserSkill:
-        """Sets the skill value to the performer
+        """Assigns a skill to a Toloker.
 
         Args:
-            request: To whom and what value of the skill to set.
+            request: Skill parameters.
 
         Returns:
-            UserSkill: Сreated fact of skill installation.
+            UserSkill: Updated skill information.
 
         Example:
             >>> from decimal import *
@@ -4517,13 +4517,13 @@ class TolokaClient:
         user_id: typing.Optional[str] = None,
         value: typing.Optional[decimal.Decimal] = None
     ) -> toloka.client.user_skill.UserSkill:
-        """Sets the skill value to the performer
+        """Assigns a skill to a Toloker.
 
         Args:
-            request: To whom and what value of the skill to set.
+            request: Skill parameters.
 
         Returns:
-            UserSkill: Сreated fact of skill installation.
+            UserSkill: Updated skill information.
 
         Example:
             >>> from decimal import *
@@ -4535,10 +4535,10 @@ class TolokaClient:
     def delete_user_skill(self, user_skill_id: str) -> None:
         """Drop specific UserSkill
 
-        UserSkill describe the skill value for a specific performer.
+        `UserSkill` describes the skill value for a specific Toloker.
 
         Args:
-            user_skill_id: ID of the fact that the performer has a skill to delete.
+            user_skill_id: ID of the fact that the Toloker has a skill to delete.
 
         Example:
             >>> toloka_client.delete_user_skill(user_skill_id='1')
@@ -4743,7 +4743,7 @@ class TolokaClient:
             >>> answers_df = answers_df.rename(columns={
             >>>     'INPUT:image': 'task',
             >>>     'OUTPUT:result': 'label',
-            >>>     'ASSIGNMENT:worker_id': 'performer'
+            >>>     'ASSIGNMENT:worker_id': 'annotator'
             >>> })
             ...
         """
@@ -4796,7 +4796,7 @@ class TolokaClient:
             >>> answers_df = answers_df.rename(columns={
             >>>     'INPUT:image': 'task',
             >>>     'OUTPUT:result': 'label',
-            >>>     'ASSIGNMENT:worker_id': 'performer'
+            >>>     'ASSIGNMENT:worker_id': 'annotator'
             >>> })
             ...
         """
@@ -5194,13 +5194,13 @@ class TolokaClient:
     def create_app_item(
         self,
         app_project_id: str,
-        request: toloka.client.app.AppItemCreateRequest
+        app_item: toloka.client.app.AppItem
     ) -> toloka.client.app.AppItem:
         """Creates an App task item in Toloka.
 
         Args:
             app_project_id: The ID of the App project to create the item in.
-            request: The request parameters.
+            app_item: The task item with parameters.
 
         Returns:
             AppItem: Created App task item with updated parameters.
@@ -5219,7 +5219,7 @@ class TolokaClient:
 
         Args:
             app_project_id: The ID of the App project to create the item in.
-            request: The request parameters.
+            app_item: The task item with parameters.
 
         Returns:
             AppItem: Created App task item with updated parameters.
