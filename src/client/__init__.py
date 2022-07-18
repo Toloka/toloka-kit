@@ -486,7 +486,7 @@ class TolokaClient:
 
         Pass to the `find_aggregated_solutions` the ID of the operation started by the [aggregate_solutions_by_pool](toloka.client.TolokaClient.aggregate_solutions_by_pool.md) method.
 
-        The number of returned aggregated responses is limited. Find remaining matching responses with subsequent `find_aggregated_solutions` calls.
+        The number of returned aggregated responses is limited. To find remaining responses call `find_aggregated_solutions` with updated search criteria.
 
         To iterate over all matching aggregated responses you may use the [get_aggregated_solutions](toloka.client.TolokaClient.get_aggregated_solutions.md) method.
 
@@ -592,7 +592,7 @@ class TolokaClient:
                          limit: Optional[int] = None) -> search_results.AssignmentSearchResult:
         """Finds assignments that match certain criteria.
 
-        The number of returned assignments is limited. Find remaining matching assignments with subsequent `find_assignments` calls.
+        The number of returned assignments is limited. To find remaining assignments call `find_assignments` with updated search criteria.
 
         To iterate over all matching assignments you may use [get_assignments](toloka.client.TolokaClient.get_assignments.md).
 
@@ -705,7 +705,7 @@ class TolokaClient:
                          limit: Optional[int] = None) -> search_results.AttachmentSearchResult:
         """Finds attachments that match certain criteria and returns their metadata.
 
-        The number of returned attachments is limited. Find remaining matching attachments with subsequent `find_attachments` calls.
+        The number of returned attachments is limited. To find remaining attachments call `find_attachments` with updated search criteria.
 
         To iterate over all matching attachments you may use the [get_attachments](toloka.client.TolokaClient.get_attachments.md) method.
 
@@ -854,7 +854,7 @@ class TolokaClient:
                              limit: Optional[int] = None) -> search_results.MessageThreadSearchResult:
         """Finds message threads that match certain criteria.
 
-        The number of returned message threads is limited. Find remaining matching threads with subsequent `find_message_threads` calls.
+        The number of returned message threads is limited. To find remaining threads call `find_message_threads` with updated search criteria.
 
         To iterate over all matching threads you may use the [get_message_threads](toloka.client.TolokaClient.get_message_threads.md) method.
 
@@ -1028,7 +1028,7 @@ class TolokaClient:
                       limit: Optional[int] = None) -> search_results.ProjectSearchResult:
         """Finds projects that match certain criteria.
 
-        The number of returned projects is limited. Find remaining matching projects with subsequent `find_projects` calls.
+        The number of returned projects is limited. To find remaining projects call `find_projects` with updated search criteria.
 
         To iterate over all matching projects you may use the [get_projects](toloka.client.TolokaClient.get_projects.md) method.
 
@@ -1429,7 +1429,7 @@ class TolokaClient:
                    limit: Optional[int] = None) -> search_results.PoolSearchResult:
         """Finds pools that match certain criteria.
 
-        The number of returned pools is limited. Find remaining matching pools with subsequent `find_pools` calls.
+        The number of returned pools is limited. To find remaining pools call `find_pools` with updated search criteria.
 
         To iterate over all matching pools you may use the [get_pools](toloka.client.TolokaClient.get_pools.md) method.
 
@@ -1790,7 +1790,7 @@ class TolokaClient:
                        limit: Optional[int] = None) -> search_results.TrainingSearchResult:
         """Finds training pools that match certain criteria.
 
-        The number of returned pools is limited. Find remaining matching pools with subsequent `find_trainings` calls.
+        The number of returned pools is limited. To find remaining pools call `find_trainings` with updated search criteria.
 
         To iterate over all matching training pools you may use the [get_trainings](toloka.client.TolokaClient.get_trainings.md) method.
 
@@ -1975,7 +1975,7 @@ class TolokaClient:
                     limit: Optional[int] = None) -> search_results.SkillSearchResult:
         """Finds skills that match certain criteria.
 
-        The number of returned skills is limited. Find remaining matching skills with subsequent `find_skills` calls.
+        The number of returned skills is limited. To find remaining skills call `find_skills` with updated search criteria.
 
         To iterate over all matching skills you may use the [get_skills](toloka.client.TolokaClient.get_skills.md) method.
 
@@ -2225,7 +2225,7 @@ class TolokaClient:
                    limit: Optional[int] = None) -> search_results.TaskSearchResult:
         """Finds tasks that match certain criteria.
 
-        The number of returned tasks is limited. Find remaining matching tasks with subsequent `find_tasks` calls.
+        The number of returned tasks is limited. To find remaining tasks call `find_tasks` with updated search criteria.
 
         To iterate over all matching tasks you may use the [get_tasks](toloka.client.TolokaClient.get_tasks.md) method.
 
@@ -2471,7 +2471,7 @@ class TolokaClient:
     ) -> search_results.TaskSuiteSearchResult:
         """Finds task suites that match certain criteria.
 
-        The number of returned task suites is limited. Find remaining matching task suites with subsequent `find_task_suites` calls.
+        The number of returned task suites is limited. To find remaining task suites call `find_task_suites` with updated search criteria.
 
         To iterate over all matching task suites you may use the [get_task_suites](toloka.client.TolokaClient.get_task_suites.md) method.
 
@@ -2846,7 +2846,7 @@ class TolokaClient:
                           limit: Optional[int] = None) -> search_results.UserBonusSearchResult:
         """Finds Tolokers' rewards that match certain criteria.
 
-        The number of returned rewards is limited. Find remaining matching rewards with subsequent `find_user_bonuses` calls.
+        The number of returned rewards is limited. To find remaining rewards call `find_user_bonuses` with updated search criteria.
 
         To iterate over all matching Tolokers' rewards you may use the [get_user_bonuses](toloka.client.TolokaClient.get_user_bonuses.md) method.
 
@@ -2915,7 +2915,7 @@ class TolokaClient:
                                limit: Optional[int] = None) -> search_results.UserRestrictionSearchResult:
         """Finds Toloker restrictions that match certain criteria.
 
-        The number of returned restrictions is limited. Find remaining matching restrictions with subsequent `find_user_restrictions` calls.
+        The number of returned restrictions is limited. To find remaining restrictions call `find_user_restrictions` with updated search criteria.
 
         To iterate over all matching Toloker restrictions you may use the [get_user_restrictions](toloka.client.TolokaClient.get_user_restrictions.md) method.
 
@@ -3054,7 +3054,7 @@ class TolokaClient:
                          limit: Optional[int] = None) -> search_results.UserSkillSearchResult:
         """Finds Toloker's skills that match certain criteria.
 
-        The number of returned Toloker's skills is limited. Find remaining matching skills with subsequent `find_user_skills` calls.
+        The number of returned Toloker's skills is limited. To find remaining skills call `find_user_skills` with updated search criteria.
 
         To iterate over all matching skills you may use the [get_user_skills](toloka.client.TolokaClient.get_user_skills.md) method.
 
@@ -3210,7 +3210,7 @@ class TolokaClient:
                                    limit: Optional[int] = None) -> search_results.WebhookSubscriptionSearchResult:
         """Finds webhook subscriptions that match certain criteria.
 
-        The number of returned webhook subscriptions is limited. Find remaining matching webhook subscriptions with subsequent `find_webhook_subscriptions` calls.
+        The number of returned webhook subscriptions is limited. To find remaining webhook subscriptions call `find_webhook_subscriptions` with updated search criteria.
 
         To iterate over all matching webhook subscriptions you may use the [get_webhook_subscriptions](toloka.client.TolokaClient.get_webhook_subscriptions.md) method.
 
@@ -3320,7 +3320,7 @@ class TolokaClient:
                           limit: Optional[int] = None) -> search_results.AppProjectSearchResult:
         """Finds App projects that match certain criteria.
 
-        The number of returned projects is limited. Find remaining matching projects with subsequent `find_app_projects` calls.
+        The number of returned projects is limited. To find remaining projects call `find_app_projects` with updated search criteria.
         To iterate over all matching projects you may use the [get_app_projects](toloka.client.TolokaClient.get_app_projects.md) method.
 
         Args:
@@ -3443,7 +3443,7 @@ class TolokaClient:
     ) -> search_results.AppSearchResult:
         """Finds App solutions that match certain criteria.
 
-        The number of returned solutions is limited. Find remaining matching solutions with subsequent `find_apps` calls.
+        The number of returned solutions is limited. To find remaining solutions call `find_apps` with updated search criteria.
 
         To iterate over all matching solutions you may use the [get_apps](toloka.client.TolokaClient.get_apps.md) method.
 
@@ -3513,7 +3513,7 @@ class TolokaClient:
     ) -> search_results.AppItemSearchResult:
         """Finds task items that match certain criteria in an App project.
 
-        The number of returned items is limited. Find remaining matching items with subsequent `find_app_items` calls.
+        The number of returned items is limited. To find remaining items call `find_app_items` with updated search criteria.
 
         To iterate over all matching items you may use the [get_app_items](toloka.client.TolokaClient.get_app_items.md) method.
 
@@ -3623,7 +3623,7 @@ class TolokaClient:
                          limit: Optional[int] = None) -> search_results.AppBatchSearchResult:
         """Finds batches that match certain criteria in an App project.
 
-        The number of returned batches is limited. Find remaining matching batches with subsequent `find_app_batches` calls.
+        The number of returned batches is limited. To find remaining batches call `find_app_batches` with updated search criteria.
 
         To iterate over all matching batches you may use the [get_app_batches](toloka.client.TolokaClient.get_app_batches.md) method.
 
