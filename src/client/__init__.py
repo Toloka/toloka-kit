@@ -993,7 +993,7 @@ class TolokaClient:
         """Creates a new project
 
         Args:
-            project: New Project with setted parameters.
+            project: New Project with set parameters.
 
         Returns:
             Project: Created project. With read-only fields.
@@ -1120,7 +1120,7 @@ class TolokaClient:
     def clone_project(self, project_id: str, reuse_controllers: bool = True) -> CloneResults:
         """Synchronously clones the project, all pools and trainings
 
-        Emulates cloning behaviour via Toloka interface:
+        Emulates cloning behavior via Toloka interface:
         - the same skills will be used
         - the same quality control collectors will be used (could be changed by reuse_controllers=False)
         - the expiration date will not be changed in the new project
@@ -1387,7 +1387,7 @@ class TolokaClient:
         You can send a maximum of 20 requests of this kind per minute and 100 requests per day.
 
         Args:
-            pool: New Pool with setted parameters.
+            pool: New Pool with set parameters.
 
         Returns:
             Pool: Created pool. With read-only fields.
@@ -1750,7 +1750,7 @@ class TolokaClient:
         """Creates a new training
 
         Args:
-            training: New Training with setted parameters.
+            training: New Training with set parameters.
 
         Returns:
             Training: Created training. With read-only fields.
@@ -2381,7 +2381,7 @@ class TolokaClient:
         clearly why you need it.
         Task suites can be from different pools. You can insert both regular tasks and golden-tasks.
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        Recomended maximum of 10,000 task suites per request if async_mode is True.
+        Recommended maximum of 10,000 task suites per request if async_mode is True.
 
         Args:
             task_suites: List of task suites, that will be created.
@@ -2433,14 +2433,14 @@ class TolokaClient:
         """Creates many task suites in pools, asynchronous version
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        Recomended maximum of 10,000 task suites per request.
+        Recommended maximum of 10,000 task suites per request.
 
         Args:
             task_suites: List of task suites, that will be created.
             parameters: Parameters for TaskSuite creation controlling.
 
         Returns:
-            TaskSuiteCreateBatchOperation: An operation upon completion of which you can get the created teask suites.
+            TaskSuiteCreateBatchOperation: An operation upon completion of which you can get the created task suites.
 
         Example:
             >>> task_suites = [
