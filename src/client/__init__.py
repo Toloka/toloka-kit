@@ -594,7 +594,7 @@ class TolokaClient:
 
         The number of returned assignments is limited. To find remaining assignments call `find_assignments` with updated search criteria.
 
-        To iterate over all matching assignments you may use [get_assignments](toloka.client.TolokaClient.get_assignments.md).
+        To iterate over all matching assignments you may use the [get_assignments](toloka.client.TolokaClient.get_assignments.md) method.
 
         Args:
             request: Search criteria.
@@ -3321,6 +3321,7 @@ class TolokaClient:
         """Finds App projects that match certain criteria.
 
         The number of returned projects is limited. To find remaining projects call `find_app_projects` with updated search criteria.
+        
         To iterate over all matching projects you may use the [get_app_projects](toloka.client.TolokaClient.get_app_projects.md) method.
 
         Args:
