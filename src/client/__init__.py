@@ -3591,7 +3591,7 @@ class TolokaClient:
 
         Args:
             app_project_id: The ID of the App project to create the item in.
-            request: The request parameters.
+            app_item: The task item with parameters.
 
         Returns:
             AppItem: Created App task item with updated parameters.
