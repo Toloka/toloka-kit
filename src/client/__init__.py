@@ -207,6 +207,10 @@ class TolokaClient:
         retryer_factory: Factory that creates `Retry` object.
             Fully specified retry policy that will apply to all requests.
             Default value: `None`.
+        act_under_account_id: ID of the requester that has been shared access with the current token owner account.
+            All requests will be made using a specified account. See [Shared access to the requester's account](https://toloka.ai/docs/guide/concepts/multiple-access.html?lang=en)
+            documentation page. ID of the requester can be retrieved using the [get_requester](toloka.client.TolokaClient.get_requester.md)
+            method (this method should be called by the account owner using account's token).
 
     Example:
         How to create `TolokaClient` instance and make your first request to Toloka.
@@ -241,6 +245,7 @@ class TolokaClient:
         url: Optional[str] = None,
         retry_quotas: Union[List[str], str, None] = TolokaRetry.Unit.MIN,
         retryer_factory: Optional[Callable[[], Retry]] = None,
+        act_under_account_id: Optional[str] = None,
     ):
         if url is None and environment is None:
             raise ValueError('You must pass at least one parameter: url or environment.')
@@ -268,6 +273,8 @@ class TolokaClient:
         else:
             self.retryer_factory = functools.partial(self._default_retryer_factory, retries, retry_quotas)
 
+        self.act_under_account_id = act_under_account_id
+
     @staticmethod
     def _default_retryer_factory(
         retries: int,
@@ -293,6 +300,8 @@ class TolokaClient:
                 'User-Agent': f'python-toloka-client-{__version__}',
             }
         )
+        if self.act_under_account_id:
+            session.headers['X-Act-Under-Account-ID'] = self.act_under_account_id
         return session
 
     @property
