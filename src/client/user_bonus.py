@@ -49,6 +49,7 @@ class UserBonus(BaseTolokaObject):
         >>>         assignment_id='012345'
         >>>     )
         >>> )
+        ...
 
         How to create bonus with message in several languages.
 
