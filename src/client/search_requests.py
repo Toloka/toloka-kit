@@ -202,13 +202,10 @@ ProjectSortItems = BaseSortItems.for_fields(
     # docstring
     """Parameters for sorting project search results
 
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
-
     Attributes:
         items: Fields by which to sort. Possible values:
             * id - Project ID in ascending order.
-            * created - Project creation date in UTC in yyyy-MM-DD format (ascending).
+            * created - Project creation date.
             * public_name - Project name (in alphabetical order).
             * private_comment - Comment on the project (in alphabetical order).
 
@@ -260,13 +257,10 @@ PoolSortItems = BaseSortItems.for_fields(
     # docstring
     """Parameters for sorting pool search results
 
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
-
     Attributes:
         items: Fields by which to sort. Possible values:
             * id - Pool ID in ascending order.
-            * created - Pool creation date in UTC in yyyy-MM-DD format (ascending).
+            * created - Pool creation date.
             * last_started - The date the pool was last started (ascending).
 
     Example:
@@ -318,13 +312,10 @@ TrainingSortItems = BaseSortItems.for_fields(
     # docstring
     """Parameters for sorting training pool search results
 
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
-
     Attributes:
         items: Fields by which to sort. Possible values:
             * id - Training pool ID in ascending order.
-            * created - Training pool creation date in UTC in yyyy-MM-DD format (ascending).
+            * created - Training pool creation date.
             * last_started - The date the pool was last started (ascending).
 
     Example:
@@ -364,13 +355,10 @@ SkillSortItems = BaseSortItems.for_fields(
     # docstring
     """Parameters for sorting skill search results
 
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
-
     Attributes:
         items: Fields by which to sort. Possible values:
             * id - Skill ID in ascending order.
-            * created - Skill creation date in UTC in yyyy-MM-DD format (ascending).
+            * created - Skill creation date.
 
     Example:
         How to specify and use SortItems.
@@ -469,18 +457,15 @@ AssignmentSortItems = BaseSortItems.for_fields(
     # docstring
     """Parameters for sorting assignment search results
 
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
-
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - ID for issuing a set of tasks (in ascending order).
-            * created - Date of issue of the set of tasks in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
-            * submitted - Date of completion of the set of tasks in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
-            * accepted - Date the set of tasks was accepted in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
-            * rejected - Date the set of tasks was rejected in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
-            * skipped - Date the set of tasks was skipped in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
-            * expired - Date the set of tasks was expired in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
+            * id - ID for issuing a set of tasks.
+            * created - Date of issue of the set of tasks.
+            * submitted - Date of completion of the set of tasks.
+            * accepted - Date the set of tasks was accepted.
+            * rejected - Date the set of tasks was rejected.
+            * skipped - Date the set of tasks was skipped.
+            * expired - Date the set of tasks was expired.
 
     Example:
         How to specify and use SortItems.
@@ -554,13 +539,10 @@ TaskSortItems = BaseSortItems.for_fields(
     # docstring
     """Parameters for sorting task search results
 
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
-
     Attributes:
         items: Fields by which to sort. Possible values:
             * id - Job ID (in ascending order).
-            * created - Date of creation of the task in UTC in the format YYYY-MM-DD (ascending).
+            * created - Date of creation of the task.
 
     Example:
         How to specify and use SortItems.
@@ -609,13 +591,10 @@ TaskSuiteSortItems = BaseSortItems.for_fields(
     # docstring
     """Parameters for sorting task suite search results
 
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
-
     Attributes:
         items: Fields by which to sort. Possible values:
             * id - Task set ID (in ascending order).
-            * created - Date of creation of the set of tasks in UTC in the format YYYY-MM-DD (ascending).
+            * created - Date of creation of the set of tasks.
 
     Example:
         How to specify and use SortItems.
@@ -667,13 +646,10 @@ AttachmentSortItems = BaseSortItems.for_fields(
     # docstring
     """Parameters for sorting attachment search results
 
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
-
     Attributes:
         items: Fields by which to sort. Possible values:
             * id - File ID in ascending order.
-            * created - Date of sending the file in UTC in the yyyy-MM-DD format (ascending).
+            * created - Date of sending the file.
 
     Example:
         How to specify and use SortItems.
@@ -719,14 +695,11 @@ UserSkillSortItems = BaseSortItems.for_fields(
     # docstring
     """Parameters for sorting Toloker skill search results
 
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
-
     Attributes:
         items: Fields by which to sort. Possible values:
             * id - Skill ID in ascending order.
-            * created - Date the skill was created in UTC in the yyyy-MM-DD format (ascending).
-            * modified - Date the skill was modified in UTC in the yyyy-MM-DD format (ascending).
+            * created - Date the skill was created.
+            * modified - Date the skill was modified.
 
     Example:
         How to specify and use SortItems.
@@ -774,13 +747,10 @@ UserRestrictionSortItems = BaseSortItems.for_fields(
     # docstring
     """Parameters for sorting Toloker restriction search results
 
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
-
     Attributes:
         items: Fields by which to sort. Possible values:
             * id - Restriction IDs.
-            * created - Creation date in UTC format yyyy-MM-DD.
+            * created - Creation date.
 
     Example:
         How to specify and use SortItems.
@@ -823,13 +793,10 @@ UserBonusSortItems = BaseSortItems.for_fields(
     # docstring
     """Parameters for sorting `UserBonus` search results
 
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
-
     Attributes:
         items: Fields by which to sort. Possible values:
             * id - Bonus ID in ascending order.
-            * created - Creation date in UTC format yyyy-MM-DD (ascending).
+            * created - Creation date (ascending).
 
     Example:
         How to specify and use SortItems.
@@ -891,13 +858,10 @@ MessageThreadSortItems = BaseSortItems.for_fields(
     # docstring
     """Parameters for sorting message thread search results
 
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
-
     Attributes:
         items: Fields by which to sort. Possible values:
             * id - Thread ID in ascending order.
-            * created - Creation date in UTC format yyyy-MM-DD (ascending).
+            * created - Creation date (ascending).
     """
 )
 
@@ -931,13 +895,10 @@ WebhookSubscriptionSortItems = BaseSortItems.for_fields(
     # docstring
     """Parameters for sorting webhook-subscriptions search results
 
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
-
     Attributes:
         items: Fields by which to sort. Possible values:
             * id - Subscription ID (in ascending order).
-            * created - Date of creation of the subscription in UTC in the format YYYY-MM-DD (ascending).
+            * created - Date of creation of the subscription.
 
     Example:
         How to specify and use SortItems.
@@ -970,14 +931,10 @@ class AppProjectSearchRequest(BaseSearchRequest):
         name_gte: Projects with a name lexicographically greater than or equal to the specified value.
         name_lt: Projects with a name lexicographically less than the specified value.
         name_lte: Projects with a name lexicographically less than or equal to the specified value.
-        created_gt: Projects created after the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_gte: Projects created after or on the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_lt: Projects created before the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_lte: Projects created before or on the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
+        created_gt: Projects created after the specified date.
+        created_gte: Projects created after or on the specified date.
+        created_lt: Projects created before the specified date.
+        created_lte: Projects created before or on the specified date.
     """
 
     @unique
@@ -1012,9 +969,6 @@ AppProjectSortItems = BaseSortItems.for_fields(
     'AppProjectSortItems', ['id', 'name', 'created'],
     # docstring
     """Keys for sorting App projects in search results.
-
-    You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
-    Example: `sort='-created,id'`.
 
     Attributes:
         key: The sorting key. Supported keys:
@@ -1053,9 +1007,6 @@ AppSortItems = BaseSortItems.for_fields(
     # docstring
     """Keys for sorting App solutions in search results.
 
-    You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
-    Example: `sort='-id'`.
-
     Attributes:
         key: The sorting key. Supported keys:
             * `id` — An App solution ID.
@@ -1074,14 +1025,10 @@ class AppItemSearchRequest(BaseSearchRequest):
         id_gte: Items with IDs greater than or equal to the specified value.
         id_lt: Items with IDs less than the specified value.
         id_lte: Items with IDs less than or equal to the specified value.
-        created_gt: Items created after the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_gte: Items created after or on the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_lt: Items created before the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_lte: Items created before or on the specified date. The date is specified in UTC in ISO 8601
-            format: YYYY-MM-DDThh:mm:ss[.sss].
+        created_gt: Items created after the specified date.
+        created_gte: Items created after or on the specified date.
+        created_lt: Items created before the specified date.
+        created_lte: Items created before or on the specified date.
         finished_gt: Items labeled after the specified date.
         finished_gte: Items labeled after or on the specified date.
         finished_lt: Items labeled before the specified date.
@@ -1102,9 +1049,6 @@ AppItemSortItems = BaseSortItems.for_fields(
     'AppItemSortItems', ['id', 'created', 'finished', 'status'],
     # docstring
     """Keys for sorting App task items in search results.
-
-    You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
-    Example: `sort='-created,id'`.
 
     Attributes:
         key: The sorting key. Supported keys:
@@ -1130,14 +1074,10 @@ class AppBatchSearchRequest(BaseSearchRequest):
         name_gte: Batches with names lexicographically greater than or equal to the specified value.
         name_lt: Batches with names lexicographically less than the specified value.
         name_lte: Batches with names lexicographically less than or equal to the specified value.
-        created_gt: Batches created after the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_gte: Batches created after or on the specified date. The date is specified in UTC in ISO 8601
-            format: YYYY-MM-DDThh:mm:ss[.sss].
-        created_lt: Batches created before the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_lte: Batches created before or on the specified date. The date is specified in UTC in ISO 8601
-            format: YYYY-MM-DDThh:mm:ss[.sss].
+        created_gt: Batches created after the specified date.
+        created_gte: Batches created after or on the specified date.
+        created_lt: Batches created before the specified date.
+        created_lte: Batches created before or on the specified date.
     """
 
     class CompareFields:
@@ -1153,9 +1093,6 @@ AppBatchSortItems = BaseSortItems.for_fields(
     'AppBatchSortItems', ['id', 'name', 'created', 'status'],
     # docstring
     """Keys for sorting App batches in search results.
-
-    You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
-    Example: `sort='-created,id'`.
 
     Attributes:
         key: The sorting key. Supported keys:
