@@ -3321,7 +3321,7 @@ class TolokaClient:
         """Finds App projects that match certain criteria.
 
         The number of returned projects is limited. To find remaining projects call `find_app_projects` with updated search criteria.
-        
+
         To iterate over all matching projects you may use the [get_app_projects](toloka.client.TolokaClient.get_app_projects.md) method.
 
         Args:
