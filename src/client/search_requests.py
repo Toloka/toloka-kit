@@ -178,8 +178,8 @@ class ProjectSearchRequest(BaseSearchRequest):
 
     Attributes:
         status: Status of the project, from Project.ProjectStatus:
-            * ACTIVE
-            * ARCHIVED
+            * `'ACTIVE'`
+            * `'ARCHIVED'`
         id_lt: Projects with an ID less than the specified value.
         id_lte: Projects with an ID less than or equal to the specified value.
         id_gt: Projects with an ID greater than the specified value.
@@ -224,10 +224,10 @@ class PoolSearchRequest(BaseSearchRequest):
 
     Attributes:
         status: Pool status
-            * OPEN
-            * CLOSED
-            * ARCHIVED
-            * LOCKED
+            * `'OPEN'`
+            * `'CLOSED'`
+            * `'ARCHIVED'`
+            * `'LOCKED'`
         project_id: ID of the project to which the pool is attached.
         id_lt: Pools with an ID less than the specified value.
         id_lte: Pools with an ID less than or equal to the specified value.
@@ -279,10 +279,10 @@ class TrainingSearchRequest(BaseSearchRequest):
 
     Attributes:
         status: Training pool status:
-            * OPEN
-            * CLOSED
-            * ARCHIVED
-            * LOCKED
+            * `'OPEN'`
+            * `'CLOSED'`
+            * `'ARCHIVED'`
+            * `'LOCKED'`
         project_id: ID of the project to which the training pool is attached.
         id_lt: Training pools with an ID less than the specified value.
         id_lte: Training pools with an ID less than or equal to the specified value.
