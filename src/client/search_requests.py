@@ -204,10 +204,10 @@ ProjectSortItems = BaseSortItems.for_fields(
 
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - Project ID in ascending order.
-            * created - Project creation date.
-            * public_name - Project name (in alphabetical order).
-            * private_comment - Comment on the project (in alphabetical order).
+            * id — Project ID in ascending order.
+            * created — Project creation date.
+            * public_name — Project name (in alphabetical order).
+            * private_comment — Comment on the project (in alphabetical order).
 
     Example:
         How to specify and use SortItems.
@@ -259,9 +259,9 @@ PoolSortItems = BaseSortItems.for_fields(
 
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - Pool ID in ascending order.
-            * created - Pool creation date.
-            * last_started - The date the pool was last started (ascending).
+            * id — Pool ID in ascending order.
+            * created — Pool creation date.
+            * last_started — The date the pool was last started (ascending).
 
     Example:
         How to specify and use SortItems.
@@ -314,9 +314,9 @@ TrainingSortItems = BaseSortItems.for_fields(
 
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - Training pool ID in ascending order.
-            * created - Training pool creation date.
-            * last_started - The date the pool was last started (ascending).
+            * id — Training pool ID in ascending order.
+            * created — Training pool creation date.
+            * last_started — The date the pool was last started (ascending).
 
     Example:
         How to specify and use SortItems.
@@ -357,8 +357,8 @@ SkillSortItems = BaseSortItems.for_fields(
 
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - Skill ID in ascending order.
-            * created - Skill creation date.
+            * id — Skill ID in ascending order.
+            * created — Skill creation date.
 
     Example:
         How to specify and use SortItems.
@@ -459,13 +459,13 @@ AssignmentSortItems = BaseSortItems.for_fields(
 
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - ID for issuing a set of tasks.
-            * created - Date of issue of the set of tasks.
-            * submitted - Date of completion of the set of tasks.
-            * accepted - Date the set of tasks was accepted.
-            * rejected - Date the set of tasks was rejected.
-            * skipped - Date the set of tasks was skipped.
-            * expired - Date the set of tasks was expired.
+            * id — ID for issuing a set of tasks.
+            * created — Date of issue of the set of tasks.
+            * submitted — Date of completion of the set of tasks.
+            * accepted — Date the set of tasks was accepted.
+            * rejected — Date the set of tasks was rejected.
+            * skipped — Date the set of tasks was skipped.
+            * expired — Date the set of tasks was expired.
 
     Example:
         How to specify and use SortItems.
@@ -500,7 +500,7 @@ AggregatedSolutionSortItems = BaseSortItems.for_fields(
 
     Attributes:
         items: Possible values:
-            * `task_id` - Sort by a task ID in ascending order.
+            * `task_id` — Sort by a task ID in ascending order.
     """
 )
 
@@ -541,8 +541,8 @@ TaskSortItems = BaseSortItems.for_fields(
 
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - Job ID (in ascending order).
-            * created - Date of creation of the task.
+            * id — Job ID (in ascending order).
+            * created — Date of creation of the task.
 
     Example:
         How to specify and use SortItems.
@@ -593,8 +593,8 @@ TaskSuiteSortItems = BaseSortItems.for_fields(
 
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - Task set ID (in ascending order).
-            * created - Date of creation of the set of tasks.
+            * id — Task set ID (in ascending order).
+            * created — Date of creation of the set of tasks.
 
     Example:
         How to specify and use SortItems.
@@ -611,7 +611,7 @@ class AttachmentSearchRequest(BaseSearchRequest):
 
     Attributes:
         name: File name.
-        type: Attachment type. Currently the key can have only one value - ASSIGNMENT_ATTACHMENT.
+        type: Attachment type. Currently the key can have only one value — ASSIGNMENT_ATTACHMENT.
         user_id: ID of the Toloker who uploaded the file(s).
         assignment_id: Assignment ID.
         pool_id: Pool ID.
@@ -648,8 +648,8 @@ AttachmentSortItems = BaseSortItems.for_fields(
 
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - File ID in ascending order.
-            * created - Date of sending the file.
+            * id — File ID in ascending order.
+            * created — Date of sending the file.
 
     Example:
         How to specify and use SortItems.
@@ -697,9 +697,9 @@ UserSkillSortItems = BaseSortItems.for_fields(
 
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - Skill ID in ascending order.
-            * created - Date the skill was created.
-            * modified - Date the skill was modified.
+            * id — Skill ID in ascending order.
+            * created — Date the skill was created.
+            * modified — Date the skill was modified.
 
     Example:
         How to specify and use SortItems.
@@ -749,8 +749,8 @@ UserRestrictionSortItems = BaseSortItems.for_fields(
 
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - Restriction IDs.
-            * created - Creation date.
+            * id — Restriction IDs.
+            * created — Creation date.
 
     Example:
         How to specify and use SortItems.
@@ -795,8 +795,8 @@ UserBonusSortItems = BaseSortItems.for_fields(
 
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - Bonus ID in ascending order.
-            * created - Creation date (ascending).
+            * id — Bonus ID in ascending order.
+            * created — Creation date (ascending).
 
     Example:
         How to specify and use SortItems.
@@ -860,8 +860,8 @@ MessageThreadSortItems = BaseSortItems.for_fields(
 
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - Thread ID in ascending order.
-            * created - Creation date (ascending).
+            * id — Thread ID in ascending order.
+            * created — Creation date (ascending).
     """
 )
 
@@ -897,8 +897,8 @@ WebhookSubscriptionSortItems = BaseSortItems.for_fields(
 
     Attributes:
         items: Fields by which to sort. Possible values:
-            * id - Subscription ID (in ascending order).
-            * created - Date of creation of the subscription.
+            * id — Subscription ID (in ascending order).
+            * created — Date of creation of the subscription.
 
     Example:
         How to specify and use SortItems.
