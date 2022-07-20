@@ -55,8 +55,8 @@ AggregatedSolutionSearchResult = _create_search_result_class_for(
     Attributes:
         items: List of found AggregatedSolution
         has_more: Whether the list is complete:
-            * True — Not all elements are included in the output due to restrictions in the limit parameter.
-            * False — The output lists all the items.
+            * `True` — Not all elements are included in the output due to restrictions in the limit parameter.
+            * `False` — The output lists all the items.
     """
 )
 AssignmentSearchResult = _create_search_result_class_for(
@@ -81,8 +81,8 @@ AttachmentSearchResult = _create_search_result_class_for(
     Attributes:
         items: List of found Attachment
         has_more: Whether the list is complete:
-            * True — Not all elements are included in the output due to restrictions in the limit parameter.
-            * False — The output lists all the items.
+            * `True` — Not all elements are included in the output due to restrictions in the limit parameter.
+            * `False` — The output lists all the items.
     """
 )
 MessageThreadSearchResult = _create_search_result_class_for(
@@ -94,8 +94,8 @@ MessageThreadSearchResult = _create_search_result_class_for(
     Attributes:
         items: List of found MessageThread
         has_more: Whether the list is complete:
-            * True — Not all elements are included in the output due to restrictions in the limit parameter.
-            * False — The output lists all the items.
+            * `True` — Not all elements are included in the output due to restrictions in the limit parameter.
+            * `False` — The output lists all the items.
     """
 )
 ProjectSearchResult = _create_search_result_class_for(
@@ -107,8 +107,8 @@ ProjectSearchResult = _create_search_result_class_for(
     Attributes:
         items: List of found projects
         has_more: Whether the list is complete:
-            * True — Not all elements are included in the output due to restrictions in the limit parameter.
-            * False — The output lists all the items.
+            * `True` — Not all elements are included in the output due to restrictions in the limit parameter.
+            * `False` — The output lists all the items.
     """
 )
 PoolSearchResult = _create_search_result_class_for(
@@ -120,8 +120,8 @@ PoolSearchResult = _create_search_result_class_for(
     Attributes:
         items: List of found pools
         has_more: Whether the list is complete:
-            * True — Not all elements are included in the output due to restrictions in the limit parameter.
-            * False — The output lists all the items.
+            * `True` — Not all elements are included in the output due to restrictions in the limit parameter.
+            * `False` — The output lists all the items.
     """
 )
 SkillSearchResult = _create_search_result_class_for(
@@ -133,8 +133,8 @@ SkillSearchResult = _create_search_result_class_for(
     Attributes:
         items: List of found skills
         has_more: Whether the list is complete:
-            * True — Not all elements are included in the output due to restrictions in the limit parameter.
-            * False — The output lists all the items.
+            * `True` — Not all elements are included in the output due to restrictions in the limit parameter.
+            * `False` — The output lists all the items.
     """
 )
 TaskSearchResult = _create_search_result_class_for(
@@ -146,8 +146,8 @@ TaskSearchResult = _create_search_result_class_for(
     Attributes:
         items: List of found tasks
         has_more: Whether the list is complete:
-            * True — Not all elements are included in the output due to restrictions in the limit parameter.
-            * False — The output lists all the items.
+            * `True` — Not all elements are included in the output due to restrictions in the limit parameter.
+            * `False` — The output lists all the items.
     """
 )
 TaskSuiteSearchResult = _create_search_result_class_for(
@@ -159,8 +159,8 @@ TaskSuiteSearchResult = _create_search_result_class_for(
     Attributes:
         items: List of found sets of tasks
         has_more: Whether the list is complete:
-            * True — Not all elements are included in the output due to restrictions in the limit parameter.
-            * False — The output lists all the items.
+            * `True` — Not all elements are included in the output due to restrictions in the limit parameter.
+            * `False` — The output lists all the items.
     """
 )
 TrainingSearchResult = _create_search_result_class_for(
@@ -172,8 +172,8 @@ TrainingSearchResult = _create_search_result_class_for(
     Attributes:
         items: List of found training pools
         has_more: Whether the list is complete:
-            * True — Not all elements are included in the output due to restrictions in the limit parameter.
-            * False — The output lists all the items.
+            * `True` — Not all elements are included in the output due to restrictions in the limit parameter.
+            * `False` — The output lists all the items.
     """
 )
 UserBonusSearchResult = _create_search_result_class_for(
@@ -185,8 +185,8 @@ UserBonusSearchResult = _create_search_result_class_for(
     Attributes:
         items: List of found `UserBonus` instances
         has_more: Whether the list is complete:
-            * True — Not all elements are included in the output due to restrictions in the limit parameter.
-            * False — The output lists all the items.
+            * `True` — Not all elements are included in the output due to restrictions in the limit parameter.
+            * `False` — The output lists all the items.
     """
 )
 UserRestrictionSearchResult = _create_search_result_class_for(
@@ -198,8 +198,8 @@ UserRestrictionSearchResult = _create_search_result_class_for(
     Attributes:
         items: List of found Toloker restrictions
         has_more: Whether the list is complete:
-            * True — Not all elements are included in the output due to restrictions in the limit parameter.
-            * False — The output lists all the items.
+            * `True` — Not all elements are included in the output due to restrictions in the limit parameter.
+            * `False` — The output lists all the items.
     """
 )
 UserSkillSearchResult = _create_search_result_class_for(
@@ -211,8 +211,8 @@ UserSkillSearchResult = _create_search_result_class_for(
     Attributes:
         items: List of found Toloker skills
         has_more: Whether the list is complete:
-            * True — Not all elements are included in the output due to restrictions in the limit parameter.
-            * False — The output lists all the items.
+            * `True` — Not all elements are included in the output due to restrictions in the limit parameter.
+            * `False` — The output lists all the items.
     """
 )
 WebhookSubscriptionSearchResult = _create_search_result_class_for(
@@ -225,8 +225,8 @@ WebhookSubscriptionSearchResult = _create_search_result_class_for(
     Attributes:
         items: List of found subscriptions
         has_more: Whether the list is complete:
-            * True — Not all elements are included in the output due to restrictions in the limit parameter.
-            * False — The output lists all the items.
+            * `True` — Not all elements are included in the output due to restrictions in the limit parameter.
+            * `False` — The output lists all the items.
     """
 )
 AppProjectSearchResult = _create_search_result_class_for(
@@ -237,8 +237,8 @@ AppProjectSearchResult = _create_search_result_class_for(
     Attributes:
         content: A list with found App projects.
         has_more: A flag showing whether there are more matching projects.
-            * True — There are more matching projects, not included in `content` due to the limit set in the search request.
-            * False — `content` contains all matching projects.
+            * `True` — There are more matching projects, not included in `content` due to the limit set in the search request.
+            * `False` — `content` contains all matching projects.
     """
 )
 AppSearchResult = _create_search_result_class_for(
@@ -249,8 +249,8 @@ AppSearchResult = _create_search_result_class_for(
     Attributes:
         content: A list with found App solutions.
         has_more: A flag showing whether there are more matching solutions.
-            * True — There are more matching solutions, not included in `content` due to the limit set in the search request.
-            * False — `content` contains all matching solutions.
+            * `True` — There are more matching solutions, not included in `content` due to the limit set in the search request.
+            * `False` — `content` contains all matching solutions.
     """
 )
 AppItemSearchResult = _create_search_result_class_for(
@@ -261,8 +261,8 @@ AppItemSearchResult = _create_search_result_class_for(
     Attributes:
         content: A list with found App task items.
         has_more: A flag showing whether there are more matching task items.
-            * True — There are more matching task items, not included in `content` due to the limit set in the search request.
-            * False — `content` contains all matching task items.
+            * `True` — There are more matching task items, not included in `content` due to the limit set in the search request.
+            * `False` — `content` contains all matching task items.
     """
 )
 AppBatchSearchResult = _create_search_result_class_for(
@@ -273,7 +273,7 @@ AppBatchSearchResult = _create_search_result_class_for(
     Attributes:
         content: A list with found App batches.
         has_more: A flag showing whether there are more matching batches.
-            * True — There are more matching batches, not included in `content` due to the limit set in the search request.
-            * False — `content` contains all matching batches.
+            * `True` — There are more matching batches, not included in `content` due to the limit set in the search request.
+            * `False` — `content` contains all matching batches.
     """
 )
