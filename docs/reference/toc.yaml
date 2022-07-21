@@ -277,6 +277,8 @@ items:
         href: toloka.client.TolokaClient.get_user_skill.md
       - name: get_user_skills
         href: toloka.client.TolokaClient.get_user_skills.md
+      - name: get_user
+        href: toloka.client.TolokaClient.get_user.md
       - name: set_user_skill
         href: toloka.client.TolokaClient.set_user_skill.md
     - name: webhook subscription
@@ -1885,6 +1887,13 @@ items:
       hidden: true
     - name: codegen_setter_for_owner
       href: toloka.client.training.codegen_setter_for_owner.md
+      hidden: true
+  - name: user
+    items:
+    - name: User
+      href: toloka.client.user.User.md
+    - name: User.Attributes
+      href: toloka.client.user.User.Attributes.md
       hidden: true
   - name: user_bonus
     items:
