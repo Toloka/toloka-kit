@@ -105,6 +105,10 @@ items:
       items:
       - name: get_operation
         href: toloka.client.TolokaClient.get_operation.md
+      - name: find_operations
+        href: toloka.client.TolokaClient.find_operations.md
+      - name: get_operations
+        href: toloka.client.TolokaClient.get_operations.md
       - name: get_operation_log
         href: toloka.client.TolokaClient.get_operation_log.md
       - name: wait_operation
@@ -1309,6 +1313,12 @@ items:
     - name: WebhookSubscriptionSortItems.SortItem
       href: toloka.client.search_requests.WebhookSubscriptionSortItems.SortItem.md
       hidden: true
+    - name: OperationSortItems.SortItem.SortField
+      href: toloka.client.search_requests.OperationSortItems.SortItem.SortField.md
+      hidden: true
+    - name: OperationSortItems.SortItem
+      href: toloka.client.search_requests.OperationSortItems.SortItem.md
+      hidden: true
     - name: AggregatedSolutionSortItems
       href: toloka.client.search_requests.AggregatedSolutionSortItems.md
     - name: AppBatchSortItems
@@ -1345,6 +1355,8 @@ items:
       href: toloka.client.search_requests.UserSkillSortItems.md
     - name: WebhookSubscriptionSortItems
       href: toloka.client.search_requests.WebhookSubscriptionSortItems.md
+    - name: OperationSortItems
+      href: toloka.client.search_requests.OperationSortItems.md
     - name: BaseSearchRequest
       href: toloka.client.search_requests.BaseSearchRequest.md
       hidden: true
@@ -1444,6 +1456,11 @@ items:
     - name: WebhookSubscriptionSearchRequest.CompareFields
       href: toloka.client.search_requests.WebhookSubscriptionSearchRequest.CompareFields.md
       hidden: true
+    - name: OperationSearchRequest
+      href: toloka.client.search_requests.OperationSearchRequest.md
+    - name: OperationSearchRequest.CompareFields
+      href: toloka.client.search_requests.OperationSearchRequest.CompareFields.md
+      hidden: true
     - name: SearchRequestMetaclass
       href: toloka.client.search_requests.SearchRequestMetaclass.md
       hidden: true
@@ -1488,6 +1505,8 @@ items:
       href: toloka.client.search_results.UserSkillSearchResult.md
     - name: WebhookSubscriptionSearchResult
       href: toloka.client.search_results.WebhookSubscriptionSearchResult.md
+    - name: OperationSearchResult
+      href: toloka.client.search_results.OperationSearchResult.md
   - name: skill
     items:
     - name: Skill
