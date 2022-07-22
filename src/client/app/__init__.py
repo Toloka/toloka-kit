@@ -52,7 +52,7 @@ class AppProject(BaseTolokaObject):
 
     Attributes:
         app_id: The ID of the App solution used to create the project.
-        parent_app_project_id The ID of the parent project. It is set if this project is a clone of other project. Otherwise it is empty.
+        parent_app_project_id: The ID of the parent project. It is set if this project is a clone of other project. Otherwise it is empty.
         name: The project name.
         parameters: Parameters of the solution. The parameters should follow the schema described in the `param_spec` field of the [solution](toloka.client.app.App.md).
         id: The ID of the project.
