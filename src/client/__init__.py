@@ -58,6 +58,7 @@ __all__ = [
     'UserBonusCreateRequestParameters',
     'UserRestriction',
     'UserSkill',
+    'User',
     'Pool',
     'PoolPatchRequest',
     'Project',
@@ -153,6 +154,7 @@ from .task_suite import TaskSuite
 from .user_bonus import UserBonus, UserBonusCreateRequestParameters
 from .user_restriction import UserRestriction
 from .user_skill import SetUserSkillRequest, UserSkill
+from .user import User
 from ..util import identity
 from ..util._managing_headers import add_headers, form_additional_headers
 from ..util._codegen import expand
@@ -3117,6 +3119,20 @@ class TolokaClient:
         generator = self._find_all(self.find_user_skills, request)
         generator.send(None)
         return generator
+
+    @add_headers('client')
+    def get_user(self, user_id: str) -> User:
+        """Gets Toloker metadata by user_id.
+
+        Args:
+            user_id: Toloker ID.
+
+        Returns:
+            User: Contains Toloker metadata.
+        """
+
+        response = self._request('get', f'/v1/user-metadata/{user_id}')
+        return structure(response, User)
 
     @expand('request')
     @add_headers('client')
