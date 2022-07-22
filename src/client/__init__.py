@@ -2614,9 +2614,9 @@ class TolokaClient:
 
     @add_headers('client')
     def wait_operation(
-            self,
-            op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10),
-            disable_progress: bool = False
+        self,
+        op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10),
+        disable_progress: bool = False
     ) -> operations.Operation:
         """Waits for the operation to complete, and return it
 

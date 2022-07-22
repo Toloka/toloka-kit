@@ -1,3 +1,32 @@
+1.0.0rc1
+-------------------
+
+**Breaking changes**:
+* By default only the core version of the package with minimized dependencies size is installed. The following objects were 
+extracted into package extras:
+  * `TolokaClient.get_assignments_df` method now requires `toloka-kit[pandas]`;
+  * `toloka.metrics.jupyter_dashboard` module now requires `toloka-kit[jupyter-metrics]`;
+  * `ZooKeeperLocker` class now requires `toloka-kit[zookeeper]` installed;
+  * `S3Storage` class now requires `toloka-kit[s3]`.
+
+  To install all optional dependencies (the same behavior as in pre-1.0.0 releases) use `toloka-kit[all]`.
+
+* `SubmittedAssignmentsCountPoolAnalytics` class is renamed to `SubmitedAssignmentsCountPoolAnalytics`.
+
+Features:
+* `TolokaClient.wait_operation` now shows progress bar of submitted operation. This behavior can be disabled with 
+the `disable_progress=True` parameter.
+* Supported `infer_data_spec` option in `TemplateBuilderViewSpec`. This option allows you to control whether data 
+specifications will be inferred from the provided view spec or not.
+* New `autoquality` usage example. 
+* New verified languages in the `Languages` filter.
+* New `TolokaClient` option: `act_under_account_id`. This option allows you to act using a shared account without 
+a token of this account.
+* New `TolokaClient` methods: `TolokaClient.find_operations` and `TolokaClient.get_operations`. These methods allow 
+you to list operations in the same way as the other `find_*` and `get_*` methods. 
+* New `TolokaClient.get_user` method which allows you to get information about one specific Toloker.
+* Massive improvements in documentation.
+
 0.1.26
 -------------------
 
