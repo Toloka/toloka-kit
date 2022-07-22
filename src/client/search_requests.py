@@ -174,16 +174,16 @@ class BaseSearchRequest(BaseTolokaObject, metaclass=SearchRequestMetaclass):
 
 
 class ProjectSearchRequest(BaseSearchRequest):
-    """Parameters for searching projects
+    """Parameters for searching projects.
 
     Attributes:
-        status: Status of the project, from Project.ProjectStatus:
+        status: Projects with the specified status:
             * `'ACTIVE'`
             * `'ARCHIVED'`
-        id_lt: Projects with an ID less than the specified value.
-        id_lte: Projects with an ID less than or equal to the specified value.
-        id_gt: Projects with an ID greater than the specified value.
-        id_gte: Projects with an ID greater than or equal to the specified value.
+        id_lt: Projects with IDs less than the specified value.
+        id_lte: Projects with IDs less than or equal to the specified value.
+        id_gt: Projects with IDs greater than the specified value.
+        id_gte: Projects with IDs greater than or equal to the specified value.
         created_lt: Projects created before the specified date.
         created_lte: Projects created before or on the specified date.
         created_gt: Projects created after the specified date.
@@ -200,17 +200,17 @@ class ProjectSearchRequest(BaseSearchRequest):
 ProjectSortItems = BaseSortItems.for_fields(
     'ProjectSortItems', ['id', 'created', 'public_name', 'private_comment'],
     # docstring
-    """Parameters for sorting project search results
+    """Keys for sorting projects in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * `'id'` — Project ID in ascending order.
-            * `'created'` — Project creation date.
-            * `'public_name'` — Project name (in alphabetical order).
-            * `'private_comment'` — Comment on the project (in alphabetical order).
+        items: A list of sorting keys. Supported values:
+            * `'id'` — A project ID.
+            * `'created'` — A project creation date.
+            * `'public_name'` — A project name.
+            * `'private_comment'` — A project comment.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find active projects sorted by names in descending order. Projects with equal names are sorted by IDs.
 
         >>> sort = toloka.client.search_requests.ProjectSortItems(['-public_name', 'id'])
         >>> result = toloka_client.find_projects(status='ACTIVE', sort=sort, limit=50)
@@ -220,27 +220,27 @@ ProjectSortItems = BaseSortItems.for_fields(
 
 
 class PoolSearchRequest(BaseSearchRequest):
-    """Parameters for searching pools
+    """Parameters for searching pools.
 
     Attributes:
-        status: Pool status
+        status: Pools with the specified status:
             * `'OPEN'`
             * `'CLOSED'`
             * `'ARCHIVED'`
             * `'LOCKED'`
-        project_id: ID of the project to which the pool is attached.
-        id_lt: Pools with an ID less than the specified value.
-        id_lte: Pools with an ID less than or equal to the specified value.
-        id_gt: Pools with an ID greater than the specified value.
-        id_gte: Pools with an ID greater than or equal to the specified value.
+        project_id: Pools belonging to the project with the specified ID.
+        id_lt: Pools with IDs less than the specified value.
+        id_lte: Pools with IDs less than or equal to the specified value.
+        id_gt: Pools with IDs greater than the specified value.
+        id_gte: Pools with IDs greater than or equal to the specified value.
         created_lt: Pools created before the specified date.
         created_lte: Pools created before or on the specified date.
         created_gt: Pools created after the specified date.
         created_gte: Pools created after or on the specified date.
-        last_started_lt: Pools that were last opened before the specified date.
-        last_started_lte: Pools that were last opened on or before the specified date.
-        last_started_gt: Pools that were last opened after the specified date.
-        last_started_gte: Pools that were last opened on or after the specified date.
+        last_started_lt: Pools that were opened last time before the specified date.
+        last_started_lte: Pools that were opened last time before or on the specified date.
+        last_started_gt: Pools that were opened last time after the specified date.
+        last_started_gte: Pools that were opened last time after or on the specified date.
     """
 
     class CompareFields:
@@ -255,16 +255,16 @@ class PoolSearchRequest(BaseSearchRequest):
 PoolSortItems = BaseSortItems.for_fields(
     'PoolSortItems', ['id', 'created', 'last_started'],
     # docstring
-    """Parameters for sorting pool search results
+    """Keys for sorting pools in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * `'id'` — Pool ID in ascending order.
-            * `'created'` — Pool creation date.
-            * `'last_started'` — The date the pool was last started (ascending).
+        items: A list of sorting keys. Supported values:
+            * `'id'` — A pool ID.
+            * `'created'` — A pool creation date.
+            * `'last_started'` — The last opening date of a pool.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find opened pools sorted by the last opening date in descending order. Pools with equal dates are sorted by IDs.
 
         >>> sort = toloka.client.search_requests.PoolSortItems(['-last_started', 'id'])
         >>> result = toloka_client.find_pools(status='OPEN', sort=sort, limit=50)
@@ -275,27 +275,27 @@ PoolSortItems = BaseSortItems.for_fields(
 
 
 class TrainingSearchRequest(BaseSearchRequest):
-    """Parameters for searching training pools
+    """Parameters for searching training pools.
 
     Attributes:
-        status: Training pool status:
+        status: Training pools with the specified status:
             * `'OPEN'`
             * `'CLOSED'`
             * `'ARCHIVED'`
             * `'LOCKED'`
-        project_id: ID of the project to which the training pool is attached.
-        id_lt: Training pools with an ID less than the specified value.
-        id_lte: Training pools with an ID less than or equal to the specified value.
-        id_gt: Training pools with an ID greater than the specified value.
-        id_gte: Training pools with an ID greater than or equal to the specified value.
+        project_id: Training pools belonging to the project with the specified ID.
+        id_lt: Training pools with IDs less than the specified value.
+        id_lte: Training pools with IDs less than or equal to the specified value.
+        id_gt: Training pools with IDs greater than the specified value.
+        id_gte: Training pools with IDs greater than or equal to the specified value.
         created_lt: Training pools created before the specified date.
         created_lte: Training pools created before or on the specified date.
         created_gt: Training pools created after the specified date.
         created_gte: Training pools created after or on the specified date.
-        last_started_lt: Training pools that were last opened before the specified date.
-        last_started_lte: Training pools that were last opened on or before the specified date.
-        last_started_gt: Training pools that were last opened after the specified date.
-        last_started_gte: Training pools that were last opened on or after the specified date.
+        last_started_lt: Training pools that were opened last time before the specified date.
+        last_started_lte: Training pools that were opened last time before or on the specified date.
+        last_started_gt: Training pools that were opened last time after the specified date.
+        last_started_gte: Training pools that were opened last time after or on the specified date.
     """
 
     class CompareFields:
@@ -310,16 +310,16 @@ class TrainingSearchRequest(BaseSearchRequest):
 TrainingSortItems = BaseSortItems.for_fields(
     'TrainingSortItems', ['id', 'created', 'last_started'],
     # docstring
-    """Parameters for sorting training pool search results
+    """Keys for sorting training pools in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
+        items: A list of sorting keys. Supported values:
             * `'id'` — Training pool ID in ascending order.
             * `'created'` — Training pool creation date.
-            * `'last_started'` — The date the pool was last started (ascending).
+            * `'last_started'` — The last opening date of a training pool.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find opened training pools sorted by the last opening date in descending order. Pools with equal opening dates are sorted by IDs.
 
         >>> sort = toloka.client.search_requests.TrainingSortItems(['-last_started', 'id'])
         >>> result = toloka_client.find_trainings(status='OPEN', sort=sort, limit=50)
@@ -329,14 +329,14 @@ TrainingSortItems = BaseSortItems.for_fields(
 
 
 class SkillSearchRequest(BaseSearchRequest):
-    """Parameters for searching skill
+    """Parameters for searching skill.
 
     Attributes:
-        name: Skill name.
-        id_lt: Skills with an ID less than the specified value.
-        id_lte: Skills with an ID less than or equal to the specified value.
-        id_gt: Skills with an ID greater than the specified value.
-        id_gte: Skills with an ID greater than or equal to the specified value.
+        name: The name of the skill.
+        id_lt: Skills with IDs less than the specified value.
+        id_lte: Skills with IDs less than or equal to the specified value.
+        id_gt: Skills with IDs greater than the specified value.
+        id_gte: Skills with IDs greater than or equal to the specified value.
         created_lt: Skills created before the specified date.
         created_lte: Skills created before or on the specified date.
         created_gt: Skills created after the specified date.
@@ -353,15 +353,15 @@ class SkillSearchRequest(BaseSearchRequest):
 SkillSortItems = BaseSortItems.for_fields(
     'SkillSortItems', ['id', 'created'],
     # docstring
-    """Parameters for sorting skill search results
+    """Keys for sorting skills in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * `'id'` — Skill ID in ascending order.
-            * `'created'` — Skill creation date.
+        items: A list of sorting keys. Supported values:
+            * `'id'` — The ID of a skill.
+            * `'created'` — A skill creation date.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find skills sorted by creation date in descending order. Skills with equal creation dates are sorted by IDs.
 
         >>> sort = toloka.client.search_requests.SkillSortItems(['-created', 'id'])
         >>> result = toloka_client.find_skills(name='Image annotation', sort=sort, limit=10)
@@ -455,10 +455,10 @@ class AssignmentSearchRequest(BaseSearchRequest):
 AssignmentSortItems = BaseSortItems.for_fields(
     'AssignmentSortItems', ['id', 'created', 'submitted', 'accepted', 'rejected', 'skipped', 'expired'],
     # docstring
-    """Parameters for sorting assignment search results
+    """Keys for sorting assignments in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
+        items: A list of sorting keys. Supported values:
             * `'id'` — ID for issuing a set of tasks.
             * `'created'` — Date of issue of the set of tasks.
             * `'submitted'` — Date of completion of the set of tasks.
@@ -494,12 +494,10 @@ class AggregatedSolutionSearchRequest(BaseSearchRequest):
 AggregatedSolutionSortItems = BaseSortItems.for_fields(
     'AggregatedSolutionSortItems', ['task_id'],
     # docstring
-    """Parameters for sorting aggregated solution search results.
-
-    To sort in descending order add a hyphen before the parameter. For example, `sort=-task_id`.
+    """Keys for sorting aggregated responses in search results.
 
     Attributes:
-        items: Possible values:
+        items: A list of sorting keys. Supported values:
             * `'task_id'` — Sort by a task ID in ascending order.
     """
 )
@@ -537,10 +535,10 @@ class TaskSearchRequest(BaseSearchRequest):
 TaskSortItems = BaseSortItems.for_fields(
     'TaskSortItems', ['id', 'created'],
     # docstring
-    """Parameters for sorting task search results
+    """Keys for sorting tasks in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
+        items: A list of sorting keys. Supported values:
             * `'id'` — Job ID (in ascending order).
             * `'created'` — Date of creation of the task.
 
@@ -589,10 +587,10 @@ class TaskSuiteSearchRequest(BaseSearchRequest):
 TaskSuiteSortItems = BaseSortItems.for_fields(
     'TaskSuiteSortItems', ['id', 'created'],
     # docstring
-    """Parameters for sorting task suite search results
+    """Keys for sorting task suites in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
+        items: A list of sorting keys. Supported values:
             * `'id'` — Task set ID (in ascending order).
             * `'created'` — Date of creation of the set of tasks.
 
@@ -644,10 +642,10 @@ class AttachmentSearchRequest(BaseSearchRequest):
 AttachmentSortItems = BaseSortItems.for_fields(
     'AttachmentSortItems', ['id', 'created'],
     # docstring
-    """Parameters for sorting attachment search results
+    """Keys for sorting attachments in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
+        items: A list of sorting keys. Supported values:
             * `'id'` — File ID in ascending order.
             * `'created'` — Date of sending the file.
 
@@ -693,10 +691,10 @@ class UserSkillSearchRequest(BaseSearchRequest):
 UserSkillSortItems = BaseSortItems.for_fields(
     'UserSkillSortItems', ['id', 'created', 'modified'],
     # docstring
-    """Parameters for sorting Toloker skill search results
+    """Keys for sorting skills in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
+        items: A list of sorting keys. Supported values:
             * `'id'` — Skill ID in ascending order.
             * `'created'` — Date the skill was created.
             * `'modified'` — Date the skill was modified.
@@ -745,10 +743,10 @@ class UserRestrictionSearchRequest(BaseSearchRequest):
 UserRestrictionSortItems = BaseSortItems.for_fields(
     'UserRestrictionSortItems', ['id', 'created'],
     # docstring
-    """Parameters for sorting Toloker restriction search results
+    """Keys for sorting Toloker restrictions in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
+        items: A list of sorting keys. Supported values:
             * `'id'` — Restriction IDs.
             * `'created'` — Creation date.
 
@@ -791,10 +789,10 @@ class UserBonusSearchRequest(BaseSearchRequest):
 UserBonusSortItems = BaseSortItems.for_fields(
     'UserBonusSortItems', ['id', 'created'],
     # docstring
-    """Parameters for sorting `UserBonus` search results
+    """Keys for sorting rewards in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
+        items: A list of sorting keys. Supported values:
             * `'id'` — Bonus ID in ascending order.
             * `'created'` — Creation date (ascending).
 
@@ -856,10 +854,10 @@ class MessageThreadSearchRequest(BaseSearchRequest):
 MessageThreadSortItems = BaseSortItems.for_fields(
     'MessageThreadSortItems', ['id', 'created'],
     # docstring
-    """Parameters for sorting message thread search results
+    """Keys for sorting message threads in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
+        items: A list of sorting keys. Supported values:
             * `'id'` — Thread ID in ascending order.
             * `'created'` — Creation date (ascending).
     """
@@ -893,10 +891,10 @@ class WebhookSubscriptionSearchRequest(BaseSearchRequest):
 WebhookSubscriptionSortItems = BaseSortItems.for_fields(
     'WebhookSubscriptionSortItems', ['id', 'created'],
     # docstring
-    """Parameters for sorting webhook-subscriptions search results
+    """Keys for sorting webhook subscriptions in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
+        items: A list of sorting keys. Supported values:
             * `'id'` — Subscription ID (in ascending order).
             * `'created'` — Date of creation of the subscription.
 
@@ -971,7 +969,7 @@ AppProjectSortItems = BaseSortItems.for_fields(
     """Keys for sorting App projects in search results.
 
     Attributes:
-        key: The sorting key. Supported keys:
+        items: A list of sorting keys. Supported values:
             * `'id'` — An App project ID.
             * `'name'` — An App project name.
             * `'created'` — A project creation date.
@@ -1008,7 +1006,7 @@ AppSortItems = BaseSortItems.for_fields(
     """Keys for sorting App solutions in search results.
 
     Attributes:
-        key: The sorting key. Supported keys:
+        items: A list of sorting keys. Supported values:
             * `'id'` — An App solution ID.
     """
 )
@@ -1048,10 +1046,10 @@ class AppItemSearchRequest(BaseSearchRequest):
 AppItemSortItems = BaseSortItems.for_fields(
     'AppItemSortItems', ['id', 'created', 'finished', 'status'],
     # docstring
-    """Keys for sorting App task items in search results.
+    """Keys for sorting App items in search results.
 
     Attributes:
-        key: The sorting key. Supported keys:
+        items: A list of sorting keys. Supported values:
             * `'id'` — A task item ID.
             * `'created'` — The date and time when the item was created.
             * `'finished'` — The date and time when the item processing was completed.
@@ -1095,7 +1093,7 @@ AppBatchSortItems = BaseSortItems.for_fields(
     """Keys for sorting App batches in search results.
 
     Attributes:
-        key: The sorting key. Supported keys:
+        items: A list of sorting keys. Supported values:
             * `'id'` — A batch ID.
             * `'name'` — A batch name.
             * `'created'` — A batch creation date.
