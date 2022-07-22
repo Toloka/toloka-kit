@@ -67,7 +67,7 @@ print(toloka_client.get_requester())
 
 Free trial
 --------------
-To get acquainted with Toloka tools for free, you can use the promo code **TOLOKAKIT1** on $20 on your [profile page](https://toloka.yandex.com/requester/profile?utm_source=github&utm_medium=site&utm_campaign=tolokakit) after registration.
+To get acquainted with Toloka tools for free, you can use the promo code **TOLOKAKIT1** on $20 on your [profile page](https://toloka.dev/requester/profile?utm_source=github&utm_medium=site&utm_campaign=tolokakit) after registration.
 
 
 Useful Links

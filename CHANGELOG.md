@@ -27,6 +27,9 @@ you to list operations in the same way as the other `find_*` and `get_*` methods
 * New `TolokaClient.get_user` method which allows you to get information about one specific Toloker.
 * Massive improvements in documentation.
 
+Changes:
+* https://toloka.dev and https://sandbox.toloka.dev domains are now used for the API requests. 
+
 0.1.26
 -------------------
 

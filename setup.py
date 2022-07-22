@@ -54,7 +54,7 @@ setup(
     extras_require=EXTRAS_REQUIRE,
     include_package_data=True,
     project_urls={
-        'Documentation': 'https://yandex.com/dev/toloka/toloka-kit/doc/',
+        'Documentation': 'https://toloka.ai/en/docs/toloka-kit',
         'Source': 'https://github.com/Toloka/toloka-kit',
     },
     classifiers=[

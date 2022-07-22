@@ -11,7 +11,7 @@ def test_all_verified_languages_skills_exist(client):
 
 def test_verified_languages_to_skills_mapping_is_up_to_date():
     local_mapping = Languages.verified_languages_to_skills
-    remote_mapping = json.loads(requests.get('https://toloka.yandex.com/api/env').content)['config']['public_verifiedLanguages']
+    remote_mapping = json.loads(requests.get('https://toloka.dev/api/env').content)['config']['public_verifiedLanguages']
     remote_keys = remote_mapping[::2]  # every first element in list
     remote_values = remote_mapping[1::2]  # every second element in list
     remote_mapping = dict(zip(remote_keys, remote_values))
