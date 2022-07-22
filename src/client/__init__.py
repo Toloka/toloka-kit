@@ -2666,6 +2666,57 @@ class TolokaClient:
                     if datetime.datetime.now(datetime.timezone.utc) > wait_until_time:
                         raise TimeoutError
 
+    @expand('request')
+    @add_headers('client')
+    def find_operations(
+        self, request: search_requests.OperationSearchRequest,
+        sort: Union[List[str], search_requests.OperationSortItems, None] = None, limit: Optional[int] = None
+    ) -> search_results.OperationSearchResult:
+        """Finds operations that match certain criteria.
+
+        The number of returned operations is limited. To find remaining operations call `find_operations` with updated search criteria.
+
+        To iterate over all matching operations you may use the [get_operations](toloka.client.TolokaClient.get_operations.md) method.
+
+        Args:
+            request: Search criteria.
+            sort: Sorting options. Default: `None`.
+            limit: Returned operations limit. The default limit is 50. The maximum allowed limit is 500.
+
+        Returns:
+            OperationSearchResult: Found operations and a flag showing whether there are more matching task suites exceeding the limit.
+
+        Example:
+            >>> toloka_client.find_operations(type='POOL_OPEN', status='SUCCESS', sort=['-finished'], limit=3)
+            ...
+        """
+        sort = None if sort is None else structure(sort, search_requests.OperationSortItems)
+        response = self._search_request('get', '/v1/operations', request, sort, limit)
+        return structure(response, search_results.OperationSearchResult)
+
+    @expand('request')
+    @add_headers('client')
+    def get_operations(self, request: search_requests.OperationSearchRequest) -> Generator[operations.Operation, None, None]:
+        """Finds all operations that match certain rules and returns them in an iterable object
+
+       `get_user_bonuses` returns a generator. You can iterate over all found operations using the generator. Several requests to the Toloka server are possible while iterating.
+
+        If you need to sort operations use the [find_operations](toloka.client.TolokaClient.find_operations.md) method.
+
+        Args:
+            request: Search criteria.
+
+        Yields:
+            Operation: The next matching operations.
+
+        Example:
+            >>> bonuses = [bonus for bonus in toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00')]
+            ...
+        """
+        generator = self._find_all(self.find_operations, request)
+        generator.send(None)
+        return generator
+
     @add_headers('client')
     def get_operation_log(self, operation_id: str) -> List[OperationLogItem]:
         """Reads information about validation errors and which task (or task suites) were created
