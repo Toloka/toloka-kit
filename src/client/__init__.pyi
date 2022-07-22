@@ -224,6 +224,10 @@ class TolokaClient:
         retryer_factory: Factory that creates `Retry` object.
             Fully specified retry policy that will apply to all requests.
             Default value: `None`.
+        act_under_account_id: ID of the requester that has been shared access with the current token owner account.
+            All requests will be made using a specified account. See [Shared access to the requester's account](https://toloka.ai/docs/guide/concepts/multiple-access.html?lang=en)
+            documentation page. ID of the requester can be retrieved using the [get_requester](toloka.client.TolokaClient.get_requester.md)
+            method (this method should be called by the account owner using account's token).
 
     Example:
         How to create `TolokaClient` instance and make your first request to Toloka.
@@ -254,7 +258,8 @@ class TolokaClient:
         timeout: typing.Union[float, typing.Tuple[float, float]] = 10.0,
         url: typing.Optional[str] = None,
         retry_quotas: typing.Union[typing.List[str], str, None] = 'MIN',
-        retryer_factory: typing.Optional[typing.Callable[[], urllib3.util.retry.Retry]] = None
+        retryer_factory: typing.Optional[typing.Callable[[], urllib3.util.retry.Retry]] = None,
+        act_under_account_id: typing.Optional[str] = None
     ): ...
 
     @typing.overload
