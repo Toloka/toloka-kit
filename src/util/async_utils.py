@@ -183,6 +183,7 @@ class Cooldown:
         >>> while True:
         >>>     async with coldown:
         >>>         await do_it()  # will be called no more than once every 5 seconds
+        ...
     """
     _touch_time: float
     _cooldown_time: int

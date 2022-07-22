@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install "stubmaker==0.0.3"
+          pip install https://github.com/Toloka/stubmaker/archive/refs/heads/main.zip
           pip install .[all]
           pip install "attrs>=21.0.0"
       - name: Generate stubs

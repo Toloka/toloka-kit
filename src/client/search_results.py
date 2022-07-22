@@ -13,6 +13,7 @@ __all__ = [
     'UserRestrictionSearchResult',
     'UserSkillSearchResult',
     'WebhookSubscriptionSearchResult',
+    'OperationSearchResult',
     'AppProjectSearchResult',
     'AppSearchResult',
     'AppItemSearchResult',
@@ -24,13 +25,14 @@ from .app import App, AppItem, AppProject, AppBatch
 from .assignment import Assignment
 from .attachment import Attachment
 from .message_thread import MessageThread
+from .operations import Operation
 from .pool import Pool
 from .primitives.base import BaseTolokaObject, BaseTolokaObjectMetaclass
 from .project import Project
-from .training import Training
 from .skill import Skill
 from .task import Task
 from .task_suite import TaskSuite
+from .training import Training
 from .user_bonus import UserBonus
 from .user_restriction import UserRestriction
 from .user_skill import UserSkill
@@ -224,6 +226,20 @@ WebhookSubscriptionSearchResult = _create_search_result_class_for(
 
     Attributes:
         items: List of found subscriptions
+        has_more: Whether the list is complete:
+            * True - Not all elements are included in the output due to restrictions in the limit parameter.
+            * False - The output lists all the items.
+    """
+)
+OperationSearchResult = _create_search_result_class_for(
+    Operation,
+    """The list of found operations and whether there is something else on the original request
+
+    It's better to use TolokaClient.get_operations(),
+    which already implements the correct handling of the search result.
+
+    Attributes:
+        items: List of found operations
         has_more: Whether the list is complete:
             * True - Not all elements are included in the output due to restrictions in the limit parameter.
             * False - The output lists all the items.

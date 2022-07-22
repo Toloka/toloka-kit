@@ -34,6 +34,8 @@ __all__ = [
     'MessageThreadSortItems',
     'WebhookSubscriptionSearchRequest',
     'WebhookSubscriptionSortItems',
+    'OperationSearchRequest',
+    'OperationSortItems',
     'AppProjectSearchRequest',
     'AppProjectSortItems',
     'AppSearchRequest',
@@ -54,11 +56,12 @@ from .app import AppItem, AppProject, AppBatch
 from .assignment import Assignment
 from .attachment import Attachment
 from .message_thread import Folder
+from .operations import OperationType, Operation
 from .pool import Pool
+from .primitives.base import BaseTolokaObject, BaseTolokaObjectMetaclass
 from .project import Project
 from .training import Training
 from .user_restriction import UserRestriction
-from .primitives.base import BaseTolokaObject, BaseTolokaObjectMetaclass
 from .webhook_subscription import WebhookSubscription
 
 SortItemSelf = TypeVar('SortItemSelf', bound='BaseSortItem')
@@ -944,6 +947,59 @@ WebhookSubscriptionSortItems = BaseSortItems.for_fields(
 
         >>> sort = toloka.client.search_requests.WebhookSubscriptionSortItems(['-created', 'id'])
         >>> result = toloka_client.find_webhook_subscriptions(event_type=some_event_type, pool_id=my_pretty_pool_id, sort=sort, limit=10)
+        ...
+    """
+)
+
+
+class OperationSearchRequest(BaseSearchRequest):
+    """Parameters for searching webhook-subscriptions.
+
+        Attributes:
+            type: Operation type.
+            status: The status of the operation.
+            id_lt: Operations with an ID less than the specified value.
+            id_lte: Operations with an ID less than or equal to the specified value.
+            id_gt: Operations with an ID greater than the specified value.
+            id_gte: Operations with an ID greater than or equal to the specified value.
+            submitted_lt: Operations submitted before the specified date.
+            submitted_lte: Operations submitted before or on the specified date.
+            submitted_gt: Operations submitted after the specified date.
+            submitted_gte: Operations submitted after or on the specified date.
+            finished_lt: Operations finished before the specified date.
+            finished_lte: Operations finished before or on the specified date.
+            finished_gt: Operations finished after the specified date.
+            finished_gte: Operations finished after or on the specified date.
+        """
+
+    class CompareFields:
+        id: str
+        submitted: datetime.datetime
+        finished: datetime.datetime
+
+    type: OperationType
+    status: Operation.Status
+
+
+OperationSortItems = BaseSortItems.for_fields(
+    'OperationSortItems', ['id', 'submitted', 'finished'],
+    # docstring
+    """Parameters for sorting operations search results
+
+    You can specify multiple parameters.
+    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+
+    Attributes:
+        items: Fields by which to sort. Possible values:
+            * id - Subscription ID.
+            * submitted - The date and time when the request was sent.
+            * finished - The date and time when the operation was finished.
+
+    Example:
+        How to specify and use SortItems.
+
+        >>> sort = toloka.client.search_requests.OperationsSearchRequest(['-finished', 'id'])
+        >>> result = toloka_client.find_operations(type='POOL_OPEN', status='SUCCESS', sort=sort, limit=10)
         ...
     """
 )
