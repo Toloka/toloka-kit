@@ -50,7 +50,7 @@ def _create_search_result_class_for(type_: Type, docstring: Optional[str] = None
     return cls
 
 
-def _create_search_result_docstring(name:str, name_in_header:str = None, items_field:str = 'items'):
+def _create_search_result_docstring(name: str, name_in_header: str = None, items_field: str = 'items'):
     name_in_header = name_in_header or name
     return f"""The result of searching {name_in_header}.
 
