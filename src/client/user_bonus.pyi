@@ -46,6 +46,7 @@ class UserBonus(toloka.client.primitives.base.BaseTolokaObject):
         >>>         assignment_id='012345'
         >>>     )
         >>> )
+        ...
 
         How to create bonus with message in several languages.
 

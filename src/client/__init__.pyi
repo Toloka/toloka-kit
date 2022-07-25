@@ -56,6 +56,7 @@ __all__ = [
     'UserBonusCreateRequestParameters',
     'UserRestriction',
     'UserSkill',
+    'User',
     'Pool',
     'PoolPatchRequest',
     'Project',
@@ -91,6 +92,7 @@ import toloka.client.skill
 import toloka.client.task
 import toloka.client.task_suite
 import toloka.client.training
+import toloka.client.user
 import toloka.client.user_bonus
 import toloka.client.user_restriction
 import toloka.client.user_skill
@@ -167,6 +169,7 @@ from toloka.client.skill import Skill
 from toloka.client.task import Task
 from toloka.client.task_suite import TaskSuite
 from toloka.client.training import Training
+from toloka.client.user import User
 from toloka.client.user_bonus import (
     UserBonus,
     UserBonusCreateRequestParameters,
@@ -3690,7 +3693,7 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned operations limit. The default limit is 50. The maximum allowed limit is 100,000.
+            limit: Returned operations limit. The default limit is 50. The maximum allowed limit is 500.
 
         Returns:
             OperationSearchResult: Found operations and a flag showing whether there are more matching task suites exceeding the limit.
@@ -3730,7 +3733,7 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned operations limit. The default limit is 50. The maximum allowed limit is 100,000.
+            limit: Returned operations limit. The default limit is 50. The maximum allowed limit is 500.
 
         Returns:
             OperationSearchResult: Found operations and a flag showing whether there are more matching task suites exceeding the limit.
@@ -4577,6 +4580,17 @@ class TolokaClient:
         Example:
             >>> results_list = [skill for skill in toloka_client.get_user_skills()]
             ...
+        """
+        ...
+
+    def get_user(self, user_id: str) -> toloka.client.user.User:
+        """Gets Toloker metadata by user_id.
+
+        Args:
+            user_id: Toloker ID.
+
+        Returns:
+            User: Contains Toloker metadata.
         """
         ...
 
