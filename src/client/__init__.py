@@ -178,9 +178,9 @@ class TolokaClient:
     Args:
         token: Your OAuth token for Toloka. You can learn more about how to get it [here](https://toloka.ai/docs/api/concepts/access.html#access__token)
         environment: There are two environments in Toloka:
-            * `SANDBOX` – [Testing environment](https://sandbox.toloka.yandex.com) for Toloka requesters.
+            * `SANDBOX` – [Testing environment](https://sandbox.toloka.dev) for Toloka requesters.
             You can test complex projects before assigning tasks to Tolokers. Nobody will see your tasks, and it's free.
-            * `PRODUCTION` – [Production environment](https://toloka.yandex.com) for Toloka requesters.
+            * `PRODUCTION` – [Production environment](https://toloka.dev) for Toloka requesters.
             You spend money there and get the results.
             You need to register in each environment separately. OAuth tokens are generated in each environment separately too.
             Default value: `None`.
@@ -230,8 +230,8 @@ class TolokaClient:
 
     @unique
     class Environment(Enum):
-        SANDBOX = 'https://sandbox.toloka.yandex.com'
-        PRODUCTION = 'https://toloka.yandex.com'
+        SANDBOX = 'https://sandbox.toloka.dev'
+        PRODUCTION = 'https://toloka.dev'
 
     token: str
     default_timeout: Union[float, Tuple[float, float]]
@@ -2614,9 +2614,9 @@ class TolokaClient:
 
     @add_headers('client')
     def wait_operation(
-            self,
-            op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10),
-            disable_progress: bool = False
+        self,
+        op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10),
+        disable_progress: bool = False
     ) -> operations.Operation:
         """Waits for the operation to complete, and return it
 
