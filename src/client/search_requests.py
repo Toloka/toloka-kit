@@ -181,7 +181,7 @@ class ProjectSearchRequest(BaseSearchRequest):
 
     Attributes:
         status: Project status.
-                Refer to the [ProjectStatus](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.project.Project.ProjectStatus) page for more information on the available `status` values.
+                Refer to the [ProjectStatus](toloka.client.project.Project.ProjectStatus.md) page for more information on the available `status` values.
         id_lt: Projects with IDs less than the specified value.
         id_lte: Projects with IDs less than or equal to the specified value.
         id_gt: Projects with IDs greater than the specified value.
@@ -225,7 +225,7 @@ class PoolSearchRequest(BaseSearchRequest):
     """Parameters for searching pools.
 
     Attributes:
-        status: Pool status. Refer to the [Pool.Status](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.pool.Pool.Status) page for more information on the available `status` values.
+        status: Pool status. Refer to the [Pool.Status](toloka.client.pool.Pool.Status.md) page for more information on the available `status` values.
         project_id: Pools belonging to the project with the specified ID.
         id_lt: Pools with IDs less than the specified value.
         id_lte: Pools with IDs less than or equal to the specified value.
@@ -277,7 +277,7 @@ class TrainingSearchRequest(BaseSearchRequest):
 
     Attributes:
         status: Training pool status.
-                Refer to the [Training.Status](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.training.Training.Status) page for more information on the available `status` values.
+                Refer to the [Training.Status](toloka.client.training.Training.Status.md) page for more information on the available `status` values.
         project_id: Training pools belonging to the project with the specified ID.
         id_lt: Training pools with IDs less than the specified value.
         id_lte: Training pools with IDs less than or equal to the specified value.
@@ -370,7 +370,7 @@ class AssignmentSearchRequest(BaseSearchRequest):
 
     Attributes:
         status: Assignment status or a list of statuses.
-                Refer to the [Assignment.Status](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.assignment.Assignment.Status) page
+                Refer to the [Assignment.Status](toloka.client.assignment.Assignment.Status.md) page
                 for more information on the available `status` values.
         task_id: Assignments containing the task with the specified ID.
         task_suite_id: Assignments for a task suite with the specified ID.
@@ -600,7 +600,7 @@ class AttachmentSearchRequest(BaseSearchRequest):
     Attributes:
         name: An attachment file name.
         type: An attachment type.
-              Refer to the [Attachment.Type](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.attachment.Attachment.Type) page for more information on the available `type` values.
+              Refer to the [Attachment.Type](toloka.client.attachment.Attachment.Type.md) page for more information on the available `type` values.
         user_id: The ID of a Toloker who uploaded attachments.
         assignment_id: The ID of an assignment with attachments. Either `assignment_id` of `pool_id` is required in a search request.
         pool_id: The ID of a pool with attachments. Either `assignment_id` of `pool_id` is required in a search request.
@@ -703,7 +703,7 @@ class UserRestrictionSearchRequest(BaseSearchRequest):
 
     Attributes:
         scope: The scope of a restriction.
-               Refer to the [UserRestriction.Scope](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.user_restriction.UserRestriction.Scope) page
+               Refer to the [UserRestriction.Scope](toloka.client.user_restriction.UserRestriction.Scope.md) page
                for more information on the available `scope` values.
         user_id: The Toloker's ID.
         project_id: The ID of a project with restricted access.
@@ -799,7 +799,7 @@ class MessageThreadSearchRequest(BaseSearchRequest):
 
     Attributes:
         folder: A folder where to search threads or a list of folders.
-                Refer to the [Folder](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.message_thread.Folder) page for more information on the available `folder` values.
+                Refer to the [Folder](toloka.client.message_thread.Folder.md) page for more information on the available `folder` values.
         folder_ne: A folder to skip or a list of folders. Supported values are the same as for `folder`.
         id_lt: Threads with IDs less than the specified value.
         id_lte: Threads with IDs less than or equal to the specified value.
@@ -858,7 +858,7 @@ class WebhookSubscriptionSearchRequest(BaseSearchRequest):
 
     Attributes:
         event_type: Event type.
-                    Refer to the [EventType](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.webhook_subscription.WebhookSubscription.EventType) page
+                    Refer to the [EventType](toloka.client.webhook_subscription.WebhookSubscription.EventType.md) page
                     for more information on the available `event_type` values.
         pool_id: The ID of a subscribed pool.
         id_lt: Subscriptions with IDs less than the specified value.
@@ -904,9 +904,9 @@ class OperationSearchRequest(BaseSearchRequest):
 
         Attributes:
             type: Operation type.
-                  Refer to the [OperationType](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.oerations.OperationType) page for more information on the available `type` values.
+                  Refer to the [OperationType](toloka.client.operations.OperationType.md) page for more information on the available `type` values.
             status: The status of the operation.
-                  Refer to the [Operation.Status](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.oerations.Operation.Status) page for more information on the available `status` values.
+                  Refer to the [Operation.Status](toloka.client.operations.Operation.Status.md) page for more information on the available `status` values.
             id_lt: Operations with IDs less than the specified value.
             id_lte: Operations with IDs less than or equal to the specified value.
             id_gt: Operations with IDs greater than the specified value.
@@ -958,7 +958,7 @@ class AppProjectSearchRequest(BaseSearchRequest):
         app_id: Projects created using the solution with the specified ID.
         parent_app_project_id: Projects cloned from the project with the specified ID. Projects can be cloned in the web version of Toloka.
         status: App project status.
-                Refer to the [AppProject.Status](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.app.AppProject.Status) page for more information on the available `status` values.
+                Refer to the [AppProject.Status](toloka.client.app.AppProject.Status.md) page for more information on the available `status` values.
         after_id: The ID of a project used for cursor pagination.
         scope: Values:
             * `'MY'` — Projects created by you.
@@ -1063,7 +1063,7 @@ class AppItemSearchRequest(BaseSearchRequest):
         after_id: The ID of the item used for cursor pagination.
         batch_id: The ID of the batch to look in.
         status: App task item status.
-                Refer to the [AppItem.Status](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.app.AppItem.Status) page for more information on the available `status` values.
+                Refer to the [AppItem.Status](toloka.client.app.AppItem.Status.md) page for more information on the available `status` values.
         id_gt: Items with IDs greater than the specified value.
         id_gte: Items with IDs greater than or equal to the specified value.
         id_lt: Items with IDs less than the specified value.
@@ -1108,7 +1108,7 @@ class AppBatchSearchRequest(BaseSearchRequest):
 
     Attributes:
         after_id: The ID of the batch used for cursor pagination.
-        status: Refer to the [AppBatch.Status](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.app.AppBatch.Status) page for more information on the available `status` values.
+        status: Refer to the [AppBatch.Status](toloka.client.app.AppBatch.Status.md) page for more information on the available `status` values.
         id_gt: Batches with IDs greater than the specified value.
         id_gte: Batches with IDs greater than or equal to the specified value.
         id_lt: Batches with IDs less than the specified value.
