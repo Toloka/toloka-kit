@@ -62,12 +62,12 @@ class Assignment(BaseTolokaObject):
         """The status of an assigned task suite.
 
         Attributes:
-            ACTIVE — The task suite is assigned but it isn't completed yet.
-            SUBMITTED — The task suite is completed but it isn't checked.
-            ACCEPTED — The task suite is accepted by the requester.
-            REJECTED — The task suite is rejected by the requester.
-            SKIPPED — The task suite is skipped by the Toloker.
-            EXPIRED — Time for completing the tasks has expired.
+            ACTIVE: The task suite is assigned but it isn't completed yet.
+            SUBMITTED: The task suite is completed but it isn't checked.
+            ACCEPTED: The task suite is accepted by the requester.
+            REJECTED: The task suite is rejected by the requester.
+            SKIPPED: The task suite is skipped by the Toloker.
+            EXPIRED: Time for completing the tasks has expired.
         """
         ACTIVE = 'ACTIVE'
         SUBMITTED = 'SUBMITTED'
