@@ -340,7 +340,8 @@ class ListFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_LIST):
 
 @inherit_docstrings
 class MediaFileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_MEDIA_FILE):
-    """Adds buttons for different types of uploads: uploading photos or videos, selecting files from the file manager or choosing from the gallery. In the accept property, select which buttons you need.
+    """Adds buttons for different types of uploads: uploading photos or videos, selecting files from the file manager or choosing from the gallery.
+    In the accept property, select which buttons you need.
 
     By default, only one file can be uploaded, but you can allow multiple files in the multiple property.
 
