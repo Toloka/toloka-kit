@@ -119,17 +119,7 @@ WebhookSubscriptionSearchResult = _create_search_result_class_for(
 )
 OperationSearchResult = _create_search_result_class_for(
     Operation,
-    """The list of found operations and whether there is something else on the original request
-
-    It's better to use TolokaClient.get_operations(),
-    which already implements the correct handling of the search result.
-
-    Attributes:
-        items: List of found operations
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
-    """
+    _create_search_result_docstring('operations')
 )
 OperationSearchResult = _create_search_result_class_for(
     Operation,

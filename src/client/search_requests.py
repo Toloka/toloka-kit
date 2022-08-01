@@ -937,9 +937,9 @@ OperationSortItems = BaseSortItems.for_fields(
 
     Attributes:
         items: A list of sorting keys. Supported values:
-            * id - Operation ID.
-            * submitted - The date and time when the request was sent.
-            * finished - The date and time when the operation was finished.
+            * `'id'` — Operation ID.
+            * `'submitted'` — The date and time when the request was sent.
+            * `'finished'` — The date and time when the operation was finished.
 
     Example:
         The example shows how to find operations sorted by finish date in descending order. Operations with equal finish dates are sorted by IDs in ascending order.
