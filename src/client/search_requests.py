@@ -981,6 +981,12 @@ class AppProjectSearchRequest(BaseSearchRequest):
 
     @unique
     class Scope(Enum):
+        """
+        * `MY` — Projects created by you.
+            * `COMPANY` — Projects created by requesters from your company.
+            * `REQUESTER_LIST` — Projects created by requesters in the `requester_ids` list.
+        """
+
         MY = 'MY'
         COMPANY = 'COMPANY'
         REQUESTER_LIST = 'REQUESTER_LIST'

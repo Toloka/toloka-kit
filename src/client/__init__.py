@@ -305,19 +305,22 @@ class TolokaClient:
             backoff_factor=2,  # summary retry time more than 10 seconds
         )
 
+    @property
+    def _headers(self):
+        headers = {
+            'Authorization': f'OAuth {self.token}',
+            'User-Agent': f'python-toloka-client-{__version__}',
+        }
+        if self.act_under_account_id:
+            headers['X-Act-Under-Account-ID'] = self.act_under_account_id
+        return headers
+
     @functools.lru_cache(maxsize=128)
     def _session_for_thread(self, thread_id: int) -> requests.Session:
         adapter = PreloadingHTTPAdapter(max_retries=self.retryer_factory())
         session = requests.Session()
         session.mount(self.url, adapter)
-        session.headers.update(
-            {
-                'Authorization': f'OAuth {self.token}',
-                'User-Agent': f'python-toloka-client-{__version__}',
-            }
-        )
-        if self.act_under_account_id:
-            session.headers['X-Act-Under-Account-ID'] = self.act_under_account_id
+        session.headers.update(self._headers)
         return session
 
     @property

@@ -122,7 +122,8 @@ def test_aggregatte_solution_by_task(requests_mock, toloka_client, toloka_url):
     assert raw_result == client.unstructure(result)
 
 
-def test_find_aggregated_solutions(requests_mock, toloka_client, toloka_url):
+def test_find_aggregated_solutions(universal_requests_mock, toloka_client_with_expected_header, toloka_url):
+    toloka_client, client_header = toloka_client_with_expected_header
     raw_result = {
         'has_more': False,
         'items': [
@@ -143,7 +144,7 @@ def test_find_aggregated_solutions(requests_mock, toloka_client, toloka_url):
 
     def aggregated_solutions(request, context):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': client_header,
             'X-Top-Level-Method': 'find_aggregated_solutions',
             'X-Low-Level-Method': 'find_aggregated_solutions',
         }
@@ -157,7 +158,7 @@ def test_find_aggregated_solutions(requests_mock, toloka_client, toloka_url):
         } == parse_qs(urlparse(request.url).query)
         return raw_result
 
-    requests_mock.get(
+    universal_requests_mock.get(
         f'{toloka_url}/aggregated-solutions/op_id',
         json=aggregated_solutions,
         status_code=200,

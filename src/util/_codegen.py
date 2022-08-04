@@ -3,6 +3,7 @@ __all__: list = [
     'fix_attrs_converters',
 ]
 import functools
+import inspect
 import linecache
 import uuid
 from inspect import isclass, signature, Signature, Parameter, BoundArguments
@@ -90,12 +91,12 @@ def _get_signature_invocation_string(sig: Signature) -> str:
     return '(' + ', '.join(tokens) + ')'
 
 
-def _compile_function(func_name, func_sig, func_body, globs=None):
+def _compile_function(func_name, func_sig, func_body, is_coroutine=False, globs=None):
     file_name = f'{func_name}_{uuid.uuid4().hex}'
     annotations = _get_annotations_from_signature(func_sig)
     sig = _remove_annotations_from_signature(func_sig)
 
-    source = f'def {func_name}{sig}:\n{indent(func_body, " " * 4)}'
+    source = f'{"async " if is_coroutine else ""}def {func_name}{sig}:\n{indent(func_body, " " * 4)}'
     bytecode = compile(source, file_name, 'exec')
     namespace = {}
     eval(bytecode, {} if globs is None else globs, namespace)
@@ -178,6 +179,7 @@ def expand_func_by_argument(func: Callable, arg_name: str, arg_type: Optional[Ty
             {arg_name} = {arg_type.__name__}{_get_signature_invocation_string(arg_type_sig)}
             return func{_get_signature_invocation_string(func_sig)}
         '''),
+        inspect.iscoroutinefunction(func),
         {arg_type.__name__: arg_type, 'func': func, 'NOTHING': attr.NOTHING}
     )
     expanded_func.__doc__ = func.__doc__
@@ -214,21 +216,40 @@ def expand(arg_name: str, arg_type: Optional[Type] = None, check_type: bool = Tr
         expanded_func: Callable = expand_func_by_argument(func, arg_name, arg_type)
         expanded_func_sig: Signature = get_signature(expanded_func)
 
-        @functools.wraps(func)
-        def wrapped(*args, **kwargs):
-            bound, func_problem = _try_bind_arguments(func_sig, args, kwargs)
-            if bound is not None:
-                if check_type and arg_name not in kwargs:
-                    fit, func_problem = _check_arg_type_compatibility(func_sig, arg_name, arg_type, bound)
-                    if fit:
-                        return func(*args, **kwargs)
-                else:
-                    return func(*args, **kwargs)
+        if inspect.iscoroutinefunction(func):
+            @functools.wraps(func)
+            async def wrapped(*args, **kwargs):
+                bound, func_problem = _try_bind_arguments(func_sig, args, kwargs)
+                if bound is not None:
+                    if check_type and arg_name not in kwargs:
+                        fit, func_problem = _check_arg_type_compatibility(func_sig, arg_name, arg_type, bound)
+                        if fit:
+                            return await func(*args, **kwargs)
+                    else:
+                        return await func(*args, **kwargs)
 
-            bound, expand_func_problem = _try_bind_arguments(expanded_func_sig, args, kwargs)
-            if bound is None:
-                raise TypeError(f'Arguments does not fit standart or expanded version.\nStandart version on problem: {func_problem}\nExpand version on problem: {expand_func_problem}')
-            return expanded_func(*args, **kwargs)
+                bound, expand_func_problem = _try_bind_arguments(expanded_func_sig, args, kwargs)
+                if bound is None:
+                    raise TypeError(
+                        f'Arguments does not fit standart or expanded version.\nStandart version on problem: {func_problem}\nExpand version on problem: {expand_func_problem}')
+                return await expanded_func(*args, **kwargs)
+        else:
+            @functools.wraps(func)
+            def wrapped(*args, **kwargs):
+                bound, func_problem = _try_bind_arguments(func_sig, args, kwargs)
+                if bound is not None:
+                    if check_type and arg_name not in kwargs:
+                        fit, func_problem = _check_arg_type_compatibility(func_sig, arg_name, arg_type, bound)
+                        if fit:
+                            return func(*args, **kwargs)
+                    else:
+                        return func(*args, **kwargs)
+
+                bound, expand_func_problem = _try_bind_arguments(expanded_func_sig, args, kwargs)
+                if bound is None:
+                    raise TypeError(
+                        f'Arguments does not fit standart or expanded version.\nStandart version on problem: {func_problem}\nExpand version on problem: {expand_func_problem}')
+                return expanded_func(*args, **kwargs)
 
         wrapped._func = func
         wrapped._expanded_func = expanded_func
