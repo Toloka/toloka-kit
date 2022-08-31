@@ -235,6 +235,7 @@ class TolokaClient:
 
     token: str
     default_timeout: Union[float, Tuple[float, float]]
+    _platform_url = 'https://platform.toloka.ai'
     url: Optional[str]
     retryer_factory: Optional[Callable[[], Retry]]
 
@@ -1029,7 +1030,7 @@ class TolokaClient:
         """
         response = self._request('post', '/v1/projects', json=unstructure(project))
         result = structure(response, Project)
-        logger.info(f'A new project with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/project/{result.id}')
+        logger.info(f'A new project with ID "{result.id}" has been created. Link to open in web interface: {self._platform_url}/requester/project/{result.id}')
         return result
 
     @expand('request')
@@ -1366,7 +1367,7 @@ class TolokaClient:
         result = self.get_pool(operation.details.pool_id)
         logger.info(
             f'A new pool with ID "{result.id}" has been cloned. Link to open in web interface: '
-            f'{self.url}/requester/project/{result.project_id}/pool/{result.id}'
+            f'{self._platform_url}/requester/project/{result.project_id}/pool/{result.id}'
         )
         return result
 
@@ -1429,7 +1430,7 @@ class TolokaClient:
         result = structure(response, Pool)
         logger.info(
             f'A new pool with ID "{result.id}" has been created. Link to open in web interface: '
-            f'{self.url}/requester/project/{result.project_id}/pool/{result.id}'
+            f'{self._platform_url}/requester/project/{result.project_id}/pool/{result.id}'
         )
         return result
 
@@ -1731,7 +1732,7 @@ class TolokaClient:
         result = self.get_training(operation.details.training_id)
         logger.info(
             f'A new training with ID "{result.id}" has been cloned. Link to open in web interface: '
-            f'{self.url}/requester/project/{result.project_id}/training/{result.id}'
+            f'{self._platform_url}/requester/project/{result.project_id}/training/{result.id}'
         )
         return result
 
@@ -1790,7 +1791,7 @@ class TolokaClient:
         result = structure(response, Training)
         logger.info(
             f'A new training with ID "{result.id}" has been created. Link to open in web interface: '
-            f'{self.url}/requester/project/{result.project_id}/training/{result.id}'
+            f'{self._platform_url}/requester/project/{result.project_id}/training/{result.id}'
         )
         return result
 
@@ -1975,7 +1976,7 @@ class TolokaClient:
         result = structure(response, Skill)
         logger.info(
             f'A new skill with ID "{result.id}" has been created. Link to open in web interface: '
-            f'{self.url}/requester/quality/skill/{result.id}'
+            f'{self._platform_url}/requester/quality/skill/{result.id}'
         )
         return result
 
