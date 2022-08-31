@@ -206,7 +206,7 @@ class AutoQuality:
     Attributes:
         toloka_client: TolokaClient instance to interact with requester's account
         project_id: Toloka project ID
-        base_pool_id: Temolate Pool for autoquality pools
+        base_pool_id: Template Pool for autoquality pools
         training_pool_id:  Training Pool ID
         exam_pool_id: Exam Pool ID
         exam_skill_id: Skill for filtering by exam perfomance
@@ -263,10 +263,10 @@ class AutoQuality:
         """Create autoquality pools with sampled quality control parameters.
         """
         logger.info('Creating pools')
-        for i, params in enumerate(ParameterSampler(
+        for params in ParameterSampler(
             self._params_to_flat_dict(self.parameter_distributions),
             self.n_iter * 10,
-        )):
+        ):
             if len(self.params) >= self.n_iter:
                 break
             try:
@@ -382,12 +382,10 @@ class AutoQuality:
         skill = next(self.toloka_client.get_skills(name=skill_name), None)
         if skill:
             return skill
-        else:
-            skill = self.toloka_client.create_skill(
-                name=skill_name,
-                hidden=True,
-            )
-        return skill
+        return self.toloka_client.create_skill(
+            name=skill_name,
+            hidden=True,
+        )
 
     def _create_tasks(self, pool_id: str, tasks_data: List[Task]):
         tasks = []
@@ -405,18 +403,9 @@ class AutoQuality:
                 conditions=[AssignmentsAcceptedCount > 0],
                 action=SetSkill(skill_id=pool_skill.id, skill_value=1),
             )
-
-            for pool2 in self.autoquality_pools:
-                if pool.id == pool2.id:
-                    continue
-                pool2_skill = self.autoquality_pool_skills[pool2.id]
-                pool.filter = pool.filter & FilterOr([
-                    Skill(
-                        key=pool2_skill.id,
-                        operator=CompareOperator.NE,
-                        value=1
-                    )
-                ])
+            other_pools = filter(lambda other_pool: other_pool.id != pool.id, self.autoquality_pools)
+            for other_pool in other_pools:
+                pool.filter &= (Skill(self.autoquality_pool_skills[other_pool.id]) != 1)
 
             self.toloka_client.update_pool(pool.id, pool)
 
