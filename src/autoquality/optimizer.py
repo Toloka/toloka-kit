@@ -31,7 +31,6 @@ from ..client.conditions import (
 )
 from ..client.filter import FilterAnd, FilterOr, Skill
 from ..client.quality_control import QualityControl
-from ..client.primitives.operators import CompareOperator
 from .scoring import default_calc_scores, default_calc_ranks
 
 logger = logging.getLogger(__name__)
@@ -148,8 +147,10 @@ def _create_autoquality_pool_default(autoquality: 'AutoQuality', params: Dict[st
         if 'ExamRequirement' in params and autoquality.exam_skill_id:
             exam_passing_skill_value = params['ExamRequirement']['exam_passing_skill_value']
             has_filter = False
+            if pool.filter and not isinstance(pool.filter, (FilterAnd, FilterOr)):
+                pool.filter = FilterAnd([pool.filter])
             if isinstance(pool.filter, FilterAnd):
-                for filter in pool.filter.and_:
+                for filter in pool.filter:
                     if isinstance(filter, Skill) and filter.key == autoquality.exam_skill_id:
                         filter.value = exam_passing_skill_value
                         has_filter = True
@@ -157,7 +158,10 @@ def _create_autoquality_pool_default(autoquality: 'AutoQuality', params: Dict[st
 
             if not has_filter:
                 exam_filter = (Skill(autoquality.exam_skill_id) >= exam_passing_skill_value)
-                pool.set_filter(pool.filter & exam_filter)
+                if pool.filter:
+                    pool.filter &= exam_filter
+                else:
+                    pool.filter = exam_filter
 
         return pool
 
