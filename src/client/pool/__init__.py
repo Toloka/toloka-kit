@@ -25,7 +25,7 @@ from .dynamic_pricing_config import DynamicPricingConfig
 from .mixer_config import MixerConfig
 from .speed_quality_balance_config import SpeedQualityBalanceConfig
 from .._converter import unstructure
-from ..filter import FilterCondition, FilterOr, FilterAnd
+from ..filter import FilterCondition, FilterOr, FilterAnd, Condition
 from ..owner import Owner
 from ..primitives.base import BaseTolokaObject
 from ..quality_control import QualityControl
@@ -234,7 +234,9 @@ class Pool(BaseTolokaObject):
 
     def unstructure(self) -> Optional[dict]:
         self_unstructured_dict = super().unstructure()
-        if self.filter is not None and not isinstance(self.filter, (FilterOr, FilterAnd)):
+        if isinstance(self.filter, Condition):
+            self_unstructured_dict['filter'] = unstructure(FilterAnd([FilterOr([self.filter])]))
+        if isinstance(self.filter, FilterOr):
             self_unstructured_dict['filter'] = unstructure(FilterAnd([self.filter]))
         return self_unstructured_dict
 

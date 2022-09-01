@@ -61,10 +61,13 @@ def pool_map():
         'filter': {
             'and': [
                 {
-                    'category': 'profile',
-                    'key': 'adult_allowed',
-                    'operator': 'EQ',
-                    'value': True,
+                    'or': [
+                        {'category': 'profile',
+                        'key': 'adult_allowed',
+                        'operator': 'EQ',
+                        'value': True,
+                        }
+                    ]
                 },
                 {
                     'or': [
@@ -180,7 +183,7 @@ def training_pool_map():
             'myself': True,
             'company_id': '1'
         },
-        'type': 'TRAINING',
+        'type': 'TRAINING', 
         'project_id': '10',
         'private_name': 'training_v12_231',
         'public_description': '42',
