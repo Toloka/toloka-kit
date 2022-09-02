@@ -179,7 +179,7 @@ def test_create_training(requests_mock, toloka_client, toloka_url, training_map,
         assert caplog.record_tuples == [(
             'toloka.client',
             logging.INFO,
-            'A new training with ID "21" has been created. Link to open in web interface: https://sandbox.toloka.dev/requester/project/10/training/21'
+            'A new training with ID "21" has been created. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/project/10/training/21'
         )]
         assert training_map_with_readonly == client.unstructure(result)
 
@@ -619,6 +619,6 @@ def test_clone_training(requests_mock, toloka_client, toloka_url,
         assert caplog.record_tuples == [(
             'toloka.client',
             logging.INFO,
-            'A new training with ID "22" has been cloned. Link to open in web interface: https://sandbox.toloka.dev/requester/project/10/training/22'
+            'A new training with ID "22" has been cloned. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/project/10/training/22'
         )]
         assert cloned_training_map_with_readonly == client.unstructure(result)

@@ -233,9 +233,16 @@ class TolokaClient:
         SANDBOX = 'https://sandbox.toloka.dev'
         PRODUCTION = 'https://toloka.dev'
 
+        @property
+        def platform_url(self):
+            if self is TolokaClient.Environment.PRODUCTION:
+                return 'https://platform.toloka.ai'
+            if self is TolokaClient.Environment.SANDBOX:
+                return 'https://sandbox.toloka.yandex.com'
+
     token: str
     default_timeout: Union[float, Tuple[float, float]]
-    _platform_url = 'https://platform.toloka.ai'
+    _platform_url: Optional[str]
     url: Optional[str]
     retryer_factory: Optional[Callable[[], Retry]]
 
@@ -256,10 +263,12 @@ class TolokaClient:
             raise ValueError('You can only pass one parameter: environment or url. Both are now set.')
         if url is not None:
             self.url = url[:-1] if url.endswith('/') else url
+            self._platform_url = self.url
         else:
             if not isinstance(environment, TolokaClient.Environment):
                 environment = TolokaClient.Environment[environment.upper()]
             self.url = environment.value
+            self._platform_url = environment.platform_url
         if isinstance(retries, Retry) and retry_quotas is not None:
             raise ValueError('You must set retry_quotas parameter to None when you specify retries parameters not as int.')
         self.token = token

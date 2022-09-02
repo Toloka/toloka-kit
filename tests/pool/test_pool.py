@@ -172,7 +172,7 @@ def test_create_pool(requests_mock, toloka_client, toloka_url, pool_map, pool_ma
         result = toloka_client.create_pool(pool)
         assert caplog.record_tuples == [(
             'toloka.client', logging.INFO,
-            'A new pool with ID "21" has been created. Link to open in web interface: https://sandbox.toloka.dev/requester/project/10/pool/21'
+            'A new pool with ID "21" has been created. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/project/10/pool/21'
         )]
         assert pool_map_with_readonly == client.unstructure(result)
 
@@ -985,7 +985,7 @@ def test_clone_pool(requests_mock, toloka_client, toloka_url,
         assert caplog.record_tuples == [(
             'toloka.client',
             logging.INFO,
-            'A new pool with ID "22" has been cloned. Link to open in web interface: https://sandbox.toloka.dev/requester/project/10/pool/22'
+            'A new pool with ID "22" has been cloned. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/project/10/pool/22'
         )]
         assert cloned_pool_map == client.unstructure(result)
 
