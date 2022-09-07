@@ -28,12 +28,12 @@ from ..util._extendable_enum import ExtendableStrEnum
 
 
 class CollectorConfig(BaseParameters, spec_enum='Type', spec_field='type'):
-    """Base class for all collectors
+    """Base class for all collectors.
 
-    Attriutes:
-        uuid: Id for this collector. Pay attention! If you clone the pool, you will have same collector in old and new pools.
-            So collectors can behave a little unexpectedly. For example they start gather "history_size" patameter
-            from both pools.
+    Attributes:
+        uuid: The ID of a collector.
+            Note that when you clone a pool, both pools start using the same collector, because it is not cloned.
+            Usually, it is not an intended behavior. For example, the collector gathers history size from both pools.
     """
 
     _compatible_conditions: ClassVar[FrozenSet[RuleConditionKey]]
@@ -62,34 +62,36 @@ class CollectorConfig(BaseParameters, spec_enum='Type', spec_field='type'):
 
 @inherit_docstrings
 class AcceptanceRate(CollectorConfig, spec_value=CollectorConfig.Type.ACCEPTANCE_RATE):
-    """Results of checking the answers of the Toloker.
+    """Counts accepted and rejected Toloker's assignments.
 
-    If non-automatic acceptance (assignment review) is set in the pool, add a rule to:
-    - Set the Toloker's skill based on their responses.
-    - Block access for Tolokers who give incorrect responses.
+    If non-automatic acceptance is set in the pool, you may use this collector to:
+    - Set a Toloker's skill.
+    - Block access for Tolokers with too many incorrect responses.
 
-    Used with conditions:
-    * TotalAssignmentsCount - How many assignments from this Toloker were checked.
-    * AcceptedAssignmentsRate - Percentage of how many assignments were accepted from this Toloker out of all checked assignment.
-    * RejectedAssignmentsRate - Percentage of how many assignments were rejected from this Toloker out of all checked assignment.
+    The collector is used with conditions:
+    * [TotalAssignmentsCount](toloka.client.conditions.TotalAssignmentsCount.md) — Total count of checked assignments submitted by a Toloker.
+    * [AcceptedAssignmentsRate](toloka.client.conditions.AcceptedAssignmentsRate.md) — Percentage of accepted assignments.
+    * [RejectedAssignmentsRate](toloka.client.conditions.RejectedAssignmentsRate.md) — Percentage of rejected assignments.
 
-    Used with actions:
-    * RestrictionV2 - Block access to projects or pools.
-    * ApproveAllAssignments - Approve all replies from the Toloker.
-    * RejectAllAssignments - Reject all replies from the Toloker.
-    * SetSkill - Set Toloker's skill value.
-    * SetSkillFromOutputField - Set Toloker's skill value from source.
+    The collector can be used with actions:
+    * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
+    * [ApproveAllAssignments](toloka.client.actions.ApproveAllAssignments.md) accepts all Toloker's assignments.
+    * [RejectAllAssignments](toloka.client.actions.RejectAllAssignments.md) rejects all Toloker's assignments.
+    * [SetSkill](toloka.client.actions.SetSkill.md) sets Toloker's skill value.
+    * [SetSkillFromOutputField](toloka.client.actions.SetSkillFromOutputField.md) sets Toloker's skill value using an output field.
 
     Attributes:
-        parameters.history_size: The maximum number of recent tasks that the Toloker completed in the project to use for the calculation.
-            If this field is omitted, the calculation is based on all the tasks that the Toloker completed in the pool.
+        parameters.history_size: The maximum number of tasks that are taken into account.
+            If `history_size` is omitted, all tasks completed by the Toloker are counted.
 
     Example:
-        How to ban a Toloker in this project if he makes mistakes.
+        The example shows how to ban a Toloker if they make too many mistakes.
+        If more than 35% of responses are rejected, then the Toloker is restricted to access the project.
+        The rule is applied after collecting 3 or more responses.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
-        >>> collector=toloka.collectors.AcceptanceRate(),
+        >>>     collector=toloka.collectors.AcceptanceRate(),
         >>>     conditions=[
         >>>         toloka.conditions.TotalAssignmentsCount > 2,
         >>>         toloka.conditions.RejectedAssignmentsRate > 35,
@@ -116,24 +118,24 @@ class AcceptanceRate(CollectorConfig, spec_value=CollectorConfig.Type.ACCEPTANCE
 
 @inherit_docstrings
 class AnswerCount(CollectorConfig, spec_value=CollectorConfig.Type.ANSWER_COUNT):
-    """How many assignments were accepted from a Toloker.
+    """Counts assignments submitted by a Toloker.
 
-    Use this rule if you want to:
-    - Get responses from as many Tolokers as possible (for this purpose, set a low threshold, such as one task suite).
-    - Protect yourself from robots (for this purpose, the threshold should be higher, such as 10% of the pool's tasks).
-    - Mark Tolokers completing a task so that you can filter them later in the checking project.
+    Use this collector if you want to:
+    - Involve as many Tolokers as possible. Set the limit to 1, and a Toloker can take no more than one task suite.
+    - Improve protection from robots. For this purpose, the limit should be higher, such as 10% of the pool's tasks.
+    - Filter Tolokers who complete your tasks so they don't check the tasks in the checking project.
 
-    Used with conditions:
-    * AssignmentsAcceptedCount - How many assignments were accepted from a Toloker.
+    The collector is used with conditions:
+    * [AssignmentsAcceptedCount](toloka.client.conditions.AssignmentsAcceptedCount.md) — Percentage of accepted assignments.
 
-    Used with actions:
-    * RestrictionV2 - Block access to projects or pools.
-    * ApproveAllAssignments - Approve all replies from the Toloker.
-    * RejectAllAssignments - Reject all replies from the Toloker.
-    * SetSkill - Set Toloker's skill value.
+    The collector can be used with actions:
+    * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
+    * [ApproveAllAssignments](toloka.client.actions.ApproveAllAssignments.md) accepts all Toloker's assignments.
+    * [RejectAllAssignments](toloka.client.actions.RejectAllAssignments.md) rejects all Toloker's assignments.
+    * [SetSkill](toloka.client.actions.SetSkill.md) sets Toloker's skill value.
 
     Example:
-        How to mark Tolokers completing a task so that you can filter them later in the checking project.
+        The example shows how to mark Tolokers completing a task so that you can filter them later in the checking project.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
