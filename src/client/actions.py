@@ -39,7 +39,7 @@ class RuleAction(BaseParameters, spec_enum=RuleType, spec_field='type'):
 class Restriction(RuleAction, spec_value=RuleType.RESTRICTION):
     """Restricts Toloker's access to projects or pools.
 
-    To have better control over restriction period use [RestrictionV2](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.actions.RestrictionV2).
+    To have better control over restriction period use [RestrictionV2](toloka.client.actions.RestrictionV2.md).
 
     Attributes:
         parameters.scope:
@@ -99,7 +99,7 @@ class RestrictionV2(RuleAction, spec_value=RuleType.RESTRICTION_V2):
 class SetSkillFromOutputField(RuleAction, spec_value=RuleType.SET_SKILL_FROM_OUTPUT_FIELD):
     """Sets Toloker's skill value to the percentage of correct or incorrect answers.
 
-    You can use this action with [MajorityVote](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.MajorityVote) and [GoldenSet](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.GoldenSet) collectors.  # noqa: E501
+    You can use this action with [MajorityVote](toloka.client.collectors.MajorityVote.md) and [GoldenSet](toloka.client.collectors.GoldenSet.md) collectors.
 
     Attributes:
         parameters.skill_id: The ID of the skill to update.
@@ -132,7 +132,7 @@ class SetSkillFromOutputField(RuleAction, spec_value=RuleType.SET_SKILL_FROM_OUT
 class ChangeOverlap(RuleAction, spec_value=RuleType.CHANGE_OVERLAP):
     """Increases the overlap of a task.
 
-    You can use this rule only with [UsersAssessment](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.UsersAssessment) and [AssignmentsAssessment](https://toloka.ai/en/docs/toloka-kit/reference/toloka.client.collectors.AssignmentsAssessment) collectors.  # noqa: E501
+    You can use this rule only with [UsersAssessment](toloka.client.collectors.UsersAssessment) and [AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment) collectors.
 
     Attributes:
         parameters.delta: An overlap increment.

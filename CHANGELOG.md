@@ -217,7 +217,7 @@ Fixing issues with `create_tasks` and `create_task_suites`
 -------------------
 * Implemented a `clone_project` method
 * Deserialization should not fail on unknown enum values or unexpected value types anymore
-* Some functions that used to return an Operation object now wait for operations to end and return a more usefull output. For example, `clone_pool` now returns an instance of Pool representing a newly created pool. If you want the old behaviour please use `*_async` versions of the methods. The list of affected methods:
+* Some functions that used to return an Operation object now wait for operations to end and return a more useful output. For example, `clone_pool` now returns an instance of Pool representing a newly created pool. If you want the old behavior please use `*_async` versions of the methods. The list of affected methods:
   * archive_pool
   * archive_project
   * archive_training
