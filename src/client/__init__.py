@@ -486,12 +486,12 @@ class TolokaClient:
             The example shows how to aggregate responses to a single task.
 
             >>> aggregated_response = toloka_client.aggregate_solutions_by_task(
-            >>>         type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
-            >>>         pool_id=some_existing_pool_id,
-            >>>         task_id=some_existing_task_id,
-            >>>         answer_weight_skill_id=some_skill_id,
-            >>>         fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
-            >>>     )
+            >>>     type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
+            >>>     pool_id=some_existing_pool_id,
+            >>>     task_id=some_existing_task_id,
+            >>>     answer_weight_skill_id=some_skill_id,
+            >>>     fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
+            >>> )
             >>> print(aggregated_response.output_values['result'])
             ...
         """
@@ -571,11 +571,11 @@ class TolokaClient:
             The example shows how to aggregate responses in a pool.
 
             >>> aggregation_operation = toloka_client.aggregate_solutions_by_pool(
-            >>>         type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
-            >>>         pool_id=some_existing_pool_id,
-            >>>         answer_weight_skill_id=some_skill_id,
-            >>>         fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
-            >>>     )
+            >>>     type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
+            >>>     pool_id=some_existing_pool_id,
+            >>>     answer_weight_skill_id=some_skill_id,
+            >>>     fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
+            >>> )
             >>> aggregation_operation = toloka_client.wait_operation(aggregation_operation)
             >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
             ...
@@ -789,7 +789,7 @@ class TolokaClient:
         Example:
             Make a list of all received attachments in the specified pool.
 
-            >>> results_list = [attachment for attachment in toloka_client.get_attachments(pool_id='1')]
+            >>> results_list = list(toloka_client.get_attachments(pool_id='1'))
             ...
         """
         generator = self._find_all(self.find_attachments, request)
@@ -912,7 +912,10 @@ class TolokaClient:
             >>> message_threads = toloka_client.get_message_threads(folder='UNREAD')
             >>> message_reply = {'EN': 'Thank you for your message! I will get back to you soon.'}
             >>> for thread in message_threads:
-            >>>     toloka_client.reply_message_thread(message_thread_id=thread.id, reply=toloka.message_thread.MessageThreadReply(text=message_reply))
+            >>>     toloka_client.reply_message_thread(
+            >>>         message_thread_id=thread.id,
+            >>>         reply=toloka.message_thread.MessageThreadReply(text=message_reply)
+            >>>     )
             ...
         """
         response = self._request('post', f'/v1/message-threads/{message_thread_id}/reply', json=unstructure(reply))
@@ -2185,12 +2188,12 @@ class TolokaClient:
             >>> golden_tasks = []
             >>> for _, row in dataset.iterrows():
             >>>     golden_tasks.append(
-            >>>             toloka.task.Task(
-            >>>                 input_values={'image': row['image']},
-            >>>                 known_solutions = [toloka.task.BaseTask.KnownSolution(output_values={'animal': row['label']})],
-            >>>                 pool_id = existing_pool_id,
-            >>>             )
+            >>>         toloka.task.Task(
+            >>>             input_values={'image': row['image']},
+            >>>             known_solutions = [toloka.task.BaseTask.KnownSolution(output_values={'animal': row['label']})],
+            >>>             pool_id = existing_pool_id,
             >>>         )
+            >>>     )
             >>> created_result = toloka_client.create_tasks(golden_tasks, allow_defaults=True)
             >>> print(len(created_result.items))
             ...
@@ -2224,12 +2227,8 @@ class TolokaClient:
 
         Example:
             >>> training_tasks = [
-            >>>     toloka.task.Task(
-            >>>                 input_values={'image': 'link1'},
-            >>>                 pool_id='1'),
-            >>>     toloka.task.Task(
-            >>>             input_values={'image': 'link2'},
-            >>>             pool_id='1')
+            >>>     toloka.task.Task(input_values={'image': 'link1'}, pool_id='1'),
+            >>>     toloka.task.Task(input_values={'image': 'link2'}, pool_id='1')
             >>> ]
             >>> tasks_op = toloka_client.create_tasks_async(training_tasks)
             >>> toloka_client.wait_operation(tasks_op)
@@ -2303,7 +2302,7 @@ class TolokaClient:
         Example:
             Getting all tasks from a single pool.
 
-            >>> results_list = [task for task in toloka_client.get_tasks(pool_id='1')]
+            >>> results_list = list(toloka_client.get_tasks(pool_id='1'))
             ...
         """
         generator = self._find_all(self.find_tasks, request)
@@ -2377,9 +2376,10 @@ class TolokaClient:
 
         Example:
             >>> new_task_suite = toloka.task_suite.TaskSuite(
-            >>>                 pool_id='1',
-            >>>                 tasks=[toloka.task.Task(input_values={'label': 'Cats vs Dogs'})],
-            >>>                 overlap=2)
+            >>>     pool_id='1',
+            >>>     tasks=[toloka.task.Task(input_values={'label': 'Cats vs Dogs'})],
+            >>>     overlap=2
+            >>> )
             >>> toloka_client.create_task_suite(new_task_suite)
             ...
         """
@@ -2549,7 +2549,7 @@ class TolokaClient:
         Example:
             Get task suites from a specific pool.
 
-            >>> results_list = [task_suite for task_suite in toloka_client.get_task_suites(pool_id='1')]
+            >>> results_list = list(toloka_client.get_task_suites(pool_id='1'))
             ...
         """
         generator = self._find_all(self.find_task_suites, request)
@@ -2646,13 +2646,15 @@ class TolokaClient:
 
             >>> pool = toloka_client.get_pool(pool_id)
             >>> while not pool.is_closed():
-            >>>     op = toloka_client.get_analytics([toloka.analytics_request.CompletionPercentagePoolAnalytics(subject_id=pool.id)])
+            >>>     op = toloka_client.get_analytics(
+            >>>         [toloka.analytics_request.CompletionPercentagePoolAnalytics(subject_id=pool.id)]
+            >>>     )
             >>>     op = toloka_client.wait_operation(op)
             >>>     percentage = op.details['value'][0]['result']['value']
             >>>     print(
-            >>>         f'   {datetime.datetime.now().strftime("%H:%M:%S")}\t'
+            >>>         f'{datetime.datetime.now().strftime("%H:%M:%S")}'
             >>>         f'Pool {pool.id} - {percentage}%'
-            >>>         )
+            >>>     )
             >>>     time.sleep(60 * minutes_to_wait)
             >>>     pool = toloka_client.get_pool(pool.id)
             >>> print('Pool was closed.')
@@ -2729,7 +2731,7 @@ class TolokaClient:
             Operation: The next matching operations.
 
         Example:
-            >>> bonuses = [bonus for bonus in toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00')]
+            >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00'))
             ...
         """
         generator = self._find_all(self.find_operations, request)
@@ -2836,7 +2838,8 @@ class TolokaClient:
             >>>             'EN': 'You are the best!',
             >>>             'RU': 'Молодец!',
             >>>         },
-            >>>         assignment_id='1'),
+            >>>         assignment_id='1'
+            >>>     ),
             >>>     UserBonus(
             >>>         user_id='2',
             >>>         amount=decimal.Decimal('1.0'),
@@ -2848,7 +2851,8 @@ class TolokaClient:
             >>>             'EN': 'You have completed all tasks!',
             >>>             'RU': 'Сделаны все задания!',
             >>>         },
-            >>>         assignment_id='2')
+            >>>         assignment_id='2'
+            >>>     )
             >>> ]
             >>> toloka_client.create_user_bonuses(new_bonuses)
             ...
@@ -2889,7 +2893,8 @@ class TolokaClient:
             >>>             'EN': 'You are the best!',
             >>>             'RU': 'Молодец!',
             >>>         },
-            >>>         assignment_id='1'),
+            >>>         assignment_id='1'
+            >>>     ),
             >>>     UserBonus(
             >>>         user_id='2',
             >>>         amount=decimal.Decimal('1.0'),
@@ -2901,7 +2906,8 @@ class TolokaClient:
             >>>             'EN': 'You have completed all tasks!',
             >>>             'RU': 'Сделаны все задания!',
             >>>         },
-            >>>         assignment_id='2')
+            >>>         assignment_id='2'
+            >>>     )
             >>> ]
             >>> create_bonuses = toloka_client.create_user_bonuses_async(new_bonuses)
             >>> toloka_client.wait_operation(create_bonuses)
@@ -2971,7 +2977,7 @@ class TolokaClient:
             UserBonus: The next matching Toloker's reward.
 
         Example:
-            >>> bonuses = [bonus for bonus in toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00')]
+            >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00'))
             ...
         """
         generator = self._find_all(self.find_user_bonuses, request)
@@ -3045,7 +3051,7 @@ class TolokaClient:
             UserRestriction: The next matching Toloker restriction.
 
         Example:
-            >>> results_list = [restriction for restriction in toloka_client.get_user_restrictions(scope='ALL_PROJECTS')]
+            >>> results_list = list(toloka_client.get_user_restrictions(scope='ALL_PROJECTS'))
             ...
         """
         generator = self._find_all(self.find_user_restrictions, request)
@@ -3183,7 +3189,7 @@ class TolokaClient:
             UserSkill: The next matching Toloker's skill.
 
         Example:
-            >>> results_list = [skill for skill in toloka_client.get_user_skills()]
+            >>> results_list = list(toloka_client.get_user_skills())
             ...
         """
         generator = self._find_all(self.find_user_skills, request)
@@ -3216,7 +3222,7 @@ class TolokaClient:
             UserSkill: Updated skill information.
 
         Example:
-            >>> from decimal import *
+            >>> from decimal import Decimal
             >>> toloka_client.set_user_skill(skill_id='1', user_id='1', value=Decimal(100))
             ...
         """
