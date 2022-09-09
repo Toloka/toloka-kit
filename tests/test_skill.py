@@ -152,7 +152,7 @@ def test_create_skill(skill_sample, skill_header, requests_mock, toloka_client, 
         assert caplog.record_tuples == [(
             'toloka.client',
             logging.INFO,
-            'A new skill with ID "21" has been created. Link to open in web interface: https://sandbox.toloka.dev/requester/quality/skill/21'
+            'A new skill with ID "21" has been created. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/quality/skill/21'
         )]
         assert skill_sample == client.unstructure(result)
 
