@@ -118,8 +118,8 @@ class CreateTaskParameters(Parameters):
 
     Attributes:
         allow_defaults: Active overlap setting:
-            * True — Use the overlap value that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
-            * False — Use the overlap value that is set in the `overlap` task suite parameter.
+            * True — Use the overlap that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
+            * False — Use the overlap that is set in the task parameters (in the `overlap` field).
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
     """
 
@@ -158,7 +158,7 @@ class TaskOverlapPatch(BaseTolokaObject):
     Attributes:
         overlap: Overlap value.
         infinite_overlap: Infinite overlap:
-            * True — Assign the task to all Tolokers. It is useful for training tasks.
+            * True — Assign the task to all Tolokers. It is useful for training and control tasks.
             * False — Overlap value specified for the task or for the pool is used. Default value: False.
     """
 
