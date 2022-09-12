@@ -54,7 +54,6 @@ def _create_autoquality_pool_default(autoquality: 'AutoQuality', params: Dict[st
 
         if 'overlap' in params:
             overlap = params['overlap']
-
             pool.defaults = Pool.Defaults(
                 default_overlap_for_new_task_suites=overlap,
             )
@@ -68,7 +67,6 @@ def _create_autoquality_pool_default(autoquality: 'AutoQuality', params: Dict[st
 
             fast_submit_threshold_seconds = int(avg_page_seconds * too_fast_fraction)
             fast_submitted_count = history_size
-
             fast_submitted_count = min(
                 fast_submitted_count,
                 history_size,
@@ -145,24 +143,34 @@ def _create_autoquality_pool_default(autoquality: 'AutoQuality', params: Dict[st
             )
 
         if 'ExamRequirement' in params and autoquality.exam_skill_id:
-            exam_passing_skill_value = params['ExamRequirement']['exam_passing_skill_value']
-            has_filter = False
-            if pool.filter and not isinstance(pool.filter, (FilterAnd, FilterOr)):
-                pool.filter = FilterAnd([pool.filter])
-            if isinstance(pool.filter, FilterAnd):
-                for filter in pool.filter:
-                    if isinstance(filter, Skill) and filter.key == autoquality.exam_skill_id:
-                        filter.value = exam_passing_skill_value
-                        has_filter = True
-                        break
+            pool = _configure_exam(
+                pool,
+                autoquality.exam_skill_id,
+                params['ExamRequirement']['exam_passing_skill_value']
+            )
 
-            if not has_filter:
-                exam_filter = (Skill(autoquality.exam_skill_id) >= exam_passing_skill_value)
-                if pool.filter:
-                    pool.filter &= exam_filter
-                else:
-                    pool.filter = exam_filter
+        return pool
 
+    def _configure_exam(pool: Pool, exam_skill_id, exam_passing_skill_value) -> Pool:
+        exam_filter = (Skill(exam_skill_id) >= exam_passing_skill_value)
+        if pool.filter is None:
+            pool.filter = exam_filter
+            return pool
+
+        if not isinstance(pool.filter, FilterAnd):
+            pool.filter = FilterAnd([pool.filter])
+
+        has_filter = False
+        for filter in pool.filter:
+            if isinstance(filter, (FilterOr, FilterAnd)):
+                sub_filters = list(filter)
+                filter = sub_filters[0] if len(sub_filters) == 1 else filter
+            if isinstance(filter, Skill) and filter.key == exam_skill_id:
+                filter.value = exam_passing_skill_value
+                has_filter = True
+
+        if not has_filter:
+            pool.filter &= exam_filter
         return pool
 
     pool = autoquality.toloka_client.clone_pool(autoquality.base_pool_id)
