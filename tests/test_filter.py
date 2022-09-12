@@ -41,26 +41,6 @@ def test_language_pickleable(obj):
 def test_language_deepcopyable(obj):
     assert obj == copy.deepcopy(obj)
 
-# ((filter.Gender == filter.Gender.FEMALE) | (filter.Country != 'BE')) &
-# (filter.Citizenship == 'BY') &
-# (filter.Education == filter.Education.MIDDLE) &
-# (filter.AdultAllowed == True) &  # noqa: E712
-# (filter.DateOfBirth > 604972800) &
-# (filter.City.not_in(225)) &
-# (filter.Languages.in_('RU')) &
-# (filter.RegionByPhone.in_(213) & filter.RegionByIp.not_in(1)) &
-# (filter.DeviceCategory == filter.DeviceCategory.PERSONAL_COMPUTER) &
-# (filter.OSFamily == filter.OSFamily.WINDOWS) &
-# (filter.OSVersion >= 8.1) &
-# (filter.OSVersionMajor > 8) &
-# (filter.OSVersionMinor >= 1) &
-# (filter.OSVersionBugfix <= 225) &
-# (filter.UserAgentType == filter.UserAgentType.BROWSER) &
-# (filter.UserAgentVersion < 11.12) &
-# (filter.UserAgentVersionMajor < 11) &
-# (filter.UserAgentVersionMinor < 12) &
-# (filter.UserAgentVersionBugfix > 2026) &
-# ((filter.Skill('224') >= 85) | (filter.Skill('300') != None) | (filter.Skill('350') == 75.512))  # noqa: E711
 
 def test_filter_in_pool():
     pool = Pool(

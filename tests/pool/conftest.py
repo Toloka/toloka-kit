@@ -183,7 +183,7 @@ def training_pool_map():
             'myself': True,
             'company_id': '1'
         },
-        'type': 'TRAINING', 
+        'type': 'TRAINING',
         'project_id': '10',
         'private_name': 'training_v12_231',
         'public_description': '42',

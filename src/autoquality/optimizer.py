@@ -407,9 +407,9 @@ class AutoQuality:
                 conditions=[AssignmentsAcceptedCount > 0],
                 action=SetSkill(skill_id=pool_skill.id, skill_value=1),
             )
-            other_pools = filter(lambda other_pool: other_pool.id != pool.id, self.autoquality_pools)
-            for other_pool in other_pools:
-                pool.filter &= (Skill(self.autoquality_pool_skills[other_pool.id]) != 1)
+            for other_pool in self.autoquality_pools:
+                if other_pool.id != pool.id:
+                    pool.filter &= (Skill(self.autoquality_pool_skills[other_pool.id]) != 1)
 
             self.toloka_client.update_pool(pool.id, pool)
 
