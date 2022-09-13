@@ -153,27 +153,24 @@ class AnswerCount(CollectorConfig, spec_value=CollectorConfig.Type.ANSWER_COUNT)
 
 @inherit_docstrings
 class AssignmentsAssessment(CollectorConfig, spec_value=CollectorConfig.Type.ASSIGNMENTS_ASSESSMENT):
-    """Processing rejected and accepted assignments
+    """Counts accepted and rejected assignments for every task suite.
 
-    This rule is helpful when you need to:
-    - Resend rejected assignments for re-completion to other Tolokers. If you rejected an assignment, you may want it
-    to be completed by another Toloker instead of the one whose response you rejected. To do this, you can increase
-    the overlap for this assignment only. This is especially helpful if you have the overlap value set to 1.
-    - Save money on re-completing assignments that you have already accepted. If you reviewed and accepted an assignment,
-    it may not make sense for other Tolokers to complete the same assignment. To avoid this, you can reduce the overlap for
-    accepted assignments only.
+    This collector is used to:
+    - Reassign rejected task suites to other Tolokers. To do this, increase
+    the overlap of the task suite if the assignment was rejected. This collector is especially helpful if the default overlap value is 1.
+    - Save money if you accept an assignment and don't need to collect more responses for that task suite. To stop assigning the task suite reduce its overlap.
 
     Used with conditions:
-    * PendingAssignmentsCount - Number of Assignments pending checking.
-    * AcceptedAssignmentsCount - How many times this assignment was accepted.
-    * RejectedAssignmentsCount - How many times this assignment was rejected.
-    * AssessmentEvent - Assessment of the assignment changes its status to the specified one.
+    * [PendingAssignmentsCount](toloka.client.conditions.PendingAssignmentsCount.md) — The number of pending assignments that must be checked.
+    * [AcceptedAssignmentsCount](toloka.client.conditions.AcceptedAssignmentsCount.md) — The number of accepted assignments for a task suite.
+    * [RejectedAssignmentsCount](toloka.client.conditions.RejectedAssignmentsCount.md) — The number of rejected assignments for a task suite.
+    * [AssessmentEvent](toloka.client.conditions.AssessmentEvent.md) — An assignment changes its status to the specified one.
 
     Used with actions:
-    * ChangeOverlap - Increase the overlap of the set of tasks.
+    * [ChangeOverlap](toloka.client.actions.ChangeOverlap.md) changes the overlap of a task suite.
 
     Example:
-        How to resend rejected assignments for re-completion to other Tolokers.
+        The example shows how to reassign rejected task suites to other Tolokers.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -194,35 +191,35 @@ class AssignmentsAssessment(CollectorConfig, spec_value=CollectorConfig.Type.ASS
 
 @inherit_docstrings
 class AssignmentSubmitTime(CollectorConfig, spec_value=CollectorConfig.Type.ASSIGNMENT_SUBMIT_TIME):
-    """Filtering cheating Tolokers who respond too quickly
+    """Counts fast responses.
 
-    Helpful when you need to:
-    - Use this Restrict the pool access for Tolokers who respond too quickly.
-    - Provide protection from robots.
+    This collector is used:
+    - To find Tolokers who respond too quickly.
+    - To improve protection against robots.
 
-    Used with conditions:
-    * TotalSubmittedCount - The number of assignments a specific Toloker completed.
-    * FastSubmittedCount - The number of assignments a specific Toloker completed too fast.
+    The collector is used with conditions:
+    * [TotalSubmittedCount](toloka.client.conditions.TotalSubmittedCount.md) — The number of assignments a specific Toloker completed.
+    * [FastSubmittedCount](toloka.client.conditions.FastSubmittedCount.md) — The number of assignments a specific Toloker completed too fast.
 
-    Used with actions:
-    * RestrictionV2 - Block access to projects or pools.
-    * ApproveAllAssignments - Approve all replies from the Toloker.
-    * RejectAllAssignments - Reject all replies from the Toloker.
-    * SetSkill - Set Toloker's skill value.
+    The collector can be used with actions:
+    * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
+    * [ApproveAllAssignments](toloka.client.actions.ApproveAllAssignments.md) accepts all Toloker's assignments.
+    * [RejectAllAssignments](toloka.client.actions.RejectAllAssignments.md) rejects all Toloker's assignments.
+    * [SetSkill](toloka.client.actions.SetSkill.md) sets Toloker's skill value.
 
     Attributes:
-        parameters.fast_submit_threshold_seconds: The task suite completion time (in seconds).
-            Everything that is completed faster is considered a fast response.
-        parameters.history_size: The number of the recent task suites completed by the Toloker.
+        parameters.fast_submit_threshold_seconds: Fast response threshold in seconds.
+            A response submitted in less time is considered a fast response.
+        parameters.history_size: The number of the recent task suites to track.
 
     Example:
-        How to reject all assignments if Toloker sends answers too fast.
+        The example shows how to reject all assignments if a Toloker sends responses too fast.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
         >>>     collector=toloka.collectors.AssignmentSubmitTime(history_size=5, fast_submit_threshold_seconds=20),
         >>>     conditions=[toloka.conditions.FastSubmittedCount > 3],
-        >>>     action=toloka.actions.RejectAllAssignments(public_comment='Too fast answering. You are cheater!')
+        >>>     action=toloka.actions.RejectAllAssignments(public_comment='Too fast responses.')
         >>> )
         ...
     """
@@ -239,25 +236,25 @@ class AssignmentSubmitTime(CollectorConfig, spec_value=CollectorConfig.Type.ASSI
 
 @inherit_docstrings
 class Captcha(CollectorConfig, spec_value=CollectorConfig.Type.CAPTCHA):
-    """Captchas provide a high level of protection from robots
+    """Saves captcha statistics for a Toloker.
 
-    Used with conditions:
-    * StoredResultsCount - How many times the Toloker entered captcha.
-    * SuccessRate - Percentage of correct answers of the Toloker to the captcha.
-    * FailRate - Percentage of wrong answers of the Toloker to the captcha.
+    Captcha provides an advanced protection against robots. It is used with conditions:s
+    * [StoredResultsCount](toloka.client.conditions.StoredResultsCount.md) — How many times the Toloker entered captcha.
+    * [SuccessRate](toloka.client.conditions.SuccessRate.md) — The percentage of successful captcha passes.
+    * [FailRate](toloka.client.conditions.FailRate.md) — The percentage of captcha failures.
 
-    Used with actions:
-    * RestrictionV2 - Block access to projects or pools.
-    * ApproveAllAssignments - Approve all replies from the Toloker.
-    * RejectAllAssignments - Reject all replies from the Toloker.
-    * SetSkill - Set Toloker's skill value.
-    * SetSkillFromOutputField - Set Toloker's skill value from source.
+    The collector can be used with actions:
+    * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
+    * [ApproveAllAssignments](toloka.client.actions.ApproveAllAssignments.md) accepts all Toloker's assignments.
+    * [RejectAllAssignments](toloka.client.actions.RejectAllAssignments.md) rejects all Toloker's assignments.
+    * [SetSkill](toloka.client.actions.SetSkill.md) sets Toloker's skill value.
+    * [SetSkillFromOutputField](toloka.client.actions.SetSkillFromOutputField.md) sets Toloker's skill value using an output field.
 
     Attributes:
-        parameters.history_size: The number of times the Toloker was shown a captcha recently.
+        parameters.history_size: The number of recent captchas to calculate the statistics.
 
     Example:
-        How to ban a Toloker in this project if he mistakes in captcha.
+        The example shows how to ban a Toloker if they do not solve captcha.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.set_captcha_frequency('MEDIUM')
@@ -288,43 +285,43 @@ class Captcha(CollectorConfig, spec_value=CollectorConfig.Type.CAPTCHA):
 
 @inherit_docstrings
 class GoldenSet(CollectorConfig, spec_value=CollectorConfig.Type.GOLDEN_SET):
-    """How Toloker answers on control tasks
+    """Saves control and training task statistics for a Toloker.
 
     Use control tasks to assign a skill to Tolokers based on their responses and ban Tolokers who submit incorrect responses.
 
-    Don't use it if:
-    - You have a lot of response options.
-    - Tolokers need to attach a file to their assignment.
+    It is better not to use this collector if:
+    - There are a lot of response options.
+    - Tolokers need to attach files to assignments.
     - Tolokers need to transcribe text.
-    - Tolokers need to select objects in a photo.
+    - Tolokers need to select objects on a photo.
     - Tasks don't have a correct or incorrect response. For example: "Which image do you like best?" or
     "Choose the page design option that you like best".
 
     Used with conditions:
-    * TotalAnswersCount - The number of completed control and training tasks.
-    * CorrectAnswersRate - The percentage of correct responses in training and control tasks.
-    * IncorrectAnswersRate - The percentage of incorrect responses in training and control tasks.
-    * GoldenSetAnswersCount - The number of completed control tasks
-    * GoldenSetCorrectAnswersRate - The percentage of correct responses in control tasks.
-    * GoldenSetIncorrectAnswersRate - The percentage of incorrect responses in control tasks.
+    * [TotalAnswersCount](toloka.client.conditions.TotalAnswersCount.md) — The number of completed control and training tasks.
+    * [CorrectAnswersRate](toloka.client.conditions.CorrectAnswersRate.md) — The percentage of correct responses in control and training tasks.
+    * [IncorrectAnswersRate](toloka.client.conditions.IncorrectAnswersRate.md) — The percentage of incorrect responses in control and training tasks.
+    * [GoldenSetAnswersCount](toloka.client.conditions.GoldenSetAnswersCount.md) — The number of completed control tasks.
+    * [GoldenSetCorrectAnswersRate](toloka.client.conditions.GoldenSetCorrectAnswersRate.md) — The percentage of correct responses in control tasks.
+    * [GoldenSetIncorrectAnswersRate](toloka.client.conditions.GoldenSetIncorrectAnswersRate.md) — The percentage of incorrect responses in control tasks.
 
-    Used with actions:
-    * RestrictionV2 - Block access to projects or pools.
-    * ApproveAllAssignments - Approve all replies from the Toloker.
-    * RejectAllAssignments - Reject all replies from the Toloker.
-    * SetSkill - Set Toloker's skill value.
-    * SetSkillFromOutputField - Set Toloker's skill value from source.
+    The collector can be used with actions:
+    * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
+    * [ApproveAllAssignments](toloka.client.actions.ApproveAllAssignments.md) accepts all Toloker's assignments.
+    * [RejectAllAssignments](toloka.client.actions.RejectAllAssignments.md) rejects all Toloker's assignments.
+    * [SetSkill](toloka.client.actions.SetSkill.md) sets Toloker's skill value.
+    * [SetSkillFromOutputField](toloka.client.actions.SetSkillFromOutputField.md) sets Toloker's skill value using an output field.
 
     Attributes:
-        parameters.history_size: The number of the Toloker's last responses to control tasks.
+        parameters.history_size: The number of recent control or training tasks to calculate the statistics.
 
     Example:
-        How to approve all assignments if the Toloker gives correct answers in control tasks.
+        The example shows how to approve all assignments if a Toloker gives correct responses in control tasks.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
         >>>     collector=toloka.collectors.GoldenSet(history_size=5),
-        >>>     conditions=[toloka.conditions.GoldenSetCorrectAnswersRate > 90],
+        >>>     conditions=[toloka.conditions.GoldenSetCorrectAnswersRate > 80],
         >>>     action=toloka.actions.ApproveAllAssignments()
         >>> )
         ...
@@ -345,22 +342,22 @@ class GoldenSet(CollectorConfig, spec_value=CollectorConfig.Type.GOLDEN_SET):
 
 @inherit_docstrings
 class Income(CollectorConfig, spec_value=CollectorConfig.Type.INCOME):
-    """Limit the Toloker's daily earnings in the pool
+    """Counts Toloker's daily earnings in the pool.
 
     Helpful when you need to:
     - Get responses from as many Tolokers as possible.
 
     Used with conditions:
-    * IncomeSumForLast24Hours - The Toloker earnings for completed tasks in the pool over the last 24 hours.
+    * [IncomeSumForLast24Hours](toloka.client.conditions.IncomeSumForLast24Hours) — The Toloker earnings for completed tasks in the pool for the last 24 hours.
 
-    Used with actions:
-    * RestrictionV2 - Block access to projects or pools.
-    * ApproveAllAssignments - Approve all replies from the Toloker.
-    * RejectAllAssignments - Reject all replies from the Toloker.
-    * SetSkill - Set Toloker's skill value.
+    The collector can be used with actions:
+    * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
+    * [ApproveAllAssignments](toloka.client.actions.ApproveAllAssignments.md) accepts all Toloker's assignments.
+    * [RejectAllAssignments](toloka.client.actions.RejectAllAssignments.md) rejects all Toloker's assignments.
+    * [SetSkill](toloka.client.actions.SetSkill.md) sets Toloker's skill value.
 
     Example:
-        How to ban a Toloker in this project if he made enough answers.
+        The example shows how to ban a Toloker in the project if their earnings reach some threshold.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -370,7 +367,7 @@ class Income(CollectorConfig, spec_value=CollectorConfig.Type.INCOME):
         >>>         scope=toloka.user_restriction.UserRestriction.PROJECT,
         >>>         duration=15,
         >>>         duration_unit='DAYS',
-        >>>         private_comment='Answer limit is reached',
+        >>>         private_comment='Earnings limit is reached',
         >>>     )
         >>> )
         ...
@@ -383,31 +380,29 @@ class Income(CollectorConfig, spec_value=CollectorConfig.Type.INCOME):
 
 @inherit_docstrings
 class MajorityVote(CollectorConfig, spec_value=CollectorConfig.Type.MAJORITY_VOTE):
-    """Majority vote is a quality control method based on coinciding responses from the majority
+    """Counts correct responses based on majority vote method.
 
-    The response chosen by the majority is considered correct, and other responses are considered incorrect.
+    A response chosen by the majority is considered to be correct, and other responses are considered to be incorrect.
     Depending on the percentage of correct responses, you can either increase the Toloker's skill value, or ban the Toloker.
 
     Used with conditions:
-    * TotalAnswersCount - The number of completed tasks by the Toloker.
-    * CorrectAnswersRate - The percentage of correct responses.
-    * IncorrectAnswersRate - The percentage of incorrect responses.
+    * [TotalAnswersCount](toloka.client.conditions.TotalAnswersCount) — The number of completed tasks by the Toloker.
+    * [CorrectAnswersRate](toloka.client.conditions.CorrectAnswersRate) — The percentage of correct responses.
+    * [IncorrectAnswersRate](toloka.client.conditions.IncorrectAnswersRate) — The percentage of incorrect responses.
 
-    Used with actions:
-    * RestrictionV2 - Block access to projects or pools.
-    * ApproveAllAssignments - Approve all replies from the Toloker.
-    * RejectAllAssignments - Reject all replies from the Toloker.
-    * SetSkill - Set Toloker's skill value.
-    * SetSkillFromOutputField - Set Toloker's skill value from source.
+    The collector can be used with actions:
+    * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
+    * [ApproveAllAssignments](toloka.client.actions.ApproveAllAssignments.md) accepts all Toloker's assignments.
+    * [RejectAllAssignments](toloka.client.actions.RejectAllAssignments.md) rejects all Toloker's assignments.
+    * [SetSkill](toloka.client.actions.SetSkill.md) sets Toloker's skill value.
+    * [SetSkillFromOutputField](toloka.client.actions.SetSkillFromOutputField.md) sets Toloker's skill value using an output field.
 
     Attributes:
-        parameters.answer_threshold: The number of Tolokers considered the majority (for example, 3 out of 5).
-        parameters.history_size: The maximum number of the Toloker's recent responses in the project to use for calculating
-            the percentage of correct responses. If this field is omitted, the calculation is based on all the Toloker's
-            responses in the pool.
+        parameters.answer_threshold: The number of Tolokers considered the majority.
+        parameters.history_size: The maximum number of recent Toloker's responses to calculate the statistics. If it is omitted, calculation is based on all collected responses.
 
     Example:
-        How to ban a Toloker in this project if he made enough answers (only for pools with post acceptance).
+        The example shows how to reject all Toloker's responses if they significantly differ from the majority.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -436,21 +431,21 @@ class MajorityVote(CollectorConfig, spec_value=CollectorConfig.Type.MAJORITY_VOT
 
 @inherit_docstrings
 class SkippedInRowAssignments(CollectorConfig, spec_value=CollectorConfig.Type.SKIPPED_IN_ROW_ASSIGNMENTS):
-    """Skipping tasks is considered an indirect indicator of the quality of responses.
+    """Counts sequentially skipped task suites.
 
-    You can block access to a pool or project if a Toloker skips multiple task suites in a row.
+    Skipping tasks is considered an indirect indicator of quality of responses. You can block access to a pool or project if a Toloker skips multiple task suites in a row.
 
     Used with conditions:
-    * SkippedInRowCount - How many tasks in a row the Toloker skipped.
+    * [SkippedInRowCount](toloka.client.conditions.SkippedInRowCount) — How many tasks in a row a Toloker skipped.
 
-    Used with actions:
-    * RestrictionV2 - Block access to projects or pools.
-    * ApproveAllAssignments - Approve all replies from the Toloker.
-    * RejectAllAssignments - Reject all replies from the Toloker.
-    * SetSkill - Set Toloker's skill value.
+    The collector can be used with actions:
+    * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
+    * [ApproveAllAssignments](toloka.client.actions.ApproveAllAssignments.md) accepts all Toloker's assignments.
+    * [RejectAllAssignments](toloka.client.actions.RejectAllAssignments.md) rejects all Toloker's assignments.
+    * [SetSkill](toloka.client.actions.SetSkill.md) sets Toloker's skill value.
 
     Example:
-        How to ban a Toloker in this project if he skipped tasks.
+        The example shows how to ban a Toloker if he skipped more than 3 task suites in a row.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -460,7 +455,7 @@ class SkippedInRowAssignments(CollectorConfig, spec_value=CollectorConfig.Type.S
         >>>         scope=toloka.user_restriction.UserRestriction.PROJECT,
         >>>         duration=15,
         >>>         duration_unit='DAYS',
-        >>>         private_comment='Lazy Toloker',
+        >>>         private_comment='Skips too many task suites in a row',
         >>>     )
         >>> )
         ...
@@ -485,20 +480,17 @@ class Training(CollectorConfig, spec_value=CollectorConfig.Type.TRAINING):
 
 @inherit_docstrings
 class UsersAssessment(CollectorConfig, spec_value=CollectorConfig.Type.USERS_ASSESSMENT):
-    """Recompletion of assignments from banned Tolokers
-
-    If you or the system banned a Toloker and you want someone else to complete their tasks.
-    This rule will help you do this automatically.
+    """This collector helps you to reassign task suites completed by banned Tolokers.
 
     Used with conditions:
-    * PoolAccessRevokedReason - Reason for loss of access of the Toloker to the current pool.
-    * SkillId - The Toloker no longer meets the specific skill filter.
+    * [PoolAccessRevokedReason](toloka.client.conditions.PoolAccessRevokedReason.md) — The reason why the Toloker has lost access to the pool.
+    * [SkillId](toloka.client.conditions.SkillId.md) — The Toloker no longer meets the specific skill filter.
 
     Used with actions:
-    * ChangeOverlap - Increase the overlap of the set of tasks.
+    * [ChangeOverlap](toloka.client.actions.ChangeOverlap.md) changes the overlap of a task suite.
 
     Example:
-        How to resend rejected assignments for re-completion to other Tolokers.
+        The example shows how to reassign rejected assignments to other Tolokers.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
