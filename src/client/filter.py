@@ -43,7 +43,6 @@ from .primitives.operators import (
     ComparableConditionMixin,
     InclusionConditionMixin,
     InclusionOperator,
-    IdentityOperator,
 )
 from ..util._codegen import attribute
 from ..util._docstrings import inherit_docstrings
