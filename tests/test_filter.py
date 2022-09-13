@@ -38,3 +38,26 @@ def test_language_pickleable(obj):
 )
 def test_language_deepcopyable(obj):
     assert obj == copy.deepcopy(obj)
+
+
+@pytest.mark.parametrize('obj,obj_inverted', [
+    (Languages.in_(['EN', 'RU']), Languages.not_in(['EN', 'RU'])),
+    (Skill('123') == 10, Skill('123') != 10),
+    (Skill('123') > 10, Skill('123') <= 10),
+])
+def test_filter_invertion(obj, obj_inverted):
+    assert ~obj == obj_inverted
+    
+
+@pytest.mark.parametrize('obj,obj_inverted', [
+    (
+        Languages.in_(['EN', 'RU']) & (Skill('123') == 10),
+        Languages.not_in(['EN', 'RU']) | (Skill('123') != 10)
+    ),
+    (
+        Languages.in_(['RU']) | ((Skill('123') > 10) & (Skill('123') <= 90)),
+        Languages.not_in(['RU']) & ((Skill('123') <= 10) | (Skill('123') > 90)),
+    ),
+])
+def test_complex_filter_invertion(obj, obj_inverted):
+    assert ~obj == obj_inverted
