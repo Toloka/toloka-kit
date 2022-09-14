@@ -89,6 +89,9 @@ class TolokaKitMarkdownViewer(MarkdownViewer):
                     sio.write(f'  {ret.type_name}\n')
 
             sio.write(get_examples_from_docstring(parsed_docstring))
-        return get_markdown_page(expanded_function_definition.name,
-                                 expanded_function_definition.full_name,
-                                 sio.getvalue())
+        return get_markdown_page(
+            expanded_function_definition.name, expanded_function_definition.full_name, sio.getvalue(),
+            source_link=self.source_link_finder(
+                expanded_function_definition.original_func
+            ) if self.source_link_finder else None,
+        )

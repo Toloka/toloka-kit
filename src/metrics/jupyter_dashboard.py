@@ -216,7 +216,7 @@ class DashBoard:
         >>> metrics.bind_client(new_dash.metrics, toloka_client)
         >>> # Then in new cell:
         >>> new_dash.run_dash()
-        >>> # If you want to stops it:
+        >>> # If you want to stop it:
         >>> new_dash.stop_dash()
         ...
     """

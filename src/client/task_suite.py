@@ -33,7 +33,7 @@ class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
             This parameter can be used if the pool has issue_task_suites_in_creation_order: true.
             Allowed values: from -99999.99999 to 99999.99999.
         mixed: Type of operation for creating a task suite:
-            * True - Automatically with the "smart mixing" option (for details, see Yandex.Toloka requester's guide).
+            * True - Automatically with the "smart mixing" option (for details, see Toloka requester's guide).
             * False - Manually.
         traits_all_of:
         traits_any_of:

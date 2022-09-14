@@ -182,12 +182,14 @@ class TolokaClient:
             You can test complex projects before assigning tasks to Tolokers. Nobody will see your tasks, and it's free.
             * `PRODUCTION` – [Production environment](https://toloka.dev) for Toloka requesters.
             You spend money there and get the results.
+
             You need to register in each environment separately. OAuth tokens are generated in each environment separately too.
             Default value: `None`.
         retries: Retry policy for failed API requests.
             Possible values:
             * `int` – The number of retries for all requests. In this case, the retry policy is created automatically.
             * `Retry` object – Deprecated type. Use `retryer_factory` parameter instead.
+
             Default value: `3`.
         timeout: Number of seconds that [Requests library](https://docs.python-requests.org/en/master) will wait for your client to establish connection to a remote machine.
             Possible values:
@@ -195,6 +197,7 @@ class TolokaClient:
             * `Tuple[float, float]` – Tuple sets the values for connect and read timeouts separately.
             * `None` – Set the timeout to `None` only if you are willing to wait the [Response](https://docs.python-requests.org/en/master/api/#requests.Response)
             for unlimited number of seconds.
+
             Default value: `10.0`.
         url: Set a specific URL instead of Toloka environment. May be useful for testing purposes.
             You can only set one parameter – either `url` or `environment`, not both of them.
@@ -205,6 +208,7 @@ class TolokaClient:
             * `MIN` - Retry minutes quotas.
             * `HOUR` - Retry hourly quotas. This means that the program just sleeps for an hour.
             * `DAY` - Retry daily quotas. We do not recommend retrying these quotas.
+
             Default value: `MIN`.
         retryer_factory: Factory that creates `Retry` object.
             Fully specified retry policy that will apply to all requests.
@@ -2720,7 +2724,7 @@ class TolokaClient:
     def get_operations(self, request: search_requests.OperationSearchRequest) -> Generator[operations.Operation, None, None]:
         """Finds all operations that match certain rules and returns them in an iterable object
 
-       `get_user_bonuses` returns a generator. You can iterate over all found operations using the generator. Several requests to the Toloka server are possible while iterating.
+       `get_operations` returns a generator. You can iterate over all found operations using the generator. Several requests to the Toloka server are possible while iterating.
 
         If you need to sort operations use the [find_operations](toloka.client.TolokaClient.find_operations.md) method.
 
@@ -2731,7 +2735,7 @@ class TolokaClient:
             Operation: The next matching operations.
 
         Example:
-            >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00'))
+            >>> bonuses = list(toloka_client.get_operations(submitted_lt='2021-06-01T00:00:00'))
             ...
         """
         generator = self._find_all(self.find_operations, request)
@@ -3198,7 +3202,7 @@ class TolokaClient:
 
     @add_headers('client')
     def get_user(self, user_id: str) -> User:
-        """Gets Toloker metadata by user_id.
+        """Gets Toloker metadata by `user_id`.
 
         Args:
             user_id: Toloker ID.
@@ -3785,7 +3789,7 @@ class TolokaClient:
 
     @add_headers('client')
     def get_app_batch(self, app_project_id: str, batch_id: str) -> AppBatch:
-        """"Gets information from Toloka about a batch in an App project.
+        """Gets information from Toloka about a batch in an App project.
 
         Args:
             app_project_id: The ID of the project.
@@ -3804,7 +3808,7 @@ class TolokaClient:
     @expand('patch')
     @add_headers('client')
     def patch_app_batch(self, app_project_id: str, batch_id: str, patch: AppBatchPatch) -> AppBatch:
-        """Update app batch name
+        """Updates an App batch name.
 
         Args:
             app_project_id: The ID of the project.
