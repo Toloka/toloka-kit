@@ -86,7 +86,7 @@ class TaskSuiteCreateRequestParameters(Parameters):
                 don't create the task suites.
         allow_defaults: Overlap settings:
             * True - Use the overlap that is set in the pool parameters.
-            * False - Use the overlap that is set in the task suite parameters (in the overlap field).
+            * False - Use the overlap that is set in the task suite parameters (in the `overlap` field).
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
         async_mode: How the request is processed:
             * True — deferred. The query results in an asynchronous operation running in the background.

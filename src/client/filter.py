@@ -34,6 +34,7 @@ import inspect
 from enum import unique
 from typing import Any, List, Optional, Union, ClassVar, Dict
 
+from ._converter import unstructure
 from .primitives.base import BaseTolokaObject
 from .primitives.operators import (
     CompareOperator,
@@ -107,6 +108,12 @@ class FilterOr(FilterCondition, kw_only=False):
     def structure(cls, data):
         return super(FilterCondition, cls).structure(data)
 
+    def unstructure(self) -> Optional[dict]:
+        self_unstructured_dict = super().unstructure()
+        if self.or_:
+            self_unstructured_dict['or'] = [unstructure(inner_filter) for inner_filter in self.or_]
+        return self_unstructured_dict
+
 
 class FilterAnd(FilterCondition, kw_only=False):
     """Use to combine multiple filters via "and" logic
@@ -130,6 +137,17 @@ class FilterAnd(FilterCondition, kw_only=False):
     @classmethod
     def structure(cls, data):
         return super(FilterCondition, cls).structure(data)
+
+    def unstructure(self) -> Optional[dict]:
+        self_unstructured_dict = super().unstructure()
+        if self.and_:
+            self_unstructured_dict['and'] = [
+                unstructure(FilterOr([inner_filter]))
+                if isinstance(inner_filter, Condition)
+                else unstructure(inner_filter)
+                for inner_filter in self.and_
+            ]
+        return self_unstructured_dict
 
 
 class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
