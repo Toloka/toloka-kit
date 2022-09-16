@@ -23,10 +23,10 @@ class Training(toloka.client.primitives.base.BaseTolokaObject):
             It is recommended to allocate at least 60 seconds for a set of tasks
             (taking into account the time for loading the page, sending responses).
         mix_tasks_in_creation_order: The order in which tasks are included in sets:
-            * True - Default behaviour. Include tasks in sets in the order they were loaded.
+            * True - Default behavior. Include tasks in sets in the order they were loaded.
             * False - Include tasks in sets in random order.
         shuffle_tasks_in_task_suite: Order of tasks within the task set:
-            * true - Random. Default behaviour.
+            * true - Random. Default behavior.
             * false - The order in which the tasks were loaded.
         training_tasks_in_task_suite_count: The number of tasks in the set.
         task_suites_required_to_pass: The number of task suites that must be successfully completed to assign a skill
