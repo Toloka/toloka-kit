@@ -33,7 +33,7 @@ class CollectorConfig(BaseParameters, spec_enum='Type', spec_field='type'):
     Attributes:
         uuid: The ID of a collector.
             Note that when you clone a pool, both pools start using the same collector, because it is not cloned.
-            Usually, it is not an intended behavior. For example, the collector gathers history size from both pools.
+            Usually, it is not an intended behavior. For example, in this case one collector gathers history size from both pools.
     """
 
     _compatible_conditions: ClassVar[FrozenSet[RuleConditionKey]]
@@ -68,10 +68,10 @@ class AcceptanceRate(CollectorConfig, spec_value=CollectorConfig.Type.ACCEPTANCE
     - Set a Toloker's skill.
     - Block access for Tolokers with too many incorrect responses.
 
-    The collector is used with conditions:
+    The collector can be used with conditions:
     * [TotalAssignmentsCount](toloka.client.conditions.TotalAssignmentsCount.md) — Total count of checked assignments submitted by a Toloker.
-    * [AcceptedAssignmentsRate](toloka.client.conditions.AcceptedAssignmentsRate.md) — Percentage of accepted assignments.
-    * [RejectedAssignmentsRate](toloka.client.conditions.RejectedAssignmentsRate.md) — Percentage of rejected assignments.
+    * [AcceptedAssignmentsRate](toloka.client.conditions.AcceptedAssignmentsRate.md) — A percentage of accepted assignments.
+    * [RejectedAssignmentsRate](toloka.client.conditions.RejectedAssignmentsRate.md) — A percentage of rejected assignments.
 
     The collector can be used with actions:
     * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
@@ -81,8 +81,8 @@ class AcceptanceRate(CollectorConfig, spec_value=CollectorConfig.Type.ACCEPTANCE
     * [SetSkillFromOutputField](toloka.client.actions.SetSkillFromOutputField.md) sets Toloker's skill value using an output field.
 
     Attributes:
-        parameters.history_size: The maximum number of tasks that are taken into account.
-            If `history_size` is omitted, all tasks completed by the Toloker are counted.
+        parameters.history_size: The maximum number of recent assignments used to calculate the statistics.
+            If `history_size` is omitted, all Toloker's assignments are counted.
 
     Example:
         The example shows how to ban a Toloker if they make too many mistakes.
@@ -120,13 +120,13 @@ class AcceptanceRate(CollectorConfig, spec_value=CollectorConfig.Type.ACCEPTANCE
 class AnswerCount(CollectorConfig, spec_value=CollectorConfig.Type.ANSWER_COUNT):
     """Counts assignments submitted by a Toloker.
 
-    Use this collector if you want to:
-    - Involve as many Tolokers as possible. Set the limit to 1, and a Toloker can take no more than one task suite.
-    - Improve protection from robots. For this purpose, the limit should be higher, such as 10% of the pool's tasks.
-    - Filter Tolokers who complete your tasks so they don't check the tasks in the checking project.
+    Collector use cases:
+    - To involve as many Tolokers as possible limit assignments to 1.
+    - To improve protection from robots set the limit higher, such as 10% of the pool's tasks.
+    - You can filter Tolokers who complete your tasks, so they don't check the tasks in the checking project.
 
-    The collector is used with conditions:
-    * [AssignmentsAcceptedCount](toloka.client.conditions.AssignmentsAcceptedCount.md) — Percentage of accepted assignments.
+    The collector can be used with conditions:
+    * [AssignmentsAcceptedCount](toloka.client.conditions.AssignmentsAcceptedCount.md) — The number of accepted assignments.
 
     The collector can be used with actions:
     * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
@@ -135,7 +135,7 @@ class AnswerCount(CollectorConfig, spec_value=CollectorConfig.Type.ANSWER_COUNT)
     * [SetSkill](toloka.client.actions.SetSkill.md) sets Toloker's skill value.
 
     Example:
-        The example shows how to mark Tolokers completing a task so that you can filter them later in the checking project.
+        The example shows how to mark Tolokers completing any task in the pool so that you can filter them later in the checking project.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -155,18 +155,18 @@ class AnswerCount(CollectorConfig, spec_value=CollectorConfig.Type.ANSWER_COUNT)
 class AssignmentsAssessment(CollectorConfig, spec_value=CollectorConfig.Type.ASSIGNMENTS_ASSESSMENT):
     """Counts accepted and rejected assignments for every task suite.
 
-    This collector is used to:
-    - Reassign rejected task suites to other Tolokers. To do this, increase
-    the overlap of the task suite if the assignment was rejected. This collector is especially helpful if the default overlap value is 1.
-    - Save money if you accept an assignment and don't need to collect more responses for that task suite. To stop assigning the task suite reduce its overlap.
+    Collector use cases:
+    - To reassign rejected task suite to other Tolokers increase
+    the overlap of the task suite if the assignment was rejected. It is essential if the default overlap value is 1.
+    - To save money if you accept an assignment and don't need to collect more responses for that task suite stop assigning the task suite.
 
-    Used with conditions:
+    The collector can be used with actions:
     * [PendingAssignmentsCount](toloka.client.conditions.PendingAssignmentsCount.md) — The number of pending assignments that must be checked.
     * [AcceptedAssignmentsCount](toloka.client.conditions.AcceptedAssignmentsCount.md) — The number of accepted assignments for a task suite.
     * [RejectedAssignmentsCount](toloka.client.conditions.RejectedAssignmentsCount.md) — The number of rejected assignments for a task suite.
-    * [AssessmentEvent](toloka.client.conditions.AssessmentEvent.md) — An assignment changes its status to the specified one.
+    * [AssessmentEvent](toloka.client.conditions.AssessmentEvent.md) — An assignment status change event.
 
-    Used with actions:
+    The collector can be used with actions:
     * [ChangeOverlap](toloka.client.actions.ChangeOverlap.md) changes the overlap of a task suite.
 
     Example:
@@ -193,13 +193,13 @@ class AssignmentsAssessment(CollectorConfig, spec_value=CollectorConfig.Type.ASS
 class AssignmentSubmitTime(CollectorConfig, spec_value=CollectorConfig.Type.ASSIGNMENT_SUBMIT_TIME):
     """Counts fast responses.
 
-    This collector is used:
-    - To find Tolokers who respond too quickly.
+    Collector use cases:
+    - To find Tolokers who respond suspiciously quickly.
     - To improve protection against robots.
 
-    The collector is used with conditions:
-    * [TotalSubmittedCount](toloka.client.conditions.TotalSubmittedCount.md) — The number of assignments a specific Toloker completed.
-    * [FastSubmittedCount](toloka.client.conditions.FastSubmittedCount.md) — The number of assignments a specific Toloker completed too fast.
+    The collector can be used with conditions:
+    * [TotalSubmittedCount](toloka.client.conditions.TotalSubmittedCount.md) — The number of assignments completed by a specific Toloker.
+    * [FastSubmittedCount](toloka.client.conditions.FastSubmittedCount.md) — The number of assignments completed too fast.
 
     The collector can be used with actions:
     * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
@@ -209,11 +209,12 @@ class AssignmentSubmitTime(CollectorConfig, spec_value=CollectorConfig.Type.ASSI
 
     Attributes:
         parameters.fast_submit_threshold_seconds: Fast response threshold in seconds.
-            A response submitted in less time is considered a fast response.
-        parameters.history_size: The number of the recent task suites to track.
+            Any response submitted in less time than threshold is considered a fast response.
+        parameters.history_size: The maximum number of recent assignments used to calculate the statistics.
+            If `history_size` is omitted, all Toloker's assignments in the pool are counted.
 
     Example:
-        The example shows how to reject all assignments if a Toloker sends responses too fast.
+        The example shows how to reject all assignments if a Toloker sent at least 4 responses during 20 seconds after getting a task suite.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -236,12 +237,12 @@ class AssignmentSubmitTime(CollectorConfig, spec_value=CollectorConfig.Type.ASSI
 
 @inherit_docstrings
 class Captcha(CollectorConfig, spec_value=CollectorConfig.Type.CAPTCHA):
-    """Saves captcha statistics for a Toloker.
+    """Collects captcha statistics for every Toloker.
 
-    Captcha provides an advanced protection against robots. It is used with conditions:s
-    * [StoredResultsCount](toloka.client.conditions.StoredResultsCount.md) — How many times the Toloker entered captcha.
-    * [SuccessRate](toloka.client.conditions.SuccessRate.md) — The percentage of successful captcha passes.
-    * [FailRate](toloka.client.conditions.FailRate.md) — The percentage of captcha failures.
+    Captcha provides an advanced protection against robots. It is used with conditions:
+    * [StoredResultsCount](toloka.client.conditions.StoredResultsCount.md) — How many times the Toloker entered a captcha.
+    * [SuccessRate](toloka.client.conditions.SuccessRate.md) — The percentage of solved captchas.
+    * [FailRate](toloka.client.conditions.FailRate.md) — The percentage of unsolved captchas.
 
     The collector can be used with actions:
     * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
@@ -251,17 +252,19 @@ class Captcha(CollectorConfig, spec_value=CollectorConfig.Type.CAPTCHA):
     * [SetSkillFromOutputField](toloka.client.actions.SetSkillFromOutputField.md) sets Toloker's skill value using an output field.
 
     Attributes:
-        parameters.history_size: The number of recent captchas to calculate the statistics.
+        parameters.history_size: The maximum number of recent captchas used to calculate the statistics.
+            If `history_size` is omitted, all captchas are counted.
 
     Example:
-        The example shows how to ban a Toloker if they do not solve captcha.
+        The example shows how to block Toloker's access to the project for 15 days if they solve 60% of captchas or less.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.set_captcha_frequency('MEDIUM')
         >>> new_pool.quality_control.add_action(
-        >>> collector=toloka.collectors.Captcha(history_size=5),
+        >>>     collector=toloka.collectors.Captcha(history_size=5),
         >>>     conditions=[
         >>>         toloka.conditions.SuccessRate < 60,
+        >>>         toloka.conditions.StoredResultsCount == 5,
         >>>     ],
         >>>     action=toloka.actions.RestrictionV2(
         >>>         scope=toloka.user_restriction.UserRestriction.PROJECT,
@@ -285,19 +288,18 @@ class Captcha(CollectorConfig, spec_value=CollectorConfig.Type.CAPTCHA):
 
 @inherit_docstrings
 class GoldenSet(CollectorConfig, spec_value=CollectorConfig.Type.GOLDEN_SET):
-    """Saves control and training task statistics for a Toloker.
+    """Collects control and training task statistics for a Toloker.
 
-    Use control tasks to assign a skill to Tolokers based on their responses and ban Tolokers who submit incorrect responses.
+    Use control tasks to assign a skill to Tolokers based on their responses and block Tolokers who submit incorrect responses.
 
-    It is better not to use this collector if:
+    It is better **not** to use this collector if:
     - There are a lot of response options.
     - Tolokers need to attach files to assignments.
     - Tolokers need to transcribe text.
     - Tolokers need to select objects on a photo.
-    - Tasks don't have a correct or incorrect response. For example: "Which image do you like best?" or
-    "Choose the page design option that you like best".
+    - Tasks don't have a correct or incorrect responses. For example, you ask about Toloker preferences.
 
-    Used with conditions:
+    The collector can be used with actions:
     * [TotalAnswersCount](toloka.client.conditions.TotalAnswersCount.md) — The number of completed control and training tasks.
     * [CorrectAnswersRate](toloka.client.conditions.CorrectAnswersRate.md) — The percentage of correct responses in control and training tasks.
     * [IncorrectAnswersRate](toloka.client.conditions.IncorrectAnswersRate.md) — The percentage of incorrect responses in control and training tasks.
@@ -313,10 +315,11 @@ class GoldenSet(CollectorConfig, spec_value=CollectorConfig.Type.GOLDEN_SET):
     * [SetSkillFromOutputField](toloka.client.actions.SetSkillFromOutputField.md) sets Toloker's skill value using an output field.
 
     Attributes:
-        parameters.history_size: The number of recent control or training tasks to calculate the statistics.
+        parameters.history_size: The maximum number of recent control or training tasks used to calculate the statistics.
+            If `history_size` is omitted, all Toloker's control or training tasks in the pool are counted.
 
     Example:
-        The example shows how to approve all assignments if a Toloker gives correct responses in control tasks.
+        The example shows how to accept all assignments if more than 80% of responses to control tasks are correct.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -347,8 +350,8 @@ class Income(CollectorConfig, spec_value=CollectorConfig.Type.INCOME):
     Helpful when you need to:
     - Get responses from as many Tolokers as possible.
 
-    Used with conditions:
-    * [IncomeSumForLast24Hours](toloka.client.conditions.IncomeSumForLast24Hours) — The Toloker earnings for completed tasks in the pool for the last 24 hours.
+    The collector can be used with actions:
+    * [IncomeSumForLast24Hours](toloka.client.conditions.IncomeSumForLast24Hours.md) — The Toloker earnings for completed tasks in the pool during the last 24 hours.
 
     The collector can be used with actions:
     * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
@@ -357,7 +360,7 @@ class Income(CollectorConfig, spec_value=CollectorConfig.Type.INCOME):
     * [SetSkill](toloka.client.actions.SetSkill.md) sets Toloker's skill value.
 
     Example:
-        The example shows how to ban a Toloker in the project if their earnings reach some threshold.
+        The example shows how to block Toloker's access to the project for 1 day if their earnings reach 1 dollar.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -365,7 +368,7 @@ class Income(CollectorConfig, spec_value=CollectorConfig.Type.INCOME):
         >>>     conditions=[toloka.conditions.IncomeSumForLast24Hours > 1],
         >>>     action=toloka.actions.RestrictionV2(
         >>>         scope=toloka.user_restriction.UserRestriction.PROJECT,
-        >>>         duration=15,
+        >>>         duration=1,
         >>>         duration_unit='DAYS',
         >>>         private_comment='Earnings limit is reached',
         >>>     )
@@ -380,15 +383,15 @@ class Income(CollectorConfig, spec_value=CollectorConfig.Type.INCOME):
 
 @inherit_docstrings
 class MajorityVote(CollectorConfig, spec_value=CollectorConfig.Type.MAJORITY_VOTE):
-    """Counts correct responses based on majority vote method.
+    """Counts correct responses determined by the majority vote method.
 
     A response chosen by the majority is considered to be correct, and other responses are considered to be incorrect.
-    Depending on the percentage of correct responses, you can either increase the Toloker's skill value, or ban the Toloker.
+    Depending on the percentage of correct responses, you can either increase a Toloker's skill value, or to block the Toloker.
 
-    Used with conditions:
-    * [TotalAnswersCount](toloka.client.conditions.TotalAnswersCount) — The number of completed tasks by the Toloker.
-    * [CorrectAnswersRate](toloka.client.conditions.CorrectAnswersRate) — The percentage of correct responses.
-    * [IncorrectAnswersRate](toloka.client.conditions.IncorrectAnswersRate) — The percentage of incorrect responses.
+    The collector can be used with actions:
+    * [TotalAnswersCount](toloka.client.conditions.TotalAnswersCount.md) — The number of completed tasks by the Toloker.
+    * [CorrectAnswersRate](toloka.client.conditions.CorrectAnswersRate.md) — The percentage of correct responses.
+    * [IncorrectAnswersRate](toloka.client.conditions.IncorrectAnswersRate.md) — The percentage of incorrect responses.
 
     The collector can be used with actions:
     * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
@@ -402,7 +405,7 @@ class MajorityVote(CollectorConfig, spec_value=CollectorConfig.Type.MAJORITY_VOT
         parameters.history_size: The maximum number of recent Toloker's responses to calculate the statistics. If it is omitted, calculation is based on all collected responses.
 
     Example:
-        The example shows how to reject all Toloker's responses if they significantly differ from the majority.
+        The example shows how to reject all Toloker's responses if they significantly differ from the majority. The rule is applied after collecting at least 10 responses.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -431,12 +434,12 @@ class MajorityVote(CollectorConfig, spec_value=CollectorConfig.Type.MAJORITY_VOT
 
 @inherit_docstrings
 class SkippedInRowAssignments(CollectorConfig, spec_value=CollectorConfig.Type.SKIPPED_IN_ROW_ASSIGNMENTS):
-    """Counts sequentially skipped task suites.
+    """Counts task suites skipped in a row by a Toloker.
 
     Skipping tasks is considered an indirect indicator of quality of responses. You can block access to a pool or project if a Toloker skips multiple task suites in a row.
 
-    Used with conditions:
-    * [SkippedInRowCount](toloka.client.conditions.SkippedInRowCount) — How many tasks in a row a Toloker skipped.
+    The collector can be used with actions:
+    * [SkippedInRowCount](toloka.client.conditions.SkippedInRowCount.md) — How many tasks in a row a Toloker skipped.
 
     The collector can be used with actions:
     * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
@@ -445,7 +448,7 @@ class SkippedInRowAssignments(CollectorConfig, spec_value=CollectorConfig.Type.S
     * [SetSkill](toloka.client.actions.SetSkill.md) sets Toloker's skill value.
 
     Example:
-        The example shows how to ban a Toloker if he skipped more than 3 task suites in a row.
+        The example shows how to block Toloker's access to the project for 15 days if he skipped more than 3 task suites in a row.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -480,13 +483,13 @@ class Training(CollectorConfig, spec_value=CollectorConfig.Type.TRAINING):
 
 @inherit_docstrings
 class UsersAssessment(CollectorConfig, spec_value=CollectorConfig.Type.USERS_ASSESSMENT):
-    """This collector helps you to reassign task suites completed by banned Tolokers.
+    """This collector helps you to reassign task suites completed by blocked Tolokers.
 
-    Used with conditions:
+    The collector can be used with conditions:
     * [PoolAccessRevokedReason](toloka.client.conditions.PoolAccessRevokedReason.md) — The reason why the Toloker has lost access to the pool.
     * [SkillId](toloka.client.conditions.SkillId.md) — The Toloker no longer meets the specific skill filter.
 
-    Used with actions:
+    The collector can be used with actions:
     * [ChangeOverlap](toloka.client.actions.ChangeOverlap.md) changes the overlap of a task suite.
 
     Example:
