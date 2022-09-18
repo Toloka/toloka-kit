@@ -88,7 +88,7 @@ class ClassicViewSpec(ViewSpec, spec_value=ViewSpec.CLASSIC):
                 * "$TOLOKA_ASSETS/js/toloka-handlebars-templates.js" — Handlebars. See the description on the template
                     engine website [here](http://handlebarsjs.com/)
                 * "$TOLOKA_ASSETS/js/image-annotation.js" — Image labeling interface. See image with area selection in
-                    the Requester's guide [here](https://yandex.ru/support/toloka-requester/concepts/t-components/image-annotation.html/?lang=en)
+                    the Requester's guide [here](https://toloka.ai/docs/guide/concepts/t-components/image-annotation.html)
                 Note that the image labeling interface should only be connected together with the Handlebars helpers.
                 The order of connection matters.
 

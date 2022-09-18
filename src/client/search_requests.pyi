@@ -144,16 +144,15 @@ class BaseSearchRequest(toloka.client.primitives.base.BaseTolokaObject, metaclas
 
 
 class ProjectSearchRequest(BaseSearchRequest):
-    """Parameters for searching projects
+    """Parameters for searching projects.
 
     Attributes:
-        status: Status of the project, from Project.ProjectStatus:
-            * ACTIVE
-            * ARCHIVED
-        id_lt: Projects with an ID less than the specified value.
-        id_lte: Projects with an ID less than or equal to the specified value.
-        id_gt: Projects with an ID greater than the specified value.
-        id_gte: Projects with an ID greater than or equal to the specified value.
+        status: Project status.
+                Refer to the [ProjectStatus](toloka.client.project.Project.ProjectStatus.md) page for more information on the available `status` values.
+        id_lt: Projects with IDs less than the specified value.
+        id_lte: Projects with IDs less than or equal to the specified value.
+        id_gt: Projects with IDs greater than the specified value.
+        id_gte: Projects with IDs greater than or equal to the specified value.
         created_lt: Projects created before the specified date.
         created_lte: Projects created before or on the specified date.
         created_gt: Projects created after the specified date.
@@ -193,20 +192,17 @@ class ProjectSearchRequest(BaseSearchRequest):
 
 
 class ProjectSortItems(BaseSortItems):
-    """Parameters for sorting project search results
-
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    """Keys for sorting projects in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * id - Project ID in ascending order.
-            * created - Project creation date in UTC in yyyy-MM-DD format (ascending).
-            * public_name - Project name (in alphabetical order).
-            * private_comment - Comment on the project (in alphabetical order).
+        items: A list of sorting keys. Supported values:
+            * `'id'` — A project ID.
+            * `'created'` — A project creation date.
+            * `'public_name'` — A project name.
+            * `'private_comment'` — A project private comment.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find active projects sorted by names in descending order. Projects with equal names are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.ProjectSortItems(['-public_name', 'id'])
         >>> result = toloka_client.find_projects(status='ACTIVE', sort=sort, limit=50)
@@ -246,27 +242,23 @@ class ProjectSortItems(BaseSortItems):
 
 
 class PoolSearchRequest(BaseSearchRequest):
-    """Parameters for searching pools
+    """Parameters for searching pools.
 
     Attributes:
-        status: Pool status
-            * OPEN
-            * CLOSED
-            * ARCHIVED
-            * LOCKED
-        project_id: ID of the project to which the pool is attached.
-        id_lt: Pools with an ID less than the specified value.
-        id_lte: Pools with an ID less than or equal to the specified value.
-        id_gt: Pools with an ID greater than the specified value.
-        id_gte: Pools with an ID greater than or equal to the specified value.
+        status: Pool status. Refer to the [Pool.Status](toloka.client.pool.Pool.Status.md) page for more information on the available `status` values.
+        project_id: Pools belonging to the project with the specified ID.
+        id_lt: Pools with IDs less than the specified value.
+        id_lte: Pools with IDs less than or equal to the specified value.
+        id_gt: Pools with IDs greater than the specified value.
+        id_gte: Pools with IDs greater than or equal to the specified value.
         created_lt: Pools created before the specified date.
         created_lte: Pools created before or on the specified date.
         created_gt: Pools created after the specified date.
         created_gte: Pools created after or on the specified date.
-        last_started_lt: Pools that were last opened before the specified date.
-        last_started_lte: Pools that were last opened on or before the specified date.
-        last_started_gt: Pools that were last opened after the specified date.
-        last_started_gte: Pools that were last opened on or after the specified date.
+        last_started_lt: Pools that were opened last time before the specified date.
+        last_started_lte: Pools that were opened last time before or on the specified date.
+        last_started_gt: Pools that were opened last time after the specified date.
+        last_started_gte: Pools that were opened last time after or on the specified date.
     """
 
     class CompareFields:
@@ -313,19 +305,16 @@ class PoolSearchRequest(BaseSearchRequest):
 
 
 class PoolSortItems(BaseSortItems):
-    """Parameters for sorting pool search results
-
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    """Keys for sorting pools in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * id - Pool ID in ascending order.
-            * created - Pool creation date in UTC in yyyy-MM-DD format (ascending).
-            * last_started - The date the pool was last started (ascending).
+        items: A list of sorting keys. Supported values:
+            * `'id'` — A pool ID.
+            * `'created'` — A pool creation date.
+            * `'last_started'` — The last opening date of a pool.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find opened pools sorted by the last opening date in descending order. Pools with equal opening dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.PoolSortItems(['-last_started', 'id'])
         >>> result = toloka_client.find_pools(status='OPEN', sort=sort, limit=50)
@@ -364,27 +353,24 @@ class PoolSortItems(BaseSortItems):
 
 
 class TrainingSearchRequest(BaseSearchRequest):
-    """Parameters for searching training pools
+    """Parameters for searching training pools.
 
     Attributes:
-        status: Training pool status:
-            * OPEN
-            * CLOSED
-            * ARCHIVED
-            * LOCKED
-        project_id: ID of the project to which the training pool is attached.
-        id_lt: Training pools with an ID less than the specified value.
-        id_lte: Training pools with an ID less than or equal to the specified value.
-        id_gt: Training pools with an ID greater than the specified value.
-        id_gte: Training pools with an ID greater than or equal to the specified value.
+        status: Training pool status.
+                Refer to the [Training.Status](toloka.client.training.Training.Status.md) page for more information on the available `status` values.
+        project_id: Training pools belonging to the project with the specified ID.
+        id_lt: Training pools with IDs less than the specified value.
+        id_lte: Training pools with IDs less than or equal to the specified value.
+        id_gt: Training pools with IDs greater than the specified value.
+        id_gte: Training pools with IDs greater than or equal to the specified value.
         created_lt: Training pools created before the specified date.
         created_lte: Training pools created before or on the specified date.
         created_gt: Training pools created after the specified date.
         created_gte: Training pools created after or on the specified date.
-        last_started_lt: Training pools that were last opened before the specified date.
-        last_started_lte: Training pools that were last opened on or before the specified date.
-        last_started_gt: Training pools that were last opened after the specified date.
-        last_started_gte: Training pools that were last opened on or after the specified date.
+        last_started_lt: Training pools that were opened last time before the specified date.
+        last_started_lte: Training pools that were opened last time before or on the specified date.
+        last_started_gt: Training pools that were opened last time after the specified date.
+        last_started_gte: Training pools that were opened last time after or on the specified date.
     """
 
     class CompareFields:
@@ -431,19 +417,16 @@ class TrainingSearchRequest(BaseSearchRequest):
 
 
 class TrainingSortItems(BaseSortItems):
-    """Parameters for sorting training pool search results
-
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    """Keys for sorting training pools in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * id - Training pool ID in ascending order.
-            * created - Training pool creation date in UTC in yyyy-MM-DD format (ascending).
-            * last_started - The date the pool was last started (ascending).
+        items: A list of sorting keys. Supported values:
+            * `'id'` — Training pool ID.
+            * `'created'` — Training pool creation date.
+            * `'last_started'` — The last opening date of a training pool.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find opened training pools sorted by the last opening date in descending order. Pools with equal opening dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.TrainingSortItems(['-last_started', 'id'])
         >>> result = toloka_client.find_trainings(status='OPEN', sort=sort, limit=50)
@@ -482,14 +465,14 @@ class TrainingSortItems(BaseSortItems):
 
 
 class SkillSearchRequest(BaseSearchRequest):
-    """Parameters for searching skill
+    """Parameters for searching skill.
 
     Attributes:
-        name: Skill name.
-        id_lt: Skills with an ID less than the specified value.
-        id_lte: Skills with an ID less than or equal to the specified value.
-        id_gt: Skills with an ID greater than the specified value.
-        id_gte: Skills with an ID greater than or equal to the specified value.
+        name: The name of the skill.
+        id_lt: Skills with IDs less than the specified value.
+        id_lte: Skills with IDs less than or equal to the specified value.
+        id_gt: Skills with IDs greater than the specified value.
+        id_gte: Skills with IDs greater than or equal to the specified value.
         created_lt: Skills created before the specified date.
         created_lte: Skills created before or on the specified date.
         created_gt: Skills created after the specified date.
@@ -529,18 +512,15 @@ class SkillSearchRequest(BaseSearchRequest):
 
 
 class SkillSortItems(BaseSortItems):
-    """Parameters for sorting skill search results
-
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    """Keys for sorting skills in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * id - Skill ID in ascending order.
-            * created - Skill creation date in UTC in yyyy-MM-DD format (ascending).
+        items: A list of sorting keys. Supported values:
+            * `'id'` — The ID of a skill.
+            * `'created'` — A skill creation date.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find skills sorted by creation date in descending order. Skills with equal creation dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.SkillSortItems(['-created', 'id'])
         >>> result = toloka_client.find_skills(name='Image annotation', sort=sort, limit=10)
@@ -578,48 +558,44 @@ class SkillSortItems(BaseSortItems):
 
 
 class AssignmentSearchRequest(BaseSearchRequest):
-    """Parameters for searching assignment
+    """Parameters for searching task suites assignments.
 
     Attributes:
-        status: The status of an assigned task suite:
-            * `ACTIVE` — Assigned but not completed.
-            * `SUBMITTED` — Completed but not checked.
-            * `ACCEPTED` — Accepted by the requester.
-            * `REJECTED` — Rejected by the requester.
-            * `SKIPPED` — Skipped by the Toloker.
-            * `EXPIRED` — Time for completing tasks has expired.
-        task_id: The ID of a task. The task suite containing that task, matches this search criteria.
-        task_suite_id: The ID of a task suite.
-        pool_id: Task suites in the pool with the specified ID.
-        user_id: Task suites assigned to the Toloker with the specified ID.
-        id_lt: Task suites with assignment IDs less than the specified value.
-        id_lte: Task suites with assignment IDs less than or equal to the specified value.
-        id_gt: Task suites with assignment IDs greater than the specified value.
-        id_gte: Task suites with assignment IDs greater than or equal to the specified value.
+        status: Assignment status or a list of statuses.
+                Refer to the [Assignment.Status](toloka.client.assignment.Assignment.Status.md) page
+                for more information on the available `status` values.
+        task_id: Assignments containing the task with the specified ID.
+        task_suite_id: Assignments for a task suite with the specified ID.
+        pool_id: Assignments in a pool with the specified ID.
+        user_id: Assignments from a Toloker with the specified ID.
+        id_lt: Assignments with IDs less than the specified value.
+        id_lte: Assignments with IDs less than or equal to the specified value.
+        id_gt: Assignments with IDs greater than the specified value.
+        id_gte: Assignments with IDs greater than or equal to the specified value.
         created_lt: Task suites assigned before the specified date.
         created_lte: Task suites assigned before or on the specified date.
         created_gt: Task suites assigned after the specified date.
         created_gte: Task suites assigned after or on the specified date.
-        submitted_lt: Task suites completed before the specified date.
-        submitted_lte: Task suites completed before or on the specified date.
-        submitted_gt: Task suites completed after the specified date.
-        submitted_gte: Task suites completed after or on the specified date.
-        accepted_lt: Task suites accepted before the specified date.
-        accepted_lte: Task suites accepted before or on the specified date.
-        accepted_gt: Task suites accepted after the specified date.
-        accepted_gte: Task suites accepted after or on the specified date.
-        rejected_lt: Task suites rejected before the specified date.
-        rejected_lte: Task suites rejected before or on the specified date.
-        rejected_gt: Task suites rejected after the specified date.
-        rejected_gte: Task suites rejected after or on the specified date.
-        skipped_lt: Task suites skipped before the specified date.
-        skipped_lte: Task suites skipped before or on the specified date.
-        skipped_gt: Task suites skipped after the specified date.
-        skipped_gte: Task suites skipped after or on the specified date.
-        expired_lt: Task suites expired before the specified date.
-        expired_lte: Task suites expired before or on the specified date.
-        expired_gt: Task suites expired after the specified date.
-        expired_gte: Task suites expired after or on the specified date.
+        submitted_lt: Assignments completed before the specified date.
+        submitted_lte: Assignments completed before or on the specified date.
+        submitted_gt: Assignments completed after the specified date.
+        submitted_gte: Assignments completed after or on the specified date.
+        accepted_lt: Assignments accepted before the specified date.
+        accepted_lte: Assignments accepted before or on the specified date.
+        accepted_gt: Assignments accepted after the specified date.
+        accepted_gte: Assignments accepted after or on the specified date.
+        rejected_lt: Assignments rejected before the specified date.
+        rejected_lte: Assignments rejected before or on the specified date.
+        rejected_gt: Assignments rejected after the specified date.
+        rejected_gte: Assignments rejected after or on the specified date.
+        skipped_lt: Assigned task suites skipped before the specified date.
+        skipped_lte: Assigned task suites skipped before or on the specified date.
+        skipped_gt: Assigned task suites skipped after the specified date.
+        skipped_gte: Assigned task suites skipped after or on the specified date.
+        expired_lt: Assigned task suites expired before the specified date.
+        expired_lte: Assigned task suites expired before or on the specified date.
+        expired_gt: Assigned task suites expired after the specified date.
+        expired_gte: Assigned task suites expired after or on the specified date.
     """
 
     class CompareFields:
@@ -710,23 +686,20 @@ class AssignmentSearchRequest(BaseSearchRequest):
 
 
 class AssignmentSortItems(BaseSortItems):
-    """Parameters for sorting assignment search results
-
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    """Keys for sorting assignments in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * id - ID for issuing a set of tasks (in ascending order).
-            * created - Date of issue of the set of tasks in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
-            * submitted - Date of completion of the set of tasks in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
-            * accepted - Date the set of tasks was accepted in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
-            * rejected - Date the set of tasks was rejected in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
-            * skipped - Date the set of tasks was skipped in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
-            * expired - Date the set of tasks was expired in UTC in ISO 8601 format YYYY-MM-DDThh:mm:ss[.sss] (ascending).
+        items: A list of sorting keys. Supported values:
+            * `'id'` — An assignment ID.
+            * `'created'` — The assigning date of a task suite.
+            * `'submitted'` — The completion date of a task suite.
+            * `'accepted'` — The acceptance date of a task suite.
+            * `'rejected'` — The rejection date a task suite.
+            * `'skipped'` — The date when a task suite was skipped.
+            * `'expired'` — The expiration date of a task suite.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find assignments sorted by the completion date in descending order. Assignments with equal completion dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.AssignmentSortItems(['-submitted', 'id'])
         >>> result = toloka_client.find_assignments(status='SUBMITTED', sort=sort, limit=10)
@@ -769,13 +742,13 @@ class AssignmentSortItems(BaseSortItems):
 
 
 class AggregatedSolutionSearchRequest(BaseSearchRequest):
-    """Parameters for filtering aggregated responses.
+    """Parameters for searching aggregated responses.
 
     Attributes:
-        task_id_lt: Tasks with an ID less than the specified value.
-        task_id_lte: Tasks with an ID less than or equal to the specified value.
-        task_id_gt: Tasks with an ID greater than the specified value.
-        task_id_gte: Tasks with an ID greater than or equal to the specified value.
+        task_id_lt: Responses for tasks with IDs less than the specified value.
+        task_id_lte: Responses for tasks with IDs less than or equal to the specified value.
+        task_id_gt: Responses for tasks with IDs greater than the specified value.
+        task_id_gte: Responses for tasks with IDs greater than or equal to the specified value.
     """
 
     class CompareFields:
@@ -800,13 +773,11 @@ class AggregatedSolutionSearchRequest(BaseSearchRequest):
 
 
 class AggregatedSolutionSortItems(BaseSortItems):
-    """Parameters for sorting aggregated solution search results.
-
-    To sort in descending order add a hyphen before the parameter. For example, `sort=-task_id`.
+    """Keys for sorting aggregated responses in search results.
 
     Attributes:
-        items: Possible values:
-            * `task_id` - Sort by a task ID in ascending order.
+        items: A list of sorting keys. Supported values:
+            * `'task_id'` — The ID of a task.
     """
 
     class SortItem(BaseSortItem):
@@ -839,15 +810,15 @@ class AggregatedSolutionSortItems(BaseSortItems):
 
 
 class TaskSearchRequest(BaseSearchRequest):
-    """Parameters for searching tasks
+    """Parameters for searching tasks.
 
     Attributes:
         pool_id: The ID of the pool to get tasks from.
         overlap: Tasks with an overlap equal to the specified value.
-        id_lt: Tasks with an ID less than the specified value.
-        id_lte: Tasks with an ID less than or equal to the specified value.
-        id_gt: Tasks with an ID greater than the specified value.
-        id_gte: Tasks with an ID greater than or equal to the specified value.
+        id_lt: Tasks with IDs less than the specified value.
+        id_lte: Tasks with IDs less than or equal to the specified value.
+        id_gt: Tasks with IDs greater than the specified value.
+        id_gte: Tasks with IDs greater than or equal to the specified value.
         created_lt: Tasks created before the specified date.
         created_lte: Tasks created before or on the specified date.
         created_gt: Tasks created after the specified date.
@@ -902,21 +873,18 @@ class TaskSearchRequest(BaseSearchRequest):
 
 
 class TaskSortItems(BaseSortItems):
-    """Parameters for sorting task search results
-
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    """Keys for sorting tasks in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * id - Job ID (in ascending order).
-            * created - Date of creation of the task in UTC in the format YYYY-MM-DD (ascending).
+        items: A list of sorting keys. Supported values:
+            * `'id'` — The ID of a task.
+            * `'created'` — The creation date of a task.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find tasks sorted by creation dates in descending order. Tasks with equal creation dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.TaskSortItems(['-created', 'id'])
-        >>> result = toloka_client.find_tasks(pool_id=my_pretty_pool_id, sort=sort, limit=10)
+        >>> result = toloka_client.find_tasks(pool_id=my_pool_id, sort=sort, limit=10)
         ...
     """
 
@@ -951,25 +919,24 @@ class TaskSortItems(BaseSortItems):
 
 
 class TaskSuiteSearchRequest(BaseSearchRequest):
-    """Parameters for searching task suites
+    """Parameters for searching task suites.
 
     Attributes:
-        task_id: The task ID in suites generated automatically using "smart mixing".
-            You will get task suites that contain the specified task.
-        pool_id: ID of the pool to get task suites from.
-        overlap: Suites with an overlap equal to the specified value.
-        id_lt: Task suites with an ID less than the specified value.
-        id_lte: Task suites with an ID less than or equal to the specified value.
-        id_gt: Task suites with an ID greater than the specified value.
-        id_gte: Task suites with an ID greater than or equal to the specified value.
+        task_id: Task suite containing a task with the specified ID.
+        pool_id: Task suites from a pool with the specified ID.
+        overlap: Task suites with an overlap equal to the specified value.
+        id_lt: Task suites with IDs less than the specified value.
+        id_lte: Task suites with IDs less than or equal to the specified value.
+        id_gt: Task suites with IDs greater than the specified value.
+        id_gte: Task suites with IDs greater than or equal to the specified value.
         created_lt: Task suites created before the specified date.
         created_lte: Task suites created before or on the specified date.
         created_gt: Task suites created after the specified date.
         created_gte: Task suites created after or on the specified date.
-        overlap_lt: Suites with an overlap less than the specified value.
-        overlap_lte: Suites with an overlap less than or equal to the specified value.
-        overlap_gt: Suites with an overlap greater than the specified value.
-        overlap_gte: Suites with an overlap greater than or equal to the specified value.
+        overlap_lt: Task suites with an overlap less than the specified value.
+        overlap_lte: Task suites with an overlap less than or equal to the specified value.
+        overlap_gt: Task suites with an overlap greater than the specified value.
+        overlap_gte: Task suites with an overlap greater than or equal to the specified value.
     """
 
     class CompareFields:
@@ -1018,21 +985,18 @@ class TaskSuiteSearchRequest(BaseSearchRequest):
 
 
 class TaskSuiteSortItems(BaseSortItems):
-    """Parameters for sorting task suite search results
-
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    """Keys for sorting task suites in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * id - Task set ID (in ascending order).
-            * created - Date of creation of the set of tasks in UTC in the format YYYY-MM-DD (ascending).
+        items: A list of sorting keys. Supported values:
+            * `'id'` — The ID of a task suite.
+            * `'created'` — The creation date of a task suite.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find task suites sorted by the creation date in descending order. Task suites with equal creation dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.TaskSuiteSortItems(['-created', 'id'])
-        >>> result = toloka_client.find_task_suites(pool_id=my_pretty_pool_id, sort=sort, limit=10)
+        >>> result = toloka_client.find_task_suites(pool_id=my_pool_id, sort=sort, limit=10)
         ...
     """
 
@@ -1067,24 +1031,23 @@ class TaskSuiteSortItems(BaseSortItems):
 
 
 class AttachmentSearchRequest(BaseSearchRequest):
-    """Parameters for searching attachment
+    """Parameters for searching attachments.
 
     Attributes:
-        name: File name.
-        type: Attachment type. Currently the key can have only one value - ASSIGNMENT_ATTACHMENT.
-        user_id: ID of the Toloker who uploaded the file(s).
-        assignment_id: Assignment ID.
-        pool_id: Pool ID.
-        owner_id: Optional[str]
-        owner_company_id: Optional[str]
-        id_lt: Files with an ID less than the specified value.
-        id_lte: Files with an ID less than or equal to the specified value.
-        id_gt: Files with an ID greater than the specified value.
-        id_gte: Files with an ID greater than or equal to the specified value.
-        created_lt: Files uploaded by Tolokers before the specified date.
-        created_lte: Files uploaded by Tolokers before or on the specified date.
-        created_gt: Files uploaded by Tolokers after the specified date.
-        created_gte: Files uploaded by Tolokers after or on the specified date.
+        name: An attachment file name.
+        type: An attachment type.
+              Refer to the [Attachment.Type](toloka.client.attachment.Attachment.Type.md) page for more information on the available `type` values.
+        user_id: The ID of a Toloker who uploaded attachments.
+        assignment_id: The ID of an assignment with attachments. Either `assignment_id` of `pool_id` is required in a search request.
+        pool_id: The ID of a pool with attachments. Either `assignment_id` of `pool_id` is required in a search request.
+        id_lt: Attachments with IDs less than the specified value.
+        id_lte: Attachments with IDs less than or equal to the specified value.
+        id_gt: Attachments with IDs greater than the specified value.
+        id_gte: Attachments with IDs greater than or equal to the specified value.
+        created_lt: Attachments uploaded by Tolokers before the specified date.
+        created_lte: Attachments uploaded by Tolokers before or on the specified date.
+        created_gt: Attachments uploaded by Tolokers after the specified date.
+        created_gte: Attachments uploaded by Tolokers after or on the specified date.
     """
 
     class CompareFields:
@@ -1132,21 +1095,18 @@ class AttachmentSearchRequest(BaseSearchRequest):
 
 
 class AttachmentSortItems(BaseSortItems):
-    """Parameters for sorting attachment search results
-
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    """Keys for sorting attachments in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * id - File ID in ascending order.
-            * created - Date of sending the file in UTC in the yyyy-MM-DD format (ascending).
+        items: A list of sorting keys. Supported values:
+            * `'id'` — The ID of an attachment.
+            * `'created'` — The date of uploading an attachment.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find attachments sorted by uploading date in descending order. Attachments with equal uploading dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.AttachmentSortItems(['-created', 'id'])
-        >>> result = toloka_client.find_attachments(pool_id=my_pretty_pool_id, sort=sort, limit=10)
+        >>> result = toloka_client.find_attachments(pool_id=my_pool_id, sort=sort, limit=10)
         ...
     """
 
@@ -1181,15 +1141,15 @@ class AttachmentSortItems(BaseSortItems):
 
 
 class UserSkillSearchRequest(BaseSearchRequest):
-    """Parameters for searching Toloker skill
+    """Parameters for searching Toloker skill.
 
     Attributes:
-        user_id: Toloker's ID.
-        skill_id: Skill ID.
-        id_lt: Skills with an ID less than the specified value.
-        id_lte: Skills with an ID less than or equal to the specified value.
-        id_gt: Skills with an ID greater than the specified value.
-        id_gte: Skills with an ID greater than or equal to the specified value.
+        user_id: The ID of a Toloker.
+        skill_id: The ID of a skill.
+        id_lt: Skills with IDs less than the specified value.
+        id_lte: Skills with IDs less than or equal to the specified value.
+        id_gt: Skills with IDs greater than the specified value.
+        id_gte: Skills with IDs greater than or equal to the specified value.
         created_lt: Skills created before the specified date.
         created_lte: Skills created before or on the specified date.
         created_gt: Skills created after the specified date.
@@ -1244,19 +1204,16 @@ class UserSkillSearchRequest(BaseSearchRequest):
 
 
 class UserSkillSortItems(BaseSortItems):
-    """Parameters for sorting Toloker skill search results
-
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    """Keys for sorting skills in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * id - Skill ID in ascending order.
-            * created - Date the skill was created in UTC in the yyyy-MM-DD format (ascending).
-            * modified - Date the skill was modified in UTC in the yyyy-MM-DD format (ascending).
+        items: A list of sorting keys. Supported values:
+            * `'id'` — The ID of a skill.
+            * `'created'` — The date when a skill was created.
+            * `'modified'` — The date when a skill was modified.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find Tolokers' skills sorted by creation date in descending order. Skills with equal creation dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.UserSkillSortItems(['-created', 'id'])
         >>> result = toloka_client.find_user_skills(skill_id=my_useful_skill_id, sort=sort, limit=10)
@@ -1295,24 +1252,23 @@ class UserSkillSortItems(BaseSortItems):
 
 
 class UserRestrictionSearchRequest(BaseSearchRequest):
-    """Parameters for searching Toloker restriction
+    """Parameters for searching Toloker restrictions.
 
     Attributes:
-        scope: The scope of the ban
-            * ALL_PROJECTS
-            * PROJECT
-            * POOL
-        user_id: Toloker's ID.
-        project_id: The ID of the project that is blocked.
-        pool_id: The ID of the pool that is blocked.
-        id_lt: Bans with an ID less than the specified value.
-        id_lte: Bans with an ID less than or equal to the specified value.
-        id_gt: Bans with an ID greater than the specified value.
-        id_gte: Bans with an ID greater than or equal to the specified value.
-        created_lt: Bans created before the specified date.
-        created_lte: Bans created before or on the specified date.
-        created_gt: Bans created after the specified date.
-        created_gte: Bans created after or on the specified date.
+        scope: The scope of a restriction.
+               Refer to the [UserRestriction.Scope](toloka.client.user_restriction.UserRestriction.Scope.md) page
+               for more information on the available `scope` values.
+        user_id: The Toloker's ID.
+        project_id: The ID of a project with restricted access.
+        pool_id: The ID of a pool with restricted access.
+        id_lt: Restrictions with IDs less than the specified value.
+        id_lte: Restrictions with IDs less than or equal to the specified value.
+        id_gt: Restrictions with IDs greater than the specified value.
+        id_gte: Restrictions with IDs greater than or equal to the specified value.
+        created_lt: Restrictions created before the specified date.
+        created_lte: Restrictions created before or on the specified date.
+        created_gt: Restrictions created after the specified date.
+        created_gte: Restrictions created after or on the specified date.
     """
 
     class CompareFields:
@@ -1354,18 +1310,15 @@ class UserRestrictionSearchRequest(BaseSearchRequest):
 
 
 class UserRestrictionSortItems(BaseSortItems):
-    """Parameters for sorting Toloker restriction search results
-
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    """Keys for sorting Toloker restrictions in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * id - Restriction IDs.
-            * created - Creation date in UTC format yyyy-MM-DD.
+        items: A list of sorting keys. Supported values:
+            * `'id'` — The ID of a restriction.
+            * `'created'` — The restriction creation date.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find Toloker restrictions sorted by creation date in descending order. Restrictions with equal creation dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.UserRestrictionSortItems(['-created', 'id'])
         >>> result = toloka_client.find_user_restrictions(pool_id=my_pretty_pool_id, sort=sort, limit=10)
@@ -1403,20 +1356,20 @@ class UserRestrictionSortItems(BaseSortItems):
 
 
 class UserBonusSearchRequest(BaseSearchRequest):
-    """Parameters for searching `UserBonus` instances.
+    """Parameters for searching Tolokers' rewards.
 
     Attributes:
-        user_id: The ID of the Toloker.
-        assignment_id: The ID of the Toloker's response to the task a reward is issued for.
-        private_comment: Comments for the requester.
-        id_lt: Bonuses with an ID less than the specified value.
-        id_lte: Bonuses with an ID less than or equal to the specified value.
-        id_gt: Bonuses with an ID greater than the specified value.
-        id_gte: Bonuses with an ID greater than or equal to the specified value.
-        created_lt: Bonuses awarded before the specified date.
-        created_lte: Bonuses awarded before or on the specified date.
-        created_gt: Bonuses awarded after the specified date.
-        created_gte: Bonuses awarded after or on the specified date.
+        user_id: The ID of a Toloker.
+        assignment_id: The ID of an assignment a reward was granted for.
+        private_comment: Rewards with specified comment.
+        id_lt: Rewards with IDs less than the specified value.
+        id_lte: Rewards with IDs less than or equal to the specified value.
+        id_gt: Rewards with IDs greater than the specified value.
+        id_gte: Rewards with IDs greater than or equal to the specified value.
+        created_lt: Rewards given before the specified date.
+        created_lte: Rewards given before or on the specified date.
+        created_gt: Rewards given after the specified date.
+        created_gte: Rewards given after or on the specified date.
     """
 
     class CompareFields:
@@ -1456,21 +1409,18 @@ class UserBonusSearchRequest(BaseSearchRequest):
 
 
 class UserBonusSortItems(BaseSortItems):
-    """Parameters for sorting `UserBonus` search results
-
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    """Keys for sorting rewards in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * id - Bonus ID in ascending order.
-            * created - Creation date in UTC format yyyy-MM-DD (ascending).
+        items: A list of sorting keys. Supported values:
+            * `'id'` — The ID of a reward.
+            * `'created'` — The date of granting a reward.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find rewards sorted by granting date in descending order. Rewards with equal granting dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.UserBonusSortItems(['-created', 'id'])
-        >>> result = toloka_client.find_user_bonuses(user_id=best_performer_id, sort=sort, limit=10)
+        >>> result = toloka_client.find_user_bonuses(user_id=best_toloker_id, sort=sort, limit=10)
         ...
     """
 
@@ -1505,15 +1455,16 @@ class UserBonusSortItems(BaseSortItems):
 
 
 class MessageThreadSearchRequest(BaseSearchRequest):
-    """Parameters for searching message threads
+    """Parameters for searching message threads.
 
     Attributes:
-        folder: Folders to search for the thread
-        folder_ne: Folders to not search for the thread
-        id_lt: Threads with an ID less than the specified value.
-        id_lte: Threads with an ID less than or equal to the specified value.
-        id_gt: Threads with an ID greater than the specified value.
-        id_gte: Threads with an ID greater than or equal to the specified value.
+        folder: A folder where to search threads or a list of folders.
+                Refer to the [Folder](toloka.client.message_thread.Folder.md) page for more information on the available `folder` values.
+        folder_ne: A folder to skip or a list of folders. Supported values are the same as for `folder`.
+        id_lt: Threads with IDs less than the specified value.
+        id_lte: Threads with IDs less than or equal to the specified value.
+        id_gt: Threads with IDs greater than the specified value.
+        id_gte: Threads with IDs greater than or equal to the specified value.
         created_lt: Threads created before the specified date.
         created_lte: Threads created before or on the specified date.
         created_gt: Threads created after the specified date.
@@ -1557,15 +1508,12 @@ class MessageThreadSearchRequest(BaseSearchRequest):
 
 
 class MessageThreadSortItems(BaseSortItems):
-    """Parameters for sorting message thread search results
-
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    """Keys for sorting message threads in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * id - Thread ID in ascending order.
-            * created - Creation date in UTC format yyyy-MM-DD (ascending).
+        items: A list of sorting keys. Supported values:
+            * `'id'` — Message thread ID.
+            * `'created'` — Message thread creation date.
     """
 
     class SortItem(BaseSortItem):
@@ -1599,15 +1547,17 @@ class MessageThreadSortItems(BaseSortItems):
 
 
 class WebhookSubscriptionSearchRequest(BaseSearchRequest):
-    """Parameters for searching webhook-subscriptions.
+    """Parameters for searching event subscriptions.
 
     Attributes:
         event_type: Event type.
-        pool_id: ID of the pool for which subscription information is requested.
-        id_lt: Subscriptions with an ID less than the specified value.
-        id_lte: Subscriptions with an ID less than or equal to the specified value.
-        id_gt: Subscriptions with an ID greater than the specified value.
-        id_gte: Subscriptions with an ID greater than or equal to the specified value.
+                    Refer to the [EventType](toloka.client.webhook_subscription.WebhookSubscription.EventType.md) page
+                    for more information on the available `event_type` values.
+        pool_id: The ID of a subscribed pool.
+        id_lt: Subscriptions with IDs less than the specified value.
+        id_lte: Subscriptions with IDs less than or equal to the specified value.
+        id_gt: Subscriptions with IDs greater than the specified value.
+        id_gte: Subscriptions with IDs greater than or equal to the specified value.
         created_lt: Subscriptions created before the specified date.
         created_lte: Subscriptions created before or on the specified date.
         created_gt: Subscriptions created after the specified date.
@@ -1649,18 +1599,15 @@ class WebhookSubscriptionSearchRequest(BaseSearchRequest):
 
 
 class WebhookSubscriptionSortItems(BaseSortItems):
-    """Parameters for sorting webhook-subscriptions search results
-
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    """Keys for sorting event subscriptions in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * id - Subscription ID (in ascending order).
-            * created - Date of creation of the subscription in UTC in the format YYYY-MM-DD (ascending).
+        items: A list of sorting keys. Supported values:
+            * `'id'` — A subscription ID.
+            * `'created'` — The creation date of a subscription.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find event subscriptions sorted by creation date in descending order. Subscriptions with equal creation dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.WebhookSubscriptionSortItems(['-created', 'id'])
         >>> result = toloka_client.find_webhook_subscriptions(event_type=some_event_type, pool_id=my_pretty_pool_id, sort=sort, limit=10)
@@ -1698,15 +1645,17 @@ class WebhookSubscriptionSortItems(BaseSortItems):
 
 
 class OperationSearchRequest(BaseSearchRequest):
-    """Parameters for searching webhook-subscriptions.
+    """Parameters for searching operations.
 
     Attributes:
         type: Operation type.
+              Refer to the [OperationType](toloka.client.operations.OperationType.md) page for more information on the available `type` values.
         status: The status of the operation.
-        id_lt: Operations with an ID less than the specified value.
-        id_lte: Operations with an ID less than or equal to the specified value.
-        id_gt: Operations with an ID greater than the specified value.
-        id_gte: Operations with an ID greater than or equal to the specified value.
+              Refer to the [Operation.Status](toloka.client.operations.Operation.Status.md) page for more information on the available `status` values.
+        id_lt: Operations with IDs less than the specified value.
+        id_lte: Operations with IDs less than or equal to the specified value.
+        id_gt: Operations with IDs greater than the specified value.
+        id_gte: Operations with IDs greater than or equal to the specified value.
         submitted_lt: Operations submitted before the specified date.
         submitted_lte: Operations submitted before or on the specified date.
         submitted_gt: Operations submitted after the specified date.
@@ -1761,19 +1710,16 @@ class OperationSearchRequest(BaseSearchRequest):
 
 
 class OperationSortItems(BaseSortItems):
-    """Parameters for sorting operations search results
-
-    You can specify multiple parameters.
-    To change the sorting direction (sort in descending order), add a hyphen before the parameter. For example, sort=-id.
+    """Keys for sorting operations in search results.
 
     Attributes:
-        items: Fields by which to sort. Possible values:
-            * id - Subscription ID.
-            * submitted - The date and time when the request was sent.
-            * finished - The date and time when the operation was finished.
+        items: A list of sorting keys. Supported values:
+            * `'id'` — Operation ID.
+            * `'submitted'` — The date and time when the request was sent.
+            * `'finished'` — The date and time when the operation was finished.
 
     Example:
-        How to specify and use SortItems.
+        The example shows how to find operations sorted by finish date in descending order. Operations with equal finish dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.OperationsSearchRequest(['-finished', 'id'])
         >>> result = toloka_client.find_operations(type='POOL_OPEN', status='SUCCESS', sort=sort, limit=10)
@@ -1817,12 +1763,13 @@ class AppProjectSearchRequest(BaseSearchRequest):
     Attributes:
         app_id: Projects created using the solution with the specified ID.
         parent_app_project_id: Projects cloned from the project with the specified ID. Projects can be cloned in the web version of Toloka.
-        status: Projects with the specified status.
+        status: App project status.
+                Refer to the [AppProject.Status](toloka.client.app.AppProject.Status.md) page for more information on the available `status` values.
         after_id: The ID of a project used for cursor pagination.
         scope: Values:
-            * `MY` — Projects created by you.
-            * `COMPANY` — Projects created by requesters from your company.
-            * `REQUESTER_LIST` — Projects created by requesters in the `requester_ids` list.
+            * `'MY'` — Projects created by you.
+            * `'COMPANY'` — Projects created by requesters from your company.
+            * `'REQUESTER_LIST'` — Projects created by requesters in the `requester_ids` list.
         requester_ids: A list with requester IDs separated by a comma. Use the list with parameter `scope = REQUESTER_LIST`.
         id_gt: Projects with IDs greater than the specified value.
         id_gte: Projects with IDs greater than or equal to the specified value.
@@ -1832,14 +1779,10 @@ class AppProjectSearchRequest(BaseSearchRequest):
         name_gte: Projects with a name lexicographically greater than or equal to the specified value.
         name_lt: Projects with a name lexicographically less than the specified value.
         name_lte: Projects with a name lexicographically less than or equal to the specified value.
-        created_gt: Projects created after the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_gte: Projects created after or on the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_lt: Projects created before the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_lte: Projects created before or on the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
+        created_gt: Projects created after the specified date.
+        created_gte: Projects created after or on the specified date.
+        created_lt: Projects created before the specified date.
+        created_lte: Projects created before or on the specified date.
     """
 
     class Scope(enum.Enum):
@@ -1904,14 +1847,11 @@ class AppProjectSearchRequest(BaseSearchRequest):
 class AppProjectSortItems(BaseSortItems):
     """Keys for sorting App projects in search results.
 
-    You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
-    Example: `sort='-created,id'`.
-
     Attributes:
-        key: The sorting key. Supported keys:
-            * `id` — An App project ID.
-            * `name` — An App project name.
-            * `created` — A project creation date.
+        items: A list of sorting keys. Supported values:
+            * `'id'` — An App project ID.
+            * `'name'` — An App project name.
+            * `'created'` — A project creation date.
     """
 
     class SortItem(BaseSortItem):
@@ -1989,12 +1929,9 @@ class AppSearchRequest(BaseSearchRequest):
 class AppSortItems(BaseSortItems):
     """Keys for sorting App solutions in search results.
 
-    You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
-    Example: `sort='-id'`.
-
     Attributes:
-        key: The sorting key. Supported keys:
-            * `id` — An App solution ID.
+        items: A list of sorting keys. Supported values:
+            * `'id'` — An App solution ID.
     """
 
     class SortItem(BaseSortItem):
@@ -2032,19 +1969,16 @@ class AppItemSearchRequest(BaseSearchRequest):
     Attributes:
         after_id: The ID of the item used for cursor pagination.
         batch_id: The ID of the batch to look in.
-        status: Items with the specified status.
+        status: App task item status.
+                Refer to the [AppItem.Status](toloka.client.app.AppItem.Status.md) page for more information on the available `status` values.
         id_gt: Items with IDs greater than the specified value.
         id_gte: Items with IDs greater than or equal to the specified value.
         id_lt: Items with IDs less than the specified value.
         id_lte: Items with IDs less than or equal to the specified value.
-        created_gt: Items created after the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_gte: Items created after or on the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_lt: Items created before the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_lte: Items created before or on the specified date. The date is specified in UTC in ISO 8601
-            format: YYYY-MM-DDThh:mm:ss[.sss].
+        created_gt: Items created after the specified date.
+        created_gte: Items created after or on the specified date.
+        created_lt: Items created before the specified date.
+        created_lte: Items created before or on the specified date.
         finished_gt: Items labeled after the specified date.
         finished_gte: Items labeled after or on the specified date.
         finished_lt: Items labeled before the specified date.
@@ -2097,17 +2031,14 @@ class AppItemSearchRequest(BaseSearchRequest):
 
 
 class AppItemSortItems(BaseSortItems):
-    """Keys for sorting App task items in search results.
-
-    You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
-    Example: `sort='-created,id'`.
+    """Keys for sorting App items in search results.
 
     Attributes:
-        key: The sorting key. Supported keys:
-            * `id` — A task item ID.
-            * `created` — The date and time when the item was created.
-            * `finished` — The date and time when the item processing was completed.
-            * `status` — The item status.
+        items: A list of sorting keys. Supported values:
+            * `'id'` — A task item ID.
+            * `'created'` — The date and time when the item was created.
+            * `'finished'` — The date and time when the item processing was completed.
+            * `'status'` — The item status.
     """
 
     class SortItem(BaseSortItem):
@@ -2147,7 +2078,7 @@ class AppBatchSearchRequest(BaseSearchRequest):
 
     Attributes:
         after_id: The ID of the batch used for cursor pagination.
-        status: Batches with the specified status.
+        status: Refer to the [AppBatch.Status](toloka.client.app.AppBatch.Status.md) page for more information on the available `status` values.
         id_gt: Batches with IDs greater than the specified value.
         id_gte: Batches with IDs greater than or equal to the specified value.
         id_lt: Batches with IDs less than the specified value.
@@ -2156,14 +2087,10 @@ class AppBatchSearchRequest(BaseSearchRequest):
         name_gte: Batches with names lexicographically greater than or equal to the specified value.
         name_lt: Batches with names lexicographically less than the specified value.
         name_lte: Batches with names lexicographically less than or equal to the specified value.
-        created_gt: Batches created after the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_gte: Batches created after or on the specified date. The date is specified in UTC in ISO 8601
-            format: YYYY-MM-DDThh:mm:ss[.sss].
-        created_lt: Batches created before the specified date. The date is specified in UTC in ISO 8601 format:
-            YYYY-MM-DDThh:mm:ss[.sss].
-        created_lte: Batches created before or on the specified date. The date is specified in UTC in ISO 8601
-            format: YYYY-MM-DDThh:mm:ss[.sss].
+        created_gt: Batches created after the specified date.
+        created_gte: Batches created after or on the specified date.
+        created_lt: Batches created before the specified date.
+        created_lte: Batches created before or on the specified date.
     """
 
     class CompareFields:
@@ -2212,15 +2139,12 @@ class AppBatchSearchRequest(BaseSearchRequest):
 class AppBatchSortItems(BaseSortItems):
     """Keys for sorting App batches in search results.
 
-    You can specify multiple keys separated by a comma. To sort in descending order, add the `-` sign before a key.
-    Example: `sort='-created,id'`.
-
     Attributes:
-        key: The sorting key. Supported keys:
-            * `id` — A batch ID.
-            * `name` — A batch name.
-            * `created` — A batch creation date.
-            * `status` — The item status.
+        items: A list of sorting keys. Supported values:
+            * `'id'` — A batch ID.
+            * `'name'` — A batch name.
+            * `'created'` — A batch creation date.
+            * `'status'` — The item status.
     """
 
     class SortItem(BaseSortItem):

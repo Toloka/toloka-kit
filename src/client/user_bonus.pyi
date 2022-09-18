@@ -107,7 +107,7 @@ class UserBonusCreateRequestParameters(toloka.client.primitives.parameter.Parame
             results of creating bonuses.
         skip_invalid_items: Validation parameters of objects:
             * True - Award a bonus if the object with bonus information passed validation. Otherwise, skip the bonus.
-            * False - Default behaviour. Stop the operation and don't award bonuses if at least one object didn't pass validation.
+            * False - Default behavior. Stop the operation and don't award bonuses if at least one object didn't pass validation.
     """
 
     def __init__(

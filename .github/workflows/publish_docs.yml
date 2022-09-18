@@ -19,6 +19,7 @@ jobs:
         pip install https://github.com/Toloka/stubmaker/archive/refs/heads/main.zip
         pip install .[all]
         pip install "attrs>=21.0.0"
+        pip install pyyaml
     - name: Checkout docs repository
       uses: actions/checkout@v3
       with:
@@ -27,7 +28,11 @@ jobs:
     - name: Generate markdowns
       run: |
         python ./misc/stubmaker/bin/make_markdowns $(./misc/stubmaker/bin/make_markdowns/tolokakit_args.sh) --github-source-url https://github.com/Toloka/toloka-kit/blob/${{ github.event.release.tag_name }}/src
+        mv docs-repo/en/toloka-kit/python-sdk.md .
         rm -r docs-repo/en/toloka-kit
+        mkdir docs-repo/en/toloka-kit
+        mv python-sdk.md docs-repo/en/toloka-kit
+        python misc/add_python_sdk_to_toc.py --path docs/toc.yaml
         mv docs docs-repo/en/toloka-kit
     - name: Create Pull Request to docs repository
       uses: peter-evans/create-pull-request@v4

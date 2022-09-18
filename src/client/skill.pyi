@@ -19,7 +19,7 @@ class Skill(toloka.client.primitives.base.BaseTolokaObject):
         name: Skill name.
         private_comment: Comments on the skill (only visible to the requester).
         hidden: Access to information about the skill (the name and value) for Tolokers:
-            * True - Closed. Default behaviour.
+            * True - Closed. Default behavior.
             * False - Opened.
         skill_ttl_hours: The skill's "time to live" after the last update (in hours). The skill is removed from
             the Toloker's profile if the skill level hasn't been updated for the specified length of time.

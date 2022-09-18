@@ -182,12 +182,14 @@ class TolokaClient:
             You can test complex projects before assigning tasks to Tolokers. Nobody will see your tasks, and it's free.
             * `PRODUCTION` – [Production environment](https://toloka.dev) for Toloka requesters.
             You spend money there and get the results.
+
             You need to register in each environment separately. OAuth tokens are generated in each environment separately too.
             Default value: `None`.
         retries: Retry policy for failed API requests.
             Possible values:
             * `int` – The number of retries for all requests. In this case, the retry policy is created automatically.
             * `Retry` object – Deprecated type. Use `retryer_factory` parameter instead.
+
             Default value: `3`.
         timeout: Number of seconds that [Requests library](https://docs.python-requests.org/en/master) will wait for your client to establish connection to a remote machine.
             Possible values:
@@ -195,6 +197,7 @@ class TolokaClient:
             * `Tuple[float, float]` – Tuple sets the values for connect and read timeouts separately.
             * `None` – Set the timeout to `None` only if you are willing to wait the [Response](https://docs.python-requests.org/en/master/api/#requests.Response)
             for unlimited number of seconds.
+
             Default value: `10.0`.
         url: Set a specific URL instead of Toloka environment. May be useful for testing purposes.
             You can only set one parameter – either `url` or `environment`, not both of them.
@@ -205,6 +208,7 @@ class TolokaClient:
             * `MIN` - Retry minutes quotas.
             * `HOUR` - Retry hourly quotas. This means that the program just sleeps for an hour.
             * `DAY` - Retry daily quotas. We do not recommend retrying these quotas.
+
             Default value: `MIN`.
         retryer_factory: Factory that creates `Retry` object.
             Fully specified retry policy that will apply to all requests.
@@ -233,8 +237,16 @@ class TolokaClient:
         SANDBOX = 'https://sandbox.toloka.dev'
         PRODUCTION = 'https://toloka.dev'
 
+        @property
+        def platform_url(self):
+            if self is TolokaClient.Environment.PRODUCTION:
+                return 'https://platform.toloka.ai'
+            if self is TolokaClient.Environment.SANDBOX:
+                return 'https://sandbox.toloka.yandex.com'
+
     token: str
     default_timeout: Union[float, Tuple[float, float]]
+    _platform_url: Optional[str]
     url: Optional[str]
     retryer_factory: Optional[Callable[[], Retry]]
 
@@ -255,10 +267,12 @@ class TolokaClient:
             raise ValueError('You can only pass one parameter: environment or url. Both are now set.')
         if url is not None:
             self.url = url[:-1] if url.endswith('/') else url
+            self._platform_url = self.url
         else:
             if not isinstance(environment, TolokaClient.Environment):
                 environment = TolokaClient.Environment[environment.upper()]
             self.url = environment.value
+            self._platform_url = environment.platform_url
         if isinstance(retries, Retry) and retry_quotas is not None:
             raise ValueError('You must set retry_quotas parameter to None when you specify retries parameters not as int.')
         self.token = token
@@ -476,12 +490,12 @@ class TolokaClient:
             The example shows how to aggregate responses to a single task.
 
             >>> aggregated_response = toloka_client.aggregate_solutions_by_task(
-            >>>         type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
-            >>>         pool_id=some_existing_pool_id,
-            >>>         task_id=some_existing_task_id,
-            >>>         answer_weight_skill_id=some_skill_id,
-            >>>         fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
-            >>>     )
+            >>>     type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
+            >>>     pool_id=some_existing_pool_id,
+            >>>     task_id=some_existing_task_id,
+            >>>     answer_weight_skill_id=some_skill_id,
+            >>>     fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
+            >>> )
             >>> print(aggregated_response.output_values['result'])
             ...
         """
@@ -561,11 +575,11 @@ class TolokaClient:
             The example shows how to aggregate responses in a pool.
 
             >>> aggregation_operation = toloka_client.aggregate_solutions_by_pool(
-            >>>         type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
-            >>>         pool_id=some_existing_pool_id,
-            >>>         answer_weight_skill_id=some_skill_id,
-            >>>         fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
-            >>>     )
+            >>>     type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
+            >>>     pool_id=some_existing_pool_id,
+            >>>     answer_weight_skill_id=some_skill_id,
+            >>>     fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
+            >>> )
             >>> aggregation_operation = toloka_client.wait_operation(aggregation_operation)
             >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
             ...
@@ -779,7 +793,7 @@ class TolokaClient:
         Example:
             Make a list of all received attachments in the specified pool.
 
-            >>> results_list = [attachment for attachment in toloka_client.get_attachments(pool_id='1')]
+            >>> results_list = list(toloka_client.get_attachments(pool_id='1'))
             ...
         """
         generator = self._find_all(self.find_attachments, request)
@@ -902,7 +916,10 @@ class TolokaClient:
             >>> message_threads = toloka_client.get_message_threads(folder='UNREAD')
             >>> message_reply = {'EN': 'Thank you for your message! I will get back to you soon.'}
             >>> for thread in message_threads:
-            >>>     toloka_client.reply_message_thread(message_thread_id=thread.id, reply=toloka.message_thread.MessageThreadReply(text=message_reply))
+            >>>     toloka_client.reply_message_thread(
+            >>>         message_thread_id=thread.id,
+            >>>         reply=toloka.message_thread.MessageThreadReply(text=message_reply)
+            >>>     )
             ...
         """
         response = self._request('post', f'/v1/message-threads/{message_thread_id}/reply', json=unstructure(reply))
@@ -1029,7 +1046,7 @@ class TolokaClient:
         """
         response = self._request('post', '/v1/projects', json=unstructure(project))
         result = structure(response, Project)
-        logger.info(f'A new project with ID "{result.id}" has been created. Link to open in web interface: {self.url}/requester/project/{result.id}')
+        logger.info(f'A new project with ID "{result.id}" has been created. Link to open in web interface: {self._platform_url}/requester/project/{result.id}')
         return result
 
     @expand('request')
@@ -1366,7 +1383,7 @@ class TolokaClient:
         result = self.get_pool(operation.details.pool_id)
         logger.info(
             f'A new pool with ID "{result.id}" has been cloned. Link to open in web interface: '
-            f'{self.url}/requester/project/{result.project_id}/pool/{result.id}'
+            f'{self._platform_url}/requester/project/{result.project_id}/pool/{result.id}'
         )
         return result
 
@@ -1429,7 +1446,7 @@ class TolokaClient:
         result = structure(response, Pool)
         logger.info(
             f'A new pool with ID "{result.id}" has been created. Link to open in web interface: '
-            f'{self.url}/requester/project/{result.project_id}/pool/{result.id}'
+            f'{self._platform_url}/requester/project/{result.project_id}/pool/{result.id}'
         )
         return result
 
@@ -1731,7 +1748,7 @@ class TolokaClient:
         result = self.get_training(operation.details.training_id)
         logger.info(
             f'A new training with ID "{result.id}" has been cloned. Link to open in web interface: '
-            f'{self.url}/requester/project/{result.project_id}/training/{result.id}'
+            f'{self._platform_url}/requester/project/{result.project_id}/training/{result.id}'
         )
         return result
 
@@ -1790,7 +1807,7 @@ class TolokaClient:
         result = structure(response, Training)
         logger.info(
             f'A new training with ID "{result.id}" has been created. Link to open in web interface: '
-            f'{self.url}/requester/project/{result.project_id}/training/{result.id}'
+            f'{self._platform_url}/requester/project/{result.project_id}/training/{result.id}'
         )
         return result
 
@@ -1975,7 +1992,7 @@ class TolokaClient:
         result = structure(response, Skill)
         logger.info(
             f'A new skill with ID "{result.id}" has been created. Link to open in web interface: '
-            f'{self.url}/requester/quality/skill/{result.id}'
+            f'{self._platform_url}/requester/quality/skill/{result.id}'
         )
         return result
 
@@ -2175,12 +2192,12 @@ class TolokaClient:
             >>> golden_tasks = []
             >>> for _, row in dataset.iterrows():
             >>>     golden_tasks.append(
-            >>>             toloka.task.Task(
-            >>>                 input_values={'image': row['image']},
-            >>>                 known_solutions = [toloka.task.BaseTask.KnownSolution(output_values={'animal': row['label']})],
-            >>>                 pool_id = existing_pool_id,
-            >>>             )
+            >>>         toloka.task.Task(
+            >>>             input_values={'image': row['image']},
+            >>>             known_solutions = [toloka.task.BaseTask.KnownSolution(output_values={'animal': row['label']})],
+            >>>             pool_id = existing_pool_id,
             >>>         )
+            >>>     )
             >>> created_result = toloka_client.create_tasks(golden_tasks, allow_defaults=True)
             >>> print(len(created_result.items))
             ...
@@ -2214,12 +2231,8 @@ class TolokaClient:
 
         Example:
             >>> training_tasks = [
-            >>>     toloka.task.Task(
-            >>>                 input_values={'image': 'link1'},
-            >>>                 pool_id='1'),
-            >>>     toloka.task.Task(
-            >>>             input_values={'image': 'link2'},
-            >>>             pool_id='1')
+            >>>     toloka.task.Task(input_values={'image': 'link1'}, pool_id='1'),
+            >>>     toloka.task.Task(input_values={'image': 'link2'}, pool_id='1')
             >>> ]
             >>> tasks_op = toloka_client.create_tasks_async(training_tasks)
             >>> toloka_client.wait_operation(tasks_op)
@@ -2293,7 +2306,7 @@ class TolokaClient:
         Example:
             Getting all tasks from a single pool.
 
-            >>> results_list = [task for task in toloka_client.get_tasks(pool_id='1')]
+            >>> results_list = list(toloka_client.get_tasks(pool_id='1'))
             ...
         """
         generator = self._find_all(self.find_tasks, request)
@@ -2367,9 +2380,10 @@ class TolokaClient:
 
         Example:
             >>> new_task_suite = toloka.task_suite.TaskSuite(
-            >>>                 pool_id='1',
-            >>>                 tasks=[toloka.task.Task(input_values={'label': 'Cats vs Dogs'})],
-            >>>                 overlap=2)
+            >>>     pool_id='1',
+            >>>     tasks=[toloka.task.Task(input_values={'label': 'Cats vs Dogs'})],
+            >>>     overlap=2
+            >>> )
             >>> toloka_client.create_task_suite(new_task_suite)
             ...
         """
@@ -2539,7 +2553,7 @@ class TolokaClient:
         Example:
             Get task suites from a specific pool.
 
-            >>> results_list = [task_suite for task_suite in toloka_client.get_task_suites(pool_id='1')]
+            >>> results_list = list(toloka_client.get_task_suites(pool_id='1'))
             ...
         """
         generator = self._find_all(self.find_task_suites, request)
@@ -2636,13 +2650,15 @@ class TolokaClient:
 
             >>> pool = toloka_client.get_pool(pool_id)
             >>> while not pool.is_closed():
-            >>>     op = toloka_client.get_analytics([toloka.analytics_request.CompletionPercentagePoolAnalytics(subject_id=pool.id)])
+            >>>     op = toloka_client.get_analytics(
+            >>>         [toloka.analytics_request.CompletionPercentagePoolAnalytics(subject_id=pool.id)]
+            >>>     )
             >>>     op = toloka_client.wait_operation(op)
             >>>     percentage = op.details['value'][0]['result']['value']
             >>>     print(
-            >>>         f'   {datetime.datetime.now().strftime("%H:%M:%S")}\t'
+            >>>         f'{datetime.datetime.now().strftime("%H:%M:%S")}'
             >>>         f'Pool {pool.id} - {percentage}%'
-            >>>         )
+            >>>     )
             >>>     time.sleep(60 * minutes_to_wait)
             >>>     pool = toloka_client.get_pool(pool.id)
             >>> print('Pool was closed.')
@@ -2708,7 +2724,7 @@ class TolokaClient:
     def get_operations(self, request: search_requests.OperationSearchRequest) -> Generator[operations.Operation, None, None]:
         """Finds all operations that match certain rules and returns them in an iterable object
 
-       `get_user_bonuses` returns a generator. You can iterate over all found operations using the generator. Several requests to the Toloka server are possible while iterating.
+       `get_operations` returns a generator. You can iterate over all found operations using the generator. Several requests to the Toloka server are possible while iterating.
 
         If you need to sort operations use the [find_operations](toloka.client.TolokaClient.find_operations.md) method.
 
@@ -2719,7 +2735,7 @@ class TolokaClient:
             Operation: The next matching operations.
 
         Example:
-            >>> bonuses = [bonus for bonus in toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00')]
+            >>> bonuses = list(toloka_client.get_operations(submitted_lt='2021-06-01T00:00:00'))
             ...
         """
         generator = self._find_all(self.find_operations, request)
@@ -2826,7 +2842,8 @@ class TolokaClient:
             >>>             'EN': 'You are the best!',
             >>>             'RU': 'Молодец!',
             >>>         },
-            >>>         assignment_id='1'),
+            >>>         assignment_id='1'
+            >>>     ),
             >>>     UserBonus(
             >>>         user_id='2',
             >>>         amount=decimal.Decimal('1.0'),
@@ -2838,7 +2855,8 @@ class TolokaClient:
             >>>             'EN': 'You have completed all tasks!',
             >>>             'RU': 'Сделаны все задания!',
             >>>         },
-            >>>         assignment_id='2')
+            >>>         assignment_id='2'
+            >>>     )
             >>> ]
             >>> toloka_client.create_user_bonuses(new_bonuses)
             ...
@@ -2879,7 +2897,8 @@ class TolokaClient:
             >>>             'EN': 'You are the best!',
             >>>             'RU': 'Молодец!',
             >>>         },
-            >>>         assignment_id='1'),
+            >>>         assignment_id='1'
+            >>>     ),
             >>>     UserBonus(
             >>>         user_id='2',
             >>>         amount=decimal.Decimal('1.0'),
@@ -2891,7 +2910,8 @@ class TolokaClient:
             >>>             'EN': 'You have completed all tasks!',
             >>>             'RU': 'Сделаны все задания!',
             >>>         },
-            >>>         assignment_id='2')
+            >>>         assignment_id='2'
+            >>>     )
             >>> ]
             >>> create_bonuses = toloka_client.create_user_bonuses_async(new_bonuses)
             >>> toloka_client.wait_operation(create_bonuses)
@@ -2961,7 +2981,7 @@ class TolokaClient:
             UserBonus: The next matching Toloker's reward.
 
         Example:
-            >>> bonuses = [bonus for bonus in toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00')]
+            >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00'))
             ...
         """
         generator = self._find_all(self.find_user_bonuses, request)
@@ -3035,7 +3055,7 @@ class TolokaClient:
             UserRestriction: The next matching Toloker restriction.
 
         Example:
-            >>> results_list = [restriction for restriction in toloka_client.get_user_restrictions(scope='ALL_PROJECTS')]
+            >>> results_list = list(toloka_client.get_user_restrictions(scope='ALL_PROJECTS'))
             ...
         """
         generator = self._find_all(self.find_user_restrictions, request)
@@ -3173,7 +3193,7 @@ class TolokaClient:
             UserSkill: The next matching Toloker's skill.
 
         Example:
-            >>> results_list = [skill for skill in toloka_client.get_user_skills()]
+            >>> results_list = list(toloka_client.get_user_skills())
             ...
         """
         generator = self._find_all(self.find_user_skills, request)
@@ -3182,7 +3202,7 @@ class TolokaClient:
 
     @add_headers('client')
     def get_user(self, user_id: str) -> User:
-        """Gets Toloker metadata by user_id.
+        """Gets Toloker metadata by `user_id`.
 
         Args:
             user_id: Toloker ID.
@@ -3206,7 +3226,7 @@ class TolokaClient:
             UserSkill: Updated skill information.
 
         Example:
-            >>> from decimal import *
+            >>> from decimal import Decimal
             >>> toloka_client.set_user_skill(skill_id='1', user_id='1', value=Decimal(100))
             ...
         """
@@ -3769,7 +3789,7 @@ class TolokaClient:
 
     @add_headers('client')
     def get_app_batch(self, app_project_id: str, batch_id: str) -> AppBatch:
-        """"Gets information from Toloka about a batch in an App project.
+        """Gets information from Toloka about a batch in an App project.
 
         Args:
             app_project_id: The ID of the project.
@@ -3788,7 +3808,7 @@ class TolokaClient:
     @expand('patch')
     @add_headers('client')
     def patch_app_batch(self, app_project_id: str, batch_id: str, patch: AppBatchPatch) -> AppBatch:
-        """Update app batch name
+        """Updates an App batch name.
 
         Args:
             app_project_id: The ID of the project.

@@ -30,10 +30,12 @@ __all__ = [
     'UserAgentVersionMinor',
     'UserAgentVersionBugfix',
 ]
+import copy
 import inspect
 from enum import unique
 from typing import Any, List, Optional, Union, ClassVar, Dict
 
+from ._converter import unstructure
 from .primitives.base import BaseTolokaObject
 from .primitives.operators import (
     CompareOperator,
@@ -74,6 +76,9 @@ class FilterCondition(BaseTolokaObject):
             return other & self
         return FilterAnd(and_=[self, other])
 
+    def __invert__(self) -> 'FilterCondition':
+        raise NotImplementedError('It is abstract method')
+
     @classmethod
     def structure(cls, data: dict):
         if 'or' in data:
@@ -97,6 +102,9 @@ class FilterOr(FilterCondition, kw_only=False):
         self.or_.append(other)
         return self
 
+    def __invert__(self) -> 'FilterAnd':
+        return FilterAnd(and_=[~condition for condition in self.or_])
+
     def __iter__(self):
         return iter(self.or_)
 
@@ -106,6 +114,12 @@ class FilterOr(FilterCondition, kw_only=False):
     @classmethod
     def structure(cls, data):
         return super(FilterCondition, cls).structure(data)
+
+    def unstructure(self) -> Optional[dict]:
+        self_unstructured_dict = super().unstructure()
+        if self.or_:
+            self_unstructured_dict['or'] = [unstructure(inner_filter) for inner_filter in self.or_]
+        return self_unstructured_dict
 
 
 class FilterAnd(FilterCondition, kw_only=False):
@@ -121,6 +135,9 @@ class FilterAnd(FilterCondition, kw_only=False):
         self.and_.append(other)
         return self
 
+    def __invert__(self) -> FilterOr:
+        return FilterOr(or_=[~condition for condition in self.and_])
+
     def __iter__(self):
         return iter(self.and_)
 
@@ -130,6 +147,17 @@ class FilterAnd(FilterCondition, kw_only=False):
     @classmethod
     def structure(cls, data):
         return super(FilterCondition, cls).structure(data)
+
+    def unstructure(self) -> Optional[dict]:
+        self_unstructured_dict = super().unstructure()
+        if self.and_:
+            self_unstructured_dict['and'] = [
+                unstructure(FilterOr([inner_filter]))
+                if isinstance(inner_filter, Condition)
+                else unstructure(inner_filter)
+                for inner_filter in self.and_
+            ]
+        return self_unstructured_dict
 
 
 class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
@@ -151,6 +179,11 @@ class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
 
     operator: Any = attribute(required=True)
     value: Any = attribute(required=True)
+
+    def __invert__(self) -> 'Condition':
+        condition_copy = copy.deepcopy(self)
+        condition_copy.operator = ~self.operator
+        return condition_copy
 
     @classmethod
     def structure(cls, data):

@@ -8,7 +8,7 @@ from ...util._codegen import attribute
 class MixerConfig(BaseTolokaObject):
     """Parameters for automatically creating a task suite ("smart mixing").
 
-    For more information about creating task see Yandex.Toloka Requester's guide.
+    For more information about creating task see Toloka Requester's guide.
 
     Attributes:
         real_tasks_count: The number of main tasks to put in a task suite.
