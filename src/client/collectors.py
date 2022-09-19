@@ -85,7 +85,7 @@ class AcceptanceRate(CollectorConfig, spec_value=CollectorConfig.Type.ACCEPTANCE
             If `history_size` is omitted, all Toloker's assignments are counted.
 
     Example:
-        The example shows how to ban a Toloker if they make too many mistakes.
+        The example shows how to block a Toloker if they make too many mistakes.
         If more than 35% of responses are rejected, then the Toloker is restricted to access the project.
         The rule is applied after collecting 3 or more responses.
 
@@ -120,7 +120,7 @@ class AcceptanceRate(CollectorConfig, spec_value=CollectorConfig.Type.ACCEPTANCE
 class AnswerCount(CollectorConfig, spec_value=CollectorConfig.Type.ANSWER_COUNT):
     """Counts assignments submitted by a Toloker.
 
-    Collector use cases:
+    Collector use cases.
     - To involve as many Tolokers as possible limit assignments to 1.
     - To improve protection from robots set the limit higher, such as 10% of the pool's tasks.
     - You can filter Tolokers who complete your tasks, so they don't check the tasks in the checking project.
@@ -155,10 +155,10 @@ class AnswerCount(CollectorConfig, spec_value=CollectorConfig.Type.ANSWER_COUNT)
 class AssignmentsAssessment(CollectorConfig, spec_value=CollectorConfig.Type.ASSIGNMENTS_ASSESSMENT):
     """Counts accepted and rejected assignments for every task suite.
 
-    Collector use cases:
+    Collector use cases.
     - To reassign rejected task suite to other Tolokers increase
-    the overlap of the task suite if the assignment was rejected. It is essential if the default overlap value is 1.
-    - To save money if you accept an assignment and don't need to collect more responses for that task suite stop assigning the task suite.
+    the overlap of the task suite. It is essential if the default overlap value is 1.
+    - You accept an assignment and don't need to collect more responses for that task suite. To save money stop assigning the task suite.
 
     The collector can be used with actions:
     * [PendingAssignmentsCount](toloka.client.conditions.PendingAssignmentsCount.md) — The number of pending assignments that must be checked.
@@ -193,7 +193,7 @@ class AssignmentsAssessment(CollectorConfig, spec_value=CollectorConfig.Type.ASS
 class AssignmentSubmitTime(CollectorConfig, spec_value=CollectorConfig.Type.ASSIGNMENT_SUBMIT_TIME):
     """Counts fast responses.
 
-    Collector use cases:
+    Collector use cases.
     - To find Tolokers who respond suspiciously quickly.
     - To improve protection against robots.
 
@@ -214,7 +214,7 @@ class AssignmentSubmitTime(CollectorConfig, spec_value=CollectorConfig.Type.ASSI
             If `history_size` is omitted, all Toloker's assignments in the pool are counted.
 
     Example:
-        The example shows how to reject all assignments if a Toloker sent at least 4 responses during 20 seconds after getting a task suite.
+        The example shows how to reject all assignments if a Toloker sent at least 4 responses during 20 seconds after getting every task suite.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -264,7 +264,7 @@ class Captcha(CollectorConfig, spec_value=CollectorConfig.Type.CAPTCHA):
         >>>     collector=toloka.collectors.Captcha(history_size=5),
         >>>     conditions=[
         >>>         toloka.conditions.SuccessRate < 60,
-        >>>         toloka.conditions.StoredResultsCount == 5,
+        >>>         toloka.conditions.StoredResultsCount >= 3,
         >>>     ],
         >>>     action=toloka.actions.RestrictionV2(
         >>>         scope=toloka.user_restriction.UserRestriction.PROJECT,
@@ -324,7 +324,10 @@ class GoldenSet(CollectorConfig, spec_value=CollectorConfig.Type.GOLDEN_SET):
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
         >>>     collector=toloka.collectors.GoldenSet(history_size=5),
-        >>>     conditions=[toloka.conditions.GoldenSetCorrectAnswersRate > 80],
+        >>>     conditions=[
+        >>>         toloka.conditions.GoldenSetCorrectAnswersRate > 80,
+        >>>         toloka.conditions.GoldenSetAnswersCount >= 5,
+        >>>     ],
         >>>     action=toloka.actions.ApproveAllAssignments()
         >>> )
         ...
@@ -487,7 +490,7 @@ class UsersAssessment(CollectorConfig, spec_value=CollectorConfig.Type.USERS_ASS
 
     The collector can be used with conditions:
     * [PoolAccessRevokedReason](toloka.client.conditions.PoolAccessRevokedReason.md) — The reason why the Toloker has lost access to the pool.
-    * [SkillId](toloka.client.conditions.SkillId.md) — The Toloker no longer meets the specific skill filter.
+    * [SkillId](toloka.client.conditions.SkillId.md) — The ID of a skill if reason is `SKILL_CHANGE`.
 
     The collector can be used with actions:
     * [ChangeOverlap](toloka.client.actions.ChangeOverlap.md) changes the overlap of a task suite.
