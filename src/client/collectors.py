@@ -66,7 +66,7 @@ class AcceptanceRate(CollectorConfig, spec_value=CollectorConfig.Type.ACCEPTANCE
 
     If non-automatic acceptance is set in the pool, you may use this collector to:
     - Set a Toloker's skill.
-    - Block access for Tolokers with too many incorrect responses.
+    - Block access for Tolokers with too many rejected responses.
 
     The collector can be used with conditions:
     * [TotalAssignmentsCount](toloka.client.conditions.TotalAssignmentsCount.md) — Total count of checked assignments submitted by a Toloker.
@@ -160,7 +160,7 @@ class AssignmentsAssessment(CollectorConfig, spec_value=CollectorConfig.Type.ASS
     the overlap of the task suite. It is essential if the default overlap value is 1.
     - You accept an assignment and don't need to collect more responses for that task suite. To save money stop assigning the task suite.
 
-    The collector can be used with actions:
+    The collector can be used with conditions:
     * [PendingAssignmentsCount](toloka.client.conditions.PendingAssignmentsCount.md) — The number of pending assignments that must be checked.
     * [AcceptedAssignmentsCount](toloka.client.conditions.AcceptedAssignmentsCount.md) — The number of accepted assignments for a task suite.
     * [RejectedAssignmentsCount](toloka.client.conditions.RejectedAssignmentsCount.md) — The number of rejected assignments for a task suite.
@@ -257,6 +257,7 @@ class Captcha(CollectorConfig, spec_value=CollectorConfig.Type.CAPTCHA):
 
     Example:
         The example shows how to block Toloker's access to the project for 15 days if they solve 60% of captchas or less.
+        The rule is applied after entering at least 3 captchas.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.set_captcha_frequency('MEDIUM')
@@ -299,7 +300,7 @@ class GoldenSet(CollectorConfig, spec_value=CollectorConfig.Type.GOLDEN_SET):
     - Tolokers need to select objects on a photo.
     - Tasks don't have a correct or incorrect responses. For example, you ask about Toloker preferences.
 
-    The collector can be used with actions:
+    The collector can be used with conditions:
     * [TotalAnswersCount](toloka.client.conditions.TotalAnswersCount.md) — The number of completed control and training tasks.
     * [CorrectAnswersRate](toloka.client.conditions.CorrectAnswersRate.md) — The percentage of correct responses in control and training tasks.
     * [IncorrectAnswersRate](toloka.client.conditions.IncorrectAnswersRate.md) — The percentage of incorrect responses in control and training tasks.
@@ -353,7 +354,7 @@ class Income(CollectorConfig, spec_value=CollectorConfig.Type.INCOME):
     Helpful when you need to:
     - Get responses from as many Tolokers as possible.
 
-    The collector can be used with actions:
+    The collector can be used with conditions:
     * [IncomeSumForLast24Hours](toloka.client.conditions.IncomeSumForLast24Hours.md) — The Toloker earnings for completed tasks in the pool during the last 24 hours.
 
     The collector can be used with actions:
@@ -391,7 +392,7 @@ class MajorityVote(CollectorConfig, spec_value=CollectorConfig.Type.MAJORITY_VOT
     A response chosen by the majority is considered to be correct, and other responses are considered to be incorrect.
     Depending on the percentage of correct responses, you can either increase a Toloker's skill value, or to block the Toloker.
 
-    The collector can be used with actions:
+    The collector can be used with conditions:
     * [TotalAnswersCount](toloka.client.conditions.TotalAnswersCount.md) — The number of completed tasks by the Toloker.
     * [CorrectAnswersRate](toloka.client.conditions.CorrectAnswersRate.md) — The percentage of correct responses.
     * [IncorrectAnswersRate](toloka.client.conditions.IncorrectAnswersRate.md) — The percentage of incorrect responses.
@@ -441,7 +442,7 @@ class SkippedInRowAssignments(CollectorConfig, spec_value=CollectorConfig.Type.S
 
     Skipping tasks is considered an indirect indicator of quality of responses. You can block access to a pool or project if a Toloker skips multiple task suites in a row.
 
-    The collector can be used with actions:
+    The collector can be used with conditions:
     * [SkippedInRowCount](toloka.client.conditions.SkippedInRowCount.md) — How many tasks in a row a Toloker skipped.
 
     The collector can be used with actions:
