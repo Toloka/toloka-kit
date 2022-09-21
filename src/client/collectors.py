@@ -302,11 +302,11 @@ class GoldenSet(CollectorConfig, spec_value=CollectorConfig.Type.GOLDEN_SET):
 
     The collector can be used with conditions:
     * [TotalAnswersCount](toloka.client.conditions.TotalAnswersCount.md) — The number of completed control and training tasks.
-    * [CorrectAnswersRate](toloka.client.conditions.CorrectAnswersRate.md) — The percentage of correct responses in control and training tasks.
-    * [IncorrectAnswersRate](toloka.client.conditions.IncorrectAnswersRate.md) — The percentage of incorrect responses in control and training tasks.
+    * [CorrectAnswersRate](toloka.client.conditions.CorrectAnswersRate.md) — The percentage of correct responses to control and training tasks.
+    * [IncorrectAnswersRate](toloka.client.conditions.IncorrectAnswersRate.md) — The percentage of incorrect responses to control and training tasks.
     * [GoldenSetAnswersCount](toloka.client.conditions.GoldenSetAnswersCount.md) — The number of completed control tasks.
-    * [GoldenSetCorrectAnswersRate](toloka.client.conditions.GoldenSetCorrectAnswersRate.md) — The percentage of correct responses in control tasks.
-    * [GoldenSetIncorrectAnswersRate](toloka.client.conditions.GoldenSetIncorrectAnswersRate.md) — The percentage of incorrect responses in control tasks.
+    * [GoldenSetCorrectAnswersRate](toloka.client.conditions.GoldenSetCorrectAnswersRate.md) — The percentage of correct responses to control tasks.
+    * [GoldenSetIncorrectAnswersRate](toloka.client.conditions.GoldenSetIncorrectAnswersRate.md) — The percentage of incorrect responses to control tasks.
 
     The collector can be used with actions:
     * [RestrictionV2](toloka.client.actions.RestrictionV2.md) blocks access to projects or pools.
