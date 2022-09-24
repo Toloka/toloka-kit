@@ -83,7 +83,8 @@ class IdentityRuleCondition(RuleCondition, IdentityConditionMixin):
 class AcceptedAssignmentsCount(ComparableRuleCondition, spec_value=RuleConditionKey.ACCEPTED_ASSIGNMENTS_COUNT):
     """The number of accepted assignments of a task suite.
 
-    `AcceptedAssignmentsCount` condition can be used with[AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment.md) collector only.
+    `AcceptedAssignmentsCount` is used with collectors:
+    - [AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment.md)
 
     See also:
     - AssignmentsAcceptedCount(toloka.client.conditions.AssignmentsAcceptedCount.md) — The number of assignments accepted from a Toloker.
@@ -94,6 +95,9 @@ class AcceptedAssignmentsCount(ComparableRuleCondition, spec_value=RuleCondition
 
 class AcceptedAssignmentsRate(ComparableRuleCondition, spec_value=RuleConditionKey.ACCEPTED_ASSIGNMENTS_RATE):
     """The percentage of accepted assignments out of all checked assignments from a Toloker.
+
+    `AcceptedAssignmentsRate` is used with collectors:
+    - [AcceptanceRate](toloka.client.collectors.AcceptanceRate.md)
     """
 
     value: float
@@ -102,16 +106,17 @@ class AcceptedAssignmentsRate(ComparableRuleCondition, spec_value=RuleConditionK
 class AssessmentEvent(IdentityRuleCondition, spec_value=RuleConditionKey.ASSESSMENT_EVENT):
     """An assignment status change event.
 
+    Possible values:
+        * `ACCEPT` — an assignment was accepted.
+        * `ACCEPT_AFTER_REJECT` — an assignment with previously set `REJECTED` status was accepted.
+        * `REJECT` — an assignment was rejected.
     This condition can be used with `==` operator only.
 
-    Attributes:
-        value: Possible values:
-            * `conditions.AssessmentEvent.ACCEPT` — an assignment was accepted.
-            * `conditions.AssessmentEvent.ACCEPT_AFTER_REJECT` — an assignment had `REJECTED` status and was accepted.
-            * `conditions.AssessmentEvent.REJECT` — an assignment was rejected.
+    `AssessmentEvent` is used with collectors:
+    - [AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment.md).
 
     Example:
-        The example shows how to increase the overlap of a task suite when you reject an assignment in delayed mode.
+        The example shows how to automatically increase the overlap of a task suite when an assignment was rejected.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -138,7 +143,8 @@ class AssessmentEvent(IdentityRuleCondition, spec_value=RuleConditionKey.ASSESSM
 class AssignmentsAcceptedCount(ComparableRuleCondition, spec_value=RuleConditionKey.ASSIGNMENTS_ACCEPTED_COUNT):
     """The number of assignments accepted from a Toloker.
 
-    `AssignmentsAcceptedCount` condition can be used with[AnswerCount](toloka.client.collectors.AnswerCount.md) collector.
+    `AssignmentsAcceptedCount` is used with collectors:
+    - [AnswerCount](toloka.client.collectors.AnswerCount.md)
 
     See also:
     - AcceptedAssignmentsCount(toloka.client.conditions.AcceptedAssignmentsCount.md) — The number of accepted assignments of a task suite.
@@ -189,7 +195,7 @@ class GoldenSetAnswersCount(ComparableRuleCondition, spec_value=RuleConditionKey
 
 
 class GoldenSetCorrectAnswersRate(ComparableRuleCondition, spec_value=RuleConditionKey.GOLDEN_SET_CORRECT_ANSWERS_RATE):
-    """The percentage of correct responses in control tasks.
+    """The percentage of correct responses to control tasks.
 
     `GoldenSetCorrectAnswersRate` is used with collectors:
     - [GoldenSet](toloka.client.collectors.GoldenSet.md)
@@ -199,7 +205,7 @@ class GoldenSetCorrectAnswersRate(ComparableRuleCondition, spec_value=RuleCondit
 
 
 class GoldenSetIncorrectAnswersRate(ComparableRuleCondition, spec_value=RuleConditionKey.GOLDEN_SET_INCORRECT_ANSWERS_RATE):
-    """The percentage of incorrect responses in control tasks.
+    """The percentage of incorrect responses to control tasks.
 
     `GoldenSetIncorrectAnswersRate` is used with collectors:
     - [GoldenSet](toloka.client.collectors.GoldenSet.md)
@@ -246,13 +252,12 @@ class PendingAssignmentsCount(ComparableRuleCondition, spec_value=RuleConditionK
 class PoolAccessRevokedReason(IdentityRuleCondition, spec_value=RuleConditionKey.POOL_ACCESS_REVOKED_REASON):
     """The reason why a Toloker has lost access to a pool.
 
+    Possible values:
+        * `SKILL_CHANGE` — The Toloker no longer meets one or more filters.
+        * `RESTRICTION` — The Toloker's access to tasks is blocked by a quality control rule.
+
     `PoolAccessRevokedReason` is used with collectors:
     - [UsersAssessment](toloka.client.collectors.UsersAssessment.md)
-
-    Attributes:
-        value: exact reason
-            * `SKILL_CHANGE` — The Toloker no longer meets one or more filters.
-            * `RESTRICTION` — The Toloker's access to tasks is blocked by a quality control rule.
     """
 
     @unique
@@ -290,7 +295,7 @@ class RejectedAssignmentsRate(ComparableRuleCondition, spec_value=RuleConditionK
 
 
 class SkillId(IdentityRuleCondition, spec_value=RuleConditionKey.SKILL_ID):
-    """The ID of a changed skill which caused blocking access to pool.
+    """The ID of a changed skill which caused access blocking to a pool.
 
     `SkillId` provides details if [PoolAccessRevokedReason](toloka.client.conditions.PoolAccessRevokedReason.md) condition equals `SKILL_CHANGE`.
 
