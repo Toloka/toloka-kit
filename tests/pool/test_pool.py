@@ -198,8 +198,8 @@ def test_create_pool_check_all_filters(requests_mock, toloka_client, toloka_url,
                 {'or': [{'category': 'profile', 'key': 'verified', 'operator': 'EQ', 'value': True}]},
                 {
                     'and': [
-                        {'or': [{'category': 'computed', 'key': 'region_by_phone', 'operator': 'IN', 'value': 213}]},
-                        {'or': [{'category': 'computed', 'key': 'region_by_ip', 'operator': 'NOT_IN', 'value': 1}]},
+                        {'category': 'computed', 'key': 'region_by_phone', 'operator': 'IN', 'value': 213},
+                        {'category': 'computed', 'key': 'region_by_ip', 'operator': 'NOT_IN', 'value': 1},
                     ]
                 },
                 {'or': [{'category': 'computed', 'key': 'device_category', 'operator': 'EQ', 'value': 'PERSONAL_COMPUTER'}]},

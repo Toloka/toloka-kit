@@ -2,12 +2,13 @@ import datetime
 import pickle
 import copy
 import pytest
-from toloka.client.filter import Languages, FilterAnd, Skill, Gender, OSVersion
+from toloka.client.filter import Languages, FilterAnd, FilterOr, Skill, Gender, OSVersion
 from toloka.client.pool import Pool
 
 
 def test_simple_language():
-    assert Languages.in_('EN').unstructure() == {'operator': 'IN', 'value': 'EN', 'key': 'languages', 'category': 'profile'}
+    assert Languages.in_('EN').unstructure() == {'operator': 'IN', 'value': 'EN', 'key': 'languages',
+                                                 'category': 'profile'}
 
 
 def test_verified_language_not_in_is_incorrect():
@@ -21,11 +22,13 @@ def test_unknown_verified_language_is_incorrect():
 
 
 def test_language_multiple():
-    assert Languages.in_('EN', verified=True) == FilterAnd([Languages.in_('EN'), Skill('26366').eq(100)])
+    assert Languages.in_('EN', verified=True) == FilterOr([FilterAnd([Languages.in_('EN'), Skill('26366').eq(100)])])
 
 
 def test_verified_language_multiple():
-    assert Languages.in_(['EN', 'RU'], verified=True) == FilterAnd([Languages.in_(['EN', 'RU']), Skill('26366').eq(100), Skill('26296').eq(100)])
+    assert Languages.in_(['EN', 'RU'], verified=True) == FilterOr([FilterAnd(
+        [Languages.in_(['EN', 'RU']), Skill('26366').eq(100), Skill('26296').eq(100)]
+    )])
 
 
 @pytest.mark.parametrize(
@@ -49,7 +52,7 @@ def test_language_deepcopyable(obj):
 ])
 def test_filter_invertion(obj, obj_inverted):
     assert ~obj == obj_inverted
-    
+
 
 @pytest.mark.parametrize('obj,obj_inverted', [
     (
@@ -92,8 +95,8 @@ def test_filter_in_pool():
             }
         ]
     }
-    new_filter |= ((Skill('224') >= 85) & (OSVersion >= 8.1))
-    pool.filter = new_filter
+    filter_with_verified_language = new_filter & Languages.in_('EN', verified=True)
+    pool.filter = filter_with_verified_language
     assert pool.unstructure()['filter'] == {
         'and': [
             {
@@ -104,25 +107,25 @@ def test_filter_in_pool():
                         'operator': 'EQ',
                         'value': 'FEMALE'
                     },
+                ]
+            },
+            {
+                'or': [
                     {
                         'and': [
                             {
-                                'or': [{
-                                    'category': 'skill',
-                                    'key': '224',
-                                    'operator': 'GTE',
-                                    'value': 85
-                                }]
+                                'category': 'profile',
+                                'key': 'languages',
+                                'operator': 'IN',
+                                'value': 'EN'
                             },
                             {
-                                'or': [{
-                                    'category': 'computed',
-                                    'key': 'os_version',
-                                    'operator': 'GTE',
-                                    'value': 8.1
-                                }]
+                                'category': 'skill',
+                                'key': '26366',
+                                'operator': 'EQ',
+                                'value': 100.0
                             }
-                    ]
+                        ],
                     }
                 ]
             },

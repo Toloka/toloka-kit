@@ -238,6 +238,13 @@ class Pool(BaseTolokaObject):
             self_unstructured_dict['filter'] = unstructure(FilterAnd([FilterOr([self.filter])]))
         if isinstance(self.filter, FilterOr):
             self_unstructured_dict['filter'] = unstructure(FilterAnd([self.filter]))
+        if isinstance(self.filter, FilterAnd):
+            self_unstructured_dict['filter'] = unstructure(FilterAnd([
+                unstructure(FilterOr([inner_filter]))
+                if isinstance(inner_filter, Condition)
+                else unstructure(inner_filter)
+                for inner_filter in self.filter
+            ]))
         return self_unstructured_dict
 
     def is_open(self) -> bool:

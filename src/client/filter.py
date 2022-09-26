@@ -151,12 +151,7 @@ class FilterAnd(FilterCondition, kw_only=False):
     def unstructure(self) -> Optional[dict]:
         self_unstructured_dict = super().unstructure()
         if self.and_:
-            self_unstructured_dict['and'] = [
-                unstructure(FilterOr([inner_filter]))
-                if isinstance(inner_filter, Condition)
-                else unstructure(inner_filter)
-                for inner_filter in self.and_
-            ]
+            self_unstructured_dict['and'] = [unstructure(inner_filter) for inner_filter in self.and_]
         return self_unstructured_dict
 
 
@@ -405,7 +400,7 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
                 else:
                     conditions.append(Skill(skills_mapping[value]).eq(cls.VERIFIED_LANGUAGE_SKILL_VALUE))
 
-                return FilterAnd(conditions)
+                return FilterOr([FilterAnd(conditions)])
             except KeyError:
                 if not isinstance(value, str):
                     unsupported_languages = set(value) - skills_mapping.keys()
