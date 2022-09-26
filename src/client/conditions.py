@@ -107,10 +107,11 @@ class AssessmentEvent(IdentityRuleCondition, spec_value=RuleConditionKey.ASSESSM
     """An assignment status change event.
 
     Possible values:
-        * `ACCEPT` — an assignment was accepted.
-        * `ACCEPT_AFTER_REJECT` — an assignment with previously set `REJECTED` status was accepted.
-        * `REJECT` — an assignment was rejected.
-    This condition can be used with `==` operator only.
+        * `ACCEPT` — An assignment was accepted.
+        * `ACCEPT_AFTER_REJECT` — An assignment with previously set `REJECTED` status was accepted.
+        * `REJECT` — An assignment was rejected.
+
+    `AssessmentEvent` condition can be used with the `==` operator only.
 
     `AssessmentEvent` is used with collectors:
     - [AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment.md).
@@ -272,7 +273,7 @@ class PoolAccessRevokedReason(IdentityRuleCondition, spec_value=RuleConditionKey
 
 
 class RejectedAssignmentsCount(ComparableRuleCondition, spec_value=RuleConditionKey.REJECTED_ASSIGNMENTS_COUNT):
-    """The number of rejected assignments for a task suite.
+    """The number of rejected assignments of a task suite.
 
     `RejectedAssignmentsCount` is used with collectors:
     - [AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment.md)
@@ -288,14 +289,14 @@ class RejectedAssignmentsRate(ComparableRuleCondition, spec_value=RuleConditionK
     - [AcceptanceRate](toloka.client.collectors.AcceptanceRate.md)
 
     See also:
-    - [RejectedAssignmentsCount](toloka.client.conditions.RejectedAssignmentsCount.md) — The number of rejected assignments for a task suite.
+    - [RejectedAssignmentsCount](toloka.client.conditions.RejectedAssignmentsCount.md) — The number of rejected assignments of a task suite.
     """
 
     value: float
 
 
 class SkillId(IdentityRuleCondition, spec_value=RuleConditionKey.SKILL_ID):
-    """The ID of a changed skill which caused access blocking to a pool.
+    """The ID of a changed skill which caused access blocking.
 
     `SkillId` provides details if [PoolAccessRevokedReason](toloka.client.conditions.PoolAccessRevokedReason.md) condition equals `SKILL_CHANGE`.
 
@@ -352,7 +353,7 @@ class TotalAnswersCount(ComparableRuleCondition, spec_value=RuleConditionKey.TOT
 
 
 class TotalAssignmentsCount(ComparableRuleCondition, spec_value=RuleConditionKey.TOTAL_ASSIGNMENTS_COUNT):
-    """Total count of checked assignments submitted by a Toloker.
+    """The number of checked assignments out of all assignments submitted by a Toloker.
 
     `TotalAssignmentsCount` is used with collectors:
     - [AcceptanceRate](toloka.client.collectors.AcceptanceRate.md)
