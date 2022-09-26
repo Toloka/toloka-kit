@@ -208,6 +208,7 @@ class Profile(Condition, spec_value=Condition.Category.PROFILE, spec_field='key'
         DATE_OF_BIRTH = 'date_of_birth'
         CITY = 'city'
         LANGUAGES = 'languages'
+        VERIFIED = 'verified'
 
 
 @inherit_docstrings
@@ -432,6 +433,21 @@ languages_init_signature_parameters['verified'] = inspect.Parameter(
 )
 Languages.__init__.__annotations__['verified'] = bool
 Languages.__init__.__signature__ = languages_init_signature.replace(parameters=languages_init_signature_parameters.values())
+
+
+@inherit_docstrings
+class Verified(Profile, IdentityConditionMixin, spec_value=Profile.Key.VERIFIED):
+    """Use to select verified Tolokers.
+
+    Attributes:
+        value: is Toloker verified.
+
+    Example:
+            >>> verified_filter = toloka.client.filter.Verified == True
+            >>> unverified_filter = toloka.client.filter.Verified == False
+            ...
+    """
+    value: bool = attribute(required=True)
 
 
 @inherit_docstrings
