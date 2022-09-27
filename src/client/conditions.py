@@ -108,7 +108,7 @@ class AssessmentEvent(IdentityRuleCondition, spec_value=RuleConditionKey.ASSESSM
 
     Possible values:
         * `ACCEPT` — An assignment was accepted.
-        * `ACCEPT_AFTER_REJECT` — An assignment with previously set `REJECTED` status was accepted.
+        * `ACCEPT_AFTER_REJECT` — An assignment with the previously set `REJECTED` status was accepted.
         * `REJECT` — An assignment was rejected.
 
     `AssessmentEvent` condition can be used with the `==` operator only.
@@ -298,7 +298,7 @@ class RejectedAssignmentsRate(ComparableRuleCondition, spec_value=RuleConditionK
 class SkillId(IdentityRuleCondition, spec_value=RuleConditionKey.SKILL_ID):
     """The ID of a changed skill which caused access blocking.
 
-    `SkillId` provides details if [PoolAccessRevokedReason](toloka.client.conditions.PoolAccessRevokedReason.md) condition equals `SKILL_CHANGE`.
+    `SkillId` provides details if the [PoolAccessRevokedReason](toloka.client.conditions.PoolAccessRevokedReason.md) condition equals `SKILL_CHANGE`.
 
     `SkillId` is used with collectors:
     - [UsersAssessment](toloka.client.collectors.UsersAssessment.md)
