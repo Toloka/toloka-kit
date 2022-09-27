@@ -195,6 +195,7 @@ def test_create_pool_check_all_filters(requests_mock, toloka_client, toloka_url,
                 {'or': [{'category': 'profile', 'key': 'date_of_birth', 'operator': 'GT', 'value': 604972800}]},
                 {'or': [{'category': 'profile', 'key': 'city', 'operator': 'NOT_IN', 'value': 225}]},
                 {'or': [{'category': 'profile', 'key': 'languages', 'operator': 'IN', 'value': 'RU'}]},
+                {'or': [{'category': 'profile', 'key': 'verified', 'operator': 'EQ', 'value': True}]},
                 {
                     'and': [
                         {'or': [{'category': 'computed', 'key': 'region_by_phone', 'operator': 'IN', 'value': 213}]},
@@ -248,6 +249,7 @@ def test_create_pool_check_all_filters(requests_mock, toloka_client, toloka_url,
         (filter.DateOfBirth > 604972800) &
         (filter.City.not_in(225)) &
         (filter.Languages.in_('RU')) &
+        (filter.Verified == True) &  # noqa: E712
         (filter.RegionByPhone.in_(213) & filter.RegionByIp.not_in(1)) &
         (filter.DeviceCategory == filter.DeviceCategory.PERSONAL_COMPUTER) &
         (filter.OSFamily == filter.OSFamily.WINDOWS) &
