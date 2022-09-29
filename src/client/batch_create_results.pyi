@@ -86,7 +86,7 @@ class TaskSuiteBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject)
 
 
 class UserBonusBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list with the results of the user bonuses creation operation.
+    """A list with the results of creating rewards for Tolokers.
 
     Attributes:
         items: Object with information about issued bonuses.
@@ -109,7 +109,7 @@ class UserBonusBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject)
 
 
 class WebhookSubscriptionBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list with the results of the webhook-subscriptions creation operation.
+    """A list with the results of the webhook-subscriptions creation operation.
 
     Attributes:
         items: Object with created webhook-subscriptions.

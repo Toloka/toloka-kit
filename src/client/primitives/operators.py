@@ -28,17 +28,43 @@ class CompareOperator(ExtendableStrEnum):
     LT = 'LT'
     LTE = 'LTE'
 
+    def __invert__(self):
+        if self == CompareOperator.EQ:
+            return CompareOperator.NE
+        if self == CompareOperator.NE:
+            return CompareOperator.EQ
+        if self == CompareOperator.GT:
+            return CompareOperator.LTE
+        if self == CompareOperator.GTE:
+            return CompareOperator.LT
+        if self == CompareOperator.LT:
+            return CompareOperator.GTE
+        if self == CompareOperator.LTE:
+            return CompareOperator.GT
+
 
 @unique
 class InclusionOperator(ExtendableStrEnum):
     IN = 'IN'
     NOT_IN = 'NOT_IN'
 
+    def __invert__(self):
+        if self == InclusionOperator.IN:
+            return InclusionOperator.NOT_IN
+        if self == InclusionOperator.NOT_IN:
+            return InclusionOperator.IN
+
 
 @unique
 class IdentityOperator(ExtendableStrEnum):
     EQ = 'EQ'
     NE = 'NE'
+
+    def __invert__(self):
+        if self == IdentityOperator.EQ:
+            return IdentityOperator.NE
+        if self == IdentityOperator.NE:
+            return IdentityOperator.EQ
 
 
 def _create_operator_metaclass_new(operator_enum: Type[Enum]):

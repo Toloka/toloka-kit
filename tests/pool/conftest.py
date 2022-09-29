@@ -61,10 +61,13 @@ def pool_map():
         'filter': {
             'and': [
                 {
-                    'category': 'profile',
-                    'key': 'adult_allowed',
-                    'operator': 'EQ',
-                    'value': True,
+                    'or': [
+                        {'category': 'profile',
+                        'key': 'adult_allowed',
+                        'operator': 'EQ',
+                        'value': True,
+                        }
+                    ]
                 },
                 {
                     'or': [

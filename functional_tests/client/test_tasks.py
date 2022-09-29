@@ -22,7 +22,7 @@ def pool(client, empty_project):
 
 @pytest.fixture(scope='package')
 def task(client, pool):
-    new_task = Task(input_values={'url': 'https://toloka.yandex.com'}, pool_id=pool.id, overlap=1)
+    new_task = Task(input_values={'url': 'https://toloka.dev'}, pool_id=pool.id, overlap=1)
     new_task = client.create_task(new_task)
     return new_task
 

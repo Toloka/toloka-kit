@@ -69,7 +69,7 @@ class TextAnnotationHotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGI
     Attributes:
         labels: Keyboard shortcuts for selecting categories. They're assigned to buttons with categories in the order
             they're shown.
-        remove: Use this property to allow the performer to deselect an entire line or part of it. The key that you
+        remove: Use this property to allow a Toloker to deselect an entire line or part of it. The key that you
             assign to this property will deselect.
     """
 
@@ -151,7 +151,7 @@ class TriggerPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TRIGGER):
         on_change_of: The data that triggers the action when changed.
 
     Example:
-        How to save the performer coordinates to the output.
+        How to save Toloker's coordinates to the output.
 
         >>> coordinates_save_plugin = tb.plugins.TriggerPluginV1(
         >>>     fire_immediately=True,

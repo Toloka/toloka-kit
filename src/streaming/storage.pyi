@@ -149,7 +149,17 @@ class BucketType(typing.Protocol):
 
 
 class S3Storage(BaseExternalLockerStorage):
-    """Storage that save to AWS S3 using given boto3 client. Requires toloka-kit[s3] extras.
+    """Storage that save to AWS S3 using given boto3 client.
+
+    {% note warning %}
+
+    Requires toloka-kit[s3] extras. Install it with the following command:
+
+    ```shell
+    pip install toloka-kit[s3]
+    ```
+
+    {% endnote %}
 
     Attributes:
         bucket: Boto3 bucket object.

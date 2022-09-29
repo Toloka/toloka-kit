@@ -310,7 +310,7 @@ def autocast_to_enum(func: typing.Callable) -> typing.Callable:
     signature = inspect.signature(func)
     new_params = []
     # cattr supports structuring of generic types (i.e. List, Dict) instances. We want to perform only str -> Enum
-    # structuring conversion. It is possible to achieve this behaviour by replacing any other than Enum types with
+    # structuring conversion. It is possible to achieve this behavior by replacing any other than Enum types with
     # Any type hint (cattr structures data to Any type simply by passing through data without any conversion). Special
     # case is Union[Enum, Any] which is supported in _converter.py.
     casting_types = []

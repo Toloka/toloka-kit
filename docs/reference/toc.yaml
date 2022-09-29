@@ -27,6 +27,8 @@ items:
         href: toloka.client.TolokaClient.archive_app_project.md
       - name: create_app_batch
         href: toloka.client.TolokaClient.create_app_batch.md
+      - name: patch_app_batch
+        href: toloka.client.TolokaClient.patch_app_batch.md
       - name: create_app_item
         href: toloka.client.TolokaClient.create_app_item.md
       - name: create_app_items
@@ -59,6 +61,10 @@ items:
         href: toloka.client.TolokaClient.get_apps.md
       - name: start_app_batch
         href: toloka.client.TolokaClient.start_app_batch.md
+      - name: stop_app_batch
+        href: toloka.client.TolokaClient.stop_app_batch.md
+      - name: resume_app_batch
+        href: toloka.client.TolokaClient.resume_app_batch.md
       - name: unarchive_app_project
         href: toloka.client.TolokaClient.unarchive_app_project.md
     - name: assignments
@@ -105,6 +111,10 @@ items:
       items:
       - name: get_operation
         href: toloka.client.TolokaClient.get_operation.md
+      - name: find_operations
+        href: toloka.client.TolokaClient.find_operations.md
+      - name: get_operations
+        href: toloka.client.TolokaClient.get_operations.md
       - name: get_operation_log
         href: toloka.client.TolokaClient.get_operation_log.md
       - name: wait_operation
@@ -277,6 +287,8 @@ items:
         href: toloka.client.TolokaClient.get_user_skill.md
       - name: get_user_skills
         href: toloka.client.TolokaClient.get_user_skills.md
+      - name: get_user
+        href: toloka.client.TolokaClient.get_user.md
       - name: set_user_skill
         href: toloka.client.TolokaClient.set_user_skill.md
     - name: webhook subscription
@@ -382,8 +394,8 @@ items:
       href: toloka.client.analytics_request.SkippedAssignmentsCountPoolAnalytics.md
     - name: SpentBudgetPoolAnalytics
       href: toloka.client.analytics_request.SpentBudgetPoolAnalytics.md
-    - name: SubmitedAssignmentsCountPoolAnalytics
-      href: toloka.client.analytics_request.SubmitedAssignmentsCountPoolAnalytics.md
+    - name: SubmittedAssignmentsCountPoolAnalytics
+      href: toloka.client.analytics_request.SubmittedAssignmentsCountPoolAnalytics.md
     - name: UniqueSubmittersCountPoolAnalytics
       href: toloka.client.analytics_request.UniqueSubmittersCountPoolAnalytics.md
     - name: UniqueWorkersCountPoolAnalytics
@@ -395,6 +407,9 @@ items:
       hidden: true
     - name: App
       href: toloka.client.app.App.md
+    - name: AppLightestResult
+      href: toloka.client.app.AppLightestResult.md
+      hidden: true
     - name: AppBatch
       href: toloka.client.app.AppBatch.md
     - name: AppBatch.Status
@@ -402,6 +417,9 @@ items:
       hidden: true
     - name: AppBatchCreateRequest
       href: toloka.client.app.AppBatchCreateRequest.md
+    - name: AppItemImport
+      href: toloka.client.app.AppItemImport.md
+      hidden: true
     - name: AppItem
       href: toloka.client.app.AppItem.md
     - name: AppItem.Status
@@ -1309,6 +1327,12 @@ items:
     - name: WebhookSubscriptionSortItems.SortItem
       href: toloka.client.search_requests.WebhookSubscriptionSortItems.SortItem.md
       hidden: true
+    - name: OperationSortItems.SortItem.SortField
+      href: toloka.client.search_requests.OperationSortItems.SortItem.SortField.md
+      hidden: true
+    - name: OperationSortItems.SortItem
+      href: toloka.client.search_requests.OperationSortItems.SortItem.md
+      hidden: true
     - name: AggregatedSolutionSortItems
       href: toloka.client.search_requests.AggregatedSolutionSortItems.md
     - name: AppBatchSortItems
@@ -1345,6 +1369,8 @@ items:
       href: toloka.client.search_requests.UserSkillSortItems.md
     - name: WebhookSubscriptionSortItems
       href: toloka.client.search_requests.WebhookSubscriptionSortItems.md
+    - name: OperationSortItems
+      href: toloka.client.search_requests.OperationSortItems.md
     - name: BaseSearchRequest
       href: toloka.client.search_requests.BaseSearchRequest.md
       hidden: true
@@ -1444,6 +1470,11 @@ items:
     - name: WebhookSubscriptionSearchRequest.CompareFields
       href: toloka.client.search_requests.WebhookSubscriptionSearchRequest.CompareFields.md
       hidden: true
+    - name: OperationSearchRequest
+      href: toloka.client.search_requests.OperationSearchRequest.md
+    - name: OperationSearchRequest.CompareFields
+      href: toloka.client.search_requests.OperationSearchRequest.CompareFields.md
+      hidden: true
     - name: SearchRequestMetaclass
       href: toloka.client.search_requests.SearchRequestMetaclass.md
       hidden: true
@@ -1488,6 +1519,8 @@ items:
       href: toloka.client.search_results.UserSkillSearchResult.md
     - name: WebhookSubscriptionSearchResult
       href: toloka.client.search_results.WebhookSubscriptionSearchResult.md
+    - name: OperationSearchResult
+      href: toloka.client.search_results.OperationSearchResult.md
   - name: skill
     items:
     - name: Skill
@@ -1886,6 +1919,13 @@ items:
     - name: codegen_setter_for_owner
       href: toloka.client.training.codegen_setter_for_owner.md
       hidden: true
+  - name: user
+    items:
+    - name: User
+      href: toloka.client.user.User.md
+    - name: User.Attributes
+      href: toloka.client.user.User.Attributes.md
+      hidden: true
   - name: user_bonus
     items:
     - name: UserBonus
@@ -2252,10 +2292,10 @@ items:
       href: toloka.streaming.storage.BaseStorage.md
       hidden: true
     - name: BucketType.download_fileobj
-      href: toloka.streaming.storage.BaseStorage.download_fileobj.md
+      href: toloka.streaming.storage.BucketType.download_fileobj.md
       hidden: true
     - name: BucketType.upload_fileobj
-      href: toloka.streaming.storage.BaseStorage.upload_fileobj.md
+      href: toloka.streaming.storage.BucketType.upload_fileobj.md
       hidden: true
     - name: JSONLocalStorage.DefaultNearbyFileLocker
       href: toloka.streaming.storage.JSONLocalStorage.DefaultNearbyFileLocker.md
@@ -2270,6 +2310,9 @@ items:
       href: toloka.streaming.storage.JSONLocalStorage.md
     - name: JSONLocalStorage.save
       href: toloka.streaming.storage.JSONLocalStorage.save.md
+      hidden: true
+    - name: BucketType
+      href: toloka.streaming.storage.BucketType.md
       hidden: true
     - name: S3Storage.cleanup
       href: toloka.streaming.storage.S3Storage.cleanup.md

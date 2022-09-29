@@ -45,7 +45,7 @@ class BaseTask(toloka.client.primitives.base.BaseTolokaObject):
                 "<output field id n>": "<correct answer value n>"
             correctness_weight: Weight of the correct answer. Allows you to set several options for correct answers and
                 rank them by correctness. For example, if the weight of the correct answer is 0.5, half of the error is
-                counted to the user. The more correct the answer in correctValues, the higher its weight.
+                counted to the Toloker. The more correct the answer in correctValues, the higher its weight.
         """
 
         def __init__(
@@ -84,9 +84,9 @@ class BaseTask(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class Task(toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin, BaseTask):
-    """The task that will be issued to the performers
+    """A task that is assigned to Tolokers.
 
-    Not to be confused with TaskSuite - a set of tasks that is shown to the user at one time.
+    Not to be confused with TaskSuite - a set of tasks that is shown to a Toloker at one time.
     TaskSuite may contain several Tasks.
 
     Attributes:
@@ -100,15 +100,15 @@ class Task(toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMi
         message_on_unknown_solution: Hint for the task (for training tasks).
         id: Task ID.
         pool_id: The ID of the pool that the task is uploaded to.
-        remaining_overlap: How many times will this task be issued to performers. Read Only field.
-        reserved_for: IDs of users who will have access to the task.
-        unavailable_for: IDs of users who shouldn't have access to the task.
+        remaining_overlap: How many times will this task be issued to Tolokers. Read Only field.
+        reserved_for: IDs of Tolokers who will have access to the task.
+        unavailable_for: IDs of Tolokers who shouldn't have access to the task.
         traits_all_of: 
         traits_any_of: 
         traits_none_of_any: 
         origin_task_id: ID of the task it was copied from.
         created: The UTC date and time when the task was created.
-        baseline_solutions: Preliminary responses. This data simulates performer responses when calculating confidence in a response.
+        baseline_solutions: Preliminary responses. This data simulates Tolokers' responses when calculating confidence in a response.
             It is used in dynamic overlap (also known as incremental relabeling or IRL) and aggregation of results by skill.
 
     Examples:
@@ -188,8 +188,8 @@ class CreateTaskParameters(toloka.client.primitives.parameter.Parameters):
 
     Attributes:
         allow_defaults: Active overlap setting:
-            * True — Use the overlap value that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
-            * False — Use the overlap value that is set in the `overlap` task suite parameter.
+            * True — Use the overlap that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
+            * False — Use the overlap that is set in the task parameters (in the `overlap` field).
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
     """
 
@@ -211,8 +211,8 @@ class CreateTaskParameters(toloka.client.primitives.parameter.Parameters):
 class CreateTaskAsyncParameters(CreateTaskParameters):
     """Attributes:
         allow_defaults: Active overlap setting:
-            * True — Use the overlap value that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
-            * False — Use the overlap value that is set in the `overlap` task suite parameter.
+            * True — Use the overlap that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
+            * False — Use the overlap that is set in the task parameters (in the `overlap` field).
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
     """
 
@@ -240,8 +240,8 @@ class CreateTasksParameters(CreateTaskParameters):
 
     Attributes:
         allow_defaults: Active overlap setting:
-            * True — Use the overlap value that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
-            * False — Use the overlap value that is set in the `overlap` task suite parameter.
+            * True — Use the overlap that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
+            * False — Use the overlap that is set in the task parameters (in the `overlap` field).
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
         skip_invalid_items: Task validation option:
             * True — All valid tasks are added. If a task does not pass validation, then it is not added to Toloka. All such tasks are listed in the response.
@@ -278,7 +278,7 @@ class TaskOverlapPatch(toloka.client.primitives.base.BaseTolokaObject):
     Attributes:
         overlap: Overlap value.
         infinite_overlap: Infinite overlap:
-            * True — Assign the task to all users. It is useful for training tasks.
+            * True — Assign the task to all Tolokers. It is useful for training and control tasks.
             * False — Overlap value specified for the task or for the pool is used. Default value: False.
     """
 
@@ -303,9 +303,9 @@ class TaskPatch(TaskOverlapPatch):
     Attributes:
         overlap: Overlap value.
         infinite_overlap: Infinite overlap:
-            * True — Assign the task to all users. It is useful for training tasks.
+            * True — Assign the task to all Tolokers. It is useful for training and control tasks.
             * False — Overlap value specified for the task or for the pool is used. Default value: False.
-        baseline_solutions: Preliminary responses. This data simulates performer responses when calculating confidence in a response.
+        baseline_solutions: Preliminary responses. This data simulates Tolokers' responses when calculating confidence in a response.
             It is used in dynamic overlap (also known as incremental relabeling or IRL) and aggregation of results by skill.
         known_solutions: Responses and hints for control tasks and training tasks. If multiple output fields are included
             in the validation, all combinations of the correct response must be specified.

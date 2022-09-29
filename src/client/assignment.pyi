@@ -5,6 +5,7 @@ __all__ = [
 ]
 import datetime
 import decimal
+import toloka.client.owner
 import toloka.client.primitives.base
 import toloka.client.primitives.parameter
 import toloka.client.solution
@@ -20,37 +21,48 @@ class Assignment(toloka.client.primitives.base.BaseTolokaObject):
         id: The ID of the assignment.
         task_suite_id: The ID of the assigned task suite.
         pool_id: The ID of the pool containing the task suite.
-        user_id: The ID of the performer who was assigned the task suite.
+        user_id: The ID of the Toloker who was assigned the task suite.
         status: Status of the assignment.
             * `ACTIVE` — The task suite is assigned but it isn't completed yet.
             * `SUBMITTED` — The task suite is completed but it isn't checked.
             * `ACCEPTED` — The task suite is accepted by the requester.
             * `REJECTED` — The task suite is rejected by the requester.
-            * `SKIPPED` — The task suite is skipped by the performer.
+            * `SKIPPED` — The task suite is skipped by the Toloker.
             * `EXPIRED` — Time for completing the tasks has expired.
-        reward: Payment received by the performer.
-        tasks: All tasks in the task suite.
-        automerged: A flag showing merged tasks:
-            * `True` — The response was obtained by merging identical tasks.
-            * `False` — No task merging occurred.
-        created: The date and time when the task suite was assigned to the performer.
-        submitted: The date and time when the task suite was completed by the performer.
+        reward: Payment received by the Toloker.
+        bonus_ids: IDs of rewards issued for the task.
+        tasks: Data for the tasks.
+        automerged: Flag of the response received as a result of merging identical tasks. Value:
+            * True — The response was recorded when identical tasks were merged.
+            * False — Normal Toloker response.
+        created: The date and time when the task suite was assigned to a Toloker.
+        submitted: The date and time when the task suite was completed by a Toloker.
         accepted: The date and time when the responses for the task suite were accepted by the requester.
         rejected: The date and time when the responses for the task suite were rejected by the requester.
-        skipped: The date and time when the task suite was skipped by the performer.
-        expired: The date and time when time for completing the task suite expired.
-        first_declined_solution_attempt: The performer's first try responses in training tasks if the responses are wrong. If the performer answers correctly on the first try, the
-            `first_declined_solution_attempt` is omitted.
-            The order of the responses is the same as the order of `tasks`.
-        solutions: The performer's responses. The order of the responses is the same as the order of `tasks`.
-        mixed: The method of grouping tasks in the task suite:
+        skipped: The date and time when the task suite was skipped by the Toloker.
+        expired: The date and time when the time for completing the task suite expired.
+        first_declined_solution_attempt: For training tasks. The Toloker's first responses in the training task
+            (only if these were the wrong answers). If the Toloker answered correctly on the first try, the
+            first_declined_solution_attempt array is omitted.
+            Arrays with the responses (output_values) are arranged in the same order as the task data in the tasks array.
+        solutions: Toloker responses. Arranged in the same order as the data for tasks in the tasks array.
+        mixed: Type of operation for creating a task suite:
             * `True` — Smart mixing was used.
             * `False` — The tasks were grouped manually, smart mixing was not used.
+        owner: Properties of Requester.
         public_comment: A public comment that is set when accepting or rejecting the assignment.
     """
 
     class Status(toloka.util._extendable_enum.ExtendableStrEnum):
-        """An enumeration.
+        """The status of an assigned task suite.
+
+        Attributes:
+            ACTIVE: The task suite is assigned but it isn't completed yet.
+            SUBMITTED: The task suite is completed but it isn't checked.
+            ACCEPTED: The task suite is accepted by the requester.
+            REJECTED: The task suite is rejected by the requester.
+            SKIPPED: The task suite is skipped by the Toloker.
+            EXPIRED: Time for completing the tasks has expired.
         """
 
         ACTIVE = 'ACTIVE'
@@ -69,6 +81,7 @@ class Assignment(toloka.client.primitives.base.BaseTolokaObject):
         user_id: typing.Optional[str] = None,
         status: typing.Union[Status, str, None] = None,
         reward: typing.Optional[decimal.Decimal] = None,
+        bonus_ids: typing.Optional[typing.List[str]] = None,
         tasks: typing.Optional[typing.List[toloka.client.task.Task]] = None,
         automerged: typing.Optional[bool] = None,
         created: typing.Optional[datetime.datetime] = None,
@@ -80,6 +93,7 @@ class Assignment(toloka.client.primitives.base.BaseTolokaObject):
         first_declined_solution_attempt: typing.Optional[typing.List[toloka.client.solution.Solution]] = None,
         solutions: typing.Optional[typing.List[toloka.client.solution.Solution]] = None,
         mixed: typing.Optional[bool] = None,
+        owner: typing.Optional[toloka.client.owner.Owner] = None,
         public_comment: typing.Optional[str] = None
     ) -> None:
         """Method generated by attrs for class Assignment.
@@ -93,6 +107,7 @@ class Assignment(toloka.client.primitives.base.BaseTolokaObject):
     user_id: typing.Optional[str]
     status: typing.Optional[Status]
     reward: typing.Optional[decimal.Decimal]
+    bonus_ids: typing.Optional[typing.List[str]]
     tasks: typing.Optional[typing.List[toloka.client.task.Task]]
     automerged: typing.Optional[bool]
     created: typing.Optional[datetime.datetime]
@@ -104,6 +119,7 @@ class Assignment(toloka.client.primitives.base.BaseTolokaObject):
     first_declined_solution_attempt: typing.Optional[typing.List[toloka.client.solution.Solution]]
     solutions: typing.Optional[typing.List[toloka.client.solution.Solution]]
     mixed: typing.Optional[bool]
+    owner: typing.Optional[toloka.client.owner.Owner]
     public_comment: typing.Optional[str]
 
 
@@ -143,7 +159,7 @@ class GetAssignmentsTsvParameters(toloka.client.primitives.parameter.Parameters)
         status: Statuses of assignments to download.
         start_time_from: Download assignments submitted after the specified date and time.
         start_time_to: Download assignments submitted before the specified date and time.
-        exclude_banned: Exclude answers from banned performers, even if their assignments have suitable status.
+        exclude_banned: Exclude answers from banned Tolokers, even if their assignments have suitable status.
         field: Names of `Assignment` fields to be downloaded. Fields other then from `Assignment` class are always downloaded.
     """
 

@@ -46,13 +46,13 @@ class FieldType(toloka.util._extendable_enum.ExtendableStrEnum):
 
 class FieldSpec(toloka.client.primitives.base.BaseTolokaObject):
     """A base class for field specifications used in project's `input_spec` and `output_spec`
-    for input and respose data validation specification respectively. Use subclasses of this
+    for input and response data validation specification respectively. Use subclasses of this
     class defined below to define the data type (string, integer, URL, etc.) and specify
     validation parameters (such as string length).
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
     """
 
     def __init__(
@@ -74,8 +74,8 @@ class BooleanSpec(FieldSpec):
     """A boolean field specification
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
         allowed_values: Allowed values
     """
 
@@ -100,8 +100,8 @@ class StringSpec(FieldSpec):
     """A string field specification
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
         min_length: Minimum length of the string
         max_length: Maximum length of the string
         allowed_values: Allowed values
@@ -132,8 +132,8 @@ class IntegerSpec(FieldSpec):
     """An integer field specification
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
         min_value: Minimum value of the number
         max_value: Maximum value of the number
         allowed_values: Allowed values
@@ -164,8 +164,8 @@ class FloatSpec(FieldSpec):
     """An floating point field specification
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
         min_value: Minimum value of the number
         max_value: Maximum value of the number
     """
@@ -193,8 +193,8 @@ class UrlSpec(FieldSpec):
     """A url field specification
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
     """
 
     def __init__(
@@ -216,8 +216,8 @@ class FileSpec(FieldSpec):
     """A file field specification (only for output data)
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
     """
 
     def __init__(
@@ -239,9 +239,9 @@ class CoordinatesSpec(FieldSpec):
     """Geographical coordinates field specification, such as “53.910236,27.531110
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
-        current_location: put the user's current coordinates in the field (true/false).
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
+        current_location: put the Toloker's current coordinates in the field (true/false).
             Used in tasks for the mobile app.
     """
 
@@ -266,8 +266,8 @@ class JsonSpec(FieldSpec):
     """A JSON object field specification
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
     """
 
     def __init__(
@@ -289,8 +289,8 @@ class ArrayBooleanSpec(BooleanSpec):
     """A boolean array field specification
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
         allowed_values: Allowed values
         min_size: Minimum number of elements in the array
         max_size: Maximum number of elements in the array
@@ -321,8 +321,8 @@ class ArrayStringSpec(StringSpec):
     """A string array field specification
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
         min_length: Minimum length of the string
         max_length: Maximum length of the string
         allowed_values: Allowed values
@@ -359,8 +359,8 @@ class ArrayIntegerSpec(IntegerSpec):
     """An integer array field specification
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
         min_value: Minimum value of the number
         max_value: Maximum value of the number
         allowed_values: Allowed values
@@ -397,8 +397,8 @@ class ArrayFloatSpec(FloatSpec):
     """An floating point array field specification
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
         min_value: Minimum value of the number
         max_value: Maximum value of the number
         min_size: Minimum number of elements in the array
@@ -432,8 +432,8 @@ class ArrayUrlSpec(UrlSpec):
     """A url array field specification
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
         min_size: Minimum number of elements in the array
         max_size: Maximum number of elements in the array
     """
@@ -461,8 +461,8 @@ class ArrayFileSpec(FileSpec):
     """A file array field specification (only for output data)
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
         min_size: Minimum number of elements in the array
         max_size: Maximum number of elements in the array
     """
@@ -490,9 +490,9 @@ class ArrayCoordinatesSpec(CoordinatesSpec):
     """Geographical coordinates array field specification
 
     Attributes:
-        required: Whether the object or input field is required
-        hidden: Whether or not to hide the input value field from the user
-        current_location: put the user's current coordinates in the field (true/false).
+        required: Whether the object or input field is required.
+        hidden: Whether to hide the input field from Tolokers.
+        current_location: put the Toloker's current coordinates in the field (true/false).
             Used in tasks for the mobile app.
         min_size: Minimum number of elements in the array
         max_size: Maximum number of elements in the array

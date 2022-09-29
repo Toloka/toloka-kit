@@ -24,6 +24,10 @@ Main advantages of Toloka:
   - **Cost-efficiency** - Save time and money with this purpose-built platform for handling large-scale data collection and annotation projects, on-demand 24/7, at your own price and within your timeframe.
   - **Free, powerful API** - Build scalable and fully automated human-in-the-loop machine learning pipelines with a powerful open API.
 
+**⚠️ toloka-kit==1.0.0 breaking changes ⚠️**
+
+Starting with 1.0.0 release only the core version of the package is installed by default. See "Optional dependencies" 
+section for details.
 
 Requirements
 --------------
@@ -43,6 +47,7 @@ $ pip install toloka-kit
 ```
 Note: this project is still under heavy development and interfaces may change slightly. For production environments please specify exact package version. For example: `toloka-kit==0.1.26`
 
+### Optional dependencies
 If you want to install toloka-kit with all additional dependencies:
 ```shell
 $ pip install toloka-kit[all]
@@ -62,7 +67,7 @@ print(toloka_client.get_requester())
 
 Free trial
 --------------
-To get acquainted with Toloka tools for free, you can use the promo code **TOLOKAKIT1** on $20 on your [profile page](https://toloka.yandex.com/requester/profile?utm_source=github&utm_medium=site&utm_campaign=tolokakit) after registration.
+To get acquainted with Toloka tools for free, you can use the promo code **TOLOKAKIT1** on $20 on your [profile page](https://toloka.dev/requester/profile?utm_source=github&utm_medium=site&utm_campaign=tolokakit) after registration.
 
 
 Useful Links

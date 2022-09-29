@@ -14,22 +14,22 @@ import uuid
 
 
 class TaskSuite(toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin, toloka.client.primitives.base.BaseTolokaObject):
-    """A set of tasks issued to the performer at a time
+    """A set of tasks issued to the Toloker at a time
 
     TaskSuite can contain one or more tasks. The execution price is charged for one TaskSuite.
-    Performers receive exactly one TaskSuite when they take on your task.
+    Tolokers receive exactly one TaskSuite when they take on your task.
 
     Attributes:
         pool_id: The ID of the pool that task suite are uploaded to.
         tasks: Data for the tasks.
-        reserved_for: IDs of users who will have access to the task suite.
-        unavailable_for: IDs of users who shouldn't have access to the task suite.
+        reserved_for: IDs of Tolokers who will have access to the task suite.
+        unavailable_for: IDs of Tolokers who shouldn't have access to the task suite.
         issuing_order_override: The priority of a task suite among other sets in the pool. Defines the order in which
-            task suites are assigned to performers. The larger the parameter value, the higher the priority.
+            task suites are assigned to Tolokers. The larger the parameter value, the higher the priority.
             This parameter can be used if the pool has issue_task_suites_in_creation_order: true.
             Allowed values: from -99999.99999 to 99999.99999.
         mixed: Type of operation for creating a task suite:
-            * True - Automatically with the "smart mixing" option (for details, see Yandex.Toloka requester's guide).
+            * True - Automatically with the "smart mixing" option (for details, see Toloka requester's guide).
             * False - Manually.
         traits_all_of:
         traits_any_of:
@@ -37,7 +37,7 @@ class TaskSuite(toloka.client.primitives.infinite_overlap.InfiniteOverlapParamet
         longitude: The longitude of the point on the map for the task suite.
         latitude: The latitude of the point on the map for the task suite.
         id: ID of a task suite. Read only field.
-        remaining_overlap: How many times will this Task Suite be issued to performers. Read only field.
+        remaining_overlap: How many times will this Task Suite be issued to Tolokers. Read only field.
         automerged: The task suite flag is created after task merging. Read Only field. Value:
             * True - The task suite is generated as a result of merging identical tasks.
             * False - A standard task suite created by "smart mixing" or by the requester.
@@ -112,7 +112,7 @@ class TaskSuiteCreateRequestParameters(toloka.client.primitives.parameter.Parame
                 don't create the task suites.
         allow_defaults: Overlap settings:
             * True - Use the overlap that is set in the pool parameters.
-            * False - Use the overlap that is set in the task suite parameters (in the overlap field).
+            * False - Use the overlap that is set in the task suite parameters (in the `overlap` field).
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
         async_mode: How the request is processed:
             * True — deferred. The query results in an asynchronous operation running in the background.
@@ -160,7 +160,7 @@ class TaskSuitePatch(toloka.client.primitives.infinite_overlap.InfiniteOverlapPa
 
     Attributes:
         issuing_order_override: The priority of a task suite among other sets in the pool. Defines the order in which
-            task suites are assigned to performers. The larger the parameter value, the higher the priority.
+            task suites are assigned to Tolokers. The larger the parameter value, the higher the priority.
             This parameter can be used if the pool has issue_task_suites_in_creation_order: true.
             Allowed values: from -99999.99999 to 99999.99999.
         open_pool: Open the pool immediately after changing a task suite, if the pool is closed.

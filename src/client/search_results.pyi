@@ -13,6 +13,7 @@ __all__ = [
     'UserRestrictionSearchResult',
     'UserSkillSearchResult',
     'WebhookSubscriptionSearchResult',
+    'OperationSearchResult',
     'AppProjectSearchResult',
     'AppSearchResult',
     'AppItemSearchResult',
@@ -23,6 +24,7 @@ import toloka.client.app
 import toloka.client.assignment
 import toloka.client.attachment
 import toloka.client.message_thread
+import toloka.client.operations
 import toloka.client.pool
 import toloka.client.primitives.base
 import toloka.client.project
@@ -38,13 +40,13 @@ import typing
 
 
 class AggregatedSolutionSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found AggregatedSolutions and whether there is something else on the original request
+    """The result of searching aggregated responses.
 
     Attributes:
-        items: List of found AggregatedSolution
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        items: A list with found aggregated responses.
+        has_more: A flag showing whether there are more matching aggregated responses.
+            * `True` — There are more matching aggregated responses, not included in `items` due to the limit set in the search request.
+            * `False` — `items` contains all matching aggregated responses.
     """
 
     def __init__(
@@ -63,15 +65,13 @@ class AggregatedSolutionSearchResult(toloka.client.primitives.base.BaseTolokaObj
 
 
 class AssignmentSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found assignments.
-
-    The number of assignments in the list is limited by the [find_assignments](toloka.client.TolokaClient.find_assignments.md) method.
+    """The result of searching assignments.
 
     Attributes:
-        items: The list of found assignments.
-        has_more: More items flag:
-            * `True` — Not all assignments matching search criteria are returned in the `items` due to the limit.
-            * `False` — All matching assignments are in the `items`.
+        items: A list with found assignments.
+        has_more: A flag showing whether there are more matching assignments.
+            * `True` — There are more matching assignments, not included in `items` due to the limit set in the search request.
+            * `False` — `items` contains all matching assignments.
     """
 
     def __init__(
@@ -90,15 +90,13 @@ class AssignmentSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AttachmentSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found attachments and whether there is something else on the original request
-
-    It's better to use TolokaClient.get_attachments(), which already implements the correct handling of the search result.
+    """The result of searching attachments.
 
     Attributes:
-        items: List of found Attachment
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        items: A list with found attachments.
+        has_more: A flag showing whether there are more matching attachments.
+            * `True` — There are more matching attachments, not included in `items` due to the limit set in the search request.
+            * `False` — `items` contains all matching attachments.
     """
 
     def __init__(
@@ -117,15 +115,13 @@ class AttachmentSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class MessageThreadSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found message chains and whether there is something else on the original request
-
-    It's better to use TolokaClient.get_message_threads(), which already implements the correct handling of the search result.
+    """The result of searching message threads.
 
     Attributes:
-        items: List of found MessageThread
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        items: A list with found message threads.
+        has_more: A flag showing whether there are more matching message threads.
+            * `True` — There are more matching message threads, not included in `items` due to the limit set in the search request.
+            * `False` — `items` contains all matching message threads.
     """
 
     def __init__(
@@ -144,15 +140,13 @@ class MessageThreadSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class ProjectSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found projects and whether there is something else on the original request
-
-    It's better to use TolokaClient.get_projects(), which already implements the correct handling of the search result.
+    """The result of searching projects.
 
     Attributes:
-        items: List of found projects
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        items: A list with found projects.
+        has_more: A flag showing whether there are more matching projects.
+            * `True` — There are more matching projects, not included in `items` due to the limit set in the search request.
+            * `False` — `items` contains all matching projects.
     """
 
     def __init__(
@@ -171,15 +165,13 @@ class ProjectSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class PoolSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found pools and whether there is something else on the original request
-
-    It's better to use TolokaClient.get_pools(), which already implements the correct handling of the search result.
+    """The result of searching pools.
 
     Attributes:
-        items: List of found pools
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        items: A list with found pools.
+        has_more: A flag showing whether there are more matching pools.
+            * `True` — There are more matching pools, not included in `items` due to the limit set in the search request.
+            * `False` — `items` contains all matching pools.
     """
 
     def __init__(
@@ -198,15 +190,13 @@ class PoolSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class SkillSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found skills and whether there is something else on the original request
-
-    It's better to use TolokaClient.get_skill(), which already implements the correct handling of the search result.
+    """The result of searching skills.
 
     Attributes:
-        items: List of found skills
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        items: A list with found skills.
+        has_more: A flag showing whether there are more matching skills.
+            * `True` — There are more matching skills, not included in `items` due to the limit set in the search request.
+            * `False` — `items` contains all matching skills.
     """
 
     def __init__(
@@ -225,15 +215,13 @@ class SkillSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class TaskSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found tasks and whether there is something else on the original request
-
-    It's better to use TolokaClient.get_tasks(), which already implements the correct handling of the search result.
+    """The result of searching tasks.
 
     Attributes:
-        items: List of found tasks
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        items: A list with found tasks.
+        has_more: A flag showing whether there are more matching tasks.
+            * `True` — There are more matching tasks, not included in `items` due to the limit set in the search request.
+            * `False` — `items` contains all matching tasks.
     """
 
     def __init__(
@@ -252,15 +240,13 @@ class TaskSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class TaskSuiteSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found sets of tasks and whether there is something else on the original request
-
-    It's better to use TolokaClient.get_task_suites(), which already implements the correct handling of the search result.
+    """The result of searching task suites.
 
     Attributes:
-        items: List of found sets of tasks
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        items: A list with found task suites.
+        has_more: A flag showing whether there are more matching task suites.
+            * `True` — There are more matching task suites, not included in `items` due to the limit set in the search request.
+            * `False` — `items` contains all matching task suites.
     """
 
     def __init__(
@@ -279,15 +265,13 @@ class TaskSuiteSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class TrainingSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found training pools and whether there is something else on the original request
-
-    It's better to use TolokaClient.get_trainings(), which already implements the correct handling of the search result.
+    """The result of searching training pools.
 
     Attributes:
-        items: List of found training pools
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        items: A list with found training pools.
+        has_more: A flag showing whether there are more matching training pools.
+            * `True` — There are more matching training pools, not included in `items` due to the limit set in the search request.
+            * `False` — `items` contains all matching training pools.
     """
 
     def __init__(
@@ -306,15 +290,13 @@ class TrainingSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class UserBonusSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found user bonuses and whether there is something else on the original request
-
-    It's better to use TolokaClient.get_user_bonuses(), which already implements the correct handling of the search result.
+    """The result of searching Tolokers' rewards.
 
     Attributes:
-        items: List of found user bonuses
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        items: A list with found rewards.
+        has_more: A flag showing whether there are more matching rewards.
+            * `True` — There are more matching rewards, not included in `items` due to the limit set in the search request.
+            * `False` — `items` contains all matching rewards.
     """
 
     def __init__(
@@ -333,15 +315,13 @@ class UserBonusSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class UserRestrictionSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found user restrictions and whether there is something else on the original request
-
-    It's better to use TolokaClient.get_user_restrictions(), which already implements the correct handling of the search result.
+    """The result of searching Toloker restrictions.
 
     Attributes:
-        items: List of found user restrictions
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        items: A list with found Toloker restrictions.
+        has_more: A flag showing whether there are more matching Toloker restrictions.
+            * `True` — There are more matching Toloker restrictions, not included in `items` due to the limit set in the search request.
+            * `False` — `items` contains all matching Toloker restrictions.
     """
 
     def __init__(
@@ -360,15 +340,13 @@ class UserRestrictionSearchResult(toloka.client.primitives.base.BaseTolokaObject
 
 
 class UserSkillSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found user skills and whether there is something else on the original request
-
-    It's better to use TolokaClient.get_user_skills(), which already implements the correct handling of the search result.
+    """The result of searching Tolokers' skills.
 
     Attributes:
-        items: List of found user skills
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        items: A list with found skills.
+        has_more: A flag showing whether there are more matching skills.
+            * `True` — There are more matching skills, not included in `items` due to the limit set in the search request.
+            * `False` — `items` contains all matching skills.
     """
 
     def __init__(
@@ -387,16 +365,13 @@ class UserSkillSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class WebhookSubscriptionSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found subscriptions and whether there is something else on the original request
-
-    It's better to use TolokaClient.get_webhook_subscriptions(),
-    which already implements the correct handling of the search result.
+    """The result of searching webhook subscriptions.
 
     Attributes:
-        items: List of found subscriptions
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        items: A list with found subscriptions.
+        has_more: A flag showing whether there are more matching subscriptions.
+            * `True` — There are more matching subscriptions, not included in `items` due to the limit set in the search request.
+            * `False` — `items` contains all matching subscriptions.
     """
 
     def __init__(
@@ -414,17 +389,42 @@ class WebhookSubscriptionSearchResult(toloka.client.primitives.base.BaseTolokaOb
     has_more: typing.Optional[bool]
 
 
-class AppProjectSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found App projects and whether there is something else on the original request.
+class OperationSearchResult(toloka.client.primitives.base.BaseTolokaObject):
+    """The list of found operations and whether there is something else on the original request
 
-    It's better to use TolokaClient.get_app_projects(),
+    It's better to use TolokaClient.get_operations(),
     which already implements the correct handling of the search result.
 
     Attributes:
-        items: List of found App projects.
+        items: List of found operations
         has_more: Whether the list is complete:
             * True - Not all elements are included in the output due to restrictions in the limit parameter.
             * False - The output lists all the items.
+    """
+
+    def __init__(
+        self,
+        *,
+        items: typing.Optional[typing.List[toloka.client.operations.Operation]] = None,
+        has_more: typing.Optional[bool] = None
+    ) -> None:
+        """Method generated by attrs for class OperationSearchResult.
+        """
+        ...
+
+    _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
+    items: typing.Optional[typing.List[toloka.client.operations.Operation]]
+    has_more: typing.Optional[bool]
+
+
+class AppProjectSearchResult(toloka.client.primitives.base.BaseTolokaObject):
+    """The result of searching App projects.
+
+    Attributes:
+        content: A list with found App projects.
+        has_more: A flag showing whether there are more matching App projects.
+            * `True` — There are more matching App projects, not included in `content` due to the limit set in the search request.
+            * `False` — `content` contains all matching App projects.
     """
 
     def __init__(
@@ -443,16 +443,13 @@ class AppProjectSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found Apps and whether there is something else on the original request.
-
-    It's better to use TolokaClient.get_apps(),
-    which already implements the correct handling of the search result.
+    """The result of searching App solutions.
 
     Attributes:
-        items: List of found Apps.
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        content: A list with found App solutions.
+        has_more: A flag showing whether there are more matching App solutions.
+            * `True` — There are more matching App solutions, not included in `content` due to the limit set in the search request.
+            * `False` — `content` contains all matching App solutions.
     """
 
     def __init__(
@@ -471,16 +468,13 @@ class AppSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppItemSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found work items in the App project and whether there is something else on the original request.
-
-    It's better to use TolokaClient.get_app_items(),
-    which already implements the correct handling of the search result.
+    """The result of searching App task items.
 
     Attributes:
-        items: List of found work items in the App project.
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        content: A list with found task items.
+        has_more: A flag showing whether there are more matching task items.
+            * `True` — There are more matching task items, not included in `content` due to the limit set in the search request.
+            * `False` — `content` contains all matching task items.
     """
 
     def __init__(
@@ -499,16 +493,13 @@ class AppItemSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppBatchSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list of found batches in the App project and whether there is something else on the original request.
-
-    It's better to use TolokaClient.get_app_batches(),
-    which already implements the correct handling of the search result.
+    """The result of searching batches in an App project.
 
     Attributes:
-        items: List of found batches in the App project.
-        has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+        content: A list with found batches.
+        has_more: A flag showing whether there are more matching batches.
+            * `True` — There are more matching batches, not included in `content` due to the limit set in the search request.
+            * `False` — `content` contains all matching batches.
     """
 
     def __init__(

@@ -2,7 +2,7 @@ import pytest
 import toloka.client as client
 from toloka.client.analytics_request import (
     RealTasksCountPoolAnalytics,
-    SubmitedAssignmentsCountPoolAnalytics,
+    SubmittedAssignmentsCountPoolAnalytics,
     SkippedAssignmentsCountPoolAnalytics,
     RejectedAssignmentsCountPoolAnalytics,
     ApprovedAssignmentsCountPoolAnalytics,
@@ -158,7 +158,7 @@ def test_send_analytics_request(requests_mock, toloka_client, toloka_api_url,
 
     stat_requests = [
         RealTasksCountPoolAnalytics(subject_id='123'),
-        SubmitedAssignmentsCountPoolAnalytics(subject_id='123'),
+        SubmittedAssignmentsCountPoolAnalytics(subject_id='123'),
         SkippedAssignmentsCountPoolAnalytics(subject_id='123'),
         RejectedAssignmentsCountPoolAnalytics(subject_id='123'),
         ApprovedAssignmentsCountPoolAnalytics(subject_id='123'),
@@ -194,5 +194,5 @@ def test_less_ms_digits(requests_mock, toloka_client, toloka_api_url, success_an
         return success_answer_map
 
     requests_mock.post(f'{toloka_api_url}/staging/analytics-2', json=task_map)
-    operation = toloka_client.get_analytics([SubmitedAssignmentsCountPoolAnalytics(subject_id='123')])
+    operation = toloka_client.get_analytics([SubmittedAssignmentsCountPoolAnalytics(subject_id='123')])
     assert real_result == client.unstructure(operation)

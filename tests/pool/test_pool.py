@@ -189,30 +189,31 @@ def test_create_pool_check_all_filters(requests_mock, toloka_client, toloka_url,
                         {'category': 'profile', 'key': 'country', 'operator': 'NE', 'value': 'BE'},
                     ],
                 },
-                {'category': 'profile', 'key': 'citizenship', 'operator': 'EQ', 'value': 'BY'},
-                {'category': 'profile', 'key': 'education', 'operator': 'EQ', 'value': 'MIDDLE'},
-                {'category': 'profile', 'key': 'adult_allowed', 'operator': 'EQ', 'value': True},
-                {'category': 'profile', 'key': 'date_of_birth', 'operator': 'GT', 'value': 604972800},
-                {'category': 'profile', 'key': 'city', 'operator': 'NOT_IN', 'value': 225},
-                {'category': 'profile', 'key': 'languages', 'operator': 'IN', 'value': 'RU'},
+                {'or': [{'category': 'profile', 'key': 'citizenship', 'operator': 'EQ', 'value': 'BY'}]},
+                {'or': [{'category': 'profile', 'key': 'education', 'operator': 'EQ', 'value': 'MIDDLE'}]},
+                {'or': [{'category': 'profile', 'key': 'adult_allowed', 'operator': 'EQ', 'value': True}]},
+                {'or': [{'category': 'profile', 'key': 'date_of_birth', 'operator': 'GT', 'value': 604972800}]},
+                {'or': [{'category': 'profile', 'key': 'city', 'operator': 'NOT_IN', 'value': 225}]},
+                {'or': [{'category': 'profile', 'key': 'languages', 'operator': 'IN', 'value': 'RU'}]},
+                {'or': [{'category': 'profile', 'key': 'verified', 'operator': 'EQ', 'value': True}]},
                 {
                     'and': [
-                        {'category': 'computed', 'key': 'region_by_phone', 'operator': 'IN', 'value': 213},
-                        {'category': 'computed', 'key': 'region_by_ip', 'operator': 'NOT_IN', 'value': 1},
+                        {'or': [{'category': 'computed', 'key': 'region_by_phone', 'operator': 'IN', 'value': 213}]},
+                        {'or': [{'category': 'computed', 'key': 'region_by_ip', 'operator': 'NOT_IN', 'value': 1}]},
                     ]
                 },
-                {'category': 'computed', 'key': 'device_category', 'operator': 'EQ', 'value': 'PERSONAL_COMPUTER'},
-                {'category': 'computed', 'key': 'os_family', 'operator': 'EQ', 'value': 'WINDOWS'},
-                {'category': 'computed', 'key': 'os_version', 'operator': 'GTE', 'value': 8.1},
-                {'category': 'computed', 'key': 'os_version_major', 'operator': 'GT', 'value': 8},
-                {'category': 'computed', 'key': 'os_version_minor', 'operator': 'GTE', 'value': 1},
-                {'category': 'computed', 'key': 'os_version_bugfix', 'operator': 'LTE', 'value': 225},
-                {'category': 'computed', 'key': 'user_agent_type', 'operator': 'EQ', 'value': 'BROWSER'},
+                {'or': [{'category': 'computed', 'key': 'device_category', 'operator': 'EQ', 'value': 'PERSONAL_COMPUTER'}]},
+                {'or': [{'category': 'computed', 'key': 'os_family', 'operator': 'EQ', 'value': 'WINDOWS'}]},
+                {'or': [{'category': 'computed', 'key': 'os_version', 'operator': 'GTE', 'value': 8.1}]},
+                {'or': [{'category': 'computed', 'key': 'os_version_major', 'operator': 'GT', 'value': 8}]},
+                {'or': [{'category': 'computed', 'key': 'os_version_minor', 'operator': 'GTE', 'value': 1}]},
+                {'or': [{'category': 'computed', 'key': 'os_version_bugfix', 'operator': 'LTE', 'value': 225}]},
+                {'or': [{'category': 'computed', 'key': 'user_agent_type', 'operator': 'EQ', 'value': 'BROWSER'}]},
                 # {'category': 'computed', 'key': 'user_agent_family', 'operator': 'NE', 'value': 'OPERA'},
-                {'category': 'computed', 'key': 'user_agent_version', 'operator': 'LT', 'value': 11.12},
-                {'category': 'computed', 'key': 'user_agent_version_major', 'operator': 'LT', 'value': 11},
-                {'category': 'computed', 'key': 'user_agent_version_minor', 'operator': 'LT', 'value': 12},
-                {'category': 'computed', 'key': 'user_agent_version_bugfix', 'operator': 'GT', 'value': 2026},
+                {'or': [{'category': 'computed', 'key': 'user_agent_version', 'operator': 'LT', 'value': 11.12}]},
+                {'or': [{'category': 'computed', 'key': 'user_agent_version_major', 'operator': 'LT', 'value': 11}]},
+                {'or': [{'category': 'computed', 'key': 'user_agent_version_minor', 'operator': 'LT', 'value': 12}]},
+                {'or': [{'category': 'computed', 'key': 'user_agent_version_bugfix', 'operator': 'GT', 'value': 2026}]},
                 {
                     'or': [
                         {'category': 'skill', 'key': '224', 'operator': 'GTE', 'value': 85},
@@ -248,6 +249,7 @@ def test_create_pool_check_all_filters(requests_mock, toloka_client, toloka_url,
         (filter.DateOfBirth > 604972800) &
         (filter.City.not_in(225)) &
         (filter.Languages.in_('RU')) &
+        (filter.Verified == True) &  # noqa: E712
         (filter.RegionByPhone.in_(213) & filter.RegionByIp.not_in(1)) &
         (filter.DeviceCategory == filter.DeviceCategory.PERSONAL_COMPUTER) &
         (filter.OSFamily == filter.OSFamily.WINDOWS) &
@@ -293,7 +295,7 @@ def test_unstructure_pool_check_one_filter_wrap(requests_mock, toloka_client, to
         **pool_map_without_filter,
         'filter': {
             'and': [
-                {'category': 'profile', 'key': 'languages', 'operator': 'IN', 'value': 'EN'},
+                {'or': [{'category': 'profile', 'key': 'languages', 'operator': 'IN', 'value': 'EN'}]},
             ]
         }
     }
@@ -336,7 +338,7 @@ def test_unstructure_pool_filter_after_init():
 
     filter_map = {
         'and': [
-            {'category': 'profile', 'key': 'languages', 'operator': 'IN', 'value': 'EN'},
+            {'or': [{'category': 'profile', 'key': 'languages', 'operator': 'IN', 'value': 'EN'}]},
         ]
     }
 

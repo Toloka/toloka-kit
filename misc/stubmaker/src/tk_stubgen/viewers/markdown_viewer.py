@@ -4,7 +4,7 @@ __all__ = [
 from io import StringIO
 
 from stubmaker.viewers.common import add_inherited_singledispatchmethod
-from stubgen.viewers.markdown_viewer import (
+from stubmaker.viewers.markdown_viewer import (
     MarkdownViewer,
     parameter_html_description,
     get_examples_from_docstring,
@@ -17,6 +17,10 @@ from stubmaker.viewers.util import replace_representations_in_signature
 
 @add_inherited_singledispatchmethod(method_name='view', implementation_prefix='view_')
 class TolokaKitMarkdownViewer(MarkdownViewer):
+
+    def is_markdown_needed_for_function(self, function_def: FunctionDef):
+        parent_call_result = super().is_markdown_needed_for_function(function_def)
+        return parent_call_result and function_def.name not in ['structure', 'unstructure']
 
     def get_definition_markdown_signature(self, function_def: FunctionDef):
         if isinstance(function_def, ExpandedFunctionDef):
@@ -85,6 +89,9 @@ class TolokaKitMarkdownViewer(MarkdownViewer):
                     sio.write(f'  {ret.type_name}\n')
 
             sio.write(get_examples_from_docstring(parsed_docstring))
-        return get_markdown_page(expanded_function_definition.name,
-                                 expanded_function_definition.full_name,
-                                 sio.getvalue())
+        return get_markdown_page(
+            expanded_function_definition.name, expanded_function_definition.full_name, sio.getvalue(),
+            source_link=self.source_link_finder(
+                expanded_function_definition.original_func
+            ) if self.source_link_finder else None,
+        )

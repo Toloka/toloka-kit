@@ -18,9 +18,9 @@ class RecipientsSelectType(toloka.util._extendable_enum.ExtendableStrEnum):
     """Method for specifying recipients.
 
     Attributes:
-        DIRECT: specify user IDs.
-        FILTER: select users using filter.
-        ALL: send a message to all users who have tried to complete your tasks at least once.
+        DIRECT: specify IDs of Tolokers.
+        FILTER: select Tolokers using a filter.
+        ALL: send a message to all Tolokers who have tried to complete your tasks at least once.
     """
 
     DIRECT = 'DIRECT'
@@ -52,9 +52,9 @@ class Interlocutor(toloka.client.primitives.base.BaseTolokaObject):
         """Role of the sender or recipient in Toloka.
 
         Attributes:
-            USER: Performer.
-            REQUESTER: Customer.
-            ADMINISTRATOR: Administrator.
+            USER: A Toloker.
+            REQUESTER: A requester.
+            ADMINISTRATOR: An administrator.
             SYSTEM: For messages sent automatically.
         """
 
@@ -99,8 +99,8 @@ class MessageThread(toloka.client.primitives.base.BaseTolokaObject):
         messages: Messages in the thread. Sorted by creation date (new first).
         meta: Meta
         answerable: Ability to reply to a message:
-            * True — The performer can respond to the message.
-            * False — The performer cannot respond to the message.
+            * True — The Toloker can respond to the message.
+            * False — The Toloker cannot respond to the message.
         folders: Folders where the thread is located.
         compose_details: For messages that you sent: details of the POST request for creating the message.
         created: The date the first message in the chain was created.
@@ -210,7 +210,7 @@ class MessageThreadReply(toloka.client.primitives.base.BaseTolokaObject):
     """Reply to message thread.
 
     Attributes:
-        text: Message text. You can provide text in several languages (the message will come in the user's language).
+        text: Message text. You can provide text in several languages (the message will come in the Toloker's language).
             Format: {"<language RU / EN/TR/ID / FR>": "<message text>"}.
     """
 
@@ -240,18 +240,18 @@ class MessageThreadFolders(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class MessageThreadCompose(toloka.client.primitives.base.BaseTolokaObject):
-    """Sent message to perfromer
+    """Sent message to a Toloker.
 
     Attributes:
         recipients_select_type: Method for specifying recipients
-        topic: Post title. You can provide a title in several languages (the message will come in the user's language).
+        topic: Post title. You can provide a title in several languages (the message will come in the Toloker's language).
             Format: "<language RU/EN/TR/ID/FR>": "<topic text>".
-        text: Message text. You can provide text in several languages (the message will come in the user's language).
+        text: Message text. You can provide text in several languages (the message will come in the Toloker's language).
             Format: "<language RU/EN/TR/ID/FR>": "<message text>".
         answerable: Ability to reply to a message:
-            * True — Users can respond to the message.
-            * False — Users can't respond to the message.
-        recipients_ids: List of IDs of users to whom the message will be sent.
+            * True — The Toloker can respond to the message.
+            * False — The Toloker can't respond to the message.
+        recipients_ids: List of IDs of Tolokers to whom the message will be sent.
         recipients_filter: Filter to select recipients.
     """
 

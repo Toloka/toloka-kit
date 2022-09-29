@@ -10,23 +10,23 @@ import typing
 
 
 class UserBonus(toloka.client.primitives.base.BaseTolokaObject):
-    """Issuing a bonus to a specific performer
+    """Issuing a bonus to a specific Toloker.
 
     It's addition to payment for completed tasks.
 
     Attributes:
-        user_id: Performer ID to whom the bonus will be issued.
-        amount: The bonus amount in dollars. Can be from 0.01 to 100 dollars per user per time.
+        user_id: Toloker's ID to whom the bonus will be issued.
+        amount: The bonus amount in dollars. Can be from 0.01 to 100 dollars per Toloker per time.
         private_comment: Comments that are only visible to the requester.
-        public_title: Message header for the user. You can provide a title in several languages
-            (the message will come in the user's language). Format {'language': 'title', ... }.
+        public_title: Message header for the Toloker. You can provide a title in several languages
+            (the message will come in the Toloker's language). Format {'language': 'title', ... }.
             The language can be RU/EN/TR/ID/FR.
-        public_message: Message text for the user. You can provide text in several languages
-            (the message will come in the user's language). Format {'language': 'message', ... }.
+        public_message: Message text for the Toloker. You can provide text in several languages
+            (the message will come in the Toloker's language). Format {'language': 'message', ... }.
             The language can be RU/EN/TR/ID/FR.
-        without_message: Do not send a bonus message to the user. To award a bonus without a message, specify null
+        without_message: Do not send a bonus message to the Toloker. To award a bonus without a message, specify null
             for public_title and public_message and True for without_message.
-        assignment_id: The answer to the task for which this bonus was issued.
+        assignment_id: ID of the Toloker's response to the task a reward is issued for.
         id: Internal ID of the issued bonus. Read only.
         created: Date the bonus was awarded, in UTC. Read only.
 
@@ -41,11 +41,12 @@ class UserBonus(toloka.client.primitives.base.BaseTolokaObject):
         >>>             'EN': 'Perfect job!',
         >>>         },
         >>>         public_message={
-        >>>             'EN': 'You are the best performer EVER',
+        >>>             'EN': 'You are the best Toloker',
         >>>         },
         >>>         assignment_id='012345'
         >>>     )
         >>> )
+        ...
 
         How to create bonus with message in several languages.
 
@@ -96,7 +97,7 @@ class UserBonus(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class UserBonusCreateRequestParameters(toloka.client.primitives.parameter.Parameters):
-    """Parameters for creating performer bonuses
+    """Parameters for creating bonuses for Tolokers.
 
     Used in methods 'create_user_bonus', 'create_user_bonuses' и 'create_user_bonuses_async' of the class TolokaClient,
     to clarify the behavior when creating bonuses.
@@ -106,7 +107,7 @@ class UserBonusCreateRequestParameters(toloka.client.primitives.parameter.Parame
             results of creating bonuses.
         skip_invalid_items: Validation parameters of objects:
             * True - Award a bonus if the object with bonus information passed validation. Otherwise, skip the bonus.
-            * False - Default behaviour. Stop the operation and don't award bonuses if at least one object didn't pass validation.
+            * False - Default behavior. Stop the operation and don't award bonuses if at least one object didn't pass validation.
     """
 
     def __init__(
