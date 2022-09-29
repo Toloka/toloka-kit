@@ -44,7 +44,7 @@ class BaseData(BaseComponent, metaclass=BaseDataMetaclass):
 class InputData(BaseData, spec_value=ComponentType.DATA_INPUT):
     """The input data.
 
-    For example, links to images that will be shown to users. In the Template Builder sandbox, you can
+    For example, links to images that will be shown to Tolokers. In the Template Builder sandbox, you can
     set an example of input data.
     """
 

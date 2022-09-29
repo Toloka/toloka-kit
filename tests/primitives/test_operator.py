@@ -40,6 +40,11 @@ def test_inclusion_condition_metaclass():
     assert {'operator': 'NOT_IN', 'value': 123} == unstructure(not_in_condition)
 
 
+def test_inclusion_operator():
+    assert ~InclusionOperator.IN == InclusionOperator.NOT_IN
+    assert ~InclusionOperator.NOT_IN == InclusionOperator.IN
+
+
 def test_identity_condition_metaclass():
 
     @attr.attrs(auto_attribs=True)
@@ -70,6 +75,11 @@ def test_identity_condition_metaclass():
     assert ne_condition == structure({'operator': 'NE', 'value': 123}, IdentityCondition)
     assert {'operator': 'EQ', 'value': 123} == unstructure(eq_condition)
     assert {'operator': 'NE', 'value': 123} == unstructure(ne_condition)
+
+
+def test_identity_operator():
+    assert ~IdentityOperator.EQ == IdentityOperator.NE
+    assert ~IdentityOperator.NE == IdentityOperator.EQ
 
 
 def test_comparable_condition_metaclass():
@@ -125,6 +135,15 @@ def test_comparable_condition_metaclass():
     assert gt_condition == structure({'operator': 'GT', 'value': 123}, ComparationCondition)
     assert lte_condition == structure({'operator': 'LTE', 'value': 123}, ComparationCondition)
     assert gte_condition == structure({'operator': 'GTE', 'value': 123}, ComparationCondition)
+
+
+def test_compare_operator():
+    assert ~CompareOperator.EQ == CompareOperator.NE
+    assert ~CompareOperator.NE == CompareOperator.EQ
+    assert ~CompareOperator.GT == CompareOperator.LTE
+    assert ~CompareOperator.GTE == CompareOperator.LT
+    assert ~CompareOperator.LT == CompareOperator.GTE
+    assert ~CompareOperator.LTE == CompareOperator.GT
 
 
 # TODO: implement

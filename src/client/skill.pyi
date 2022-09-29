@@ -2,31 +2,33 @@ __all__ = [
     'Skill',
 ]
 import datetime
+import toloka.client.owner
 import toloka.client.primitives.base
 import typing
 
 
 class Skill(toloka.client.primitives.base.BaseTolokaObject):
-    """A skill is an assessment of some aspect of a user's responses (a number from 0 to 100)
+    """A skill is an assessment of some aspect of a Toloker's responses (a number from 0 to 100)
 
     Skill is a general grouping entity, for example "image annotation", which is created once and then used.
-    To set the Skill value for a specific performer, use UserSkill.
-    You can set up skill calculation in a quality control rule, or manually set the skill level for a user.
-    You can use skills to select users who perform pool tasks.
+    To set the Skill value for a specific Toloker, use UserSkill.
+    You can set up skill calculation in a quality control rule, or manually set the skill level for a Toloker.
+    You can use skills to select Tolokers which are allowed to complete your tasks.
 
     Attributes:
         name: Skill name.
         private_comment: Comments on the skill (only visible to the requester).
-        hidden: Access to information about the skill (the name and value) for users:
-            * True - Closed. Default behaviour.
+        hidden: Access to information about the skill (the name and value) for Tolokers:
+            * True - Closed. Default behavior.
             * False - Opened.
         skill_ttl_hours: The skill's "time to live" after the last update (in hours). The skill is removed from
-            the user's profile if the skill level hasn't been updated for the specified length of time.
+            the Toloker's profile if the skill level hasn't been updated for the specified length of time.
         training: Whether the skill is related to a training pool:
             * True - The skill level is calculated from training pool tasks.
             * False - The skill isn't related to a training pool.
-        public_name: Skill name for other users. You can provide a name in several languages (the message will come in the user's language).
-        public_requester_description: Skill description text for other users. You can provide text in several languages (the message will come in the user's language).
+        public_name: Skill name for other Tolokers. You can provide a name in several languages (the message will come in the Toloker's language).
+        public_requester_description: Skill description text for other Tolokers. You can provide text in several languages (the message will come in the Toloker's language).
+        owner: Skill owner.
         id: Skill ID. Read only field.
         created: The UTC date and time when the skill was created. Read only field.
 
@@ -36,7 +38,7 @@ class Skill(toloka.client.primitives.base.BaseTolokaObject):
         >>> segmentation_skill = toloka_client.create_skill(
         >>>     name='Area selection of road signs',
         >>>     public_requester_description={
-        >>>         'EN': 'Performer is annotating road signs',
+        >>>         'EN': 'Toloker annotates road signs',
         >>>         'RU': 'Как исполнитель размечает дорожные знаки',
         >>>     },
         >>> )
@@ -63,6 +65,7 @@ class Skill(toloka.client.primitives.base.BaseTolokaObject):
         training: typing.Optional[bool] = None,
         public_name: typing.Optional[typing.Dict[str, str]] = None,
         public_requester_description: typing.Optional[typing.Dict[str, str]] = None,
+        owner: typing.Optional[toloka.client.owner.Owner] = None,
         id: typing.Optional[str] = None,
         created: typing.Optional[datetime.datetime] = None
     ) -> None:
@@ -78,5 +81,6 @@ class Skill(toloka.client.primitives.base.BaseTolokaObject):
     training: typing.Optional[bool]
     public_name: typing.Optional[typing.Dict[str, str]]
     public_requester_description: typing.Optional[typing.Dict[str, str]]
+    owner: typing.Optional[toloka.client.owner.Owner]
     id: typing.Optional[str]
     created: typing.Optional[datetime.datetime]

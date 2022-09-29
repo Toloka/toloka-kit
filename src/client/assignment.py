@@ -25,40 +25,50 @@ class Assignment(BaseTolokaObject):
         id: The ID of the assignment.
         task_suite_id: The ID of the assigned task suite.
         pool_id: The ID of the pool containing the task suite.
-        user_id: The ID of the performer who was assigned the task suite.
+        user_id: The ID of the Toloker who was assigned the task suite.
         status: Status of the assignment.
             * `ACTIVE` — The task suite is assigned but it isn't completed yet.
             * `SUBMITTED` — The task suite is completed but it isn't checked.
             * `ACCEPTED` — The task suite is accepted by the requester.
             * `REJECTED` — The task suite is rejected by the requester.
-            * `SKIPPED` — The task suite is skipped by the performer.
+            * `SKIPPED` — The task suite is skipped by the Toloker.
             * `EXPIRED` — Time for completing the tasks has expired.
-        reward: Payment received by the performer.
+        reward: Payment received by the Toloker.
         bonus_ids: IDs of rewards issued for the task.
         tasks: Data for the tasks.
         automerged: Flag of the response received as a result of merging identical tasks. Value:
-            * True - The response was recorded when identical tasks were merged.
-            * False - Normal performer response.
-        created: The date and time when the task suite was assigned to a performer.
-        submitted: The date and time when the task suite was completed by a performer.
+            * True — The response was recorded when identical tasks were merged.
+            * False — Normal Toloker response.
+        created: The date and time when the task suite was assigned to a Toloker.
+        submitted: The date and time when the task suite was completed by a Toloker.
         accepted: The date and time when the responses for the task suite were accepted by the requester.
         rejected: The date and time when the responses for the task suite were rejected by the requester.
-        skipped: The date and time when the task suite was skipped by the performer.
+        skipped: The date and time when the task suite was skipped by the Toloker.
         expired: The date and time when the time for completing the task suite expired.
-        first_declined_solution_attempt: For training tasks. The performer's first responses in the training task
-            (only if these were the wrong answers). If the performer answered correctly on the first try, the
+        first_declined_solution_attempt: For training tasks. The Toloker's first responses in the training task
+            (only if these were the wrong answers). If the Toloker answered correctly on the first try, the
             first_declined_solution_attempt array is omitted.
             Arrays with the responses (output_values) are arranged in the same order as the task data in the tasks array.
-        solutions: performer responses. Arranged in the same order as the data for tasks in the tasks array.
+        solutions: Toloker responses. Arranged in the same order as the data for tasks in the tasks array.
         mixed: Type of operation for creating a task suite:
-            * True - Automatic ("smart mixing").
-            * False - Manually.
+            * `True` — Smart mixing was used.
+            * `False` — The tasks were grouped manually, smart mixing was not used.
         owner: Properties of Requester.
-        public_comment: Public comment about an assignment. Why it was accepted or rejected.
+        public_comment: A public comment that is set when accepting or rejecting the assignment.
     """
 
     @unique
     class Status(ExtendableStrEnum):
+        """The status of an assigned task suite.
+
+        Attributes:
+            ACTIVE: The task suite is assigned but it isn't completed yet.
+            SUBMITTED: The task suite is completed but it isn't checked.
+            ACCEPTED: The task suite is accepted by the requester.
+            REJECTED: The task suite is rejected by the requester.
+            SKIPPED: The task suite is skipped by the Toloker.
+            EXPIRED: Time for completing the tasks has expired.
+        """
         ACTIVE = 'ACTIVE'
         SUBMITTED = 'SUBMITTED'
         ACCEPTED = 'ACCEPTED'
@@ -122,7 +132,7 @@ class GetAssignmentsTsvParameters(Parameters):
         status: Statuses of assignments to download.
         start_time_from: Download assignments submitted after the specified date and time.
         start_time_to: Download assignments submitted before the specified date and time.
-        exclude_banned: Exclude answers from banned performers, even if their assignments have suitable status.
+        exclude_banned: Exclude answers from banned Tolokers, even if their assignments have suitable status.
         field: Names of `Assignment` fields to be downloaded. Fields other then from `Assignment` class are always downloaded.
     """
 

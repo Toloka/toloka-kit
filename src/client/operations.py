@@ -32,20 +32,21 @@ from ..util._extendable_enum import ExtendableStrEnum
 @unique
 class OperationType(ExtendableStrEnum):
     PSEUDO = 'PSEUDO.PSEUDO'
-    PROJECT_ARCHIVE = 'PROJECT.ARCHIVE'
-    POOL_OPEN = 'POOL.OPEN'
-    POOL_CLOSE = 'POOL.CLOSE'
+    ANALYTICS = 'ANALYTICS'
+    KNOWN_SOLUTIONS_GENERATE = 'KNOWN_SOLUTIONS.GENERATE'
     POOL_ARCHIVE = 'POOL.ARCHIVE'
     POOL_CLONE = 'POOL.CLONE'
-    TRAINING_OPEN = 'TRAINING.OPEN'
-    TRAINING_CLOSE = 'TRAINING.CLOSE'
-    TRAINING_ARCHIVE = 'TRAINING.ARCHIVE'
-    TRAINING_CLONE = 'TRAINING.CLONE'
+    POOL_CLOSE = 'POOL.CLOSE'
+    POOL_OPEN = 'POOL.OPEN'
+    PROJECT_ARCHIVE = 'PROJECT.ARCHIVE'
+    SOLUTION_AGGREGATE = 'SOLUTION.AGGREGATE'
     TASK_BATCH_CREATE = 'TASK.BATCH_CREATE'
     TASK_SUITE_BATCH_CREATE = 'TASK_SUITE.BATCH_CREATE'
+    TRAINING_ARCHIVE = 'TRAINING.ARCHIVE'
+    TRAINING_CLONE = 'TRAINING.CLONE'
+    TRAINING_CLOSE = 'TRAINING.CLOSE'
+    TRAINING_OPEN = 'TRAINING.OPEN'
     USER_BONUS_BATCH_CREATE = 'USER_BONUS.BATCH_CREATE'
-    ANALYTICS = 'ANALYTICS'
-    SOLUTION_AGGREGATE = 'SOLUTION.AGGREGATE'
 
 
 class Operation(BaseTolokaObject, spec_enum=OperationType, spec_field='type'):
@@ -344,15 +345,15 @@ class AggregatedSolutionOperation(Operation, spec_value=OperationType.SOLUTION_A
 
 @inherit_docstrings
 class UserBonusCreateBatchOperation(Operation, spec_value=OperationType.USER_BONUS_BATCH_CREATE):
-    """Operation returned by an asynchronous creating user bonuses via TolokaClient.create_user_bonuses_async()
+    """Operation returned by the `TolokaClient.create_user_bonuses_async()` method.
 
     All parameters are for reference only and describe the initial parameters of the request that this operation monitors.
 
     Attributes:
         parameters.skip_invalid_items: Validation parameters for JSON objects:
-            * True - Create the user bonuses that passed validation. Skip the rest of the user bonuses.
-            * False - If at least one of the user bonus didn't pass validation, stop the operation and
-                don't create any user bonus.
+            * True - Create rewards using `UserBonus` instances that passed validation. Skip the rest of the `UserBonus` instances.
+            * False - If at least one of the `UserBonus` instances didn't pass validation, stop the operation and
+                don't create any rewards.
         details.pool_id:
         details.total_count: The number of bonuses in the request.
         details.valid_count: The number of JSON objects with bonus information that have passed validation.

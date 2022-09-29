@@ -88,7 +88,7 @@ class ClassicViewSpec(ViewSpec, spec_value=ViewSpec.CLASSIC):
                 * "$TOLOKA_ASSETS/js/toloka-handlebars-templates.js" — Handlebars. See the description on the template
                     engine website [here](http://handlebarsjs.com/)
                 * "$TOLOKA_ASSETS/js/image-annotation.js" — Image labeling interface. See image with area selection in
-                    the Requester's guide [here](https://yandex.ru/support/toloka-requester/concepts/t-components/image-annotation.html/?lang=en)
+                    the Requester's guide [here](https://toloka.ai/docs/guide/concepts/t-components/image-annotation.html)
                 Note that the image labeling interface should only be connected together with the Handlebars helpers.
                 The order of connection matters.
 
@@ -114,14 +114,14 @@ class ClassicViewSpec(ViewSpec, spec_value=ViewSpec.CLASSIC):
 
 
 class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
-    """A template builder view scpecification that defines an interface with
+    """A template builder view specification that defines an interface with
     template builder components
 
     Attributes:
         view:
         plugins:
         vars:
-        core_version: Default template components version. Most users will not need to change this parameter.
+        core_version: Default template components version. Most likely you do not need to change this parameter.
         infer_data_spec: You can configure the data specification automatically or manually. You can change the way the
             specification is configured using the infer_data_spec option:
             * True – The specifications of input and output data are generated automatically depending on the task interface settings.
@@ -148,7 +148,7 @@ class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
 
     config: TemplateBuilder
     core_version: str = '1.0.0'
-    infer_data_spec: bool = attribute(origin='inferDataSpec')
+    infer_data_spec: bool = attribute(default=False, origin='inferDataSpec')
 
     def unstructure(self):
         data = super().unstructure()

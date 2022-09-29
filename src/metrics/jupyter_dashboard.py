@@ -216,7 +216,7 @@ class DashBoard:
         >>> metrics.bind_client(new_dash.metrics, toloka_client)
         >>> # Then in new cell:
         >>> new_dash.run_dash()
-        >>> # If you want to stops it:
+        >>> # If you want to stop it:
         >>> new_dash.stop_dash()
         ...
     """
@@ -323,7 +323,7 @@ class DashBoard:
         figures = []
         for chart in self._charts.values():
             chart.update_metrics()
-            # TODO: right now all times in utc. May be we can auto-set user current time-zone.
+            # TODO: right now all times in utc. May be we can auto-set Toloker current time-zone.
             new_figure = chart.create_figure()
             new_figure.update_layout(xaxis_range=[time_from, time_to])
             figures.append(new_figure)

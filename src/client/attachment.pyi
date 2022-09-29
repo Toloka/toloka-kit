@@ -12,11 +12,11 @@ import typing
 class Attachment(toloka.client.primitives.base.BaseTolokaObject):
     """Attachment
 
-    Files uploaded by users are saved in Toloka.
+    Files uploaded by Tolokers are saved in Toloka.
     Attributes:
         id: File ID.
         name: File name.
-        details: Infomation about the pool, the task, and the user who uploaded the file.
+        details: Information about the pool, the task, and the Toloker who uploaded the file.
         created: Date the file was uploaded to Toloka.
         media_type: MIME data type.
         owner: Owner
@@ -29,11 +29,11 @@ class Attachment(toloka.client.primitives.base.BaseTolokaObject):
         ASSIGNMENT_ATTACHMENT = 'ASSIGNMENT_ATTACHMENT'
 
     class Details(toloka.client.primitives.base.BaseTolokaObject):
-        """Information about the pool, task, and user from which the file was received.
+        """Information about the pool, task, and the Toloker from which the file was received.
 
         Attributes:
-            user_id: ID of the user from whom the file was received.
-            assignment_id: ID for issuing a set of tasks to the user.
+            user_id: ID of the Toloker from whom the file was received.
+            assignment_id: ID for issuing a set of tasks to the Toloker.
             pool_id: Pool ID.
         """
 
@@ -82,7 +82,7 @@ class AssignmentAttachment(Attachment):
     Attributes:
         id: File ID.
         name: File name.
-        details: Infomation about the pool, the task, and the user who uploaded the file.
+        details: Information about the pool, the task, and the Toloker who uploaded the file.
         created: Date the file was uploaded to Toloka.
         media_type: MIME data type.
         owner: Owner

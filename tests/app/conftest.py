@@ -114,6 +114,17 @@ def app_map():
                 }
             }
         },
+        'input_format_info': {
+            'examples': {
+                'id': '1',
+                'text': "Leslie Nielson is a very talented actor, who made a huge mistake by doing this film. It doesn't even come close to being funny. The best word to describe it is STUPID!",
+            },
+            'input_fields': [
+                {'name': 'text', 'description': 'Text'},
+                {'name': 'id', 'description': 'Optional identificator'},
+            ],
+            'format_description': 'Prepare TSV or JSON file with your data: single file for all tasks',
+        }
     }
 
 
@@ -138,7 +149,8 @@ def app_project_map_with_readonly(app_project_map):
         'created': '2021-09-29T15:13:38.491000',
         'errors': [],
         'item_price': 0.0000,
-        'read_only': False
+        'read_only': False,
+        'app': {'id': '123', 'name': 'app_name'},
     }
 
 
@@ -173,7 +185,17 @@ def app_item_map_with_readonly(app_item_map):
 
 
 @pytest.fixture
-def app_batch_map():
+def app_item_import_map():
+    return {
+        'id': '123',
+        'records_count': 1000,
+        'records_processed': 10,
+        'errors': {}
+    }
+
+
+@pytest.fixture
+def app_batch_map(app_item_import_map):
     return {
         'id': '123',
         'app_project_id': '123',
@@ -181,9 +203,15 @@ def app_batch_map():
         'name': '1000-items',
         'items_count': 1000,
         'item_price': 0.0000,
-        'cost': 0.0000,
+        'cost': Decimal(0.0000),
+        'cost_of_processed': Decimal(10.),
+        'last_items_import': app_item_import_map,
+        'confidence_avg': 50.,
+        'items_processed_count': 10,
+        'eta': '2021-09-28T16:07:13.400000',
+        'items_per_state': {},
         'created_at': '2021-09-28T15:56:25.193000',
         'started_at': '2021-09-28T15:56:30.201000',
         'finished_at': '2021-09-28T16:07:13.400000',
-        'read_only': False
+        'read_only': False,
     }

@@ -13,6 +13,8 @@ __all__ = [
     'raise_on_api_error',
     'FailedOperation',
 ]
+
+import json
 from typing import Optional, Any, List
 
 import requests
@@ -49,7 +51,7 @@ class FailedOperation(Exception):
 
 
 # API errors
-@attr.attrs(auto_attribs=True, str=True, kw_only=True)
+@attr.attrs(auto_attribs=True, kw_only=True)
 class ApiError(Exception):
     """Error returned from the API Call.
 
@@ -66,6 +68,19 @@ class ApiError(Exception):
     code: Optional[str] = None
     message: Optional[str] = None
     payload: Optional[Any] = None
+
+    def __str__(self):
+        head = f'You have got a(n) {type(self).__name__} with http status code: {self.status_code}'
+        code = f'Code of error: {self.code}'
+        error_details = f'Error details: {self.message}'
+        if self.payload:
+            additional_info = 'Additional information about the error:\n' + json.dumps(self.payload, indent=4)
+        else:
+            additional_info = ''
+        request_id = f'request id: {self.request_id}. It needs to be specified when contacting support.'
+        lines = [line for line in [head, code, error_details, additional_info, request_id] if line]
+        result = '\n'.join(lines)
+        return result
 
 
 @inherit_docstrings

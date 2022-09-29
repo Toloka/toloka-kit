@@ -65,7 +65,7 @@ TaskSuiteBatchCreateResult = _create_batch_create_result_class_for(
 )
 UserBonusBatchCreateResult = _create_batch_create_result_class_for(
     UserBonus,
-    """The list with the results of the user bonuses creation operation.
+    """A list with the results of creating rewards for Tolokers.
 
     Attributes:
         items: Object with information about issued bonuses.
@@ -74,7 +74,7 @@ UserBonusBatchCreateResult = _create_batch_create_result_class_for(
 )
 WebhookSubscriptionBatchCreateResult = _create_batch_create_result_class_for(
     WebhookSubscription,
-    """The list with the results of the webhook-subscriptions creation operation.
+    """A list with the results of the webhook-subscriptions creation operation.
 
     Attributes:
         items: Object with created webhook-subscriptions.

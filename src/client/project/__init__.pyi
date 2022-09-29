@@ -74,7 +74,7 @@ class Project(toloka.client.primitives.base.BaseTolokaObject):
 
     In a project, you set properties for tasks and responses:
     * Input data parameters. These parameters describe the objects to display in a task, such as images or text.
-    * Output data parameters. These parameters describe users' responses. They are used for validating the
+    * Output data parameters. These parameters describe Tolokers' responses. They are used for validating the
         responses entered: the data type (integer, string, etc.), range of values, string length, and so on.
     * Task interface. For more information about how to define the appearance of tasks, see the document
         Toloka. requester's guide.
@@ -82,14 +82,14 @@ class Project(toloka.client.primitives.base.BaseTolokaObject):
     Pools and training pools are related to a project.
 
     Attributes:
-        public_name: Name of the project. Visible to users.
-        public_description: Description of the project. Visible to users.
+        public_name: Name of the project. Visible to Tolokers.
+        public_description: Description of the project. Visible to Tolokers.
         public_instructions: Instructions for completing the task. You can use any HTML markup in the instructions.
         private_comment: Comments about the project. Visible only to the requester.
         task_spec: Parameters for input and output data and the task interface.
         assignments_issuing_type: How to assign tasks. The default value is AUTOMATED.
         assignments_automerge_enabled: Solve merging identical tasks in the project.
-        max_active_assignments_count: The number of task suites the user can complete simultaneously (“Active” status)
+        max_active_assignments_count: The number of task suites a Toloker can complete simultaneously (“Active” status)
         quality_control: The quality control rule.
         metadata: Additional information about project.
         status: Project status.
@@ -105,7 +105,7 @@ class Project(toloka.client.primitives.base.BaseTolokaObject):
         >>> new_project = toloka.project.Project(
         >>>     public_name='My best project!!!',
         >>>     public_description='Look at the instruction and do it well',
-        >>>     public_instructions='!Describe your task for performers here!',
+        >>>     public_instructions='Describe your task for Tolokers here!',
         >>>     task_spec=toloka.project.task_spec.TaskSpec(
         >>>         input_spec={'image': toloka.project.field_spec.UrlSpec()},
         >>>         output_spec={'result': toloka.project.field_spec.StringSpec(allowed_values=['OK', 'BAD'])},
@@ -121,9 +121,9 @@ class Project(toloka.client.primitives.base.BaseTolokaObject):
         """How to assign tasks:
 
         Attributes:
-            AUTOMATED: The user is assigned a task suite from the pool. You can configure the order
+            AUTOMATED: A Toloker is assigned a task suite from the pool. You can configure the order
                 for assigning task suites.
-            MAP_SELECTOR: The user chooses a task suite on the map. If you are using MAP_SELECTOR,
+            MAP_SELECTOR: A Toloker chooses a task suite on the map. If you are using MAP_SELECTOR,
                 specify the text to display in the map by setting assignments_issuing_view_config.
         """
 
@@ -147,8 +147,8 @@ class Project(toloka.client.primitives.base.BaseTolokaObject):
         Used only then assignments_issuing_type == MAP_SELECTOR
 
         Attributes:
-            title_template: Name of the task. Users will see it in the task preview mode.
-            description_template: Brief description of the task. Users will see it in the task preview mode.
+            title_template: Name of the task. Tolokers will see it in the task preview mode.
+            description_template: Brief description of the task. Tolokers will see it in the task preview mode.
         """
 
         class MapProvider(toloka.util._extendable_enum.ExtendableStrEnum):

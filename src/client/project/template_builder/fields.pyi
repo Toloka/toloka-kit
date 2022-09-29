@@ -108,7 +108,7 @@ class AudioFieldV1(BaseFieldV1):
 class ButtonRadioFieldV1(BaseFieldV1):
     """A component in the form of a button.
 
-    The user makes a choice by clicking on it.
+    A Toloker makes a choice by clicking on it.
 
     The size of the button depends on the size of the label.
 
@@ -170,7 +170,7 @@ class GroupFieldOption(toloka.client.project.template_builder.base.BaseTemplate)
 
 
 class ButtonRadioGroupFieldV1(BaseFieldV1):
-    """A component with buttons that allow the user to choose between the specified values.
+    """A component with buttons that allow the Toloker to choose between the specified values.
 
     The minimum number of elements is one. Any type of data can be returned.
 
@@ -304,22 +304,22 @@ class CheckboxGroupFieldV1(BaseFieldV1):
 class DateFieldV1(BaseFieldV1):
     """A component for entering the date and time in the desired format and range.
 
-    You can set a list of dates that the user cannot select.
+    You can set a list of dates that the Toloker cannot select.
 
     Attributes:
         data: Data with values that will be processed or changed.
-        format: Format of the date entered by the user:
+        format: Format of the date entered by the Toloker:
             * date-time — date and time.
             * date — date only.
-        block_list: List of dates that the user cannot select.
-            * block_list[]: Date that the user cannot select.
-        max: The latest date and time in the YYYY-MM-DD hh:mm format that the user can select. Where:
+        block_list: List of dates that the Toloker cannot select.
+            * block_list[]: Date that the Toloker cannot select.
+        max: The latest date and time in the YYYY-MM-DD hh:mm format that the Toloker can select. Where:
             * YYYY is the year.
             * MM is the month.
             * DD is the day.
             * hh is the time in hours.
             * mm is the time in minutes.
-        min: The earliest date and time in the YYYY-MM-DD hh:mm format that the user can select. Where:
+        min: The earliest date and time in the YYYY-MM-DD hh:mm format that the Toloker can select. Where:
             * YYYY is the year.
             * MM is the month.
             * DD is the day.
@@ -404,7 +404,7 @@ class FileFieldV1(BaseFieldV1):
     You can restrict the file types to upload in the "accept" property. By default, only one file can be uploaded,
     but you can allow multiple files in the "multiple" property.
 
-    If a user logs in from a mobile device, it's more convenient to use field.media-file — it's adapted for mobile
+    If a Toloker logs in from a mobile device, it's more convenient to use field.media-file — it's adapted for mobile
     devices and makes it easier to upload photos and videos.
 
     Attributes:
@@ -484,7 +484,7 @@ class ImageAnnotationFieldV1(BaseFieldV1):
 
         Attributes:
             label: Text on the button for selecting a selection color.
-            value: The value to be written to the labels property data. Displayed to users as color options when
+            value: The value to be written to the labels property data. Displayed to Tolokers as color options when
                 selecting areas.
         """
 
@@ -545,18 +545,18 @@ class ImageAnnotationFieldV1(BaseFieldV1):
 
 
 class ListFieldV1(BaseFieldV1):
-    """A component that allows the user to add and remove list items, such as text fields to fill in.
+    """A component that allows a Toloker to add and remove list items, such as text fields to fill in.
 
-    This way you can allow the user to give multiple answers to a question.
+    This way you can allow a Toloker to give multiple answers to a question.
 
     The list items can contain any component, including a list of other components. For example, this allows you to
     create a table where you can add and delete rows.
 
-    To add a new list item, the user clicks the button. To remove an item, they click on the x on the right (it appears
+    To add a new list item, the Toloker clicks the button. To remove an item, they click on the x on the right (it appears
     when hovering over a list item).
 
-    To prevent the user from adding too many list items, set the maximum list length. You can also use the editable
-    property to block users from changing a component, like when a certain event occurs.
+    To prevent a Toloker from adding too many list items, set the maximum list length. You can also use the editable
+    property to block Tolokers from changing a component, like when a certain event occurs.
 
     Attributes:
         data: Data with values that will be processed or changed.
@@ -608,7 +608,9 @@ class ListFieldV1(BaseFieldV1):
 
 
 class MediaFileFieldV1(BaseFieldV1):
-    """Adds buttons for different types of uploads: uploading photos or videos, selecting files from the file manager or choosing from the gallery. In the accept property, select which buttons you need.
+    """Adds buttons for different types of uploads: uploading photos or videos, selecting files from the file manager or choosing from the gallery.
+
+    In the accept property, select which buttons you need.
 
     By default, only one file can be uploaded, but you can allow multiple files in the multiple property.
 
@@ -625,7 +627,7 @@ class MediaFileFieldV1(BaseFieldV1):
         validation: Validation based on condition.
 
     Examples:
-        How to allow performers to upload images and make photos.
+        How to allow Tolokers to upload images and make photos.
 
         >>> image_loader = tb.fields.MediaFileFieldV1(
         >>>     label='Upload a photo',
@@ -693,10 +695,10 @@ class MediaFileFieldV1(BaseFieldV1):
 class NumberFieldV1(BaseFieldV1):
     """A component that allows you to enter a number.
 
-    The box already has validation: by default, users can enter only numbers and decimal separators. They can use either
+    The box already has validation: by default, Tolokers can enter only numbers and decimal separators. They can use either
     a dot or a comma as a separator, but there will always be a dot in the output.
 
-    When the user is entering a number, the separator automatically changes to the one specified in the regional
+    When the Toloker is entering a number, the separator automatically changes to the one specified in the regional
     settings. For Russia, the separator is a comma.
 
     Negative numbers are allowed by default. To disable them, use the validation property. Pressing the up or down arrow
@@ -786,7 +788,7 @@ class RadioGroupFieldV1(BaseFieldV1):
     Attributes:
         data: Data with values that will be processed or changed.
         options: List of options to choose from
-        disabled: This property prevents clicking the button. If the value is true, the button is not active (the user
+        disabled: This property prevents clicking the button. If the value is true, the button is not active (the Toloker
             will not be able to click it).
         hint: Hint text.
         label: Label above the component.
@@ -945,8 +947,8 @@ class TextAnnotationFieldV1(BaseFieldV1):
         data: Data with values that will be processed or changed.
         adjust: If the property value is set to words, only words can be selected in the text. If you don't use this
             property, any part of a line can be selected.
-        content: The text where the performer has to select part of a line.
-        disabled: This property blocks the component. If true, the component is unavailable to the performer. The
+        content: The text where the Toloker has to select part of a line.
+        disabled: This property blocks the component. If true, the component is unavailable to the Toloker. The
             default value is false.
         labels: A category.
         hint: Hint text.
@@ -1007,7 +1009,7 @@ class TextareaFieldV1(BaseFieldV1):
 
     Use in tasks that require an extended response. For single-line responses, use the field.text component.
 
-    The size of the box does not automatically adjust to the length of the text. Users can change the height by
+    The size of the box does not automatically adjust to the length of the text. Tolokers can change the height by
     dragging the lower-right corner. To change the default size of the box, use the rows property.
 
     Note that formatting is not available in the text box.
@@ -1017,7 +1019,7 @@ class TextareaFieldV1(BaseFieldV1):
         disabled: If true, editing is not available.
         placeholder: A semi-transparent label that is shown when the box is empty. Use it to provide an example or a
             hint for the response.
-        resizable: Changing the box size. When set to true (the default value), the user can change the height. To
+        resizable: Changing the box size. When set to true (the default value), the Toloker can change the height. To
             prevent resizing, set the value to false.
         rows: The height of the text box in lines.
         hint: Hint text.

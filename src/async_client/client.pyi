@@ -22,7 +22,7 @@ class AsyncTolokaClient:
     @classmethod
     def from_sync_client(cls, client: toloka.client.TolokaClient) -> 'AsyncTolokaClient': ...
 
-    def wait_operation(
+    async def wait_operation(
         self,
         op: toloka.client.operations.Operation,
         timeout: datetime.timedelta = ...,

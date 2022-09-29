@@ -13,7 +13,7 @@ import typing
 class QualityControl(toloka.client.primitives.base.BaseTolokaObject):
     """Quality control unit settings and pool ID with training tasks
 
-    Quality control lets you get more accurate responses and restrict access to tasks for cheating performers.
+    Quality control lets you get more accurate responses and restrict access to tasks for cheating users.
     Quality control consists of rules. All rules work independently.
 
     Attributes:
@@ -22,7 +22,7 @@ class QualityControl(toloka.client.primitives.base.BaseTolokaObject):
             LOW - show every 20 tasks.
             MEDIUM, HIGH - show every 10 tasks.
         configs: List of quality control units. See QualityControl.QualityControlConfig
-        checkpoints_config: Random check majority opinion. Datailed description in QualityControl.CheckpointsConfig.
+        checkpoints_config: Random check majority opinion. Detailed description in QualityControl.CheckpointsConfig.
 
     Example:
         How to set up quality control on new pool.
@@ -47,7 +47,7 @@ class QualityControl(toloka.client.primitives.base.BaseTolokaObject):
         Attributes:
             training_pool_id: ID of the training pool that is linked to the pool with the main tasks.
             training_passing_skill_value: The percentage of correct answers in training tasks (from 0 to 100) required
-                for admission to the main tasks. The user's first responses in tasks are used for counting.
+                for admission to the main tasks. The Toloker's first responses in tasks are used for counting.
         """
 
         def __init__(
@@ -81,7 +81,7 @@ class QualityControl(toloka.client.primitives.base.BaseTolokaObject):
 
         You can reduce the frequency of checks over time.
 
-        Example settings: in the first 25 tasks completed by the user in the pool, issue every fifth task with an overlap "5"
+        Example settings: in the first 25 tasks completed by the Toloker in the pool, issue every fifth task with an overlap "5"
         to check the answers. In subsequent tasks issue each 25 task with an overlap "5".
 
         Attributes:
@@ -131,7 +131,7 @@ class QualityControl(toloka.client.primitives.base.BaseTolokaObject):
     class QualityControlConfig(toloka.client.primitives.base.BaseTolokaObject):
         """Quality control block
 
-        Quality control blocks help regulate access to a project or pool: you can filter out users who give incorrect answers
+        Quality control blocks help regulate access to a project or pool: you can filter out Tolokers who give incorrect answers
         in control tasks, skip many tasks in a row, and so on.
 
         The block consists of two parts: condition and the action to be performed when the condition is met.

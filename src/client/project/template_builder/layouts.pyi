@@ -148,7 +148,7 @@ class CompareLayoutItem(toloka.client.project.template_builder.base.BaseTemplate
     Attributes:
         content: The content of the element that's being compared. Add images, audio recordings, videos, links,
             or other types of data.
-        controls: Configure the input fields to make the user select an item.
+        controls: Configure the input fields to make the Toloker select an item.
     """
 
     def __init__(
@@ -219,7 +219,7 @@ class SideBySideLayoutV1(BaseLayoutV1):
     You can set the minimum width for data blocks.
 
     Attributes:
-        controls: Components that let users perform the required actions.
+        controls: Components that let Tolokers perform the required actions.
             For example: field.checkbox-group or field.button-radio-group.
         items: An array of data blocks.
         min_item_width: The minimum width of a data block, at least 400 pixels.

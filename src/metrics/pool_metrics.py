@@ -234,7 +234,7 @@ class AssignmentsInPool(BasePoolMetric):
     _skipped_name: Optional[str] = None
 
     _analytics_dict = {
-        '_submitted_name': analytics_request.SubmitedAssignmentsCountPoolAnalytics,
+        '_submitted_name': analytics_request.SubmittedAssignmentsCountPoolAnalytics,
         '_accepted_name': analytics_request.ApprovedAssignmentsCountPoolAnalytics,
         '_rejected_name': analytics_request.RejectedAssignmentsCountPoolAnalytics,
         '_skipped_name': analytics_request.SkippedAssignmentsCountPoolAnalytics,
@@ -374,12 +374,12 @@ class SpentBudgetOnPool(BasePoolMetric):
 
 @attr.s(auto_attribs=True)
 class WorkersByFilterOnPool(BasePoolMetric):
-    """The number of active performers matching the pool filters for the last hours (default 1 hour)
+    """The number of active Tolokers matching the pool filters for the last hours (default 1 hour)
 
     Args:
         pool_id: From which pool track metrics.
         workers_name: Metric name for a count of workers.
-        interval_hours: Counts unical workers on this hours interval. Default 1.
+        interval_hours: Counts unique workers on this hours interval. Default 1.
 
     Example:
         How to collect this metrics:
@@ -426,16 +426,16 @@ class WorkersByFilterOnPool(BasePoolMetric):
 
 @attr.s(auto_attribs=True)
 class BansInPool(BasePoolMetric):
-    """Tracking the new user restrictions in pool
+    """Tracking Toloker restrictions in a pool.
 
-    Be careful: if you set in quality controls to ban performers 'on project', bans 'on pool' will never happen.
+    Be careful: if you set in quality controls to ban Tolokers 'on project', bans 'on pool' will never happen.
 
     Args:
         pool_id: From which pool track metrics.
         count_name: Metric name for a count of bans.
-        filter_by_comment: Allow to split user restriction into several lines based on comment.
+        filter_by_comment: Allow to split Toloker restriction into several lines based on comment.
             Dictionary where, key - comment string, and value - name for line in which will be aggregated bans with this comments.
-        join_events: Count all events in one point.  Default False.
+        join_events: Count all events in one point. Default False.
 
     Example:
         How to collect this metrics:

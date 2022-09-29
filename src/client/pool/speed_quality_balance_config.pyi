@@ -16,8 +16,8 @@ class SpeedQualityBalanceConfig(toloka.client.primitives.base.BaseTolokaObject):
         """The type of speed quality balance:
 
         Attributes:
-            TOP_PERCENTAGE_BY_QUALITY: get top XX% performers by quality.
-            BEST_CONCURRENT_USERS_BY_QUALITY: get top x performers by quality.
+            TOP_PERCENTAGE_BY_QUALITY: get top XX% Tolokers by quality.
+            BEST_CONCURRENT_USERS_BY_QUALITY: get top x Tolokers by quality.
         """
 
         TOP_PERCENTAGE_BY_QUALITY = 'TOP_PERCENTAGE_BY_QUALITY'
@@ -32,7 +32,7 @@ class SpeedQualityBalanceConfig(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class TopPercentageByQuality(SpeedQualityBalanceConfig):
-    """The percentage of performers ordered by quality that will work on pool.
+    """The percentage of Tolokers ordered by quality that will work on pool.
     """
 
     def __init__(self, *, percent: typing.Optional[int] = None) -> None:
@@ -45,7 +45,7 @@ class TopPercentageByQuality(SpeedQualityBalanceConfig):
 
 
 class BestConcurrentUsersByQuality(SpeedQualityBalanceConfig):
-    """How many concurrent performers ordered by quality will work on pool.
+    """How many concurrent Tolokers ordered by quality will work on pool.
     """
 
     def __init__(self, *, count: typing.Optional[int] = None) -> None:
