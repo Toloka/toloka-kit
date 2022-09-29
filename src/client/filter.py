@@ -35,13 +35,13 @@ import inspect
 from enum import unique
 from typing import Any, List, Optional, Union, ClassVar, Dict
 
-from ._converter import unstructure
 from .primitives.base import BaseTolokaObject
 from .primitives.operators import (
     CompareOperator,
     StatefulComparableConditionMixin,
     IdentityConditionMixin,
     ComparableConditionMixin,
+    IdentityOperator,
     InclusionConditionMixin,
     InclusionOperator,
 )
@@ -115,12 +115,6 @@ class FilterOr(FilterCondition, kw_only=False):
     def structure(cls, data):
         return super(FilterCondition, cls).structure(data)
 
-    def unstructure(self) -> Optional[dict]:
-        self_unstructured_dict = super().unstructure()
-        if self.or_:
-            self_unstructured_dict['or'] = [unstructure(inner_filter) for inner_filter in self.or_]
-        return self_unstructured_dict
-
 
 class FilterAnd(FilterCondition, kw_only=False):
     """Use to combine multiple filters via "and" logic
@@ -147,12 +141,6 @@ class FilterAnd(FilterCondition, kw_only=False):
     @classmethod
     def structure(cls, data):
         return super(FilterCondition, cls).structure(data)
-
-    def unstructure(self) -> Optional[dict]:
-        self_unstructured_dict = super().unstructure()
-        if self.and_:
-            self_unstructured_dict['and'] = [unstructure(inner_filter) for inner_filter in self.and_]
-        return self_unstructured_dict
 
 
 class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
@@ -324,9 +312,25 @@ class AdultAllowed(Profile, IdentityConditionMixin, spec_value=Profile.Key.ADULT
 
     Attributes:
         value: Toloker's agreement.
+
+    Example:
+        Use equal operator to create appropriate filter
+
+        >>> adult_allowed_filter = toloka.client.filter.AdultAllowed == True
+        >>> adult_not_allowed_filter = toloka.client.filter.AdultAllowed == False
+        ...
     """
 
     value: bool = attribute(required=True)
+
+    def __invert__(self) -> 'Condition':
+        """Enforce to use `==` operator"""
+        condition_copy = copy.deepcopy(self)
+        if condition_copy.operator == IdentityOperator.NE:
+            condition_copy.operator = IdentityOperator.EQ
+        else:
+            condition_copy.value = not condition_copy.value
+        return condition_copy
 
 
 @inherit_docstrings
@@ -438,11 +442,22 @@ class Verified(Profile, IdentityConditionMixin, spec_value=Profile.Key.VERIFIED)
         value: is Toloker verified.
 
     Example:
-            >>> verified_filter = toloka.client.filter.Verified == True
-            >>> unverified_filter = toloka.client.filter.Verified == False
-            ...
+        Use equal operator to create appropriate filter
+
+        >>> verified_filter = toloka.client.filter.Verified == True
+        >>> unverified_filter = toloka.client.filter.Verified == False
+        ...
     """
     value: bool = attribute(required=True)
+
+    def __invert__(self) -> 'Condition':
+        """Enforce to use `==` operator"""
+        condition_copy = copy.deepcopy(self)
+        if condition_copy.operator == IdentityOperator.NE:
+            condition_copy.operator = IdentityOperator.EQ
+        else:
+            condition_copy.value = not condition_copy.value
+        return condition_copy
 
 
 @inherit_docstrings

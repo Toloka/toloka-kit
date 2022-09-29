@@ -2,7 +2,7 @@ import datetime
 import pickle
 import copy
 import pytest
-from toloka.client.filter import Languages, FilterAnd, FilterOr, Skill, Gender, OSVersion
+from toloka.client.filter import Languages, FilterAnd, FilterOr, Skill, Gender, OSVersion, Verified
 from toloka.client.pool import Pool
 
 
@@ -49,6 +49,7 @@ def test_language_deepcopyable(obj):
     (Languages.in_(['EN', 'RU']), Languages.not_in(['EN', 'RU'])),
     (Skill('123') == 10, Skill('123') != 10),
     (Skill('123') > 10, Skill('123') <= 10),
+    (Verified == True, Verified == False)
 ])
 def test_filter_invertion(obj, obj_inverted):
     assert ~obj == obj_inverted
