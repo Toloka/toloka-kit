@@ -223,7 +223,7 @@ def test_compose_thread_filter(requests_mock, toloka_client, toloka_url, message
         **compose_details_filter_map
     }
     expected_request = deepcopy(raw_request)
-    expected_request['recipients_filter'] = {'and': [{'or': [expected_request['recipients_filter']]}]}
+    expected_request['recipients_filter'] = {'and': [expected_request['recipients_filter']]}
     raw_result = {**message_thread_base_map, 'compose_details': compose_details_filter_map}
 
     def message_threads(request, context):

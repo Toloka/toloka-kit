@@ -35,13 +35,13 @@ import inspect
 from enum import unique
 from typing import Any, List, Optional, Union, ClassVar, Dict
 
-from ._converter import unstructure
 from .primitives.base import BaseTolokaObject
 from .primitives.operators import (
     CompareOperator,
     StatefulComparableConditionMixin,
     IdentityConditionMixin,
     ComparableConditionMixin,
+    IdentityOperator,
     InclusionConditionMixin,
     InclusionOperator,
 )
@@ -118,12 +118,6 @@ class FilterOr(FilterCondition, kw_only=False):
     def structure(cls, data):
         return super(FilterCondition, cls).structure(data)
 
-    def unstructure(self) -> Optional[dict]:
-        self_unstructured_dict = super().unstructure()
-        if self.or_:
-            self_unstructured_dict['or'] = [unstructure(inner_filter) for inner_filter in self.or_]
-        return self_unstructured_dict
-
 
 class FilterAnd(FilterCondition, kw_only=False):
     """Filter `AND` operator.
@@ -152,17 +146,6 @@ class FilterAnd(FilterCondition, kw_only=False):
     @classmethod
     def structure(cls, data):
         return super(FilterCondition, cls).structure(data)
-
-    def unstructure(self) -> Optional[dict]:
-        self_unstructured_dict = super().unstructure()
-        if self.and_:
-            self_unstructured_dict['and'] = [
-                unstructure(FilterOr([inner_filter]))
-                if isinstance(inner_filter, Condition)
-                else unstructure(inner_filter)
-                for inner_filter in self.and_
-            ]
-        return self_unstructured_dict
 
 
 class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
@@ -212,6 +195,7 @@ class Profile(Condition, spec_value=Condition.Category.PROFILE, spec_field='key'
         DATE_OF_BIRTH = 'date_of_birth'
         CITY = 'city'
         LANGUAGES = 'languages'
+        VERIFIED = 'verified'
 
 
 @inherit_docstrings
@@ -340,9 +324,25 @@ class AdultAllowed(Profile, IdentityConditionMixin, spec_value=Profile.Key.ADULT
 
     Attributes:
         value: `True` - Toloker agrees to work with adult content.
+
+    Example:
+        Use equal operator to create appropriate filter
+
+        >>> adult_allowed_filter = toloka.client.filter.AdultAllowed == True
+        >>> adult_not_allowed_filter = toloka.client.filter.AdultAllowed == False
+        ...
     """
 
     value: bool = attribute(required=True)
+
+    def __invert__(self) -> 'Condition':
+        """Enforce to use `==` operator"""
+        condition_copy = copy.deepcopy(self)
+        if condition_copy.operator == IdentityOperator.NE:
+            condition_copy.operator = IdentityOperator.EQ
+        else:
+            condition_copy.value = not condition_copy.value
+        return condition_copy
 
 
 @inherit_docstrings
@@ -417,7 +417,7 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
                 else:
                     conditions.append(Skill(skills_mapping[value]).eq(cls.VERIFIED_LANGUAGE_SKILL_VALUE))
 
-                return FilterAnd(conditions)
+                return FilterOr([FilterAnd(conditions)])
             except KeyError:
                 if not isinstance(value, str):
                     unsupported_languages = set(value) - skills_mapping.keys()
@@ -445,6 +445,32 @@ languages_init_signature_parameters['verified'] = inspect.Parameter(
 )
 Languages.__init__.__annotations__['verified'] = bool
 Languages.__init__.__signature__ = languages_init_signature.replace(parameters=languages_init_signature_parameters.values())
+
+
+@inherit_docstrings
+class Verified(Profile, IdentityConditionMixin, spec_value=Profile.Key.VERIFIED):
+    """Use to select verified Tolokers.
+
+    Attributes:
+        value: is Toloker verified.
+
+    Example:
+        Use equal operator to create appropriate filter
+
+        >>> verified_filter = toloka.client.filter.Verified == True
+        >>> unverified_filter = toloka.client.filter.Verified == False
+        ...
+    """
+    value: bool = attribute(required=True)
+
+    def __invert__(self) -> 'Condition':
+        """Enforce to use `==` operator"""
+        condition_copy = copy.deepcopy(self)
+        if condition_copy.operator == IdentityOperator.NE:
+            condition_copy.operator = IdentityOperator.EQ
+        else:
+            condition_copy.value = not condition_copy.value
+        return condition_copy
 
 
 @inherit_docstrings
