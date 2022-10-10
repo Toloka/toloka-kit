@@ -152,8 +152,8 @@ class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
     """A base class for filters that adds support for writing conditions.
 
     Attributes:
-        operator: Comparison operator in a condition, like `==`, `>`, `!=` and others.
-            Allowed set of operators depends on the data type of the `value` field.
+        operator: An operator used in the condition
+            Allowed set of operators depends on the filter.
         value: A value to compare with.
             For example, the minimum value of some skill, or a language specified in Tolokers' profiles.
     """
