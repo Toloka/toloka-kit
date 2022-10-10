@@ -1,10 +1,12 @@
 import datetime
 from operator import itemgetter
 from typing import List
-from urllib.parse import urlparse, parse_qs
 
+import httpx
 import pytest
+import simplejson
 import toloka.client as client
+from httpx import QueryParams
 
 from .testutils.util_functions import check_headers
 
@@ -57,27 +59,27 @@ def task_suite_map_with_readonly(task_suite_map):
     }
 
 
-def test_create_task_suite(requests_mock, toloka_client, toloka_url, task_suite_map, task_suite_map_with_readonly):
+def test_create_task_suite(respx_mock, toloka_client, toloka_url, task_suite_map, task_suite_map_with_readonly):
 
-    def task_suites(request, context):
+    def task_suites(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'create_task_suite',
             'X-Low-Level-Method': 'create_task_suite',
         }
         check_headers(request, expected_headers)
 
-        assert task_suite_map == request.json()
-        return task_suite_map_with_readonly
+        assert task_suite_map == simplejson.loads(request.content)
+        return httpx.Response(json=task_suite_map_with_readonly, status_code=200)
 
-    requests_mock.post(f'{toloka_url}/task-suites', json=task_suites)
+    respx_mock.post(f'{toloka_url}/task-suites').mock(side_effect=task_suites)
 
     # TODO: test creation parameters
     result = toloka_client.create_task_suite(client.unstructure(task_suite_map))
     assert task_suite_map_with_readonly == client.unstructure(result)
 
 
-def test_create_task_suites(requests_mock, toloka_client, toloka_url):
+def test_create_task_suites(respx_mock, toloka_client, toloka_url):
     raw_request = [
         {
             'pool_id': '21',
@@ -109,18 +111,18 @@ def test_create_task_suites(requests_mock, toloka_client, toloka_url):
         }
     }
 
-    def task_suites(request, context):
+    def task_suites(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'create_task_suites',
             'X-Low-Level-Method': 'create_task_suites',
         }
         check_headers(request, expected_headers)
 
-        assert raw_request == request.json()
-        return raw_result
+        assert raw_request == simplejson.loads(request.content)
+        return httpx.Response(json=raw_result, status_code=201)
 
-    requests_mock.post(f'{toloka_url}/task-suites', json=task_suites, status_code=201)
+    respx_mock.post(f'{toloka_url}/task-suites').mock(side_effect=task_suites)
 
     request = client.structure(raw_request, List[client.task_suite.TaskSuite])
     result = toloka_client.create_task_suites(request, async_mode=False, skip_invalid_items=True)
@@ -237,69 +239,69 @@ def task_suites_result_map():
 
 
 def test_create_task_suites_sync_through_async(
-        requests_mock, toloka_client, toloka_url, no_uuid_random,
+        respx_mock, toloka_client, toloka_url, no_uuid_random,
         task_suites_map, operation_running_map, operation_success_map,
         create_log, get_task_suites_map, task_suites_result_map
 ):
 
-    def check_task_suites(request, context):
+    def check_task_suites(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'create_task_suites',
             'X-Low-Level-Method': 'create_task_suites',
         }
         check_headers(request, expected_headers)
 
-        assert {
-            'operation_id': ['operation-i1d'],
-            'skip_invalid_items': ['true'],
-            'allow_defaults': ['true'],
-            'open_pool': ['true'],
-            'async_mode': ['true']
-        } == parse_qs(urlparse(request.url).query)
+        assert QueryParams(
+            operation_id='operation-i1d',
+            skip_invalid_items='true',
+            allow_defaults='true',
+            open_pool='true',
+            async_mode='true'
+        ) == request.url.params
         imcoming_task_suites = []
-        for t in request.json():
+        for t in simplejson.loads(request.content):
             assert '__client_uuid' in t
             t.pop('__client_uuid')
             imcoming_task_suites.append(t)
         assert task_suites_map == imcoming_task_suites
-        return operation_running_map
+        return httpx.Response(json=operation_running_map, status_code=201)
 
-    def operation_success(request, context):
+    def operation_success(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'create_task_suites',
             'X-Low-Level-Method': 'get_operation',
         }
         check_headers(request, expected_headers)
 
-        return operation_success_map
+        return httpx.Response(json=operation_success_map, status_code=201)
 
-    def get_log(request, context):
+    def get_log(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'create_task_suites',
             'X-Low-Level-Method': 'get_operation_log',
         }
         check_headers(request, expected_headers)
 
-        return create_log
+        return httpx.Response(json=create_log, status_code=201)
 
-    def task_suites(request, context):
+    def task_suites(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'create_task_suites',
             'X-Low-Level-Method': 'find_task_suites',
         }
         check_headers(request, expected_headers)
 
-        return {'items': get_task_suites_map, 'has_more': False}
+        return httpx.Response(json={'items': get_task_suites_map, 'has_more': False}, status_code=201)
 
     # mocks
-    requests_mock.post(f'{toloka_url}/task-suites', json=check_task_suites, status_code=201)
-    requests_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}', json=operation_success, status_code=201)
-    requests_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}/log', json=get_log, status_code=201)
-    requests_mock.get(f'{toloka_url}/task-suites', json=task_suites, status_code=201)
+    respx_mock.post(f'{toloka_url}/task-suites').mock(side_effect=check_task_suites)
+    respx_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}').mock(side_effect=operation_success)
+    respx_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}/log').mock(side_effect=get_log)
+    respx_mock.get(f'{toloka_url}/task-suites').mock(side_effect=task_suites)
 
     # Expanded syntax
     result = toloka_client.create_task_suites(
@@ -312,7 +314,7 @@ def test_create_task_suites_sync_through_async(
     assert task_suites_result_map == client.unstructure(result)
 
 
-def test_create_task_suites_async(requests_mock, toloka_client, toloka_url):
+def test_create_task_suites_async(respx_mock, toloka_client, toloka_url):
     raw_request = [
         {
             'pool_id': '21',
@@ -338,24 +340,24 @@ def test_create_task_suites_async(requests_mock, toloka_client, toloka_url):
         'details': {'items_count': 2},
     }
 
-    def task_suites(request, context):
+    def task_suites(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'create_task_suites_async',
             'X-Low-Level-Method': 'create_task_suites_async',
         }
         check_headers(request, expected_headers)
 
-        assert {
-            'skip_invalid_items': ['true'],
-            'allow_defaults': ['true'],
-            'open_pool': ['true'],
-            'async_mode': ['true']
-        } == parse_qs(urlparse(request.url).query)
-        assert raw_request == request.json()
-        return raw_result
+        assert QueryParams(
+            skip_invalid_items='true',
+            allow_defaults='true',
+            open_pool='true',
+            async_mode='true'
+        ) == request.url.params
+        assert raw_request == simplejson.loads(request.content)
+        return httpx.Response(json=raw_result, status_code=200)
 
-    requests_mock.post(f'{toloka_url}/task-suites', json=task_suites)
+    respx_mock.post(f'{toloka_url}/task-suites').mock(side_effect=task_suites)
 
     request = client.structure(raw_request, List[client.task_suite.TaskSuite])
 
@@ -378,32 +380,32 @@ def test_create_task_suites_async(requests_mock, toloka_client, toloka_url):
     assert raw_result == client.unstructure(result)
 
 
-def test_find_task_suites(requests_mock, toloka_client, toloka_url, task_suite_map_with_readonly):
+def test_find_task_suites(respx_mock, toloka_client, toloka_url, task_suite_map_with_readonly):
 
     raw_result = {'items': [task_suite_map_with_readonly], 'has_more': False}
 
-    def task_suites(request, context):
+    def task_suites(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'find_task_suites',
             'X-Low-Level-Method': 'find_task_suites',
         }
         check_headers(request, expected_headers)
 
-        assert {
-            'pool_id': ['21'],
-            'created_lte': ['2020-02-01T00:00:00'],
-            'overlap_gte': ['42'],
-            'sort': ['-created'],
-            'limit': ['100'],
-        } == parse_qs(urlparse(request.url).query)
-        return raw_result
+        assert QueryParams(
+            pool_id='21',
+            created_lte='2020-02-01T00:00:00',
+            overlap_gte='42',
+            sort='-created',
+            limit='100',
+        ) == request.url.params
+        return httpx.Response(json=raw_result, status_code=200)
 
-    requests_mock.get(f'{toloka_url}/task-suites', json=task_suites)
+    respx_mock.get(f'{toloka_url}/task-suites').mock(side_effect=task_suites)
 
     # Request object syntax
     request = client.search_requests.TaskSuiteSearchRequest(
-        pool_id=21,
+        pool_id='21',
         created_lte=datetime.datetime(2020, 2, 1, tzinfo=datetime.timezone.utc),
         overlap_gte=42,
     )
@@ -413,7 +415,7 @@ def test_find_task_suites(requests_mock, toloka_client, toloka_url, task_suite_m
 
     # Expanded syntax
     result = toloka_client.find_task_suites(
-        pool_id=21,
+        pool_id='21',
         created_lte=datetime.datetime(2020, 2, 1, tzinfo=datetime.timezone.utc),
         overlap_gte=42,
         sort=['-created'],
@@ -422,36 +424,37 @@ def test_find_task_suites(requests_mock, toloka_client, toloka_url, task_suite_m
     assert raw_result == client.unstructure(result)
 
 
-def test_get_task_suites(requests_mock, toloka_client, toloka_url, task_suite_map_with_readonly):
+def test_get_task_suites(respx_mock, toloka_client, toloka_url, task_suite_map_with_readonly):
 
     task_suites = [dict(task_suite_map_with_readonly, id=f'task-suite-i{i}d') for i in range(50)]
     task_suites.sort(key=itemgetter('id'))
 
-    def get_task_suites(request, context):
+    def get_task_suites(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_task_suites',
             'X-Low-Level-Method': 'find_task_suites',
         }
         check_headers(request, expected_headers)
 
-        params = parse_qs(urlparse(request.url).query)
-        id_gt = params.pop('id_gt')[0] if 'id_gt' in params else None
-        assert {
-            'pool_id': ['21'],
-            'created_lte': ['2020-02-01T00:00:00'],
-            'overlap_gte': ['42'],
-            'sort': ['id'],
-        } == params
+        params = request.url.params
+        id_gt = params.get('id_gt', None)
+        params = params.remove('id_gt')
+        assert QueryParams(
+            pool_id='21',
+            created_lte='2020-02-01T00:00:00',
+            overlap_gte='42',
+            sort='id',
+        ) == params
 
         items = [task_suite for task_suite in task_suites if id_gt is None or task_suite['id'] > id_gt][:3]
-        return {'items': items, 'has_more': items[-1]['id'] != task_suites[-1]['id']}
+        return httpx.Response(json={'items': items, 'has_more': items[-1]['id'] != task_suites[-1]['id']}, status_code=200)
 
-    requests_mock.get(f'{toloka_url}/task-suites', json=get_task_suites)
+    respx_mock.get(f'{toloka_url}/task-suites').mock(side_effect=get_task_suites)
 
     # Request object syntax
     request = client.search_requests.TaskSuiteSearchRequest(
-        pool_id=21,
+        pool_id='21',
         created_lte=datetime.datetime(2020, 2, 1, tzinfo=datetime.timezone.utc),
         overlap_gte=42,
     )
@@ -460,46 +463,46 @@ def test_get_task_suites(requests_mock, toloka_client, toloka_url, task_suite_ma
 
     # Expanded syntax
     result = toloka_client.get_task_suites(
-        pool_id=21,
+        pool_id='21',
         created_lte=datetime.datetime(2020, 2, 1, tzinfo=datetime.timezone.utc),
         overlap_gte=42,
     )
     assert task_suites == client.unstructure(list(result))
 
 
-def test_get_task_suite(requests_mock, toloka_client, toloka_url, task_suite_map_with_readonly):
+def test_get_task_suite(respx_mock, toloka_client, toloka_url, task_suite_map_with_readonly):
 
-    def task_suite(request, context):
+    def task_suite(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_task_suite',
             'X-Low-Level-Method': 'get_task_suite',
         }
         check_headers(request, expected_headers)
 
-        return task_suite_map_with_readonly
+        return httpx.Response(json=task_suite_map_with_readonly, status_code=200)
 
-    requests_mock.get(f'{toloka_url}/task-suites/task-suite-i1d', json=task_suite)
+    respx_mock.get(f'{toloka_url}/task-suites/task-suite-i1d').mock(side_effect=task_suite)
     result = toloka_client.get_task_suite('task-suite-i1d')
     assert task_suite_map_with_readonly == client.unstructure(result)
 
 
-def test_patch_task_suite(requests_mock, toloka_client, toloka_url, task_suite_map_with_readonly):
+def test_patch_task_suite(respx_mock, toloka_client, toloka_url, task_suite_map_with_readonly):
     raw_request = {'overlap': 12, 'infinite_overlap': False, 'issuing_order_override': 10.4}
     raw_result = {**task_suite_map_with_readonly, 'overlap': 12, 'issuing_order_override': 10.4}
 
-    def task_suites(request, context):
+    def task_suites(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'patch_task_suite',
             'X-Low-Level-Method': 'patch_task_suite',
         }
         check_headers(request, expected_headers)
 
-        assert raw_request == request.json()
-        return raw_result
+        assert raw_request == simplejson.loads(request.content)
+        return httpx.Response(json=raw_result, status_code=200)
 
-    requests_mock.patch(f'{toloka_url}/task-suites/task-suite-i1d', json=task_suites)
+    respx_mock.patch(f'{toloka_url}/task-suites/task-suite-i1d').mock(side_effect=task_suites)
 
     # Request object syntax
     patch = client.structure(raw_request, client.task_suite.TaskSuitePatch)
@@ -507,23 +510,23 @@ def test_patch_task_suite(requests_mock, toloka_client, toloka_url, task_suite_m
     assert raw_result == client.unstructure(result)
 
 
-def test_patch_task_suite_with_parameters(requests_mock, toloka_client, toloka_url, task_suite_map_with_readonly):
+def test_patch_task_suite_with_parameters(respx_mock, toloka_client, toloka_url, task_suite_map_with_readonly):
     raw_result = {**task_suite_map_with_readonly, 'overlap': 12, 'infinite_overlap': False}
 
-    def task_suites(request, context):
+    def task_suites(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'patch_task_suite',
             'X-Low-Level-Method': 'patch_task_suite',
         }
         check_headers(request, expected_headers)
 
-        params = parse_qs(urlparse(request.url).query)
-        assert {'open_pool': ['true']} == params
-        assert {'overlap': 12, 'infinite_overlap': False} == request.json()
-        return raw_result
+        params = request.url.params
+        assert QueryParams(open_pool='true') == params
+        assert {'overlap': 12, 'infinite_overlap': False} == simplejson.loads(request.content)
+        return httpx.Response(json=raw_result, status_code=200)
 
-    requests_mock.patch(f'{toloka_url}/task-suites/task-suite-i1d', json=task_suites)
+    respx_mock.patch(f'{toloka_url}/task-suites/task-suite-i1d').mock(side_effect=task_suites)
 
     # Request object syntax
     patch = client.task_suite.TaskSuitePatch(overlap=12, open_pool=True)
@@ -535,23 +538,23 @@ def test_patch_task_suite_with_parameters(requests_mock, toloka_client, toloka_u
     assert raw_result == client.unstructure(result)
 
 
-def test_patch_task_suite_overlap_or_min(requests_mock, toloka_client, toloka_url, task_suite_map_with_readonly):
+def test_patch_task_suite_overlap_or_min(respx_mock, toloka_client, toloka_url, task_suite_map_with_readonly):
 
     raw_patch = {'overlap': 10}
     raw_result = {**task_suite_map_with_readonly, 'overlap': 12}
 
-    def task_suites(request, context):
+    def task_suites(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'patch_task_suite_overlap_or_min',
             'X-Low-Level-Method': 'patch_task_suite_overlap_or_min',
         }
         check_headers(request, expected_headers)
 
-        assert raw_patch == request.json()
-        return raw_result
+        assert raw_patch == simplejson.loads(request.content)
+        return httpx.Response(json=raw_result, status_code=200)
 
-    requests_mock.patch(f'{toloka_url}/task-suites/task-suite-i1d/set-overlap-or-min', json=task_suites)
+    respx_mock.patch(f'{toloka_url}/task-suites/task-suite-i1d/set-overlap-or-min').mock(side_effect=task_suites)
 
     # Request object syntax
     patch = client.structure(raw_patch, client.task_suite.TaskSuiteOverlapPatch)

@@ -1,10 +1,12 @@
 import datetime
 import logging
 from operator import itemgetter
-from urllib.parse import urlparse, parse_qs
 
+import httpx
 import pytest
+import simplejson
 import toloka.client as client
+from httpx import QueryParams
 
 from .testutils.util_functions import check_headers
 
@@ -57,26 +59,26 @@ def archived_training_map_with_readonly(training_map_with_readonly):
     }
 
 
-def test_find_trainings(requests_mock, toloka_client, toloka_url, training_map_with_readonly):
+def test_find_trainings(respx_mock, toloka_client, toloka_url, training_map_with_readonly):
     raw_result = {'items': [training_map_with_readonly], 'has_more': False}
 
-    def trainings(request, context):
+    def trainings(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'find_trainings',
             'X-Low-Level-Method': 'find_trainings',
         }
         check_headers(request, expected_headers)
 
-        assert {
-            'project_id': ['10'],
-            'id_gt': ['20'],
-            'last_started_lt': ['2016-03-23T12:59:00'],
-            'sort': ['created,-id'],
-        } == parse_qs(urlparse(request.url).query)
-        return raw_result
+        assert QueryParams(
+            project_id='10',
+            id_gt='20',
+            last_started_lt='2016-03-23T12:59:00',
+            sort='created,-id',
+        ) == request.url.params
+        return httpx.Response(json=raw_result, status_code=200)
 
-    requests_mock.get(f'{toloka_url}/trainings', json=trainings)
+    respx_mock.get(f'{toloka_url}/trainings').mock(side_effect=trainings)
 
     # Request object syntax
     request = client.search_requests.TrainingSearchRequest(
@@ -98,31 +100,32 @@ def test_find_trainings(requests_mock, toloka_client, toloka_url, training_map_w
     assert raw_result == client.unstructure(result)
 
 
-def test_get_trainings(requests_mock, toloka_client, toloka_url, training_map_with_readonly):
+def test_get_trainings(respx_mock, toloka_client, toloka_url, training_map_with_readonly):
     trainings = [dict(training_map_with_readonly, id=str(i)) for i in range(100)]
     trainings.sort(key=itemgetter('id'))
     expected_trainings = [training for training in trainings if training['id'] > '20']
 
-    def get_trainings(request, context):
+    def get_trainings(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_trainings',
             'X-Low-Level-Method': 'find_trainings',
         }
         check_headers(request, expected_headers)
 
-        params = parse_qs(urlparse(request.url).query)
-        id_gt = params.pop('id_gt')[0]
-        assert {
-            'project_id': ['10'],
-            'last_started_lt': ['2016-03-23T12:59:00'],
-            'sort': ['id'],
-        } == params
+        params = request.url.params
+        id_gt = params['id_gt']
+        params = params.remove('id_gt')
+        assert QueryParams(
+            project_id='10',
+            last_started_lt='2016-03-23T12:59:00',
+            sort='id',
+        ) == params
 
         items = [training for training in trainings if id_gt is None or training['id'] > id_gt][:3]
-        return {'items': items, 'has_more': items[-1]['id'] != trainings[-1]['id']}
+        return httpx.Response(json={'items': items, 'has_more': items[-1]['id'] != trainings[-1]['id']}, status_code=200)
 
-    requests_mock.get(f'{toloka_url}/trainings', json=get_trainings)
+    respx_mock.get(f'{toloka_url}/trainings').mock(side_effect=get_trainings)
 
     # Request object syntax
     request = client.search_requests.TrainingSearchRequest(
@@ -142,36 +145,36 @@ def test_get_trainings(requests_mock, toloka_client, toloka_url, training_map_wi
     assert expected_trainings == client.unstructure(list(result))
 
 
-def test_get_training(requests_mock, toloka_client, toloka_url, training_map_with_readonly):
+def test_get_training(respx_mock, toloka_client, toloka_url, training_map_with_readonly):
 
-    def get_training(request, context):
+    def get_training(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_training',
             'X-Low-Level-Method': 'get_training',
         }
         check_headers(request, expected_headers)
 
-        return training_map_with_readonly
+        return httpx.Response(json=training_map_with_readonly, status_code=200)
 
-    requests_mock.get(f'{toloka_url}/trainings/21', json=get_training)
+    respx_mock.get(f'{toloka_url}/trainings/21').mock(side_effect=get_training)
     assert training_map_with_readonly == client.unstructure(toloka_client.get_training('21'))
 
 
-def test_create_training(requests_mock, toloka_client, toloka_url, training_map, training_map_with_readonly, caplog):
+def test_create_training(respx_mock, toloka_client, toloka_url, training_map, training_map_with_readonly, caplog):
 
-    def trainings(request, context):
+    def trainings(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'create_training',
             'X-Low-Level-Method': 'create_training',
         }
         check_headers(request, expected_headers)
 
-        assert training_map == request.json()
-        return training_map_with_readonly
+        assert training_map == simplejson.loads(request.content)
+        return httpx.Response(json=training_map_with_readonly, status_code=201)
 
-    requests_mock.post(f'{toloka_url}/trainings', json=trainings, status_code=201)
+    respx_mock.post(f'{toloka_url}/trainings').mock(side_effect=trainings)
     training = client.structure(training_map, client.training.Training)
     with caplog.at_level(logging.INFO):
         caplog.clear()
@@ -184,24 +187,24 @@ def test_create_training(requests_mock, toloka_client, toloka_url, training_map,
         assert training_map_with_readonly == client.unstructure(result)
 
 
-def test_update_training(requests_mock, toloka_client, toloka_url, training_map_with_readonly):
+def test_update_training(respx_mock, toloka_client, toloka_url, training_map_with_readonly):
     updated_training = {
         **training_map_with_readonly,
         'private_name': 'updated name',
     }
 
-    def trainings(request, context):
+    def trainings(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'update_training',
             'X-Low-Level-Method': 'update_training',
         }
         check_headers(request, expected_headers)
 
-        assert updated_training == request.json()
-        return updated_training
+        assert updated_training == simplejson.loads(request.content)
+        return httpx.Response(json=updated_training, status_code=200)
 
-    requests_mock.put(f'{toloka_url}/trainings/21', json=trainings)
+    respx_mock.put(f'{toloka_url}/trainings/21').mock(side_effect=trainings)
     result = toloka_client.update_training('21', client.structure(updated_training, client.training.Training))
     assert updated_training == client.unstructure(result)
 
@@ -227,34 +230,30 @@ def complete_open_operation_map(open_operation_map):
     }
 
 
-def test_open_training_async(requests_mock, toloka_client, toloka_url, open_operation_map, complete_open_operation_map):
+def test_open_training_async(respx_mock, toloka_client, toloka_url, open_operation_map, complete_open_operation_map):
 
-    def open_operation(request, context):
+    def open_operation(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'open_training_async',
             'X-Low-Level-Method': 'open_training_async',
         }
         check_headers(request, expected_headers)
 
-        return open_operation_map
+        return httpx.Response(json=open_operation_map, status_code=202)
 
-    def complete_open_operation(request, context):
+    def complete_open_operation(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'wait_operation',
             'X-Low-Level-Method': 'get_operation',
         }
         check_headers(request, expected_headers)
 
-        return complete_open_operation_map
+        return httpx.Response(json=complete_open_operation_map, status_code=200)
 
-    requests_mock.post(f'{toloka_url}/trainings/21/open', json=open_operation, status_code=202)
-    requests_mock.get(
-        f'{toloka_url}/operations/{open_operation_map["id"]}',
-        json=complete_open_operation,
-        status_code=200
-    )
+    respx_mock.post(f'{toloka_url}/trainings/21/open').mock(side_effect=open_operation)
+    respx_mock.get(f'{toloka_url}/operations/{open_operation_map["id"]}').mock(side_effect=complete_open_operation)
 
     operation = toloka_client.open_training_async('21')
     assert open_operation_map == client.unstructure(operation)
@@ -263,55 +262,51 @@ def test_open_training_async(requests_mock, toloka_client, toloka_url, open_oper
     assert complete_open_operation_map == client.unstructure(complete_operation)
 
 
-def test_open_training(requests_mock, toloka_client, toloka_url,
+def test_open_training(respx_mock, toloka_client, toloka_url,
                        open_operation_map, complete_open_operation_map, training_map_with_readonly):
 
-    def open_operation(request, context):
+    def open_operation(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'open_training',
             'X-Low-Level-Method': 'open_training_async',
         }
         check_headers(request, expected_headers)
 
-        return open_operation_map
+        return httpx.Response(json=open_operation_map, status_code=202)
 
-    def complete_open(request, context):
+    def complete_open(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'open_training',
             'X-Low-Level-Method': 'get_operation',
         }
         check_headers(request, expected_headers)
 
-        return complete_open_operation_map
+        return httpx.Response(json=complete_open_operation_map, status_code=200)
 
-    def training_map(request, context):
+    def training_map(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'open_training',
             'X-Low-Level-Method': 'get_training',
         }
         check_headers(request, expected_headers)
 
-        return training_map_with_readonly
+        return httpx.Response(json=training_map_with_readonly, status_code=200)
 
-    requests_mock.post(f'{toloka_url}/trainings/21/open', json=open_operation, status_code=202)
-    requests_mock.get(
-        f'{toloka_url}/operations/{open_operation_map["id"]}',
-        json=complete_open,
-        status_code=200
-    )
-    requests_mock.get(f'{toloka_url}/trainings/21', json=training_map, status_code=200)
+    respx_mock.post(f'{toloka_url}/trainings/21/open').mock(side_effect=open_operation)
+    respx_mock.get(f'{toloka_url}/operations/{open_operation_map["id"]}').mock(side_effect=complete_open)
+    respx_mock.get(f'{toloka_url}/trainings/21').mock(side_effect=training_map)
 
     result = toloka_client.open_training('21')
     assert training_map_with_readonly == client.unstructure(result)
 
 
 @pytest.fixture
-def test_open_training_already_opened(requests_mock, toloka_client, toloka_url, open_training_map_with_readonly):
-    requests_mock.post(f'{toloka_url}/trainings/21/open', [{'status_code': 204}])
-    requests_mock.get(f'{toloka_url}/pools/21', json=open_training_map_with_readonly)
+def test_open_training_already_opened(respx_mock, toloka_client, toloka_url, open_training_map_with_readonly):
+    respx_mock.post(f'{toloka_url}/trainings/21/open', [{'status_code': 204}])
+    respx_mock.get(f'{toloka_url}/pools/21').mock(side_effect=open_training_map_with_readonly)
     assert toloka_client.open_training_async('21') is None
     result = toloka_client.open_training('21')
     assert open_training_map_with_readonly == client.unstructure(result)
@@ -339,82 +334,78 @@ def complete_close_operation_map(close_operation_map):
     }
 
 
-def test_close_training_async(requests_mock, toloka_client, toloka_url, complete_close_operation_map):
+def test_close_training_async(respx_mock, toloka_client, toloka_url, complete_close_operation_map):
 
-    def complete_close_operation(request, context):
+    def complete_close_operation(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'close_training_async',
             'X-Low-Level-Method': 'close_training_async',
         }
         check_headers(request, expected_headers)
 
-        return complete_close_operation_map
+        return httpx.Response(json=complete_close_operation_map, status_code=202)
 
-    requests_mock.post(f'{toloka_url}/trainings/21/close', json=complete_close_operation, status_code=202)
+    respx_mock.post(f'{toloka_url}/trainings/21/close').mock(side_effect=complete_close_operation)
     result = toloka_client.wait_operation(toloka_client.close_training_async('21'))
     assert complete_close_operation_map == client.unstructure(result)
 
 
-def test_close_training(requests_mock, toloka_client, toloka_url,
+def test_close_training(respx_mock, toloka_client, toloka_url,
                         close_operation_map, complete_close_operation_map, training_map_with_readonly):
 
-    def close_operation(request, context):
+    def close_operation(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'close_training',
             'X-Low-Level-Method': 'close_training_async',
         }
         check_headers(request, expected_headers)
 
-        return close_operation_map
+        return httpx.Response(json=close_operation_map, status_code=202)
 
-    def complete_close_operation(request, context):
+    def complete_close_operation(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'close_training',
             'X-Low-Level-Method': 'get_operation',
         }
         check_headers(request, expected_headers)
 
-        return complete_close_operation_map
+        return httpx.Response(json=complete_close_operation_map, status_code=200)
 
-    def training(request, context):
+    def training(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'close_training',
             'X-Low-Level-Method': 'get_training',
         }
         check_headers(request, expected_headers)
 
-        return training_map_with_readonly
+        return httpx.Response(json=training_map_with_readonly, status_code=200)
 
-    requests_mock.post(f'{toloka_url}/trainings/21/close', json=close_operation, status_code=202)
-    requests_mock.get(
-        f'{toloka_url}/operations/{close_operation_map["id"]}',
-        json=complete_close_operation,
-        status_code=200
-    )
-    requests_mock.get(f'{toloka_url}/trainings/21', json=training, status_code=200)
+    respx_mock.post(f'{toloka_url}/trainings/21/close').mock(side_effect=close_operation)
+    respx_mock.get(f'{toloka_url}/operations/{close_operation_map["id"]}').mock(side_effect=complete_close_operation)
+    respx_mock.get(f'{toloka_url}/trainings/21').mock(side_effect=training)
 
     result = toloka_client.close_training('21')
     assert training_map_with_readonly == client.unstructure(result)
 
 
-def test_close_training_already_closed(requests_mock, toloka_client, toloka_url, training_map_with_readonly):
+def test_close_training_already_closed(respx_mock, toloka_client, toloka_url, training_map_with_readonly):
 
-    def training(request, context):
+    def training(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'close_training',
             'X-Low-Level-Method': 'get_training',
         }
         check_headers(request, expected_headers)
 
-        return training_map_with_readonly
+        return httpx.Response(json=training_map_with_readonly, status_code=200)
 
-    requests_mock.post(f'{toloka_url}/trainings/21/close', [{'status_code': 204}])
-    requests_mock.get(f'{toloka_url}/trainings/21', json=training)
+    respx_mock.post(f'{toloka_url}/trainings/21/close').respond(status_code=204)
+    respx_mock.get(f'{toloka_url}/trainings/21').mock(side_effect=training)
     assert toloka_client.close_training_async('21') is None
     result = toloka_client.close_training('21')
     assert training_map_with_readonly == client.unstructure(result)
@@ -442,83 +433,81 @@ def complete_archive_operation_map(archive_operation_map):
     }
 
 
-def test_archive_training_async(requests_mock, toloka_client, toloka_url, complete_archive_operation_map):
+def test_archive_training_async(respx_mock, toloka_client, toloka_url, complete_archive_operation_map):
 
-    def complete_archive_operation(request, context):
+    def complete_archive_operation(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'archive_training_async',
             'X-Low-Level-Method': 'archive_training_async',
         }
         check_headers(request, expected_headers)
 
-        return complete_archive_operation_map
+        return httpx.Response(json=complete_archive_operation_map, status_code=202)
 
-    requests_mock.post(f'{toloka_url}/trainings/21/archive', json=complete_archive_operation, status_code=202)
+    respx_mock.post(f'{toloka_url}/trainings/21/archive').mock(side_effect=complete_archive_operation)
     result = toloka_client.wait_operation(toloka_client.archive_training_async('21'))
     assert complete_archive_operation_map == client.unstructure(result)
 
 
-def test_archive_training(requests_mock, toloka_client, toloka_url,
+def test_archive_training(respx_mock, toloka_client, toloka_url,
                           archive_operation_map, complete_archive_operation_map, training_map_with_readonly):
 
-    def archive_operation(request, context):
+    def archive_operation(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'archive_training',
             'X-Low-Level-Method': 'archive_training_async',
         }
         check_headers(request, expected_headers)
 
-        return archive_operation_map
+        return httpx.Response(json=archive_operation_map, status_code=202)
 
-    def complete_archive_operation(request, context):
+    def complete_archive_operation(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'archive_training',
             'X-Low-Level-Method': 'get_operation',
         }
         check_headers(request, expected_headers)
 
-        return complete_archive_operation_map
+        return httpx.Response(json=complete_archive_operation_map, status_code=200)
 
-    def training(request, context):
+    def training(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'archive_training',
             'X-Low-Level-Method': 'get_training',
         }
         check_headers(request, expected_headers)
 
-        return training_map_with_readonly
+        return httpx.Response(json=training_map_with_readonly, status_code=200)
 
-    requests_mock.post(f'{toloka_url}/trainings/21/archive', json=archive_operation, status_code=202)
-    requests_mock.get(
-        f'{toloka_url}/operations/{archive_operation_map["id"]}',
-        json=complete_archive_operation,
-        status_code=200
-    )
-    requests_mock.get(f'{toloka_url}/trainings/21', json=training, status_code=200)
+    respx_mock.post(f'{toloka_url}/trainings/21/archive').mock(side_effect=archive_operation)
+    respx_mock.get(
+        f'{toloka_url}/operations/{archive_operation_map["id"]}'
+    ).mock(side_effect=complete_archive_operation)
+    respx_mock.get(f'{toloka_url}/trainings/21').mock(side_effect=training)
 
     result = toloka_client.archive_training('21')
     assert training_map_with_readonly == client.unstructure(result)
 
 
-def test_close_archive_training_already_archived(requests_mock, toloka_client, toloka_url,
+def test_close_archive_training_already_archived(respx_mock, toloka_client, toloka_url,
                                                  archived_training_map_with_readonly):
 
-    def archived_training(request, context):
+    def archived_training(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'archive_training',
             'X-Low-Level-Method': 'get_training',
         }
         check_headers(request, expected_headers)
 
-        return archived_training_map_with_readonly
+        return httpx.Response(json=archived_training_map_with_readonly, status_code=200)
 
-    requests_mock.post(f'{toloka_url}/trainings/21/archive', [{'status_code': 204}])
-    requests_mock.get(f'{toloka_url}/trainings/21', json=archived_training)
+    respx_mock.post(f'{toloka_url}/trainings/21/archive').respond(status_code=204)
+    respx_mock.get(f'{toloka_url}/trainings/21').mock(side_effect=archived_training)
     assert toloka_client.archive_training_async('21') is None
     result = toloka_client.archive_training('21')
     assert archived_training_map_with_readonly == client.unstructure(result)
@@ -555,63 +544,59 @@ def cloned_training_map_with_readonly(training_map_with_readonly):
     }
 
 
-def test_clone_training_async(requests_mock, toloka_client, toloka_url, complete_clone_operation_map):
+def test_clone_training_async(respx_mock, toloka_client, toloka_url, complete_clone_operation_map):
 
-    def complete_clone_operation(request, context):
+    def complete_clone_operation(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'clone_training_async',
             'X-Low-Level-Method': 'clone_training_async',
         }
         check_headers(request, expected_headers)
 
-        return complete_clone_operation_map
+        return httpx.Response(json=complete_clone_operation_map, status_code=202)
 
-    requests_mock.post(f'{toloka_url}/trainings/21/clone', json=complete_clone_operation, status_code=202)
+    respx_mock.post(f'{toloka_url}/trainings/21/clone').mock(side_effect=complete_clone_operation)
     result = toloka_client.wait_operation(toloka_client.clone_training_async('21'))
     assert complete_clone_operation_map == client.unstructure(result)
 
 
-def test_clone_training(requests_mock, toloka_client, toloka_url,
+def test_clone_training(respx_mock, toloka_client, toloka_url,
                         clone_operation_map, complete_clone_operation_map, cloned_training_map_with_readonly, caplog):
 
-    def clone_operation(request, context):
+    def clone_operation(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'clone_training',
             'X-Low-Level-Method': 'clone_training_async',
         }
         check_headers(request, expected_headers)
 
-        return clone_operation_map
+        return httpx.Response(json=clone_operation_map, status_code=202)
 
-    def complete_clone_operation(request, context):
+    def complete_clone_operation(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'clone_training',
             'X-Low-Level-Method': 'get_operation',
         }
         check_headers(request, expected_headers)
 
-        return complete_clone_operation_map
+        return httpx.Response(json=complete_clone_operation_map, status_code=200)
 
-    def cloned_training(request, context):
+    def cloned_training(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'clone_training',
             'X-Low-Level-Method': 'get_training',
         }
         check_headers(request, expected_headers)
 
-        return cloned_training_map_with_readonly
+        return httpx.Response(json=cloned_training_map_with_readonly, status_code=200)
 
-    requests_mock.post(f'{toloka_url}/trainings/21/clone', json=clone_operation, status_code=202)
-    requests_mock.get(
-        f'{toloka_url}/operations/{clone_operation_map["id"]}',
-        json=complete_clone_operation,
-        status_code=200
-    )
-    requests_mock.get(f'{toloka_url}/trainings/22', json=cloned_training, status_code=200)
+    respx_mock.post(f'{toloka_url}/trainings/21/clone').mock(side_effect=clone_operation)
+    respx_mock.get(f'{toloka_url}/operations/{clone_operation_map["id"]}').mock(side_effect=complete_clone_operation)
+    respx_mock.get(f'{toloka_url}/trainings/22').mock(side_effect=cloned_training)
 
     with caplog.at_level(logging.INFO):
         caplog.clear()

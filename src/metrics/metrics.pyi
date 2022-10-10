@@ -53,7 +53,7 @@ class BaseMetric:
         """
         ...
 
-    async def get_lines(self) -> typing.Dict[str, typing.List[typing.Tuple[typing.Any, typing.Any]]]:
+    def get_lines(self) -> typing.Dict[str, typing.List[typing.Tuple[typing.Any, typing.Any]]]:
         """Gather and return metrics
 
         All metrics returned in the same format: named list, contain pairs of: datetime of some event, metric value.

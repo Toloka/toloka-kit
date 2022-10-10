@@ -46,7 +46,7 @@ class MetricCollector:
     @staticmethod
     def create_async_tasks(coro): ...
 
-    async def run(self):
+    def run(self):
         """Starts collecting metrics. And never stops.
         """
         ...

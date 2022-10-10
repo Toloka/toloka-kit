@@ -5,9 +5,12 @@ __all__ = [
     'ensure_async',
     'get_task_traceback',
     'Cooldown',
+    'AsyncGenAdapter',
+    'generate_async_methods_from',
+    'isasyncgenadapterfunction',
 ]
-import asyncio
 import asyncio.events
+import asyncio.tasks
 import typing
 
 
@@ -77,7 +80,7 @@ class AsyncMultithreadWrapper(typing.Generic[T]):
     ): ...
 
 
-def get_task_traceback(task: asyncio.Task) -> typing.Optional[str]:
+def get_task_traceback(task: asyncio.tasks.Task) -> typing.Optional[str]:
     """Get traceback for given task as string.
     Return traceback as string if exists. Or None if there was no error.
     """
@@ -102,3 +105,19 @@ class Cooldown:
 
     _touch_time: float
     _cooldown_time: int
+
+
+def generate_async_methods_from(cls): ...
+
+
+YieldType = typing.TypeVar('YieldType')
+
+SendType = typing.TypeVar('SendType')
+
+class AsyncGenAdapter(typing.Generic[YieldType, SendType]):
+    def __init__(self, gen: typing.AsyncGenerator[YieldType, SendType]): ...
+
+    def as_sync_gen(self): ...
+
+
+def isasyncgenadapterfunction(obj): ...

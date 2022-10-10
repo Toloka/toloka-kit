@@ -2,8 +2,11 @@ import datetime
 from urllib.parse import urlparse, parse_qs
 from uuid import uuid4
 
+import httpx
 import pytest
+import simplejson
 import toloka.client as client
+from httpx import QueryParams
 
 from .testutils.util_functions import check_headers
 
@@ -59,23 +62,23 @@ def upsert_webhook_subscriptions_result_map():
 
 
 def test_upsert_webhook_subscriptions(
-    requests_mock, toloka_client, toloka_url,
+    respx_mock, toloka_client, toloka_url,
     webhook_subscriptions_map, upsert_webhook_subscriptions_result_map
 ):
 
-    def upsert_webhook_subscriptions_mock(request, _):
+    def upsert_webhook_subscriptions_mock(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'upsert_webhook_subscriptions',
             'X-Low-Level-Method': 'upsert_webhook_subscriptions',
         }
         check_headers(request, expected_headers)
 
-        assert webhook_subscriptions_map == request.json()
-        return upsert_webhook_subscriptions_result_map
+        assert webhook_subscriptions_map == simplejson.loads(request.content)
+        return httpx.Response(json=upsert_webhook_subscriptions_result_map, status_code=201)
 
     # upsert_webhook_subscriptions -> operation
-    requests_mock.put(f'{toloka_url}/webhook-subscriptions', json=upsert_webhook_subscriptions_mock, status_code=201)
+    respx_mock.put(f'{toloka_url}/webhook-subscriptions').mock(side_effect=upsert_webhook_subscriptions_mock)
 
     result = toloka_client.upsert_webhook_subscriptions(webhook_subscriptions_map)
     assert upsert_webhook_subscriptions_result_map == client.unstructure(result)
@@ -92,24 +95,24 @@ def webhook_subscription_map():
     }
 
 
-def test_get_webhook_subscription(requests_mock, toloka_client, toloka_url, webhook_subscription_map):
+def test_get_webhook_subscription(respx_mock, toloka_client, toloka_url, webhook_subscription_map):
 
-    def webhook_subscription(request, _):
+    def webhook_subscription(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_webhook_subscription',
             'X-Low-Level-Method': 'get_webhook_subscription',
         }
         check_headers(request, expected_headers)
 
-        return webhook_subscription_map
+        return httpx.Response(json=webhook_subscription_map, status_code=200)
 
-    requests_mock.get(f'{toloka_url}/webhook-subscriptions/webhook_subscription-1', json=webhook_subscription)
+    respx_mock.get(f'{toloka_url}/webhook-subscriptions/webhook_subscription-1').mock(side_effect=webhook_subscription)
     result = toloka_client.get_webhook_subscription('webhook_subscription-1')
     assert webhook_subscription_map == client.unstructure(result)
 
 
-def test_get_webhook_subscriptions(requests_mock, toloka_client, toloka_url, webhook_subscription_map):
+def test_get_webhook_subscriptions(respx_mock, toloka_client, toloka_url, webhook_subscription_map):
     webhook_subscriptions = [
         dict(
             webhook_subscription_map,
@@ -119,30 +122,34 @@ def test_get_webhook_subscriptions(requests_mock, toloka_client, toloka_url, web
         for sec in range(50)
     ]
 
-    def get_webhook_subscriptions_mock(request, _):
+    def get_webhook_subscriptions_mock(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_webhook_subscriptions',
             'X-Low-Level-Method': 'find_webhook_subscriptions',
         }
         check_headers(request, expected_headers)
 
-        params = parse_qs(urlparse(request.url).query)
-        created_gt = params.pop('created_gt')[0] if 'created_gt' in params else None
-        assert {
-            'event_type': ['ASSIGNMENT_CREATED'],
-            'pool_id': ['121212'],
-            'sort': ['created']
-        } == params, params
+        params = request.url.params
+        created_gt = params.get('created_gt')
+        params = params.remove('created_gt')
+        assert QueryParams(
+            event_type='ASSIGNMENT_CREATED',
+            pool_id='121212',
+            sort='created'
+        ) == params, params
 
         items = [
             webhook_subscription
             for webhook_subscription in webhook_subscriptions
             if created_gt is None or webhook_subscription['created'] > created_gt
         ][:3]
-        return {'items': items, 'has_more': items[-1]['created'] != webhook_subscriptions[-1]['created']}
+        return httpx.Response(
+            json={'items': items, 'has_more': items[-1]['created'] != webhook_subscriptions[-1]['created']},
+            status_code=200
+        )
 
-    requests_mock.get(f'{toloka_url}/webhook-subscriptions', json=get_webhook_subscriptions_mock)
+    respx_mock.get(f'{toloka_url}/webhook-subscriptions').mock(side_effect=get_webhook_subscriptions_mock)
 
     # Request object syntax
     request = client.search_requests.WebhookSubscriptionSearchRequest(

@@ -27,7 +27,7 @@ class Pipeline:
         >>> def handle_accepted(events: List[AssignmentEvent]) -> None:
         >>>     do_some_aggregation([item.assignment for item in events])
         >>>
-        >>> async_toloka_client = AsyncMultithreadWrapper(toloka_client)
+        >>> async_toloka_client = AsyncTolokaClient.from_sync_client(toloka_client)
         >>>
         >>> observer_123 = AssignmentsObserver(async_toloka_client, pool_id='123')
         >>> observer_123.on_submitted(handle_submitted)
@@ -92,7 +92,7 @@ class Pipeline:
         """
         ...
 
-    async def run(self) -> None: ...
+    def run(self) -> None: ...
 
     def __init__(
         self,

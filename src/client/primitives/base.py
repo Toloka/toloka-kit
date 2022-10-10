@@ -321,14 +321,22 @@ def autocast_to_enum(func: typing.Callable) -> typing.Callable:
 
     signature = signature.replace(parameters=new_params)
 
-    def wrapper(*args, **kwargs):
+    def _wrapper(*args, **kwargs):
         bound_arguments = signature.bind(*args, **kwargs)
         new_args = {}
-        for (argument_name, argument_value), casting_type, parameter in zip(bound_arguments.arguments.items(),
-                                                                            casting_types,
-                                                                            signature.parameters.values()):
+        for (argument_name, argument_value), casting_type, parameter in zip(
+                bound_arguments.arguments.items(),
+                casting_types,
+                signature.parameters.values()
+        ):
             new_args[argument_name] = converter.structure(argument_value, casting_type)
         return func(**new_args)
+
+    if inspect.iscoroutinefunction(func):
+        async def wrapper(*args, **kwargs):
+            return await _wrapper(*args, **kwargs)
+    else:
+        wrapper = _wrapper
 
     update_wrapper(wrapper, func)
     wrapper.__signature__ = signature

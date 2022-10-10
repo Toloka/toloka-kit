@@ -1,37 +1,72 @@
 import asyncio
 import inspect
+import pickle
 import random
 import uuid
+from typing import AsyncGenerator
 
 import httpx
 import pytest
 from pytest_lazyfixture import lazy_fixture
 from toloka.async_client import AsyncTolokaClient
+from toloka.util.async_utils import isasyncgenadapterfunction
 from toloka.client import TolokaClient
+
+
+class SyncOverAsyncTolokaClient:
+    def __init__(self, sync_client, use_async_gen_adapter_as_gen):
+        self.async_client = AsyncTolokaClient.from_sync_client(sync_client)
+        self.use_async_gen_adapter_as_gen = use_async_gen_adapter_as_gen
+
+    def read_async_gen(self, async_gen):
+        loop = asyncio.get_event_loop()
+        while True:
+            try:
+                yield loop.run_until_complete(async_gen.__anext__())
+            except StopAsyncIteration:
+                return
+
+    def __getattr__(self, name):
+        member = getattr(self.async_client, name)
+        if (
+            inspect.iscoroutinefunction(member)
+            or (isasyncgenadapterfunction(member) and not self.use_async_gen_adapter_as_gen)
+        ):
+            def sync_wrapper(*args, **kwargs):
+                value = asyncio.get_event_loop().run_until_complete(member(*args, **kwargs))
+                return value
+            return sync_wrapper
+        if (
+            inspect.isasyncgenfunction(member)
+            or (isasyncgenadapterfunction(member) and self.use_async_gen_adapter_as_gen)
+        ):
+            def sync_wrapper(*args, **kwargs):
+                yield from self.read_async_gen(member(*args, **kwargs))
+            return sync_wrapper
+
+        return member
+
+    def __getstate__(self):
+        return self.async_client.__dict__
+
+    def __setstate__(self, state):
+        self.async_client = AsyncTolokaClient.__new__(AsyncTolokaClient)
+        self.async_client.__dict__ = state
 
 
 @pytest.fixture
 def sync_toloka_client():
-    return TolokaClient('fake-token', 'SANDBOX')
-
-
-class SyncOverAsyncTolokaClient:
-    def __init__(self, sync_client):
-        self.async_client = AsyncTolokaClient.from_sync_client(sync_client)
-
-    def __getattr__(self, name):
-        member = getattr(self.async_client, name)
-        if inspect.iscoroutinefunction(member):
-            def sync_wrapper(*args, **kwargs):
-                return asyncio.get_event_loop().run_until_complete(member(*args, **kwargs))
-
-            return sync_wrapper
-        return member
+    return TolokaClient('fake-token', 'SANDBOX', timeout=0.1, retries=1)
 
 
 @pytest.fixture
-def sync_over_async_toloka_client(sync_toloka_client):
-    return SyncOverAsyncTolokaClient(sync_toloka_client)
+def async_toloka_client():
+    return AsyncTolokaClient('fake-token', 'SANDBOX', timeout=0.1, retries=1)
+
+
+@pytest.fixture(params=[True, False])
+def sync_over_async_toloka_client(sync_toloka_client, request):
+    return SyncOverAsyncTolokaClient(sync_client=sync_toloka_client, use_async_gen_adapter_as_gen=request.param)
 
 
 @pytest.fixture(params=[lazy_fixture('sync_toloka_client'), lazy_fixture('sync_over_async_toloka_client')])
@@ -47,30 +82,18 @@ def toloka_client_with_expected_header(toloka_client):
 
 
 @pytest.fixture
-def async_toloka_client():
-    return AsyncTolokaClient('fake-token', 'SANDBOX')
-
-
-@pytest.fixture
 def sync_toloka_client_prod():
     return TolokaClient('fake-token', 'PRODUCTION')
 
 
-@pytest.fixture
-def sync_over_async_toloka_client_prod(sync_toloka_client_prod):
-    return SyncOverAsyncTolokaClient(sync_toloka_client_prod)
+@pytest.fixture(params=[True, False])
+def sync_over_async_toloka_client_prod(sync_toloka_client_prod, request):
+    return SyncOverAsyncTolokaClient(sync_toloka_client_prod, use_async_gen_adapter_as_gen=request.param)
 
 
 @pytest.fixture(params=[lazy_fixture('sync_toloka_client_prod'), lazy_fixture('sync_over_async_toloka_client_prod')])
 def toloka_client_prod(request) -> TolokaClient:
     return request.param
-
-
-@pytest.fixture
-def toloka_client_prod_with_expected_header(toloka_client_prod):
-    if isinstance(toloka_client, TolokaClient):
-        return toloka_client, 'client'
-    return toloka_client, 'async_client'
 
 
 @pytest.fixture
@@ -93,33 +116,3 @@ def no_uuid_random():
     rd = random.Random()
     rd.seed(0)
     uuid.uuid4 = lambda: uuid.UUID(int=rd.getrandbits(128))
-
-
-class UniversalRequestsMock:
-    def __init__(self, respx_mock, requests_mock):
-        self.respx_mock = respx_mock
-        self.requests_mock = requests_mock
-
-    def _get_httpx_response(self, json, text, status_code):
-        def response(request, route):
-            return httpx.Response(status_code, json=json and json(request, route), text=text and text(request, route))
-
-        return response
-
-    def get(self, url, json=None, text=None, status_code=200):
-        self.respx_mock.get(url).mock(side_effect=self._get_httpx_response(json, text, status_code))
-        self.requests_mock.get(url, json=json, text=text)
-
-    def post(self, url, json=None, text=None, status_code=200):
-        self.respx_mock.post(url).mock(side_effect=self._get_httpx_response(json, text, status_code))
-        self.requests_mock.post(url, json=json, text=text)
-
-    def patch(self, url, json=None, text=None, status_code=200):
-        self.respx_mock.patch(url).mock(side_effect=self._get_httpx_response(json, text, status_code))
-        self.requests_mock.patch(url, json=json, text=text)
-
-
-@pytest.fixture
-def universal_requests_mock(respx_mock, requests_mock):
-    return UniversalRequestsMock(respx_mock, requests_mock)
-

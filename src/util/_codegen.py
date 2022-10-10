@@ -1,6 +1,8 @@
 __all__: list = [
     'attribute',
     'fix_attrs_converters',
+    'universal_decorator',
+    'expand'
 ]
 import functools
 import inspect
@@ -19,6 +21,61 @@ REQUIRED_KEY = 'toloka_field_required'
 ORIGIN_KEY = 'toloka_field_origin'
 READONLY_KEY = 'toloka_field_readonly'
 AUTOCAST_KEY = 'toloka_field_autocast'
+
+
+def universal_decorator(*, has_parameters):
+    """Metadecorator used for writing universal decorators that does not change function-like object type.
+
+    Wrapped decorator will preserve function-like object type: plain functions, async functions, generators and
+    async generators will keep their type after being decorated. Warning: if your decorator changes the
+    type of the function-like object (e.g. yields plain function result) do NOT use this (meta)decorator.
+    """
+
+    # top level closure for universal_decorator parameters capturing
+    def wrapper(dec):
+        def wrapped_decorator(func, decorator_to_apply):
+            """Applies the decorator and wraps the resulting function-like object with the original type."""
+            decorated_func = decorator_to_apply(func)
+
+            if inspect.isasyncgenfunction(func):
+
+                @functools.wraps(func)
+                async def wrapped(*args, **kwargs):
+                    async for item in decorated_func(*args, **kwargs):
+                        yield item
+
+            elif inspect.isgeneratorfunction(func):
+
+                @functools.wraps(func)
+                def wrapped(*args, **kwargs):
+                    yield from decorated_func(*args, **kwargs)
+
+            elif inspect.iscoroutinefunction(func):
+
+                @functools.wraps(func)
+                async def wrapped(*args, **kwargs):
+                    res = await decorated_func(*args, **kwargs)
+                    while inspect.isawaitable(res):
+                        res = await res
+                    return res
+
+            else:  # plain function
+                wrapped = decorated_func
+
+            return wrapped
+
+        if has_parameters:
+            # @decorator(...) syntax
+
+            @functools.wraps(dec)
+            def get_decorator(*args, **kwargs):
+                return functools.partial(wrapped_decorator, decorator_to_apply=dec(*args, **kwargs))
+
+            return get_decorator
+        # @decorator syntax
+        return functools.wraps(dec)(functools.partial(wrapped_decorator, decorator_to_apply=dec))
+
+    return wrapper
 
 
 def _remove_annotations_from_signature(sig: Signature) -> Signature:
@@ -197,6 +254,7 @@ def _check_arg_type_compatibility(func_sig: Signature, arg_name: str, arg_type: 
     return False, f'Argument "{arg_candidate}" has type "{type(arg_candidate)}" that is not a subclass of "{arg_type}"'
 
 
+@universal_decorator(has_parameters=True)
 def expand(arg_name: str, arg_type: Optional[Type] = None, check_type: bool = True) -> Callable:
     """Allows you to call function also via passing values for creating "arg_name", not only via passing an instance of "arg_name"
 
@@ -216,40 +274,22 @@ def expand(arg_name: str, arg_type: Optional[Type] = None, check_type: bool = Tr
         expanded_func: Callable = expand_func_by_argument(func, arg_name, arg_type)
         expanded_func_sig: Signature = get_signature(expanded_func)
 
-        if inspect.iscoroutinefunction(func):
-            @functools.wraps(func)
-            async def wrapped(*args, **kwargs):
-                bound, func_problem = _try_bind_arguments(func_sig, args, kwargs)
-                if bound is not None:
-                    if check_type and arg_name not in kwargs:
-                        fit, func_problem = _check_arg_type_compatibility(func_sig, arg_name, arg_type, bound)
-                        if fit:
-                            return await func(*args, **kwargs)
-                    else:
-                        return await func(*args, **kwargs)
-
-                bound, expand_func_problem = _try_bind_arguments(expanded_func_sig, args, kwargs)
-                if bound is None:
-                    raise TypeError(
-                        f'Arguments does not fit standart or expanded version.\nStandart version on problem: {func_problem}\nExpand version on problem: {expand_func_problem}')
-                return await expanded_func(*args, **kwargs)
-        else:
-            @functools.wraps(func)
-            def wrapped(*args, **kwargs):
-                bound, func_problem = _try_bind_arguments(func_sig, args, kwargs)
-                if bound is not None:
-                    if check_type and arg_name not in kwargs:
-                        fit, func_problem = _check_arg_type_compatibility(func_sig, arg_name, arg_type, bound)
-                        if fit:
-                            return func(*args, **kwargs)
-                    else:
+        @functools.wraps(func)
+        def wrapped(*args, **kwargs):
+            bound, func_problem = _try_bind_arguments(func_sig, args, kwargs)
+            if bound is not None:
+                if check_type and arg_name not in kwargs:
+                    fit, func_problem = _check_arg_type_compatibility(func_sig, arg_name, arg_type, bound)
+                    if fit:
                         return func(*args, **kwargs)
+                else:
+                    return func(*args, **kwargs)
 
-                bound, expand_func_problem = _try_bind_arguments(expanded_func_sig, args, kwargs)
-                if bound is None:
-                    raise TypeError(
-                        f'Arguments does not fit standart or expanded version.\nStandart version on problem: {func_problem}\nExpand version on problem: {expand_func_problem}')
-                return expanded_func(*args, **kwargs)
+            bound, expand_func_problem = _try_bind_arguments(expanded_func_sig, args, kwargs)
+            if bound is None:
+                raise TypeError(
+                    f'Arguments does not fit standart or expanded version.\nStandart version on problem: {func_problem}\nExpand version on problem: {expand_func_problem}')
+            return expanded_func(*args, **kwargs)
 
         wrapped._func = func
         wrapped._expanded_func = expanded_func

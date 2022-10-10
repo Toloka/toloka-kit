@@ -14,11 +14,15 @@ __all__ = [
     'FailedOperation',
 ]
 
+from json import JSONDecodeError
+
 import json
 from typing import Optional, Any, List
 
+import httpx
 import requests
 import attr
+from httpx import HTTPStatusError, ReadError
 
 from .error_codes import CommonErrorCodes, InternalErrorCodes
 from ..util._docstrings import inherit_docstrings
@@ -154,9 +158,12 @@ _ERROR_MAP = {
 }
 
 
-def raise_on_api_error(response: requests.Response):
+def raise_on_api_error(response: httpx.Response):
     if 200 <= response.status_code < 300:
         return
+
+    if not response.content:
+        raise HTTPStatusError(message='No content', response=response, request=response.request)
 
     response_json = response.json()
     error_class = _ERROR_MAP.get(response_json['code'], ApiError)

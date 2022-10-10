@@ -15,7 +15,7 @@ from typing import Any, Container, ContextManager, Dict, Iterable, Iterator, Lis
 from .observer import BaseObserver
 from .storage import BaseStorage
 from ..util.async_utils import ComplexException
-from ..util._managing_headers import async_add_headers
+from ..util._managing_headers import add_headers
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ class _Worker:
     observer: BaseObserver = attr.ib()
     should_resume: bool = attr.ib(default=False)
 
-    @async_add_headers('streaming')
+    @add_headers('streaming')
     async def __call__(self) -> None:
         if getattr(self.observer, '_enabled', True):
             await self.observer()
@@ -84,7 +84,7 @@ class Pipeline:
         >>> def handle_accepted(events: List[AssignmentEvent]) -> None:
         >>>     do_some_aggregation([item.assignment for item in events])
         >>>
-        >>> async_toloka_client = AsyncMultithreadWrapper(toloka_client)
+        >>> async_toloka_client = AsyncTolokaClient.from_sync_client(toloka_client)
         >>>
         >>> observer_123 = AssignmentsObserver(async_toloka_client, pool_id='123')
         >>> observer_123.on_submitted(handle_submitted)

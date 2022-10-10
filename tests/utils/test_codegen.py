@@ -1,9 +1,13 @@
+import asyncio
 import re
 import traceback
+from functools import partial
 from inspect import signature
+from io import StringIO
 
 import pytest
-from toloka.util._codegen import expand_func_by_argument
+from pytest_lazyfixture import lazy_fixture
+from toloka.util._codegen import expand_func_by_argument, universal_decorator
 
 
 @pytest.fixture
@@ -58,3 +62,105 @@ def test_generated_source_in_traceback(simple_class):
         '    b = Dummy\\(x, y\\)'
     )
     assert 1 == len(re.findall(pattern, trace))
+
+
+@pytest.fixture
+def universal_logging_decorator():
+    buffer = []
+
+    @universal_decorator(has_parameters=False)
+    def decorator(func):
+        def wrapped(*args, **kwargs):
+            buffer.append((args, kwargs))
+            return func(*args, **kwargs)
+
+        return wrapped
+
+    return decorator, buffer
+
+
+@pytest.fixture
+def universal_logging_decorator_with_parameters():
+    buffer = []
+
+    @universal_decorator(has_parameters=True)
+    def decorator(param):
+        def wrapper(func):
+            def wrapped(*args, **kwargs):
+                buffer.append((args, kwargs))
+                return func(*args, **kwargs)
+            return wrapped
+        return wrapper
+
+    return decorator(param=123), buffer
+
+
+@pytest.mark.parametrize(
+    'decorator_with_buffer',
+    [lazy_fixture('universal_logging_decorator'), lazy_fixture('universal_logging_decorator_with_parameters')]
+)
+def test_universal_decorator_plain_function(decorator_with_buffer):
+    decorator, buffer = decorator_with_buffer
+
+    @decorator
+    def func(a, b=None):
+        return a, b
+
+    assert func(10, b=20) == (10, 20)
+    assert func(10, 20) == (10, 20)
+    assert func(10) == (10, None)
+    assert buffer == [((10,), {'b': 20}), ((10, 20), {}), ((10,), {})]
+
+
+@pytest.mark.parametrize(
+    'decorator_with_buffer',
+    [lazy_fixture('universal_logging_decorator'), lazy_fixture('universal_logging_decorator_with_parameters')]
+)
+def test_universal_decorator_generator(decorator_with_buffer):
+    decorator, buffer = decorator_with_buffer
+
+    @decorator
+    def func(a, b=None):
+        yield a, b
+
+    assert list(func(10, b=20)) == [(10, 20)]
+    assert list(func(10, 20)) == [(10, 20)]
+    assert list(func(10)) == [(10, None)]
+    assert buffer == [((10,), {'b': 20}), ((10, 20), {}), ((10,), {})]
+
+
+@pytest.mark.parametrize(
+    'decorator_with_buffer',
+    [lazy_fixture('universal_logging_decorator'), lazy_fixture('universal_logging_decorator_with_parameters')]
+)
+def test_universal_decorator_async(decorator_with_buffer):
+    decorator, buffer = decorator_with_buffer
+
+    @decorator
+    async def func(a, b=None):
+        return a, b
+
+    assert asyncio.run(func(10, b=20)) == (10, 20)
+    assert asyncio.run(func(10, 20)) == (10, 20)
+    assert asyncio.run(func(10)) == (10, None)
+    assert buffer == [((10,), {'b': 20}), ((10, 20), {}), ((10,), {})]
+
+
+@pytest.mark.parametrize(
+    'decorator_with_buffer',
+    [lazy_fixture('universal_logging_decorator'), lazy_fixture('universal_logging_decorator_with_parameters')]
+)
+def test_universal_decorator_async_generator(decorator_with_buffer):
+    decorator, buffer = decorator_with_buffer
+
+    @decorator
+    async def func(a, b=None):
+        yield a, b
+
+    async def collect_async_gen(*args, **kwargs):
+        return [item async for item in func(*args, **kwargs)]
+
+    assert asyncio.run(collect_async_gen(10, b=20)) == [(10, 20)]
+    assert asyncio.run(collect_async_gen(10, 20)) == [(10, 20)]
+    assert asyncio.run(collect_async_gen(10)) == [(10, None)]
+    assert buffer == [((10,), {'b': 20}), ((10, 20), {}), ((10,), {})]
