@@ -81,37 +81,43 @@ class IdentityRuleCondition(RuleCondition, IdentityConditionMixin):
 
 
 class AcceptedAssignmentsCount(ComparableRuleCondition, spec_value=RuleConditionKey.ACCEPTED_ASSIGNMENTS_COUNT):
-    """How many times this assignment was accepted
+    """The number of accepted assignments of a task suite.
 
-    Don't be confused!!!
-    This condition used only with 'AssignmentsAssessment' controller.
-    And exist very similar condition 'AssignmentsAcceptedCount', that used only with 'AnswerCount' controller.
-    Sorry about that.
+    `AcceptedAssignmentsCount` is used with collectors:
+    - [AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment.md)
+
+    See also:
+    - AssignmentsAcceptedCount(toloka.client.conditions.AssignmentsAcceptedCount.md) — The number of assignments accepted from a Toloker.
     """
 
     value: int
 
 
 class AcceptedAssignmentsRate(ComparableRuleCondition, spec_value=RuleConditionKey.ACCEPTED_ASSIGNMENTS_RATE):
-    """Percentage of how many assignments were accepted from this Toloker out of all checked assignment
+    """The percentage of accepted assignments out of all checked assignments from a Toloker.
+
+    `AcceptedAssignmentsRate` is used with collectors:
+    - [AcceptanceRate](toloka.client.collectors.AcceptanceRate.md)
     """
 
     value: float
 
 
 class AssessmentEvent(IdentityRuleCondition, spec_value=RuleConditionKey.ASSESSMENT_EVENT):
-    """Assessment of the assignment changes its status to the specified one
+    """An assignment status change event.
 
-    This condition can work only with compare operator '=='.
+    Possible values:
+        * `ACCEPT` — An assignment was accepted.
+        * `ACCEPT_AFTER_REJECT` — An assignment with the previously set `REJECTED` status was accepted.
+        * `REJECT` — An assignment was rejected.
 
-    Attributes:
-        value: Possible values:
-            * conditions.AssessmentEvent.ACCEPT
-            * conditions.AssessmentEvent.ACCEPT_AFTER_REJECT
-            * conditions.AssessmentEvent.REJECT
+    `AssessmentEvent` condition can be used with the `==` operator only.
+
+    `AssessmentEvent` is used with collectors:
+    - [AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment.md).
 
     Example:
-        How to increase task overlap when you reject assignment in delayed mode.
+        The example shows how to automatically increase the overlap of a task suite when an assignment was rejected.
 
         >>> new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
@@ -136,72 +142,95 @@ class AssessmentEvent(IdentityRuleCondition, spec_value=RuleConditionKey.ASSESSM
 
 
 class AssignmentsAcceptedCount(ComparableRuleCondition, spec_value=RuleConditionKey.ASSIGNMENTS_ACCEPTED_COUNT):
-    """How many assignment was accepted from a Toloker
+    """The number of assignments accepted from a Toloker.
 
-    Don't be confused!!!
-    This condition used only with 'AnswerCount' controller.
-    And exist very similar condition 'AcceptedAssignmentsCount', that used only with 'AssignmentsAssessment' controller.
-    Sorry about that.
+    `AssignmentsAcceptedCount` is used with collectors:
+    - [AnswerCount](toloka.client.collectors.AnswerCount.md)
+
+    See also:
+    - AcceptedAssignmentsCount(toloka.client.conditions.AcceptedAssignmentsCount.md) — The number of accepted assignments of a task suite.
     """
 
     value: int
 
 
 class CorrectAnswersRate(ComparableRuleCondition, spec_value=RuleConditionKey.CORRECT_ANSWERS_RATE):
-    """The percentage of correct responses
+    """The percentage of correct responses.
 
-    Be careful, it may have different meanings in different collectors.
+    `CorrectAnswersRate` is used with collectors:
+    - [GoldenSet](toloka.client.collectors.GoldenSet.md)
+    - [MajorityVote](toloka.client.collectors.MajorityVote.md)
     """
 
     value: float
 
 
 class FailRate(ComparableRuleCondition, spec_value=RuleConditionKey.FAIL_RATE):
-    """Percentage of wrong answers of the Toloker to the captcha
+    """The percentage of unsolved captchas.
+
+    `FailRate` is used with collectors:
+    - [Captcha](toloka.client.collectors.Captcha.md)
     """
 
     value: float
 
 
 class FastSubmittedCount(ComparableRuleCondition, spec_value=RuleConditionKey.FAST_SUBMITTED_COUNT):
-    """The number of assignments a specific Toloker completed too fast
+    """The number of assignments completed by a Toloker too fast.
+
+    `FastSubmittedCount` is used with collectors:
+    - [AssignmentSubmitTime](toloka.client.collectors.AssignmentSubmitTime.md)
     """
 
     value: int
 
 
 class GoldenSetAnswersCount(ComparableRuleCondition, spec_value=RuleConditionKey.GOLDEN_SET_ANSWERS_COUNT):
-    """The number of completed control tasks
+    """The number of completed control tasks.
+
+    `GoldenSetAnswersCount` is used with collectors:
+    - [GoldenSet](toloka.client.collectors.GoldenSet.md)
     """
 
     value: int
 
 
 class GoldenSetCorrectAnswersRate(ComparableRuleCondition, spec_value=RuleConditionKey.GOLDEN_SET_CORRECT_ANSWERS_RATE):
-    """The percentage of correct responses in control tasks
+    """The percentage of correct responses to control tasks.
+
+    `GoldenSetCorrectAnswersRate` is used with collectors:
+    - [GoldenSet](toloka.client.collectors.GoldenSet.md)
     """
 
     value: float
 
 
 class GoldenSetIncorrectAnswersRate(ComparableRuleCondition, spec_value=RuleConditionKey.GOLDEN_SET_INCORRECT_ANSWERS_RATE):
-    """The percentage of incorrect responses in control tasks
+    """The percentage of incorrect responses to control tasks.
+
+    `GoldenSetIncorrectAnswersRate` is used with collectors:
+    - [GoldenSet](toloka.client.collectors.GoldenSet.md)
     """
 
     value: float
 
 
 class IncomeSumForLast24Hours(ComparableRuleCondition, spec_value=RuleConditionKey.INCOME_SUM_FOR_LAST_24_HOURS):
-    """The Toloker's earnings for completed tasks in the pool over the last 24 hours
+    """The Toloker's earnings for completed tasks in the pool during the last 24 hours.
+
+    `IncomeSumForLast24Hours` is used with collectors:
+    - [Income](toloka.client.collectors.Income.md)
     """
 
     value: float
 
 
 class IncorrectAnswersRate(ComparableRuleCondition, spec_value=RuleConditionKey.INCORRECT_ANSWERS_RATE):
-    """The percentage of incorrect responses
+    """The percentage of incorrect responses.
 
-    Be careful, it may have different meanings in different collectors.
+    `IncorrectAnswersRate` is used with collectors:
+    - [MajorityVote](toloka.client.collectors.MajorityVote.md)
+    - [GoldenSet](toloka.client.collectors.GoldenSet.md)
     """
 
     value: float
@@ -212,20 +241,24 @@ class NextAssignmentAvailable(ComparableRuleCondition, spec_value=RuleConditionK
 
 
 class PendingAssignmentsCount(ComparableRuleCondition, spec_value=RuleConditionKey.PENDING_ASSIGNMENTS_COUNT):
-    """Number of Assignments pending checking
+    """The number of pending assignments that must be checked.
+
+    `PendingAssignmentsCount` is used with collectors:
+    - [AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment.md)
     """
 
     value: int
 
 
 class PoolAccessRevokedReason(IdentityRuleCondition, spec_value=RuleConditionKey.POOL_ACCESS_REVOKED_REASON):
-    """Reason for loss of access of the Toloker to the current pool
+    """The reason why a Toloker has lost access to a pool.
 
-    Attributes:
-        value: exact reason
-            * SKILL_CHANGE - The Toloker no longer meets one or more filters.
-            * RESTRICTION - The Toloker's access to tasks is blocked by a quality control rule (such as control tasks,
-                majority vote, fast answers, skipped assignments, or captcha).
+    Possible values:
+        * `SKILL_CHANGE` — The Toloker no longer meets one or more filters.
+        * `RESTRICTION` — The Toloker's access to tasks is blocked by a quality control rule.
+
+    `PoolAccessRevokedReason` is used with collectors:
+    - [UsersAssessment](toloka.client.collectors.UsersAssessment.md)
     """
 
     @unique
@@ -240,35 +273,55 @@ class PoolAccessRevokedReason(IdentityRuleCondition, spec_value=RuleConditionKey
 
 
 class RejectedAssignmentsCount(ComparableRuleCondition, spec_value=RuleConditionKey.REJECTED_ASSIGNMENTS_COUNT):
-    """How many times this assignment was rejected
+    """The number of rejected assignments of a task suite.
+
+    `RejectedAssignmentsCount` is used with collectors:
+    - [AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment.md)
     """
 
     value: int
 
 
 class RejectedAssignmentsRate(ComparableRuleCondition, spec_value=RuleConditionKey.REJECTED_ASSIGNMENTS_RATE):
-    """Percentage of how many assignments were rejected from this Toloker out of all checked assignment
+    """A percentage of rejected assignments submitted by a Toloker.
+
+    `RejectedAssignmentsRate` is used with collectors:
+    - [AcceptanceRate](toloka.client.collectors.AcceptanceRate.md)
+
+    See also:
+    - [RejectedAssignmentsCount](toloka.client.conditions.RejectedAssignmentsCount.md) — The number of rejected assignments of a task suite.
     """
 
     value: float
 
 
 class SkillId(IdentityRuleCondition, spec_value=RuleConditionKey.SKILL_ID):
-    """The Toloker no longer meets the specific skill filter
+    """The ID of a changed skill which caused access blocking.
+
+    `SkillId` provides details if the [PoolAccessRevokedReason](toloka.client.conditions.PoolAccessRevokedReason.md) condition equals `SKILL_CHANGE`.
+
+    `SkillId` is used with collectors:
+    - [UsersAssessment](toloka.client.collectors.UsersAssessment.md)
     """
 
     value: str
 
 
 class SkippedInRowCount(ComparableRuleCondition, spec_value=RuleConditionKey.SKIPPED_IN_ROW_COUNT):
-    """How many tasks in a row the Toloker skipped
+    """The number of tasks skipped in a row by a Toloker.
+
+    `SkippedInRowCount` is used with collectors:
+    - [SkippedInRowAssignments](toloka.client.collectors.SkippedInRowAssignments.md)
     """
 
     value: int
 
 
 class StoredResultsCount(ComparableRuleCondition, spec_value=RuleConditionKey.STORED_RESULTS_COUNT):
-    """How many times the Toloker entered captcha
+    """The number of times a Toloker entered captcha.
+
+    `StoredResultsCount` is used with collectors:
+    - [Captcha](toloka.client.collectors.Captcha.md)
     """
 
     value: int
@@ -279,30 +332,41 @@ class SubmittedAssignmentsCount(ComparableRuleCondition, spec_value=RuleConditio
 
 
 class SuccessRate(ComparableRuleCondition, spec_value=RuleConditionKey.SUCCESS_RATE):
-    """Percentage of correct answers of the Toloker to the captcha
+    """A percentage of solved captchas out of all entered captchas.
+
+    `SuccessRate` is used with collectors:
+    - [Captcha](toloka.client.collectors.Captcha.md)
     """
 
     value: float
 
 
 class TotalAnswersCount(ComparableRuleCondition, spec_value=RuleConditionKey.TOTAL_ANSWERS_COUNT):
-    """The number of completed tasks by the Toloker
+    """The number of completed tasks.
 
-    Be careful, it may have different meanings in different collectors.
+    `TotalAnswersCount` is used with collectors:
+    - [GoldenSet](toloka.client.collectors.GoldenSet.md)
+    - [MajorityVote](toloka.client.collectors.MajorityVote.md)
     """
 
     value: int
 
 
 class TotalAssignmentsCount(ComparableRuleCondition, spec_value=RuleConditionKey.TOTAL_ASSIGNMENTS_COUNT):
-    """How many assignments from this Toloker were checked
+    """The number of checked assignments out of all assignments submitted by a Toloker.
+
+    `TotalAssignmentsCount` is used with collectors:
+    - [AcceptanceRate](toloka.client.collectors.AcceptanceRate.md)
     """
 
     value: int
 
 
 class TotalSubmittedCount(ComparableRuleCondition, spec_value=RuleConditionKey.TOTAL_SUBMITTED_COUNT):
-    """The number of assignments a specific Toloker completed
+    """The number of assignments submitted by a Toloker.
+
+    `TotalSubmittedCount` is used with collectors:
+    - [AssignmentSubmitTime](toloka.client.collectors.AssignmentSubmitTime.md)
     """
 
     value: int
