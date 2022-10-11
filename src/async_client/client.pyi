@@ -49,6 +49,11 @@ class AsyncTolokaClient:
         **kwargs
     ): ...
 
+    def __getattr__(self, name):
+        """Access non function arguments
+        """
+        ...
+
     @classmethod
     def from_sync_client(cls, client: toloka.client.TolokaClient) -> 'AsyncTolokaClient': ...
 

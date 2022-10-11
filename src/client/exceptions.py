@@ -14,15 +14,12 @@ __all__ = [
     'FailedOperation',
 ]
 
-from json import JSONDecodeError
-
 import json
-from typing import Optional, Any, List
+from typing import Any, List, Optional
 
-import httpx
-import requests
 import attr
-from httpx import HTTPStatusError, ReadError
+import httpx
+from httpx import HTTPStatusError
 
 from .error_codes import CommonErrorCodes, InternalErrorCodes
 from ..util._docstrings import inherit_docstrings

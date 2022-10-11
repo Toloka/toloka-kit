@@ -70,7 +70,6 @@ __all__ = [
     'AppBatchCreateRequest',
 ]
 
-import contextvars
 import datetime
 import functools
 import io
@@ -383,8 +382,6 @@ class TolokaClient:
         return self._request(method, path, params=params)
 
     def _find_all(self, find_function, request, sort_field: str = 'id', items_field: str = 'items'):
-        yield
-
         result = find_function(request, sort=[sort_field])
         items = getattr(result, items_field)
         while result.has_more:
@@ -614,7 +611,6 @@ class TolokaClient:
         """
         find_function = functools.partial(self.find_aggregated_solutions, operation_id)
         generator = self._find_all(find_function, request, sort_field='task_id')
-        generator.send(None)
         yield from generator
 
     # Assignments section
@@ -708,7 +704,6 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_assignments, request)
-        generator.send(None)
         yield from generator
 
     @expand('patch')
@@ -825,7 +820,6 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_attachments, request)
-        generator.send(None)
         yield from generator
 
     @add_headers('client')
@@ -975,7 +969,6 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_message_threads, request)
-        generator.send(None)
         yield from generator
 
     @autocast_to_enum
@@ -1151,7 +1144,6 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_projects, request)
-        generator.send(None)
         yield from generator
 
     @add_headers('client')
@@ -1563,7 +1555,6 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_pools, request)
-        generator.send(None)
         yield from generator
 
     @add_headers('client')
@@ -1919,7 +1910,6 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_trainings, request)
-        generator.send(None)
         yield from generator
 
     @add_headers('client')
@@ -2096,7 +2086,6 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_skills, request)
-        generator.send(None)
         yield from generator
 
     @add_headers('client')
@@ -2338,7 +2327,6 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_tasks, request)
-        generator.send(None)
         yield from generator
 
     @expand('patch')
@@ -2585,7 +2573,6 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_task_suites, request)
-        generator.send(None)
         yield from generator
 
     @expand('patch')
@@ -2767,7 +2754,6 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_operations, request)
-        generator.send(None)
         yield from generator
 
     @add_headers('client')
@@ -3013,7 +2999,6 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_user_bonuses, request)
-        generator.send(None)
         yield from generator
 
     # User restrictions
@@ -3087,7 +3072,6 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_user_restrictions, request)
-        generator.send(None)
         yield from generator
 
     @add_headers('client')
@@ -3225,7 +3209,6 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_user_skills, request)
-        generator.send(None)
         yield from generator
 
     @add_headers('client')
@@ -3369,7 +3352,6 @@ class TolokaClient:
             WebhookSubscription: The next matching webhook subscription.
         """
         generator = self._find_all(self.find_webhook_subscriptions, request, sort_field='created')
-        generator.send(None)
         yield from generator
 
     @add_headers('client')
@@ -3484,7 +3466,6 @@ class TolokaClient:
             raise RuntimeError('this method supports only production environment')
 
         generator = self._find_all(self.find_app_projects, request, items_field='content')
-        generator.send(None)
         yield from generator
 
     @add_headers('client')
@@ -3608,7 +3589,6 @@ class TolokaClient:
             raise RuntimeError('this method supports only production environment')
 
         generator = self._find_all(self.find_apps, request, items_field='content')
-        generator.send(None)
         yield from generator
 
     @add_headers('client')
@@ -3684,7 +3664,6 @@ class TolokaClient:
 
         find_function = functools.partial(self.find_app_items, app_project_id)
         generator = self._find_all(find_function, request, items_field='content')
-        generator.send(None)
         yield from generator
 
     @expand('app_item')
@@ -3793,7 +3772,6 @@ class TolokaClient:
 
         find_function = functools.partial(self.find_app_batches, app_project_id)
         generator = self._find_all(find_function, request, items_field='content')
-        generator.send(None)
         yield from generator
 
     @expand('request')

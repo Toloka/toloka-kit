@@ -24,7 +24,7 @@ from concurrent import futures
 from io import StringIO
 from textwrap import dedent
 from typing import (
-    AsyncGenerator, Awaitable, Callable, Dict, Generator, Generic, List, Optional, Type, TypeVar
+    AsyncGenerator, AsyncIterable, Awaitable, Callable, Dict, Generator, Generic, List, Optional, Type, TypeVar,
 )
 import nest_asyncio
 
@@ -32,6 +32,7 @@ import attr
 
 from .stored import PICKLE_DEFAULT_PROTOCOL
 
+# makes SyncGenWrapper possible
 nest_asyncio.apply()
 logger = logging.Logger(__file__)
 
@@ -338,7 +339,20 @@ class SyncGenWrapper:
             return
 
 
-class AsyncGenAdapter(Generic[YieldType, SendType]):
+class AsyncGenAdapter(Generic[YieldType, SendType], AsyncIterable, Awaitable):
+    """Adapter class that enables alternative syntax for iteration over async generator.
+
+    This class is used for backwards compatibility. Please use "async for" syntax in new code.
+
+    Examples:
+        main syntax
+         >>> async for value in AsyncGenAdapter(async_gen): ...
+         ...
+
+         alternative syntax (please do not use in new code):
+         >>> for value in await AsyncGenAdapter(async_gen): ...
+         ...
+    """
 
     def __init__(self, gen: AsyncGenerator[YieldType, SendType]):
         self.gen = gen

@@ -20,7 +20,7 @@ from ..client.exceptions import (
 )
 from ..client.operations import Operation
 from ..client.primitives.retry import AsyncRetryingOverURLLibRetry
-from ..util._managing_headers import add_headers, set_variable, top_level_method_var
+from ..util._managing_headers import add_headers
 from ..util.async_utils import generate_async_methods_from
 
 logger = logging.getLogger(__name__)
@@ -48,7 +48,9 @@ class AsyncTolokaClient:
         )
 
     def __getattr__(self, name):
-        """Access non function arguments"""
+        """Access non function fileds.
+
+        All function fields should be already overrided with generate_async_methods_from"""
         return getattr(self._sync_client, name)
 
     @classmethod
@@ -88,8 +90,6 @@ class AsyncTolokaClient:
         return (await self._raw_request(method, path, **kwargs)).json(parse_float=Decimal)
 
     async def _find_all(self, find_function, request, sort_field: str = 'id', items_field: str = 'items'):
-        yield
-
         result = await find_function(request, sort=[sort_field])
         items = getattr(result, items_field)
         while result.has_more:

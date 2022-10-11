@@ -18,7 +18,6 @@ from tenacity.stop import stop_base
 from tenacity.wait import wait_base
 from urllib3.connectionpool import ConnectionPool
 from urllib3.response import HTTPResponse  # type: ignore
-from urllib3.util import Retry
 from urllib3.util.retry import Retry  # type: ignore
 
 logger = logging.getLogger(__name__)

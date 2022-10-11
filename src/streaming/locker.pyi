@@ -6,6 +6,7 @@ __all__ = [
 ]
 import filelock._api
 import kazoo.client  # type: ignore
+import kazoo.recipe.lock  # type: ignore
 import typing
 
 
@@ -16,6 +17,8 @@ class NewerInstanceDetectedError(Exception):
 
 
 class BaseLocker:
+    def __call__(self, key: str) -> typing.ContextManager[typing.Any]: ...
+
     def cleanup(self, lock: typing.Any) -> None: ...
 
 
@@ -60,6 +63,8 @@ class FileLocker(BaseSequentialIdLocker):
         ...     pass
         ...
     """
+
+    def __call__(self, key: str) -> typing.ContextManager[filelock._api.BaseFileLock]: ...
 
     def cleanup(self, lock: filelock._api.BaseFileLock) -> None: ...
 
@@ -129,6 +134,8 @@ class ZooKeeperLocker(BaseSequentialIdLocker):
         ...     pass
         ...
     """
+
+    def __call__(self, key: str) -> typing.ContextManager[kazoo.recipe.lock.Lock]: ...
 
     def __init__(
         self,
