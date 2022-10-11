@@ -383,15 +383,14 @@ class TolokaClient:
         return self._request(method, path, params=params)
 
     def _find_all(self, find_function, request, sort_field: str = 'id', items_field: str = 'items'):
-        ctx = contextvars.copy_context()
         yield
 
-        result = ctx.run(find_function, request, sort=[sort_field])
+        result = find_function(request, sort=[sort_field])
         items = getattr(result, items_field)
         while result.has_more:
             request = attr.evolve(request, **{f'{sort_field}_gt': getattr(items[-1], sort_field)})
             yield from items
-            result = ctx.run(find_function, request, sort=[sort_field])
+            result = find_function(request, sort=[sort_field])
             items = getattr(result, items_field)
 
         yield from items

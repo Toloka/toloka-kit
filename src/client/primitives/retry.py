@@ -191,7 +191,7 @@ class RetryingOverURLLibRetry(BaseRetrying):
             base_url=state['base_url'], retry=state['urllib_retry'], exception_to_retry=state['exception_to_retry']
         )
 
-    def patch_with_urllib_retry(self, func: Callable):
+    def _patch_with_urllib_retry(self, func: Callable):
         @wraps(func)
         def wrapped(*args, **kwargs):
             bound_args = signature(func).bind(*args, **kwargs)
@@ -225,7 +225,7 @@ class RetryingOverURLLibRetry(BaseRetrying):
         class IsExhausted(stop_base):
             """Callback wrapped in callable class to match BaseRetrying signature."""
 
-            @self.patch_with_urllib_retry
+            @self._patch_with_urllib_retry
             def __call__(self, retry_state):
                 return retry_state.urllib_retry.is_exhausted()
 
@@ -237,7 +237,7 @@ class RetryingOverURLLibRetry(BaseRetrying):
         class GetBackoffTime(wait_base):
             """Callback wrapped in callable class to match BaseRetrying signature."""
 
-            @self.patch_with_urllib_retry
+            @self._patch_with_urllib_retry
             def __call__(self, retry_state):
                 response = outer_self._get_urllib_response(retry_state)
                 if response and retry_state.urllib_retry.respect_retry_after_header:
@@ -253,7 +253,7 @@ class RetryingOverURLLibRetry(BaseRetrying):
         class IsRetry(retry_base):
             """Callback wrapped in callable class to match BaseRetrying signature."""
 
-            @self.patch_with_urllib_retry
+            @self._patch_with_urllib_retry
             def __call__(self, retry_state):
                 if retry_state.outcome.failed:
                     exception = retry_state.outcome.exception()
@@ -270,7 +270,8 @@ class RetryingOverURLLibRetry(BaseRetrying):
         return IsRetry()
 
     def _get_after_callback(self):
-        @self.patch_with_urllib_retry
+
+        @self._patch_with_urllib_retry
         def increment(retry_state: RetryCallState):
             retry: Retry = retry_state.urllib_retry
             bound_args = signature(retry_state.fn).bind(*retry_state.args, **retry_state.kwargs)
@@ -286,7 +287,8 @@ class RetryingOverURLLibRetry(BaseRetrying):
                     error=httpx_exception_to_urllib_exception(exception) if exception else None,
                 )
             except urllib3.exceptions.MaxRetryError:
-                # retry.increment raises MaxRetryError when exhausted. We want to delegate that to the stop callback.
+                # retry.increment raises MaxRetryError when exhausted. We want to delegate checking if the process
+                # should be stopped to the stop callback.
                 retry_state.urllib_retry = Retry(total=-1)
 
         return increment

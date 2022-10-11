@@ -1,5 +1,6 @@
 __all__ = [
     'add_headers',
+    'async_add_headers',
     'form_additional_headers',
     'set_variable',
 ]
@@ -21,5 +22,7 @@ def add_headers(client: str):
     """
     ...
 
+
+async_add_headers = add_headers
 
 def form_additional_headers(ctx: contextvars.Context = None) -> typing.Dict[str, str]: ...

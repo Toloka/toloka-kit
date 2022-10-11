@@ -88,18 +88,15 @@ class AsyncTolokaClient:
         return (await self._raw_request(method, path, **kwargs)).json(parse_float=Decimal)
 
     async def _find_all(self, find_function, request, sort_field: str = 'id', items_field: str = 'items'):
-        cached_top_level_method_var = top_level_method_var.get()
         yield
 
-        with set_variable(top_level_method_var, cached_top_level_method_var):
-            result = await find_function(request, sort=[sort_field])
+        result = await find_function(request, sort=[sort_field])
         items = getattr(result, items_field)
         while result.has_more:
             request = attr.evolve(request, **{f'{sort_field}_gt': getattr(items[-1], sort_field)})
             for item in items:
                 yield item
-            with set_variable(top_level_method_var, cached_top_level_method_var):
-                result = await find_function(request, sort=[sort_field])
+            result = await find_function(request, sort=[sort_field])
             items = getattr(result, items_field)
 
         for item in items:

@@ -16,7 +16,7 @@ import typing
 class BaseObserver:
     def inject(self, injection: typing.Any) -> None: ...
 
-    def should_resume(self) -> bool: ...
+    async def should_resume(self) -> bool: ...
 
     def delete(self) -> None:
         """Schedule observer to be removed from the pipeline.
@@ -33,7 +33,7 @@ class BaseObserver:
         """
         ...
 
-    def run(self, period: datetime.timedelta = ...) -> None:
+    async def run(self, period: datetime.timedelta = ...) -> None:
         """For standalone usage (out of a Pipeline).
         """
         ...
@@ -49,7 +49,7 @@ class BaseObserver:
 
 
 class BasePoolObserver(BaseObserver):
-    def should_resume(self) -> bool: ...
+    async def should_resume(self) -> bool: ...
 
     def __init__(
         self,

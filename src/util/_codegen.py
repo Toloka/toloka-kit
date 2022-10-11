@@ -39,20 +39,20 @@ def universal_decorator(*, has_parameters):
 
             if inspect.isasyncgenfunction(func):
 
-                @functools.wraps(func)
+                @functools.wraps(decorated_func)
                 async def wrapped(*args, **kwargs):
                     async for item in decorated_func(*args, **kwargs):
                         yield item
 
             elif inspect.isgeneratorfunction(func):
 
-                @functools.wraps(func)
+                @functools.wraps(decorated_func)
                 def wrapped(*args, **kwargs):
                     yield from decorated_func(*args, **kwargs)
 
             elif inspect.iscoroutinefunction(func):
 
-                @functools.wraps(func)
+                @functools.wraps(decorated_func)
                 async def wrapped(*args, **kwargs):
                     res = await decorated_func(*args, **kwargs)
                     while inspect.isawaitable(res):

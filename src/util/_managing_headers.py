@@ -1,5 +1,6 @@
 __all__ = [
     'add_headers',
+    'async_add_headers',
     'form_additional_headers',
     'set_variable',
 ]
@@ -73,6 +74,10 @@ def add_headers(client: str):
         return wrapped
 
     return wrapper
+
+
+# backwards compatibility
+async_add_headers = add_headers
 
 
 def form_additional_headers(ctx: contextvars.Context = None) -> Dict[str, str]:
