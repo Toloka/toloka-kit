@@ -11,6 +11,10 @@ def test_simple_language():
                                                  'category': 'profile'}
 
 
+def test_not_in_languages():
+    assert Languages.not_in(['EN', 'RU']) == (Languages.not_in('EN') & Languages.not_in('RU'))
+
+
 def test_verified_language_not_in_is_incorrect():
     with pytest.raises(ValueError):
         Languages.not_in('EN', verified=True)
@@ -18,17 +22,27 @@ def test_verified_language_not_in_is_incorrect():
 
 def test_unknown_verified_language_is_incorrect():
     with pytest.raises(ValueError):
-        Languages.in_(['fake language 1', 'EN'], verified=True)
+        Languages.in_('fake language 1', verified=True)
 
 
 def test_language_multiple():
-    assert Languages.in_('EN', verified=True) == FilterOr([FilterAnd([Languages.in_('EN'), Skill('26366').eq(100)])])
+    assert Languages.in_(['EN', 'RU']) == FilterOr([
+        Languages.in_('EN'),
+        Languages.in_('RU'),
+    ])
 
 
 def test_verified_language_multiple():
-    assert Languages.in_(['EN', 'RU'], verified=True) == FilterOr([FilterAnd(
-        [Languages.in_(['EN', 'RU']), Skill('26366').eq(100), Skill('26296').eq(100)]
-    )])
+    assert Languages.in_(['EN', 'RU'], verified=True) == FilterOr([
+        FilterAnd([
+            Languages.in_('EN'),
+            Skill('26366').eq(100)
+        ]),
+        FilterAnd([
+            Languages.in_('RU'),
+            Skill('26296').eq(100)
+        ]),
+    ])
 
 
 @pytest.mark.parametrize(
