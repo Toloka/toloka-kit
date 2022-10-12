@@ -1061,14 +1061,6 @@ items:
         hidden: true
     - name: retry
       items:
-      - name: PreloadingHTTPAdapter
-        href: toloka.client.primitives.retry.PreloadingHTTPAdapter.md
-      - name: PreloadingHTTPAdapter.build_response
-        href: toloka.client.primitives.retry.PreloadingHTTPAdapter.build_response.md
-        hidden: true
-      - name: PreloadingHTTPAdapter.get_connection
-        href: toloka.client.primitives.retry.PreloadingHTTPAdapter.get_connection.md
-        hidden: true
       - name: TolokaRetry
         href: toloka.client.primitives.retry.TolokaRetry.md
       - name: TolokaRetry.get_retry_after
@@ -1970,9 +1962,305 @@ items:
   - name: AsyncTolokaClient.from_sync_client
     href: toloka.async_client.client.AsyncTolokaClient.from_sync_client.md
     hidden: true
-  - name: AsyncTolokaClient.wait_operation
-    href: toloka.async_client.client.AsyncTolokaClient.wait_operation.md
+  - name: AsyncTolokaClient methods
     hidden: true
+    items:
+    - name: aggregation
+      items:
+      - name: aggregate_solutions_by_pool
+        href: toloka.async_client.client.AsyncTolokaClient.aggregate_solutions_by_pool.md
+      - name: aggregate_solutions_by_task
+        href: toloka.async_client.client.AsyncTolokaClient.aggregate_solutions_by_task.md
+      - name: find_aggregated_solutions
+        href: toloka.async_client.client.AsyncTolokaClient.find_aggregated_solutions.md
+      - name: get_aggregated_solutions
+        href: toloka.async_client.client.AsyncTolokaClient.get_aggregated_solutions.md
+    - name: analytics
+      items:
+      - name: get_analytics
+        href: toloka.async_client.client.AsyncTolokaClient.get_analytics.md
+    - name: app
+      items:
+      - name: archive_app_project
+        href: toloka.async_client.client.AsyncTolokaClient.archive_app_project.md
+      - name: create_app_batch
+        href: toloka.async_client.client.AsyncTolokaClient.create_app_batch.md
+      - name: patch_app_batch
+        href: toloka.async_client.client.AsyncTolokaClient.patch_app_batch.md
+      - name: create_app_item
+        href: toloka.async_client.client.AsyncTolokaClient.create_app_item.md
+      - name: create_app_items
+        href: toloka.async_client.client.AsyncTolokaClient.create_app_items.md
+      - name: create_app_project
+        href: toloka.async_client.client.AsyncTolokaClient.create_app_project.md
+      - name: find_app_batches
+        href: toloka.async_client.client.AsyncTolokaClient.find_app_batches.md
+      - name: find_app_items
+        href: toloka.async_client.client.AsyncTolokaClient.find_app_items.md
+      - name: find_app_projects
+        href: toloka.async_client.client.AsyncTolokaClient.find_app_projects.md
+      - name: find_apps
+        href: toloka.async_client.client.AsyncTolokaClient.find_apps.md
+      - name: get_app
+        href: toloka.async_client.client.AsyncTolokaClient.get_app.md
+      - name: get_app_batch
+        href: toloka.async_client.client.AsyncTolokaClient.get_app_batch.md
+      - name: get_app_batches
+        href: toloka.async_client.client.AsyncTolokaClient.get_app_batches.md
+      - name: get_app_item
+        href: toloka.async_client.client.AsyncTolokaClient.get_app_item.md
+      - name: get_app_items
+        href: toloka.async_client.client.AsyncTolokaClient.get_app_items.md
+      - name: get_app_project
+        href: toloka.async_client.client.AsyncTolokaClient.get_app_project.md
+      - name: get_app_projects
+        href: toloka.async_client.client.AsyncTolokaClient.get_app_projects.md
+      - name: get_apps
+        href: toloka.async_client.client.AsyncTolokaClient.get_apps.md
+      - name: start_app_batch
+        href: toloka.async_client.client.AsyncTolokaClient.start_app_batch.md
+      - name: stop_app_batch
+        href: toloka.async_client.client.AsyncTolokaClient.stop_app_batch.md
+      - name: resume_app_batch
+        href: toloka.async_client.client.AsyncTolokaClient.resume_app_batch.md
+      - name: unarchive_app_project
+        href: toloka.async_client.client.AsyncTolokaClient.unarchive_app_project.md
+    - name: assignments
+      items:
+      - name: accept_assignment
+        href: toloka.async_client.client.AsyncTolokaClient.accept_assignment.md
+      - name: find_assignments
+        href: toloka.async_client.client.AsyncTolokaClient.find_assignments.md
+      - name: get_assignment
+        href: toloka.async_client.client.AsyncTolokaClient.get_assignment.md
+      - name: get_assignments
+        href: toloka.async_client.client.AsyncTolokaClient.get_assignments.md
+      - name: get_assignments_df [pandas]
+        href: toloka.async_client.client.AsyncTolokaClient.get_assignments_df.md
+      - name: patch_assignment
+        href: toloka.async_client.client.AsyncTolokaClient.patch_assignment.md
+      - name: reject_assignment
+        href: toloka.async_client.client.AsyncTolokaClient.reject_assignment.md
+    - name: attachments
+      items:
+      - name: find_attachments
+        href: toloka.async_client.client.AsyncTolokaClient.find_attachments.md
+      - name: get_attachment
+        href: toloka.async_client.client.AsyncTolokaClient.get_attachment.md
+      - name: get_attachments
+        href: toloka.async_client.client.AsyncTolokaClient.get_attachments.md
+      - name: download_attachment
+        href: toloka.async_client.client.AsyncTolokaClient.download_attachment.md
+    - name: messages
+      items:
+      - name: add_message_thread_to_folders
+        href: toloka.async_client.client.AsyncTolokaClient.add_message_thread_to_folders.md
+      - name: compose_message_thread
+        href: toloka.async_client.client.AsyncTolokaClient.compose_message_thread.md
+      - name: find_message_threads
+        href: toloka.async_client.client.AsyncTolokaClient.find_message_threads.md
+      - name: get_message_threads
+        href: toloka.async_client.client.AsyncTolokaClient.get_message_threads.md
+      - name: reply_message_thread
+        href: toloka.async_client.client.AsyncTolokaClient.reply_message_thread.md
+      - name: remove_message_thread_from_folders
+        href: toloka.async_client.client.AsyncTolokaClient.remove_message_thread_from_folders.md
+    - name: operations
+      items:
+      - name: get_operation
+        href: toloka.async_client.client.AsyncTolokaClient.get_operation.md
+      - name: find_operations
+        href: toloka.async_client.client.AsyncTolokaClient.find_operations.md
+      - name: get_operations
+        href: toloka.async_client.client.AsyncTolokaClient.get_operations.md
+      - name: get_operation_log
+        href: toloka.async_client.client.AsyncTolokaClient.get_operation_log.md
+      - name: wait_operation
+        href: toloka.async_client.client.AsyncTolokaClient.wait_operation.md
+    - name: pools
+      items:
+      - name: archive_pool
+        href: toloka.async_client.client.AsyncTolokaClient.archive_pool.md
+      - name: archive_pool_async
+        href: toloka.async_client.client.AsyncTolokaClient.archive_pool_async.md
+      - name: clone_pool
+        href: toloka.async_client.client.AsyncTolokaClient.clone_pool.md
+      - name: clone_pool_async
+        href: toloka.async_client.client.AsyncTolokaClient.clone_pool_async.md
+      - name: close_pool
+        href: toloka.async_client.client.AsyncTolokaClient.close_pool.md
+      - name: close_pool_async
+        href: toloka.async_client.client.AsyncTolokaClient.close_pool_async.md
+      - name: close_pool_for_update
+        href: toloka.async_client.client.AsyncTolokaClient.close_pool_for_update.md
+      - name: close_pool_for_update_async
+        href: toloka.async_client.client.AsyncTolokaClient.close_pool_for_update_async.md
+      - name: create_pool
+        href: toloka.async_client.client.AsyncTolokaClient.create_pool.md
+      - name: find_pools
+        href: toloka.async_client.client.AsyncTolokaClient.find_pools.md
+      - name: get_pool
+        href: toloka.async_client.client.AsyncTolokaClient.get_pool.md
+      - name: get_pools
+        href: toloka.async_client.client.AsyncTolokaClient.get_pools.md
+      - name: open_pool
+        href: toloka.async_client.client.AsyncTolokaClient.open_pool.md
+      - name: open_pool_async
+        href: toloka.async_client.client.AsyncTolokaClient.open_pool_async.md
+      - name: patch_pool
+        href: toloka.async_client.client.AsyncTolokaClient.patch_pool.md
+      - name: update_pool
+        href: toloka.async_client.client.AsyncTolokaClient.update_pool.md
+    - name: projects
+      items:
+      - name: archive_project
+        href: toloka.async_client.client.AsyncTolokaClient.archive_project.md
+      - name: archive_project_async
+        href: toloka.async_client.client.AsyncTolokaClient.archive_project_async.md
+      - name: create_project
+        href: toloka.async_client.client.AsyncTolokaClient.create_project.md
+      - name: clone_project
+        href: toloka.async_client.client.AsyncTolokaClient.clone_project.md
+      - name: find_projects
+        href: toloka.async_client.client.AsyncTolokaClient.find_projects.md
+      - name: get_project
+        href: toloka.async_client.client.AsyncTolokaClient.get_project.md
+      - name: get_projects
+        href: toloka.async_client.client.AsyncTolokaClient.get_projects.md
+      - name: update_project
+        href: toloka.async_client.client.AsyncTolokaClient.update_project.md
+    - name: requester
+      items:
+      - name: get_requester
+        href: toloka.async_client.client.AsyncTolokaClient.get_requester.md
+    - name: skills
+      items:
+      - name: create_skill
+        href: toloka.async_client.client.AsyncTolokaClient.create_skill.md
+      - name: find_skills
+        href: toloka.async_client.client.AsyncTolokaClient.find_skills.md
+      - name: get_skill
+        href: toloka.async_client.client.AsyncTolokaClient.get_skill.md
+      - name: get_skills
+        href: toloka.async_client.client.AsyncTolokaClient.get_skills.md
+      - name: update_skill
+        href: toloka.async_client.client.AsyncTolokaClient.update_skill.md
+    - name: tasks
+      items:
+      - name: create_task
+        href: toloka.async_client.client.AsyncTolokaClient.create_task.md
+      - name: create_tasks
+        href: toloka.async_client.client.AsyncTolokaClient.create_tasks.md
+      - name: create_tasks_async
+        href: toloka.async_client.client.AsyncTolokaClient.create_tasks_async.md
+      - name: find_tasks
+        href: toloka.async_client.client.AsyncTolokaClient.find_tasks.md
+      - name: get_task
+        href: toloka.async_client.client.AsyncTolokaClient.get_task.md
+      - name: get_tasks
+        href: toloka.async_client.client.AsyncTolokaClient.get_tasks.md
+      - name: patch_task
+        href: toloka.async_client.client.AsyncTolokaClient.patch_task.md
+      - name: patch_task_overlap_or_min
+        href: toloka.async_client.client.AsyncTolokaClient.patch_task_overlap_or_min.md
+    - name: task suites
+      items:
+      - name: create_task_suite
+        href: toloka.async_client.client.AsyncTolokaClient.create_task_suite.md
+      - name: create_task_suites
+        href: toloka.async_client.client.AsyncTolokaClient.create_task_suites.md
+      - name: create_task_suites_async
+        href: toloka.async_client.client.AsyncTolokaClient.create_task_suites_async.md
+      - name: find_task_suites
+        href: toloka.async_client.client.AsyncTolokaClient.find_task_suites.md
+      - name: get_task_suite
+        href: toloka.async_client.client.AsyncTolokaClient.get_task_suite.md
+      - name: get_task_suites
+        href: toloka.async_client.client.AsyncTolokaClient.get_task_suites.md
+      - name: patch_task_suite
+        href: toloka.async_client.client.AsyncTolokaClient.patch_task_suite.md
+      - name: patch_task_suite_overlap_or_min
+        href: toloka.async_client.client.AsyncTolokaClient.patch_task_suite_overlap_or_min.md
+    - name: training
+      items:
+      - name: archive_training
+        href: toloka.async_client.client.AsyncTolokaClient.archive_training.md
+      - name: archive_training_async
+        href: toloka.async_client.client.AsyncTolokaClient.archive_training_async.md
+      - name: clone_training
+        href: toloka.async_client.client.AsyncTolokaClient.clone_training.md
+      - name: clone_training_async
+        href: toloka.async_client.client.AsyncTolokaClient.clone_training_async.md
+      - name: close_training
+        href: toloka.async_client.client.AsyncTolokaClient.close_training.md
+      - name: close_training_async
+        href: toloka.async_client.client.AsyncTolokaClient.close_training_async.md
+      - name: create_training
+        href: toloka.async_client.client.AsyncTolokaClient.create_training.md
+      - name: find_trainings
+        href: toloka.async_client.client.AsyncTolokaClient.find_trainings.md
+      - name: get_training
+        href: toloka.async_client.client.AsyncTolokaClient.get_training.md
+      - name: get_trainings
+        href: toloka.async_client.client.AsyncTolokaClient.get_trainings.md
+      - name: open_training
+        href: toloka.async_client.client.AsyncTolokaClient.open_training.md
+      - name: open_training_async
+        href: toloka.async_client.client.AsyncTolokaClient.open_training_async.md
+      - name: update_training
+        href: toloka.async_client.client.AsyncTolokaClient.update_training.md
+    - name: user bonus
+      items:
+      - name: create_user_bonus
+        href: toloka.async_client.client.AsyncTolokaClient.create_user_bonus.md
+      - name: create_user_bonuses
+        href: toloka.async_client.client.AsyncTolokaClient.create_user_bonuses.md
+      - name: create_user_bonuses_async
+        href: toloka.async_client.client.AsyncTolokaClient.create_user_bonuses_async.md
+      - name: find_user_bonuses
+        href: toloka.async_client.client.AsyncTolokaClient.find_user_bonuses.md
+      - name: get_user_bonus
+        href: toloka.async_client.client.AsyncTolokaClient.get_user_bonus.md
+      - name: get_user_bonuses
+        href: toloka.async_client.client.AsyncTolokaClient.get_user_bonuses.md
+    - name: user restrictions
+      items:
+      - name: delete_user_restriction
+        href: toloka.async_client.client.AsyncTolokaClient.delete_user_restriction.md
+      - name: find_user_restrictions
+        href: toloka.async_client.client.AsyncTolokaClient.find_user_restrictions.md
+      - name: get_user_restriction
+        href: toloka.async_client.client.AsyncTolokaClient.get_user_restriction.md
+      - name: get_user_restrictions
+        href: toloka.async_client.client.AsyncTolokaClient.get_user_restrictions.md
+      - name: set_user_restriction
+        href: toloka.async_client.client.AsyncTolokaClient.set_user_restriction.md
+    - name: user skills
+      items:
+      - name: delete_user_skill
+        href: toloka.async_client.client.AsyncTolokaClient.delete_user_skill.md
+      - name: find_user_skills
+        href: toloka.async_client.client.AsyncTolokaClient.find_user_skills.md
+      - name: get_user_skill
+        href: toloka.async_client.client.AsyncTolokaClient.get_user_skill.md
+      - name: get_user_skills
+        href: toloka.async_client.client.AsyncTolokaClient.get_user_skills.md
+      - name: get_user
+        href: toloka.async_client.client.AsyncTolokaClient.get_user.md
+      - name: set_user_skill
+        href: toloka.async_client.client.AsyncTolokaClient.set_user_skill.md
+    - name: webhook subscription
+      items:
+      - name: delete_webhook_subscription
+        href: toloka.async_client.client.AsyncTolokaClient.delete_webhook_subscription.md
+      - name: find_webhook_subscriptions
+        href: toloka.async_client.client.AsyncTolokaClient.find_webhook_subscriptions.md
+      - name: get_webhook_subscription
+        href: toloka.async_client.client.AsyncTolokaClient.get_webhook_subscription.md
+      - name: get_webhook_subscriptions
+        href: toloka.async_client.client.AsyncTolokaClient.get_webhook_subscriptions.md
+      - name: upsert_webhook_subscriptions
+        href: toloka.async_client.client.AsyncTolokaClient.upsert_webhook_subscriptions.md
 - name: toloka.autoquality [autoquality]
   items:
   - name: optimizer
@@ -2349,9 +2637,6 @@ items:
   - name: ExtendableStrEnumMetaclass
     href: toloka.util._extendable_enum.ExtendableStrEnumMetaclass.md
     hidden: true
-  - name: add_headers
-    href: toloka.util._managing_headers.async_add_headers.md
-    hidden: true
   - name: AsyncInterfaceWrapper
     href: toloka.util.async_utils.AsyncInterfaceWrapper.md
   - name: AsyncMultithreadWrapper
@@ -2364,6 +2649,11 @@ items:
     href: toloka.util.async_utils.ensure_async.md
   - name: get_task_traceback
     href: toloka.util.async_utils.get_task_traceback.md
+  - name: AsyncGenAdapter
+    href: toloka.util.async_utils.AsyncGenAdapter.md
+  - name: AsyncGenAdapter.as_sync_gen
+    href: toloka.util.async_utils.AsyncGenAdapter.as_sync_gen.md
+    hidden: true
   - name: get_signature
     href: toloka.util.get_signature.md
   - name: identity

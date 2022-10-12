@@ -48,7 +48,8 @@ class TolokaRetry(urllib3.util.retry.Retry):
 class RetryingOverURLLibRetry(tenacity.BaseRetrying, metaclass=abc.ABCMeta):
     """Adapter class that allows usage of the urllib3 Retry class with the tenacity retrying mechanism.
 
-    Wrapped function should make a single request using HTTPX library.
+    Wrapped function should make a single request using HTTPX library and either return httpx.Response or raise an
+    exception.
     """
 
     def __init__(

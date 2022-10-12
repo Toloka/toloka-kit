@@ -225,6 +225,14 @@ class Cooldown:
 
 
 def generate_async_methods_from(cls):
+    """Class decorator that generates asynchronous versions of methods using the provided class.
+
+    This class assumes that every method of the resulting class is either an async gen or async function. In case of
+    the naming collision (decorated class already has the method that would have been created by the decorator)
+    the new method is not generated. This allows you to custom implement asynchronous versions of non-trivial methods
+    while automatically generating boilerplate code.
+    """
+
     def _substitute_for_loop(match):
         method_name = match.group(2)
         method = getattr(cls, method_name)
@@ -249,7 +257,7 @@ def generate_async_methods_from(cls):
             inspect.getsource(method),
         )
 
-        # Generator[YieldType, SendType, ReturnType] -> AsyncGenerator[YieldType, SendType]
+        # Generator[YieldType, SendType, ReturnType] -> AsyncGenAdapter[YieldType, SendType]
         generator_type_annotation_regex = re.compile(r'Generator\[(\S+, \S+), \S+]')
         source = re.sub(generator_type_annotation_regex, r'AsyncGenAdapter[\1]', source)
 
@@ -275,28 +283,29 @@ def generate_async_methods_from(cls):
 
         return dedent(source)
 
-    def _compile_function(member_name, source):
-        file_name = f'async_client_{member_name}'
-
-        bytecode = compile(source, file_name, 'exec')
-        # use a modified target class module __dict__ as globals
-        proxy_globals = dict(**sys.modules[cls.__module__].__dict__)
-        proxy_globals['AsyncGenAdapter'] = AsyncGenAdapter
-        proxy_locals = dict(**cls.__dict__)
-        eval(bytecode, proxy_globals, proxy_locals)
-        function = proxy_locals[member_name]
-        function.__module__ = __name__
-
-        linecache.cache[file_name] = (
-            len(source),
-            None,
-            source.splitlines(True),
-            file_name
-        )
-
-        return function
-
     def wrapper(target_cls):
+        def _compile_function(member_name, source):
+            file_name = f'async_client_{member_name}'
+
+            bytecode = compile(source, file_name, 'exec')
+            # use a modified target class module __dict__ as globals
+            proxy_globals = dict(**sys.modules[cls.__module__].__dict__)
+            proxy_globals['AsyncGenAdapter'] = AsyncGenAdapter
+            proxy_locals = dict(**cls.__dict__)
+            eval(bytecode, proxy_globals, proxy_locals)
+            function = proxy_locals[member_name]
+            function.__module__ = target_cls.__module__
+            function.__qualname__ = f'{target_cls.__name__}.{function.__name__}'
+
+            linecache.cache[file_name] = (
+                len(source),
+                None,
+                source.splitlines(True),
+                file_name
+            )
+
+            return function
+
         for member_name, member in cls.__dict__.items():
             if (
                 inspect.isfunction(member)

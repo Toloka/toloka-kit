@@ -13,6 +13,9 @@ def universal_decorator(*, has_parameters):
     Wrapped decorator will preserve function-like object type: plain functions, async functions, generators and
     async generators will keep their type after being decorated. Warning: if your decorator changes the
     type of the function-like object (e.g. yields plain function result) do NOT use this (meta)decorator.
+
+    Args:
+        has_parameters: does wrapped decorator use parameters
     """
     ...
 

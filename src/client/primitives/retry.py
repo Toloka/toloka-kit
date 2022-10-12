@@ -97,6 +97,8 @@ class TolokaRetry(Retry):
 
 
 def httpx_exception_to_urllib_exception(exception: BaseException) -> BaseException:
+    """Maps the httpx exception to the corresponding urllib3 exception."""
+
     if isinstance(exception, httpx.HTTPError):
         mapped_exception = urllib3.exceptions.HTTPError()
     elif isinstance(exception, httpx.RequestError):
@@ -164,7 +166,8 @@ def httpx_exception_to_urllib_exception(exception: BaseException) -> BaseExcepti
 class RetryingOverURLLibRetry(BaseRetrying):
     """Adapter class that allows usage of the urllib3 Retry class with the tenacity retrying mechanism.
 
-    Wrapped function should make a single request using HTTPX library.
+    Wrapped function should make a single request using HTTPX library and either return httpx.Response or raise an
+    exception.
     """
 
     def __init__(self, base_url: str, retry: Retry, exception_to_retry: Tuple[Type[Exception], ...], **kwargs):
@@ -191,6 +194,8 @@ class RetryingOverURLLibRetry(BaseRetrying):
         )
 
     def _patch_with_urllib_retry(self, func: Callable):
+        """Ensures that retry_state contains current urllib3 Retry instance before function call."""
+
         @wraps(func)
         def wrapped(*args, **kwargs):
             bound_args = signature(func).bind(*args, **kwargs)
@@ -202,6 +207,8 @@ class RetryingOverURLLibRetry(BaseRetrying):
 
     @staticmethod
     def _get_urllib_response(retry_state: RetryCallState):
+        """Constructs urllib3 response from httpx response."""
+
         if retry_state.outcome.failed:
             return None
 

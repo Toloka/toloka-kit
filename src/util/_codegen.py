@@ -23,57 +23,67 @@ READONLY_KEY = 'toloka_field_readonly'
 AUTOCAST_KEY = 'toloka_field_autocast'
 
 
+def _get_decorator_wrapper(wrapped_decorator):
+
+    @functools.wraps(wrapped_decorator)
+    def decorator_wrapper(func):
+        """Applies the decorator and wraps the resulting function-like object with the original type."""
+        decorated_func = wrapped_decorator(func)
+
+        if inspect.isasyncgenfunction(func):
+
+            @functools.wraps(decorated_func)
+            async def wrapped(*args, **kwargs):
+                async for item in decorated_func(*args, **kwargs):
+                    yield item
+
+        elif inspect.isgeneratorfunction(func):
+
+            @functools.wraps(decorated_func)
+            def wrapped(*args, **kwargs):
+                yield from decorated_func(*args, **kwargs)
+
+        elif inspect.iscoroutinefunction(func):
+
+            @functools.wraps(decorated_func)
+            async def wrapped(*args, **kwargs):
+                res = await decorated_func(*args, **kwargs)
+                while inspect.isawaitable(res):
+                    res = await res
+                return res
+
+        else:  # plain function
+            wrapped = decorated_func
+
+        return wrapped
+
+    return decorator_wrapper
+
+
 def universal_decorator(*, has_parameters):
     """Metadecorator used for writing universal decorators that does not change function-like object type.
 
     Wrapped decorator will preserve function-like object type: plain functions, async functions, generators and
     async generators will keep their type after being decorated. Warning: if your decorator changes the
     type of the function-like object (e.g. yields plain function result) do NOT use this (meta)decorator.
+
+    Args:
+        has_parameters: does wrapped decorator use parameters
     """
 
     # top level closure for universal_decorator parameters capturing
     def wrapper(dec):
-        def wrapped_decorator(func, decorator_to_apply):
-            """Applies the decorator and wraps the resulting function-like object with the original type."""
-            decorated_func = decorator_to_apply(func)
-
-            if inspect.isasyncgenfunction(func):
-
-                @functools.wraps(decorated_func)
-                async def wrapped(*args, **kwargs):
-                    async for item in decorated_func(*args, **kwargs):
-                        yield item
-
-            elif inspect.isgeneratorfunction(func):
-
-                @functools.wraps(decorated_func)
-                def wrapped(*args, **kwargs):
-                    yield from decorated_func(*args, **kwargs)
-
-            elif inspect.iscoroutinefunction(func):
-
-                @functools.wraps(decorated_func)
-                async def wrapped(*args, **kwargs):
-                    res = await decorated_func(*args, **kwargs)
-                    while inspect.isawaitable(res):
-                        res = await res
-                    return res
-
-            else:  # plain function
-                wrapped = decorated_func
-
-            return wrapped
-
         if has_parameters:
             # @decorator(...) syntax
 
             @functools.wraps(dec)
             def get_decorator(*args, **kwargs):
-                return functools.partial(wrapped_decorator, decorator_to_apply=dec(*args, **kwargs))
+                return _get_decorator_wrapper(wrapped_decorator=dec(*args, **kwargs))
 
             return get_decorator
+
         # @decorator syntax
-        return functools.wraps(dec)(functools.partial(wrapped_decorator, decorator_to_apply=dec))
+        return _get_decorator_wrapper(wrapped_decorator=dec)
 
     return wrapper
 

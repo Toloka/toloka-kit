@@ -19,7 +19,10 @@ import simplejson as json
 
 from .._converter import converter
 from ..exceptions import SpecClassIdentificationError
-from ...util._codegen import attribute, expand, fix_attrs_converters, REQUIRED_KEY, ORIGIN_KEY, AUTOCAST_KEY
+from ...util._codegen import (
+    attribute, expand, fix_attrs_converters, REQUIRED_KEY, ORIGIN_KEY, AUTOCAST_KEY,
+    universal_decorator,
+)
 
 E = TypeVar('E', bound=Enum)
 
@@ -301,6 +304,7 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
         return cls.structure(json.loads(json_str, use_decimal=True))
 
 
+@universal_decorator(has_parameters=False)
 def autocast_to_enum(func: typing.Callable) -> typing.Callable:
     """Function decorator that performs str -> Enum conversion when decorated function is called
 
@@ -321,7 +325,7 @@ def autocast_to_enum(func: typing.Callable) -> typing.Callable:
 
     signature = signature.replace(parameters=new_params)
 
-    def _wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs):
         bound_arguments = signature.bind(*args, **kwargs)
         new_args = {}
         for (argument_name, argument_value), casting_type, parameter in zip(
@@ -331,12 +335,6 @@ def autocast_to_enum(func: typing.Callable) -> typing.Callable:
         ):
             new_args[argument_name] = converter.structure(argument_value, casting_type)
         return func(**new_args)
-
-    if inspect.iscoroutinefunction(func):
-        async def wrapper(*args, **kwargs):
-            return await _wrapper(*args, **kwargs)
-    else:
-        wrapper = _wrapper
 
     update_wrapper(wrapper, func)
     wrapper.__signature__ = signature
