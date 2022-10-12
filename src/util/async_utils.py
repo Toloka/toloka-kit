@@ -32,8 +32,6 @@ import attr
 
 from .stored import PICKLE_DEFAULT_PROTOCOL
 
-# makes SyncGenWrapper possible
-nest_asyncio.apply()
 logger = logging.Logger(__file__)
 
 
@@ -343,7 +341,9 @@ class SyncGenWrapper:
     def __iter__(self):
         try:
             while True:
-                yield asyncio.run(self.gen.__anext__())
+                loop = asyncio.get_event_loop()
+                nest_asyncio.apply(loop)
+                yield loop.run_until_complete(self.gen.__anext__())
         except StopAsyncIteration:
             return
 
