@@ -257,6 +257,7 @@ class AutoQuality:
     ranking_func: Callable = default_calc_ranks
     create_autoquality_pool_func: Callable = _create_autoquality_pool_default
     run_id: str = attr.attrib(
+        init=False,
         default=f'AutoQuality Project {datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")}'
     )
 
