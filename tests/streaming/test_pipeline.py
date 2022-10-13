@@ -3,12 +3,12 @@ import copy
 import datetime
 import logging
 from typing import List, Set, Tuple
-from uuid import uuid4
 
 import attr
 import httpx
 import pytest
 from toloka.client import TolokaClient, unstructure
+from toloka.async_client import AsyncTolokaClient
 from toloka.streaming import Pipeline
 from toloka.streaming.locker import NewerInstanceDetectedError
 from toloka.streaming.observer import AssignmentsObserver, BaseObserver, PoolStatusObserver
@@ -89,11 +89,13 @@ def test_pipeline_errored_callback(respx_mock, toloka_url, sync_toloka_client, e
     assert events_expected == unstructure(handler.received)
 
 
-def test_pipeline(respx_mock, toloka_url, toloka_client, existing_backend_assignments, new_backend_assignments):
-    if isinstance(toloka_client, TolokaClient):
-        _toloka_client = toloka_client
+# do not test async client using wrapper to prevent nested asyncio loops
+@pytest.mark.parametrize('use_async', [False, True])
+def test_pipeline(respx_mock, toloka_url, sync_toloka_client, use_async, existing_backend_assignments, new_backend_assignments):
+    if use_async:
+        _toloka_client = AsyncTolokaClient.from_sync_client(sync_toloka_client)
     else:
-        _toloka_client = toloka_client.async_client
+        _toloka_client = sync_toloka_client
 
     pool_mock_value = {'id': '100', 'status': 'OPEN'}
 
@@ -111,7 +113,7 @@ def test_pipeline(respx_mock, toloka_url, toloka_client, existing_backend_assign
         save_submitted_here.extend(event.assignment for event in events)
 
     async def handle_pool_open(pool):
-        active_count = len(list(toloka_client.get_assignments(pool_id=pool.id, status='ACTIVE')))
+        active_count = len(list(sync_toloka_client.get_assignments(pool_id=pool.id, status='ACTIVE')))
         save_pool_info_here.append(f'pool open with active tasks count: {active_count}')
 
     class HandlePoolClose:
@@ -238,7 +240,7 @@ class HandlerToRestore:
 def test_save_and_load(
     respx_mock,
     toloka_url,
-    toloka_client,
+    sync_toloka_client,
     existing_backend_assignments,
     new_backend_assignments,
     new_backend_assignments_after_restore,
@@ -260,7 +262,7 @@ def test_save_and_load(
 
     HandlerToRestore.FAIL = True
     pipeline_old = Pipeline(storage=JSONLocalStorage(dirname=dirname), period=datetime.timedelta(milliseconds=500))
-    observer_old = pipeline_old.register(AssignmentsObserver(toloka_client, pool_id='100'))
+    observer_old = pipeline_old.register(AssignmentsObserver(sync_toloka_client, pool_id='100'))
     handler_old = observer_old.on_submitted(HandlerToRestore(comment='old'))
 
     async def _add_new_assignments(after_sec):
@@ -305,7 +307,7 @@ def test_save_and_load(
     HandlerToRestore.FAIL = False
 
     pipeline_new = Pipeline(storage=JSONLocalStorage(dirname=dirname), period=datetime.timedelta(milliseconds=500))
-    observer_new = pipeline_new.register(AssignmentsObserver(toloka_client, pool_id='100'))
+    observer_new = pipeline_new.register(AssignmentsObserver(sync_toloka_client, pool_id='100'))
     handler_new = observer_new.on_submitted(HandlerToRestore(comment='new'))
 
     async def _add_new_assignments_after_restore(after_sec):
@@ -403,7 +405,7 @@ def test_async_observers():
 def test_two_pipeline_instances_run(
     respx_mock,
     toloka_url,
-    toloka_client,
+    sync_toloka_client,
     existing_backend_assignments,
     new_backend_assignments,
     tmp_path,
@@ -421,11 +423,11 @@ def test_two_pipeline_instances_run(
     dirname.mkdir()
 
     pipeline_1 = Pipeline(storage=JSONLocalStorage(dirname=dirname), period=datetime.timedelta(seconds=1))
-    observer_1 = pipeline_1.register(AssignmentsObserver(toloka_client, pool_id='100'))
+    observer_1 = pipeline_1.register(AssignmentsObserver(sync_toloka_client, pool_id='100'))
     handler_1 = observer_1.on_submitted(HandlerToSaveAssignments())
 
     pipeline_2 = Pipeline(storage=JSONLocalStorage(dirname=dirname), period=datetime.timedelta(seconds=1))
-    observer_2 = pipeline_2.register(AssignmentsObserver(toloka_client, pool_id='100'))
+    observer_2 = pipeline_2.register(AssignmentsObserver(sync_toloka_client, pool_id='100'))
     handler_2 = observer_2.on_submitted(HandlerToSaveAssignments())
 
     async def _run_1():

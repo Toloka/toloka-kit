@@ -34,6 +34,7 @@ class AsyncTolokaClient:
     All arguments, same as in TolokaClient.
     """
 
+    @functools.wraps(TolokaClient.__init__)
     def __init__(
         self,
         *args, **kwargs

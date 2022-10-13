@@ -26,7 +26,6 @@ from textwrap import dedent
 from typing import (
     AsyncGenerator, AsyncIterable, Awaitable, Callable, Dict, Generator, Generic, List, Optional, Type, TypeVar,
 )
-import nest_asyncio
 
 import attr
 
@@ -339,13 +338,20 @@ class SyncGenWrapper:
         self.gen = gen
 
     def __iter__(self):
+        # use new event loop in different thread not to interfere with the current one
+        loop = asyncio.new_event_loop()
         try:
-            while True:
-                loop = asyncio.get_event_loop()
-                nest_asyncio.apply(loop)
-                yield loop.run_until_complete(self.gen.__anext__())
+            # Nested event loops are prohibited in python, so we use threading to synchronously run such a loop.
+            # Creating new loop inside thread each time is impossible since it will be destroyed on thread exit and
+            # generator will be closed.
+            with futures.ThreadPoolExecutor(max_workers=1) as executor:
+                while True:
+                    res = executor.submit(loop.run_until_complete, self.gen.__anext__())
+                    yield res.result()
         except StopAsyncIteration:
             return
+        finally:
+            loop.close()
 
 
 class AsyncGenAdapter(Generic[YieldType, SendType], AsyncIterable, Awaitable):

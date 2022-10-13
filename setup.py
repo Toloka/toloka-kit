@@ -18,7 +18,7 @@ with open('README.md') as f:
     readme = f.read()
 
 EXTRAS_REQUIRE = {
-    'dev': ['respx', 'aiohttp'],
+    'dev': ['respx', 'aiohttp', 'pytest', 'pytest-lazy-fixture', 'pytest-asyncio'],
     'pandas': ['pandas'],
     'autoquality': ['crowd-kit >= 1.0.0'],
     's3': ['boto3 >= 1.4.7'],
@@ -50,7 +50,6 @@ setup(
         'tenacity',
         'typing-extensions',
         'urllib3 >= 1.26.0',
-        'nest-asyncio',
         'simplejson',
         'docstring-parser',
         'tqdm',
