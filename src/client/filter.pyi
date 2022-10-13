@@ -447,9 +447,11 @@ class Languages(Profile, toloka.client.primitives.operators.InclusionConditionMi
         operator: Comparison operator in the condition.
             For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
             GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
-        value: Languages specified by the Toloker in the profile (two-letter ISO code of the standard ISO 639-1 in upper case).
+        value: Language or list of languages specified by the Toloker in the profile
+            (two-letter ISO code of the standard ISO 639-1 in upper case).
         verified: If set to True, only the Tolokers who have passed a language test will be selected. Currently, you can
-            use this parameter only with the following ISO codes : `DE`, `EN`, `FR`, `JA`, `PT`, `SV`, `RU`, `AR`, `ES`.
+            use this parameter only with the following ISO codes : `DE`, `EN`, `FR`, `JA`, `PT`, `SV`, `RU`, `AR`, `ES`,
+            `HE`, `ID`, `ZH-HANS`.
     """
 
     def __init__(
