@@ -1,4 +1,16 @@
-1.0.0rc1
+1.0.1
+-------------------
+Features:
+* Some filters now support inversion using "~" operator.
+* Improved error messages.
+* Added new `Verified` filter.
+
+Bug fixes:
+* Filters created using Toloka-Kit now should be rendered correctly in the Toloka UI.
+* `Languages.include` now works correctly in case of multiple languages being passed.
+
+
+1.0.0, 1.0.0rc1
 -------------------
 
 **Breaking changes**:
