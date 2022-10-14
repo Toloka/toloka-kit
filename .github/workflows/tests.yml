@@ -46,8 +46,19 @@ jobs:
         pip install https://github.com/Toloka/stubmaker/archive/refs/heads/main.zip
         pip install .[all]
         pip install "attrs>=21.0.0"
+    - name: Checkout docs repository
+      uses: actions/checkout@v3
+      with:
+        repository: 'Toloka/docs'
+        path: 'docs-repo'
     - name: Generate markdowns
       run: |
         python ./misc/stubmaker/bin/make_markdowns $(./misc/stubmaker/bin/make_markdowns/tolokakit_args.sh)
+    - name: Update docs repository
+      run: |
+        rm -rf docs-repo/en/toloka-kit/reference/*.md
+        rsync -a docs/ docs-repo/
     - name: Generate docs
-      run: yfm -c .yfm -i ./docs -o /tmp/toloka-kit-docs
+      run: |
+        cd docs-repo
+        yfm -c .yfm -i . -o /tmp/toloka-kit-docs
