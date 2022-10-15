@@ -55,13 +55,13 @@ class FilterCondition(BaseTolokaObject):
 
     For example, you can select Tolokers by a skill, language, or browser type.
 
-    Filters can be combined with operators `|` and  `&`.
+    Filters can be combined with the `|` and  `&` operators. Some filters support the `~` operator.
 
     Example:
         Filtering by language and device category.
 
         >>> filter = (
-        >>>    (toloka.client.filter.Languages.in_(['EN', 'DE'])) &
+        >>>    (toloka.client.filter.Languages.in_('EN')) &
         >>>    (toloka.client.filter.DeviceCategory == toloka.client.filter.DeviceCategory.SMARTPHONE)
         >>> )
         ...
@@ -91,9 +91,7 @@ class FilterCondition(BaseTolokaObject):
 
 
 class FilterOr(FilterCondition, kw_only=False):
-    """Filter `OR` operator.
-
-    Filters can be combined with the `|` operator.
+    """Supports combining filters with the `|` operator.
 
     Attributes:
         or_: A list of filters.
@@ -120,9 +118,7 @@ class FilterOr(FilterCondition, kw_only=False):
 
 
 class FilterAnd(FilterCondition, kw_only=False):
-    """Filter `AND` operator.
-
-    Filters can be combined with the `&` operator.
+    """Supports combining filters with the `&` operator.
 
     Attributes:
         and_: A list of filters.
@@ -149,13 +145,15 @@ class FilterAnd(FilterCondition, kw_only=False):
 
 
 class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
-    """A base class for filters that adds support for writing conditions.
+    """A base class that supports filter conditions.
+
+    Any condition belongs to some category and has a condition operator and a value. They are mapped to API parameters.
 
     Attributes:
-        operator: An operator used in the condition
+        operator: An operator used in a condition.
             Allowed set of operators depends on the filter.
         value: A value to compare with.
-            For example, the minimum value of some skill, or a language specified in Tolokers' profiles.
+            For example, the minimum value of some skill, or a language specified in a Toloker's profile.
     """
 
     @unique
@@ -179,12 +177,12 @@ class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
 
 @inherit_docstrings
 class Profile(Condition, spec_value=Condition.Category.PROFILE, spec_field='key', spec_enum='Key'):
-    """Base class for filters that use Toloker's profile fields.
+    """A base class for a category of filters that use Toloker's profile.
     """
 
     @unique
     class Key(ExtendableStrEnum):
-        """Concrete profile filter names.
+        """Filter names in the `profile` category.
         """
 
         GENDER = 'gender'
@@ -200,12 +198,12 @@ class Profile(Condition, spec_value=Condition.Category.PROFILE, spec_field='key'
 
 @inherit_docstrings
 class Computed(Condition, spec_value=Condition.Category.COMPUTED, spec_field='key', spec_enum='Key'):
-    """Base class for filters that use connection and client information.
+    """A base class for a category of filters that use connection and client information.
     """
 
     @unique
     class Key(ExtendableStrEnum):
-        """Concrete computed filter names.
+        """Filter names in the `computed` category.
         """
 
         CLIENT_TYPE = 'client_type'
@@ -233,14 +231,16 @@ class Skill(StatefulComparableConditionMixin, Condition, order=False, eq=False, 
     Pass the ID of a skill to the filter constructor.
     To select Tolokers without a skill, compare created filter with `None`.
 
+    This filter belongs to the `skill` category.
+
     Example:
     Selecting Tolokers with a skill with ID '224' greater than 70.
     >>> filter = toloka.client.filter.Skill('224') > 70
 
     Attributes:
         key: The ID of a skill.
-        operator: Comparison operator in the condition.
-        value: A value to compare with.
+        operator: An operator in the condition.
+        value: A value to compare the skill with.
     """
 
     key: str = attribute(required=True)
@@ -296,7 +296,7 @@ class Citizenship(Profile, IdentityConditionMixin, spec_value=Profile.Key.CITIZE
 
 @inherit_docstrings
 class Education(Profile, IdentityConditionMixin, spec_value=Profile.Key.EDUCATION):
-    """Filtering Tolokers by the level of education specified in their profiles.
+    """Filtering Tolokers by a level of education specified in their profiles.
 
     Attributes:
         value: Toloker's level of education.
@@ -323,10 +323,11 @@ class AdultAllowed(Profile, IdentityConditionMixin, spec_value=Profile.Key.ADULT
     """Filtering Tolokers who agreed to work with adult content.
 
     Attributes:
-        value: `True` - Toloker agrees to work with adult content.
+        value:
+            * `True` — Toloker agrees to work with adult content.
+            * `False` — Toloker does not agree to work with adult content.
 
     Example:
-        Use equal operator to create appropriate filter
 
         >>> adult_allowed_filter = toloka.client.filter.AdultAllowed == True
         >>> adult_not_allowed_filter = toloka.client.filter.AdultAllowed == False
@@ -361,7 +362,7 @@ class City(Profile, InclusionConditionMixin, spec_value=Profile.Key.CITY):
     """Filtering Tolokers by a city specified in their profiles.
 
     Attributes:
-        value: The ID of the city.
+        value: The [ID]([https://toloka.ai/en/docs/api/concepts/regions]) of the city.
     """
 
     value: int = attribute(required=True)
@@ -375,7 +376,7 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
         value: Languages specified in the profile. Two-letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) code in upper case is used.
         verified: If set to `True`, only Tolokers who have passed a language test are selected.
             Tests are available for languages: `AR`, `DE`, `EN`, `ES`, `FR`,
-            `HE`, `ID`, `JA`, `PT`, `RU`, `SV`, `ZH-HASN`.
+            `HE`, `ID`, `JA`, `PT`, `RU`, `SV`, `ZH-HANS`.
     """
 
     verified_languages_to_skills: ClassVar[Dict[str, str]] = {
@@ -398,9 +399,9 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
     value: Union[str, List[str]] = attribute(required=True)
 
     def __new__(cls, *args, **kwargs):
-        """Handling `verified` parameter.
+        """Handling `verified` parameter of the `Languages` filter class.
 
-        If class is instantiated with `verified=True` parameter then return
+        If the class is instantiated with `verified=True` then return
         `FilterAnd([verified_skill_for_language_1, ..., verified_skill_for_language_n, language_1, ..., language_n])`
         condition for API compatibility reasons.
         """

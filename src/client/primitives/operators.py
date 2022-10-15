@@ -53,7 +53,7 @@ class CompareOperator(ExtendableStrEnum):
 
 @unique
 class InclusionOperator(ExtendableStrEnum):
-    """Supports the `in_()` and `not_in()` methods.
+    """Supports the `include()` and `exclude()` methods in filter conditions.
     """
     IN = 'IN'
     NOT_IN = 'NOT_IN'
