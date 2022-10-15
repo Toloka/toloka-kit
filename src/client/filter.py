@@ -377,9 +377,14 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
         verified: If set to `True`, only Tolokers who have passed a language test are selected.
             Tests are available for languages: `AR`, `DE`, `EN`, `ES`, `FR`,
             `HE`, `ID`, `JA`, `PT`, `RU`, `SV`, `ZH-HANS`.
+        value: Language or list of languages specified by the Toloker in the profile
+            (two-letter ISO code of the standard ISO 639-1 in upper case).
+        verified: If set to True, only the Tolokers who have passed a language test will be selected. Currently, you can
+            use this parameter only with the following ISO codes : `DE`, `EN`, `FR`, `JA`, `PT`, `SV`, `RU`, `AR`, `ES`,
+            `HE`, `ID`, `ZH-HANS`.
     """
 
-    verified_languages_to_skills: ClassVar[Dict[str, str]] = {
+    VERIFIED_LANGUAGES_TO_SKILLS: ClassVar[Dict[str, str]] = {
         'AR': '30724',
         'DE': '26377',
         'EN': '26366',
@@ -403,34 +408,49 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
 
         If the class is instantiated with `verified=True` then return
         `FilterAnd([verified_skill_for_language_1, ..., verified_skill_for_language_n, language_1, ..., language_n])`
+        If class is instantiated with `verified=True` parameter then return
+        `FilterOr([
+            FilterAnd([language_1, verified_skill_for_language_1]),
+            ...
+            FilterAnd([language_n, verified_skill_for_language_n])
+        ])`
         condition for API compatibility reasons.
         """
         bound_args = inspect.signature(cls.__init__).bind(None, *args, **kwargs).arguments
-        value = bound_args['value']
+        languages = bound_args['value']
         operator = bound_args['operator']
+        verified = bound_args.pop('verified', False)
 
-        if bound_args.get('verified', False) and operator == InclusionOperator.IN:
-            skills_mapping = cls.verified_languages_to_skills
+        if verified and operator == InclusionOperator.NOT_IN:
+            raise ValueError('"Language not in" filter does not support verified=True argument')
+        if verified and operator == InclusionOperator.IN:
+            skills_mapping = cls.VERIFIED_LANGUAGES_TO_SKILLS
             try:
-                conditions = [Languages(operator=operator, value=value)]
-                if isinstance(value, list):
-                    conditions.extend([Skill(skills_mapping[value]).eq(cls.VERIFIED_LANGUAGE_SKILL_VALUE) for value in value])
-                else:
-                    conditions.append(Skill(skills_mapping[value]).eq(cls.VERIFIED_LANGUAGE_SKILL_VALUE))
+                if not isinstance(languages, list):
+                    languages = [languages]
+                result_conditions = FilterOr([])
+                for language in languages:
+                    verified_language_condition = (
+                        Languages(operator=operator, value=language) &
+                        Skill(skills_mapping[language]).eq(cls.VERIFIED_LANGUAGE_SKILL_VALUE)
+                    )
+                    result_conditions |= verified_language_condition
 
-                return FilterOr([FilterAnd(conditions)])
+                return result_conditions
             except KeyError:
-                if not isinstance(value, str):
-                    unsupported_languages = set(value) - skills_mapping.keys()
+                if not isinstance(languages, str):
+                    unsupported_languages = set(languages) - skills_mapping.keys()
                 else:
-                    unsupported_languages = [value]
+                    unsupported_languages = [languages]
                 raise ValueError(
                     'Following languages are not supported as verified languages:\n' + '\n'.join(unsupported_languages)
                 )
-        else:
-            if kwargs.pop('verified', False):
-                raise ValueError('"Language not in" filter does not support verified=True argument')
-            return super().__new__(cls, *args, **kwargs)
+        if isinstance(languages, list):
+            if operator == InclusionOperator.IN:
+                return FilterOr([Languages(operator=operator, value=language) for language in languages])
+            else:
+                return FilterAnd([Languages(operator=operator, value=language) for language in languages])
+        return super().__new__(cls, *args, **kwargs)
 
     def __getnewargs__(self):
         """Due to redefined __new__ method class can't be deepcopied or pickled without __getnewargs__ definition"""

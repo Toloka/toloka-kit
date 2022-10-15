@@ -2083,7 +2083,7 @@ class TolokaClient:
             Skill: Modified skill object with all fields.
 
         Example:
-            >>> toloka_client.create_skill(skill_id=old_skill_id, skill=new_skill_object)
+            >>> toloka_client.update_skill(skill_id=old_skill_id, skill=new_skill_object)
             ...
         """
         response = self._request('put', f'/v1/skills/{skill_id}', json=unstructure(skill))
