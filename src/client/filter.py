@@ -406,15 +406,12 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
     def __new__(cls, *args, **kwargs):
         """Handling `verified` parameter of the `Languages` filter class.
 
-        If the class is instantiated with `verified=True` then return
-        `FilterAnd([verified_skill_for_language_1, ..., verified_skill_for_language_n, language_1, ..., language_n])`
-        If class is instantiated with `verified=True` parameter then return
+        If the class is instantiated with `verified=True` then combined conditions is returned:
         `FilterOr([
             FilterAnd([language_1, verified_skill_for_language_1]),
             ...
             FilterAnd([language_n, verified_skill_for_language_n])
         ])`
-        condition for API compatibility reasons.
         """
         bound_args = inspect.signature(cls.__init__).bind(None, *args, **kwargs).arguments
         languages = bound_args['value']
@@ -470,13 +467,12 @@ Languages.__init__.__signature__ = languages_init_signature.replace(parameters=l
 
 @inherit_docstrings
 class Verified(Profile, IdentityConditionMixin, spec_value=Profile.Key.VERIFIED):
-    """Use to select verified Tolokers.
+    """Filtering Tolokers that passed verification.
 
     Attributes:
-        value: is Toloker verified.
+        value: A flag showing whether a Toloker passed verification.
 
     Example:
-        Use equal operator to create appropriate filter
 
         >>> verified_filter = toloka.client.filter.Verified == True
         >>> unverified_filter = toloka.client.filter.Verified == False
@@ -526,7 +522,7 @@ class DeviceCategory(Computed, IdentityConditionMixin, spec_value=Computed.Key.D
 
     @unique
     class DeviceCategory(ExtendableStrEnum):
-        """Device category.
+        """Device categories.
         """
 
         PERSONAL_COMPUTER = 'PERSONAL_COMPUTER'
@@ -544,10 +540,10 @@ class DeviceCategory(Computed, IdentityConditionMixin, spec_value=Computed.Key.D
 
 @inherit_docstrings
 class ClientType(Computed, IdentityConditionMixin, spec_value=Computed.Key.CLIENT_TYPE):
-    """Filtering Tolokers by their application type.
+    """Filtering Tolokers by a client application type.
 
     Attributes:
-        value: Client application type.
+        value: Client application types.
     """
 
     @unique
@@ -571,7 +567,7 @@ class OSFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.OS_FAMI
 
     @unique
     class OSFamily(ExtendableStrEnum):
-        """The operating system family.
+        """The OS families.
         """
 
         WINDOWS = 'WINDOWS'
@@ -597,12 +593,13 @@ class OSFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.OS_FAMI
 
 @inherit_docstrings
 class OSVersion(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION):
-    """Filtering Tolokers by OS full version.
+    """Filtering Tolokers by an OS version.
 
-    For example: 14.4
+    The version consists of major and minor version numbers, for example, 14.4.
+    Present it as a single floating point number in conditions.
 
     Attributes:
-        value: Full version of the operating system.
+        value: The version of the OS.
     """
 
     value: float = attribute(required=True)
@@ -610,12 +607,10 @@ class OSVersion(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_V
 
 @inherit_docstrings
 class OSVersionMajor(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION_MAJOR):
-    """Filtering Tolokers by OS major version.
-
-    For example: 14
+    """Filtering Tolokers by an OS major version.
 
     Attributes:
-        value: Major version of the operating system.
+        value: The major version of the OS.
     """
 
     value: int = attribute(required=True)
@@ -623,12 +618,10 @@ class OSVersionMajor(Computed, ComparableConditionMixin, spec_value=Computed.Key
 
 @inherit_docstrings
 class OSVersionMinor(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION_MINOR):
-    """Filtering Tolokers by OS minor version.
-
-    For example: 4
+    """Filtering Tolokers by an OS minor version.
 
     Attributes:
-        value: Minor version of the operating system.
+        value: The minor version of the OS.
     """
 
     value: int = attribute(required=True)
@@ -636,11 +629,10 @@ class OSVersionMinor(Computed, ComparableConditionMixin, spec_value=Computed.Key
 
 @inherit_docstrings
 class OSVersionBugfix(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION_BUGFIX):
-    """Filtering Tolokers by build number (bugfix version) of the operating system.
+    """Filtering Tolokers by a build number or a bugfix version of their OS.
 
-    For example: 1
     Attributes:
-        value: Build number (bugfix version) of the operating system.
+        value: The build number or the bugfix version of the OS.
     """
 
     value: int = attribute(required=True)
@@ -648,15 +640,15 @@ class OSVersionBugfix(Computed, ComparableConditionMixin, spec_value=Computed.Ke
 
 @inherit_docstrings
 class UserAgentType(Computed, IdentityConditionMixin, spec_value=Computed.Key.USER_AGENT_TYPE):
-    """Filtering Tolokers by user agent type.
+    """Filtering Tolokers by a user agent type.
 
     Attributes:
-        value: User agent type.
+        value: The user agent type.
     """
 
     @unique
     class UserAgentType(ExtendableStrEnum):
-        """User agent type.
+        """User agent types.
         """
 
         BROWSER = 'BROWSER'
@@ -672,15 +664,15 @@ class UserAgentType(Computed, IdentityConditionMixin, spec_value=Computed.Key.US
 
 @inherit_docstrings
 class UserAgentFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.USER_AGENT_FAMILY):
-    """Filtering Tolokers by user agent family.
+    """Filtering Tolokers by a user agent family.
 
     Attributes:
-        value: User agent family.
+        value: The user agent family.
     """
 
     @unique
     class UserAgentFamily(ExtendableStrEnum):
-        """User agent family.
+        """User agent families.
         """
 
         IE = 'IE'
@@ -712,10 +704,13 @@ class UserAgentFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.
 
 @inherit_docstrings
 class UserAgentVersion(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION):
-    """Filtering Tolokers by full browser version.
+    """Filtering Tolokers by a browser version.
+
+    The version consists of major and minor version numbers.
+    Present it as a single floating point number in conditions.
 
     Attributes:
-        value: Full browser version. <Major version>.<Minor version>.
+        value: The version of the browser.
     """
 
     value: float
@@ -723,10 +718,10 @@ class UserAgentVersion(Computed, ComparableConditionMixin, spec_value=Computed.K
 
 @inherit_docstrings
 class UserAgentVersionMajor(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION_MAJOR):
-    """Filtering Tolokers by major browser version.
+    """Filtering Tolokers by a major browser version.
 
     Attributes:
-        value: Major browser version.
+        value: The major browser version.
     """
 
     value: int
@@ -734,10 +729,10 @@ class UserAgentVersionMajor(Computed, ComparableConditionMixin, spec_value=Compu
 
 @inherit_docstrings
 class UserAgentVersionMinor(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION_MINOR):
-    """Filtering Tolokers by minor browser version.
+    """Filtering Tolokers by a minor browser version.
 
     Attributes:
-        value: Minor browser version.
+        value: The minor browser version.
     """
 
     value: int
@@ -745,10 +740,10 @@ class UserAgentVersionMinor(Computed, ComparableConditionMixin, spec_value=Compu
 
 @inherit_docstrings
 class UserAgentVersionBugfix(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION_BUGFIX):
-    """Filtering Tolokers by build number (bugfix version) of the browser.
+    """Filtering Tolokers by a build number or a bugfix version of their browser.
 
     Attributes:
-        value: Build number (bugfix version) of the browser.
+        value: The build number or the bugfix version of the browser.
     """
 
     value: int
