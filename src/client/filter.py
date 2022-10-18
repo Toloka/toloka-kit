@@ -53,9 +53,9 @@ from ..util._extendable_enum import ExtendableStrEnum
 class FilterCondition(BaseTolokaObject):
     """Filters for selecting Tolokers who can access tasks.
 
-    For example, you can select Tolokers by a skill, language, or browser type.
+    For example, you can select Tolokers who have some skill, speak certain languages, or use a smartphone.
 
-    Filters can be combined with the `|` and  `&` operators. Some filters support the `~` operator.
+    Filters can be combined using the `|` and  `&` operators. Some filters support the `~` operator.
 
     Example:
         Filtering by language and device category.
@@ -91,7 +91,7 @@ class FilterCondition(BaseTolokaObject):
 
 
 class FilterOr(FilterCondition, kw_only=False):
-    """Supports combining filters with the `|` operator.
+    """Supports combining filters using the `|` operator.
 
     Attributes:
         or_: A list of filters.
@@ -118,7 +118,7 @@ class FilterOr(FilterCondition, kw_only=False):
 
 
 class FilterAnd(FilterCondition, kw_only=False):
-    """Supports combining filters with the `&` operator.
+    """Supports combining filters using the `&` operator.
 
     Attributes:
         and_: A list of filters.
@@ -147,7 +147,7 @@ class FilterAnd(FilterCondition, kw_only=False):
 class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
     """A base class that supports filter conditions.
 
-    Any condition belongs to some category and has a condition operator and a value. They are mapped to API parameters.
+    Any condition belongs to some category and has a condition operator and a value. These attributes are mapped to API parameters.
 
     Attributes:
         operator: An operator used in a condition.
@@ -234,8 +234,8 @@ class Skill(StatefulComparableConditionMixin, Condition, order=False, eq=False, 
     This filter belongs to the `skill` category.
 
     Example:
-    Selecting Tolokers with a skill with ID '224' greater than 70.
-    >>> filter = toloka.client.filter.Skill('224') > 70
+        Selecting Tolokers with a skill with ID '224' greater than 70.
+        >>> filter = toloka.client.filter.Skill('224') > 70
 
     Attributes:
         key: The ID of a skill.
@@ -250,12 +250,10 @@ class Skill(StatefulComparableConditionMixin, Condition, order=False, eq=False, 
 
 @inherit_docstrings
 class Gender(Profile, IdentityConditionMixin, spec_value=Profile.Key.GENDER):
-    """Filtering Tolokers by a gender.
+    """Filtering Tolokers by gender.
 
     Attributes:
-        value: Possible values:
-            * `MALE`
-            * `FEMALE`
+        value: Toloker's gender specified in the profile.
     """
 
     @unique
@@ -274,10 +272,10 @@ class Gender(Profile, IdentityConditionMixin, spec_value=Profile.Key.GENDER):
 
 @inherit_docstrings
 class Country(Profile, IdentityConditionMixin, spec_value=Profile.Key.COUNTRY):
-    """Filtering Tolokers by the country of residence specified in their profiles.
+    """Filtering Tolokers by a country of residence specified in their profiles.
 
     Attributes:
-        value: Two-letter code of a country taken from [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+        value: A two-letter code of the country taken from the [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) standard.
     """
 
     value: str = attribute(required=True)  # ISO 3166-1 alpha-2
@@ -285,10 +283,10 @@ class Country(Profile, IdentityConditionMixin, spec_value=Profile.Key.COUNTRY):
 
 @inherit_docstrings
 class Citizenship(Profile, IdentityConditionMixin, spec_value=Profile.Key.CITIZENSHIP):
-    """Filtering Tolokers by the country of citizenship specified in their profiles.
+    """Filtering Tolokers by a country of citizenship specified in their profiles.
 
     Attributes:
-        value: Two-letter code of a country taken from [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+        value: A two-letter code of the country taken from the [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) standard.
     """
 
     value: str = attribute(required=True)  # ISO 3166-1 alpha-2
@@ -348,7 +346,7 @@ class AdultAllowed(Profile, IdentityConditionMixin, spec_value=Profile.Key.ADULT
 
 @inherit_docstrings
 class DateOfBirth(Profile, ComparableConditionMixin, spec_value=Profile.Key.DATE_OF_BIRTH):
-    """Filtering Tolokers by the date of birth.
+    """Filtering Tolokers by a date of birth.
 
     Attributes:
         value: The date of birth in seconds since 1 January 1970 (UNIX time).
@@ -362,7 +360,7 @@ class City(Profile, InclusionConditionMixin, spec_value=Profile.Key.CITY):
     """Filtering Tolokers by a city specified in their profiles.
 
     Attributes:
-        value: The [ID]([https://toloka.ai/en/docs/api/concepts/regions]) of the city.
+        value: The [ID](https://toloka.ai/en/docs/api/concepts/regions) of the city.
     """
 
     value: int = attribute(required=True)
@@ -373,15 +371,10 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
     """Filtering Tolokers by languages specified in their profiles.
 
     Attributes:
-        value: Languages specified in the profile. Two-letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) code in upper case is used.
+        value: Languages specified in the profile. A two-letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) code in upper case is used.
         verified: If set to `True`, only Tolokers who have passed a language test are selected.
             Tests are available for languages: `AR`, `DE`, `EN`, `ES`, `FR`,
             `HE`, `ID`, `JA`, `PT`, `RU`, `SV`, `ZH-HANS`.
-        value: Language or list of languages specified by the Toloker in the profile
-            (two-letter ISO code of the standard ISO 639-1 in upper case).
-        verified: If set to True, only the Tolokers who have passed a language test will be selected. Currently, you can
-            use this parameter only with the following ISO codes : `DE`, `EN`, `FR`, `JA`, `PT`, `SV`, `RU`, `AR`, `ES`,
-            `HE`, `ID`, `ZH-HANS`.
     """
 
     VERIFIED_LANGUAGES_TO_SKILLS: ClassVar[Dict[str, str]] = {
@@ -492,7 +485,7 @@ class Verified(Profile, IdentityConditionMixin, spec_value=Profile.Key.VERIFIED)
 
 @inherit_docstrings
 class RegionByPhone(Computed, InclusionConditionMixin, spec_value=Computed.Key.REGION_BY_PHONE):
-    """Filtering Tolokers by the region which is determined by their mobile phone number.
+    """Filtering Tolokers by a region which is determined by their mobile phone number.
 
     Attributes:
         value: The ID from the [list of regions](https://toloka.ai/en/docs/api/concepts/regions).
@@ -503,7 +496,7 @@ class RegionByPhone(Computed, InclusionConditionMixin, spec_value=Computed.Key.R
 
 @inherit_docstrings
 class RegionByIp(Computed, InclusionConditionMixin, spec_value=Computed.Key.REGION_BY_IP):
-    """Filtering Tolokers by the region which is determined by their IP address.
+    """Filtering Tolokers by a region which is determined by their IP address.
 
     Attributes:
         value: The ID from the [list of regions](https://toloka.ai/en/docs/api/concepts/regions).
@@ -543,12 +536,12 @@ class ClientType(Computed, IdentityConditionMixin, spec_value=Computed.Key.CLIEN
     """Filtering Tolokers by a client application type.
 
     Attributes:
-        value: Client application types.
+        value: The client application type.
     """
 
     @unique
     class ClientType(ExtendableStrEnum):
-        """Client application type.
+        """Client application types.
         """
 
         BROWSER = 'BROWSER'
@@ -567,7 +560,7 @@ class OSFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.OS_FAMI
 
     @unique
     class OSFamily(ExtendableStrEnum):
-        """The OS families.
+        """OS families.
         """
 
         WINDOWS = 'WINDOWS'
@@ -595,8 +588,8 @@ class OSFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.OS_FAMI
 class OSVersion(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION):
     """Filtering Tolokers by an OS version.
 
-    The version consists of major and minor version numbers, for example, 14.4.
-    Present it as a single floating point number in conditions.
+    The version consists of major and minor version numbers, for example, `14.4`.
+    The version is represented as a single floating point number in conditions.
 
     Attributes:
         value: The version of the OS.
@@ -707,7 +700,7 @@ class UserAgentVersion(Computed, ComparableConditionMixin, spec_value=Computed.K
     """Filtering Tolokers by a browser version.
 
     The version consists of major and minor version numbers.
-    Present it as a single floating point number in conditions.
+    The version is represented as a single floating point number in conditions.
 
     Attributes:
         value: The version of the browser.
