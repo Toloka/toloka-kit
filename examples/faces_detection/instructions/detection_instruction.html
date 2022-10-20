@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<style>
+  body {
+	scroll-behavior: smooth;
+  }
+
+  h2,
+  h3,
+  h4 {
+	font-weight: bolder;
+	font-style: normal;
+	text-transform: none;
+	margin-bottom: 10px;
+	padding: 0;
+  }
+
+  h2 {
+	font-size: 24px;
+  }
+
+  h3 {
+	font-size: 20px;
+  }
+
+  h4 {
+	font-size: 16px;
+  }
+
+  img {
+	width: 93%;
+	max-width: 600px;
+	border-radius: 8px;
+  }
+
+  p,
+  li {
+	font-size: 14px;
+	padding: 2px 0 0 0;
+	margin: 0;
+  }
+
+  p.example {
+	font-size: 14px;
+	background-color: #fff;
+	border-left: 2px dotted green;
+	color: green;
+	padding-left: 10px;
+	margin: 10px 0;
+  }
+
+  table {
+	border-collapse: separate;
+	width: 100%;
+	max-width: 1000px;
+	font-size: 13px;
+	font-family: Arial;
+	margin: 10px 10px 10px 0;
+	padding: 2px 0 0 0;
+  }
+
+  td,
+  th,
+  td.example  {
+	color: black;
+	border: 1px solid #cccccc;
+	border-radius: 5px;
+	vertical-align: middle;
+	padding: 5px;
+	width: auto;
+  }
+
+  th {
+	padding: 10px;
+	text-transform: uppercase;
+	background-color: #9de0b4;
+  }
+
+  td.example {
+	font-size: 15px;
+  }
+	
+	.hide {
+	display: none;
+  }
+
+  .hide+label~div {
+	display: none;
+  }
+
+  .hide+label~p {
+	display: none;
+  }
+
+  .hide+label {
+	border-bottom: 1px dotted blue;
+	margin-bottom: 5px;
+	padding: 2px 0 0 0;
+	cursor: pointer;
+	display: inline-block;
+	color: blue;
+	font-size: 14px;
+  }
+
+  .hide:checked+label {
+	border-bottom: 0;
+	color: green;
+	padding: 2px 0 0 0;
+	font-size: 14px;
+  }
+
+  .hide:checked+label+div {
+	font-size: 14px;
+	display: block;
+  }
+
+  .hide:checked+label+span {
+	font-size: 14px;
+	display: block;
+  }
+
+  .hide:checked+label+p {
+	font-size: 14px;
+	display: block;
+  }
+
+  .hide:checked+label+div {
+	display: block;
+	-webkit-animation: fade ease-in 0.5s;
+	-moz-animation: fade ease-in 0.5s;
+	animation: fade ease-in 0.5s;
+  }
+
+  @-moz-keyframes fade {
+	from {
+	  opacity: 0;
+	}
+
+	to {
+	  opacity: 1
+	}
+  }
+
+  @-webkit-keyframes fade {
+	from {
+	  opacity: 0;
+	}
+
+	to {
+	  opacity: 1
+	}
+  }
+
+  @keyframes fade {
+	from {
+	  opacity: 0;
+	}
+
+	to {
+	  opacity: 1
+	}
+  }
+</style>
+
+<h3>About the task</h3>
+
+	<p>You will see images with people. You need to outline all the people faces on it.</p>
+
+
+<h3>Nuances of markup</h3>
+<ol>
+	<li>
+		You need to outline ALL PEOPLE FACES in the image.
+	</li>
+	<li>
+		The bounding box should include all visible part of head: from crown to chin.
+		The box boarders should be as close as possible to the head contour,
+		not to capture the entire face and not leave empty backround area between the box and face.
+	</li>
+	<li>
+		Outline only those people, that have at least one of the visibile face parts: cheek, eyes.
+		Do not outline people visible only from the back of their heads.
+	</li>
+	<li>
+		People in hats, or whose faces are partially covered by external objects (glasses, a medical mask, a scarf, etc.)
+		should be outlined as well, if this does not contradict the previous paragraphs.
+		Faces completely covered by opaque objects, so that no part of the face is visible should not be marked.
+	</li>
+</ol>
+
+
+
+
+
