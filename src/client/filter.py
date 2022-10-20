@@ -349,7 +349,7 @@ class DateOfBirth(Profile, ComparableConditionMixin, spec_value=Profile.Key.DATE
     """Filtering Tolokers by a date of birth.
 
     Attributes:
-        value: The date of birth in seconds since 1 January 1970 (UNIX time).
+        value: The date of birth in seconds since January 1, 1970 (UNIX time).
     """
 
     value: int = attribute(required=True)
