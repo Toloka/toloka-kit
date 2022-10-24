@@ -231,8 +231,6 @@ class Skill(StatefulComparableConditionMixin, Condition, order=False, eq=False, 
     Pass the ID of a skill to the filter constructor.
     To select Tolokers without a skill, compare created filter with `None`.
 
-    This filter belongs to the `skill` category.
-
     Example:
         Selecting Tolokers with a skill with ID '224' greater than 70.
         >>> filter = toloka.client.filter.Skill('224') > 70
