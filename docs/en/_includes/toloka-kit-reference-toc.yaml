@@ -2270,6 +2270,12 @@ items:
     - name: Pipeline.run
       href: ../toloka-kit/reference/toloka.streaming.pipeline.Pipeline.run.md
       hidden: true
+    - name: Pipeline.run_manually
+      href: ../toloka-kit/reference/toloka.streaming.pipeline.Pipeline.run_manually.md
+      hidden: true
+    - name: IterationMode
+      href: ../toloka-kit/reference/toloka.streaming.pipeline.IterationMode.md
+      hidden: true
   - name: storage
     hidden: true
     items:
