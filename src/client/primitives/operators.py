@@ -21,6 +21,14 @@ from ...util._extendable_enum import ExtendableStrEnum
 
 @unique
 class CompareOperator(ExtendableStrEnum):
+    """Supports comparison operators:
+        * `==`
+        * `!=`
+        * `>`
+        * `>=`
+        * `<`
+        * `<=`
+    """
     EQ = 'EQ'
     NE = 'NE'
     GT = 'GT'
@@ -45,6 +53,8 @@ class CompareOperator(ExtendableStrEnum):
 
 @unique
 class InclusionOperator(ExtendableStrEnum):
+    """Supports the `include()` and `exclude()` methods in filter conditions.
+    """
     IN = 'IN'
     NOT_IN = 'NOT_IN'
 
@@ -57,6 +67,8 @@ class InclusionOperator(ExtendableStrEnum):
 
 @unique
 class IdentityOperator(ExtendableStrEnum):
+    """Supports the `==` and `!=` operators.
+    """
     EQ = 'EQ'
     NE = 'NE'
 
