@@ -252,7 +252,7 @@ class Pipeline:
             raise ComplexException([task.exception() for task in errored])
 
     @attr.s
-    class _RunState:
+    class RunState:
         """State of a single Pipeline run.
 
         Attributes:
@@ -271,14 +271,14 @@ class Pipeline:
             self.pending.update({worker: datetime.min for worker in new_workers})
 
     def _create_state(self):
-        state = Pipeline._RunState(pipeline_key=str(self._get_unique_key()))
+        state = Pipeline.RunState(pipeline_key=str(self._get_unique_key()))
         state.add_new_observers(self.observers_iter())
         with self._lock(state.pipeline_key):
             # Get checkpoint from the storage.
             self._storage_load(state.pipeline_key, state.workers)
         return state
 
-    async def run_manually(self) -> AsyncGenerator['Pipeline._RunState', None]:
+    async def run_manually(self) -> AsyncGenerator['Pipeline.RunState', None]:
         if not self._observers:
             raise ValueError('No observers registered')
 
