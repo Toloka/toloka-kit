@@ -2,9 +2,20 @@ __all__ = [
     'Pipeline',
 ]
 import datetime
+import enum
 import toloka.streaming.observer
 import toloka.streaming.storage
 import typing
+
+
+class IterationMode(enum.Enum):
+    """Possible values:
+        * `ALL_COMPLETED` – start next iteration only when all current tasks are done.
+        * `FIRST_COMPLETED` – start next iteration as soon as any single task is done.
+    """
+
+    ALL_COMPLETED = 'ALL_COMPLETED'
+    FIRST_COMPLETED = 'FIRST_COMPLETED'
 
 
 class Pipeline:
@@ -16,6 +27,7 @@ class Pipeline:
         period: Period of observers calls. By default, 60 seconds.
         storage: Optional storage object to save pipeline's state.
             Allow to recover from previous state in case of failure.
+        iteration_mode: When to start new iteration. Default is `FIRST_COMPLETED`
 
     Examples:
         Get assignments from segmentation pool and send them for verification to another pool.
@@ -92,12 +104,15 @@ class Pipeline:
         """
         ...
 
+    def run_manually(self) -> typing.AsyncGenerator['Pipeline._RunState', None]: ...
+
     async def run(self) -> None: ...
 
     def __init__(
         self,
         period: datetime.timedelta = ...,
         storage: typing.Optional[toloka.streaming.storage.BaseStorage] = None,
+        iteration_mode: IterationMode = IterationMode.FIRST_COMPLETED,
         *,
         name: typing.Optional[str] = None
     ) -> None:
@@ -107,6 +122,7 @@ class Pipeline:
 
     period: datetime.timedelta
     storage: typing.Optional[toloka.streaming.storage.BaseStorage]
+    iteration_mode: IterationMode
     name: typing.Optional[str]
     _observers: typing.Dict[int, toloka.streaming.observer.BaseObserver]
     _got_sigint: bool
