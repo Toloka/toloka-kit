@@ -1,4 +1,22 @@
-1.0.0rc1
+1.0.2
+-------------------
+Features:
+* `Pipeline` class can be manually iterated now using `Pipeline.run_manually` method.
+* `Pipeline` now supports `iteration_mode` parameter, which controls whether the new iteration will start only after the completion of all tasks.  
+
+1.0.1
+-------------------
+Features:
+* Some filters now support inversion using "~" operator.
+* Improved error messages.
+* Added new `Verified` filter.
+
+Bug fixes:
+* Filters created using Toloka-Kit now should be rendered correctly in the Toloka UI.
+* `Languages.include` now works correctly in case of multiple languages being passed.
+
+
+1.0.0, 1.0.0rc1
 -------------------
 
 **Breaking changes**:
