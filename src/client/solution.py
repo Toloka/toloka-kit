@@ -6,10 +6,14 @@ import attr
 
 @attr.attrs(auto_attribs=True)
 class Solution:
-    """Toloker's response for a task.
+    """A Toloker's response to a single task.
+
+    A solution contains values for output fields specified in a [TaskSpec](toloka.client.project.task_spec.md) when a project was created.
+
+    Solutions can be accessed via the [Assignment](toloka.client.assignment.md) class.
 
     Attributes:
-        output_values: Dictionary "field name" - "response value", by the number of fields that should be in the response.
+        output_values: A dictionary with keys named as output fields.
     """
 
     output_values: Dict[str, Any]
