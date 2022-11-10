@@ -1,3 +1,9 @@
+1.0.2
+-------------------
+Features:
+* `Pipeline` class can be manually iterated now using `Pipeline.run_manually` method.
+* `Pipeline` now supports `iteration_mode` parameter, which controls whether the new iteration will start only after the completion of all tasks.  
+
 1.0.1
 -------------------
 Features:

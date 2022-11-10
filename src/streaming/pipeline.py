@@ -3,14 +3,17 @@ __all__ = [
 ]
 
 import asyncio
-import attr
+from enum import Enum
+
 import itertools
 import logging
 import signal
 
 from contextlib import contextmanager
 from datetime import datetime, timedelta
-from typing import Any, Container, ContextManager, Dict, Iterable, Iterator, List, Optional, Set, Tuple
+from typing import Any, AsyncGenerator, Container, ContextManager, Dict, Iterable, Iterator, List, Optional, Set, Tuple
+
+import attr.setters
 
 from .observer import BaseObserver
 from .storage import BaseStorage
@@ -63,6 +66,16 @@ class _Worker:
         return getattr(self.observer, '_deleted', False)
 
 
+class IterationMode(Enum):
+    """
+    Possible values:
+        * `ALL_COMPLETED` – start next iteration only when all current tasks are done.
+        * `FIRST_COMPLETED` – start next iteration as soon as any single task is done.
+    """
+    ALL_COMPLETED = asyncio.ALL_COMPLETED
+    FIRST_COMPLETED = asyncio.FIRST_COMPLETED
+
+
 @attr.s
 class Pipeline:
     """An entry point for toloka streaming pipelines.
@@ -73,6 +86,7 @@ class Pipeline:
         period: Period of observers calls. By default, 60 seconds.
         storage: Optional storage object to save pipeline's state.
             Allow to recover from previous state in case of failure.
+        iteration_mode: When to start new iteration. Default is `FIRST_COMPLETED`
 
     Examples:
         Get assignments from segmentation pool and send them for verification to another pool.
@@ -120,6 +134,7 @@ class Pipeline:
 
     period: timedelta = attr.ib(default=timedelta(seconds=60))
     storage: Optional[BaseStorage] = attr.ib(default=None)
+    iteration_mode: IterationMode = attr.ib(default=IterationMode.FIRST_COMPLETED)
     name: Optional[str] = attr.ib(default=None, kw_only=True)
     _observers: Dict[int, BaseObserver] = attr.ib(factory=dict, init=False)
     _got_sigint: bool = attr.ib(default=False, init=False)
@@ -216,7 +231,9 @@ class Pipeline:
         waiting: Dict[_Worker, asyncio.Task],
         pending: Dict[_Worker, datetime],
     ) -> None:
-        """Take done tasks and modify `waiting` and `pending`."""
+        """Take done tasks and modify `waiting` and `pending`.
+        """
+
         logger.info('Done count: %d', len(done))
         workers_to_dump = []
         errored = []
@@ -234,117 +251,144 @@ class Pipeline:
                 logger.error('Got error in: %s', task)
             raise ComplexException([task.exception() for task in errored])
 
-    async def run(self) -> None:
+    @attr.s
+    class RunState:
+        """State of a single Pipeline run.
+
+        Attributes:
+            workers: all known workers
+            waiting: currently running workers
+            pending: currently not running workers
+        """
+        pipeline_key: str = attr.ib()
+        workers: Dict[_Worker, None] = attr.ib(on_setattr=attr.setters.frozen, factory=lambda: {})
+        waiting: Dict[_Worker, asyncio.Task] = attr.ib(on_setattr=attr.setters.frozen, factory=lambda: {})
+        pending: Dict[_Worker, datetime] = attr.ib(on_setattr=attr.setters.frozen, factory=lambda: {})
+
+        def add_new_observers(self, new_observers: Iterable[BaseObserver]) -> None:
+            new_workers = _OrderedSet(_Worker._from_observer(observer) for observer in new_observers)
+            self.workers.update(new_workers)
+            self.pending.update({worker: datetime.min for worker in new_workers})
+
+    def _create_state(self):
+        state = Pipeline.RunState(pipeline_key=str(self._get_unique_key()))
+        state.add_new_observers(self.observers_iter())
+        with self._lock(state.pipeline_key):
+            # Get checkpoint from the storage.
+            self._storage_load(state.pipeline_key, state.workers)
+        return state
+
+    async def run_manually(self) -> AsyncGenerator['Pipeline.RunState', None]:
         if not self._observers:
             raise ValueError('No observers registered')
-        self._got_sigint = False
 
-        pipeline_key: str = str(self._get_unique_key())
+        state = await self._initialize_run()
 
-        workers = _OrderedSet(())
-        waiting: Dict[_Worker, asyncio.Task] = {}
-        pending: Dict[_Worker, datetime] = {}
-
-        def _add_new_observers(new_observers: Iterable[BaseObserver]) -> None:
-            new_workers = _OrderedSet(_Worker._from_observer(observer) for observer in new_observers)
-            workers.update(new_workers)
-            pending.update({worker: datetime.min for worker in new_workers})
-
-        _add_new_observers(self.observers_iter())
-
+        # Check mode means that all workers should_run methods returned False. Setting check_mode to True has following
+        # effects:
+        #   * All pending tasks will be started regardless of their scheduled time;
+        #   * ALL_COMPLETED iteration mode will be forced;
+        #   * If all workers should_run will return False pipeline will be finished.
         check_mode = False
 
         for iteration in itertools.count(1):
             logger.info('Iteration %d', iteration)
 
-            with self._lock(pipeline_key) as lock:
-                if iteration == 1:  # Get checkpoint from the storage.
-                    self._storage_load(pipeline_key, workers)
-                    loop = asyncio.get_event_loop()
-                    loop.add_signal_handler(signal.SIGINT, self._sigint_handler, loop, waiting)
-
+            with self._lock(state.pipeline_key) as lock:
                 iteration_start = datetime.now()
 
                 still_pending = {}
                 to_start: List[_Worker] = []
                 to_remove: List[_Worker] = []
-                for worker, time_to_start in pending.items():
+
+                for worker, time_to_start in state.pending.items():
                     if worker._is_deleted():
                         to_remove.append(worker)
                     elif time_to_start <= iteration_start or check_mode:
-                        assert worker not in waiting
+                        assert worker not in state.waiting
                         to_start.append(worker)
                     else:
                         still_pending[worker] = time_to_start
-                pending = still_pending
+                state.pending.clear()
+                state.pending.update(still_pending)
 
                 if to_remove:
                     logger.info('Found observers to remove count: %d', len(to_remove))
                     for worker in to_remove:
                         self._observers.pop(id(worker.observer))
-                        workers.pop(worker)
+                        state.workers.pop(worker)
 
-                if self._got_sigint:
-                    logger.warning('Not starting new workers due to SIGINT received')
-                    to_start = []
-                else:
+                if not self._got_sigint:
                     logger.info('Observers to run count: %d', len(to_start))
                     for worker in to_start:
                         task = asyncio.get_event_loop().create_task(worker())
                         task.worker = worker
                         task.start_time = iteration_start
-                        waiting[worker] = task
+                        state.waiting[worker] = task
+                else:
+                    logger.warning('Not starting new workers due to SIGINT received')
 
-                return_when = asyncio.FIRST_COMPLETED
-                if check_mode:
+                return_when = self.iteration_mode.value
+                if check_mode or self._got_sigint:
                     return_when = asyncio.ALL_COMPLETED
-                    logger.info('Check resume all')
-                if self._got_sigint:
-                    return_when = asyncio.ALL_COMPLETED
-                    logger.warning('Need to wait all working')
+                    logger.info('Waiting until all tasks are completed')
 
-                if waiting:  # It may be empty due to SIGINT.
-                    done, _ = await asyncio.wait(waiting.values(), return_when=return_when)
-                    self._process_done_tasks(pipeline_key, done, waiting, pending)
-                elif self._got_sigint:
+                if state.waiting:  # It may be empty due to SIGINT.
+                    done, _ = await asyncio.wait(state.waiting.values(), return_when=return_when)
+                    self._process_done_tasks(state.pipeline_key, done, state.waiting, state.pending)
+                elif self._got_sigint:  # reraise KeyboardInterrupt when all tasks are finished
                     raise KeyboardInterrupt
                 else:
                     logger.info('No workers to process. Finish')
                     return
 
-                if _Worker._no_one_should_resume(workers):  # But some of them may still work.
+                if _Worker._no_one_should_resume(state.workers):  # But some of them may still work.
                     if check_mode:
-                        self._storage_cleanup(pipeline_key, workers, lock)
+                        self._storage_cleanup(state.pipeline_key, state.workers, lock)
                         logger.info('Finish')
                         asyncio.get_event_loop().remove_signal_handler(signal.SIGINT)
                         return
 
                     logger.info('No one should resume yet. Waiting for remaining ones...')
-                    if waiting:
-                        done, _ = await asyncio.wait(waiting.values(), return_when=asyncio.ALL_COMPLETED)
+                    if state.waiting:
+                        done, _ = await asyncio.wait(state.waiting.values(), return_when=asyncio.ALL_COMPLETED)
                     else:
                         done = set()
-                    self._process_done_tasks(pipeline_key, done, waiting, pending)
+                    self._process_done_tasks(state.pipeline_key, done, state.waiting, state.pending)
                     if self._got_sigint:
                         raise KeyboardInterrupt
-                    if _Worker._no_one_should_resume(workers):  # If stop condition at all workers, run in check_mode.
+                    if _Worker._no_one_should_resume(state.workers):  # If stop condition at all workers, run in check_mode.
                         check_mode = True
-                    start_soon = max(pending.values(), default=None)
                 else:
                     check_mode = False
-                    start_soon = min(pending.values(), default=None)
+
+            self._update_observers(state)
 
             if self._got_sigint:
-                logger.warning('No sleeping while SIGINT handling')
+                logger.warning('Execute next iteration immediately due to SIGINT handling')
+            elif check_mode:
+                logger.warning('Execute next iteration immediately due to check mode handling')
             else:
-                sleep_time = (start_soon - datetime.now()).total_seconds()
-                sleep_time = max(sleep_time, self.MIN_SLEEP_SECONDS)
+                yield state
 
-                logger.info('Sleeping for %f seconds', sleep_time)
-                await asyncio.sleep(sleep_time)
+    def _update_observers(self, state):
+        new_observers_ids = self._observers.keys() - {id(worker.observer) for worker in state.workers}
+        if new_observers_ids:
+            logger.info('New observers found in quantity: %d', len(new_observers_ids))
+            new_observers = (self._observers[id_] for id_ in new_observers_ids)
+            state.add_new_observers(new_observers)
 
-            new_observers_ids = self._observers.keys() - {id(worker.observer) for worker in workers}
-            if new_observers_ids:
-                logger.info('New observers found in quantity: %d', len(new_observers_ids))
-                new_observers = (self._observers[id_] for id_ in new_observers_ids)
-                _add_new_observers(new_observers)
+    async def _initialize_run(self):
+        state = self._create_state()
+        loop = asyncio.get_event_loop()
+        loop.add_signal_handler(signal.SIGINT, self._sigint_handler, loop, state.waiting)
+        self._got_sigint = False
+        return state
+
+    async def run(self) -> None:
+        async for state in self.run_manually():
+            start_soon = max(state.pending.values(), default=None)
+            sleep_time = (start_soon - datetime.now()).total_seconds()
+            sleep_time = max(sleep_time, self.MIN_SLEEP_SECONDS)
+            logger.info('Sleeping for %f seconds', sleep_time)
+            await asyncio.sleep(sleep_time)
