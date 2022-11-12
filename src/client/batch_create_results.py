@@ -51,7 +51,7 @@ TaskBatchCreateResult = _create_batch_create_result_class_for(
 
     Attributes:
         items: A list of created tasks.
-        validation_errors: A list with validation errors in input tasks. The list is filled if the request parameter `skip_invalid_items` is True.
+        validation_errors: A list with validation errors in input tasks. The list is filled if the request parameter `skip_invalid_items` is `True`.
     """
 )
 TaskSuiteBatchCreateResult = _create_batch_create_result_class_for(
@@ -60,7 +60,7 @@ TaskSuiteBatchCreateResult = _create_batch_create_result_class_for(
 
     Attributes:
         items: A list of created task suites.
-        validation_errors: A list with validation errors in input task suites. The list is filled if the request parameter `skip_invalid_items` is True.
+        validation_errors: A list with validation errors in input task suites. The list is filled if the request parameter `skip_invalid_items` is `True`.
     """
 )
 UserBonusBatchCreateResult = _create_batch_create_result_class_for(
@@ -69,7 +69,7 @@ UserBonusBatchCreateResult = _create_batch_create_result_class_for(
 
     Attributes:
         items: A list of created rewards.
-        validation_errors: A list with validation errors. The list is filled if the request parameter `skip_invalid_items` is True.
+        validation_errors: A list with validation errors. The list is filled if the request parameter `skip_invalid_items` is `True`.
     """
 )
 WebhookSubscriptionBatchCreateResult = _create_batch_create_result_class_for(

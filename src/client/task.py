@@ -134,7 +134,7 @@ class CreateTasksParameters(CreateTaskParameters):
     """Parameters used with the [create_tasks](toloka.client.TolokaClient.create_tasks.md) method.
 
     If the operation is started in an asynchronous mode,
-    we recommend to send the `operation_id` to avoid creating the same tasks multiple times. You can use this ID later to get information about the operation.
+    we recommend that you send the `operation_id` to avoid creating the same tasks multiple times. You can use this ID later to get information about the operation.
 
     Attributes:
         skip_invalid_items: Task validation option:

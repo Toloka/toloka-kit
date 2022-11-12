@@ -28,7 +28,7 @@ class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
         reserved_for: IDs of Tolokers who have access to the task suite.
         unavailable_for: IDs of Tolokers who don't have access to the task suite.
         issuing_order_override: The priority of a task suite.
-            It influences the order of assigning task suites to Tolokers in pools with the `issue_task_suites_in_creation_order` parameter set to True.
+            It influences the order of assigning task suites to Tolokers in pools with the `issue_task_suites_in_creation_order` parameter set to `True`.
             Allowed range: from -99999.99999 to 99999.99999.
         mixed: [The way of grouping tasks](https://toloka.ai/en/docs/guide/concepts/distribute-tasks-by-pages) to create the task suite.
             * True — The tasks are mixed automatically using the smart mixing approach.
@@ -112,7 +112,7 @@ class TaskSuitePatch(InfiniteOverlapParametersMixin, BaseTolokaObject):
 
     Attributes:
         issuing_order_override: The priority of a task suite.
-            It influences the order of assigning task suites to Tolokers in pools with the `issue_task_suites_in_creation_order` parameter set to True.
+            It influences the order of assigning task suites to Tolokers in pools with the `issue_task_suites_in_creation_order` parameter set to `True`.
             Allowed range: from -99999.99999 to 99999.99999.
         open_pool: Open the pool immediately after changing a task suite, if the pool is closed.
     """
