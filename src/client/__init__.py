@@ -2412,7 +2412,7 @@ class TolokaClient:
         change `async_mode` to False, if you do not understand clearly why you need it.
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        It is recommended to create no more than 10,000 task suites in a single request if the `async_mode` parameter is `True`.
+        It is recommended that you create no more than 10,000 task suites in a single request if the `async_mode` parameter is `True`.
 
         Args:
             task_suites: A list of task suites to be created.
@@ -2462,7 +2462,7 @@ class TolokaClient:
         """Creates several task suites in Toloka asynchronously.
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        It is recommended to create no more than 10,000 task suites in a single request.
+        It is recommended that you create no more than 10,000 task suites in a single request.
 
         See also the [create_task_suites](toloka.client.TolokaClient.create_task_suites.md) method.
 
@@ -2568,11 +2568,11 @@ class TolokaClient:
     @expand('patch')
     @add_headers('client')
     def patch_task_suite(self, task_suite_id: str, patch: task_suite.TaskSuitePatch) -> TaskSuite:
-        """Changes task suite parameters in Toloka.
+        """Changes task suite parameter values in Toloka.
 
         Args:
             task_suite_id: The ID of the task suite.
-            patch: New parameters.
+            patch: New parameter values.
 
         Returns:
             TaskSuite: The task suite with updated fields.
