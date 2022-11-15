@@ -2444,7 +2444,7 @@ class TolokaClient:
             objects=task_suites,
             parameters=parameters,
             url='/v1/task-suites',
-            result_type=batch_create_results.TaskBatchCreateResult,
+            result_type=batch_create_results.TaskSuiteBatchCreateResult,
             operation_type=operations.TaskSuiteCreateBatchOperation,
             output_id_field='task_suite_id',
             get_method=self.get_task_suites
