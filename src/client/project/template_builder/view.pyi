@@ -24,7 +24,14 @@ import typing
 
 
 class BaseViewV1Metaclass(toloka.client.project.template_builder.base.VersionedBaseComponentMetaclass):
-    ...
+    @staticmethod
+    def __new__(
+        mcs,
+        name,
+        bases,
+        namespace,
+        **kwargs
+    ): ...
 
 
 class BaseViewV1(toloka.client.project.template_builder.base.BaseComponent, metaclass=BaseViewV1Metaclass):

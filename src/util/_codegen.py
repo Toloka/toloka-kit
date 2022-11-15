@@ -48,8 +48,6 @@ def _get_decorator_wrapper(wrapped_decorator):
             @functools.wraps(decorated_func)
             async def wrapped(*args, **kwargs):
                 res = await decorated_func(*args, **kwargs)
-                while inspect.isawaitable(res):
-                    res = await res
                 return res
 
         else:  # plain function
@@ -239,13 +237,21 @@ def expand_func_by_argument(func: Callable, arg_name: str, arg_type: Optional[Ty
     new_params: List[Parameter] = list(func_params)
     new_params[arg_index:arg_index + 1] = arg_type_sig.parameters.values()
 
+    if inspect.iscoroutinefunction(func):
+        function_body = dedent(f'''
+            {arg_name} = {arg_type.__name__}{_get_signature_invocation_string(arg_type_sig)}
+            return await func{_get_signature_invocation_string(func_sig)}
+        ''')
+    else:
+        function_body = dedent(f'''
+            {arg_name} = {arg_type.__name__}{_get_signature_invocation_string(arg_type_sig)}
+            return func{_get_signature_invocation_string(func_sig)}
+        ''')
+
     expanded_func = _compile_function(
         f'{func.__name__}_expanded_by_{arg_name}',
         func_sig.replace(parameters=new_params),
-        dedent(f'''
-            {arg_name} = {arg_type.__name__}{_get_signature_invocation_string(arg_type_sig)}
-            return func{_get_signature_invocation_string(func_sig)}
-        '''),
+        function_body,
         inspect.iscoroutinefunction(func),
         {arg_type.__name__: arg_type, 'func': func, 'NOTHING': attr.NOTHING}
     )

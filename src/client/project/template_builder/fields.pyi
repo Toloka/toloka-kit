@@ -26,7 +26,14 @@ import typing
 
 
 class BaseFieldV1Metaclass(toloka.client.project.template_builder.base.VersionedBaseComponentMetaclass):
-    ...
+    @staticmethod
+    def __new__(
+        mcs,
+        name,
+        bases,
+        namespace,
+        **kwargs
+    ): ...
 
 
 class BaseFieldV1(toloka.client.project.template_builder.base.BaseComponent, metaclass=BaseFieldV1Metaclass):

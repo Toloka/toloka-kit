@@ -33,6 +33,7 @@ import toloka.client.user_skill
 import toloka.client.webhook_subscription
 import toloka.util.async_utils
 import typing
+import urllib3.util.retry
 import uuid
 
 
@@ -45,8 +46,14 @@ class AsyncTolokaClient:
 
     def __init__(
         self,
-        *args,
-        **kwargs
+        token: str,
+        environment: typing.Union[toloka.client.TolokaClient.Environment, str, None] = None,
+        retries: typing.Union[int, urllib3.util.retry.Retry] = 3,
+        timeout: typing.Union[float, typing.Tuple[float, float]] = 10.0,
+        url: typing.Optional[str] = None,
+        retry_quotas: typing.Union[typing.List[str], str, None] = 'MIN',
+        retryer_factory: typing.Optional[typing.Callable[[], urllib3.util.retry.Retry]] = None,
+        act_under_account_id: typing.Optional[str] = None
     ): ...
 
     def __getattr__(self, name):
@@ -2417,7 +2424,7 @@ class AsyncTolokaClient:
             Skill: Modified skill object with all fields.
 
         Example:
-            >>> toloka_client.create_skill(skill_id=old_skill_id, skill=new_skill_object)
+            >>> toloka_client.update_skill(skill_id=old_skill_id, skill=new_skill_object)
             ...
         """
         ...

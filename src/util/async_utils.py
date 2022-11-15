@@ -247,11 +247,13 @@ def generate_async_methods_from(cls):
             return match.expand(r'await self.\1(')
 
     def _generate_async_version_source(method):
+        source = inspect.getsource(method)
+
         yield_from_regex = re.compile(r'yield from (\S+)')
         source = re.sub(
             yield_from_regex,
             r'async for _val in \1: yield _val',
-            inspect.getsource(method),
+            source,
         )
 
         # Generator[YieldType, SendType, ReturnType] -> AsyncGenAdapter[YieldType, SendType]

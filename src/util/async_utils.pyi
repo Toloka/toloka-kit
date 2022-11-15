@@ -9,8 +9,8 @@ __all__ = [
     'generate_async_methods_from',
     'isasyncgenadapterfunction',
 ]
+import asyncio
 import asyncio.events
-import asyncio.tasks
 import typing
 
 
@@ -94,7 +94,7 @@ class AsyncMultithreadWrapper(typing.Generic[T]):
     def __getattr__(self, name: str): ...
 
 
-def get_task_traceback(task: asyncio.tasks.Task) -> typing.Optional[str]:
+def get_task_traceback(task: asyncio.Task) -> typing.Optional[str]:
     """Get traceback for given task as string.
     Return traceback as string if exists. Or None if there was no error.
     """

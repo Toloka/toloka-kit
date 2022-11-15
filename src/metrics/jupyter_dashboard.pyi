@@ -17,8 +17,8 @@ __all__ = [
     'DashBoard',
     'Chart',
 ]
+import asyncio
 import asyncio.events
-import asyncio.tasks
 import datetime
 import jupyter_dash.jupyter_app  # type: ignore
 import plotly.graph_objs._figure  # type: ignore
@@ -90,7 +90,7 @@ class Chart:
     _id: str
     _lines: typing.Dict[str, LineStats]
     _event_loop: asyncio.events.AbstractEventLoop
-    _tasks: typing.List[asyncio.tasks.Task]
+    _tasks: typing.List[asyncio.Task]
 
 
 class DashBoard:
