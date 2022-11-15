@@ -51,17 +51,18 @@ from ..util._extendable_enum import ExtendableStrEnum
 
 
 class FilterCondition(BaseTolokaObject):
-    """You can select Tolokers to access pool tasks.
+    """Filters for selecting Tolokers who can access tasks.
 
-    For example, you can select Tolokers by region, skill, or browser type (desktop or mobile).
+    For example, you can select Tolokers who have some skill, speak certain languages, or use a smartphone.
+
+    Filters can be combined using the `|` and  `&` operators. Some filters support the `~` operator.
 
     Example:
-        How to setup filter for selecting Tolokers.
+        Filtering by language and device category.
 
-        >>> # you can combine filters using bitwise operators '|' and  '&'
         >>> filter = (
-        >>>    (toloka.filter.Languages.in_('EN')) &
-        >>>    (toloka.client.filter.DeviceCategory.in_(toloka.client.filter.DeviceCategory.SMARTPHONE))
+        >>>    (toloka.client.filter.Languages.in_('EN')) &
+        >>>    (toloka.client.filter.DeviceCategory == toloka.client.filter.DeviceCategory.SMARTPHONE)
         >>> )
         ...
     """
@@ -90,10 +91,10 @@ class FilterCondition(BaseTolokaObject):
 
 
 class FilterOr(FilterCondition, kw_only=False):
-    """Use to combine multiple filters via "or" logic
+    """Supports combining filters using the `|` operator.
 
     Attributes:
-        or_: list of filters to combine
+        or_: A list of filters.
     """
 
     or_: List[FilterCondition] = attribute(origin='or', required=True)
@@ -117,10 +118,10 @@ class FilterOr(FilterCondition, kw_only=False):
 
 
 class FilterAnd(FilterCondition, kw_only=False):
-    """Use to combine multiple filters via "and" logic
+    """Supports combining filters using the `&` operator.
 
     Attributes:
-        and_: list of filters to combine
+        and_: A list of filters.
     """
 
     and_: List[FilterCondition] = attribute(origin='and', required=True)
@@ -144,14 +145,15 @@ class FilterAnd(FilterCondition, kw_only=False):
 
 
 class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
-    """Condition to select Tolokers.
+    """A base class that supports filter conditions.
+
+    Any condition belongs to some category and has a condition operator and a value. These attributes are mapped to API parameters.
 
     Attributes:
-        operator: Comparison operator in the condition.
-            For example, for a condition "The Toloker must be 18 years old or older» used date of birth and operator
-            GTE («Greater than or equal»). Possible key values operator depends on the data type in the field value
-        value: Attribute value from the field key. For example, the ID of the region specified in the profile,
-            or the minimum skill value.
+        operator: An operator used in a condition.
+            Allowed set of operators depends on the filter.
+        value: A value to compare with.
+            For example, the minimum value of some skill, or a language specified in a Toloker's profile.
     """
 
     @unique
@@ -175,12 +177,12 @@ class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
 
 @inherit_docstrings
 class Profile(Condition, spec_value=Condition.Category.PROFILE, spec_field='key', spec_enum='Key'):
-    """Use to select Tolokers based on profile data.
+    """A base class for a category of filters that use Toloker's profile.
     """
 
     @unique
     class Key(ExtendableStrEnum):
-        """Possible criteria for filtering Tolokers by profile.
+        """Filter names in the `profile` category.
         """
 
         GENDER = 'gender'
@@ -196,12 +198,12 @@ class Profile(Condition, spec_value=Condition.Category.PROFILE, spec_field='key'
 
 @inherit_docstrings
 class Computed(Condition, spec_value=Condition.Category.COMPUTED, spec_field='key', spec_enum='Key'):
-    """Use to select Tolokers based on data received or calculated by Toloka.
+    """A base class for a category of filters that use connection and client information.
     """
 
     @unique
     class Key(ExtendableStrEnum):
-        """Possible criteria for filtering Tolokers by computed data.
+        """Filter names in the `computed` category.
         """
 
         CLIENT_TYPE = 'client_type'
@@ -224,13 +226,19 @@ class Computed(Condition, spec_value=Condition.Category.COMPUTED, spec_field='ke
 
 
 class Skill(StatefulComparableConditionMixin, Condition, order=False, eq=False, kw_only=False, spec_value=Condition.Category.SKILL):
-    """Use to select Tolokers by skill value.
+    """Filtering Tolokers by skills.
 
-    To select Tolokers without a skill set the parameter value operator=CompareOperator.EQ and exclude the parameter value.
+    Pass the ID of a skill to the filter constructor.
+    To select Tolokers without a skill, compare created filter with `None`.
+
+    Example:
+        Selecting Tolokers with a skill with ID '224' greater than 70.
+        >>> filter = toloka.client.filter.Skill('224') > 70
+
     Attributes:
-        key: Skill ID.
-        operator: Comparison operator in the condition.
-        value: Attribute value from the field key.
+        key: The ID of a skill.
+        operator: An operator in the condition.
+        value: A value to compare the skill with.
     """
 
     key: str = attribute(required=True)
@@ -240,10 +248,10 @@ class Skill(StatefulComparableConditionMixin, Condition, order=False, eq=False, 
 
 @inherit_docstrings
 class Gender(Profile, IdentityConditionMixin, spec_value=Profile.Key.GENDER):
-    """Use to select Tolokers by gender.
+    """Filtering Tolokers by gender.
 
     Attributes:
-        value: Toloker's gender.
+        value: Toloker's gender specified in the profile.
     """
 
     @unique
@@ -262,10 +270,10 @@ class Gender(Profile, IdentityConditionMixin, spec_value=Profile.Key.GENDER):
 
 @inherit_docstrings
 class Country(Profile, IdentityConditionMixin, spec_value=Profile.Key.COUNTRY):
-    """Use to select Tolokers by country.
+    """Filtering Tolokers by a country of residence specified in their profiles.
 
     Attributes:
-        value: Country of the Toloker (two-letter code of the standard ISO 3166-1 alpha-2).
+        value: A two-letter code of the country taken from the [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) standard.
     """
 
     value: str = attribute(required=True)  # ISO 3166-1 alpha-2
@@ -273,10 +281,10 @@ class Country(Profile, IdentityConditionMixin, spec_value=Profile.Key.COUNTRY):
 
 @inherit_docstrings
 class Citizenship(Profile, IdentityConditionMixin, spec_value=Profile.Key.CITIZENSHIP):
-    """Use to select Tolokers by citizenship.
+    """Filtering Tolokers by a country of citizenship specified in their profiles.
 
     Attributes:
-        value: Toloker's citizenship (two-letter country code) ISO 3166-1 alpha-2
+        value: A two-letter code of the country taken from the [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) standard.
     """
 
     value: str = attribute(required=True)  # ISO 3166-1 alpha-2
@@ -284,15 +292,15 @@ class Citizenship(Profile, IdentityConditionMixin, spec_value=Profile.Key.CITIZE
 
 @inherit_docstrings
 class Education(Profile, IdentityConditionMixin, spec_value=Profile.Key.EDUCATION):
-    """Use to select Tolokers by education.
+    """Filtering Tolokers by a level of education specified in their profiles.
 
     Attributes:
-        value: Toloker's education.
+        value: Toloker's level of education.
     """
 
     @unique
     class Education(ExtendableStrEnum):
-        """Toloker's education.
+        """Toloker's education level.
         """
 
         BASIC = 'BASIC'
@@ -308,13 +316,14 @@ class Education(Profile, IdentityConditionMixin, spec_value=Profile.Key.EDUCATIO
 
 @inherit_docstrings
 class AdultAllowed(Profile, IdentityConditionMixin, spec_value=Profile.Key.ADULT_ALLOWED):
-    """Use to select Tolokers by their agreement to perform tasks that contain adult content.
+    """Filtering Tolokers who agreed to work with adult content.
 
     Attributes:
-        value: Toloker's agreement.
+        value:
+            * `True` — Toloker agrees to work with adult content.
+            * `False` — Toloker does not agree to work with adult content.
 
     Example:
-        Use equal operator to create appropriate filter
 
         >>> adult_allowed_filter = toloka.client.filter.AdultAllowed == True
         >>> adult_not_allowed_filter = toloka.client.filter.AdultAllowed == False
@@ -335,10 +344,10 @@ class AdultAllowed(Profile, IdentityConditionMixin, spec_value=Profile.Key.ADULT
 
 @inherit_docstrings
 class DateOfBirth(Profile, ComparableConditionMixin, spec_value=Profile.Key.DATE_OF_BIRTH):
-    """Use to select Tolokers by date of birth.
+    """Filtering Tolokers by a date of birth.
 
     Attributes:
-        value: The Toloker's date of birth (UNIX time in seconds).
+        value: The date of birth in seconds since January 1, 1970 (UNIX time).
     """
 
     value: int = attribute(required=True)
@@ -346,10 +355,10 @@ class DateOfBirth(Profile, ComparableConditionMixin, spec_value=Profile.Key.DATE
 
 @inherit_docstrings
 class City(Profile, InclusionConditionMixin, spec_value=Profile.Key.CITY):
-    """Use to select Tolokers by city.
+    """Filtering Tolokers by a city specified in their profiles.
 
     Attributes:
-        value: Toloker's city(ID of the region).
+        value: The [ID](https://toloka.ai/en/docs/api/concepts/regions) of the city.
     """
 
     value: int = attribute(required=True)
@@ -357,15 +366,16 @@ class City(Profile, InclusionConditionMixin, spec_value=Profile.Key.CITY):
 
 @inherit_docstrings
 class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAGES):
-    """Use to select Tolokers by languages specified by the Toloker in the profile.
+    """Filtering Tolokers by languages specified in their profiles.
 
     Attributes:
-        value: Languages specified by the Toloker in the profile (two-letter ISO code of the standard ISO 639-1 in upper case).
-        verified: If set to True, only the Tolokers who have passed a language test will be selected. Currently, you can
-            use this parameter only with the following ISO codes : `DE`, `EN`, `FR`, `JA`, `PT`, `SV`, `RU`, `AR`, `ES`.
+        value: Languages specified in the profile. A two-letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) code in upper case is used.
+        verified: If set to `True`, only Tolokers who have passed a language test are selected.
+            Tests are available for languages: `AR`, `DE`, `EN`, `ES`, `FR`,
+            `HE`, `ID`, `JA`, `PT`, `RU`, `SV`, `ZH-HANS`.
     """
 
-    verified_languages_to_skills: ClassVar[Dict[str, str]] = {
+    VERIFIED_LANGUAGES_TO_SKILLS: ClassVar[Dict[str, str]] = {
         'AR': '30724',
         'DE': '26377',
         'EN': '26366',
@@ -386,38 +396,50 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
     value: Union[str, List[str]] = attribute(required=True)
 
     def __new__(cls, *args, **kwargs):
-        """Handle "verified" parameter
+        """Handling `verified` parameter of the `Languages` filter class.
 
-        If class is instantiated with `verified=True` parameter then return
-        `FilterAnd([verified_skill_for_language_1, ..., verified_skill_for_language_n, language_1, ..., language_n])`
-        condition for API compatibility reasons.
+        If the class is instantiated with `verified=True` then combined conditions is returned:
+        `FilterOr([
+            FilterAnd([language_1, verified_skill_for_language_1]),
+            ...
+            FilterAnd([language_n, verified_skill_for_language_n])
+        ])`
         """
         bound_args = inspect.signature(cls.__init__).bind(None, *args, **kwargs).arguments
-        value = bound_args['value']
+        languages = bound_args['value']
         operator = bound_args['operator']
+        verified = bound_args.pop('verified', False)
 
-        if bound_args.get('verified', False) and operator == InclusionOperator.IN:
-            skills_mapping = cls.verified_languages_to_skills
+        if verified and operator == InclusionOperator.NOT_IN:
+            raise ValueError('"Language not in" filter does not support verified=True argument')
+        if verified and operator == InclusionOperator.IN:
+            skills_mapping = cls.VERIFIED_LANGUAGES_TO_SKILLS
             try:
-                conditions = [Languages(operator=operator, value=value)]
-                if isinstance(value, list):
-                    conditions.extend([Skill(skills_mapping[value]).eq(cls.VERIFIED_LANGUAGE_SKILL_VALUE) for value in value])
-                else:
-                    conditions.append(Skill(skills_mapping[value]).eq(cls.VERIFIED_LANGUAGE_SKILL_VALUE))
+                if not isinstance(languages, list):
+                    languages = [languages]
+                result_conditions = FilterOr([])
+                for language in languages:
+                    verified_language_condition = (
+                        Languages(operator=operator, value=language) &
+                        Skill(skills_mapping[language]).eq(cls.VERIFIED_LANGUAGE_SKILL_VALUE)
+                    )
+                    result_conditions |= verified_language_condition
 
-                return FilterOr([FilterAnd(conditions)])
+                return result_conditions
             except KeyError:
-                if not isinstance(value, str):
-                    unsupported_languages = set(value) - skills_mapping.keys()
+                if not isinstance(languages, str):
+                    unsupported_languages = set(languages) - skills_mapping.keys()
                 else:
-                    unsupported_languages = [value]
+                    unsupported_languages = [languages]
                 raise ValueError(
                     'Following languages are not supported as verified languages:\n' + '\n'.join(unsupported_languages)
                 )
-        else:
-            if kwargs.pop('verified', False):
-                raise ValueError('"Language not in" filter does not support verified=True argument')
-            return super().__new__(cls, *args, **kwargs)
+        if isinstance(languages, list):
+            if operator == InclusionOperator.IN:
+                return FilterOr([Languages(operator=operator, value=language) for language in languages])
+            else:
+                return FilterAnd([Languages(operator=operator, value=language) for language in languages])
+        return super().__new__(cls, *args, **kwargs)
 
     def __getnewargs__(self):
         """Due to redefined __new__ method class can't be deepcopied or pickled without __getnewargs__ definition"""
@@ -437,13 +459,12 @@ Languages.__init__.__signature__ = languages_init_signature.replace(parameters=l
 
 @inherit_docstrings
 class Verified(Profile, IdentityConditionMixin, spec_value=Profile.Key.VERIFIED):
-    """Use to select verified Tolokers.
+    """Filtering Tolokers that passed verification.
 
     Attributes:
-        value: is Toloker verified.
+        value: A flag showing whether a Toloker passed verification.
 
     Example:
-        Use equal operator to create appropriate filter
 
         >>> verified_filter = toloka.client.filter.Verified == True
         >>> unverified_filter = toloka.client.filter.Verified == False
@@ -463,10 +484,10 @@ class Verified(Profile, IdentityConditionMixin, spec_value=Profile.Key.VERIFIED)
 
 @inherit_docstrings
 class RegionByPhone(Computed, InclusionConditionMixin, spec_value=Computed.Key.REGION_BY_PHONE):
-    """Use to select Tolokers by their region determined by the mobile phone number.
+    """Filtering Tolokers by a region which is determined by their mobile phone number.
 
     Attributes:
-        value: The Toloker's region.
+        value: The ID from the [list of regions](https://toloka.ai/en/docs/api/concepts/regions).
     """
 
     value: int = attribute(required=True)
@@ -474,10 +495,10 @@ class RegionByPhone(Computed, InclusionConditionMixin, spec_value=Computed.Key.R
 
 @inherit_docstrings
 class RegionByIp(Computed, InclusionConditionMixin, spec_value=Computed.Key.REGION_BY_IP):
-    """Use to select Tolokers by their region determined by IP address.
+    """Filtering Tolokers by a region which is determined by their IP address.
 
     Attributes:
-        value: The Toloker's region.
+        value: The ID from the [list of regions](https://toloka.ai/en/docs/api/concepts/regions).
     """
 
     value: int = attribute(required=True)
@@ -485,7 +506,7 @@ class RegionByIp(Computed, InclusionConditionMixin, spec_value=Computed.Key.REGI
 
 @inherit_docstrings
 class DeviceCategory(Computed, IdentityConditionMixin, spec_value=Computed.Key.DEVICE_CATEGORY):
-    """Use to select Tolokers by their device category.
+    """Filtering Tolokers by their device category.
 
     Attributes:
         value: The Toloker's device category.
@@ -493,7 +514,7 @@ class DeviceCategory(Computed, IdentityConditionMixin, spec_value=Computed.Key.D
 
     @unique
     class DeviceCategory(ExtendableStrEnum):
-        """Device сategory.
+        """Device categories.
         """
 
         PERSONAL_COMPUTER = 'PERSONAL_COMPUTER'
@@ -511,15 +532,15 @@ class DeviceCategory(Computed, IdentityConditionMixin, spec_value=Computed.Key.D
 
 @inherit_docstrings
 class ClientType(Computed, IdentityConditionMixin, spec_value=Computed.Key.CLIENT_TYPE):
-    """Use to select Tolokers by their application type.
+    """Filtering Tolokers by a client application type.
 
     Attributes:
-        value: Client application type.
+        value: The client application type.
     """
 
     @unique
     class ClientType(ExtendableStrEnum):
-        """Client application type.
+        """Client application types.
         """
 
         BROWSER = 'BROWSER'
@@ -530,15 +551,15 @@ class ClientType(Computed, IdentityConditionMixin, spec_value=Computed.Key.CLIEN
 
 @inherit_docstrings
 class OSFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.OS_FAMILY):
-    """Use to select Tolokers by their OS family.
+    """Filtering Tolokers by their OS family.
 
     Attributes:
-        value: The operating system family.
+        value: The OS family.
     """
 
     @unique
     class OSFamily(ExtendableStrEnum):
-        """The operating system family.
+        """OS families.
         """
 
         WINDOWS = 'WINDOWS'
@@ -564,11 +585,13 @@ class OSFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.OS_FAMI
 
 @inherit_docstrings
 class OSVersion(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION):
-    """Use to select Tolokers by OS full version.
+    """Filtering Tolokers by an OS version.
 
-    For example: 14.4
+    The version consists of major and minor version numbers, for example, `14.4`.
+    The version is represented as a single floating point number in conditions.
+
     Attributes:
-        value: Full version of the operating system.
+        value: The version of the OS.
     """
 
     value: float = attribute(required=True)
@@ -576,11 +599,10 @@ class OSVersion(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_V
 
 @inherit_docstrings
 class OSVersionMajor(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION_MAJOR):
-    """Use to select Tolokers by OS major version.
+    """Filtering Tolokers by an OS major version.
 
-    For example: 14
     Attributes:
-        value: Major version of the operating system.
+        value: The major version of the OS.
     """
 
     value: int = attribute(required=True)
@@ -588,11 +610,10 @@ class OSVersionMajor(Computed, ComparableConditionMixin, spec_value=Computed.Key
 
 @inherit_docstrings
 class OSVersionMinor(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION_MINOR):
-    """Use to select Tolokers by OS minor version.
+    """Filtering Tolokers by an OS minor version.
 
-    For example: 4
     Attributes:
-        value: Minor version of the operating system.
+        value: The minor version of the OS.
     """
 
     value: int = attribute(required=True)
@@ -600,11 +621,10 @@ class OSVersionMinor(Computed, ComparableConditionMixin, spec_value=Computed.Key
 
 @inherit_docstrings
 class OSVersionBugfix(Computed, ComparableConditionMixin, spec_value=Computed.Key.OS_VERSION_BUGFIX):
-    """Use to select Tolokers by build number (bugfix version) of the operating system.
+    """Filtering Tolokers by a build number or a bugfix version of their OS.
 
-    For example: 1
     Attributes:
-        value: Build number (bugfix version) of the operating system.
+        value: The build number or the bugfix version of the OS.
     """
 
     value: int = attribute(required=True)
@@ -612,15 +632,15 @@ class OSVersionBugfix(Computed, ComparableConditionMixin, spec_value=Computed.Ke
 
 @inherit_docstrings
 class UserAgentType(Computed, IdentityConditionMixin, spec_value=Computed.Key.USER_AGENT_TYPE):
-    """Use to select Tolokers by user agent type:
+    """Filtering Tolokers by a user agent type.
 
     Attributes:
-        value: User agent type.
+        value: The user agent type.
     """
 
     @unique
     class UserAgentType(ExtendableStrEnum):
-        """User agent type.
+        """User agent types.
         """
 
         BROWSER = 'BROWSER'
@@ -636,15 +656,15 @@ class UserAgentType(Computed, IdentityConditionMixin, spec_value=Computed.Key.US
 
 @inherit_docstrings
 class UserAgentFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.USER_AGENT_FAMILY):
-    """Use to select Tolokers by user agent family.
+    """Filtering Tolokers by a user agent family.
 
     Attributes:
-        value: User agent family.
+        value: The user agent family.
     """
 
     @unique
     class UserAgentFamily(ExtendableStrEnum):
-        """User agent family.
+        """User agent families.
         """
 
         IE = 'IE'
@@ -676,10 +696,13 @@ class UserAgentFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.
 
 @inherit_docstrings
 class UserAgentVersion(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION):
-    """Use to select Tolokers by full browser version.
+    """Filtering Tolokers by a browser version.
+
+    The version consists of major and minor version numbers.
+    The version is represented as a single floating point number in conditions.
 
     Attributes:
-        value: Full browser version. <Major version>.<Minor version>.
+        value: The version of the browser.
     """
 
     value: float
@@ -687,10 +710,10 @@ class UserAgentVersion(Computed, ComparableConditionMixin, spec_value=Computed.K
 
 @inherit_docstrings
 class UserAgentVersionMajor(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION_MAJOR):
-    """Use to select Tolokers by major browser version.
+    """Filtering Tolokers by a major browser version.
 
     Attributes:
-        value: Major browser version.
+        value: The major browser version.
     """
 
     value: int
@@ -698,10 +721,10 @@ class UserAgentVersionMajor(Computed, ComparableConditionMixin, spec_value=Compu
 
 @inherit_docstrings
 class UserAgentVersionMinor(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION_MINOR):
-    """Use to select Tolokers by minor browser version.
+    """Filtering Tolokers by a minor browser version.
 
     Attributes:
-        value: Minor browser version.
+        value: The minor browser version.
     """
 
     value: int
@@ -709,10 +732,10 @@ class UserAgentVersionMinor(Computed, ComparableConditionMixin, spec_value=Compu
 
 @inherit_docstrings
 class UserAgentVersionBugfix(Computed, ComparableConditionMixin, spec_value=Computed.Key.USER_AGENT_VERSION_BUGFIX):
-    """Use to select Tolokers by build number (bugfix version) of the browser.
+    """Filtering Tolokers by a build number or a bugfix version of their browser.
 
     Attributes:
-        value: Build number (bugfix version) of the browser.
+        value: The build number or the bugfix version of the browser.
     """
 
     value: int
