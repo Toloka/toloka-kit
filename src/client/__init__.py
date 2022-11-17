@@ -2156,8 +2156,10 @@ class TolokaClient:
     ) -> batch_create_results.TaskBatchCreateResult:
         """Creates several tasks in Toloka.
 
-        Tasks can be added to different pools. You can add together regular tasks and control tasks.
-        Pool(s) should be ready for new tasks. It includes configured mixer config.
+        You can add together general and control tasks.
+        Tasks can be added to different pools.
+        Note that pools must be configured before accepting new tasks. For example, [mixer configuration](toloka.client.pool.mixer_config.MixerConfig.md) must be set.
+
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
 
         By default, `create_tasks` starts asynchronous operation internally and waits for the completion of it. Do not
@@ -2165,7 +2167,7 @@ class TolokaClient:
 
         Args:
             tasks: A list of tasks to be created.
-            parameters: Additional parameters of the request. Default: `None` — asynchronous mode is used.
+            parameters: Additional parameters of the request.
 
         Returns:
             batch_create_results.TaskBatchCreateResult: The result of the operation.
@@ -2176,20 +2178,20 @@ class TolokaClient:
                 * Validation errors found while the `skip_invalid_items` parameter was `False`.
 
         Example:
-            The first example shows how to create regular tasks using a TSV file.
+            The first example shows how to create tasks using a TSV file.
 
-            >>> dataset = pandas.read_csv('dataset.tsv', sep='\t')
+            >>> dataset = pandas.read_csv('dataset.tsv', sep=';')
             >>> tasks = [
             >>>     toloka.client.Task(input_values={'image': url}, pool_id=existing_pool_id)
             >>>     for url in dataset['image'].values[:50]
             >>> ]
-            >>> created_result = toloka_client.create_tasks(tasks, allow_defaults=True)
-            >>> print(len(created_result.items))
+            >>> result = toloka_client.create_tasks(tasks, allow_defaults=True)
+            >>> print(len(result.items))
             ...
 
-            The second example shows how to create control tasks.
+            The second example shows how to add control tasks.
 
-            >>> dataset = pandas.read_csv('dateset.tsv', sep=';')
+            >>> dataset = pandas.read_csv('labeled_dataset.tsv', sep=';')
             >>> golden_tasks = []
             >>> for _, row in dataset.iterrows():
             >>>     golden_tasks.append(
@@ -2199,8 +2201,8 @@ class TolokaClient:
             >>>             pool_id = existing_pool_id,
             >>>         )
             >>>     )
-            >>> created_result = toloka_client.create_tasks(golden_tasks, allow_defaults=True)
-            >>> print(len(created_result.items))
+            >>> result = toloka_client.create_tasks(golden_tasks, allow_defaults=True)
+            >>> print(len(result.items))
             ...
         """
         if not parameters:
@@ -2227,7 +2229,7 @@ class TolokaClient:
 
         Args:
             tasks: A list of tasks to be created.
-            parameters: Additional parameters of the request. Default: `None`.
+            parameters: Additional parameters of the request.
 
         Returns:
             TasksCreateOperation: An object to track the progress of the operation.

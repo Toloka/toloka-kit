@@ -33,6 +33,8 @@ class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
         mixed: [The way of grouping tasks](https://toloka.ai/en/docs/guide/concepts/distribute-tasks-by-pages) to create the task suite.
             * True — The tasks are mixed automatically using the smart mixing approach.
             * False — The tasks are grouped manually.
+
+            Default value: `False`.
         traits_all_of: The task suite can be assigned to Tolokers who have all of the specified traits.
         traits_any_of: The task suite can be assigned to Tolokers who have any of the specified traits.
         traits_none_of_any: The task suite can not be assigned to Tolokers who have any of the specified traits.
@@ -81,13 +83,19 @@ class TaskSuiteCreateRequestParameters(Parameters):
         skip_invalid_items: Task suite validation option:
             * True — All valid task suites are added. If a task suite does not pass validation, then it is not added to Toloka.
             * False — If any task suite does not pass validation, then operation is cancelled and no task suites are added to Toloka.
+
+            Default value: `False`.
         allow_defaults: Active overlap setting:
             * True — Use the overlap that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
             * False — Use the overlap that is set in the `overlap` task suite parameter.
+
+            Default value: `False`.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
         async_mode: Request processing mode:
             * True — Asynchronous operation is started internally.
             * False — The request is processed synchronously. A maximum of 5000 task suites can be added in a single request in this mode.
+
+            Default value: `True`.
     """
 
     operation_id: UUID
@@ -113,8 +121,10 @@ class TaskSuitePatch(InfiniteOverlapParametersMixin, BaseTolokaObject):
     Attributes:
         issuing_order_override: The priority of a task suite.
             It influences the order of assigning task suites to Tolokers in pools with the `issue_task_suites_in_creation_order` parameter set to `True`.
-            Allowed range: from -99999.99999 to 99999.99999.
+            Allowed range: from -99999.99999 to 99999.99999. Default value: 0.
         open_pool: Open the pool immediately after changing a task suite, if the pool is closed.
+
+            Default value: `False`.
     """
 
     issuing_order_override: float
