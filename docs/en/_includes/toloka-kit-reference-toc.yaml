@@ -1,6 +1,8 @@
 items:
 - name: toloka.client
   items:
+  - name: TolokaClient
+    href: ../toloka-kit/reference/toloka.client.TolokaClient.md
   - name: Environment
     href: ../toloka-kit/reference/toloka.client.TolokaClient.Environment.md
     hidden: true
@@ -2269,6 +2271,12 @@ items:
       hidden: true
     - name: Pipeline.run
       href: ../toloka-kit/reference/toloka.streaming.pipeline.Pipeline.run.md
+      hidden: true
+    - name: Pipeline.run_manually
+      href: ../toloka-kit/reference/toloka.streaming.pipeline.Pipeline.run_manually.md
+      hidden: true
+    - name: IterationMode
+      href: ../toloka-kit/reference/toloka.streaming.pipeline.IterationMode.md
       hidden: true
   - name: storage
     hidden: true

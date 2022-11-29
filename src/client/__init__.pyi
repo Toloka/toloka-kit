@@ -182,7 +182,7 @@ from toloka.client.user_skill import (
 
 
 class TolokaClient:
-    """Class that implements interaction with [Toloka API](https://toloka.ai/docs/api/concepts/about.html).
+    """Class that implements interaction with [Toloka API](https://toloka.ai/en/docs/api/).
 
     Objects of other classes are created and modified only in memory of your computer.
     You can transfer information about these objects to Toloka only by calling one of the `TolokaClient` methods.
@@ -194,7 +194,7 @@ class TolokaClient:
     Call `TolokaClient.update_project` and pass the `Project` to apply your changes.
 
     Args:
-        token: Your OAuth token for Toloka. You can learn more about how to get it [here](https://toloka.ai/docs/api/concepts/access.html#access__token)
+        token: Your OAuth token for Toloka. You can learn more about how to get it [here](https://toloka.ai/en/docs/api/concepts/access#token)
         environment: There are two environments in Toloka:
             * `SANDBOX` – [Testing environment](https://sandbox.toloka.dev) for Toloka requesters.
             You can test complex projects before assigning tasks to Tolokers. Nobody will see your tasks, and it's free.
@@ -232,7 +232,7 @@ class TolokaClient:
             Fully specified retry policy that will apply to all requests.
             Default value: `None`.
         act_under_account_id: ID of the requester that has been shared access with the current token owner account.
-            All requests will be made using a specified account. See [Shared access to the requester's account](https://toloka.ai/docs/guide/concepts/multiple-access.html?lang=en)
+            All requests will be made using a specified account. See [Shared access to the requester's account](https://toloka.ai/en/docs/guide/concepts/multiple-access)
             documentation page. ID of the requester can be retrieved using the [get_requester](toloka.client.TolokaClient.get_requester.md)
             method (this method should be called by the account owner using account's token).
 

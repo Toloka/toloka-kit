@@ -12,7 +12,13 @@ import toloka.util._extendable_enum
 
 
 class CompareOperator(toloka.util._extendable_enum.ExtendableStrEnum):
-    """An enumeration.
+    """Supports comparison operators:
+    * `==`
+    * `!=`
+    * `>`
+    * `>=`
+    * `<`
+    * `<=`
     """
 
     EQ = 'EQ'
@@ -24,7 +30,7 @@ class CompareOperator(toloka.util._extendable_enum.ExtendableStrEnum):
 
 
 class InclusionOperator(toloka.util._extendable_enum.ExtendableStrEnum):
-    """An enumeration.
+    """Supports the `include()` and `exclude()` methods in filter conditions.
     """
 
     IN = 'IN'
@@ -32,7 +38,7 @@ class InclusionOperator(toloka.util._extendable_enum.ExtendableStrEnum):
 
 
 class IdentityOperator(toloka.util._extendable_enum.ExtendableStrEnum):
-    """An enumeration.
+    """Supports the `==` and `!=` operators.
     """
 
     EQ = 'EQ'
