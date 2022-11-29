@@ -17,7 +17,9 @@ class Training(BaseTolokaObject):
     - To train Tolokers so they solve general tasks better.
     - To select Tolokers who successfully completed training tasks.
 
-    To link a trining pool to a general pool setup the [Pool](toloka.client.pool.Pool.md).[quality_control](toloka.client.quality_control.QualityControl.md).[training_requirement](toloka.client.quality_control.QualityControl.TrainingRequirement.md) parameter.
+    To link a trining pool to a general pool setup the
+    [Pool](toloka.client.pool.Pool.md).[quality_control](toloka.client.quality_control.QualityControl.md).[training_requirement](toloka.client.quality_control.QualityControl.TrainingRequirement.md)
+    parameter.
 
     For more information, see [Adding a training](https://toloka.ai/en/docs/guide/concepts/train).
 
