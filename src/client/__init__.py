@@ -1696,8 +1696,8 @@ class TolokaClient:
             Training: The training with updated status.
 
         Example:
-            >>> open_training = next(toloka_client.get_trainings(status='OPEN'))
-            >>> toloka_client.close_training(training_id=open_training.id)
+            >>> opened_training = next(toloka_client.get_trainings(status='OPEN'))
+            >>> toloka_client.close_training(training_id=opened_training.id)
             ...
         """
         operation = self.close_training_async(training_id)
@@ -1708,7 +1708,7 @@ class TolokaClient:
 
     @add_headers('client')
     def close_training_async(self, training_id: str) -> Optional[operations.TrainingCloseOperation]:
-        """Closes a training pool.
+        """Closes a training pool. Sends an asynchronous request to Toloka.
 
         Tasks from closed pools are not assigned to Tolokers.
 
@@ -1764,7 +1764,7 @@ class TolokaClient:
         The new training is attached to the same project.
 
         Args:
-            training_id: The ID of a training to be cloned.
+            training_id: The ID of the training to be cloned.
 
         Returns:
             TrainingCloneOperation: An object to track the progress of the operation.
@@ -1911,7 +1911,7 @@ class TolokaClient:
             Training: The training with updated status.
 
         Example:
-            Opening the training.
+            Opening a training.
 
             >>> toloka_client.open_training(training_id='1')
             ...
@@ -1924,7 +1924,7 @@ class TolokaClient:
 
     @add_headers('client')
     def open_training_async(self, training_id: str) -> Optional[operations.TrainingOpenOperation]:
-        """opens a training pool. Sends an asynchronous request to Toloka.
+        """Opens a training pool. Sends an asynchronous request to Toloka.
 
         Tasks from opened pools can be assigned to Tolokers.
 
