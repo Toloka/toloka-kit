@@ -82,6 +82,7 @@ import attr
 import httpx
 import simplejson
 from httpx import HTTPStatusError, ReadError, RequestError
+from httpx._transports.default import map_httpcore_exceptions
 
 try:
     import pandas as pd
@@ -330,8 +331,9 @@ class TolokaClient:
     def _do_request_with_retries(self, method, path, **kwargs):
         @self.retrying.wraps
         def wrapped(method, path, **kwargs):
-            response = self._session.request(method, path, **kwargs)
-            raise_on_api_error(response)
+            with map_httpcore_exceptions():
+                response = self._session.request(method, path, **kwargs)
+                raise_on_api_error(response)
             return response
 
         return wrapped(method, path, **kwargs)
