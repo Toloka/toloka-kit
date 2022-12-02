@@ -1,6 +1,8 @@
 items:
 - name: toloka.client
   items:
+  - name: TolokaClient
+    href: ../toloka-kit/reference/toloka.client.TolokaClient.md
   - name: Environment
     href: ../toloka-kit/reference/toloka.client.TolokaClient.Environment.md
     hidden: true
