@@ -2655,9 +2655,9 @@ items:
   - name: get_task_traceback
     href: ../toloka-kit/reference/toloka.util.async_utils.get_task_traceback.md
   - name: AsyncGenAdapter
-    href: toloka.util.async_utils.AsyncGenAdapter.md
+    href: ../toloka-kit/reference/toloka.util.async_utils.AsyncGenAdapter.md
   - name: AsyncGenAdapter.as_sync_gen
-    href: toloka.util.async_utils.AsyncGenAdapter.as_sync_gen.md
+    href: ../toloka-kit/reference/toloka.util.async_utils.AsyncGenAdapter.as_sync_gen.md
     hidden: true
   - name: get_signature
     href: ../toloka-kit/reference/toloka.util.get_signature.md
