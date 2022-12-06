@@ -12,7 +12,7 @@ def test_socket_timeout_is_retried(timeout_server_url, fake_requester, retries_b
         url=timeout_server_url,
         retries=Retry(retries_before_response, backoff_factor=0),
         retry_quotas=None,
-        timeout=0.1
+        timeout=0.3
     )
 
     assert toloka_client.get_requester() == fake_requester
