@@ -12,7 +12,6 @@ from decimal import Decimal
 import attr
 import httpx
 from httpx import HTTPStatusError, ReadError, RequestError
-from httpx._transports.default import map_httpcore_exceptions
 
 from ..client import TolokaClient
 from ..client.exceptions import (
@@ -81,10 +80,9 @@ class AsyncTolokaClient:
     async def _do_request_with_retries(self, method, path, **kwargs):
         @self.retrying.wraps
         async def wrapped(method, path, **kwargs):
-            with map_httpcore_exceptions():
-                response = await self._session.request(method, path, **kwargs)
-                await response.aread()
-                raise_on_api_error(response)
+            response = await self._session.request(method, path, **kwargs)
+            await response.aread()
+            raise_on_api_error(response)
             return response
 
         return await wrapped(method, path, **kwargs)
