@@ -24,6 +24,12 @@ class AsyncTolokaClient:
     def __getattr__(self, name):
         return getattr(self._async_wrapped_client, name)
 
+    def __getstate__(self):
+        return self.__dict__
+
+    def __setstate__(self, state):
+        self.__dict__ = state
+
     @property
     def sync_client(self) -> TolokaClient:
         return self._async_wrapped_client.__wrapped__
