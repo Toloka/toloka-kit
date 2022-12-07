@@ -2523,6 +2523,7 @@ class AsyncTolokaClient:
         """Creates several tasks in Toloka using a single request.
 
         Tasks can be added to different pools. You can add together regular tasks and control tasks.
+        Pool(s) should be ready for new tasks. It includes configured mixer config.
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
 
         By default, `create_tasks` starts asynchronous operation internally and waits for the completion of it. Do not
@@ -2585,6 +2586,7 @@ class AsyncTolokaClient:
         """Creates several tasks in Toloka using a single request.
 
         Tasks can be added to different pools. You can add together regular tasks and control tasks.
+        Pool(s) should be ready for new tasks. It includes configured mixer config.
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
 
         By default, `create_tasks` starts asynchronous operation internally and waits for the completion of it. Do not

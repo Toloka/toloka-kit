@@ -19,6 +19,12 @@ class _Worker:
         should_resume: Current observer's should_resume state.
     """
 
+    async def __call__(self) -> None: ...
+
+    def __hash__(self) -> int: ...
+
+    def __eq__(self, other) -> bool: ...
+
     def __init__(
         self,
         name: str,

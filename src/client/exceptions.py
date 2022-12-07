@@ -18,8 +18,7 @@ import json
 from typing import Any, List, Optional
 
 import attr
-import httpx
-from httpx import HTTPStatusError
+from httpx import HTTPStatusError, Response as HTTPXResponse
 
 from .error_codes import CommonErrorCodes, InternalErrorCodes
 from ..util._docstrings import inherit_docstrings
@@ -155,7 +154,7 @@ _ERROR_MAP = {
 }
 
 
-def raise_on_api_error(response: httpx.Response):
+def raise_on_api_error(response: HTTPXResponse):
     if 200 <= response.status_code < 300:
         return
 

@@ -51,7 +51,9 @@ class _Worker:
     def __hash__(self) -> int:
         return hash(self.name)
 
-    def __eq__(self, other: '_Worker') -> bool:
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, _Worker):
+            return False
         return self.name == other.name
 
     @classmethod

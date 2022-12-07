@@ -11,11 +11,9 @@ from decimal import Decimal
 
 import attr
 import httpx
-from httpx import HTTPStatusError, ReadError, RequestError
 
 from ..client import TolokaClient
 from ..client.exceptions import (
-    InternalApiError, RemoteServiceUnavailableApiError, TooManyRequestsApiError,
     raise_on_api_error,
 )
 from ..client.operations import Operation
@@ -42,10 +40,7 @@ class AsyncTolokaClient:
         self._sync_client = TolokaClient(*args, **kwargs)
         self.retrying = AsyncRetryingOverURLLibRetry(
             base_url=str(self._session.base_url), retry=self._sync_client.retryer_factory(), reraise=True,
-            exception_to_retry=(
-                RequestError, InternalApiError, TooManyRequestsApiError, RemoteServiceUnavailableApiError,
-                HTTPStatusError, ReadError,
-            )
+            exception_to_retry=self.EXCEPTIONS_TO_RETRY,
         )
 
     def __getattr__(self, name):

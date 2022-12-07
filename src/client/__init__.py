@@ -81,7 +81,7 @@ import uuid
 import attr
 import httpx
 import simplejson
-from httpx import HTTPStatusError, ReadError, RequestError
+from httpx import HTTPStatusError, RequestError
 
 try:
     import pandas as pd
@@ -93,7 +93,7 @@ from decimal import Decimal
 from enum import Enum, unique
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
-from typing import BinaryIO, Callable, Generator, List, Optional, Sequence, Tuple, Union
+from typing import BinaryIO, Callable, ClassVar, Generator, List, Optional, Sequence, Tuple, Union
 from urllib3.util.retry import Retry
 
 from . import actions
@@ -248,6 +248,10 @@ class TolokaClient:
             if self is TolokaClient.Environment.SANDBOX:
                 return 'https://sandbox.toloka.yandex.com'
 
+    EXCEPTIONS_TO_RETRY: ClassVar[Tuple[Exception]] = (
+        RequestError, InternalApiError, TooManyRequestsApiError, RemoteServiceUnavailableApiError, HTTPStatusError,
+    )
+
     token: str
     default_timeout: Union[float, Tuple[float, float]]
     _platform_url: Optional[str]
@@ -297,10 +301,7 @@ class TolokaClient:
 
         self.retrying = SyncRetryingOverURLLibRetry(
             base_url=str(self._session.base_url), retry=self.retryer_factory(), reraise=True,
-            exception_to_retry=(
-                RequestError, InternalApiError, TooManyRequestsApiError, RemoteServiceUnavailableApiError,
-                HTTPStatusError, ReadError,
-            )
+            exception_to_retry=self.EXCEPTIONS_TO_RETRY,
         )
 
     @staticmethod
