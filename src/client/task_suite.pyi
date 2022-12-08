@@ -14,34 +14,34 @@ import uuid
 
 
 class TaskSuite(toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin, toloka.client.primitives.base.BaseTolokaObject):
-    """A set of tasks issued to the Toloker at a time
+    """A set of tasks assigned to a Toloker at once.
 
-    TaskSuite can contain one or more tasks. The execution price is charged for one TaskSuite.
-    Tolokers receive exactly one TaskSuite when they take on your task.
+    A task suite contains one or more tasks. Tolokers are paid after completing all tasks in a task suite.
 
     Attributes:
-        pool_id: The ID of the pool that task suite are uploaded to.
-        tasks: Data for the tasks.
-        reserved_for: IDs of Tolokers who will have access to the task suite.
-        unavailable_for: IDs of Tolokers who shouldn't have access to the task suite.
-        issuing_order_override: The priority of a task suite among other sets in the pool. Defines the order in which
-            task suites are assigned to Tolokers. The larger the parameter value, the higher the priority.
-            This parameter can be used if the pool has issue_task_suites_in_creation_order: true.
-            Allowed values: from -99999.99999 to 99999.99999.
-        mixed: Type of operation for creating a task suite:
-            * True - Automatically with the "smart mixing" option (for details, see Toloka requester's guide).
-            * False - Manually.
-        traits_all_of:
-        traits_any_of:
-        traits_none_of_any:
+        pool_id: The ID of a pool that the task suite belongs to.
+        tasks: The tasks.
+        reserved_for: IDs of Tolokers who have access to the task suite.
+        unavailable_for: IDs of Tolokers who don't have access to the task suite.
+        issuing_order_override: The priority of a task suite.
+            It influences the order of assigning task suites to Tolokers in pools with the `issue_task_suites_in_creation_order` parameter set to `True`.
+            Allowed range: from -99999.99999 to 99999.99999.
+        mixed: [The way of grouping tasks](https://toloka.ai/en/docs/guide/concepts/distribute-tasks-by-pages) to create the task suite.
+            * True — The tasks are mixed automatically using the smart mixing approach.
+            * False — The tasks are grouped manually.
+
+            Default value: `False`.
+        traits_all_of: The task suite can be assigned to Tolokers who have all of the specified traits.
+        traits_any_of: The task suite can be assigned to Tolokers who have any of the specified traits.
+        traits_none_of_any: The task suite can not be assigned to Tolokers who have any of the specified traits.
         longitude: The longitude of the point on the map for the task suite.
         latitude: The latitude of the point on the map for the task suite.
-        id: ID of a task suite. Read only field.
-        remaining_overlap: How many times will this Task Suite be issued to Tolokers. Read only field.
-        automerged: The task suite flag is created after task merging. Read Only field. Value:
-            * True - The task suite is generated as a result of merging identical tasks.
-            * False - A standard task suite created by "smart mixing" or by the requester.
-        created: The UTC date and time when the task suite was created. Read Only field.
+        id: The ID of the task suite. This parameter is read only.
+        remaining_overlap: The number of times left for this task suite to be assigned to Tolokers. This parameter is read only.
+        automerged:
+            * True — The task suite was created after [merging tasks](https://toloka.ai/en/docs/api/concepts/tasks#task-merge).
+            * False — There are no merged tasks in the task suite.
+        created: The UTC date and time when the task suite was created. This parameter is read only.
     """
 
     @typing.overload
@@ -102,23 +102,26 @@ class TaskSuite(toloka.client.primitives.infinite_overlap.InfiniteOverlapParamet
 
 
 class TaskSuiteCreateRequestParameters(toloka.client.primitives.parameter.Parameters):
-    """Parameters for TaskSuite creation controlling
+    """Parameters for creating task suites.
 
     Attributes:
-        operation_id: Operation ID for asynchronous loading of task suites.
-        skip_invalid_items: Validation parameters:
-            * True - Create the task suites that passed validation. Skip the rest of the task suites.
-            * False - If at least one of the task suites didn't pass validation, stop the operation and
-                don't create the task suites.
-        allow_defaults: Overlap settings:
-            * True - Use the overlap that is set in the pool parameters.
-            * False - Use the overlap that is set in the task suite parameters (in the `overlap` field).
+        operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122). Use it if the `async_mode` is set to `True`.
+        skip_invalid_items: Task suite validation option:
+            * True — All valid task suites are added. If a task suite does not pass validation, then it is not added to Toloka.
+            * False — If any task suite does not pass validation, then operation is cancelled and no task suites are added to Toloka.
+
+            Default value: `False`.
+        allow_defaults: Active overlap setting:
+            * True — Use the overlap that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
+            * False — Use the overlap that is set in the `overlap` task suite parameter.
+
+            Default value: `False`.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
-        async_mode: How the request is processed:
-            * True — deferred. The query results in an asynchronous operation running in the background.
-                Answer contains information about the operation (start and end time, status, number of sets).
-            * False — synchronous. Answer contains information about the generated sets of tasks.
-                You can send a maximum of 5000 task sets in a single request.
+        async_mode: Request processing mode:
+            * True — Asynchronous operation is started internally.
+            * False — The request is processed synchronously. A maximum of 5000 task suites can be added in a single request in this mode.
+
+            Default value: `True`.
     """
 
     def __init__(
@@ -143,7 +146,10 @@ class TaskSuiteCreateRequestParameters(toloka.client.primitives.parameter.Parame
 
 
 class TaskSuiteOverlapPatch(toloka.client.primitives.base.BaseTolokaObject):
-    """Parameters to stop issuing a specific TaskSuite
+    """Parameters for stopping assigning a task suite.
+
+    Attributes:
+        overlap: The new overlap value.
     """
 
     def __init__(self, *, overlap: typing.Optional[int] = None) -> None:
@@ -156,14 +162,15 @@ class TaskSuiteOverlapPatch(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class TaskSuitePatch(toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin, toloka.client.primitives.base.BaseTolokaObject):
-    """Parameters for changing specific TaskSuite
+    """Parameters for changing a task suite.
 
     Attributes:
-        issuing_order_override: The priority of a task suite among other sets in the pool. Defines the order in which
-            task suites are assigned to Tolokers. The larger the parameter value, the higher the priority.
-            This parameter can be used if the pool has issue_task_suites_in_creation_order: true.
-            Allowed values: from -99999.99999 to 99999.99999.
+        issuing_order_override: The priority of a task suite.
+            It influences the order of assigning task suites to Tolokers in pools with the `issue_task_suites_in_creation_order` parameter set to `True`.
+            Allowed range: from -99999.99999 to 99999.99999. Default value: 0.
         open_pool: Open the pool immediately after changing a task suite, if the pool is closed.
+
+            Default value: `False`.
     """
 
     def __init__(
