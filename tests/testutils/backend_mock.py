@@ -5,6 +5,7 @@ import operator
 from typing import Any, Callable, Dict, List, Optional
 from urllib.parse import urlparse, parse_qs
 
+import httpx
 from toloka.client import unstructure
 
 logger = logging.getLogger(__name__)
@@ -58,20 +59,22 @@ class BackendSearchMock:
     limit: Optional[int] = attr.ib(default=None)
     responses: List[Dict[str, Any]] = attr.ib(factory=list, init=False)
 
-    def __call__(self, request: object, _: object) -> Dict[str, Any]:
-        params: Dict[str, List[str]] = parse_qs(urlparse(request.url).query)
+    def __call__(self, request: httpx.Request) -> httpx.Response:
+        params = request.url.params
         logger.info('Making request with params: %s', params)
 
-        sort: List[str] = params.pop('sort', [])
-        limit: int = params.pop('limit', [self.limit])[0]
+        sort: List[str] = params.get_list('sort')
+        params = params.remove('sort')
+        limit: int = int(params.get('limit', str(self.limit)))
+        params = params.remove('limit')
 
         conditions_exact = []
         conditions_interval = []
-        for param, value in params.items():
+        for param in params:
             try:
-                conditions_interval.append(ConditionInterval(param, value))
+                conditions_interval.append(ConditionInterval(param, params.get_list(param)))
             except Exception:
-                conditions_exact.append(ConditionExact(param, value))
+                conditions_exact.append(ConditionExact(param, params.get_list(param)))
 
         items = unstructure(list(self.storage))
         for field in reversed(sort):
@@ -89,4 +92,4 @@ class BackendSearchMock:
         logger.info('Response: %s', response)
         self.responses.append(response)
 
-        return response
+        return httpx.Response(json=response, status_code=200)

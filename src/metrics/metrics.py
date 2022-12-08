@@ -27,7 +27,7 @@ from ..client import (
     Requester,
     TolokaClient,
 )
-from ..util._managing_headers import async_add_headers
+from ..util._managing_headers import add_headers
 from ..util.async_utils import Cooldown
 from ..streaming import cursor
 from ..streaming.cursor import TolokaClientSyncOrAsyncType
@@ -96,7 +96,7 @@ class BaseMetric:
             self.toloka_client = toloka_client.sync_client
             self.atoloka_client = toloka_client
 
-    @async_add_headers('metrics')
+    @add_headers('metrics')
     async def get_lines(self) -> Dict[str, List[Tuple[Any, Any]]]:
         """Gather and return metrics
 

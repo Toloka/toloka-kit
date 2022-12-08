@@ -1,7 +1,6 @@
+import httpx
 import pytest
-import requests
-import requests_mock
-
+import respx
 from .backend_mock import BackendSearchMock
 
 
@@ -52,25 +51,25 @@ def mock_items():
 )
 def test_backend_search_mock(mock_items, params, expected):
     backend_mock = BackendSearchMock(mock_items, limit=2)
-    with requests_mock.Mocker(real_http=False) as http_mocker:
-        http_mocker.get(SOME_URL, json=backend_mock)
-        response_json = requests.get(SOME_URL, params=params).json()
+    with respx.mock:
+        respx.get(SOME_URL).mock(side_effect=backend_mock)
+        response_json = httpx.get(SOME_URL, params=params).json()
         assert expected == response_json, response_json
         assert [expected] == backend_mock.responses
 
 
-def test_backend_search_mock_change_storage(mock_items):
+def test_backend_search_mock_change_storage(respx_mock, mock_items):
     backend_mock = BackendSearchMock(mock_items, limit=2)
-    with requests_mock.Mocker(real_http=False) as http_mocker:
-        http_mocker.get(SOME_URL, json=backend_mock)
+    with respx.mock:
+        respx.get(SOME_URL).mock(side_effect=backend_mock)
 
-        response_json = requests.get(SOME_URL, params={'sort': ['created'], 'created_gte': '004'}).json()
+        response_json = httpx.get(SOME_URL, params={'sort': ['created'], 'created_gte': '004'}).json()
         assert {'items': [{'pool_id': '2', 'id': 'E', 'created': '004'}],
                 'has_more': False} == response_json, response_json
 
         backend_mock.storage.append({'pool_id': '2', 'id': 'D', 'created': '005'})
 
-        response_json = requests.get(SOME_URL, params={'sort': ['created'], 'created_gte': '004'}).json()
+        response_json = httpx.get(SOME_URL, params={'sort': ['created'], 'created_gte': '004'}).json()
         assert {'items': [{'pool_id': '2', 'id': 'E', 'created': '004'},
                           {'pool_id': '2', 'id': 'D', 'created': '005'}],
                 'has_more': False} == response_json, response_json

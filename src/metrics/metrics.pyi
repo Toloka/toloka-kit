@@ -46,6 +46,8 @@ class BaseMetric:
     Stores TolokaClient instance for this metric.
     """
 
+    def __attrs_post_init__(self): ...
+
     def set_client(self, toloka_client: typing.Union[toloka.client.TolokaClient, toloka.async_client.client.AsyncTolokaClient]):
         """Sets both TolokaClient and AsyncTolokaClient for the object.
 
