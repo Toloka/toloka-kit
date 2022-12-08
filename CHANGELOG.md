@@ -1,3 +1,30 @@
+1.1.0
+-------------------
+Features:
+* `AsyncTolokaClient` rework. Previously `AsyncTolokaClient` was a simple wrapper over `TolokaClient` that provided asynchrony via threading. This lead to poor performance and instability in the case of many concurrent connections. With the current release, `AsyncTolokaClient` is implemented with native python async code and `httpx` async networking provider internally, fixing all the above problems.
+
+Deprecated:
+* All `AsyncTolokaClient` methods returning generators now return async generators. Currently, the old (synchronous) iteration syntax is still supported via an adapter, but we encourage you to switch to the new (asynchronous) one.
+Example:
+```python
+async_toloka_client = AsyncTolokaClient(...)
+
+# deprecated syntax, support will be dropped in the feature
+for assignment in await async_toloka_client.get_assignments(...):
+    ...
+
+# recommended syntax
+async for assignment in async_toloka_client.get_assignments(...):
+    ...
+```
+
+
+Changes:
+* Toloka-Kit now internally uses `httpx` library instead of `requests`.
+
+Bug fixes:
+* `TolokaClient.create_task_suites` now returns response of the correct type.
+
 1.0.2
 -------------------
 Features:
