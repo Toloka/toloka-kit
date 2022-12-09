@@ -22,6 +22,7 @@ UNDOCUMENTED_COMPONENTS = {
     'field.multi-select',
     'helper.length',
     'helper.sum',
+    'helper.multiply',
     'view.debug',
     'view.hint',
     'view.json',
