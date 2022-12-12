@@ -382,6 +382,7 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
         'ES': '32346',
         'FR': '26711',
         'HE': '44954',
+        'HU': '54378',
         'ID': '39821',
         'JA': '26513',
         'PT': '26714',

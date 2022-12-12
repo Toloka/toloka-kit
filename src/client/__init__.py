@@ -364,6 +364,7 @@ class TolokaClient:
         json_param = prepared_kwargs.pop('json', None)
         if json_param:
             prepared_kwargs['content'] = simplejson.dumps(json_param)
+            headers['Content-Type'] = 'application/json'
         return prepared_kwargs
 
     def _raw_request(self, method, path, **kwargs):
