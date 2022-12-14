@@ -11,13 +11,13 @@ from ..util._extendable_enum import ExtendableStrEnum
 
 @codegen_attr_attributes_setters
 class Training(BaseTolokaObject):
-    """A training pool.
+    """A training.
 
-    A training pool contains tasks with known solutions and hints for Tolokers. Use training pools:
+    A training is a pool containing tasks with known solutions and hints for Tolokers. Use trainings:
     - To train Tolokers so they solve general tasks better.
-    - To select for general pool Tolokers who successfully completed training tasks.
+    - To select Tolokers who successfully completed training tasks and to give them access to a general pool.
 
-    To link a trining pool to a general pool set the
+    To link a training to a general pool set the
     [Pool](toloka.client.pool.Pool.md).[quality_control](toloka.client.quality_control.QualityControl.md).[training_requirement](toloka.client.quality_control.QualityControl.TrainingRequirement.md)
     parameter.
 
@@ -25,7 +25,7 @@ class Training(BaseTolokaObject):
 
     Attributes:
         project_id: The ID of the project containing the training.
-        private_name: The training pool name. It is visible to the requester only.
+        private_name: The training name. It is visible to the requester only.
         may_contain_adult_content: The presence of adult content.
         assignment_max_duration_seconds: Time limit to complete a task suite.
             Take into account loading a page with a task suite and sending responses to the server. It is recommended that you set at least 60 seconds.
@@ -33,39 +33,39 @@ class Training(BaseTolokaObject):
             * True — Tasks are grouped in suites in the order they were created.
             * False — Tasks are chosen for a task suite in a random order.
 
-            Default: False.
+            Default: True.
         shuffle_tasks_in_task_suite:
             * True — Tasks from a task suite are shuffled on the page.
             * False — Tasks from a task suite are placed on the page in the order they were created.
 
-            Default: False.
-        training_tasks_in_task_suite_count: The number of training tasks in one suite.
+            Default: True.
+        training_tasks_in_task_suite_count: The number of training tasks in one task suite.
         task_suites_required_to_pass: The number of task suites that must be completed by a Toloker to get a training skill.
         retry_training_after_days: The training can be completed again after the specified number of days to update the training skill.
             If the parameter is not specified, then the training skill is issued for an unlimited time.
         inherited_instructions:
-            * True — Project instructions are used in the training pool.
+            * True — Project instructions are used in the training.
             * False — Instruction, specified in the `public_instructions` parameter, are used.
 
             Default: False.
         public_instructions: Instructions for Tolokers used when the `inherited_instructions` parameter is False. Describe in the instructions how to complete training tasks.
             You can use HTML markup inside `public_instructions`.
         metadata: A dictionary with metadata.
-        owner: A training pool owner.
-        id: The ID of the training pool. Read only.
-        status: A training pool status. Read only.
-        last_close_reason: A reason why the training pool was closed last time.
-        created: The UTC date and time when the training pool was created. Read only.
-        last_started: The UTC date and time when the training pool was started last time. Read only.
-        last_stopped: The UTC date and time when the training pool was stopped last time. Read only.
+        owner: A training owner.
+        id: The ID of the training. Read only.
+        status: A training status. Read only.
+        last_close_reason: A reason why the training was closed last time. Read only.
+        created: The UTC date and time when the training was created. Read only.
+        last_started: The UTC date and time when the training was started last time. Read only.
+        last_stopped: The UTC date and time when the training was stopped last time. Read only.
     """
 
     @unique
     class CloseReason(ExtendableStrEnum):
-        """A reason for closing a pool.
+        """A reason for closing a training.
 
         Attributes:
-            MANUAL: A pool was closed by a requester.
+            MANUAL: A training was closed by a requester.
             EXPIRED: The lifetime of the linked pool has expired.
             COMPLETED: All linked pool tasks were completed.
             NOT_ENOUGH_BALANCE: There is not enough money to run the linked pool.
@@ -82,13 +82,13 @@ class Training(BaseTolokaObject):
 
     @unique
     class Status(ExtendableStrEnum):
-        """The status of a training pool.
+        """The status of a training.
 
         Attributes:
-            OPEN: The training pool is open.
-            CLOSED: The training pool is closed.
-            ARCHIVED: The training pool is archived.
-            LOCKED: The training pool is locked.
+            OPEN: The training is open.
+            CLOSED: The training is closed.
+            ARCHIVED: The training is archived.
+            LOCKED: The training is locked.
         """
         OPEN = 'OPEN'
         CLOSED = 'CLOSED'

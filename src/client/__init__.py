@@ -1634,7 +1634,7 @@ class TolokaClient:
 
     @add_headers('client')
     def archive_training(self, training_id: str) -> Training:
-        """Archives a training pool.
+        """Archives a training.
 
         Only closed trainings can be archived.
 
@@ -1659,7 +1659,7 @@ class TolokaClient:
 
     @add_headers('client')
     def archive_training_async(self, training_id: str) -> Optional[operations.TrainingArchiveOperation]:
-        """Archives a training pool. Sends an asynchronous request to Toloka.
+        """Archives a training. Sends an asynchronous request to Toloka.
 
         Only closed trainings can be archived.
 
@@ -1685,9 +1685,9 @@ class TolokaClient:
 
     @add_headers('client')
     def close_training(self, training_id: str) -> Training:
-        """Closes a training pool.
+        """Closes a training.
 
-        Tasks from closed pools are not assigned to Tolokers.
+        Tasks from closed trainings are not assigned to Tolokers.
 
         Args:
             training_id: The ID of the training to be closed.
@@ -1708,9 +1708,9 @@ class TolokaClient:
 
     @add_headers('client')
     def close_training_async(self, training_id: str) -> Optional[operations.TrainingCloseOperation]:
-        """Closes a training pool. Sends an asynchronous request to Toloka.
+        """Closes a training. Sends an asynchronous request to Toloka.
 
-        Tasks from closed pools are not assigned to Tolokers.
+        Tasks from closed trainings are not assigned to Tolokers.
 
         Args:
             training_id: The ID of the training to be closed.
@@ -1732,7 +1732,7 @@ class TolokaClient:
 
     @add_headers('client')
     def clone_training(self, training_id: str) -> Training:
-        """Clones an existing training pool.
+        """Clones an existing training.
 
         An empty training with the same parameters is created.
         The new training is attached to the same project.
@@ -1758,7 +1758,7 @@ class TolokaClient:
 
     @add_headers('client')
     def clone_training_async(self, training_id: str) -> operations.TrainingCloneOperation:
-        """Clones an existing training pool. Sends an asynchronous request to Toloka.
+        """Clones an existing training. Sends an asynchronous request to Toloka.
 
         An empty training with the same parameters is created.
         The new training is attached to the same project.
@@ -1779,16 +1779,16 @@ class TolokaClient:
 
     @add_headers('client')
     def create_training(self, training: Training) -> Training:
-        """Creates a new training pool in Toloka.
+        """Creates a new training in Toloka.
 
         Args:
-            training: A training pool to be created.
+            training: A training to be created.
 
         Returns:
             Training: Created training with initialized read-only fields.
 
         Example:
-            Creating a new training pool.
+            Creating a new training.
 
             >>> new_training = toloka.client.Training(
             >>>     project_id='1',
@@ -1820,37 +1820,37 @@ class TolokaClient:
     def find_trainings(self, request: search_requests.TrainingSearchRequest,
                        sort: Union[List[str], search_requests.TrainingSortItems, None] = None,
                        limit: Optional[int] = None) -> search_results.TrainingSearchResult:
-        """Finds training pools that match certain criteria.
+        """Finds trainings that match certain criteria.
 
-        The number of returned pools is limited. To find remaining pools call `find_trainings` with updated search criteria.
+        The number of returned trainings is limited. To find remaining trainings call `find_trainings` with updated search criteria.
 
-        To iterate over all matching training pools you may use the [get_trainings](toloka.client.TolokaClient.get_trainings.md) method.
+        To iterate over all matching trainings you may use the [get_trainings](toloka.client.TolokaClient.get_trainings.md) method.
 
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned training pools limit. The maximum allowed limit is 300.
+            limit: Returned trainings limit. The maximum allowed limit is 300.
 
         Returns:
-           TrainingSearchResult: Found training pools and a flag showing whether there are more matching pools exceeding the limit.
+           TrainingSearchResult: Found trainings and a flag showing whether there are more matching trainings exceeding the limit.
 
         Examples:
-            Finding all training pools in all projects.
+            Finding all trainings in all projects.
 
-            >>> pools = toloka_client.find_trainings()
+            >>> trainings = toloka_client.find_trainings()
             ...
 
-            Finding all opened training pools in all projects.
+            Finding all opened trainings in all projects.
 
-            >>> pools = toloka_client.find_trainings(status='OPEN')
+            >>> trainings = toloka_client.find_trainings(status='OPEN')
             ...
 
-            Finding all opened training pools in a specific project.
+            Finding all opened trainings in a specific project.
 
-            >>> pools = toloka_client.find_trainings(status='OPEN', project_id='1')
+            >>> trainings = toloka_client.find_trainings(status='OPEN', project_id='1')
             ...
 
-            If there are pools exceeding the `limit`, then `pools.has_more` is set to `True`.
+            If there are trainings exceeding the `limit`, then `trainings.has_more` is set to `True`.
         """
         sort = None if sort is None else structure(sort, search_requests.TrainingSortItems)
         response = self._search_request('get', '/v1/trainings', request, sort, limit)
@@ -1858,13 +1858,13 @@ class TolokaClient:
 
     @add_headers('client')
     def get_training(self, training_id: str) -> Training:
-        """Gets information about a training pool from Toloka.
+        """Gets information about a training from Toloka.
 
         Args:
             training_id: The ID of the training.
 
         Returns:
-            Training: The training pool.
+            Training: The training.
 
         Example:
             >>> t = toloka_client.get_training(training_id='1')
@@ -1876,20 +1876,20 @@ class TolokaClient:
     @expand('request')
     @add_headers('client')
     def get_trainings(self, request: search_requests.TrainingSearchRequest) -> Generator[Training, None, None]:
-        """Finds all training pools that match certain criteria.
+        """Finds all trainings that match certain criteria.
 
-        `get_trainings` returns a generator. You can iterate over all found training pools using the generator. Several requests to the Toloka server are possible while iterating.
+        `get_trainings` returns a generator. You can iterate over all found trainings using the generator. Several requests to the Toloka server are possible while iterating.
 
-        If you need to sort training pools use the [find_trainings](toloka.client.TolokaClient.find_trainings.md) method.
+        If you need to sort trainings use the [find_trainings](toloka.client.TolokaClient.find_trainings.md) method.
 
         Args:
             request: Search criteria.
 
         Yields:
-            Training: The next matching training pool.
+            Training: The next matching training.
 
         Example:
-            Getting all training pools in a project.
+            Getting all trainings in a project.
 
             >>> trainings = toloka_client.get_trainings(project_id='1')
             ...
@@ -1900,9 +1900,9 @@ class TolokaClient:
 
     @add_headers('client')
     def open_training(self, training_id: str) -> Training:
-        """Opens a training pool.
+        """Opens a training.
 
-        Tasks from opened pools can be assigned to Tolokers.
+        Tasks from opened trainings can be assigned to Tolokers.
 
         Args:
             training_id: The ID of the training.
@@ -1924,19 +1924,19 @@ class TolokaClient:
 
     @add_headers('client')
     def open_training_async(self, training_id: str) -> Optional[operations.TrainingOpenOperation]:
-        """Opens a training pool. Sends an asynchronous request to Toloka.
+        """Opens a training. Sends an asynchronous request to Toloka.
 
-        Tasks from opened pools can be assigned to Tolokers.
+        Tasks from opened trainings can be assigned to Tolokers.
 
         Args:
             training_id: The ID of the training.
 
         Returns:
             TrainingOpenOperation: An object to track the progress of the operation.
-                If the training pool is already opened then `None` is returned.
+                If the training is already opened then `None` is returned.
 
         Example:
-            Opening a training pool.
+            Opening a training.
 
             >>> open_op = toloka_client.open_training_async(training_id='1')
             >>> toloka_client.wait_operation(open_op)
@@ -1950,17 +1950,17 @@ class TolokaClient:
 
     @add_headers('client')
     def update_training(self, training_id: str, training: Training) -> Training:
-        """Updates parameters of a training pool in Toloka.
+        """Updates parameters of a training in Toloka.
 
         Args:
             training_id: The ID of the training to be updated.
             training: A training object with new parameter values.
 
         Returns:
-            Training: The updated training pool.
+            Training: The updated training.
 
         Example:
-            The example shows how to set new time limit in a training pool.
+            The example shows how to set new time limit in a training.
 
             >>> updated_training = toloka_client.get_training(training_id='1')
             >>> updated_training.assignment_max_duration_seconds = 600
