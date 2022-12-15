@@ -33,12 +33,12 @@ class Training(BaseTolokaObject):
             * True — Tasks are grouped in suites in the order they were created.
             * False — Tasks are chosen for a task suite in a random order.
 
-            Default: True.
+            Default: `True`.
         shuffle_tasks_in_task_suite:
             * True — Tasks from a task suite are shuffled on the page.
             * False — Tasks from a task suite are placed on the page in the order they were created.
 
-            Default: True.
+            Default: `True`.
         training_tasks_in_task_suite_count: The number of training tasks in one task suite.
         task_suites_required_to_pass: The number of task suites that must be completed by a Toloker to get a training skill.
         retry_training_after_days: The training can be completed again after the specified number of days to update the training skill.
@@ -47,13 +47,13 @@ class Training(BaseTolokaObject):
             * True — Project instructions are used in the training.
             * False — Instruction, specified in the `public_instructions` parameter, are used.
 
-            Default: False.
+            Default: `False`.
         public_instructions: Instructions for Tolokers used when the `inherited_instructions` parameter is False. Describe in the instructions how to complete training tasks.
             You can use HTML markup inside `public_instructions`.
         metadata: A dictionary with metadata.
-        owner: A training owner.
+        owner: The training owner.
         id: The ID of the training. Read only.
-        status: A training status. Read only.
+        status: The training status. Read only.
         last_close_reason: A reason why the training was closed last time. Read only.
         created: The UTC date and time when the training was created. Read only.
         last_started: The UTC date and time when the training was started last time. Read only.
@@ -66,9 +66,7 @@ class Training(BaseTolokaObject):
 
         Attributes:
             MANUAL: A training was closed by a requester.
-            EXPIRED: The lifetime of the linked pool has expired.
             COMPLETED: All linked pool tasks were completed.
-            NOT_ENOUGH_BALANCE: There is not enough money to run the linked pool.
             ASSIGNMENTS_LIMIT_EXCEEDED: A limit of 2 millions assignments is reached.
             BLOCKED: The requester's account was blocked.
         """
@@ -88,7 +86,6 @@ class Training(BaseTolokaObject):
             OPEN: The training is open.
             CLOSED: The training is closed.
             ARCHIVED: The training is archived.
-            LOCKED: The training is locked.
         """
         OPEN = 'OPEN'
         CLOSED = 'CLOSED'
