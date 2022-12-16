@@ -37,6 +37,7 @@ class PoolAggregatedSolutionRequest(toloka.client.primitives.base.BaseTolokaObje
         pool_id: The ID of the pool.
         answer_weight_skill_id: The ID of the skill that determines the weight of the Toloker's responses.
         fields: Output data fields to aggregate. For the best results, each of these fields should have limited number of response options.
+            If the `DAWID_SKENE` aggregation type is selected, you can only specify one value.
     """
 
     class Field(toloka.client.primitives.base.BaseTolokaObject):
@@ -98,6 +99,7 @@ class WeightedDynamicOverlapTaskAggregatedSolutionRequest(TaskAggregatedSolution
         pool_id: The ID of the pool containing the task.
         answer_weight_skill_id: The ID of the skill that determines the weight of the Toloker's responses.
         fields: Output data fields to aggregate. For the best results, each of these fields should have limited number of response options.
+            If the `DAWID_SKENE` aggregation type is selected, you can only specify one value.
     """
 
     class Field(toloka.client.primitives.base.BaseTolokaObject):
