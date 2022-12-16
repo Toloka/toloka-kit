@@ -173,7 +173,7 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
     @classmethod
     def __init_subclass__(cls, spec_enum: Optional[Union[str, Type[E]]] = None,
                           spec_field: Optional[str] = None, spec_value=None):
-
+        super().__init_subclass__()
         # Completing a variant type
         if spec_value is not None:
             cls._variant_registry.register(cls, spec_value)
