@@ -37,7 +37,9 @@ from ...util._extendable_enum import ExtendableStrEnum
 class Pool(BaseTolokaObject):
     """A set of [tasks](toloka.client.task.Task.md) that share the same properties.
 
-    A pool consists of [task suites](toloka.client.task_suite.TaskSuite.md) that are sent out for completion at the same time. In the pool properties, you set the task price, overlap, Toloker selection filters, quality control rules, and so on.
+    In the pool properties, you set the task price, overlap, Toloker selection filters, quality control rules, and so on.
+
+    Pool tasks are grouped into [task suites](toloka.client.task_suite.TaskSuite.md). Whole task suites are assigned to Tolokers.
 
     Learn more in the Requester's guide about:
     * [Pools](https://toloka.ai/en/docs/guide/concepts/pool-main)
@@ -45,41 +47,37 @@ class Pool(BaseTolokaObject):
 
     Attributes:
         project_id: The ID of the project containing the pool.
-        private_name: The training pool name. It is visible to the requester and is not visible to Tolokers.
+        private_name: The pool name. It is visible to the requester and is not visible to Tolokers.
         may_contain_adult_content: The presence of adult content.
-        reward_per_assignment: Payment per task suite in US dollars. For cents, use the dot as a separator.
-            If the pool `type` is `REGULAR`, the minimum price per task suite is $0.005. For other pool types, you can set the price to zero.
-        assignment_max_duration_seconds: Time limit to complete a task suite.
+        reward_per_assignment: Payment in US dollars for a Toloker for completing a task suite. For cents, use the dot as a separator.
+            If the pool `type` is `REGULAR`, the minimum payment per task suite is $0.005. For other pool types, you can set the `reward_per_assignment` to zero.
+        assignment_max_duration_seconds: Time limit to complete one task suite.
             Take into account loading a page with a task suite and sending responses to the server. It is recommended that you set at least 60 seconds.
             Tasks not completed within the limit are reassigned to other Tolokers.
-        defaults: Default settings that are applied to new task suites in the pool.
+        defaults: Default settings that are applied to new tasks in the pool.
         will_expire: The UTC date and time when the pool is closed automatically, even if not all tasks are completed.
         private_comment: A comment about the pool. It is visible to the requester and is not visible to Tolokers.
         public_description: The pool description. If pool's `public_description` is not set, then project's `public_description` is used.
         public_instructions: The pool instructions for Tolokers. If pool's `public_instructions` is not set, then project's `public_instructions` is used.
-        auto_close_after_complete_delay_seconds: The pool remains open after all tasks are completed during the specified number of seconds.
-            Allowed range: from 0 to 259200 seconds (3 days). The default value is 0.
+        auto_close_after_complete_delay_seconds: The pool remains open after all tasks are completed during the specified time in seconds.
 
             Use non zero value if:
             * You process data in real time.
             * The pool must stay open so that you can upload new tasks.
             * Dynamic overlap is enabled in the pool.
+
+            Allowed range: from 0 to 259200 seconds (3 days). The default value is 0.
         dynamic_pricing_config: The dynamic pricing settings.
         auto_accept_solutions:
             * True — Responses from Tolokers are accepted or rejected automatically based on some rules.
             * False — Responses are checked manually. Time reserved for checking is limited by the `auto_accept_period_day` parameter.
                 Learn more about [non-automatic acceptance](https://toloka.ai/en/docs/guide/concepts/offline-accept) in the Requester's guide.
-        auto_accept_period_day: The number of days reserved for checking responses if the `auto_accept_solutions` parameter is set to False.
+        auto_accept_period_day: The number of days reserved for checking responses if the `auto_accept_solutions` parameter is set to `False`.
         assignments_issuing_config: Settings for assigning tasks in the pool.
-        priority: The priority of the pool in relation to other pools in the project with the same task
-            price and set of filters. Tolokers are assigned tasks with a higher priority first.
-            Possible values: from -100 to 100.
-            If the project has multiple pools, the order for completing them depends on the parameters:
-            * Pools with identical filter settings and price per task are assigned to Tolokers in the order
-                in which they were started. The pool that was started earlier will be completed sooner.
-                You can change the order for completing the pools.
-            * Pools with different filter settings and/or a different price per task are sent out for completion
-                when the pool opens.
+        priority: The priority of the pool in relation to other pools in the project with the same task price and set of filters.
+            Tolokers are assigned tasks with a higher priority first.
+
+            Allowed range: from 0 to 100. The default value is 0.
         filter: Settings for Toloker selection filters.
         quality_control: Settings for quality control rules and the ID of the pool with training tasks.
         speed_quality_balance: Settings for choosing Tolokers for your tasks.
@@ -90,11 +88,11 @@ class Pool(BaseTolokaObject):
         owner: The pool owner.
         id: The ID of the pool. Read only.
         status: The status of the pool. Read only.
-        last_close_reason: A reason why the pool was closed last time.
+        last_close_reason: A reason why the pool was closed last time. Read only.
         created: The UTC date and time when the pool was created. Read only.
         last_started: The UTC date and time when the pool was started last time. Read only.
         last_stopped: The UTC date and time when the pool was stopped last time. Read only.
-        type: The type of the pool. Read only.
+        type: The type of the pool. Deprecated.
 
     Example:
         Creating a new pool.
@@ -122,7 +120,8 @@ class Pool(BaseTolokaObject):
             issue_task_suites_in_creation_order:
                 Task suites are assigned in the order in which they were created.
 
-                This parameter is used when tasks are [grouped into suites](https://toloka.ai/en/docs/guide/concepts/distribute-tasks-by-pages) manually and the `assignments_issuing_type` project parameter is set to `AUTOMATED`.
+                This parameter is used when tasks are [grouped into suites](https://toloka.ai/en/docs/guide/concepts/distribute-tasks-by-pages)
+                manually and the `assignments_issuing_type` project parameter is set to `AUTOMATED`.
         """
 
         issue_task_suites_in_creation_order: bool
@@ -133,11 +132,12 @@ class Pool(BaseTolokaObject):
 
         Attributes:
             MANUAL: A pool was closed by a requester.
-            EXPIRED: The lifetime of the pool has expired.
+            EXPIRED: The lifetime of the pool expired.
             COMPLETED: All tasks were completed.
             NOT_ENOUGH_BALANCE: There is not enough money to run the pool.
             ASSIGNMENTS_LIMIT_EXCEEDED: A limit of 2 millions assignments is reached.
             BLOCKED: The requester's account was blocked.
+            FOR_UPDATE: Pool parameters are changing at the moment.
         """
 
         MANUAL = 'MANUAL'
@@ -149,7 +149,7 @@ class Pool(BaseTolokaObject):
         FOR_UPDATE = 'FOR_UPDATE'
 
     class Defaults(BaseTolokaObject):
-        """Default settings that are applied to new task suites in a pool.
+        """Default settings that are applied to new tasks and task suites in a pool.
 
            These settings are used when tasks or task suites are created with `allow_defaults=True`.
 

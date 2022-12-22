@@ -1226,7 +1226,8 @@ class TolokaClient:
 
         Only closed pools can be archived.
 
-        You can access archived pools later.
+        You can access archived pools later, if you need.
+        But you can't open archived pools.
 
         Args:
             pool_id: The ID of the pool to be archived.
@@ -1251,7 +1252,8 @@ class TolokaClient:
 
         Only closed pools can be archived.
 
-        You can access archived pools later.
+        You can access archived pools later, if you need.
+        But you can't open archived pools.
 
         Args:
             pool_id: The ID of the pool to be archived.
@@ -1321,7 +1323,7 @@ class TolokaClient:
 
     @add_headers('client')
     def close_pool_for_update(self, pool_id: str) -> Pool:
-        """Closes a pool that is updating.
+        """Closes a pool that is to be updated.
 
         To make changes to a pool, close it before updating parameters.
         If you don't open the pool after updating, it opens automatically in 15 minutes.
@@ -1344,7 +1346,7 @@ class TolokaClient:
 
     @add_headers('client')
     def close_pool_for_update_async(self, pool_id: str) -> Optional[operations.PoolCloseOperation]:
-        """Closes a pool that is updating. Sends an asynchronous request to Toloka.
+        """Closes a pool that is to be updated. Sends an asynchronous request to Toloka.
 
         To make changes to a pool, close it before updating parameters.
         If you don't open the pool after updating, it opens automatically in 15 minutes.
@@ -1547,7 +1549,7 @@ class TolokaClient:
     def open_pool(self, pool_id: str) -> Pool:
         """Opens a pool.
 
-        Tasks are assigned to Tolokers from opened pools only.
+        After opening the pool, tasks can be assigned to Tolokers.
 
         Args:
             pool_id: The ID of the pool.
@@ -1572,7 +1574,7 @@ class TolokaClient:
     def open_pool_async(self, pool_id: str) -> Optional[operations.PoolOpenOperation]:
         """Opens a pool. Sends an asynchronous request to Toloka.
 
-        Tasks are assigned to Tolokers from opened pools only.
+        After opening the pool, tasks can be assigned to Tolokers.
 
         Args:
             pool_id: The ID of the pool.
@@ -1598,7 +1600,7 @@ class TolokaClient:
     def patch_pool(self, pool_id: str, request: PoolPatchRequest) -> Pool:
         """Changes pool parameters in Toloka.
 
-        If a parameter is not specified then it is left unchanged in Toloka.
+        If a parameter is not specified in the `patch_pool` method, then it is left unchanged in Toloka.
 
         Args:
             pool_id: The ID of the pool to be changed.

@@ -17,19 +17,19 @@ class DynamicOverlapConfig(BaseTolokaObject):
     The aggregated response confidence is calculated based on the probability algorithm.
     The task overlap increases until it reaches `max_overlap` or until the confidence of the aggregated response exceeds `min_confidence`.
 
-    Learn more about the [Dynamic overlap](https://toloka.ai/en/docs/guide/concepts/dynamic-overlap) in the guide.
-
     Note, that if you use dynamic overlap, then set the `auto_close_after_complete_delay_seconds` pool parameter to a non zero value.
+
+    Learn more about the [Dynamic overlap](https://toloka.ai/en/docs/guide/concepts/dynamic-overlap) in the guide.
 
     Attributes:
         type: The dynamic overlap algorithm.
         max_overlap: Maximum overlap. The value must be higher than the default overlap value. Allowed range: from 1 to 30,000.
         min_confidence: Minimum required confidence of the aggregated response. Allowed range: from 0 to 1.
-        answer_weight_skill_id: A skill that determines the weight of the Toloker's response.
-            For the best results, use a skill calculated as percentage of correct responses in control tasks.
+        answer_weight_skill_id: A skill that determines the weight of the Toloker's responses.
+            For the best results, use a skill calculated as a percentage of correct responses in control tasks.
         fields: A list of output data fields used for aggregating responses.
-            For the best results, the each field must have a limited number of response options.
-            Don't specify fields together if they depend on each other.
+            For the best results, each field must have a limited number of response options.
+            Don't specify fields in the list together if they depend on each other.
     """
 
     @unique

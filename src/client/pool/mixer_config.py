@@ -17,18 +17,26 @@ class MixerConfig(BaseTolokaObject):
         golden_tasks_count: The number of control tasks in a task suite.
         training_tasks_count: The number of training tasks in a task suite.
         min_real_tasks_count: The minimum number of general tasks in a task suite if there are not enough tasks left to create a full task suite.
-            By default, the `min_real_tasks_count` value equals to the `real_tasks_count` value. Allowed range: from 0 to `real_tasks_count`.
+
+            Allowed range: from 0 to `real_tasks_count`.
+            By default, the `min_real_tasks_count` value equals to the `real_tasks_count` value.
         min_golden_tasks_count: The minimum number of control tasks in a task suite if there are not enough control tasks left to create a full task suite.
-            By default, the `min_golden_tasks_count` value equals to the `golden_tasks_count` value. Allowed range: from 0 to `golden_tasks_count`.
+
+            Allowed range: from 0 to `golden_tasks_count`.
+            By default, the `min_golden_tasks_count` value equals to the `golden_tasks_count` value.
         min_training_tasks_count: The minimum number of training tasks in a task suite if there are not enough training tasks left to create a full task suite.
-            By default, the `min_training_tasks_count` value equals to the `training_tasks_count` value. Allowed range: from 0 to `training_tasks_count`.
+
+            Allowed range: from 0 to `training_tasks_count`.
+            By default, the `min_training_tasks_count` value equals to the `training_tasks_count` value.
         force_last_assignment: A setting used when the number of remaining general tasks in the pool is less than the `min_real_tasks_count` value.
-            Note, that control and trining tasks must be enough to create a task suite.
+            Note, that there must be enough control and trining tasks to create a task suite.
+
             * True — An incomplete task suite is assigned.
-            * False — An incomplete task suite is not assigned. It is useful if you add tasks to the open pool.
+            * False — An incomplete task suite is not assigned. It is useful if you add tasks to an open pool.
 
             Default: `True`.
         force_last_assignment_delay_seconds: Time in seconds before assigning the last task suite. This parameter is used if `force_last_assignment` is set to `True`.
+
             Allowed range: from 0 to 86,400 seconds (one day).
         mix_tasks_in_creation_order:
             * True — Tasks are grouped in task suites in the order they were created.

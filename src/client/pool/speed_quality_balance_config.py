@@ -14,7 +14,7 @@ class SpeedQualityBalanceConfig(BaseTolokaObject, spec_enum='Type', spec_field='
     Tolokers are sorted by their quality forecast. You can limit the number of the best Tolokers who have access to your tasks.
     It influences quality of results and speed of getting results.
 
-    Learn more in [Speed/quality balance](https://toloka.ai/en/docs/guide/concepts/adjust).
+    Learn more about [Speed/quality balance](https://toloka.ai/en/docs/guide/concepts/adjust).
     """
 
     @unique
@@ -22,8 +22,8 @@ class SpeedQualityBalanceConfig(BaseTolokaObject, spec_enum='Type', spec_field='
         """The type of the filter used in [SpeedQualityBalanceConfig](toloka.client.pool.speed_quality_balance_config.SpeedQualityBalanceConfig.md).
 
         Attributes:
-            TOP_PERCENTAGE_BY_QUALITY — A percentage of Tolokers is configured.
-            BEST_CONCURRENT_USERS_BY_QUALITY — A maximum number of Tolokers is configured.
+            TOP_PERCENTAGE_BY_QUALITY — A percentage of the best Tolokers is configured.
+            BEST_CONCURRENT_USERS_BY_QUALITY — A maximum number of the best Tolokers is configured.
         """
         TOP_PERCENTAGE_BY_QUALITY = 'TOP_PERCENTAGE_BY_QUALITY'
         BEST_CONCURRENT_USERS_BY_QUALITY = 'BEST_CONCURRENT_USERS_BY_QUALITY'
