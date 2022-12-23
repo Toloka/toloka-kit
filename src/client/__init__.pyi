@@ -2656,18 +2656,19 @@ class TolokaClient:
         """Creates a new task in Toloka.
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
-        To create several tasks at once use [create_tasks](./toloka.client.TolokaClient.create_tasks.md).
+
+        To create several tasks at once use the [create_tasks](toloka.client.TolokaClient.create_tasks.md) method.
 
         Args:
-            task: Task to be created.
-            parameters: Parameters for Task creation controlling. Defaults to None.
-                Allows you to use default overlap and start pool after task creation.
+            task: The task to be created.
+            parameters: Additional parameters of the request.
+                Default: `None` — default overlap is used and the pool is started after task creation.
 
         Returns:
             Task: The created task.
 
         Example:
-            >>> task = toloka.task.Task(
+            >>> task = toloka.client.Task(
             >>>     input_values={'image': 'https://tlk.s3.yandex.net/dataset/cats_vs_dogs/dogs/048e5760fc5a46faa434922b2447a527.jpg'},
             >>>     pool_id='1'
             >>> )
@@ -2687,18 +2688,19 @@ class TolokaClient:
         """Creates a new task in Toloka.
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
-        To create several tasks at once use [create_tasks](./toloka.client.TolokaClient.create_tasks.md).
+
+        To create several tasks at once use the [create_tasks](toloka.client.TolokaClient.create_tasks.md) method.
 
         Args:
-            task: Task to be created.
-            parameters: Parameters for Task creation controlling. Defaults to None.
-                Allows you to use default overlap and start pool after task creation.
+            task: The task to be created.
+            parameters: Additional parameters of the request.
+                Default: `None` — default overlap is used and the pool is started after task creation.
 
         Returns:
             Task: The created task.
 
         Example:
-            >>> task = toloka.task.Task(
+            >>> task = toloka.client.Task(
             >>>     input_values={'image': 'https://tlk.s3.yandex.net/dataset/cats_vs_dogs/dogs/048e5760fc5a46faa434922b2447a527.jpg'},
             >>>     pool_id='1'
             >>> )
@@ -2713,53 +2715,55 @@ class TolokaClient:
         tasks: typing.List[toloka.client.task.Task],
         parameters: typing.Optional[toloka.client.task.CreateTasksParameters] = None
     ) -> toloka.client.batch_create_results.TaskBatchCreateResult:
-        """Creates several tasks in Toloka using a single request.
+        """Creates several tasks in Toloka.
 
-        Tasks can be added to different pools. You can add together regular tasks and control tasks.
+        You can add together general and control tasks.
+        Tasks can be added to different pools.
+        Note that pools must be configured before accepting new tasks. For example, [mixer configuration](toloka.client.pool.mixer_config.MixerConfig.md) must be set.
+
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
 
         By default, `create_tasks` starts asynchronous operation internally and waits for the completion of it. Do not
-        change `async_mode` to False, if you do not understand clearly why you need it.
+        change `async_mode` to `False`, if you do not understand clearly why you need it.
 
         Args:
-            tasks: List of tasks to be created.
-            parameters: Parameters for Tasks creation controlling. Defaults to None, in which case the asynchronous
-                operations is used.
+            tasks: A list of tasks to be created.
+            parameters: Additional parameters of the request.
 
         Returns:
-            batch_create_results.TaskBatchCreateResult: An object with created tasks in `items` and invalid tasks in
-                `validation_errors`.
+            batch_create_results.TaskBatchCreateResult: The result of the operation.
 
         Raises:
-            ValidationApiError: If no tasks were created, or skip_invalid_items==False and there is a problem when
-                checking any task.
+            ValidationApiError:
+                * No tasks were created.
+                * Validation errors found while the `skip_invalid_items` parameter was `False`.
 
         Example:
-            The first example shows how to create regular tasks using a TSV file.
+            The first example shows how to create tasks using a TSV file.
 
-            >>> dataset = pandas.read_csv('dataset.tsv', sep='  ')
+            >>> dataset = pandas.read_csv('dataset.tsv', sep=';')
             >>> tasks = [
-            >>>     toloka.task.Task(input_values={'image': url}, pool_id=existing_pool_id)
+            >>>     toloka.client.Task(input_values={'image': url}, pool_id=existing_pool_id)
             >>>     for url in dataset['image'].values[:50]
             >>> ]
-            >>> created_result = toloka_client.create_tasks(tasks, allow_defaults=True)
-            >>> print(len(created_result.items))
+            >>> result = toloka_client.create_tasks(tasks, allow_defaults=True)
+            >>> print(len(result.items))
             ...
 
-            The second example shows how to create control tasks.
+            The second example shows how to add control tasks.
 
-            >>> dataset = pd.read_csv('dateset.tsv', sep=';')
+            >>> dataset = pandas.read_csv('labeled_dataset.tsv', sep=';')
             >>> golden_tasks = []
             >>> for _, row in dataset.iterrows():
             >>>     golden_tasks.append(
-            >>>         toloka.task.Task(
+            >>>         toloka.client.Task(
             >>>             input_values={'image': row['image']},
-            >>>             known_solutions = [toloka.task.BaseTask.KnownSolution(output_values={'animal': row['label']})],
+            >>>             known_solutions = [toloka.client.BaseTask.KnownSolution(output_values={'animal': row['label']})],
             >>>             pool_id = existing_pool_id,
             >>>         )
             >>>     )
-            >>> created_result = toloka_client.create_tasks(golden_tasks, allow_defaults=True)
-            >>> print(len(created_result.items))
+            >>> result = toloka_client.create_tasks(golden_tasks, allow_defaults=True)
+            >>> print(len(result.items))
             ...
         """
         ...
@@ -2775,53 +2779,55 @@ class TolokaClient:
         operation_id: typing.Optional[uuid.UUID] = None,
         async_mode: typing.Optional[bool] = True
     ) -> toloka.client.batch_create_results.TaskBatchCreateResult:
-        """Creates several tasks in Toloka using a single request.
+        """Creates several tasks in Toloka.
 
-        Tasks can be added to different pools. You can add together regular tasks and control tasks.
+        You can add together general and control tasks.
+        Tasks can be added to different pools.
+        Note that pools must be configured before accepting new tasks. For example, [mixer configuration](toloka.client.pool.mixer_config.MixerConfig.md) must be set.
+
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
 
         By default, `create_tasks` starts asynchronous operation internally and waits for the completion of it. Do not
-        change `async_mode` to False, if you do not understand clearly why you need it.
+        change `async_mode` to `False`, if you do not understand clearly why you need it.
 
         Args:
-            tasks: List of tasks to be created.
-            parameters: Parameters for Tasks creation controlling. Defaults to None, in which case the asynchronous
-                operations is used.
+            tasks: A list of tasks to be created.
+            parameters: Additional parameters of the request.
 
         Returns:
-            batch_create_results.TaskBatchCreateResult: An object with created tasks in `items` and invalid tasks in
-                `validation_errors`.
+            batch_create_results.TaskBatchCreateResult: The result of the operation.
 
         Raises:
-            ValidationApiError: If no tasks were created, or skip_invalid_items==False and there is a problem when
-                checking any task.
+            ValidationApiError:
+                * No tasks were created.
+                * Validation errors found while the `skip_invalid_items` parameter was `False`.
 
         Example:
-            The first example shows how to create regular tasks using a TSV file.
+            The first example shows how to create tasks using a TSV file.
 
-            >>> dataset = pandas.read_csv('dataset.tsv', sep='  ')
+            >>> dataset = pandas.read_csv('dataset.tsv', sep=';')
             >>> tasks = [
-            >>>     toloka.task.Task(input_values={'image': url}, pool_id=existing_pool_id)
+            >>>     toloka.client.Task(input_values={'image': url}, pool_id=existing_pool_id)
             >>>     for url in dataset['image'].values[:50]
             >>> ]
-            >>> created_result = toloka_client.create_tasks(tasks, allow_defaults=True)
-            >>> print(len(created_result.items))
+            >>> result = toloka_client.create_tasks(tasks, allow_defaults=True)
+            >>> print(len(result.items))
             ...
 
-            The second example shows how to create control tasks.
+            The second example shows how to add control tasks.
 
-            >>> dataset = pd.read_csv('dateset.tsv', sep=';')
+            >>> dataset = pandas.read_csv('labeled_dataset.tsv', sep=';')
             >>> golden_tasks = []
             >>> for _, row in dataset.iterrows():
             >>>     golden_tasks.append(
-            >>>         toloka.task.Task(
+            >>>         toloka.client.Task(
             >>>             input_values={'image': row['image']},
-            >>>             known_solutions = [toloka.task.BaseTask.KnownSolution(output_values={'animal': row['label']})],
+            >>>             known_solutions = [toloka.client.BaseTask.KnownSolution(output_values={'animal': row['label']})],
             >>>             pool_id = existing_pool_id,
             >>>         )
             >>>     )
-            >>> created_result = toloka_client.create_tasks(golden_tasks, allow_defaults=True)
-            >>> print(len(created_result.items))
+            >>> result = toloka_client.create_tasks(golden_tasks, allow_defaults=True)
+            >>> print(len(result.items))
             ...
         """
         ...
@@ -2836,17 +2842,19 @@ class TolokaClient:
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
 
+        See also the [create_tasks](toloka.client.TolokaClient.create_tasks.md) method.
+
         Args:
-            tasks: List of tasks to be created.
-            parameters: Parameters for Tasks creation controlling. Defaults to None.
+            tasks: A list of tasks to be created.
+            parameters: Additional parameters of the request.
 
         Returns:
             TasksCreateOperation: An object to track the progress of the operation.
 
         Example:
             >>> training_tasks = [
-            >>>     toloka.task.Task(input_values={'image': 'link1'}, pool_id='1'),
-            >>>     toloka.task.Task(input_values={'image': 'link2'}, pool_id='1')
+            >>>     toloka.client.Task(input_values={'image': 'https://some.url/img0.png'}, pool_id='1'),
+            >>>     toloka.client.Task(input_values={'image': 'https://some.url/img1.png'}, pool_id='1')
             >>> ]
             >>> tasks_op = toloka_client.create_tasks_async(training_tasks)
             >>> toloka_client.wait_operation(tasks_op)
@@ -2869,17 +2877,19 @@ class TolokaClient:
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
 
+        See also the [create_tasks](toloka.client.TolokaClient.create_tasks.md) method.
+
         Args:
-            tasks: List of tasks to be created.
-            parameters: Parameters for Tasks creation controlling. Defaults to None.
+            tasks: A list of tasks to be created.
+            parameters: Additional parameters of the request.
 
         Returns:
             TasksCreateOperation: An object to track the progress of the operation.
 
         Example:
             >>> training_tasks = [
-            >>>     toloka.task.Task(input_values={'image': 'link1'}, pool_id='1'),
-            >>>     toloka.task.Task(input_values={'image': 'link2'}, pool_id='1')
+            >>>     toloka.client.Task(input_values={'image': 'https://some.url/img0.png'}, pool_id='1'),
+            >>>     toloka.client.Task(input_values={'image': 'https://some.url/img1.png'}, pool_id='1')
             >>> ]
             >>> tasks_op = toloka_client.create_tasks_async(training_tasks)
             >>> toloka_client.wait_operation(tasks_op)
@@ -3043,7 +3053,7 @@ class TolokaClient:
 
         Args:
             task_id: The ID of the task.
-            patch: New overlap value.
+            patch: New task parameters.
 
         Returns:
             Task: The task with updated fields.
@@ -3065,7 +3075,7 @@ class TolokaClient:
 
         Args:
             task_id: The ID of the task.
-            patch: New overlap value.
+            patch: New task parameters.
 
         Returns:
             Task: The task with updated fields.
@@ -3138,25 +3148,26 @@ class TolokaClient:
         task_suite: toloka.client.task_suite.TaskSuite,
         parameters: typing.Optional[toloka.client.task_suite.TaskSuiteCreateRequestParameters] = None
     ) -> toloka.client.task_suite.TaskSuite:
-        """Creates a new task suite
+        """Creates a task suite in Toloka.
 
-        Generally, you don't need to create a task set yourself, because you can create tasks and Toloka will create
-        task suites for you. Use this method only then you need to group specific tasks in one suite or to set a
-        different parameters on different tasks suites.
-        It's better to use "create_task_suites", if you need to insert several task suites.
+        Usually, you don't need to create a task suite manually, because Toloka can group tasks into suites automatically.
+
+        Use this method if you need to group specific tasks together or to set different parameters in different task suites.
+
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
+        To create several task suites at once use the [create_task_suites](toloka.client.TolokaClient.create_task_suites.md) method.
 
         Args:
-            task_suite: Task suite that need to be created.
-            parameters: Parameters for TaskSuite creation controlling. Defaults to None.
+            task_suite: A task suite to be created.
+            parameters: Additional parameters of the request. Default: `None`
 
         Returns:
             TaskSuite: Created task suite.
 
         Example:
-            >>> new_task_suite = toloka.task_suite.TaskSuite(
+            >>> new_task_suite = toloka.client.TaskSuite(
             >>>     pool_id='1',
-            >>>     tasks=[toloka.task.Task(input_values={'label': 'Cats vs Dogs'})],
+            >>>     tasks=[toloka.client.Task(input_values={'label': 'Cats vs Dogs'})],
             >>>     overlap=2
             >>> )
             >>> toloka_client.create_task_suite(new_task_suite)
@@ -3175,25 +3186,26 @@ class TolokaClient:
         open_pool: typing.Optional[bool] = None,
         async_mode: typing.Optional[bool] = True
     ) -> toloka.client.task_suite.TaskSuite:
-        """Creates a new task suite
+        """Creates a task suite in Toloka.
 
-        Generally, you don't need to create a task set yourself, because you can create tasks and Toloka will create
-        task suites for you. Use this method only then you need to group specific tasks in one suite or to set a
-        different parameters on different tasks suites.
-        It's better to use "create_task_suites", if you need to insert several task suites.
+        Usually, you don't need to create a task suite manually, because Toloka can group tasks into suites automatically.
+
+        Use this method if you need to group specific tasks together or to set different parameters in different task suites.
+
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
+        To create several task suites at once use the [create_task_suites](toloka.client.TolokaClient.create_task_suites.md) method.
 
         Args:
-            task_suite: Task suite that need to be created.
-            parameters: Parameters for TaskSuite creation controlling. Defaults to None.
+            task_suite: A task suite to be created.
+            parameters: Additional parameters of the request. Default: `None`
 
         Returns:
             TaskSuite: Created task suite.
 
         Example:
-            >>> new_task_suite = toloka.task_suite.TaskSuite(
+            >>> new_task_suite = toloka.client.TaskSuite(
             >>>     pool_id='1',
-            >>>     tasks=[toloka.task.Task(input_values={'label': 'Cats vs Dogs'})],
+            >>>     tasks=[toloka.client.Task(input_values={'label': 'Cats vs Dogs'})],
             >>>     overlap=2
             >>> )
             >>> toloka_client.create_task_suite(new_task_suite)
@@ -3207,39 +3219,39 @@ class TolokaClient:
         task_suites: typing.List[toloka.client.task_suite.TaskSuite],
         parameters: typing.Optional[toloka.client.task_suite.TaskSuiteCreateRequestParameters] = None
     ) -> toloka.client.batch_create_results.TaskSuiteBatchCreateResult:
-        """Creates many task suites in pools
+        """Creates several task suites in Toloka.
 
-        Generally, you don't need to create a task set yourself, because you can create tasks and Toloka will create
-        task suites for you. Use this method only then you need to group specific tasks in one suite or to set a
-        different parameters on different tasks suites.
-        By default uses asynchronous operation inside. It's better not to set "async_mode=False", if you not understand
-        clearly why you need it.
-        Task suites can be from different pools. You can insert both regular tasks and golden-tasks.
+        Usually, you don't need to create a task suite manually, because Toloka can group tasks into suites automatically.
+
+        Use this method if you need to group specific tasks together or to set different parameters in different task suites.
+        Task suites can be created in different pools. You can create general and control tasks or task suites in different pools with a single method call.
+
+        By default, `create_task_suites` starts asynchronous operation internally and waits for the completion of it. Do not
+        change `async_mode` to False, if you do not understand clearly why you need it.
+
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        Recommended maximum of 10,000 task suites per request if async_mode is True.
+        It is recommended that you create no more than 10,000 task suites in a single request if the `async_mode` parameter is `True`.
 
         Args:
-            task_suites: List of task suites, that will be created.
-            parameters: Parameters for TaskSuite creation controlling. Defaults to None, in which case the asynchronous
-                operations is used.
+            task_suites: A list of task suites to be created.
+            parameters: Additional parameters of the request. Default: `None`
 
         Returns:
-            TaskSuiteBatchCreateResult: Result of task suites creating. Contains created task suites in `items` and
-                problems in "validation_errors".
+            TaskSuiteBatchCreateResult: The result of the operation.
 
         Raises:
-            ValidationApiError: If no tasks were created, or skip_invalid_items==False and there is a problem when
-                checking any task.
+            ValidationApiError:
+                * No tasks were created.
+                * Validation errors found while the `skip_invalid_items` parameter was `False`.
 
         Example:
             >>> task_suites = [
-            >>>     toloka.task_suite.TaskSuite(
-            >>>         pool_id=pool.id,
+            >>>     toloka.client.TaskSuite(
+            >>>         pool_id=1,
             >>>         overlap=1,
             >>>         tasks=[
-            >>>             toloka.task.Task(input_values={
-            >>>                 'input1': some_input_value,
-            >>>                 'input2': some_input_value
+            >>>             toloka.client.Task(input_values={
+            >>>                 'question': 'Choose a random number'
             >>>             })
             >>>         ]
             >>>     )
@@ -3260,39 +3272,39 @@ class TolokaClient:
         open_pool: typing.Optional[bool] = None,
         async_mode: typing.Optional[bool] = True
     ) -> toloka.client.batch_create_results.TaskSuiteBatchCreateResult:
-        """Creates many task suites in pools
+        """Creates several task suites in Toloka.
 
-        Generally, you don't need to create a task set yourself, because you can create tasks and Toloka will create
-        task suites for you. Use this method only then you need to group specific tasks in one suite or to set a
-        different parameters on different tasks suites.
-        By default uses asynchronous operation inside. It's better not to set "async_mode=False", if you not understand
-        clearly why you need it.
-        Task suites can be from different pools. You can insert both regular tasks and golden-tasks.
+        Usually, you don't need to create a task suite manually, because Toloka can group tasks into suites automatically.
+
+        Use this method if you need to group specific tasks together or to set different parameters in different task suites.
+        Task suites can be created in different pools. You can create general and control tasks or task suites in different pools with a single method call.
+
+        By default, `create_task_suites` starts asynchronous operation internally and waits for the completion of it. Do not
+        change `async_mode` to False, if you do not understand clearly why you need it.
+
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        Recommended maximum of 10,000 task suites per request if async_mode is True.
+        It is recommended that you create no more than 10,000 task suites in a single request if the `async_mode` parameter is `True`.
 
         Args:
-            task_suites: List of task suites, that will be created.
-            parameters: Parameters for TaskSuite creation controlling. Defaults to None, in which case the asynchronous
-                operations is used.
+            task_suites: A list of task suites to be created.
+            parameters: Additional parameters of the request. Default: `None`
 
         Returns:
-            TaskSuiteBatchCreateResult: Result of task suites creating. Contains created task suites in `items` and
-                problems in "validation_errors".
+            TaskSuiteBatchCreateResult: The result of the operation.
 
         Raises:
-            ValidationApiError: If no tasks were created, or skip_invalid_items==False and there is a problem when
-                checking any task.
+            ValidationApiError:
+                * No tasks were created.
+                * Validation errors found while the `skip_invalid_items` parameter was `False`.
 
         Example:
             >>> task_suites = [
-            >>>     toloka.task_suite.TaskSuite(
-            >>>         pool_id=pool.id,
+            >>>     toloka.client.TaskSuite(
+            >>>         pool_id=1,
             >>>         overlap=1,
             >>>         tasks=[
-            >>>             toloka.task.Task(input_values={
-            >>>                 'input1': some_input_value,
-            >>>                 'input2': some_input_value
+            >>>             toloka.client.Task(input_values={
+            >>>                 'question': 'Choose a random number'
             >>>             })
             >>>         ]
             >>>     )
@@ -3308,27 +3320,28 @@ class TolokaClient:
         task_suites: typing.List[toloka.client.task_suite.TaskSuite],
         parameters: typing.Optional[toloka.client.task_suite.TaskSuiteCreateRequestParameters] = None
     ) -> toloka.client.operations.TaskSuiteCreateBatchOperation:
-        """Creates many task suites in pools, asynchronous version
+        """Creates several task suites in Toloka asynchronously.
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        Recommended maximum of 10,000 task suites per request.
+        It is recommended that you create no more than 10,000 task suites in a single request.
+
+        See also the [create_task_suites](toloka.client.TolokaClient.create_task_suites.md) method.
 
         Args:
-            task_suites: List of task suites, that will be created.
-            parameters: Parameters for TaskSuite creation controlling.
+            task_suites: A list of task suites to be created.
+            parameters: Additional parameters of the request. Default: `None`
 
         Returns:
-            TaskSuiteCreateBatchOperation: An operation upon completion of which you can get the created task suites.
+            TaskSuiteCreateBatchOperation: An object to track the progress of the operation.
 
         Example:
             >>> task_suites = [
-            >>>     toloka.task_suite.TaskSuite(
-            >>>         pool_id=pool.id,
+            >>>     toloka.client.TaskSuite(
+            >>>         pool_id='1',
             >>>         overlap=1,
             >>>         tasks=[
-            >>>             toloka.task.Task(input_values={
-            >>>                 'input1': some_input_value,
-            >>>                 'input2': some_input_value
+            >>>             toloka.client.Task(input_values={
+            >>>                 'question': 'Choose a random country'
             >>>             })
             >>>         ]
             >>>     )
@@ -3350,27 +3363,28 @@ class TolokaClient:
         open_pool: typing.Optional[bool] = None,
         async_mode: typing.Optional[bool] = True
     ) -> toloka.client.operations.TaskSuiteCreateBatchOperation:
-        """Creates many task suites in pools, asynchronous version
+        """Creates several task suites in Toloka asynchronously.
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
-        Recommended maximum of 10,000 task suites per request.
+        It is recommended that you create no more than 10,000 task suites in a single request.
+
+        See also the [create_task_suites](toloka.client.TolokaClient.create_task_suites.md) method.
 
         Args:
-            task_suites: List of task suites, that will be created.
-            parameters: Parameters for TaskSuite creation controlling.
+            task_suites: A list of task suites to be created.
+            parameters: Additional parameters of the request. Default: `None`
 
         Returns:
-            TaskSuiteCreateBatchOperation: An operation upon completion of which you can get the created task suites.
+            TaskSuiteCreateBatchOperation: An object to track the progress of the operation.
 
         Example:
             >>> task_suites = [
-            >>>     toloka.task_suite.TaskSuite(
-            >>>         pool_id=pool.id,
+            >>>     toloka.client.TaskSuite(
+            >>>         pool_id='1',
             >>>         overlap=1,
             >>>         tasks=[
-            >>>             toloka.task.Task(input_values={
-            >>>                 'input1': some_input_value,
-            >>>                 'input2': some_input_value
+            >>>             toloka.client.Task(input_values={
+            >>>                 'question': 'Choose a random country'
             >>>             })
             >>>         ]
             >>>     )
@@ -3454,7 +3468,7 @@ class TolokaClient:
         ...
 
     def get_task_suite(self, task_suite_id: str) -> toloka.client.task_suite.TaskSuite:
-        """Reads one specific task suite
+        """Reads one task suite.
 
         Args:
             task_suite_id: ID of the task suite.
@@ -3535,14 +3549,14 @@ class TolokaClient:
         task_suite_id: str,
         patch: toloka.client.task_suite.TaskSuitePatch
     ) -> toloka.client.task_suite.TaskSuite:
-        """Changes the task suite overlap or priority
+        """Changes task suite parameter values in Toloka.
 
         Args:
-            task_suite_id: ID of the task suite that will be changed.
-            patch: New values.
+            task_suite_id: The ID of the task suite.
+            patch: New parameter values.
 
         Returns:
-            TaskSuite: Task suite with updated fields.
+            TaskSuite: The task suite with updated fields.
 
         Example:
             Change the task suite's priority.
@@ -3562,14 +3576,14 @@ class TolokaClient:
         issuing_order_override: typing.Optional[float] = None,
         open_pool: typing.Optional[bool] = None
     ) -> toloka.client.task_suite.TaskSuite:
-        """Changes the task suite overlap or priority
+        """Changes task suite parameter values in Toloka.
 
         Args:
-            task_suite_id: ID of the task suite that will be changed.
-            patch: New values.
+            task_suite_id: The ID of the task suite.
+            patch: New parameter values.
 
         Returns:
-            TaskSuite: Task suite with updated fields.
+            TaskSuite: The task suite with updated fields.
 
         Example:
             Change the task suite's priority.
@@ -5635,6 +5649,7 @@ class TolokaClient:
         """
         ...
 
+    EXCEPTIONS_TO_RETRY: typing.ClassVar[typing.Tuple[Exception]]
     token: str
     default_timeout: typing.Union[float, typing.Tuple[float, float]]
     _platform_url: typing.Optional[str]

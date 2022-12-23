@@ -4,7 +4,7 @@ import itertools
 import pickle
 import pytest
 
-from toloka.client import unstructure
+from toloka.client import TolokaClient, unstructure
 from toloka.streaming.cursor import (
     _ByIdCursor,
     AssignmentCursor,
@@ -17,9 +17,9 @@ from ..testutils.backend_mock import BackendSearchMock
 
 
 @pytest.fixture
-def mocked_backend_for_user_bonus(requests_mock, toloka_url):
+def mocked_backend_for_user_bonus(respx_mock, toloka_url):
     backend = BackendSearchMock([], limit=RESPONSE_LIMIT)
-    requests_mock.get(f'{toloka_url}/user-bonuses', json=backend)
+    respx_mock.get(f'{toloka_url}/user-bonuses').mock(side_effect=backend)
     return backend
 
 
@@ -116,6 +116,10 @@ def test_cursor_pickleable(toloka_client):
 
 @pytest.mark.parametrize('fetcher', [fetch_sync, fetch_async])
 def test_cursor_create_expanded(toloka_client, mocked_backend_for_user_bonus, user_bonus_existing, fetcher):
+    # can't run nested async loops
+    if not isinstance(toloka_client, TolokaClient) and fetcher == fetch_async:
+        return
+
     mocked_backend_for_user_bonus.storage.extend(user_bonus_existing)
     cursor = UserBonusCursor(user_id='002', toloka_client=toloka_client)
     assert [{
@@ -139,6 +143,9 @@ def test_cursor_iter(
     fetcher,
     add_new,
 ):
+    if not isinstance(toloka_client, TolokaClient) and fetcher == fetch_async:
+        return
+
     mocked_backend_for_user_bonus.storage.extend(user_bonus_existing)
     cursor = UserBonusCursor(toloka_client=toloka_client)
 
@@ -199,13 +206,13 @@ def test_cursor_iter_by_one(toloka_client, mocked_backend_for_user_bonus, user_b
     ], key=str) == sorted(unstructure(result), key=str)
 
 
-def test_assignment_cursor(requests_mock, toloka_url, toloka_client):
+def test_assignment_cursor(respx_mock, toloka_url, toloka_client):
     backend_data = [
         {'pool_id': '100', 'id': 'A', 'submitted': '2020-01-01T01:01:01'},
         {'pool_id': '100', 'id': 'B', 'submitted': '2020-01-01T01:01:02', 'accepted': '2020-01-01T01:01:03'},
     ]
     backend = BackendSearchMock(backend_data)
-    requests_mock.get(f'{toloka_url}/assignments', json=backend)
+    respx_mock.get(f'{toloka_url}/assignments').mock(side_effect=backend)
 
     cursor_submitted = AssignmentCursor(pool_id='100', event_type='SUBMITTED', toloka_client=toloka_client)
     assert [
@@ -222,14 +229,14 @@ def test_assignment_cursor(requests_mock, toloka_url, toloka_client):
 
 
 @pytest.mark.parametrize('chunk_size', range(1, 4))
-def test_task_cursor(requests_mock, toloka_url, toloka_client, chunk_size):
+def test_task_cursor(respx_mock, toloka_url, toloka_client, chunk_size):
     backend_data = [
         {'pool_id': '100', 'id': 'A', 'created': '2020-01-01T01:01:01'},
         {'pool_id': '100', 'id': 'B', 'created': '2020-01-01T01:01:02'},
         {'pool_id': '100', 'id': 'C', 'created': '2020-01-01T01:01:03'},
     ]
     backend = BackendSearchMock(backend_data, limit=chunk_size)
-    requests_mock.get(f'{toloka_url}/tasks', json=backend)
+    respx_mock.get(f'{toloka_url}/tasks').mock(side_effect=backend)
 
     cursor = TaskCursor(pool_id='100', toloka_client=toloka_client)
     assert [
@@ -242,14 +249,14 @@ def test_task_cursor(requests_mock, toloka_url, toloka_client, chunk_size):
     ['chunk_size', 'event_type'],
     itertools.product(range(1, 4), ['CREATED', 'MODIFIED'])
 )
-def test_user_skill_cursor(requests_mock, toloka_url, toloka_client, chunk_size, event_type):
+def test_user_skill_cursor(respx_mock, toloka_url, toloka_client, chunk_size, event_type):
     backend_data = [
         {'user_id': '001', 'id': 'A', 'created': '2020-01-01T01:01:01', 'modified': '2020-01-01T01:01:01'},
         {'user_id': '001', 'id': 'B', 'created': '2020-01-01T01:01:02', 'modified': '2020-01-01T01:01:02'},
         {'user_id': '001', 'id': 'C', 'created': '2020-01-01T01:01:03', 'modified': '2020-01-01T01:01:03'},
     ]
     backend = BackendSearchMock(backend_data, limit=chunk_size)
-    requests_mock.get(f'{toloka_url}/user-skills', json=backend)
+    respx_mock.get(f'{toloka_url}/user-skills').mock(side_effect=backend)
 
     cursor = UserSkillCursor(event_type=event_type, toloka_client=toloka_client)
     assert [

@@ -1,3 +1,6 @@
+import json
+
+import httpx
 import pytest
 import toloka.client as client
 from toloka.client.analytics_request import (
@@ -140,21 +143,21 @@ def success_answer_map():
     }
 
 
-def test_send_analytics_request(requests_mock, toloka_client, toloka_api_url,
+def test_send_analytics_request(respx_mock, toloka_client, toloka_api_url,
                                       full_tasks_request_map, simple_answer_map):
 
-    def task_suites(request, context):
+    def task_suites(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_analytics',
             'X-Low-Level-Method': 'get_analytics',
         }
         check_headers(request, expected_headers)
 
-        assert full_tasks_request_map == request.json()
-        return simple_answer_map
+        assert full_tasks_request_map == json.loads(request.content)
+        return httpx.Response(status_code=200, json=simple_answer_map)
 
-    requests_mock.post(f'{toloka_api_url}/staging/analytics-2', json=task_suites)
+    respx_mock.post(f'{toloka_api_url}/staging/analytics-2').mock(side_effect=task_suites)
 
     stat_requests = [
         RealTasksCountPoolAnalytics(subject_id='123'),
@@ -175,7 +178,7 @@ def test_send_analytics_request(requests_mock, toloka_client, toloka_api_url,
     assert simple_answer_map == client.unstructure(operation)
 
 
-def test_less_ms_digits(requests_mock, toloka_client, toloka_api_url, success_answer_map):
+def test_less_ms_digits(respx_mock, toloka_client, toloka_api_url, success_answer_map):
     real_result = {
         **success_answer_map,
         'submitted': '2021-08-24T06:30:08.394000',  # 6 ms digits
@@ -183,16 +186,16 @@ def test_less_ms_digits(requests_mock, toloka_client, toloka_api_url, success_an
         'finished': '2021-08-24T06:30:11.999990',   # 6 ms digits
     }
 
-    def task_map(request, context):
+    def task_map(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_analytics',
             'X-Low-Level-Method': 'get_analytics',
         }
         check_headers(request, expected_headers)
 
-        return success_answer_map
+        return httpx.Response(status_code=200, json=success_answer_map)
 
-    requests_mock.post(f'{toloka_api_url}/staging/analytics-2', json=task_map)
+    respx_mock.post(f'{toloka_api_url}/staging/analytics-2').mock(side_effect=task_map)
     operation = toloka_client.get_analytics([SubmittedAssignmentsCountPoolAnalytics(subject_id='123')])
     assert real_result == client.unstructure(operation)

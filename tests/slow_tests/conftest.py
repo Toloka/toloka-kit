@@ -23,7 +23,7 @@ def fake_requester():
 
 @pytest.fixture(scope='session')
 def retries_before_response():
-    return 10
+    return 3
 
 
 class RetryCountingHandler:

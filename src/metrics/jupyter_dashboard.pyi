@@ -51,6 +51,17 @@ class Chart:
         """LineStats(x, y, name)
         """
 
+        @staticmethod
+        def __new__(
+            _cls,
+            x,
+            y,
+            name
+        ):
+            """Create new instance of LineStats(x, y, name)
+            """
+            ...
+
     def __init__(
         self,
         name: typing.Optional[str],
@@ -165,6 +176,8 @@ class DashBoard:
         """Stops server. And stops updating dashboard.
         """
         ...
+
+    def __del__(self): ...
 
     _charts: typing.Dict[str, Chart]
     _dashboard: jupyter_dash.jupyter_app.JupyterDash

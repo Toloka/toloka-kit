@@ -74,6 +74,8 @@ class JSONLocalStorage(BaseExternalLockerStorage):
     class DefaultNearbyFileLocker(toloka.streaming.locker.BaseLocker):
         ...
 
+    def __attrs_post_init__(self) -> None: ...
+
     def save(
         self,
         base_key: str,
@@ -116,6 +118,8 @@ class ObjectSummaryCollection(typing.Protocol):
 
     def delete(self, **kwargs): ...
 
+    def __subclasshook__(other): ...
+
     def __init__(
         self,
         *args,
@@ -138,6 +142,8 @@ class BucketType(typing.Protocol):
         ExtraArgs=None,
         **kwargs
     ): ...
+
+    def __subclasshook__(other): ...
 
     def __init__(
         self,
