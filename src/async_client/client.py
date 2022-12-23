@@ -45,7 +45,7 @@ class AsyncTolokaClient:
 
     def __getattr__(self, name):
         """Access non function fields.
-        
+
         All function fields should be already overridden with `generate_async_methods_from`."""
         return getattr(self._sync_client, name)
 
@@ -57,7 +57,7 @@ class AsyncTolokaClient:
 
     @property
     def sync_client(self) -> TolokaClient:
-        return self._async_wrapped_client.__wrapped__
+        return self._sync_client
 
     @classmethod
     def from_sync_client(cls, client: TolokaClient) -> 'AsyncTolokaClient':
