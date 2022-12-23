@@ -55,10 +55,6 @@ class AsyncTolokaClient:
     def __setstate__(self, state):
         self.__dict__ = state
 
-    @property
-    def sync_client(self) -> TolokaClient:
-        return self._sync_client
-
     @classmethod
     def from_sync_client(cls, client: TolokaClient) -> 'AsyncTolokaClient':
         async_client = cls.__new__(cls)
