@@ -22,8 +22,8 @@ class SpeedQualityBalanceConfig(BaseTolokaObject, spec_enum='Type', spec_field='
         """The type of the filter used in [SpeedQualityBalanceConfig](toloka.client.pool.speed_quality_balance_config.SpeedQualityBalanceConfig.md).
 
         Attributes:
-            TOP_PERCENTAGE_BY_QUALITY — A percentage of the best Tolokers is configured.
-            BEST_CONCURRENT_USERS_BY_QUALITY — A maximum number of the best Tolokers is configured.
+            TOP_PERCENTAGE_BY_QUALITY: A percentage of the best Tolokers is configured.
+            BEST_CONCURRENT_USERS_BY_QUALITY: A maximum number of the best Tolokers is configured.
         """
         TOP_PERCENTAGE_BY_QUALITY = 'TOP_PERCENTAGE_BY_QUALITY'
         BEST_CONCURRENT_USERS_BY_QUALITY = 'BEST_CONCURRENT_USERS_BY_QUALITY'

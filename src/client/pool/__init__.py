@@ -71,7 +71,7 @@ class Pool(BaseTolokaObject):
         auto_accept_solutions:
             * True — Responses from Tolokers are accepted or rejected automatically based on some rules.
             * False — Responses are checked manually. Time reserved for checking is limited by the `auto_accept_period_day` parameter.
-                Learn more about [non-automatic acceptance](https://toloka.ai/en/docs/guide/concepts/offline-accept) in the Requester's guide.
+                Learn more about [non-automatic acceptance](https://toloka.ai/en/docs/guide/concepts/offline-accept).
         auto_accept_period_day: The number of days reserved for checking responses if the `auto_accept_solutions` parameter is set to `False`.
         assignments_issuing_config: Settings for assigning tasks in the pool.
         priority: The priority of the pool in relation to other pools in the project with the same task price and set of filters.
@@ -86,12 +86,12 @@ class Pool(BaseTolokaObject):
         training_config: Additional settings for linked training.
         metadata: A dictionary with metadata.
         owner: The pool owner.
-        id: The ID of the pool. Read only.
-        status: The status of the pool. Read only.
-        last_close_reason: A reason why the pool was closed last time. Read only.
-        created: The UTC date and time when the pool was created. Read only.
-        last_started: The UTC date and time when the pool was started last time. Read only.
-        last_stopped: The UTC date and time when the pool was stopped last time. Read only.
+        id: The ID of the pool. Read-only field.
+        status: The status of the pool. Read-only field.
+        last_close_reason: A reason why the pool was closed last time. Read-only field.
+        created: The UTC date and time when the pool was created. Read-only field.
+        last_started: The UTC date and time when the pool was started last time. Read-only field.
+        last_stopped: The UTC date and time when the pool was stopped last time. Read-only field.
         type: The type of the pool. Deprecated.
 
     Example:
@@ -135,7 +135,7 @@ class Pool(BaseTolokaObject):
             EXPIRED: The lifetime of the pool expired.
             COMPLETED: All tasks were completed.
             NOT_ENOUGH_BALANCE: There is not enough money to run the pool.
-            ASSIGNMENTS_LIMIT_EXCEEDED: A limit of 2 millions assignments is reached.
+            ASSIGNMENTS_LIMIT_EXCEEDED: A limit of 2 million assignments is reached.
             BLOCKED: The requester's account was blocked.
             FOR_UPDATE: Pool parameters are changing at the moment.
         """

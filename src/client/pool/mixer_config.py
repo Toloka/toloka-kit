@@ -8,7 +8,7 @@ from ...util._codegen import attribute
 class MixerConfig(BaseTolokaObject):
     """Settings for automatically grouping tasks into suites (smart mixing).
 
-    You can set the number of general, training and control tasks in a task suite. Also you control task shuffling and other settings.
+    You can set the number of general, training and control tasks in a task suite. Also, you control task shuffling and other settings.
 
     Attributes:
         real_tasks_count: The number of general tasks in a task suite.
@@ -29,7 +29,7 @@ class MixerConfig(BaseTolokaObject):
             Allowed range: from 0 to `training_tasks_count`.
             By default, the `min_training_tasks_count` value equals to the `training_tasks_count` value.
         force_last_assignment: A setting used when the number of remaining general tasks in the pool is less than the `min_real_tasks_count` value.
-            Note, that there must be enough control and trining tasks to create a task suite.
+            Note, that there must be enough control and training tasks to create a task suite.
 
             * True — An incomplete task suite is assigned.
             * False — An incomplete task suite is not assigned. It is useful if you add tasks to an open pool.

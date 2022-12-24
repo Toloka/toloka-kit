@@ -1226,8 +1226,7 @@ class TolokaClient:
 
         Only closed pools can be archived.
 
-        You can access archived pools later, if you need.
-        But you can't open archived pools.
+        You can't open archived pools, but you can [clone](toloka.client.TolokaClient.clone_pool.md) them if needed.
 
         Args:
             pool_id: The ID of the pool to be archived.
@@ -1252,8 +1251,7 @@ class TolokaClient:
 
         Only closed pools can be archived.
 
-        You can access archived pools later, if you need.
-        But you can't open archived pools.
+        You can't open archived pools, but you can [clone](toloka.client.TolokaClient.clone_pool.md) them if needed.
 
         Args:
             pool_id: The ID of the pool to be archived.
@@ -1425,7 +1423,7 @@ class TolokaClient:
             pool: The pool to be created.
 
         Returns:
-            Pool: The pool with updated read only parameters.
+            Pool: The pool with updated read-only fields.
 
         Example:
             Creating a new pool.
