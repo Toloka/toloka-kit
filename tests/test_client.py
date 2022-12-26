@@ -1,14 +1,18 @@
+import copy
 from decimal import Decimal
 
 import pickle
+
+import httpx
 import pytest
 import simplejson
+from pytest_lazyfixture import lazy_fixture
 
 from toloka.client import TolokaClient
 import toloka.client as client
 
 from .testutils.util_functions import check_headers
-
+from .conftest import SyncOverAsyncTolokaClient
 
 @pytest.fixture
 def random_url():
@@ -45,19 +49,19 @@ def requester_mapping():
     }
 
 
-def test_different_urls(requests_mock, random_url, requester_mapping):
+def test_different_urls(respx_mock, random_url, requester_mapping):
 
-    def get_requester(request, context):
+    def get_requester(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_requester',
             'X-Low-Level-Method': 'get_requester',
         }
         check_headers(request, expected_headers)
 
-        return simplejson.dumps(requester_mapping)
+        return httpx.Response(text=simplejson.dumps(requester_mapping), status_code=200)
 
-    requests_mock.get(f'{random_url}/api/v1/requester', text=get_requester)
+    respx_mock.get(f'{random_url}/api/v1/requester').mock(side_effect=get_requester)
 
     toloka_client = TolokaClient('fake-token', url=random_url)
     requester = toloka_client.get_requester()
@@ -74,23 +78,35 @@ def shared_account_id():
 
 
 @pytest.fixture
-def client_act_under_account(shared_account_id, random_url):
+def client_act_under_account_sync(random_url, shared_account_id):
     return TolokaClient('fake-token', url=random_url, act_under_account_id=shared_account_id)
 
 
-def test_client_act_as(requests_mock, client_act_under_account, shared_account_id, requester_mapping, random_url):
+@pytest.fixture(params=[True, False])
+def client_act_under_account_async(client_act_under_account_sync, request):
+    return SyncOverAsyncTolokaClient(
+        sync_client=client_act_under_account_sync, use_async_gen_adapter_as_gen=request.param
+    )
 
-    def get_requester(request, context):
+
+@pytest.fixture(params=[lazy_fixture('client_act_under_account_sync'), lazy_fixture('client_act_under_account_async')])
+def client_act_under_account(request) -> TolokaClient:
+    return request.param
+
+
+def test_client_act_as(respx_mock, client_act_under_account, shared_account_id, requester_mapping):
+
+    def get_requester(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(client_act_under_account, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_requester',
             'X-Low-Level-Method': 'get_requester',
             'X-Act-Under-Account-ID': shared_account_id
         }
         check_headers(request, expected_headers)
 
-        return simplejson.dumps(requester_mapping)
+        return httpx.Response(text=simplejson.dumps(requester_mapping), status_code=200)
 
-    requests_mock.get(f'{random_url}/api/v1/requester', text=get_requester)
+    respx_mock.get(f'{client_act_under_account.url}/api/v1/requester').mock(side_effect=get_requester)
 
     client_act_under_account.get_requester()

@@ -13,7 +13,7 @@ __all__ = [
     'raise_on_api_error',
     'FailedOperation',
 ]
-import requests.models
+import httpx
 import typing
 
 
@@ -235,4 +235,4 @@ class IncorrectActionsApiError(ApiError):
     payload: typing.Optional[typing.Any]
 
 
-def raise_on_api_error(response: requests.models.Response): ...
+def raise_on_api_error(response: httpx.Response): ...

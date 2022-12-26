@@ -16,36 +16,27 @@ import uuid
 
 
 class BaseTask(toloka.client.primitives.base.BaseTolokaObject):
-    """Base class for Task
+    """A base class for tasks.
 
     Attributes:
-        input_values: Input data for a task. List of pairs:
-            "<input field ID 1>": "<field value 1>",
-            "<input field ID 1>": "<field value 2>",
-            ...
-            "<input field ID n>": "<field value n>"
-        known_solutions: Responses and hints for control tasks and training tasks. If multiple output fields are included
-            in the validation, all combinations of the correct response must be specified.
-        message_on_unknown_solution: Hint for the task (for training tasks).
-        id: Task ID.
-        origin_task_id: ID of the task it was copied from.
+        input_values: A dictionary with input data for a task. Input field names are keys in the dictionary.
+        known_solutions: A list of all responses considered correct. It is used with control and training tasks.
+                        If there are several output fields, then you must specify all their correct combinations.
+        message_on_unknown_solution: A hint used in training tasks.
+        id: The ID of a task.
+        origin_task_id: The ID of a parent task. This parameter is set if the task was created by copying.
     """
 
     class KnownSolution(toloka.client.primitives.base.BaseTolokaObject):
-        """Answers and hints for control and training tasks.
+        """A correct response for a control or training task.
 
-        If several output fields are taken into account when checking, you must specify all combinations of the correct answer.
+        Responses have a correctness weight.
+        For example, if `correctness_weight` is 0.5,
+        then half of the error is counted to the Toloker.
 
         Attributes:
-            output_values: Correct answers in the task (for control tasks). If there are several correct answer options,
-                for each option you need to define output_values and give the weight of the correct answer (key correctness_weight).
-                "<output field id 1>": "<correct answer value 1>",
-                "<output field id 2>": "<correct answer value 2>",
-                ...
-                "<output field id n>": "<correct answer value n>"
-            correctness_weight: Weight of the correct answer. Allows you to set several options for correct answers and
-                rank them by correctness. For example, if the weight of the correct answer is 0.5, half of the error is
-                counted to the Toloker. The more correct the answer in correctValues, the higher its weight.
+            output_values: Correct values of output fields.
+            correctness_weight: The correctness weight of the response.
         """
 
         def __init__(
@@ -86,44 +77,41 @@ class BaseTask(toloka.client.primitives.base.BaseTolokaObject):
 class Task(toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMixin, BaseTask):
     """A task that is assigned to Tolokers.
 
-    Not to be confused with TaskSuite - a set of tasks that is shown to a Toloker at one time.
-    TaskSuite may contain several Tasks.
+    Tasks are grouped into [TaskSuites](toloka.client.task_suite.TaskSuite.md).
 
     Attributes:
-        input_values: Input data for a task. List of pairs:
-            "<input field ID 1>": "<field value 1>",
-            "<input field ID 1>": "<field value 2>",
-            ...
-            "<input field ID n>": "<field value n>"
-        known_solutions: Responses and hints for control tasks and training tasks. If multiple output fields are included
-            in the validation, all combinations of the correct response must be specified.
-        message_on_unknown_solution: Hint for the task (for training tasks).
-        id: Task ID.
-        pool_id: The ID of the pool that the task is uploaded to.
-        remaining_overlap: How many times will this task be issued to Tolokers. Read Only field.
-        reserved_for: IDs of Tolokers who will have access to the task.
-        unavailable_for: IDs of Tolokers who shouldn't have access to the task.
-        traits_all_of: 
-        traits_any_of: 
-        traits_none_of_any: 
-        origin_task_id: ID of the task it was copied from.
+        input_values: A dictionary with input data for a task. Input field names are keys in the dictionary.
+        known_solutions: A list of all responses considered correct. It is used with control and training tasks.
+            If there are several output fields, then you must specify all their correct combinations.
+        message_on_unknown_solution: A hint used in training tasks.
+        id: The ID of a task.
+        pool_id: The ID of the pool that the task belongs to.
+        remaining_overlap: The number of times left for this task to be assigned to Tolokers. This parameter is read only.
+        reserved_for: IDs of Tolokers who have access to the task.
+        unavailable_for: IDs of Tolokers who don't have access to the task.
+        traits_all_of: The task can be assigned to Tolokers who have all of the specified traits.
+        traits_any_of: The task can be assigned to Tolokers who have any of the specified traits.
+        traits_none_of_any: The task can not be assigned to Tolokers who have any of the specified traits.
+        origin_task_id: The ID of a parent task. This parameter is set if the task was created by copying.
         created: The UTC date and time when the task was created.
-        baseline_solutions: Preliminary responses. This data simulates Tolokers' responses when calculating confidence in a response.
-            It is used in dynamic overlap (also known as incremental relabeling or IRL) and aggregation of results by skill.
+        baseline_solutions: Preliminary responses for dynamic overlap and aggregation of results by skill. They are used to calculate a confidence level of the first responses from Toloker.
 
     Examples:
-        How to create tasks.
+        Creating a simple task with one input field.
 
-        >>> tasks = [
-        >>>     Task(input_values={'image': 'https://some.url/my_img0001.png'}, pool_id=my_pool_id),
-        >>>     Task(input_values={'image': 'https://some.url/my_img0002.png'}, pool_id=my_pool_id),
-        >>> ]
-        >>> created_tasks = toloka_client.create_tasks(tasks, allow_defaults=True)
-        >>> print(len(created_tasks.items))
+        >>> task = toloka.client.Task(
+        >>>     input_values={'image': 'https://some.url/img0.png'},
+        >>>     pool_id='1'
+        >>> )
         ...
+
+        See more complex example in the description of the [create_tasks](toloka.client.TolokaClient.create_tasks.md) method.
     """
 
     class BaselineSolution(toloka.client.primitives.base.BaseTolokaObject):
+        """A preliminary response.
+        """
+
         def __init__(
             self,
             *,
@@ -182,15 +170,16 @@ class Task(toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMi
 
 
 class CreateTaskParameters(toloka.client.primitives.parameter.Parameters):
-    """Parameters for Task creation controlling
-
-    Used when creating one Task.
+    """Parameters used with the [create_task](toloka.client.TolokaClient.create_task.md) method.
 
     Attributes:
         allow_defaults: Active overlap setting:
-            * True — Use the overlap that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
-            * False — Use the overlap that is set in the task parameters (in the `overlap` field).
+            * True — Use the overlap that is set in the `defaults.default_overlap_for_new_tasks` pool parameter.
+            * False — Use the overlap that is set in the `overlap` task parameter.
+
+            Default value: `False`.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
+            Default value: `False`.
     """
 
     def __init__(
@@ -209,11 +198,19 @@ class CreateTaskParameters(toloka.client.primitives.parameter.Parameters):
 
 
 class CreateTaskAsyncParameters(CreateTaskParameters):
-    """Attributes:
+    """Parameters used with the [create_tasks_async](toloka.client.TolokaClient.create_tasks_async.md) method.
+
+    Send the `operation_id` to avoid creating the same tasks multiple times. You can use this ID later to get information about the operation.
+
+    Attributes:
         allow_defaults: Active overlap setting:
-            * True — Use the overlap that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
-            * False — Use the overlap that is set in the task parameters (in the `overlap` field).
+            * True — Use the overlap that is set in the `defaults.default_overlap_for_new_tasks` pool parameter.
+            * False — Use the overlap that is set in the `overlap` task parameter.
+
+            Default value: `False`.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
+            Default value: `False`.
+        operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
     """
 
     def __init__(
@@ -234,21 +231,30 @@ class CreateTaskAsyncParameters(CreateTaskParameters):
 
 
 class CreateTasksParameters(CreateTaskParameters):
-    """Parameters for Tasks creation controlling
+    """Parameters used with the [create_tasks](toloka.client.TolokaClient.create_tasks.md) method.
 
-    Used when creating many Tasks.
+    If the operation is started in an asynchronous mode,
+    we recommend that you send the `operation_id` to avoid creating the same tasks multiple times. You can use this ID later to get information about the operation.
 
     Attributes:
         allow_defaults: Active overlap setting:
-            * True — Use the overlap that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
-            * False — Use the overlap that is set in the task parameters (in the `overlap` field).
+            * True — Use the overlap that is set in the `defaults.default_overlap_for_new_tasks` pool parameter.
+            * False — Use the overlap that is set in the `overlap` task parameter.
+
+            Default value: `False`.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
+            Default value: `False`.
         skip_invalid_items: Task validation option:
             * True — All valid tasks are added. If a task does not pass validation, then it is not added to Toloka. All such tasks are listed in the response.
-            * False — If any task does not pass validation, then operation is cancelled and no tasks are added to Toloka.
+            * False — If any task does not pass validation, then the operation is cancelled and no tasks are added to Toloka.
+
+            Default value: `False`.
+        operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122). Use it if the `async_mode` is set to `True`.
         async_mode: Request processing mode:
             * True — Asynchronous operation is started internally and `create_tasks` waits for the completion of it. It is recommended to create no more than 10,000 tasks per request in this mode.
             * False — The request is processed synchronously. A maximum of 5000 tasks can be added in a single request in this mode.
+
+            Default value: `False`.
     """
 
     def __init__(
@@ -273,13 +279,15 @@ class CreateTasksParameters(CreateTaskParameters):
 
 
 class TaskOverlapPatch(toloka.client.primitives.base.BaseTolokaObject):
-    """Parameters for changing the overlap of a specific Task
+    """Parameters for changing the overlap of a task.
 
     Attributes:
-        overlap: Overlap value.
-        infinite_overlap: Infinite overlap:
-            * True — Assign the task to all Tolokers. It is useful for training and control tasks.
-            * False — Overlap value specified for the task or for the pool is used. Default value: False.
+        overlap: The new overlap value.
+        infinite_overlap:
+            * True — The task is assigned to all Tolokers. It is usually set for training and control tasks.
+            * False — An overlap value specified for the task or for the pool is used.
+
+            Default value: `False`.
     """
 
     def __init__(
@@ -298,18 +306,18 @@ class TaskOverlapPatch(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class TaskPatch(TaskOverlapPatch):
-    """Parameters for changing overlap or baseline_solutions of a specific Task
+    """Parameters for changing a task.
 
     Attributes:
-        overlap: Overlap value.
-        infinite_overlap: Infinite overlap:
-            * True — Assign the task to all Tolokers. It is useful for training and control tasks.
-            * False — Overlap value specified for the task or for the pool is used. Default value: False.
-        baseline_solutions: Preliminary responses. This data simulates Tolokers' responses when calculating confidence in a response.
-            It is used in dynamic overlap (also known as incremental relabeling or IRL) and aggregation of results by skill.
-        known_solutions: Responses and hints for control tasks and training tasks. If multiple output fields are included
-            in the validation, all combinations of the correct response must be specified.
-        message_on_unknown_solution: Hint for the task (for training tasks).
+        overlap: The new overlap value.
+        infinite_overlap: * True — The task is assigned to all Tolokers. It is usually set for training and control tasks.
+            * False — An overlap value specified for the task or for the pool is used.
+
+            Default value: `False`.
+        baseline_solutions: Preliminary responses for dynamic overlap and aggregation of results by a skill. They are used to calculate a confidence level of the first responses from Tolokers.
+        known_solutions: A list of all responses considered correct. It is used with control and training tasks.
+            If there are several output fields, then you must specify all their correct combinations.
+        message_on_unknown_solution: A hint used in training tasks.
     """
 
     def __init__(

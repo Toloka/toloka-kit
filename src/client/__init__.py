@@ -70,16 +70,18 @@ __all__ = [
     'AppBatchCreateRequest',
 ]
 
-import attr
 import datetime
 import functools
 import io
 import logging
-import requests
-import time
 import threading
+import time
 import uuid
-import contextvars
+
+import attr
+import httpx
+import simplejson
+from httpx import HTTPStatusError, RequestError
 
 try:
     import pandas as pd
@@ -91,7 +93,7 @@ from decimal import Decimal
 from enum import Enum, unique
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
-from typing import BinaryIO, Callable, Generator, List, Optional, Sequence, Tuple, Union
+from typing import BinaryIO, Callable, ClassVar, Generator, List, Optional, Sequence, Tuple, Union
 from urllib3.util.retry import Retry
 
 from . import actions
@@ -137,13 +139,15 @@ from .app import (
 from .assignment import Assignment, AssignmentPatch, GetAssignmentsTsvParameters
 from .attachment import Attachment
 from .clone_results import CloneResults
-from .exceptions import raise_on_api_error, ValidationApiError
+from .exceptions import (
+    raise_on_api_error, ValidationApiError, InternalApiError, TooManyRequestsApiError, RemoteServiceUnavailableApiError
+)
 from .message_thread import (
     Folder, MessageThread, MessageThreadReply, MessageThreadFolders, MessageThreadCompose
 )
 from .operation_log import OperationLogItem
 from .pool import Pool, PoolPatchRequest
-from .primitives.retry import TolokaRetry, PreloadingHTTPAdapter, STATUSES_TO_RETRY
+from .primitives.retry import TolokaRetry, SyncRetryingOverURLLibRetry, STATUSES_TO_RETRY
 from .primitives.base import autocast_to_enum
 from .project import Project
 from .training import Training
@@ -244,6 +248,10 @@ class TolokaClient:
             if self is TolokaClient.Environment.SANDBOX:
                 return 'https://sandbox.toloka.yandex.com'
 
+    EXCEPTIONS_TO_RETRY: ClassVar[Tuple[Exception]] = (
+        RequestError, InternalApiError, TooManyRequestsApiError, RemoteServiceUnavailableApiError, HTTPStatusError,
+    )
+
     token: str
     default_timeout: Union[float, Tuple[float, float]]
     _platform_url: Optional[str]
@@ -291,6 +299,11 @@ class TolokaClient:
 
         self.act_under_account_id = act_under_account_id
 
+        self.retrying = SyncRetryingOverURLLibRetry(
+            base_url=str(self._session.base_url), retry=self.retryer_factory(), reraise=True,
+            exception_to_retry=self.EXCEPTIONS_TO_RETRY,
+        )
+
     @staticmethod
     def _default_retryer_factory(
         retries: int,
@@ -305,44 +318,58 @@ class TolokaClient:
             backoff_factor=2,  # summary retry time more than 10 seconds
         )
 
-    @functools.lru_cache(maxsize=128)
-    def _session_for_thread(self, thread_id: int) -> requests.Session:
-        adapter = PreloadingHTTPAdapter(max_retries=self.retryer_factory())
-        session = requests.Session()
-        session.mount(self.url, adapter)
-        session.headers.update(
-            {
-                'Authorization': f'OAuth {self.token}',
-                'User-Agent': f'python-toloka-client-{__version__}',
-            }
-        )
+    @property
+    def _headers(self):
+        headers = {
+            'Authorization': f'OAuth {self.token}',
+            'User-Agent': f'python-toloka-client-{__version__}',
+        }
         if self.act_under_account_id:
-            session.headers['X-Act-Under-Account-ID'] = self.act_under_account_id
-        return session
+            headers['X-Act-Under-Account-ID'] = self.act_under_account_id
+        return headers
+
+    def _do_request_with_retries(self, method, path, **kwargs):
+        @self.retrying.wraps
+        def wrapped(method, path, **kwargs):
+            response = self._session.request(method, path, **kwargs)
+            raise_on_api_error(response)
+            return response
+
+        return wrapped(method, path, **kwargs)
 
     @property
     def _session(self):
         return self._session_for_thread(threading.current_thread().ident)
 
-    def _raw_request(self, method, path, **kwargs):
+    @functools.lru_cache(maxsize=128)
+    def _session_for_thread(self, thread_id: int) -> httpx.Client:
+        client = httpx.Client(headers=self._headers, base_url=self.url)
+        return client
 
+    def _prepare_request(self, kwargs):
+        prepared_kwargs = dict(**kwargs)
         # Fixing capitalisation in boolean parameters
-        if kwargs.get('params'):
-            params = kwargs['params']
+        if prepared_kwargs.get('params'):
+            params = prepared_kwargs['params']
             for key, value in params.items():
                 if isinstance(value, bool):
                     params[key] = 'true' if value else 'false'
-        if self.default_timeout is not None and 'timeout' not in kwargs:
-            kwargs['timeout'] = self.default_timeout
-
+        if self.default_timeout is not None and 'timeout' not in prepared_kwargs:
+            prepared_kwargs['timeout'] = self.default_timeout
         # Add additional headers from contextvars
         additional_headers = form_additional_headers()
-        headers = kwargs.get('headers', {})
+        headers = prepared_kwargs.get('headers', {})
         headers = {**headers, **additional_headers}
-        kwargs['headers'] = headers
+        prepared_kwargs['headers'] = headers
+        json_param = prepared_kwargs.pop('json', None)
+        if json_param:
+            prepared_kwargs['content'] = simplejson.dumps(json_param)
+            headers['Content-Type'] = 'application/json'
+        return prepared_kwargs
 
-        response = self._session.request(method, f'{self.url}/api{path}', **kwargs)
-        raise_on_api_error(response)
+    def _raw_request(self, method, path, **kwargs):
+        kwargs = self._prepare_request(kwargs)
+        response = self._do_request_with_retries(method, f'/api{path}', **kwargs)
         return response
 
     def _request(self, method, path, **kwargs):
@@ -357,15 +384,12 @@ class TolokaClient:
         return self._request(method, path, params=params)
 
     def _find_all(self, find_function, request, sort_field: str = 'id', items_field: str = 'items'):
-        ctx = contextvars.copy_context()
-        yield
-
-        result = ctx.run(find_function, request, sort=[sort_field])
+        result = find_function(request, sort=[sort_field])
         items = getattr(result, items_field)
         while result.has_more:
             request = attr.evolve(request, **{f'{sort_field}_gt': getattr(items[-1], sort_field)})
             yield from items
-            result = ctx.run(find_function, request, sort=[sort_field])
+            result = find_function(request, sort=[sort_field])
             items = getattr(result, items_field)
 
         yield from items
@@ -415,6 +439,10 @@ class TolokaClient:
             )
 
         # get object from all pools
+        items = self._collect_from_pools(get_method, pools)
+        return result_type(items=items, validation_errors=validation_errors or {})
+
+    def _collect_from_pools(self, get_method, pools):
         items = {}
         for pool_id, numerated_ids in pools.items():
             obj_it = get_method(
@@ -425,8 +453,7 @@ class TolokaClient:
             for obj in obj_it:
                 if obj.id in numerated_ids:
                     items[numerated_ids[obj.id]] = obj
-
-        return result_type(items=items, validation_errors=validation_errors or {})
+        return items
 
     # Aggregation section
 
@@ -586,8 +613,7 @@ class TolokaClient:
         """
         find_function = functools.partial(self.find_aggregated_solutions, operation_id)
         generator = self._find_all(find_function, request, sort_field='task_id')
-        generator.send(None)
-        return generator
+        yield from generator
 
     # Assignments section
 
@@ -680,8 +706,7 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_assignments, request)
-        generator.send(None)
-        return generator
+        yield from generator
 
     @expand('patch')
     @add_headers('client')
@@ -797,8 +822,7 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_attachments, request)
-        generator.send(None)
-        return generator
+        yield from generator
 
     @add_headers('client')
     def download_attachment(self, attachment_id: str, out: BinaryIO) -> None:
@@ -947,8 +971,7 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_message_threads, request)
-        generator.send(None)
-        return generator
+        yield from generator
 
     @autocast_to_enum
     @add_headers('client')
@@ -1123,8 +1146,7 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_projects, request)
-        generator.send(None)
-        return generator
+        yield from generator
 
     @add_headers('client')
     def update_project(self, project_id: str, project: Project) -> Project:
@@ -1540,8 +1562,7 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_pools, request)
-        generator.send(None)
-        return generator
+        yield from generator
 
     @add_headers('client')
     def open_pool(self, pool_id: str) -> Pool:
@@ -1899,8 +1920,7 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_trainings, request)
-        generator.send(None)
-        return generator
+        yield from generator
 
     @add_headers('client')
     def open_training(self, training_id: str) -> Training:
@@ -2076,8 +2096,7 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_skills, request)
-        generator.send(None)
-        return generator
+        yield from generator
 
     @add_headers('client')
     def update_skill(self, skill_id: str, skill: Skill) -> Skill:
@@ -2323,8 +2342,7 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_tasks, request)
-        generator.send(None)
-        return generator
+        yield from generator
 
     @expand('patch')
     @add_headers('client')
@@ -2572,8 +2590,7 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_task_suites, request)
-        generator.send(None)
-        return generator
+        yield from generator
 
     @expand('patch')
     @add_headers('client')
@@ -2754,8 +2771,7 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_operations, request)
-        generator.send(None)
-        return generator
+        yield from generator
 
     @add_headers('client')
     def get_operation_log(self, operation_id: str) -> List[OperationLogItem]:
@@ -3000,8 +3016,7 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_user_bonuses, request)
-        generator.send(None)
-        return generator
+        yield from generator
 
     # User restrictions
 
@@ -3074,8 +3089,7 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_user_restrictions, request)
-        generator.send(None)
-        return generator
+        yield from generator
 
     @add_headers('client')
     def set_user_restriction(self, user_restriction: UserRestriction) -> UserRestriction:
@@ -3212,8 +3226,7 @@ class TolokaClient:
             ...
         """
         generator = self._find_all(self.find_user_skills, request)
-        generator.send(None)
-        return generator
+        yield from generator
 
     @add_headers('client')
     def get_user(self, user_id: str) -> User:
@@ -3356,8 +3369,7 @@ class TolokaClient:
             WebhookSubscription: The next matching webhook subscription.
         """
         generator = self._find_all(self.find_webhook_subscriptions, request, sort_field='created')
-        generator.send(None)
-        return generator
+        yield from generator
 
     @add_headers('client')
     def delete_webhook_subscription(self, webhook_subscription_id: str) -> None:
@@ -3471,8 +3483,7 @@ class TolokaClient:
             raise RuntimeError('this method supports only production environment')
 
         generator = self._find_all(self.find_app_projects, request, items_field='content')
-        generator.send(None)
-        return generator
+        yield from generator
 
     @add_headers('client')
     def create_app_project(self, app_project: AppProject) -> AppProject:
@@ -3595,8 +3606,7 @@ class TolokaClient:
             raise RuntimeError('this method supports only production environment')
 
         generator = self._find_all(self.find_apps, request, items_field='content')
-        generator.send(None)
-        return generator
+        yield from generator
 
     @add_headers('client')
     def get_app(self, app_id: str, lang: Optional[str] = None) -> App:
@@ -3671,8 +3681,7 @@ class TolokaClient:
 
         find_function = functools.partial(self.find_app_items, app_project_id)
         generator = self._find_all(find_function, request, items_field='content')
-        generator.send(None)
-        return generator
+        yield from generator
 
     @expand('app_item')
     @add_headers('client')
@@ -3780,8 +3789,7 @@ class TolokaClient:
 
         find_function = functools.partial(self.find_app_batches, app_project_id)
         generator = self._find_all(find_function, request, items_field='content')
-        generator.send(None)
-        return generator
+        yield from generator
 
     @expand('request')
     @add_headers('client')

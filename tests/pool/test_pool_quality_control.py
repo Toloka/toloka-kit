@@ -1,4 +1,6 @@
+import httpx
 import pytest
+import simplejson
 
 import toloka.client as client
 
@@ -465,7 +467,7 @@ def users_assessment_config_object():
         'users_assessment',
     ],
 )
-def test_create_pool_with_collector(request, requests_mock, toloka_client, toloka_url, collector_name, pool_map_with_readonly):
+def test_create_pool_with_collector(request, respx_mock, toloka_client, toloka_url, collector_name, pool_map_with_readonly):
 
     config_map = request.getfixturevalue(f'{collector_name}_config_map')
     config_object = request.getfixturevalue(f'{collector_name}_config_object')
@@ -482,18 +484,18 @@ def test_create_pool_with_collector(request, requests_mock, toloka_client, tolok
         }
     }
 
-    def pools(request, context):
+    def pools(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'create_pool',
             'X-Low-Level-Method': 'create_pool',
         }
         check_headers(request, expected_headers)
 
-        assert pool_map == request.json()
-        return pool_map
+        assert pool_map == simplejson.loads(request.content)
+        return httpx.Response(json=pool_map, status_code=201)
 
-    requests_mock.post(f'{toloka_url}/pools', json=pools, status_code=201)
+    respx_mock.post(f'{toloka_url}/pools').mock(side_effect=pools)
 
     pool = client.structure(pool_map_with_readonly, client.pool.Pool)
     pool.quality_control = client.pool.QualityControl(

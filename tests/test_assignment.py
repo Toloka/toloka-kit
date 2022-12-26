@@ -3,9 +3,11 @@ from operator import itemgetter
 from urllib.parse import urlparse, parse_qs
 from decimal import Decimal
 
+import httpx
 import pytest
 import simplejson
 import toloka.client as client
+from httpx import QueryParams
 
 from .testutils.util_functions import check_headers
 
@@ -35,48 +37,48 @@ def assignment_map():
     }
 
 
-def test_get_assignment(requests_mock, toloka_client, toloka_url, assignment_map):
+def test_get_assignment(respx_mock, toloka_client, toloka_url, assignment_map):
 
-    def get_assignment(request, context):
+    def get_assignment(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_assignment',
             'X-Low-Level-Method': 'get_assignment',
         }
         check_headers(request, expected_headers)
 
-        return simplejson.dumps(assignment_map)
+        return httpx.Response(text=simplejson.dumps(assignment_map), status_code=200)
 
-    requests_mock.get(f'{toloka_url}/assignments/assignment-i1d', text=get_assignment)
+    respx_mock.get(f'{toloka_url}/assignments/assignment-i1d').mock(side_effect=get_assignment)
     result = toloka_client.get_assignment('assignment-i1d')
     assert assignment_map == client.unstructure(result)
 
 
-def test_find_assignments(requests_mock, toloka_client, toloka_url, assignment_map):
+def test_find_assignments(respx_mock, toloka_client, toloka_url, assignment_map):
     raw_result = {
         'items': [assignment_map],
         'has_more': False,
     }
 
-    def find_assignments(request, context):
+    def find_assignments(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'find_assignments',
             'X-Low-Level-Method': 'find_assignments',
         }
         check_headers(request, expected_headers)
 
-        assert {
-            'status': ['ACCEPTED'],
-            'pool_id': ['21'],
-            'user_id': ['user-i1d'],
-            'created_gte': ['2015-12-01T00:00:00'],
-            'created_lt': ['2016-06-01T00:00:00'],
-            'sort': ['-submitted'],
-        } == parse_qs(urlparse(request.url).query)
-        return simplejson.dumps(raw_result)
+        assert QueryParams(
+            status='ACCEPTED',
+            pool_id='21',
+            user_id='user-i1d',
+            created_gte='2015-12-01T00:00:00',
+            created_lt='2016-06-01T00:00:00',
+            sort='-submitted',
+        ) == request.url.params
+        return httpx.Response(text=simplejson.dumps(raw_result), status_code=200)
 
-    requests_mock.get(f'{toloka_url}/assignments', text=find_assignments)
+    respx_mock.get(f'{toloka_url}/assignments').mock(side_effect=find_assignments)
 
     # Request object syntax
     request = client.search_requests.AssignmentSearchRequest(
@@ -102,33 +104,37 @@ def test_find_assignments(requests_mock, toloka_client, toloka_url, assignment_m
     assert raw_result == client.unstructure(result)
 
 
-def test_get_assignments(requests_mock, toloka_client, toloka_url, assignment_map):
+def test_get_assignments(respx_mock, toloka_client, toloka_url, assignment_map):
     assignments = [dict(assignment_map, id=f'assignment-i{i}d') for i in range(50)]
     assignments.sort(key=itemgetter('id'))
 
-    def get_assignments(request, context):
+    def get_assignments(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_assignments',
             'X-Low-Level-Method': 'find_assignments',
         }
         check_headers(request, expected_headers)
 
-        params = parse_qs(urlparse(request.url).query)
-        id_gt = params.pop('id_gt')[0] if 'id_gt' in params else None
-        assert {
-            'status': ['ACCEPTED'],
-            'pool_id': ['21'],
-            'user_id': ['user-i1d'],
-            'created_gte': ['2015-12-01T00:00:00'],
-            'created_lt': ['2016-06-01T00:00:00'],
-            'sort': ['id'],
-        } == params
+        params = request.url.params
+        id_gt = params.get('id_gt', None)
+        params = params.remove('id_gt')
+        assert QueryParams(
+            status='ACCEPTED',
+            pool_id='21',
+            user_id='user-i1d',
+            created_gte='2015-12-01T00:00:00',
+            created_lt='2016-06-01T00:00:00',
+            sort='id',
+        ) == params
 
         items = [assignment for assignment in assignments if id_gt is None or assignment['id'] > id_gt][:3]
-        return simplejson.dumps({'items': items, 'has_more': items[-1]['id'] != assignments[-1]['id']})
+        return httpx.Response(
+            text=simplejson.dumps({'items': items, 'has_more': items[-1]['id'] != assignments[-1]['id']}),
+            status_code=200
+        )
 
-    requests_mock.get(f'{toloka_url}/assignments', text=get_assignments)
+    respx_mock.get(f'{toloka_url}/assignments').mock(side_effect=get_assignments)
 
     # Request object syntax
     request = client.search_requests.AssignmentSearchRequest(
@@ -186,7 +192,7 @@ def test_assignments_search_request(input_status, raw_result):
     assert client.unstructure(request) == raw_result
 
 
-def test_patch_assignment(requests_mock, toloka_client, toloka_url, assignment_map):
+def test_patch_assignment(respx_mock, toloka_client, toloka_url, assignment_map):
     raw_request = {
         'status': 'ACCEPTED',
         'public_comment': 'Well done',
@@ -194,18 +200,18 @@ def test_patch_assignment(requests_mock, toloka_client, toloka_url, assignment_m
 
     raw_result = dict(assignment_map, public_comment='Well done')
 
-    def patch_assignment(request, context):
+    def patch_assignment(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'patch_assignment',
             'X-Low-Level-Method': 'patch_assignment',
         }
         check_headers(request, expected_headers)
 
-        assert raw_request == request.json()
-        return simplejson.dumps(raw_result)
+        assert raw_request == simplejson.loads(request.content)
+        return httpx.Response(text=simplejson.dumps(raw_result), status_code=200)
 
-    requests_mock.patch(f'{toloka_url}/assignments/assignment-i1d', text=patch_assignment)
+    respx_mock.patch(f'{toloka_url}/assignments/assignment-i1d').mock(side_effect=patch_assignment)
 
     assignment_patch = client.assignment.AssignmentPatch(status=client.assignment.Assignment.ACCEPTED, public_comment='Well done')
 
@@ -220,22 +226,19 @@ def test_patch_assignment(requests_mock, toloka_client, toloka_url, assignment_m
         Decimal('0.0005'),
     ],
 )
-def test_reward_in_get_assignment(requests_mock, toloka_client, toloka_url, assignment_map, value_to_check):
+def test_reward_in_get_assignment(respx_mock, toloka_client, toloka_url, assignment_map, value_to_check):
     new_assignment_map = dict(assignment_map, reward=value_to_check)
 
-    def get_assignment(request, context):
+    def get_assignment(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_assignment',
             'X-Low-Level-Method': 'get_assignment',
         }
         check_headers(request, expected_headers)
 
-        return simplejson.dumps(new_assignment_map)
+        return httpx.Response(text=simplejson.dumps(new_assignment_map), status_code=200)
 
-    requests_mock.get(
-        f'{toloka_url}/assignments/assignment-i1d',
-        text=get_assignment
-    )
+    respx_mock.get(f'{toloka_url}/assignments/assignment-i1d').mock(side_effect=get_assignment)
     result = toloka_client.get_assignment('assignment-i1d')
     assert result.reward == value_to_check

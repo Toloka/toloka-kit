@@ -19,7 +19,10 @@ import simplejson as json
 
 from .._converter import converter
 from ..exceptions import SpecClassIdentificationError
-from ...util._codegen import attribute, expand, fix_attrs_converters, REQUIRED_KEY, ORIGIN_KEY, AUTOCAST_KEY
+from ...util._codegen import (
+    attribute, expand, fix_attrs_converters, REQUIRED_KEY, ORIGIN_KEY, AUTOCAST_KEY,
+    universal_decorator,
+)
 
 E = TypeVar('E', bound=Enum)
 
@@ -170,7 +173,7 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
     @classmethod
     def __init_subclass__(cls, spec_enum: Optional[Union[str, Type[E]]] = None,
                           spec_field: Optional[str] = None, spec_value=None):
-
+        super().__init_subclass__()
         # Completing a variant type
         if spec_value is not None:
             cls._variant_registry.register(cls, spec_value)
@@ -301,6 +304,7 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
         return cls.structure(json.loads(json_str, use_decimal=True))
 
 
+@universal_decorator(has_parameters=False)
 def autocast_to_enum(func: typing.Callable) -> typing.Callable:
     """Function decorator that performs str -> Enum conversion when decorated function is called
 
@@ -324,9 +328,11 @@ def autocast_to_enum(func: typing.Callable) -> typing.Callable:
     def wrapper(*args, **kwargs):
         bound_arguments = signature.bind(*args, **kwargs)
         new_args = {}
-        for (argument_name, argument_value), casting_type, parameter in zip(bound_arguments.arguments.items(),
-                                                                            casting_types,
-                                                                            signature.parameters.values()):
+        for (argument_name, argument_value), casting_type, parameter in zip(
+                bound_arguments.arguments.items(),
+                casting_types,
+                signature.parameters.values()
+        ):
             new_args[argument_name] = converter.structure(argument_value, casting_type)
         return func(**new_args)
 

@@ -1,3 +1,6 @@
+import httpx
+import simplejson
+from httpx import QueryParams
 import logging
 from operator import itemgetter
 from urllib.parse import urlparse, parse_qs
@@ -34,116 +37,101 @@ def skill_sample(skill_header):
     }
 
 
-def test_find_skills(skill_sample, requests_mock, toloka_client, toloka_url):
+def test_find_skills(skill_sample, respx_mock, toloka_client, toloka_url):
     raw_result = {'items': [skill_sample], 'has_more': False}
 
-    def find_skill(request, context):
+    def find_skill(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'find_skills',
             'X-Low-Level-Method': 'find_skills',
         }
         check_headers(request, expected_headers)
 
-        assert {
-            'id_gt': ['20'],
-            'sort': ['-created,id']
-        } == parse_qs(urlparse(request.url).query)
-        return raw_result
+        assert QueryParams(
+            id_gt='20',
+            sort='-created,id',
+        ) == request.url.params
+        return httpx.Response(json=raw_result, status_code=200)
 
-    requests_mock.get(
-        f'{toloka_url}/skills',
-        json=find_skill,
-        status_code=200
-    )
+    respx_mock.get(f'{toloka_url}/skills').mock(side_effect=find_skill)
 
     # Request object syntax
-    request = client.search_requests.SkillSearchRequest(id_gt=20)
+    request = client.search_requests.SkillSearchRequest(id_gt='20')
     sort = client.search_requests.SkillSortItems(['-created', 'id'])
 
     result = toloka_client.find_skills(request, sort=sort)
     assert raw_result == client.unstructure(result)
 
     # Expanded syntax
-    result = toloka_client.find_skills(id_gt=20, sort=['-created', 'id'])
+    result = toloka_client.find_skills(id_gt='20', sort=['-created', 'id'])
     assert raw_result == client.unstructure(result)
 
 
-def test_get_skills(skill_sample, requests_mock, toloka_client, toloka_url):
+def test_get_skills(skill_sample, respx_mock, toloka_client, toloka_url):
     skills = [dict(skill_sample, id=str(i)) for i in range(50)]
     skills.sort(key=itemgetter('id'))
     expected_skills = [skill for skill in skills if skill['id'] > '20']
 
-    def get_skill(request, context):
+    def get_skill(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_skills',
             'X-Low-Level-Method': 'find_skills',
         }
         check_headers(request, expected_headers)
 
-        params = parse_qs(urlparse(request.url).query)
-        id_gt = params.pop('id_gt')[0]
-        assert {'sort': ['id']} == params
+        params = request.url.params
+        id_gt = params['id_gt']
+        params = params.remove('id_gt')
+        assert QueryParams(sort='id') == params
 
         items = [skill for skill in skills if id_gt if skill['id'] > id_gt][:3]
-        return {'items': items, 'has_more': items[-1]['id'] != skills[-1]['id']}
+        return httpx.Response(json={'items': items, 'has_more': items[-1]['id'] != skills[-1]['id']}, status_code=200)
 
-    requests_mock.get(
-        f'{toloka_url}/skills',
-        json=get_skill,
-        status_code=200
-    )
+    respx_mock.get(f'{toloka_url}/skills').mock(side_effect=get_skill)
 
     # Request object syntax
-    request = client.search_requests.SkillSearchRequest(id_gt=20)
+    request = client.search_requests.SkillSearchRequest(id_gt='20')
     result = toloka_client.get_skills(request)
     assert expected_skills == client.unstructure(list(result))
 
     # Expanded syntax
-    result = toloka_client.get_skills(id_gt=20)
+    result = toloka_client.get_skills(id_gt='20')
     assert expected_skills == client.unstructure(list(result))
 
 
-def test_get_skill(skill_sample, requests_mock, toloka_client, toloka_url):
+def test_get_skill(skill_sample, respx_mock, toloka_client, toloka_url):
 
-    def skill(request, context):
+    def skill(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_skill',
             'X-Low-Level-Method': 'get_skill',
         }
         check_headers(request, expected_headers)
 
-        return skill_sample
+        return httpx.Response(json=skill_sample, status_code=200)
 
-    requests_mock.get(
-        f'{toloka_url}/skills/21',
-        json=skill,
-        status_code=200
-    )
+    respx_mock.get(f'{toloka_url}/skills/21').mock(side_effect=skill)
 
     result = toloka_client.get_skill('21')
     assert skill_sample == client.unstructure(result)
 
 
-def test_create_skill(skill_sample, skill_header, requests_mock, toloka_client, toloka_url, caplog):
-    def create_skill(request, context):
+def test_create_skill(skill_sample, skill_header, respx_mock, toloka_client, toloka_url, caplog):
+    def create_skill(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'create_skill',
             'X-Low-Level-Method': 'create_skill',
         }
         check_headers(request, expected_headers)
 
-        assert request.json() == skill_header
-        return skill_sample
+        assert simplejson.loads(request.content) == skill_header
+        return httpx.Response(json=skill_sample, status_code=201)
 
-    requests_mock.post(
-        f'{toloka_url}/skills',
-        json=create_skill,
-        status_code=201
-    )
+    respx_mock.post(f'{toloka_url}/skills').mock(side_effect=create_skill)
 
     # Request object syntax
     with caplog.at_level(logging.INFO):
@@ -183,23 +171,19 @@ def test_create_skill_readonly_fields(skill_sample, toloka_client):
         )
 
 
-def test_update_skill(skill_sample, skill_header, requests_mock, toloka_client, toloka_url):
-    def update_skill(request, context):
+def test_update_skill(skill_sample, skill_header, respx_mock, toloka_client, toloka_url):
+    def update_skill(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'update_skill',
             'X-Low-Level-Method': 'update_skill',
         }
         check_headers(request, expected_headers)
 
-        assert request.json() == skill_header
-        return skill_sample
+        assert simplejson.loads(request.content) == skill_header
+        return httpx.Response(json=skill_sample, status_code=200)
 
-    requests_mock.put(
-        f'{toloka_url}/skills/21',
-        json=update_skill,
-        status_code=200
-    )
+    respx_mock.put(f'{toloka_url}/skills/21').mock(side_effect=update_skill)
 
     result = toloka_client.update_skill(
         '21', client.Skill(**skill_header)

@@ -1,4 +1,6 @@
 from decimal import Decimal
+
+import httpx
 import simplejson
 
 import pytest
@@ -178,20 +180,20 @@ def tasks_suite_operation_log_list():
         'tasks_suite',
     ],
 )
-def test_get_operagiton_log(request, requests_mock, toloka_client, toloka_url, object):
+def test_get_operagiton_log(request, respx_mock, toloka_client, toloka_url, object):
     log_list = request.getfixturevalue(f'{object}_operation_log_list')
     operation_id = 'ee60ef13-37a3-666a-9220-266daa4b71a7'
 
-    def get_operation_log(request, context):
+    def get_operation_log(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_operation_log',
             'X-Low-Level-Method': 'get_operation_log',
         }
         check_headers(request, expected_headers)
 
-        return simplejson.dumps(log_list)
+        return httpx.Response(text=simplejson.dumps(log_list), status_code=201)
 
-    requests_mock.get(f'{toloka_url}/operations/{operation_id}/log', text=get_operation_log, status_code=201)
+    respx_mock.get(f'{toloka_url}/operations/{operation_id}/log').mock(side_effect=get_operation_log)
     result = toloka_client.get_operation_log(operation_id)
     assert log_list == client.unstructure(result)

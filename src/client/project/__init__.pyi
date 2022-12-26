@@ -178,6 +178,8 @@ class Project(toloka.client.primitives.base.BaseTolokaObject):
         description_template: typing.Optional[str]
         map_provider: typing.Optional[MapProvider]
 
+    def __attrs_post_init__(self): ...
+
     def set_default_language(self, language: str):
         """Sets the source language used in the fields public_name, public_description, and public_instructions.
 
