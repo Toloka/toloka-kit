@@ -1244,16 +1244,17 @@ class TolokaClient:
 
     @add_headers('client')
     def archive_pool(self, pool_id: str) -> Pool:
-        """Sends pool to archive
+        """Archives a pool.
 
-        The pool must be in the status "closed".
-        The archived pool is not deleted. You can access it when you will need it.
+        Only closed pools can be archived.
+
+        You can't open archived pools, but you can [clone](toloka.client.TolokaClient.clone_pool.md) them if needed.
 
         Args:
-            pool_id: ID of pool that will be archived.
+            pool_id: The ID of the pool to be archived.
 
         Returns:
-            Pool: Object with updated status.
+            Pool: The pool with updated status.
 
         Example:
             >>> closed_pool = next(toloka_client.get_pools(status='CLOSED'))
@@ -1268,17 +1269,17 @@ class TolokaClient:
 
     @add_headers('client')
     def archive_pool_async(self, pool_id: str) -> Optional[operations.PoolArchiveOperation]:
-        """Sends pool to archive, asynchronous version
+        """Archives a pool. Sends an asynchronous request to Toloka.
 
-        The pool must be in the status "closed".
-        The archived pool is not deleted. You can access it when you will need it.
+        Only closed pools can be archived.
+
+        You can't open archived pools, but you can [clone](toloka.client.TolokaClient.clone_pool.md) them if needed.
 
         Args:
-            pool_id: ID of pool that will be archived.
+            pool_id: The ID of the pool to be archived.
 
         Returns:
-            PoolArchiveOperation: An operation upon completion of which you can get the pool with updated status. If
-                pool is already archived then None is returned
+            PoolArchiveOperation: An object to track the progress of the operation. If the pool is already archived then `None` is returned.
 
         Example:
             >>> closed_pool = next(toloka_client.get_pools(status='CLOSED'))
@@ -1294,15 +1295,15 @@ class TolokaClient:
 
     @add_headers('client')
     def close_pool(self, pool_id: str) -> Pool:
-        """Stops distributing tasks from the pool
+        """Closes a pool.
 
-        If all tasks done, the pool will be closed automatically.
+        If all tasks in a pool are completed, then the pool is closed automatically.
 
         Args:
-            pool_id: ID of the pool that will be closed.
+            pool_id: The ID of the pool to be closed.
 
         Returns:
-            Pool: Pool object with new status.
+            Pool: The pool with updated status.
 
         Example:
             >>> open_pool = next(toloka_client.get_pools(status='OPEN'))
@@ -1318,16 +1319,15 @@ class TolokaClient:
 
     @add_headers('client')
     def close_pool_async(self, pool_id: str) -> Optional[operations.PoolCloseOperation]:
-        """Stops distributing tasks from the pool, asynchronous version
+        """Closes a pool. Sends an asynchronous request to Toloka.
 
-        If all tasks done, the pool will be closed automatically.
+        If all tasks in a pool are completed, then the pool is closed automatically.
 
         Args:
-            pool_id: ID of the pool that will be closed.
+            pool_id: The ID of the pool to be closed.
 
         Returns:
-            Optional[PoolCloseOperation]: An operation upon completion of which you can get the pool with updated
-                status. If pool is already closed then None is returned.
+            PoolCloseOperation: An object to track the progress of the operation. If the pool is already closed then `None` is returned.
 
         Example:
             >>> open_pool = next(toloka_client.get_pools(status='OPEN'))
@@ -1343,13 +1343,16 @@ class TolokaClient:
 
     @add_headers('client')
     def close_pool_for_update(self, pool_id: str) -> Pool:
-        """Closes pool for update
+        """Closes a pool that is to be updated.
+
+        To make changes to a pool, close it before updating parameters.
+        If you don't open the pool after updating, it opens automatically in 15 minutes.
 
         Args:
-            pool_id: ID of the pool that will be closed for update.
+            pool_id: The ID of the pool to be closed.
 
         Returns:
-            Pool: Pool object with new status.
+            Pool: The pool with updated status.
 
         Example:
             >>> toloka_client.close_pool_for_update(pool_id='1')
@@ -1363,14 +1366,16 @@ class TolokaClient:
 
     @add_headers('client')
     def close_pool_for_update_async(self, pool_id: str) -> Optional[operations.PoolCloseOperation]:
-        """Closes pool for update, asynchronous version
+        """Closes a pool that is to be updated. Sends an asynchronous request to Toloka.
+
+        To make changes to a pool, close it before updating parameters.
+        If you don't open the pool after updating, it opens automatically in 15 minutes.
 
         Args:
-            pool_id: ID of the pool that will be closed for update.
+            pool_id: The ID of the pool to be closed.
 
         Returns:
-            Optional[PoolCloseOperation]: An operation upon completion of which you can get the pool with updated
-                status. If pool is already closed for update then None is returned.
+            PoolCloseOperation: An object to track the progress of the operation. If the pool is already closed then `None` is returned.
 
         Example:
             >>> close_op = toloka_client.close_pool_for_update_async(pool_id='1')
@@ -1385,16 +1390,16 @@ class TolokaClient:
 
     @add_headers('client')
     def clone_pool(self, pool_id: str) -> Pool:
-        """Duplicates existing pool
+        """Clones an existing pool.
 
-        An empty pool with the same parameters will be created.
-        A new pool will be attached to the same project.
+        An empty pool with the same parameters is created.
+        The new pool is attached to the same project.
 
         Args:
-            pool_id: ID of the existing pool.
+            pool_id: The ID of the pool to be cloned.
 
         Returns:
-            Pool: New pool.
+            Pool: The new pool.
 
         Example:
             >>> toloka_client.clone_pool(pool_id='1')
@@ -1411,20 +1416,20 @@ class TolokaClient:
 
     @add_headers('client')
     def clone_pool_async(self, pool_id: str) -> operations.PoolCloneOperation:
-        """Duplicates existing pool, asynchronous version
+        """Clones an existing pool. Sends an asynchronous request to Toloka.
 
-        An empty pool with the same parameters will be created.
-        A new pool will be attached to the same project.
+        An empty pool with the same parameters is created.
+        The new pool is attached to the same project.
 
         Args:
-            pool_id: ID of the existing pool.
+            pool_id: The ID of the pool to be cloned.
 
         Returns:
-            PoolCloneOperation: An operation upon completion of which you can get the new pool.
+            PoolCloneOperation: An object to track the progress of the operation.
 
         Example:
-            >>> new_pool = toloka_client.clone_pool_async(pool_id='1')
-            >>> toloka_client.wait_operation(new_pool)
+            >>> clone_op = toloka_client.clone_pool_async(pool_id='1')
+            >>> toloka_client.wait_operation(clone_op)
             ...
         """
         response = self._request('post', f'/v1/pools/{pool_id}/clone')
@@ -1432,28 +1437,28 @@ class TolokaClient:
 
     @add_headers('client')
     def create_pool(self, pool: Pool) -> Pool:
-        """Creates a new pool
+        """Creates a new pool in Toloka.
 
         You can send a maximum of 20 requests of this kind per minute and 100 requests per day.
 
         Args:
-            pool: New Pool with set parameters.
+            pool: The pool to be created.
 
         Returns:
-            Pool: Created pool. With read-only fields.
+            Pool: The pool with updated read-only fields.
 
         Example:
-            How to create a new pool in a project.
+            Creating a new pool.
 
-            >>> new_pool = toloka.pool.Pool(
-            >>>     project_id=existing_project_id,
+            >>> new_pool = toloka.client.Pool(
+            >>>     project_id='1',
             >>>     private_name='Pool 1',
             >>>     may_contain_adult_content=False,
             >>>     will_expire=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=365),
             >>>     reward_per_assignment=0.01,
             >>>     assignment_max_duration_seconds=60*20,
-            >>>     defaults=toloka.pool.Pool.Defaults(default_overlap_for_new_task_suites=3),
-            >>>     filter=toloka.filter.Languages.in_('EN'),
+            >>>     defaults=toloka.client.Pool.Defaults(default_overlap_for_new_task_suites=3),
+            >>>     filter=toloka.client.filter.Languages.in_('EN'),
             >>> )
             >>> new_pool.set_mixer_config(real_tasks_count=10, golden_tasks_count=0, training_tasks_count=0)
             >>> new_pool.quality_control.add_action(...)
@@ -1492,17 +1497,17 @@ class TolokaClient:
            PoolSearchResult: Found pools and a flag showing whether there are more matching pools exceeding the limit.
 
         Examples:
-            Find all pools in all projects.
+            Finding all pools in all projects.
 
             >>> pools = toloka_client.find_pools()
             ...
 
-            Find all open pools in all projects.
+            Finding all open pools in all projects.
 
             >>> pools = toloka_client.find_pools(status='OPEN')
             ...
 
-            Find open pools in a specific project.
+            Finding open pools in a specific project.
 
             >>> pools = toloka_client.find_pools(status='OPEN', project_id='1')
             ...
@@ -1515,10 +1520,10 @@ class TolokaClient:
 
     @add_headers('client')
     def get_pool(self, pool_id: str) -> Pool:
-        """Reads one specific pool
+        """Gets pool data from Toloka.
 
         Args:
-            pool_id: ID of the pool.
+            pool_id: The ID of the pool.
 
         Returns:
             Pool: The pool.
@@ -1561,18 +1566,18 @@ class TolokaClient:
 
     @add_headers('client')
     def open_pool(self, pool_id: str) -> Pool:
-        """Starts distributing tasks from the pool
+        """Opens a pool.
 
-        Tolokers will see your tasks only after that call.
+        After opening the pool, tasks can be assigned to Tolokers.
 
         Args:
-            pool_id: ID of the pool that will be started.
+            pool_id: The ID of the pool.
 
         Returns:
-            Pool: Pool object with new status.
+            Pool: The pool with updated status.
 
         Example:
-            Open the pool for Tolokers.
+            Opening a pool.
 
             >>> toloka_client.open_pool(pool_id='1')
             ...
@@ -1586,22 +1591,21 @@ class TolokaClient:
 
     @add_headers('client')
     def open_pool_async(self, pool_id: str) -> Optional[operations.PoolOpenOperation]:
-        """Starts distributing tasks from the pool, asynchronous version
+        """Opens a pool. Sends an asynchronous request to Toloka.
 
-        Tolokers will see your tasks only after that call.
+        After opening the pool, tasks can be assigned to Tolokers.
 
         Args:
-            pool_id: ID of the pool that will be started.
+            pool_id: The ID of the pool.
 
         Returns:
-            PoolOpenOperation: An operation upon completion of which you can get the pool with new status. If pool is
-                already opened then None is returned.
+            PoolOpenOperation: An object to track the progress of the operation. If the pool is already opened then `None` is returned.
 
         Example:
-            Open the pool for Tolokers.
+            Opening a pool.
 
-            >>> open_pool = toloka_client.open_pool(pool_id='1')
-            >>> toloka_client.wait_operation(open_pool)
+            >>> open_op = toloka_client.open_pool(pool_id='1')
+            >>> toloka_client.wait_operation(open_op)
             ...
         """
         response = self._raw_request('post', f'/v1/pools/{pool_id}/open')
@@ -1613,17 +1617,19 @@ class TolokaClient:
     @expand('request')
     @add_headers('client')
     def patch_pool(self, pool_id: str, request: PoolPatchRequest) -> Pool:
-        """Changes the priority of the pool issue
+        """Changes pool parameters in Toloka.
+
+        If a parameter is not specified in the `patch_pool` method, then it is left unchanged in Toloka.
 
         Args:
-            pool_id: ID of the pool that will be patched.
-            request: New priority of the pool.
+            pool_id: The ID of the pool to be changed.
+            request: New pool parameters.
 
         Returns:
-            Pool: Object with updated priority.
+            Pool: The pool with updated parameters.
 
         Example:
-            Set the highest priority to a specified pool.
+            Changing priority of a pool.
 
             >>> toloka_client.patch_pool(pool_id='1', priority=100)
             ...
@@ -1633,17 +1639,19 @@ class TolokaClient:
 
     @add_headers('client')
     def update_pool(self, pool_id: str, pool: Pool) -> Pool:
-        """Makes changes to the pool
+        """Updates all pool parameters in Toloka.
 
         Args:
-            pool_id: ID of the pool that will be changed.
-            pool: A pool object with all the fields: those that will be updated and those that will not.
+            pool_id: The ID of the pool to be updated.
+            pool: The pool with new parameters.
 
         Returns:
-            Pool: Pool object with all fields.
+            Pool: The pool with updated parameters.
 
         Example:
-            >>> updated_pool = toloka_client.update_pool(pool_id=old_pool_id, pool=new_pool_object)
+            >>> updated_pool = toloka_client.get_pool(pool_id='1')
+            >>> updated_pool.will_expire = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=30)
+            >>> toloka_client.update_pool(pool_id=updated_pool.id, pool=updated_pool)
             ...
         """
         if pool.type == Pool.Type.TRAINING:
