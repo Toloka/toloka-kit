@@ -34,7 +34,7 @@ jobs:
         node-version: 16
     - name: Setup YFM
       run: |
-        npm i @doc-tools/docs@latest -g
+        npm install @doc-tools/docs@1.31.1 -g
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
