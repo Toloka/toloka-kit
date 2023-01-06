@@ -69,7 +69,7 @@ class Task(InfiniteOverlapParametersMixin, BaseTask):
         traits_none_of_any: The task can not be assigned to Tolokers who have any of the specified traits.
         created: The UTC date and time when the task was created.
         baseline_solutions: Preliminary responses for dynamic overlap and aggregation of results by skill. They are used to calculate a confidence level of the first responses from Toloker.
-        remaining_overlap: The number of times left for this task to be assigned to Tolokers. This parameter is read only.
+        remaining_overlap: The number of times left for this task to be assigned to Tolokers. Read-only field.
 
     Example:
         Creating a simple task with one input field.

@@ -40,12 +40,12 @@ class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
         traits_none_of_any: The task suite can not be assigned to Tolokers who have any of the specified traits.
         longitude: The longitude of the point on the map for the task suite.
         latitude: The latitude of the point on the map for the task suite.
-        id: The ID of the task suite. This parameter is read only.
-        remaining_overlap: The number of times left for this task suite to be assigned to Tolokers. This parameter is read only.
+        id: The ID of the task suite. Read-only field.
+        remaining_overlap: The number of times left for this task suite to be assigned to Tolokers. Read-only field.
         automerged:
             * True — The task suite was created after [merging tasks](https://toloka.ai/en/docs/api/concepts/tasks#task-merge).
             * False — There are no merged tasks in the task suite.
-        created: The UTC date and time when the task suite was created. This parameter is read only.
+        created: The UTC date and time when the task suite was created. Read-only field.
     """
 
     pool_id: str

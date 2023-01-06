@@ -16,8 +16,8 @@ class WebhookSubscription(BaseTolokaObject):
         webhook_url: The URL to which notifications will be sent.
         event_type: Event type.
         pool_id: ID of the pool for which the subscription was created.
-        id: Pool ID. Read only field.
-        created: When this pool was created. Read only field.
+        id: Pool ID. Read-only field.
+        created: When this pool was created. Read-only field.
     """
 
     @unique

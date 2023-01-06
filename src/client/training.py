@@ -39,12 +39,12 @@ class Training(BaseTolokaObject):
         public_instructions: Instructions for completing training tasks. May contain HTML markup.
         metadata:
         owner: Training pool owner.
-        id: Internal ID of the training pool. Read only.
-        status: Training pool status. Read only.
+        id: Internal ID of the training pool. Read-only field.
+        status: Training pool status. Read-only field.
         last_close_reason: The reason the training pool was last closed.
-        created: UTC date and time of creation of the training pool in ISO 8601 format. Read only.
-        last_started: UTC date and time of the last start of the training pool in ISO 8601 format. Read only.
-        last_stopped: UTC date and time of the last stop of the training pool in ISO 8601 format. Read only.
+        created: UTC date and time of creation of the training pool in ISO 8601 format. Read-only field.
+        last_started: UTC date and time of the last start of the training pool in ISO 8601 format. Read-only field.
+        last_stopped: UTC date and time of the last stop of the training pool in ISO 8601 format. Read-only field.
     """
 
     @unique

@@ -31,8 +31,8 @@ class Skill(BaseTolokaObject):
         public_name: Skill name for other Tolokers. You can provide a name in several languages (the message will come in the Toloker's language).
         public_requester_description: Skill description text for other Tolokers. You can provide text in several languages (the message will come in the Toloker's language).
         owner: Skill owner.
-        id: Skill ID. Read only field.
-        created: The UTC date and time when the skill was created. Read only field.
+        id: Skill ID. Read-only field.
+        created: The UTC date and time when the skill was created. Read-only field.
 
     Example:
         How to create new skill.

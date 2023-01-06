@@ -33,8 +33,8 @@ class UserRestriction(BaseTolokaObject, spec_enum='Scope', spec_field='scope'):
         user_id: The ID of the Toloker.
         private_comment: A comment for you why access to this Toloker was restricted.
         will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
-        id: The identifier of a specific fact of access restriction. Read only.
-        created: Date and time when the fact of access restriction was created. Read only.
+        id: The identifier of a specific fact of access restriction. Read-only field.
+        created: Date and time when the fact of access restriction was created. Read-only field.
 
     Example:
         How you can lock access for one Toloker on one project.
