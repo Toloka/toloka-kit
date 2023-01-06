@@ -41,7 +41,7 @@ class Pool(BaseTolokaObject):
 
     Pool tasks are grouped into [task suites](toloka.client.task_suite.TaskSuite.md). Whole task suites are assigned to Tolokers.
 
-    Learn more in the Requester's guide about:
+    Learn more about:
     * [Pools](https://toloka.ai/en/docs/guide/concepts/pool-main)
     * [Pricing](https://toloka.ai/en/docs/guide/concepts/dynamic-pricing)
 
