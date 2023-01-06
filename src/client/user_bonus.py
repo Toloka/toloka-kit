@@ -23,10 +23,8 @@ class UserBonus(BaseTolokaObject):
         private_comment: Comments that are only visible to the requester.
         public_title: Message header for the Toloker. You can provide a title in several languages
             (the message will come in the Toloker's language). Format {'language': 'title', ... }.
-            The language can be RU/EN/TR/ID/FR.
         public_message: Message text for the Toloker. You can provide text in several languages
             (the message will come in the Toloker's language). Format {'language': 'message', ... }.
-            The language can be RU/EN/TR/ID/FR.
         without_message: Do not send a bonus message to the Toloker. To award a bonus without a message, specify null
             for public_title and public_message and True for without_message.
         assignment_id: ID of the Toloker's response to the task a reward is issued for.
@@ -59,11 +57,11 @@ class UserBonus(BaseTolokaObject):
         >>>         amount='0.10',
         >>>         public_title={
         >>>             'EN': 'Good Job!',
-        >>>             'RU': 'Молодец!',
+        >>>             'DE': 'Gut Arbeit!',
         >>>         },
         >>>         public_message={
         >>>             'EN': 'Ten tasks completed',
-        >>>             'RU': 'Выполнено 10 заданий',
+        >>>             'DE': '10 Aufgaben erledigt',
         >>>         }
         >>>     )
         >>> )

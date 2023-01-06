@@ -2823,11 +2823,11 @@ class TolokaClient:
             >>>         amount=decimal.Decimal('0.50'),
             >>>         public_title={
             >>>             'EN': 'Perfect job!',
-            >>>             'RU': 'Прекрасная работа!',
+            >>>             'DE': 'Perfekter Job!',
             >>>         },
             >>>         public_message={
             >>>             'EN': 'You are the best!',
-            >>>             'RU': 'Молодец!',
+            >>>             'DE': 'Du bist der Beste!',
             >>>         },
             >>>         assignment_id='012345'
             >>>     )
@@ -2867,11 +2867,11 @@ class TolokaClient:
             >>>         amount=decimal.Decimal('0.50'),
             >>>         public_title={
             >>>             'EN': 'Perfect job!',
-            >>>             'RU': 'Прекрасная работа!',
+            >>>             'DE': 'Perfekter Job!',
             >>>         },
             >>>         public_message={
             >>>             'EN': 'You are the best!',
-            >>>             'RU': 'Молодец!',
+            >>>             'DE': 'Du bist der Beste!',
             >>>         },
             >>>         assignment_id='1'
             >>>     ),
@@ -2880,11 +2880,11 @@ class TolokaClient:
             >>>         amount=decimal.Decimal('1.0'),
             >>>         public_title={
             >>>             'EN': 'Excellent work!',
-            >>>             'RU': 'Отличная работа!',
+            >>>             'DE': 'Ausgezeichnete Arbeit!',
             >>>         },
             >>>         public_message={
             >>>             'EN': 'You have completed all tasks!',
-            >>>             'RU': 'Сделаны все задания!',
+            >>>             'DE': 'Sie haben alle Aufgaben erledigt!',
             >>>         },
             >>>         assignment_id='2'
             >>>     )
@@ -2922,11 +2922,11 @@ class TolokaClient:
             >>>         amount=decimal.Decimal('0.50'),
             >>>         public_title={
             >>>             'EN': 'Perfect job!',
-            >>>             'RU': 'Прекрасная работа!',
+            >>>             'DE': 'Perfekter Job!',
             >>>         },
             >>>         public_message={
             >>>             'EN': 'You are the best!',
-            >>>             'RU': 'Молодец!',
+            >>>             'DE': 'Du bist der Beste!',
             >>>         },
             >>>         assignment_id='1'
             >>>     ),
@@ -2935,11 +2935,11 @@ class TolokaClient:
             >>>         amount=decimal.Decimal('1.0'),
             >>>         public_title={
             >>>             'EN': 'Excellent work!',
-            >>>             'RU': 'Превосходная работа!',
+            >>>             'DE': 'Ausgezeichnete Arbeit!',
             >>>         },
             >>>         public_message={
             >>>             'EN': 'You have completed all tasks!',
-            >>>             'RU': 'Сделаны все задания!',
+            >>>             'DE': 'Sie haben alle Aufgaben erledigt!',
             >>>         },
             >>>         assignment_id='2'
             >>>     )

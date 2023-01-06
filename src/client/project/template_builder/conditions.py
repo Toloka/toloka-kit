@@ -243,7 +243,7 @@ class SameDomainConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_
 
     Links must be specified in full, including the protocol (http, https, ftp).
 
-    The www. subdomain is ignored when checking, meaning that links to www.example.ru and example.ru are considered
+    The www. subdomain is ignored when checking, meaning that links to www.example.com and example.com are considered
     to be the same.
 
     How to pass a link address:
