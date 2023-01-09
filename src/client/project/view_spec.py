@@ -124,8 +124,8 @@ class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
         core_version: Default template components version. Most likely you do not need to change this parameter.
         infer_data_spec: You can configure the data specification automatically or manually. You can change the way the
             specification is configured using the infer_data_spec option:
-            * True – The specifications of input and output data are generated automatically depending on the task interface settings.
-            * False – You can configure the specification manually. In this case, automatic detection of input and output data doesn't work.
+            * `True` – The specifications of input and output data are generated automatically depending on the task interface settings.
+            * `False` – You can configure the specification manually. In this case, automatic detection of input and output data doesn't work.
                 You may need to enable this option if:
                 * You don't want the specification version to be affected by changes in the instructions or other project fields.
                 * You have fields that you need but they become optional or are deleted after automatic generation.

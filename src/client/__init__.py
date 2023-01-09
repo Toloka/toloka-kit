@@ -1172,7 +1172,7 @@ class TolokaClient:
 
         Emulates cloning behavior via Toloka interface:
         - the same skills will be used
-        - the same quality control collectors will be used (could be changed by reuse_controllers=False)
+        - the same quality control collectors will be used (could be changed by `reuse_controllers=False`)
         - the expiration date will not be changed in the new project
         - etc.
 
@@ -1181,7 +1181,7 @@ class TolokaClient:
 
         Args:
             project_id: ID of the project to be cloned.
-            reuse_controllers: Use same quality controllers in cloned and created projects. Defaults to True.
+            reuse_controllers: Use same quality controllers in cloned and created projects. Defaults to `True`.
                 This means that all quality control rules will be applied to both projects.
                 For example, if you have rule "fast_submitted_count", fast responses counts across both projects.
 
@@ -2437,7 +2437,7 @@ class TolokaClient:
         Task suites can be created in different pools. You can create general and control tasks or task suites in different pools with a single method call.
 
         By default, `create_task_suites` starts asynchronous operation internally and waits for the completion of it. Do not
-        change `async_mode` to False, if you do not understand clearly why you need it.
+        change `async_mode` to `False`, if you do not understand clearly why you need it.
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
         It is recommended that you create no more than 10,000 task suites in a single request if the `async_mode` parameter is `True`.
@@ -2669,7 +2669,7 @@ class TolokaClient:
         Args:
             op: ID of the operation.
             timeout: How long to wait. Defaults to 10 minutes.
-            disable_progress: Whether disable progress bar or enable. Defaults to False (meaning progress bar is shown).
+            disable_progress: Whether disable progress bar or enable. Defaults to `False` (meaning progress bar is shown).
 
         Raises:
             TimeoutError: Raises it if the timeout has expired and the operation is still not completed.

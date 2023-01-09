@@ -69,8 +69,8 @@ class Pool(BaseTolokaObject):
             Allowed range: from 0 to 259200 seconds (3 days). The default value is 0.
         dynamic_pricing_config: The dynamic pricing settings.
         auto_accept_solutions:
-            * True — Responses from Tolokers are accepted or rejected automatically based on some rules.
-            * False — Responses are checked manually. Time reserved for checking is limited by the `auto_accept_period_day` parameter.
+            * `True` — Responses from Tolokers are accepted or rejected automatically based on some rules.
+            * `False` — Responses are checked manually. Time reserved for checking is limited by the `auto_accept_period_day` parameter.
                 Learn more about [non-automatic acceptance](https://toloka.ai/en/docs/guide/concepts/offline-accept).
         auto_accept_period_day: The number of days reserved for checking responses if the `auto_accept_solutions` parameter is set to `False`.
         assignments_issuing_config: Settings for assigning tasks in the pool.

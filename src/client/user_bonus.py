@@ -26,7 +26,7 @@ class UserBonus(BaseTolokaObject):
         public_message: Message text for the Toloker. You can provide text in several languages
             (the message will come in the Toloker's language). Format {'language': 'message', ... }.
         without_message: Do not send a bonus message to the Toloker. To award a bonus without a message, specify null
-            for public_title and public_message and True for without_message.
+            for `public_title` and `public_message` and `True` for `without_message`.
         assignment_id: ID of the Toloker's response to the task a reward is issued for.
         id: Internal ID of the issued bonus. Read-only field.
         created: Date the bonus was awarded, in UTC. Read-only field.
@@ -92,8 +92,8 @@ class UserBonusCreateRequestParameters(Parameters):
         operation_id: Operation ID. If asynchronous creation is used, by this identifier you can later get
             results of creating bonuses.
         skip_invalid_items: Validation parameters of objects:
-            * True - Award a bonus if the object with bonus information passed validation. Otherwise, skip the bonus.
-            * False - Default behavior. Stop the operation and don't award bonuses if at least one object didn't pass validation.
+            * `True` — Award a bonus if the object with bonus information passed validation. Otherwise, skip the bonus.
+            * `False` — Default behavior. Stop the operation and don't award bonuses if at least one object didn't pass validation.
     """
 
     operation_id: str
