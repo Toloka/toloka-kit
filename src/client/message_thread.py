@@ -153,7 +153,7 @@ class MessageThreadReply(BaseTolokaObject):
 
     Attributes:
         text: Message text. You can provide text in several languages (the message will come in the Toloker's language).
-            Format: {"<ISO 639-1 language code>": "<message text>"}.
+            Format: {"<language RU / EN/TR/ID / FR>": "<message text>"}.
     """
 
     text: Dict[str, str]
@@ -175,9 +175,9 @@ class MessageThreadCompose(BaseTolokaObject):
     Attributes:
         recipients_select_type: Method for specifying recipients
         topic: Post title. You can provide a title in several languages (the message will come in the Toloker's language).
-            Format: "<ISO 639-1 language code>": "<topic text>".
+            Format: "<language RU/EN/TR/ID/FR>": "<topic text>".
         text: Message text. You can provide text in several languages (the message will come in the Toloker's language).
-            Format: "<ISO 639-1 language code>": "<message text>".
+            Format: "<language RU/EN/TR/ID/FR>": "<message text>".
         answerable: Ability to reply to a message:
             * `True` — The Toloker can respond to the message.
             * `False` — The Toloker can't respond to the message.

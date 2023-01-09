@@ -41,7 +41,7 @@ class Skill(BaseTolokaObject):
         >>>     name='Area selection of road signs',
         >>>     public_requester_description={
         >>>         'EN': 'Toloker annotates road signs',
-        >>>         'DE': 'Toloker kommentiert Verkehrszeichen',
+        >>>         'RU': 'Как исполнитель размечает дорожные знаки',
         >>>     },
         >>> )
         >>> print(segmentation_skill.id)
