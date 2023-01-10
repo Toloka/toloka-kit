@@ -217,7 +217,7 @@ class Project(BaseTolokaObject):
             public_instructions (str): Translation of instructions for completing tasks.
 
         Examples:
-            Creating a project and translating it to Deutsch.
+            How to add russian translation to the project:
 
             >>> project = toloka.Project(
             >>>     public_name='Cats vs dogs',
@@ -227,11 +227,11 @@ class Project(BaseTolokaObject):
             >>> )
             >>> project.set_default_language('EN')
             >>> project.add_requester_translation(
-            >>>     language='DE',
-            >>>     public_name='Katzen oder Hunde'
-            >>>     public_description='Eine einfache Bildklassifizierung'
+            >>>     language='RU',
+            >>>     public_name='Кошки или собаки'
+            >>>     public_description='Простая классификация изображений'
             >>> )
-            >>> project.add_requester_translation(language='DE', public_instructions='Bestimmen Sie, welches Tier auf dem Bild zu sehen ist')
+            >>> project.add_requester_translation(language='RU', public_instructions='Определите, какое животное изображено')
         """
         assert language
 
