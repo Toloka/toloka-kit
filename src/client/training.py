@@ -52,7 +52,7 @@ class Training(BaseTolokaObject):
             You can use HTML markup inside `public_instructions`.
         metadata: A dictionary with metadata.
         owner: The training owner.
-        id: The ID of the training. Read-only field.read
+        id: The ID of the training. Read-only field.
         status: The training status. Read-only field.
         last_close_reason: A reason why the training was closed last time. Read-only field.
         created: The UTC date and time when the training was created. Read-only field.
