@@ -18,6 +18,7 @@
 !*.pyi
 !*.toml
 !*.yml
+!*.svg
 
 # Unignore bash scripts in misc
 !misc/**/*.sh

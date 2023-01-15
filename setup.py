@@ -18,14 +18,14 @@ with open('README.md') as f:
     readme = f.read()
 
 EXTRAS_REQUIRE = {
-    'dev': ['requests-mock'],
+    'dev': ['respx', 'aiohttp', 'pytest', 'pytest-lazy-fixture', 'pytest-asyncio'],
     'pandas': ['pandas'],
     'autoquality': ['crowd-kit >= 1.0.0'],
     's3': ['boto3 >= 1.4.7'],
     'zookeeper': ['kazoo >= 2.6.1'],
     'jupyter-metrics': ['plotly', 'ipyplot', 'jupyter-dash'],
 }
-EXTRAS_REQUIRE['all'] = sum(EXTRAS_REQUIRE.values(), [])
+EXTRAS_REQUIRE['all'] = sum((deps for env, deps in EXTRAS_REQUIRE.items() if env != 'dev'), [])
 
 setup(
     name=about['__title__'],
@@ -41,10 +41,13 @@ setup(
     python_requires='>=3.7.0',
     install_requires=[
         'attrs >= 20.3.0',
+        # cattr 22.2.0 breaks tests/primitives/test_operator.py
         'cattrs >= 1.1.1, < 22.2.0',
         'cached-property; python_version < "3.8.0"',
         'filelock >= 3.2.0',
         'requests',
+        'httpx',
+        'tenacity',
         'typing-extensions',
         'urllib3 >= 1.26.0',
         'simplejson',

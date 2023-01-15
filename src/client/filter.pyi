@@ -53,6 +53,12 @@ class FilterCondition(toloka.client.primitives.base.BaseTolokaObject):
         ...
     """
 
+    def __or__(self, other: 'FilterCondition'): ...
+
+    def __and__(self, other: 'FilterCondition'): ...
+
+    def __invert__(self) -> 'FilterCondition': ...
+
     @classmethod
     def structure(cls, data: dict): ...
 
@@ -70,6 +76,14 @@ class FilterOr(FilterCondition):
     Attributes:
         or_: A list of filters.
     """
+
+    def __or__(self, other: FilterCondition): ...
+
+    def __invert__(self) -> 'FilterAnd': ...
+
+    def __iter__(self): ...
+
+    def __getitem__(self, item): ...
 
     @classmethod
     def structure(cls, data): ...
@@ -89,6 +103,14 @@ class FilterAnd(FilterCondition):
     Attributes:
         and_: A list of filters.
     """
+
+    def __and__(self, other): ...
+
+    def __invert__(self) -> FilterOr: ...
+
+    def __iter__(self): ...
+
+    def __getitem__(self, item): ...
 
     @classmethod
     def structure(cls, data): ...
@@ -121,6 +143,8 @@ class Condition(FilterCondition):
         PROFILE = 'profile'
         COMPUTED = 'computed'
         SKILL = 'skill'
+
+    def __invert__(self) -> 'Condition': ...
 
     @classmethod
     def structure(cls, data): ...
@@ -449,6 +473,11 @@ class Languages(Profile, toloka.client.primitives.operators.InclusionConditionMi
             Tests are available for languages: `AR`, `DE`, `EN`, `ES`, `FR`,
             `HE`, `ID`, `JA`, `PT`, `RU`, `SV`, `ZH-HANS`.
     """
+
+    def __getnewargs__(self):
+        """Due to redefined __new__ method class can't be deepcopied or pickled without __getnewargs__ definition
+        """
+        ...
 
     def __init__(
         self,

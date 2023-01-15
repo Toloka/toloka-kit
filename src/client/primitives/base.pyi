@@ -28,6 +28,8 @@ class VariantRegistry:
         value: E
     ) -> type: ...
 
+    def __getitem__(self, value: E): ...
+
 
 class BaseTolokaObjectMetaclass(type):
     @staticmethod
@@ -58,6 +60,18 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
       if not explicitly configured otherwise
     * Skip missing optional fields during unstructuring with client's cattr converter
     """
+
+    @staticmethod
+    def __new__(
+        cls,
+        *args,
+        **kwargs
+    ):
+        """Overriding new for our check to be executed before auto-generated __init__
+        """
+        ...
+
+    def __getattr__(self, item): ...
 
     @classmethod
     def is_variant_base(cls) -> bool: ...

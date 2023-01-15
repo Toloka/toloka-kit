@@ -5,19 +5,33 @@ __all__ = [
     'ensure_async',
     'get_task_traceback',
     'Cooldown',
+    'AsyncGenAdapter',
+    'generate_async_methods_from',
+    'isasyncgenadapterfunction',
 ]
 
 import asyncio
-import attr
-import functools
-import pickle
-from concurrent import futures
 import contextvars
-from io import StringIO
+import functools
+import inspect
+import linecache
+import logging
+import pickle
+import re
+import sys
 import time
-from typing import Awaitable, Callable, Dict, Generic, List, Optional, Type, TypeVar
+from concurrent import futures
+from io import StringIO
+from textwrap import dedent
+from typing import (
+    AsyncGenerator, AsyncIterable, Awaitable, Callable, Dict, Generator, Generic, List, Optional, Type, TypeVar,
+)
+
+import attr
 
 from .stored import PICKLE_DEFAULT_PROTOCOL
+
+logger = logging.Logger(__file__)
 
 
 @attr.s
@@ -122,6 +136,10 @@ class AsyncMultithreadWrapper(Generic[T]):
         self.__loop = loop
         self.__pool_size = pool_size
         self.__executor = futures.ThreadPoolExecutor(max_workers=pool_size)
+        logger.warning(
+            'AsyncMultithreadWrapper is deprecated and will be removed in future versions. Please use AsyncTolokaClient:'
+            ' this will increase performance in case of many concurrent connections.'
+        )
 
     @property
     def _loop(self):
@@ -201,3 +219,179 @@ class Cooldown:
 
     async def __aexit__(self, *exc):
         pass
+
+
+def generate_async_methods_from(cls):
+    """Class decorator that generates asynchronous versions of methods using the provided class.
+
+    This class assumes that every method of the resulting class is either an async gen or async function. In case of
+    the naming collision (decorated class already has the method that would have been created by the decorator)
+    the new method is not generated. This allows you to custom implement asynchronous versions of non-trivial methods
+    while automatically generating boilerplate code.
+    """
+
+    def _substitute_for_loop(match):
+        method_name = match.group(2)
+        method = getattr(cls, method_name)
+        if inspect.isgeneratorfunction(method):
+            return match.expand(r'async for \1 in self.\2\3:')
+        else:
+            return match.expand(r'for \1 in await self.\2\3:')
+
+    def _substitute_method(match):
+        method_name = match.group(1)
+        method = getattr(cls, method_name)
+        if inspect.isgeneratorfunction(method):
+            return match.expand(r'self.\1(')
+        else:
+            return match.expand(r'await self.\1(')
+
+    def _generate_async_version_source(method):
+        source = inspect.getsource(method)
+
+        yield_from_regex = re.compile(r'yield from (\S+)')
+        source = re.sub(
+            yield_from_regex,
+            r'async for _val in \1: yield _val',
+            source,
+        )
+
+        # Generator[YieldType, SendType, ReturnType] -> AsyncGenAdapter[YieldType, SendType]
+        generator_type_annotation_regex = re.compile(r'Generator\[(\S+, \S+), \S+]')
+        source = re.sub(generator_type_annotation_regex, r'AsyncGenAdapter[\1]', source)
+
+        # Generator.send -> AsyncGenerator.asend
+        send_regex = re.compile(r'(\w+)\.send\(')
+        source = re.sub(send_regex, r'await \1.asend(', source)
+
+        # method calls
+        method_call_regex = re.compile(r'(?<!in )self\.(\w+)\(')
+        source = re.sub(method_call_regex, _substitute_method, source)
+
+        # for loops
+        for_loop_regex = re.compile(r'for (\w+) in self\.(\w+)([^:]+):')
+        source = re.sub(for_loop_regex, _substitute_for_loop, source)
+
+        # method signatures
+        source = source.replace(
+            f'def {method.__name__}', f'async def {method.__name__}'
+        )
+
+        # headers
+        source = source.replace("add_headers('client')", "add_headers('async_client')")
+
+        return dedent(source)
+
+    def wrapper(target_cls):
+        def _compile_function(member_name, source):
+            file_name = f'async_client_{member_name}'
+
+            bytecode = compile(source, file_name, 'exec')
+            # use a modified target class module __dict__ as globals
+            proxy_globals = dict(**sys.modules[cls.__module__].__dict__)
+            proxy_globals['AsyncGenAdapter'] = AsyncGenAdapter
+            proxy_locals = dict(**cls.__dict__)
+            eval(bytecode, proxy_globals, proxy_locals)
+            function = proxy_locals[member_name]
+            function.__module__ = target_cls.__module__
+            function.__qualname__ = f'{target_cls.__name__}.{function.__name__}'
+
+            linecache.cache[file_name] = (
+                len(source),
+                None,
+                source.splitlines(True),
+                file_name
+            )
+
+            return function
+
+        for member_name, member in cls.__dict__.items():
+            if (
+                inspect.isfunction(member)
+                and not hasattr(target_cls, member_name)
+                and not isinstance(member_name, property)
+            ):
+                source = _generate_async_version_source(member)
+
+                function = _compile_function(member_name, source)
+                if inspect.isasyncgenfunction(function):
+                    function = async_gen_adapter(function)
+                setattr(target_cls, member_name, function)
+        return target_cls
+
+    return wrapper
+
+
+def async_gen_adapter(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        return AsyncGenAdapter(func(*args, **kwargs))
+
+    wrapper.__is_async_gen_adapter = True
+    return wrapper
+
+
+YieldType = TypeVar('YieldType')
+SendType = TypeVar('SendType')
+
+
+class SyncGenWrapper:
+    def __init__(self, gen: AsyncGenerator[YieldType, SendType]):
+        self.gen = gen
+
+    def __iter__(self):
+        # use new event loop in different thread not to interfere with the current one
+        loop = asyncio.new_event_loop()
+        try:
+            # Nested event loops are prohibited in python, so we use threading to synchronously run such a loop.
+            # Creating new loop inside thread each time is impossible since it will be destroyed on thread exit and
+            # generator will be closed.
+            with futures.ThreadPoolExecutor(max_workers=1) as executor:
+                while True:
+                    res = executor.submit(loop.run_until_complete, self.gen.__anext__())
+                    yield res.result()
+        except StopAsyncIteration:
+            return
+        finally:
+            loop.close()
+
+
+class AsyncGenAdapter(Generic[YieldType, SendType], AsyncIterable, Awaitable):
+    """Adapter class that enables alternative syntax for iteration over async generator.
+
+    This class is used for backwards compatibility. Please use "async for" syntax in new code.
+
+    Examples:
+        main syntax
+         >>> async for value in AsyncGenAdapter(async_gen): ...
+         ...
+
+         alternative syntax (please do not use in new code):
+         >>> for value in await AsyncGenAdapter(async_gen): ...
+         ...
+    """
+
+    def __init__(self, gen: AsyncGenerator[YieldType, SendType]):
+        self.gen = gen
+
+    async def as_sync_gen(self):
+        return SyncGenWrapper(self.gen)
+
+    def __await__(self) -> Generator[SyncGenWrapper, None, None]:
+        logger.warning(
+            'Awaiting AsyncGenAdapter, which was returned by AsyncTolokaClient\'s method is deprecated and does not '
+            'provide true asynchrony. Please use "async for" syntax to iterate over the results.'
+        )
+        return self.as_sync_gen().__await__()
+
+    # defined explicitly due to the check in "async for"
+    async def __aiter__(self):
+        async for value in self.gen:
+            yield value
+
+    def __getattr__(self, item):
+        return getattr(self.gen, item)
+
+
+def isasyncgenadapterfunction(obj):
+    return getattr(obj, '__is_async_gen_adapter', False)

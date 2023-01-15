@@ -1786,7 +1786,9 @@ class AppProjectSearchRequest(BaseSearchRequest):
     """
 
     class Scope(enum.Enum):
-        """An enumeration.
+        """* `MY` — Projects created by you.
+            * `COMPANY` — Projects created by requesters from your company.
+            * `REQUESTER_LIST` — Projects created by requesters in the `requester_ids` list.
         """
 
         MY = 'MY'

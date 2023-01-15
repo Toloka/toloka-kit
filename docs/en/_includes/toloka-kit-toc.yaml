@@ -1,10 +1,16 @@
 items:
   - name: Overview
     href: ../toloka-kit/index.md
-  - name: Quick Start
+  - name: Getting OAuth token
+    href: ../toloka-kit/registration.md
+  - name: Quick start
     href: ../toloka-kit/quick-start.md
-  - name: TolokaClient
-    href: ../toloka-kit/reference/toloka.client.TolokaClient.md
+  - name: Recipes
+    items:
+      - name: Sample project recipe
+        href: ../toloka-kit/learn-basics.md
+      - name: More usage examples
+        href: ../toloka-kit/use-cases.md
   - name: Reference
     expanded: true
     include:

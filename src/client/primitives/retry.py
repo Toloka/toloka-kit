@@ -1,12 +1,22 @@
 __all__ = [
-    'TolokaRetry', 'PreloadingHTTPAdapter'
+    'TolokaRetry', 'SyncRetryingOverURLLibRetry', 'AsyncRetryingOverURLLibRetry'
 ]
 
 import json
 import logging
+import socket
 from functools import wraps
-from requests.adapters import HTTPAdapter
-from typing import Optional, List, Union
+from inspect import signature
+from typing import Callable, List, Optional, Tuple, Type, Union
+
+import httpx
+import urllib3
+import urllib3.exceptions
+from tenacity import AsyncRetrying, BaseRetrying, RetryCallState, Retrying
+from tenacity.retry import retry_base
+from tenacity.stop import stop_base
+from tenacity.wait import wait_base
+from urllib3.connectionpool import ConnectionPool
 from urllib3.response import HTTPResponse  # type: ignore
 from urllib3.util.retry import Retry  # type: ignore
 
@@ -86,37 +96,213 @@ class TolokaRetry(Retry):
         return super(TolokaRetry, self).increment(*args, **kwargs)
 
 
-class PreloadingHTTPAdapter(HTTPAdapter):
-    """HTTPAdapter subclass that forces preload_content=True during requests
+def httpx_exception_to_urllib_exception(exception: BaseException) -> BaseException:
+    """Maps the httpx exception to the corresponding urllib3 exception."""
 
-    As for current version (2.26.0) requests supports body preloading with stream=False, but this behavior is
-    implemented by calling response.content in the end of request process. Such implementation does not support
-    retries in case of headers being correctly received by client but body being loaded incorrectly (i.e. when server
-    uses chunked transfer encoding and fails during body transmission). Retries are handled on urllib3 level and
-    retrying failed body read can be achieved by passing preload_content=False to urllib3.response.HTTPResponse. To do
-    this using HTTPAdapter we need to use HTTP(S)ConnectionPool.urlopen with preload_content=True during send method and
-    override build_response method to populate requests Response wrapper with content.
+    if isinstance(exception, httpx.HTTPError):
+        mapped_exception = urllib3.exceptions.HTTPError()
+    elif isinstance(exception, httpx.RequestError):
+        mapped_exception = urllib3.exceptions.RequestError(
+            pool=ConnectionPool(str(exception.request.url)), url=str(exception.request.url), message=str(exception)
+        )
+    elif isinstance(exception, httpx.TransportError):
+        mapped_exception = urllib3.exceptions.HTTPError(),
+    elif isinstance(exception, httpx.TimeoutException):
+        mapped_exception = urllib3.exceptions.TimeoutError(),
+    elif isinstance(exception, httpx.ConnectTimeout):
+        mapped_exception = urllib3.exceptions.ConnectTimeoutError(),
+    elif isinstance(exception, httpx.ReadTimeout):
+        mapped_exception = urllib3.exceptions.ReadTimeoutError(
+            pool=ConnectionPool(str(exception.request.url)), url=str(exception.request.url), message=str(exception)
+        )
+    elif isinstance(exception, httpx.WriteTimeout):
+        return socket.timeout()
+    elif isinstance(exception, httpx.PoolTimeout):
+        mapped_exception = urllib3.exceptions.NewConnectionError(
+            pool=ConnectionPool(str(exception.request.url)), message=str(exception)
+        )
+    elif isinstance(exception, httpx.NetworkError):
+        mapped_exception = urllib3.exceptions.HTTPError()
+    elif isinstance(exception, httpx.ConnectError):
+        mapped_exception = urllib3.exceptions.ConnectionError()
+    elif isinstance(exception, httpx.ReadError):
+        mapped_exception = socket.error()
+    elif isinstance(exception, httpx.WriteError):
+        mapped_exception = socket.error()
+    elif isinstance(exception, httpx.CloseError):
+        mapped_exception = urllib3.exceptions.ConnectionError()
+    elif isinstance(exception, httpx.ProtocolError):
+        mapped_exception = urllib3.exceptions.ProtocolError()
+    elif isinstance(exception, httpx.LocalProtocolError):
+        mapped_exception = urllib3.exceptions.ProtocolError()
+    elif isinstance(exception, httpx.RemoteProtocolError):
+        mapped_exception = urllib3.exceptions.ProtocolError()
+    elif isinstance(exception, httpx.ProxyError):
+        mapped_exception = urllib3.exceptions.ProxyError(error=exception, message=str(exception))
+    elif isinstance(exception, httpx.UnsupportedProtocol):
+        mapped_exception = urllib3.exceptions.URLSchemeUnknown(scheme=exception.request.url.scheme)
+    elif isinstance(exception, httpx.DecodingError):
+        mapped_exception = urllib3.exceptions.DecodeError()
+    elif isinstance(exception, httpx.TooManyRedirects):
+        mapped_exception = urllib3.exceptions.ResponseError()
+    elif isinstance(exception, httpx.HTTPStatusError):
+        mapped_exception = urllib3.exceptions.ResponseError()
+    elif isinstance(exception, httpx.InvalidURL):
+        mapped_exception = urllib3.exceptions.LocationValueError()
+    elif isinstance(exception, httpx.CookieConflict):
+        mapped_exception = urllib3.exceptions.ResponseError()
+    elif isinstance(exception, httpx.StreamError):
+        mapped_exception = socket.error()
+    elif isinstance(exception, httpx.StreamConsumed):
+        mapped_exception = socket.error()
+    elif isinstance(exception, httpx.StreamClosed):
+        mapped_exception = socket.error()
+    else:
+        mapped_exception = urllib3.exceptions.HTTPError()
+    mapped_exception.__cause__ = exception
+    return mapped_exception
+
+
+class RetryingOverURLLibRetry(BaseRetrying):
+    """Adapter class that allows usage of the urllib3 Retry class with the tenacity retrying mechanism.
+
+    Wrapped function should make a single request using HTTPX library and either return httpx.Response or raise an
+    exception.
     """
 
-    @staticmethod
-    def _override_preload_content(func):
+    def __init__(self, base_url: str, retry: Retry, exception_to_retry: Tuple[Type[Exception], ...], **kwargs):
+        self.base_url = base_url
+        self.urllib_retry = retry
+        self.exception_to_retry = exception_to_retry
+
+        super().__init__(
+            stop=self._get_stop_callback(),
+            wait=self._get_wait_callback(),
+            after=self._get_after_callback(),
+            retry=self._get_retry_callback(),
+            **kwargs,
+        )
+
+    def __getstate__(self):
+        return {
+            'base_url': self.base_url, 'urllib_retry': self.urllib_retry, 'exception_to_retry': self.exception_to_retry
+        }
+
+    def __setstate__(self, state):
+        self.__init__(
+            base_url=state['base_url'], retry=state['urllib_retry'], exception_to_retry=state['exception_to_retry']
+        )
+
+    def _patch_with_urllib_retry(self, func: Callable):
+        """Ensures that retry_state contains current urllib3 Retry instance before function call."""
+
         @wraps(func)
-        def wrapper(*args, **kwargs):
-            kwargs['preload_content'] = True
-            kwargs['decode_content'] = True
-            resp = func(*args, **kwargs)
-            return resp
+        def wrapped(*args, **kwargs):
+            bound_args = signature(func).bind(*args, **kwargs)
+            retry_state = bound_args.arguments['retry_state']
+            if getattr(retry_state, 'urllib_retry', None) is None:
+                retry_state.urllib_retry = self.urllib_retry
+            return func(*args, **kwargs)
+        return wrapped
 
-        wrapper.__dict__['__preload_content_patch'] = True
-        return wrapper
+    @staticmethod
+    def _get_urllib_response(retry_state: RetryCallState):
+        """Constructs urllib3 response from httpx response."""
 
-    def build_response(self, req, resp):
-        response = super().build_response(req, resp)
-        response._content = resp.data
-        return response
+        if retry_state.outcome.failed:
+            return None
 
-    def get_connection(self, *args, **kwargs):
-        connection = super().get_connection(*args, **kwargs)
-        if not getattr(connection.urlopen, '__preload_content_patch', False):
-            connection.urlopen = self._override_preload_content(connection.urlopen)
-        return connection
+        _httpx_to_urllib_http_version = {'HTTP/2': 20, 'HTTP/1.1': 11}
+        httpx_response: httpx.Response = retry_state.outcome.result()
+        return urllib3.HTTPResponse(
+            body=httpx_response.content,
+            headers=httpx_response.headers,
+            status=httpx_response.status_code,
+            version=_httpx_to_urllib_http_version[httpx_response.http_version],
+            reason=httpx_response.reason_phrase,
+            preload_content=True,
+            decode_content=False,
+            request_method=httpx_response.request.method,
+            request_url=httpx_response.request.url,
+        )
+
+    def _get_stop_callback(self):
+
+        class IsExhausted(stop_base):
+            """Callback wrapped in callable class to match BaseRetrying signature."""
+
+            @self._patch_with_urllib_retry
+            def __call__(self, retry_state):
+                return retry_state.urllib_retry.is_exhausted()
+
+        return IsExhausted()
+
+    def _get_wait_callback(self):
+        outer_self = self
+
+        class GetBackoffTime(wait_base):
+            """Callback wrapped in callable class to match BaseRetrying signature."""
+
+            @self._patch_with_urllib_retry
+            def __call__(self, retry_state):
+                response = outer_self._get_urllib_response(retry_state)
+                if response and retry_state.urllib_retry.respect_retry_after_header:
+                    retry_after = retry_state.urllib_retry.get_retry_after(response)
+                    if retry_after:
+                        return retry_state
+                return retry_state.urllib_retry.get_backoff_time()
+
+        return GetBackoffTime()
+
+    def _get_retry_callback(self):
+
+        class IsRetry(retry_base):
+            """Callback wrapped in callable class to match BaseRetrying signature."""
+
+            @self._patch_with_urllib_retry
+            def __call__(self, retry_state):
+                if retry_state.outcome.failed:
+                    exception = retry_state.outcome.exception()
+                    return isinstance(exception, retry_state.retry_object.exception_to_retry)
+
+                httpx_response: httpx.Response = retry_state.outcome.result()
+                has_retry_after = bool(httpx_response.headers.get("Retry-After", False))
+
+                return retry_state.urllib_retry.is_retry(
+                    method=httpx_response.request.method, status_code=httpx_response.status_code,
+                    has_retry_after=has_retry_after
+                )
+
+        return IsRetry()
+
+    def _get_after_callback(self):
+
+        @self._patch_with_urllib_retry
+        def increment(retry_state: RetryCallState):
+            retry: Retry = retry_state.urllib_retry
+            bound_args = signature(retry_state.fn).bind(*retry_state.args, **retry_state.kwargs)
+
+            response = self._get_urllib_response(retry_state)
+            exception = retry_state.outcome.exception() if retry_state.outcome.failed else None
+
+            try:
+                retry_state.urllib_retry = retry.increment(
+                    method=bound_args.arguments['method'],
+                    url=f'{self.base_url}{bound_args.arguments["path"]}',
+                    response=response,
+                    error=httpx_exception_to_urllib_exception(exception) if exception else None,
+                )
+            except urllib3.exceptions.MaxRetryError:
+                # retry.increment raises MaxRetryError when exhausted. We want to delegate checking if the process
+                # should be stopped to the stop callback.
+                retry_state.urllib_retry = Retry(total=-1)
+
+        return increment
+
+
+class SyncRetryingOverURLLibRetry(RetryingOverURLLibRetry, Retrying):
+    pass
+
+
+class AsyncRetryingOverURLLibRetry(RetryingOverURLLibRetry, AsyncRetrying):
+    pass

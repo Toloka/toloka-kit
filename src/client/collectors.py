@@ -13,7 +13,7 @@ __all__ = [
     'UsersAssessment'
 ]
 """
-https://toloka.ai/docs/guide/concepts/control.html
+https://toloka.ai/en/docs/guide/concepts/control
 """
 
 from enum import unique

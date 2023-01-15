@@ -3,9 +3,11 @@ from decimal import Decimal
 from operator import itemgetter
 from urllib.parse import urlparse, parse_qs
 
+import httpx
 import pytest
 import simplejson
 import toloka.client as client
+from httpx import QueryParams
 
 from .testutils.util_functions import check_headers
 
@@ -39,27 +41,27 @@ def user_skill_map_with_readonly(user_skill_map):
     )
 
 
-def test_find_user_skills(requests_mock, toloka_client, toloka_url, user_skill_map_with_readonly):
+def test_find_user_skills(respx_mock, toloka_client, toloka_url, user_skill_map_with_readonly):
     raw_result = {'items': [user_skill_map_with_readonly], 'has_more': True}
 
-    def user_skills(request, context):
+    def user_skills(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'find_user_skills',
             'X-Low-Level-Method': 'find_user_skills',
         }
         check_headers(request, expected_headers)
 
-        assert {
-            'skill_id': ['skill-i1d'],
-            'created_gt': ['2016-03-25T00:00:00'],
-            'modified_lt': ['2017-03-25T00:00:00'],
-            'sort': ['id'],
-            'limit': ['100'],
-        } == parse_qs(urlparse(request.url).query)
-        return simplejson.dumps(raw_result)
+        assert QueryParams(
+            skill_id='skill-i1d',
+            created_gt='2016-03-25T00:00:00',
+            modified_lt='2017-03-25T00:00:00',
+            sort='id',
+            limit='100',
+        ) == request.url.params
+        return httpx.Response(text=simplejson.dumps(raw_result), status_code=200)
 
-    requests_mock.get(f'{toloka_url}/user-skills', text=user_skills, status_code=200)
+    respx_mock.get(f'{toloka_url}/user-skills').mock(side_effect=user_skills)
 
     # Request object syntax
     request = client.search_requests.UserSkillSearchRequest(
@@ -82,31 +84,35 @@ def test_find_user_skills(requests_mock, toloka_client, toloka_url, user_skill_m
     assert raw_result == client.unstructure(result)
 
 
-def test_get_user_skills(requests_mock, toloka_client, toloka_url, user_skill_map_with_readonly):
+def test_get_user_skills(respx_mock, toloka_client, toloka_url, user_skill_map_with_readonly):
     user_skills = [dict(user_skill_map_with_readonly, id=f'user-skill-i{i}d') for i in range(50)]
     user_skills.sort(key=itemgetter('id'))
 
-    def get_user_skills(request, context):
+    def get_user_skills(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_user_skills',
             'X-Low-Level-Method': 'find_user_skills',
         }
         check_headers(request, expected_headers)
 
-        params = parse_qs(urlparse(request.url).query)
-        id_gt = params.pop('id_gt')[0] if 'id_gt' in params else None
-        assert {
-            'skill_id': ['skill-i1d'],
-            'created_gt': ['2016-03-25T00:00:00'],
-            'modified_lt': ['2017-03-25T00:00:00'],
-            'sort': ['id'],
-        } == params
+        params = request.url.params
+        id_gt = params.get('id_gt', None)
+        params = params.remove('id_gt')
+        assert QueryParams(
+            skill_id='skill-i1d',
+            created_gt='2016-03-25T00:00:00',
+            modified_lt='2017-03-25T00:00:00',
+            sort='id',
+        ) == params
 
         items = [user_skill for user_skill in user_skills if id_gt is None or user_skill['id'] > id_gt][:3]
-        return simplejson.dumps({'items': items, 'has_more': items[-1]['id'] != user_skills[-1]['id']})
+        return httpx.Response(
+            text=simplejson.dumps({'items': items, 'has_more': items[-1]['id'] != user_skills[-1]['id']}),
+            status_code=200
+        )
 
-    requests_mock.get(f'{toloka_url}/user-skills', text=get_user_skills, status_code=200)
+    respx_mock.get(f'{toloka_url}/user-skills').mock(side_effect=get_user_skills)
 
     # Request object syntax
     request = client.search_requests.UserSkillSearchRequest(
@@ -126,28 +132,24 @@ def test_get_user_skills(requests_mock, toloka_client, toloka_url, user_skill_ma
     assert user_skills == client.unstructure(list(result))
 
 
-def test_get_user_skill(requests_mock, toloka_client, toloka_url, user_skill_map_with_readonly):
+def test_get_user_skill(respx_mock, toloka_client, toloka_url, user_skill_map_with_readonly):
 
-    def user_skill(request, context):
+    def user_skill(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_user_skill',
             'X-Low-Level-Method': 'get_user_skill',
         }
         check_headers(request, expected_headers)
 
-        return simplejson.dumps(user_skill_map_with_readonly)
+        return httpx.Response(text=simplejson.dumps(user_skill_map_with_readonly), status_code=200)
 
-    requests_mock.get(
-        f'{toloka_url}/user-skills/user-skill-i1d',
-        text=user_skill,
-        status_code=200
-    )
+    respx_mock.get(f'{toloka_url}/user-skills/user-skill-i1d').mock(side_effect=user_skill)
 
     assert user_skill_map_with_readonly == client.unstructure(toloka_client.get_user_skill('user-skill-i1d'))
 
 
-def test_set_user_skill(requests_mock, toloka_client, toloka_url, set_user_skill_map, user_skill_map_with_readonly):
+def test_set_user_skill(respx_mock, toloka_client, toloka_url, set_user_skill_map, user_skill_map_with_readonly):
 
     user_skill_request_map = {
         'skill_id': 'skill-i1d',
@@ -155,19 +157,19 @@ def test_set_user_skill(requests_mock, toloka_client, toloka_url, set_user_skill
         'value': Decimal('85.42'),
     }
 
-    def user_skills(request, context):
+    def user_skills(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'set_user_skill',
             'X-Low-Level-Method': 'set_user_skill',
         }
         check_headers(request, expected_headers)
 
-        assert request.text == simplejson.dumps(user_skill_request_map)
-        assert set_user_skill_map == request.json(parse_float=Decimal)
-        return simplejson.dumps(user_skill_map_with_readonly)
+        assert request.content.decode('utf8') == simplejson.dumps(user_skill_request_map)
+        assert set_user_skill_map == simplejson.loads(request.content, parse_float=Decimal)
+        return httpx.Response(text=simplejson.dumps(user_skill_map_with_readonly), status_code=201)
 
-    requests_mock.put(f'{toloka_url}/user-skills', text=user_skills, status_code=201)
+    respx_mock.put(f'{toloka_url}/user-skills').mock(side_effect=user_skills)
 
     # Request object syntax
     request = client.structure(user_skill_request_map, client.user_skill.SetUserSkillRequest)
@@ -180,17 +182,18 @@ def test_set_user_skill(requests_mock, toloka_client, toloka_url, set_user_skill
     assert user_skill_map_with_readonly == client.unstructure(response)
 
 
-def test_delete_user_skill(requests_mock, toloka_client, toloka_url):
+def test_delete_user_skill(respx_mock, toloka_client, toloka_url):
 
-    def user_skills(request, context):
+    def user_skills(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'delete_user_skill',
             'X-Low-Level-Method': 'delete_user_skill',
         }
         check_headers(request, expected_headers)
+        return httpx.Response(status_code=204)
 
-    requests_mock.delete(f'{toloka_url}/user-skills/user-skill-i1d', status_code=204, text=user_skills)
+    respx_mock.delete(f'{toloka_url}/user-skills/user-skill-i1d').mock(side_effect=user_skills)
     toloka_client.delete_user_skill('user-skill-i1d')
 
 
@@ -207,25 +210,21 @@ def test_create_set_user_skill_with_none_value():
 
 @pytest.mark.parametrize('value_to_check', [Decimal('0.05'), Decimal('0.0005')])
 def test_exact_value_in_user_skill(
-    requests_mock, toloka_client, toloka_url, user_skill_map_with_readonly,
+    respx_mock, toloka_client, toloka_url, user_skill_map_with_readonly,
     value_to_check
 ):
     new_map = dict(user_skill_map_with_readonly, exact_value=value_to_check)
 
-    def new_user_skills(request, context):
+    def new_user_skills(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_user_skill',
             'X-Low-Level-Method': 'get_user_skill',
         }
         check_headers(request, expected_headers)
 
-        return simplejson.dumps(new_map)
+        return httpx.Response(text=simplejson.dumps(new_map), status_code=200)
 
-    requests_mock.get(
-        f'{toloka_url}/user-skills/user-skill-i1d',
-        text=new_user_skills,
-        status_code=200
-    )
+    respx_mock.get(f'{toloka_url}/user-skills/user-skill-i1d').mock(side_effect=new_user_skills)
     user_skill = toloka_client.get_user_skill('user-skill-i1d')
     assert user_skill.exact_value == value_to_check

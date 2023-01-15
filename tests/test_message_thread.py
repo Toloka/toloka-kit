@@ -3,8 +3,11 @@ from copy import deepcopy
 from operator import itemgetter
 from urllib.parse import urlparse, parse_qs
 
+import httpx
 import pytest
+import simplejson
 import toloka.client as client
+from httpx import QueryParams
 
 from .testutils.util_functions import check_headers
 
@@ -54,28 +57,28 @@ def compose_details_filter_map():
     }
 
 
-def test_find_message_thread(requests_mock, toloka_client, toloka_url, message_thread_base_map):
+def test_find_message_thread(respx_mock, toloka_client, toloka_url, message_thread_base_map):
 
     raw_result = {'items': [message_thread_base_map], 'has_more': False}
 
-    def message_threads(request, context):
+    def message_threads(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'find_message_threads',
             'X-Low-Level-Method': 'find_message_threads',
         }
         check_headers(request, expected_headers)
 
-        assert {
-            'folder': ['OUTBOX'],
-            'folder_ne': ['IMPORTANT'],
-            'created_gte': ['2015-12-01T00:00:00'],
-            'created_lt': ['2016-06-01T00:00:00'],
-            'sort': ['-created'],
-        } == parse_qs(urlparse(request.url).query)
-        return raw_result
+        assert QueryParams(
+            folder='OUTBOX',
+            folder_ne='IMPORTANT',
+            created_gte='2015-12-01T00:00:00',
+            created_lt='2016-06-01T00:00:00',
+            sort='-created',
+        ) == request.url.params
+        return httpx.Response(json=raw_result, status_code=200)
 
-    requests_mock.get(f'{toloka_url}/message-threads', json=message_threads)
+    respx_mock.get(f'{toloka_url}/message-threads').mock(side_effect=message_threads)
 
     # Request object syntax
     request = client.search_requests.MessageThreadSearchRequest(
@@ -99,33 +102,34 @@ def test_find_message_thread(requests_mock, toloka_client, toloka_url, message_t
     assert raw_result == client.unstructure(result)
 
 
-def test_get_message_threads(requests_mock, toloka_client, toloka_url, message_thread_base_map):
+def test_get_message_threads(respx_mock, toloka_client, toloka_url, message_thread_base_map):
 
     threads = [dict(message_thread_base_map, id=f'message-thread-{i}') for i in range(50)]
     threads.sort(key=itemgetter('id'))
 
-    def get_message_threads(request, context):
+    def get_message_threads(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_message_threads',
             'X-Low-Level-Method': 'find_message_threads',
         }
         check_headers(request, expected_headers)
 
-        params = parse_qs(urlparse(request.url).query)
-        id_gt = params.pop('id_gt')[0] if 'id_gt' in params else None
-        assert {
-            'folder': ['OUTBOX'],
-            'folder_ne': ['IMPORTANT'],
-            'created_gte': ['2015-12-01T00:00:00'],
-            'created_lt': ['2016-06-01T00:00:00'],
-            'sort': ['id'],
-        } == params
+        params = request.url.params
+        id_gt = params.get('id_gt', None)
+        params = params.remove('id_gt')
+        assert QueryParams(
+            folder='OUTBOX',
+            folder_ne='IMPORTANT',
+            created_gte='2015-12-01T00:00:00',
+            created_lt='2016-06-01T00:00:00',
+            sort='id',
+        ) == params
 
         items = [thread for thread in threads if id_gt is None or thread['id'] > id_gt][:3]
-        return {'items': items, 'has_more': items[-1]['id'] != threads[-1]['id']}
+        return httpx.Response(json={'items': items, 'has_more': items[-1]['id'] != threads[-1]['id']}, status_code=200)
 
-    requests_mock.get(f'{toloka_url}/message-threads', json=get_message_threads)
+    respx_mock.get(f'{toloka_url}/message-threads').mock(side_effect=get_message_threads)
 
     # Request object syntax
     request = client.search_requests.MessageThreadSearchRequest(
@@ -180,7 +184,7 @@ def test_message_thread_search_request(folder, folder_ne, raw_result):
     assert client.unstructure(request) == raw_result
 
 
-def test_compose_thread_direct(requests_mock, toloka_client, toloka_url, message_thread_base_map, compose_details_direct_map):
+def test_compose_thread_direct(respx_mock, toloka_client, toloka_url, message_thread_base_map, compose_details_direct_map):
     raw_request = {
         'topic': {'EN': 'Message title'},
         'text': {'EN': 'Message text'},
@@ -188,18 +192,18 @@ def test_compose_thread_direct(requests_mock, toloka_client, toloka_url, message
     }
     raw_result = {**message_thread_base_map, 'compose_details': compose_details_direct_map}
 
-    def message_threads(request, context):
+    def message_threads(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'compose_message_thread',
             'X-Low-Level-Method': 'compose_message_thread',
         }
         check_headers(request, expected_headers)
 
-        assert raw_request == request.json()
-        return raw_result
+        assert raw_request == simplejson.loads(request.content)
+        return httpx.Response(json=raw_result, status_code=201)
 
-    requests_mock.post(f'{toloka_url}/message-threads/compose', json=message_threads, status_code=201)
+    respx_mock.post(f'{toloka_url}/message-threads/compose').mock(side_effect=message_threads)
 
     # Request object syntax
     request = client.structure(raw_request, client.message_thread.MessageThreadCompose)
@@ -216,7 +220,7 @@ def test_compose_thread_direct(requests_mock, toloka_client, toloka_url, message
     assert raw_result == client.unstructure(result)
 
 
-def test_compose_thread_filter(requests_mock, toloka_client, toloka_url, message_thread_base_map, compose_details_filter_map):
+def test_compose_thread_filter(respx_mock, toloka_client, toloka_url, message_thread_base_map, compose_details_filter_map):
     raw_request = {
         'topic': {'EN': 'Message title'},
         'text': {'EN': 'Message text'},
@@ -226,18 +230,18 @@ def test_compose_thread_filter(requests_mock, toloka_client, toloka_url, message
     expected_request['recipients_filter'] = {'and': [expected_request['recipients_filter']]}
     raw_result = {**message_thread_base_map, 'compose_details': compose_details_filter_map}
 
-    def message_threads(request, context):
+    def message_threads(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'compose_message_thread',
             'X-Low-Level-Method': 'compose_message_thread',
         }
         check_headers(request, expected_headers)
 
-        assert expected_request == request.json()
-        return raw_result
+        assert expected_request == simplejson.loads(request.content)
+        return httpx.Response(json=raw_result, status_code=201)
 
-    requests_mock.post(f'{toloka_url}/message-threads/compose', json=message_threads, status_code=201)
+    respx_mock.post(f'{toloka_url}/message-threads/compose').mock(side_effect=message_threads)
 
     # Request object syntax
     request = client.structure(raw_request, client.message_thread.MessageThreadCompose)
@@ -255,42 +259,42 @@ def test_compose_thread_filter(requests_mock, toloka_client, toloka_url, message
     assert raw_result == client.unstructure(result)
 
 
-def test_reply_message_thread(requests_mock, toloka_client, toloka_url, message_thread_base_map):
+def test_reply_message_thread(respx_mock, toloka_client, toloka_url, message_thread_base_map):
     raw_request = {'text': {'EN': 'Message text'}}
 
-    def message_threads(request, context):
+    def message_threads(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'reply_message_thread',
             'X-Low-Level-Method': 'reply_message_thread',
         }
         check_headers(request, expected_headers)
 
-        assert raw_request == request.json()
-        return message_thread_base_map
+        assert raw_request == simplejson.loads(request.content)
+        return httpx.Response(json=message_thread_base_map, status_code=200)
 
-    requests_mock.post(f'{toloka_url}/message-threads/42/reply', json=message_threads)
+    respx_mock.post(f'{toloka_url}/message-threads/42/reply').mock(side_effect=message_threads)
 
     reply = client.structure(raw_request, client.message_thread.MessageThreadReply)
     result = toloka_client.reply_message_thread('42', reply)
     assert message_thread_base_map == client.unstructure(result)
 
 
-def test_add_message_thread_to_folders(requests_mock, toloka_client, toloka_url, message_thread_base_map):
+def test_add_message_thread_to_folders(respx_mock, toloka_client, toloka_url, message_thread_base_map):
     raw_request = {'folders': ['IMPORTANT']}
 
-    def message_threads(request, context):
+    def message_threads(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'add_message_thread_to_folders',
             'X-Low-Level-Method': 'add_message_thread_to_folders',
         }
         check_headers(request, expected_headers)
 
-        assert raw_request == request.json()
-        return message_thread_base_map
+        assert raw_request == simplejson.loads(request.content)
+        return httpx.Response(json=message_thread_base_map, status_code=200)
 
-    requests_mock.post(f'{toloka_url}/message-threads/42/add-to-folders', json=message_threads)
+    respx_mock.post(f'{toloka_url}/message-threads/42/add-to-folders').mock(side_effect=message_threads)
 
     # Request object syntax
     request = client.structure(raw_request, client.message_thread.MessageThreadFolders)
@@ -302,21 +306,21 @@ def test_add_message_thread_to_folders(requests_mock, toloka_client, toloka_url,
     assert message_thread_base_map == client.unstructure(result)
 
 
-def test_remove_message_thread_from_folders(requests_mock, toloka_client, toloka_url, message_thread_base_map):
+def test_remove_message_thread_from_folders(respx_mock, toloka_client, toloka_url, message_thread_base_map):
     raw_request = {'folders': ['UNREAD']}
 
-    def message_threads(request, context):
+    def message_threads(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'remove_message_thread_from_folders',
             'X-Low-Level-Method': 'remove_message_thread_from_folders',
         }
         check_headers(request, expected_headers)
 
-        assert raw_request == request.json()
-        return message_thread_base_map
+        assert raw_request == simplejson.loads(request.content)
+        return httpx.Response(json=message_thread_base_map, status_code=200)
 
-    requests_mock.post(f'{toloka_url}/message-threads/42/remove-from-folders', json=message_threads)
+    respx_mock.post(f'{toloka_url}/message-threads/42/remove-from-folders').mock(side_effect=message_threads)
 
     # Request object syntax
     request = client.structure(raw_request, client.message_thread.MessageThreadFolders)
