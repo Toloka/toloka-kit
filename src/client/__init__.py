@@ -389,7 +389,7 @@ class TolokaClient:
         while result.has_more:
             request = attr.evolve(request, **{f'{sort_field}_gt': getattr(items[-1], sort_field)})
             yield from items
-            result = find_function(request, sort=[sort_field])
+            result = find_function(request, sort=[sort_field], limit=batch_size)
             items = getattr(result, items_field)
 
         yield from items
@@ -2623,7 +2623,7 @@ class TolokaClient:
     @expand('request')
     @add_headers('client')
     def get_task_suites(
-        self, 
+        self,
         request: search_requests.TaskSuiteSearchRequest,
         batch_size: Optional[int] = None
     ) -> Generator[TaskSuite, None, None]:
@@ -2811,7 +2811,7 @@ class TolokaClient:
     @expand('request')
     @add_headers('client')
     def get_operations(
-        self, 
+        self,
         request: search_requests.OperationSearchRequest,
         batch_size: Optional[int] = None
     ) -> Generator[operations.Operation, None, None]:
@@ -3061,7 +3061,7 @@ class TolokaClient:
     @expand('request')
     @add_headers('client')
     def get_user_bonuses(
-        self, 
+        self,
         request: search_requests.UserBonusSearchRequest,
         batch_size: Optional[int] = None
     ) -> Generator[UserBonus, None, None]:
