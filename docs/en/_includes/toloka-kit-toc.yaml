@@ -7,10 +7,106 @@ items:
     href: ../toloka-kit/quick-start.md
   - name: Recipes
     items:
+      - name: Overview
+        href: ../toloka-kit/recipes/index.md
+      - name: Projects
+        items:
+        - name: Create project
+          href: ../toloka-kit/recipes/create-project.md
+        - name: Get list of projects
+          href: ../toloka-kit/recipes/get-projects.md
+        - name: Get project details
+          href: ../toloka-kit/recipes/get-project-by-id.md
+        - name: Edit project
+          href: ../toloka-kit/recipes/edit-project.md
+        - name: Archive project
+          href: ../toloka-kit/recipes/archive-project.md
+      - name: Pools
+        items:
+        - name: Create pool
+          href: ../toloka-kit/recipes/create-pool.md
+        - name: Get list of pools
+          href: ../toloka-kit/recipes/get-pools.md
+        - name: Get pool details
+          href: ../toloka-kit/recipes/get-pool-by-id.md
+        - name: Open pool
+          href: ../toloka-kit/recipes/open-pool.md
+        - name: Close pool
+          href: ../toloka-kit/recipes/close-pool.md
+        - name: Archive pool
+          href: ../toloka-kit/recipes/archive-pool.md
+        - name: Clone pool
+          href: ../toloka-kit/recipes/clone-pool.md
+        - name: Change pool priority
+          href: ../toloka-kit/recipes/change-pool-priority.md
+        - name: Toloker selection
+          items:
+          - name: Set overlap
+            href: ../toloka-kit/recipes/set-overlap.md
+          - name: Filter Tolokers
+            href: ../toloka-kit/recipes/filter-tolokers.md
+          - name: Use quality control rules
+            href: ../toloka-kit/recipes/use-quality-control-rules.md
+      - name: Skills
+        items:
+        - name: Get skills
+          href: ../toloka-kit/recipes/get-skills.md
+        - name: Create skill
+          href: ../toloka-kit/recipes/create-skill.md
+        - name: Assign skill to Toloker
+          href: ../toloka-kit/recipes/assign-skill.md
+        - name: Edit skill
+          href: ../toloka-kit/recipes/edit-skill.md
+        - name: List Tolokers with skills
+          href: ../toloka-kit/recipes/get-user-skills.md
+        - name: Remove skill from Toloker
+          href: ../toloka-kit/recipes/delete-user-skill.md
+      - name: Tasks and task suites
+        items:
+        - name: Group tasks in task suites
+          href: ../toloka-kit/recipes/create-task-suite.md
+        - name: Upload tasks
+          href: ../toloka-kit/recipes/upload-tasks.md
+        - name: Get list of tasks
+          href: ../toloka-kit/recipes/get-tasks.md
+        - name: Get task details
+          href: ../toloka-kit/recipes/get-task-by-id.md
+        - name: Change task overlap
+          href: ../toloka-kit/recipes/change-task-overlap.md
+      - name: Responses
+        items:
+        - name: Get list of responses
+          href: ../toloka-kit/recipes/get-responses.md
+        - name: Accept responses
+          href: ../toloka-kit/recipes/accept-responses.md
+        - name: Reject responses
+          href: ../toloka-kit/recipes/reject-responses.md
+        - name: Aggregate responses in pool
+          href: ../toloka-kit/recipes/aggregate-responses.md
+        - name: Get list of files in responses
+          href: ../toloka-kit/recipes/get-attachments.md
+        - name: Download attachments
+          href: ../toloka-kit/recipes/download-attachment.md
+      - name: Rewards
+        items:
+        - name: Issue rewards to Tolokers
+          href: ../toloka-kit/recipes/assign-reward.md
+        - name: Get list of all rewards issued
+          href: ../toloka-kit/recipes/get-rewards.md
+        - name: Get reward details
+          href: ../toloka-kit/recipes/get-reward-by-id.md
+      - name: Messages
+        items:
+        - name: Send messages
+          href: ../toloka-kit/recipes/send-messages.md
+        - name: Get list of message threads
+          href: ../toloka-kit/recipes/get-message-threads.md
+        - name: Reply to thread
+          href: ../toloka-kit/recipes/reply-to-message-thread.md
       - name: Sample project recipe
-        href: ../toloka-kit/learn-basics.md
+        href: ../toloka-kit/recipes/learn-basics.md
       - name: More usage examples
-        href: ../toloka-kit/use-cases.md
+        href: ../toloka-kit/recipes/use-cases.md
   - name: Reference
     expanded: true
     include:
