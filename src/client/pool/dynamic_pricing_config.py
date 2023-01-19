@@ -10,26 +10,30 @@ from ...util._extendable_enum import ExtendableStrEnum
 class DynamicPricingConfig(BaseTolokaObject, kw_only=False):
     """The dynamic pricing settings.
 
+    A price per task suite can be variable depending on a Toloker's skill.
+    If a Toloker is not covered by dynamic pricing settings then the default price is used. It is set in the `reward_per_assignment` pool parameter.
+
     Attributes:
-        type: Parameter type for calculating dynamic pricing. The SKILL value.
-        skill_id: ID of the skill that the task price is based on
-        intervals: Skill level intervals. Must not overlap.
-            A Toloker with a skill level that is not included in any interval will receive the basic
-            price for a task suite.
+        type: The dynamic pricing type. Only `SKILL` type is supported now.
+        skill_id: The ID of the skill that dynamic pricing is based on.
+        intervals: A list of skill intervals and prices.
+            The intervals must not overlap.
     """
 
     @unique
     class Type(ExtendableStrEnum):
-        """Dynamic pricing type"""
+        """Dynamic pricing type."""
         SKILL = 'SKILL'
 
     class Interval(BaseTolokaObject):
-        """Skill level interval
+        """Skill level interval with the associated price per task suite.
+
+        The lower and upper skill bounds are included in the interval.
 
         Attributes:
-            from_: Lower bound of the interval.
-            to: dynamic_pricing_config.intervals.to
-            reward_per_assignment: The price per task page for a Toloker with the specified skill level.
+            from_: The lower bound of the interval.
+            to: The upper bound of the interval.
+            reward_per_assignment: The price per task suite for a Toloker with the specified skill level.
         """
 
         from_: int = attribute(origin='from')

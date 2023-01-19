@@ -16,6 +16,8 @@ __all__ = [
 https://toloka.ai/en/docs/guide/concepts/control
 """
 
+import logging
+
 from enum import unique
 from typing import ClassVar, FrozenSet, List, Optional
 from uuid import UUID
@@ -25,6 +27,16 @@ from .conditions import RuleConditionKey
 from .primitives.base import BaseParameters
 from ..util._docstrings import inherit_docstrings
 from ..util._extendable_enum import ExtendableStrEnum
+
+
+logger = logging.getLogger(__file__)
+
+
+def _captcha_deprecation_warning(*args, **kwargs):
+    logger.warning(
+        'CAPTCHA-based quality control settings are deprecated and will be removed in future. '
+        'CAPTCHAs are now included automatically for better quality control.'
+    )
 
 
 class CollectorConfig(BaseParameters, spec_enum='Type', spec_field='type'):
@@ -237,7 +249,7 @@ class AssignmentSubmitTime(CollectorConfig, spec_value=CollectorConfig.Type.ASSI
 
 @inherit_docstrings
 class Captcha(CollectorConfig, spec_value=CollectorConfig.Type.CAPTCHA):
-    """Collects captcha statistics for every Toloker.
+    """Deprecated. Collects captcha statistics for every Toloker.
 
     Captcha provides an advanced protection against robots. It is used with conditions:
     * [StoredResultsCount](toloka.client.conditions.StoredResultsCount.md) — How many times the Toloker entered a captcha.
@@ -285,6 +297,8 @@ class Captcha(CollectorConfig, spec_value=CollectorConfig.Type.CAPTCHA):
 
     class Parameters(CollectorConfig.Parameters):
         history_size: Optional[int] = None
+
+    __attrs_post_init__ = _captcha_deprecation_warning
 
 
 @inherit_docstrings

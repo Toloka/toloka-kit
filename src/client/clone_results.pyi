@@ -16,6 +16,17 @@ class CloneResults(tuple):
         trainings (List[Training]): New trainings. Can be empty.
     """
 
+    @staticmethod
+    def __new__(
+        _cls,
+        project: toloka.client.project.Project,
+        pools: typing.List[toloka.client.pool.Pool],
+        trainings: typing.List[toloka.client.training.Training]
+    ):
+        """Create new instance of CloneResults(project, pools, trainings)
+        """
+        ...
+
     project: toloka.client.project.Project
     pools: typing.List[toloka.client.pool.Pool]
     trainings: typing.List[toloka.client.training.Training]

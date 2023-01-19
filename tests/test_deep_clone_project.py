@@ -1,4 +1,6 @@
 import copy
+
+import httpx
 import pytest
 import toloka.client as client
 
@@ -310,94 +312,97 @@ def clone_pool_with_train_map(original_pool_with_train_map, new_project_id, new_
     return new_pool
 
 
-def test_clone_project(requests_mock, toloka_client, toloka_url,
-                            original_project_with_quality_map, clone_project_map, clone_project_with_quality_map,
-                            original_train_map, clone_train_map,
-                            original_pool_without_train_map, clone_pool_without_train_map,
-                            original_pool_with_train_map, clone_pool_with_train_map):
+def test_clone_project(
+    respx_mock, toloka_client, toloka_url, original_project_with_quality_map, clone_project_map,
+    clone_project_with_quality_map, original_train_map, clone_train_map, original_pool_without_train_map,
+    clone_pool_without_train_map, original_pool_with_train_map, clone_pool_with_train_map
+):
 
-    def original_project_with_quality(request, context):
+    def original_project_with_quality(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'clone_project',
             'X-Low-Level-Method': 'get_project',
         }
         check_headers(request, expected_headers)
 
-        return original_project_with_quality_map
+        return httpx.Response(json=original_project_with_quality_map, status_code=200)
 
-    def clone_project(request, context):
+    def clone_project(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'clone_project',
             'X-Low-Level-Method': 'create_project',
         }
         check_headers(request, expected_headers)
 
-        return clone_project_map
+        return httpx.Response(json=clone_project_map, status_code=201)
 
-    def clone_project_with_quality(request, context):
+    def clone_project_with_quality(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'clone_project',
             'X-Low-Level-Method': 'update_project',
         }
         check_headers(request, expected_headers)
 
-        return clone_project_with_quality_map
+        return httpx.Response(json=clone_project_with_quality_map, status_code=200)
 
-    requests_mock.get(f'{toloka_url}/projects/404040', json=original_project_with_quality, status_code=200)
-    requests_mock.post(f'{toloka_url}/projects', json=clone_project, status_code=201)
-    requests_mock.put(f'{toloka_url}/projects/505050', json=clone_project_with_quality, status_code=200)
+    respx_mock.get(f'{toloka_url}/projects/404040').mock(side_effect=original_project_with_quality)
+    respx_mock.post(f'{toloka_url}/projects').mock(side_effect=clone_project)
+    respx_mock.put(f'{toloka_url}/projects/505050').mock(side_effect=clone_project_with_quality)
 
-    def get_trainings(request, context):
+    def get_trainings(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'clone_project',
             'X-Low-Level-Method': 'find_trainings',
         }
         check_headers(request, expected_headers)
 
-        return {'items': [original_train_map], 'has_more': False}
+        return httpx.Response(json={'items': [original_train_map], 'has_more': False}, status_code=200)
 
-    def clone_train(request, context):
+    def clone_train(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'clone_project',
             'X-Low-Level-Method': 'create_training',
         }
         check_headers(request, expected_headers)
 
-        return clone_train_map
+        return httpx.Response(json=clone_train_map, status_code=201)
 
-    requests_mock.get(f'{toloka_url}/trainings', json=get_trainings, status_code=200)
-    requests_mock.post(f'{toloka_url}/trainings', json=clone_train, status_code=201)
+    respx_mock.get(f'{toloka_url}/trainings').mock(side_effect=get_trainings)
+    respx_mock.post(f'{toloka_url}/trainings').mock(side_effect=clone_train)
 
-    def original_pool(request, context):
+    def original_pool(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'clone_project',
             'X-Low-Level-Method': 'find_pools',
         }
         check_headers(request, expected_headers)
 
-        return {'items': [original_pool_without_train_map, original_pool_with_train_map], 'has_more': False}
+        return httpx.Response(
+            json={'items': [original_pool_without_train_map, original_pool_with_train_map], 'has_more': False},
+            status_code=200
+        )
 
-    requests_mock.get(f'{toloka_url}/pools', json=original_pool, status_code=200)
+    respx_mock.get(f'{toloka_url}/pools').mock(side_effect=original_pool)
 
     created_pools = [clone_pool_without_train_map, clone_pool_with_train_map]
 
-    def create_pool(request, context):
+    def create_pool(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'clone_project',
             'X-Low-Level-Method': 'create_pool',
         }
         check_headers(request, expected_headers)
 
-        return created_pools.pop(0)
+        return httpx.Response(json=created_pools.pop(0), status_code=201)
 
-    requests_mock.post(f'{toloka_url}/pools', json=create_pool, status_code=201)
+    respx_mock.post(f'{toloka_url}/pools').mock(side_effect=create_pool)
 
     new_project, new_pools, new_trainings = toloka_client.clone_project('404040')
 

@@ -1,4 +1,6 @@
 __all__ = ['QualityControl']
+
+import logging
 from enum import unique
 from typing import List
 
@@ -11,6 +13,17 @@ from ..util._codegen import attribute
 from ..util._extendable_enum import ExtendableStrEnum
 
 
+logger = logging.getLogger(__file__)
+
+
+def _captcha_deprecation_warning_setter(obj, name, value):
+    if value is not None:
+        logger.warning(
+            'CAPTCHA frequency setting is deprecated and will be removed in future. '
+            'CAPTCHAs are now included automatically for better quality control.'
+        )
+
+
 class QualityControl(BaseTolokaObject):
     """Quality control unit settings and pool ID with training tasks
 
@@ -19,7 +32,7 @@ class QualityControl(BaseTolokaObject):
 
     Attributes:
         training_requirement: Parameters of the training pool that is linked to the pool with the main tasks.
-        captcha_frequency: Frequency of captcha display (By default, captcha is not shown):
+        captcha_frequency: Deprecated. Frequency of captcha display (By default, captcha is not shown):
             LOW - show every 20 tasks.
             MEDIUM, HIGH - show every 10 tasks.
         configs: List of quality control units. See QualityControl.QualityControlConfig
@@ -124,7 +137,7 @@ class QualityControl(BaseTolokaObject):
         collector_config: CollectorConfig
 
     training_requirement: TrainingRequirement
-    captcha_frequency: CaptchaFrequency = attribute(autocast=True)
+    captcha_frequency: CaptchaFrequency = attribute(autocast=True, on_setattr=_captcha_deprecation_warning_setter)
     configs: List[QualityControlConfig] = attribute(factory=list)
     checkpoints_config: CheckpointsConfig
 

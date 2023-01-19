@@ -1,8 +1,40 @@
 __all__ = [
     'attribute',
     'fix_attrs_converters',
+    'universal_decorator',
+    'expand',
 ]
 import typing
+
+
+def universal_decorator(*, has_parameters):
+    """Metadecorator used for writing universal decorators that does not change function-like object type.
+
+    Wrapped decorator will preserve function-like object type: plain functions, async functions, generators and
+    async generators will keep their type after being decorated. Warning: if your decorator changes the
+    type of the function-like object (e.g. yields plain function result) do NOT use this (meta)decorator.
+
+    Args:
+        has_parameters: does wrapped decorator use parameters
+    """
+    ...
+
+
+def expand(
+    arg_name: str,
+    arg_type: typing.Optional[typing.Type] = None,
+    check_type: bool = True
+) -> typing.Callable:
+    """Allows you to call function also via passing values for creating "arg_name", not only via passing an instance of "arg_name"
+
+    If used on class, expands some argument in __init__
+
+    Args:
+        arg_name: Parameter that will be expanded.
+        arg_type: Specify the type of this parameter. Defaults to None and calc it themselves.
+        check_type: If True, check that one argument has a compatible type for none expanded version. If not, calls an expanded version. Defaults to True.
+    """
+    ...
 
 
 def attribute(

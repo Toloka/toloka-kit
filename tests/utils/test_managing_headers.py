@@ -6,7 +6,6 @@ import pytest
 
 from toloka.util._managing_headers import (
     add_headers,
-    async_add_headers,
     form_additional_headers,
 )
 
@@ -45,7 +44,7 @@ def test_complex_function():
 @pytest.mark.asyncio
 async def test_async_simple_function():
 
-    @async_add_headers('TestClient')
+    @add_headers('TestClient')
     async def async_get_additional_headers():
         return form_additional_headers()
 
@@ -61,11 +60,11 @@ async def test_async_simple_function():
 @pytest.mark.asyncio
 async def test_async_complex_function():
 
-    @async_add_headers('TestClient')
+    @add_headers('TestClient')
     async def async_get_additional_headers():
         return form_additional_headers()
 
-    @async_add_headers('AsyncTestClient')
+    @add_headers('AsyncTestClient')
     async def async_complex_func():
         return await async_get_additional_headers()
 
@@ -129,7 +128,7 @@ async def test_async_generator(n):
         for _ in range(number_of_generations):
             yield ctx.run(func)
 
-    @async_add_headers('GeneratorClient')
+    @add_headers('GeneratorClient')
     async def with_async_generator_client_context(func, number_of_generations):
         generator = generator_with_context(func, number_of_generations)
         # It is important to "activate" generator to capture context
@@ -164,7 +163,7 @@ async def test_run_in_pool_executor(executor):
             var.set(value)
         return func(*args_for_func, **kwargs)
 
-    @async_add_headers('streaming')
+    @add_headers('streaming')
     async def async_wrapper(func):
         loop = asyncio.get_event_loop()
         ctx = contextvars.copy_context()

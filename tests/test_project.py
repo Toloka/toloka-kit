@@ -1,14 +1,17 @@
 import datetime
 from operator import itemgetter
 from textwrap import dedent
-from urllib.parse import urlparse, parse_qs
 
 import io
+
+import httpx
+import simplejson
 import simplejson as json
 import logging
 import pandas as pd
 import pytest
 import toloka.client as client
+from httpx import QueryParams
 from toloka.client.exceptions import InternalApiError, ValidationApiError, IncorrectActionsApiError
 from .template_builder.test_template_builder import view_spec_map as tb_view_spec_map  # noqa: F401
 
@@ -82,27 +85,27 @@ def tb_project_map(project_map, tb_view_spec_map):  # noqa F811
     return project_map
 
 
-def test_find_project(requests_mock, toloka_client, toloka_url, project_map):
+def test_find_project(respx_mock, toloka_client, toloka_url, project_map):
     raw_result = {'items': [project_map], 'has_more': False}
 
-    def find_projects(request, context):
+    def find_projects(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'find_projects',
             'X-Low-Level-Method': 'find_projects',
         }
         check_headers(request, expected_headers)
 
-        assert {
-            'status': ['ACTIVE'],
-            'limit': ['50'],
-            'sort': ['-public_name,id'],
-            'id_gt': ['123'],
-            'created_lt': ['2015-12-09T12:10:00'],
-        } == parse_qs(urlparse(request.url).query)
-        return raw_result
+        assert QueryParams(
+            status='ACTIVE',
+            limit='50',
+            sort='-public_name,id',
+            id_gt='123',
+            created_lt='2015-12-09T12:10:00',
+        ) == request.url.params
+        return httpx.Response(json=raw_result, status_code=200, headers={'Authorization': 'OAuth abc'})
 
-    requests_mock.get(f'{toloka_url}/projects', headers={'Authorization': 'OAuth abc'}, json=find_projects, status_code=200)
+    respx_mock.get(f'{toloka_url}/projects').mock(side_effect=find_projects)
 
     # Request object syntax
     request = client.search_requests.ProjectSearchRequest(
@@ -125,31 +128,35 @@ def test_find_project(requests_mock, toloka_client, toloka_url, project_map):
     assert raw_result == client.unstructure(result)
 
 
-def test_get_projects(requests_mock, toloka_client, toloka_url, project_map):
+def test_get_projects(respx_mock, toloka_client, toloka_url, project_map):
     projects = [dict(project_map, id=str(i)) for i in range(100, 200)]
     projects.sort(key=itemgetter('id'))
     expected_projects = [project for project in projects if project['id'] > '123']
 
-    def get_projects(request, context):
+    def get_projects(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_projects',
             'X-Low-Level-Method': 'find_projects',
         }
         check_headers(request, expected_headers)
 
-        params = parse_qs(urlparse(request.url).query)
-        id_gt = params.pop('id_gt')[0]
-        assert {
-            'status': ['ACTIVE'],
-            'sort': ['id'],
-            'created_lt': ['2015-12-09T12:10:00'],
-        } == params
+        params = request.url.params
+        id_gt = params['id_gt']
+        params = params.remove('id_gt')
+        assert QueryParams(
+            status='ACTIVE',
+            sort='id',
+            created_lt='2015-12-09T12:10:00',
+        ) == params
 
         items = [project for project in projects if project['id'] > id_gt][:3]
-        return {'items': items, 'has_more': items[-1]['id'] != projects[-1]['id']}
+        return httpx.Response(
+            json={'items': items, 'has_more': items[-1]['id'] != projects[-1]['id']}, status_code=200,
+            headers={'Authorization': 'OAuth abc'}
+        )
 
-    requests_mock.get(f'{toloka_url}/projects', headers={'Authorization': 'OAuth abc'}, json=get_projects)
+    respx_mock.get(f'{toloka_url}/projects').mock(side_effect=get_projects)
 
     # Request object syntax
     request = client.search_requests.ProjectSearchRequest(
@@ -169,24 +176,24 @@ def test_get_projects(requests_mock, toloka_client, toloka_url, project_map):
     assert expected_projects == client.unstructure(list(result))
 
 
-def test_get_project(requests_mock, toloka_client, toloka_url, project_map):
+def test_get_project(respx_mock, toloka_client, toloka_url, project_map):
 
-    def get_project(request, context):
+    def get_project(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_project',
             'X-Low-Level-Method': 'get_project',
         }
         check_headers(request, expected_headers)
 
-        return project_map
+        return httpx.Response(json=project_map, status_code=200, headers={'Authorization': 'OAuth abc'})
 
-    requests_mock.get(f'{toloka_url}/projects/10', headers={'Authorization': 'OAuth abc'}, json=get_project, status_code=200)
+    respx_mock.get(f'{toloka_url}/projects/10').mock(side_effect=get_project)
     result = toloka_client.get_project('10')
     assert project_map == client.unstructure(result)
 
 
-def test_get_project_returns_internal_server_error(requests_mock, toloka_client, toloka_url):
+def test_get_project_returns_internal_server_error(respx_mock, toloka_client, toloka_url):
     body = {
         'code': 'INTERNAL_ERROR',
         'request_id': 'abc',
@@ -196,17 +203,17 @@ def test_get_project_returns_internal_server_error(requests_mock, toloka_client,
         },
     }
 
-    def get_project(request, context):
+    def get_project(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_project',
             'X-Low-Level-Method': 'get_project',
         }
         check_headers(request, expected_headers)
 
-        return body
+        return httpx.Response(json=body, status_code=500, headers={'Authorization': 'OAuth abc'})
 
-    requests_mock.get(f'{toloka_url}/projects/10', headers={'Authorization': 'OAuth abc'}, json=get_project, status_code=500)
+    respx_mock.get(f'{toloka_url}/projects/10').mock(side_effect=get_project)
     with pytest.raises(InternalApiError) as excinfo:
         toloka_client.get_project('10')
     assert excinfo.value.status_code == 500
@@ -215,7 +222,7 @@ def test_get_project_returns_internal_server_error(requests_mock, toloka_client,
 
 
 @pytest.fixture
-def simple_poject_map():
+def simple_project_map():
     return {
         'id': 10,
         'public_name': 'Map Task',
@@ -283,21 +290,23 @@ def simple_poject_map():
     }
 
 
-def test_create_project(requests_mock, toloka_client, toloka_url, simple_poject_map, caplog):
+def test_create_project(respx_mock, toloka_client, toloka_url, simple_project_map, caplog):
 
-    def project(request, context):
+    def project(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'create_project',
             'X-Low-Level-Method': 'create_project',
         }
         check_headers(request, expected_headers)
 
-        return simple_poject_map
+        return httpx.Response(
+            json=simple_project_map, status_code=201, headers={'Content-Type': 'application/json; charset=UTF-8'}
+        )
 
-    requests_mock.post(f'{toloka_url}/projects', headers={'Content-Type': 'application/json; charset=UTF-8'}, json=project, status_code=201)
+    respx_mock.post(f'{toloka_url}/projects').mock(side_effect=project)
 
-    project = client.structure(simple_poject_map, client.project.Project)
+    project = client.structure(simple_project_map, client.project.Project)
     with caplog.at_level(logging.INFO):
         caplog.clear()
         result = toloka_client.create_project(project)
@@ -308,7 +317,7 @@ def test_create_project(requests_mock, toloka_client, toloka_url, simple_poject_
         assert project == result
 
 
-def test_create_project_check_validation_errors(requests_mock, toloka_client, toloka_url):
+def test_create_project_check_validation_errors(respx_mock, toloka_client, toloka_url):
     body = {
         'public_name': 'Map Task',
         'task_spec': {
@@ -335,18 +344,20 @@ def test_create_project_check_validation_errors(requests_mock, toloka_client, to
         },
     }
 
-    def create_project(request, context):
+    def create_project(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'create_project',
             'X-Low-Level-Method': 'create_project',
         }
         check_headers(request, expected_headers)
 
-        assert body == request.json()
-        return response_body
+        assert body == simplejson.loads(request.content)
+        return httpx.Response(
+            json=response_body, headers={'Content-Type': 'application/json; charset=UTF-8'}, status_code=400
+        )
 
-    requests_mock.post(f'{toloka_url}/projects', headers={'Content-Type': 'application/json; charset=UTF-8'}, json=create_project, status_code=400)
+    respx_mock.post(f'{toloka_url}/projects').mock(side_effect=create_project)
 
     project = client.project.Project(
         public_name='Map Task',
@@ -368,7 +379,7 @@ def test_create_project_check_validation_errors(requests_mock, toloka_client, to
     assert excinfo.value.invalid_fields == list(response_body['payload'].keys())
 
 
-def test_create_project_check_logical_errors(requests_mock, toloka_client, toloka_url):
+def test_create_project_check_logical_errors(respx_mock, toloka_client, toloka_url):
     body = {
         'public_name': 'Map Task',
         'task_spec': {
@@ -385,18 +396,20 @@ def test_create_project_check_logical_errors(requests_mock, toloka_client, tolok
         'request_id': 'abc-123',
     }
 
-    def create_project(request, context):
+    def create_project(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'create_project',
             'X-Low-Level-Method': 'create_project',
         }
         check_headers(request, expected_headers)
 
-        assert body == request.json()
-        return response_body
+        assert body == simplejson.loads(request.content)
+        return httpx.Response(
+            json=response_body, status_code=400, headers={'Content-Type': 'application/json; charset=UTF-8'}
+        )
 
-    requests_mock.post(f'{toloka_url}/projects', headers={'Content-Type': 'application/json; charset=UTF-8'}, json=create_project, status_code=400)
+    respx_mock.post(f'{toloka_url}/projects').mock(side_effect=create_project)
 
     project = client.project.Project(
         public_name='Map Task',
@@ -417,7 +430,7 @@ def test_create_project_check_logical_errors(requests_mock, toloka_client, tolok
         assert getattr(excinfo.value, key) == value
 
 
-def test_project_update(requests_mock, toloka_client, toloka_url):
+def test_project_update(respx_mock, toloka_client, toloka_url):
     project_map = {
         'public_name': 'Map Task',
         'public_description': 'Simple map task',
@@ -456,24 +469,27 @@ def test_project_update(requests_mock, toloka_client, toloka_url):
         },
     }
 
-    def update_project(request, context):
+    def update_project(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'update_project',
             'X-Low-Level-Method': 'update_project',
         }
         check_headers(request, expected_headers)
 
-        assert project_map == request.json()
-        return dict(
-            project_map,
-            status='ACTIVE',
-            created='2015-12-09T12:10:00',
-            max_active_assignments_count=5,
-            id='10',
+        assert project_map == simplejson.loads(request.content)
+        return httpx.Response(
+            json=dict(
+                project_map,
+                status='ACTIVE',
+                created='2015-12-09T12:10:00',
+                max_active_assignments_count=5,
+                id='10',
+            ), status_code=200,
+            headers={'Content-Type': 'application/json; charset=UTF-8'}
         )
 
-    requests_mock.put(f'{toloka_url}/projects/10', headers={'Content-Type': 'application/json; charset=UTF-8'}, json=update_project, status_code=200)
+    respx_mock.put(f'{toloka_url}/projects/10').mock(side_effect=update_project)
     update_to_project = client.project.Project(
         public_name='Map Task',
         public_description='Simple map task',
@@ -561,81 +577,78 @@ def complete_archive_operation_map(archive_operation_map):
     }
 
 
-def test_archive_project_async(requests_mock, toloka_client, toloka_url, complete_archive_operation_map):
+def test_archive_project_async(respx_mock, toloka_client, toloka_url, complete_archive_operation_map):
 
-    def complete_archive(request, context):
+    def complete_archive(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'archive_project_async',
             'X-Low-Level-Method': 'archive_project_async',
         }
         check_headers(request, expected_headers)
 
-        return complete_archive_operation_map
+        return httpx.Response(json=complete_archive_operation_map, status_code=202)
 
-    requests_mock.post(f'{toloka_url}/projects/10/archive', json=complete_archive, status_code=202)
+    respx_mock.post(f'{toloka_url}/projects/10/archive').mock(side_effect=complete_archive)
     result = toloka_client.archive_project_async('10')
     assert complete_archive_operation_map == client.unstructure(result)
 
 
-def test_archive_project(requests_mock, toloka_client, toloka_url,
+def test_archive_project(respx_mock, toloka_client, toloka_url,
                          archive_operation_map, complete_archive_operation_map, project_map):
 
-    def archive(request, context):
+    def archive(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'archive_project',
             'X-Low-Level-Method': 'archive_project_async',
         }
         check_headers(request, expected_headers)
 
-        return archive_operation_map
+        return httpx.Response(json=archive_operation_map, status_code=202)
 
-    def complete_archive(request, context):
+    def complete_archive(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'archive_project',
             'X-Low-Level-Method': 'get_operation',
         }
         check_headers(request, expected_headers)
 
-        return complete_archive_operation_map
+        return httpx.Response(json=complete_archive_operation_map, status_code=200)
 
-    def project(request, context):
+    def project(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'archive_project',
             'X-Low-Level-Method': 'get_project',
         }
         check_headers(request, expected_headers)
 
-        return project_map
+        return httpx.Response(json=project_map, status_code=200)
 
-    requests_mock.post(f'{toloka_url}/projects/10/archive', json=archive, status_code=202)
-    requests_mock.get(
-        f'{toloka_url}/operations/{archive_operation_map["id"]}',
-        json=complete_archive,
-        status_code=200
-    )
-    requests_mock.get(f'{toloka_url}/projects/10', json=project, status_code=200)
+    respx_mock.post(f'{toloka_url}/projects/10/archive').mock(side_effect=archive)
+    respx_mock.get(
+        f'{toloka_url}/operations/{archive_operation_map["id"]}').mock(side_effect=complete_archive)
+    respx_mock.get(f'{toloka_url}/projects/10').mock(side_effect=project)
 
     result = toloka_client.archive_project('10')
     assert project_map == client.unstructure(result)
 
 
-def test_get_template_builder_project(requests_mock, toloka_client, toloka_url, tb_project_map):
+def test_get_template_builder_project(respx_mock, toloka_client, toloka_url, tb_project_map):
 
-    def tb_project(request, context):
+    def tb_project(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_project',
             'X-Low-Level-Method': 'get_project',
         }
         check_headers(request, expected_headers)
 
-        return tb_project_map
+        return httpx.Response(json=tb_project_map, status_code=200, headers={'Authorization': 'OAuth abc'})
 
-    requests_mock.get(f'{toloka_url}/projects/10', headers={'Authorization': 'OAuth abc'}, json=tb_project, status_code=200)
+    respx_mock.get(f'{toloka_url}/projects/10').mock(side_effect=tb_project)
     result = toloka_client.get_project('10')
     unstructured_result = client.unstructure(result)
     expected_template_config = tb_project_map['task_spec']['view_spec'].pop('config')
@@ -645,15 +658,8 @@ def test_get_template_builder_project(requests_mock, toloka_client, toloka_url, 
     assert tb_project_map == unstructured_result
 
 
-def test_get_assignments_df(requests_mock, toloka_client, toloka_api_url):
+def test_get_assignments_df(respx_mock, toloka_client, toloka_api_url):
     # urllib.parse.parse_qs format
-    expected_params = {
-        'status': [','.join([str.lower(s.value) for s in client.assignment.GetAssignmentsTsvParameters.Status])],
-        'starttimefrom': ['2020-01-01t00:00:00'],
-        'excludebanned': ['true'],
-        'addrowdelimiter': ['false'],
-        'field': [','.join([str.lower(f.value) for f in client.assignment.GetAssignmentsTsvParameters._default_fields])],
-    }
     expected_df = pd.DataFrame(data={
         'a': [1, 2, 3],
         'b': [4, 5, 6]
@@ -661,20 +667,27 @@ def test_get_assignments_df(requests_mock, toloka_client, toloka_api_url):
     buf = io.StringIO()
     expected_df.to_csv(buf, sep='\t', index=False, columns=['a', 'b'])
 
-    def get_content(request, context):
+    def get_content(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'get_assignments_df',
             'X-Low-Level-Method': 'get_assignments_df',
         }
         check_headers(request, expected_headers)
 
-        return buf.getvalue().encode('utf-8')
+        assert request.url.params == QueryParams(
+            status=','.join([s.value for s in client.assignment.GetAssignmentsTsvParameters.Status]),
+            startTimeFrom='2020-01-01T00:00:00',
+            excludeBanned='true',
+            addRowDelimiter='false',
+            field=','.join([f.value for f in client.assignment.GetAssignmentsTsvParameters._default_fields]),
+        )
 
-    requests_mock.get(f'{toloka_api_url}/new/requester/pools/123/assignments.tsv',
-                      content=get_content,
-                      headers={'Authorization': 'OAuth abc'},
-                      status_code=200)
+        return httpx.Response(
+            content=buf.getvalue().encode('utf-8'), status_code=200, headers={'Authorization': 'OAuth abc'}
+        )
+
+    respx_mock.get(f'{toloka_api_url}/new/requester/pools/123/assignments.tsv').mock(side_effect=get_content)
     result = toloka_client.get_assignments_df(
         pool_id='123',
         parameters=client.assignment.GetAssignmentsTsvParameters(
@@ -685,7 +698,6 @@ def test_get_assignments_df(requests_mock, toloka_client, toloka_api_url):
     )
 
     assert result.equals(expected_df)
-    assert requests_mock.last_request.qs == expected_params
 
     result = toloka_client.get_assignments_df(
         pool_id='123', start_time_from=datetime.datetime(2020, 1, 1, tzinfo=datetime.timezone.utc),
@@ -693,7 +705,6 @@ def test_get_assignments_df(requests_mock, toloka_client, toloka_api_url):
     )
 
     assert result.equals(expected_df)
-    assert requests_mock.last_request.qs == expected_params
 
 
 @pytest.fixture
@@ -732,19 +743,22 @@ def project_map_with_localization(project_map, simple_localization_config_map):
     }
 
 
-def test_localization(requests_mock, toloka_client, toloka_url, project_map, project_map_with_localization):
+def test_localization(respx_mock, toloka_client, toloka_url, project_map, project_map_with_localization):
 
-    def project_with_localization(request, context):
+    def project_with_localization(request):
         expected_headers = {
-            'X-Caller-Context': 'client',
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
             'X-Top-Level-Method': 'create_project',
             'X-Low-Level-Method': 'create_project',
         }
         check_headers(request, expected_headers)
 
-        return project_map_with_localization
+        return httpx.Response(
+            json=project_map_with_localization, headers={'Content-Type': 'application/json; charset=UTF-8'},
+            status_code=201,
+        )
 
-    requests_mock.post(f'{toloka_url}/projects', headers={'Content-Type': 'application/json; charset=UTF-8'}, json=project_with_localization, status_code=201)
+    respx_mock.post(f'{toloka_url}/projects').mock(side_effect=project_with_localization)
 
     project = client.structure(project_map, client.project.Project)
 

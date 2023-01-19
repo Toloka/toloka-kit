@@ -1,20 +1,21 @@
 import asyncio
-import attr
 import copy
 import datetime
 import logging
-import pytest
 from typing import List, Set, Tuple
 
-from toloka.client import unstructure
-from toloka.util.async_utils import ComplexException, AsyncMultithreadWrapper
+import attr
+import httpx
+import pytest
+from toloka.client import TolokaClient, unstructure
+from toloka.async_client import AsyncTolokaClient
 from toloka.streaming import Pipeline
+from toloka.streaming.locker import NewerInstanceDetectedError
 from toloka.streaming.observer import AssignmentsObserver, BaseObserver, PoolStatusObserver
 from toloka.streaming.storage import JSONLocalStorage
-from toloka.streaming.locker import NewerInstanceDetectedError
+from toloka.util.async_utils import AsyncMultithreadWrapper, ComplexException
 
 from ..testutils.backend_mock import BackendSearchMock
-
 
 Pipeline.MIN_SLEEP_SECONDS = 0
 
@@ -50,13 +51,13 @@ def new_backend_assignments_after_restore():
     ]
 
 
-def test_pipeline_errored_callback(requests_mock, toloka_url, toloka_client, existing_backend_assignments):
+def test_pipeline_errored_callback(respx_mock, toloka_url, sync_toloka_client, existing_backend_assignments):
     storage = [item for item in existing_backend_assignments if item['status'] != 'ACTIVE']  # Make sure it stops.
     assert storage  # Check this test uses correct data.
 
     backend = BackendSearchMock(storage, limit=3)  # Chunk size doesn't make sense here.
-    requests_mock.get(f'{toloka_url}/assignments', json=backend)
-    requests_mock.get(f'{toloka_url}/pools/100', json={'id': '100', 'status': 'CLOSED'})
+    respx_mock.get(f'{toloka_url}/assignments').mock(side_effect=backend)
+    respx_mock.get(f'{toloka_url}/pools/100').respond(json={'id': '100', 'status': 'CLOSED'})
 
     class HandlerRaiseSometimes:
         def __init__(self):
@@ -70,7 +71,7 @@ def test_pipeline_errored_callback(requests_mock, toloka_url, toloka_client, exi
             self.received.extend(events)
 
     pipeline = Pipeline(datetime.timedelta(milliseconds=100))
-    observer = pipeline.register(AssignmentsObserver(toloka_client, pool_id='100'))
+    observer = pipeline.register(AssignmentsObserver(sync_toloka_client, pool_id='100'))
     handler = observer.on_submitted(HandlerRaiseSometimes())
 
     loop = asyncio.new_event_loop()
@@ -88,13 +89,22 @@ def test_pipeline_errored_callback(requests_mock, toloka_url, toloka_client, exi
     assert events_expected == unstructure(handler.received)
 
 
+# do not test async client using wrapper to prevent nested asyncio loops
 @pytest.mark.parametrize('use_async', [False, True])
-def test_pipeline(requests_mock, toloka_url, toloka_client, existing_backend_assignments, new_backend_assignments, use_async):
-    pool_mock = {'id': '100', 'status': 'OPEN'}
+def test_pipeline(respx_mock, toloka_url, sync_toloka_client, use_async, existing_backend_assignments, new_backend_assignments):
+    if use_async:
+        _toloka_client = AsyncTolokaClient.from_sync_client(sync_toloka_client)
+    else:
+        _toloka_client = sync_toloka_client
+
+    pool_mock_value = {'id': '100', 'status': 'OPEN'}
+
+    def pool_mock(request):
+        return httpx.Response(json=pool_mock_value, status_code=200)
 
     backend = BackendSearchMock(existing_backend_assignments, limit=3)
-    requests_mock.get(f'{toloka_url}/assignments', json=backend)
-    requests_mock.get(f'{toloka_url}/pools/100', json=pool_mock)
+    respx_mock.get(f'{toloka_url}/assignments').mock(side_effect=backend)
+    respx_mock.get(f'{toloka_url}/pools/100').mock(side_effect=pool_mock)
 
     save_submitted_here = []
     save_pool_info_here = []
@@ -103,7 +113,7 @@ def test_pipeline(requests_mock, toloka_url, toloka_client, existing_backend_ass
         save_submitted_here.extend(event.assignment for event in events)
 
     async def handle_pool_open(pool):
-        active_count = len(list(toloka_client.get_assignments(pool_id=pool.id, status='ACTIVE')))
+        active_count = len(list(sync_toloka_client.get_assignments(pool_id=pool.id, status='ACTIVE')))
         save_pool_info_here.append(f'pool open with active tasks count: {active_count}')
 
     class HandlePoolClose:
@@ -119,10 +129,9 @@ def test_pipeline(requests_mock, toloka_url, toloka_client, existing_backend_ass
         for item in backend.storage:
             if item['status'] == 'ACTIVE':
                 item['status'] = 'EXPIRED'
-        pool_mock['status'] = 'CLOSED'
-        pool_mock['last_close_reason'] = 'EXPIRED'
+        pool_mock_value['status'] = 'CLOSED'
+        pool_mock_value['last_close_reason'] = 'EXPIRED'
 
-    _toloka_client = AsyncMultithreadWrapper(toloka_client) if use_async else toloka_client
 
     pipeline = Pipeline(datetime.timedelta(milliseconds=500))
     pipeline.register(AssignmentsObserver(_toloka_client, pool_id='100')).on_submitted(handle_submitted)
@@ -229,26 +238,31 @@ class HandlerToRestore:
 
 
 def test_save_and_load(
-    requests_mock,
+    respx_mock,
     toloka_url,
-    toloka_client,
+    sync_toloka_client,
     existing_backend_assignments,
     new_backend_assignments,
     new_backend_assignments_after_restore,
     tmp_path,
 ):
-    pool_mock = {'id': '100', 'status': 'OPEN'}
-    pool_mock_initial = dict(pool_mock)
+    pool_mock_value = {'id': '100', 'status': 'OPEN'}
+
+    def pool_mock(request):
+        return httpx.Response(json=pool_mock_value, status_code=200)
+
+    pool_mock_initial = dict(pool_mock_value)
 
     backend = BackendSearchMock(existing_backend_assignments, limit=3)
-    requests_mock.get(f'{toloka_url}/assignments', json=backend)
-    requests_mock.get(f'{toloka_url}/pools/100', json=pool_mock)
+    respx_mock.get(f'{toloka_url}/assignments').mock(side_effect=backend)
+    respx_mock.get(f'{toloka_url}/pools/100').mock(side_effect=pool_mock)
 
     dirname = tmp_path / 'storage'
     dirname.mkdir()
 
+    HandlerToRestore.FAIL = True
     pipeline_old = Pipeline(storage=JSONLocalStorage(dirname=dirname), period=datetime.timedelta(milliseconds=500))
-    observer_old = pipeline_old.register(AssignmentsObserver(toloka_client, pool_id='100'))
+    observer_old = pipeline_old.register(AssignmentsObserver(sync_toloka_client, pool_id='100'))
     handler_old = observer_old.on_submitted(HandlerToRestore(comment='old'))
 
     async def _add_new_assignments(after_sec):
@@ -260,8 +274,8 @@ def test_save_and_load(
         for item in backend.storage:
             if item['status'] == 'ACTIVE':
                 item['status'] = 'EXPIRED'
-        pool_mock['status'] = 'CLOSED'
-        pool_mock['last_close_reason'] = 'EXPIRED'
+        pool_mock_value['status'] = 'CLOSED'
+        pool_mock_value['last_close_reason'] = 'EXPIRED'
 
     async def _main_old():
         loop = asyncio.get_event_loop()
@@ -282,18 +296,18 @@ def test_save_and_load(
     assert 1 == sum(1 for task in res_old[0] if 'Test fail' in str(task.exception())), res_old
 
     # Now we change HandlerToRestore and allow it to finish.
-    # It will be run in the similiar pipeline instance
+    # It will be run in the similar pipeline instance
     # and should restore from the previous success state.
 
-    pool_mock.clear()
-    pool_mock.update(pool_mock_initial)
+    pool_mock_value.clear()
+    pool_mock_value.update(pool_mock_initial)
     for item in backend.storage:
         if item['status'] == 'EXPIRED':
             item['status'] = 'ACTIVE'
     HandlerToRestore.FAIL = False
 
     pipeline_new = Pipeline(storage=JSONLocalStorage(dirname=dirname), period=datetime.timedelta(milliseconds=500))
-    observer_new = pipeline_new.register(AssignmentsObserver(toloka_client, pool_id='100'))
+    observer_new = pipeline_new.register(AssignmentsObserver(sync_toloka_client, pool_id='100'))
     handler_new = observer_new.on_submitted(HandlerToRestore(comment='new'))
 
     async def _add_new_assignments_after_restore(after_sec):
@@ -389,28 +403,31 @@ def test_async_observers():
 
 
 def test_two_pipeline_instances_run(
-    requests_mock,
+    respx_mock,
     toloka_url,
-    toloka_client,
+    sync_toloka_client,
     existing_backend_assignments,
     new_backend_assignments,
     tmp_path,
 ):
-    pool_mock = {'id': '100', 'status': 'OPEN'}
+    pool_mock_value = {'id': '100', 'status': 'OPEN'}
+
+    def pool_mock(request):
+        return httpx.Response(json=pool_mock_value, status_code=200)
 
     backend = BackendSearchMock(existing_backend_assignments, limit=3)
-    requests_mock.get(f'{toloka_url}/assignments', json=backend)
-    requests_mock.get(f'{toloka_url}/pools/100', json=pool_mock)
+    respx_mock.get(f'{toloka_url}/assignments').mock(side_effect=backend)
+    respx_mock.get(f'{toloka_url}/pools/100').mock(side_effect=pool_mock)
 
     dirname = tmp_path / 'storage'
     dirname.mkdir()
 
     pipeline_1 = Pipeline(storage=JSONLocalStorage(dirname=dirname), period=datetime.timedelta(seconds=1))
-    observer_1 = pipeline_1.register(AssignmentsObserver(toloka_client, pool_id='100'))
+    observer_1 = pipeline_1.register(AssignmentsObserver(sync_toloka_client, pool_id='100'))
     handler_1 = observer_1.on_submitted(HandlerToSaveAssignments())
 
     pipeline_2 = Pipeline(storage=JSONLocalStorage(dirname=dirname), period=datetime.timedelta(seconds=1))
-    observer_2 = pipeline_2.register(AssignmentsObserver(toloka_client, pool_id='100'))
+    observer_2 = pipeline_2.register(AssignmentsObserver(sync_toloka_client, pool_id='100'))
     handler_2 = observer_2.on_submitted(HandlerToSaveAssignments())
 
     async def _run_1():
@@ -429,8 +446,8 @@ def test_two_pipeline_instances_run(
         for item in backend.storage:
             if item['status'] == 'ACTIVE':
                 item['status'] = 'EXPIRED'
-        pool_mock['status'] = 'CLOSED'
-        pool_mock['last_close_reason'] = 'EXPIRED'
+        pool_mock_value['status'] = 'CLOSED'
+        pool_mock_value['last_close_reason'] = 'EXPIRED'
 
     async def _main():
         loop = asyncio.get_event_loop()

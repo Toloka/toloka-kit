@@ -19,6 +19,8 @@ class InfiniteOverlapParametersMixin:
     All other states are considered invalid
     """
 
+    def __attrs_post_init__(self): ...
+
     def unset_overlap(self):
         """Unsets overlap
         """

@@ -14,12 +14,12 @@ import typing
 
 
 class FieldValidationError(toloka.client.primitives.base.BaseTolokaObject):
-    """Error that contains information about an invalid field
+    """Error that contains information about an invalid field.
 
     Attributes:
-        code: error code string.
-        message: error message.
-        params: additional params.
+        code: An error code.
+        message: An error message.
+        params: Additional parameters describing the error.
     """
 
     def __init__(
@@ -40,11 +40,11 @@ class FieldValidationError(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class TaskBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list with the results of the tasks creation operation.
+    """The results of the tasks creation operation.
 
     Attributes:
-        items: Object with created tasks.
-        validation_errors: Object with errors in tasks. Returned if the parameter is used in the request skip_invalid_items=True.
+        items: A list of created tasks.
+        validation_errors: A list with validation errors in input tasks. The list is filled if the request parameter `skip_invalid_items` is `True`.
     """
 
     def __init__(
@@ -63,11 +63,11 @@ class TaskBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class TaskSuiteBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The list with the results of the task suites creation operation.
+    """The results of the task suites creation operation.
 
     Attributes:
-        items: Object with created task suites.
-        validation_errors: Object with errors in task suites. Returned if the parameter is used in the request skip_invalid_items=True.
+        items: A list of created task suites.
+        validation_errors: A list with validation errors in input task suites. The list is filled if the request parameter `skip_invalid_items` is `True`.
     """
 
     def __init__(
@@ -86,11 +86,11 @@ class TaskSuiteBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject)
 
 
 class UserBonusBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject):
-    """A list with the results of creating rewards for Tolokers.
+    """The results of the creating rewards for Tolokers.
 
     Attributes:
-        items: Object with information about issued bonuses.
-        validation_errors: Object with validation errors. Returned if the parameter is used in the request skip_invalid_items=True.
+        items: A list of created rewards.
+        validation_errors: A list with validation errors. The list is filled if the request parameter `skip_invalid_items` is `True`.
     """
 
     def __init__(
