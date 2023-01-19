@@ -49,6 +49,12 @@ class AsyncTolokaClient:
         All function fields should be already overridden with `generate_async_methods_from`."""
         return getattr(self._sync_client, name)
 
+    def __getstate__(self):
+        return self.__dict__
+
+    def __setstate__(self, state):
+        self.__dict__ = state
+
     @classmethod
     def from_sync_client(cls, client: TolokaClient) -> 'AsyncTolokaClient':
         async_client = cls.__new__(cls)
