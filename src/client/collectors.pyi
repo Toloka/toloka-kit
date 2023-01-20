@@ -19,6 +19,9 @@ import typing
 import uuid
 
 
+def _captcha_deprecation_warning(*args, **kwargs): ...
+
+
 class CollectorConfig(toloka.client.primitives.base.BaseParameters):
     """Base class for all collectors.
 
@@ -325,7 +328,7 @@ class AssignmentSubmitTime(CollectorConfig):
 
 
 class Captcha(CollectorConfig):
-    """Collects captcha statistics for every Toloker.
+    """Deprecated. Collects captcha statistics for every Toloker.
 
     Captcha provides an advanced protection against robots. It is used with conditions:
     * [StoredResultsCount](toloka.client.conditions.StoredResultsCount.md) — How many times the Toloker entered a captcha.
@@ -376,6 +379,8 @@ class Captcha(CollectorConfig):
 
         _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
         history_size: typing.Optional[int]
+
+    def __attrs_post_init__(*args, **kwargs): ...
 
     @typing.overload
     def __init__(
