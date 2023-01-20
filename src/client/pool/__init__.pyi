@@ -9,7 +9,6 @@ __all__ = [
     'MixerConfig',
     'SpeedQualityBalanceConfig',
 ]
-import attr._make
 import datetime
 import toloka.client.filter
 import toloka.client.owner
@@ -282,7 +281,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
         may_contain_adult_content: typing.Optional[bool] = None,
         reward_per_assignment: typing.Optional[float] = None,
         assignment_max_duration_seconds: typing.Optional[int] = None,
-        defaults: typing.Optional[Defaults] = attr._make._Nothing.NOTHING,
+        defaults: typing.Optional[Defaults] = ...,
         will_expire: typing.Optional[datetime.datetime] = None,
         private_comment: typing.Optional[str] = None,
         public_description: typing.Optional[str] = None,
@@ -294,7 +293,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
         assignments_issuing_config: typing.Optional[AssignmentsIssuingConfig] = None,
         priority: typing.Optional[int] = None,
         filter: typing.Optional[toloka.client.filter.FilterCondition] = None,
-        quality_control: typing.Optional[toloka.client.quality_control.QualityControl] = attr._make._Nothing.NOTHING,
+        quality_control: typing.Optional[toloka.client.quality_control.QualityControl] = ...,
         speed_quality_balance: typing.Optional[toloka.client.pool.speed_quality_balance_config.SpeedQualityBalanceConfig] = None,
         dynamic_overlap_config: typing.Optional[toloka.client.pool.dynamic_overlap_config.DynamicOverlapConfig] = None,
         mixer_config: typing.Optional[toloka.client.pool.mixer_config.MixerConfig] = None,
@@ -383,7 +382,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
         *,
         training_requirement: typing.Optional[toloka.client.quality_control.QualityControl.TrainingRequirement] = None,
         captcha_frequency: typing.Union[toloka.client.quality_control.QualityControl.CaptchaFrequency, str, None] = None,
-        configs: typing.Optional[typing.List[toloka.client.quality_control.QualityControl.QualityControlConfig]] = attr._make._Nothing.NOTHING,
+        configs: typing.Optional[typing.List[toloka.client.quality_control.QualityControl.QualityControlConfig]] = ...,
         checkpoints_config: typing.Optional[toloka.client.quality_control.QualityControl.CheckpointsConfig] = None
     ):
         """A shortcut setter for quality_control
