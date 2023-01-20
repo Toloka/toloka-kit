@@ -6,6 +6,7 @@ __all__ = [
     'TriggerPluginV1',
     'TolokaPluginV1',
 ]
+import attr._make
 import toloka.client.project.template_builder.base
 import toloka.util._extendable_enum
 import typing
@@ -337,7 +338,7 @@ class TolokaPluginV1(BasePluginV1):
     @typing.overload
     def __init__(
         self,
-        layout: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, TolokaPluginLayout]] = ...,
+        layout: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, TolokaPluginLayout]] = attr._make._Nothing.NOTHING,
         *,
         notifications: typing.Optional[typing.Union[toloka.client.project.template_builder.base.BaseComponent, typing.List[toloka.client.project.template_builder.base.BaseComponent]]] = None,
         version: typing.Optional[str] = '1.0.0'

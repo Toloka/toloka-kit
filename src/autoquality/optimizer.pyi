@@ -2,6 +2,7 @@ __all__ = [
     'AutoQuality',
     'DEFAULT_DISTRIBUTIONS',
 ]
+import attr._make
 import pandas
 import toloka.autoquality.scoring
 import toloka.client
@@ -85,7 +86,7 @@ class AutoQuality:
         exam_skill_id: typing.Optional[str] = None,
         label_field: str = 'label',
         n_iter: int = 10,
-        parameter_distributions: typing.Dict = ...,
+        parameter_distributions: typing.Dict = attr._make._Nothing.NOTHING,
         score_func: typing.Callable = toloka.autoquality.scoring.default_calc_scores,
         ranking_func: typing.Callable = toloka.autoquality.scoring.default_calc_ranks,
         create_autoquality_pool_func: typing.Callable = _create_autoquality_pool_default
