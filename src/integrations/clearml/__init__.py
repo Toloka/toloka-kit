@@ -40,6 +40,9 @@ def get_clearml_dataset(
         >>> get_clearml_dataset(dataset_id=dataset_id)
         ...
     """
+    if not (all([dataset_project, dataset_name]) or dataset_id):
+        raise ValueError("Either dataset_project and dataset_name or dataset_id should be provided")
+
     dataset = Dataset.get(
         dataset_id=dataset_id,
         dataset_project=dataset_project,
@@ -54,10 +57,10 @@ def get_clearml_dataset(
 def register_to_clearml(
     toloka_df: pd.DataFrame,
     toloka_dataset_path: Optional[str] = None,
+    external_url_columns: Optional[List[str]] = None,
     dataset_project: Optional[str] = None,
     dataset_name: Optional[str] = None,
-    parent_dataset_id: Optional[str] = None,
-    external_url_columns: Optional[List[str]] = None,
+    parent_dataset_ids: Optional[List[str]] = None,
     verbose: bool = False
 ) -> None:
     """Registers a new Dataset to ClearML containing files annotated by Toloka
@@ -67,7 +70,8 @@ def register_to_clearml(
         dataset_project: Project containing the dataset in ClearML.
         dataset_name: Naming the new dataset in ClearML
         parent_dataset_id: Parent dataset ID
-        external_url_columns: columns containing external urls to be added to ClearML Dataset
+        external_url_columns: columns containing external urls. If specified, the URLs in the columns will be added to the clearml Dataset
+                              as links and can be retrieved when calling get_clearml_dataset
         verbose: If True print to console files added/modified
     Examples:
         The example shows how register  a new Dataset in ClearML.
@@ -78,24 +82,24 @@ def register_to_clearml(
         The example shows how to register a new Dataset in ClearML as a child Dataset.
         >>> answers_df = toloka_client.get_assignments_df(pool_id='1')
         >>> parent_dataset_id = # id of Dataset from ClearML
-        >>> register_to_clearml(parent_dataset_id=parent_dataset_id, toloka_df=answers_df,
+        >>> register_to_clearml(parent_dataset_ids=parent_dataset_id, toloka_df=answers_df,
         >>>                     dataset_project='ClearMLProject', dataset_name='TolokaDataset')
         ...
     """
-    if not (all([dataset_project, dataset_name,]) or parent_dataset_id):
+    if not (all([dataset_project, dataset_name]) or parent_dataset_ids):
         raise ValueError("Either dataset_project and dataset_name or parent_dataset_id should be provided")
 
-    if not parent_dataset_id:
+    if not parent_dataset_ids:
         dataset = Dataset.create(
             dataset_project=dataset_project,
             dataset_name=dataset_name
         )
     else:
-        parent = Dataset.get(dataset_id=parent_dataset_id)
+        parent = Dataset.get(dataset_id=parent_dataset_ids)
         dataset = Dataset.create(
             dataset_project=parent.project if not None else parent.project,
             dataset_name=parent.name if not None else parent.name,
-            parent_datasets=[parent_dataset_id]
+            parent_datasets=[parent_dataset_ids]
         )
 
     toloka_csv_file = toloka_dataset_path if toloka_dataset_path is not None else '{}/toloka_ds_temp.csv'.format(tempfile.gettempdir())
