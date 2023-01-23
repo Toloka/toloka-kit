@@ -1,5 +1,5 @@
 __all__ = [
-    'TolokaRetry', 'SyncRetryingOverURLLibRetry', 'AsyncRetryingOverURLLibRetry'
+    'TolokaRetry', 'SyncRetryingOverURLLibRetry', 'AsyncRetryingOverURLLibRetry', 'STATUSES_TO_RETRY'
 ]
 
 import json

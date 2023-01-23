@@ -9,6 +9,7 @@ import simplejson
 import simplejson as json
 import toloka.client as client
 from httpx import QueryParams
+from respx.models import AllMockedAssertionError
 
 from .testutils.util_functions import check_headers
 
@@ -396,13 +397,9 @@ def test_create_tasks_sync(respx_mock, toloka_client, toloka_url, tasks_map, tas
     assert task_create_result_map == client.unstructure(result)
 
 
-def test_create_tasks_async(respx_mock, toloka_client, toloka_url):
-    tasks_map = [
-        {'pool_id': '21', 'input_values': {'image': 'http://images.com/1.png'}},
-        {'pool_id': '21', 'input_values': {'image': 'http://images.com/2.png'}},
-    ]
-
-    operation_map = {
+@pytest.fixture
+def create_tasks_operation_map():
+    return {
         'id': '281073ea-ab34-416e-a028-47421ff1b166',
         'type': 'TASK.BATCH_CREATE',
         'status': 'SUCCESS',
@@ -411,6 +408,9 @@ def test_create_tasks_async(respx_mock, toloka_client, toloka_url):
         'parameters': {'skip_invalid_items': True, 'allow_defaults': True, 'open_pool': True},
         'details': {'items_count': 2},
     }
+
+
+def test_create_tasks_async(respx_mock, toloka_client, toloka_url, tasks_map, create_tasks_operation_map):
 
     def tasks(request):
         expected_headers = {
@@ -428,7 +428,7 @@ def test_create_tasks_async(respx_mock, toloka_client, toloka_url):
             async_mode='true',
         ) == request.url.params
         assert tasks_map == simplejson.loads(request.content)
-        return httpx.Response(json=operation_map, status_code=201)
+        return httpx.Response(json=create_tasks_operation_map, status_code=201)
 
     respx_mock.post(f'{toloka_url}/tasks').mock(side_effect=tasks)
 
@@ -442,7 +442,7 @@ def test_create_tasks_async(respx_mock, toloka_client, toloka_url):
             open_pool=True,
         )
     )
-    assert operation_map == client.unstructure(result)
+    assert create_tasks_operation_map == client.unstructure(result)
 
     # Expanded syntax
     result = toloka_client.create_tasks_async(
@@ -452,7 +452,35 @@ def test_create_tasks_async(respx_mock, toloka_client, toloka_url):
         allow_defaults=True,
         open_pool=True,
     )
-    assert operation_map == client.unstructure(result)
+    assert create_tasks_operation_map == client.unstructure(result)
+
+
+def test_create_tasks_retry(
+    respx_mock, toloka_client, toloka_url, tasks_map, task_create_result_map,
+):
+    requests_count = 0
+    first_request_op_id = None
+
+    def tasks(request):
+        nonlocal requests_count
+        nonlocal first_request_op_id
+
+        requests_count += 1
+        if requests_count == 1:
+            first_request_op_id = request.url.params['operation_id']
+            return httpx.Response(status_code=500)
+
+        assert request.url.params['operation_id'] == first_request_op_id
+        httpx.Response(json=task_create_result_map, status_code=201)
+
+    respx_mock.post(f'{toloka_url}/tasks').mock(side_effect=tasks)
+
+    # Operations API should be mocked for create_tasks to work. This test checks retrying of the first request
+    with pytest.raises(AllMockedAssertionError):
+        toloka_client.create_tasks(
+            tasks=[client.structure(task, client.task.Task) for task in tasks_map]
+        )
+    assert requests_count == 2
 
 
 def test_find_tasks(respx_mock, toloka_client, toloka_url, task_map_with_readonly):
