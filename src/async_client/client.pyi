@@ -1,7 +1,6 @@
 __all__ = [
     'AsyncTolokaClient',
 ]
-import attr._make
 import datetime
 import decimal
 import pandas
@@ -4771,11 +4770,11 @@ class AsyncTolokaClient:
         self,
         pool_id: str,
         *,
-        status: typing.Optional[typing.List[toloka.client.assignment.GetAssignmentsTsvParameters.Status]] = attr._make._Nothing.NOTHING,
+        status: typing.Optional[typing.List[toloka.client.assignment.GetAssignmentsTsvParameters.Status]] = ...,
         start_time_from: typing.Optional[datetime.datetime] = None,
         start_time_to: typing.Optional[datetime.datetime] = None,
         exclude_banned: typing.Optional[bool] = None,
-        field: typing.Optional[typing.List[toloka.client.assignment.GetAssignmentsTsvParameters.Field]] = attr._make._Nothing.NOTHING
+        field: typing.Optional[typing.List[toloka.client.assignment.GetAssignmentsTsvParameters.Field]] = ...
     ) -> pandas.DataFrame:
         """Downloads assignments as pandas.DataFrame.
 

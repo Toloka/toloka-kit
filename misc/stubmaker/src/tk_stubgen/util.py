@@ -1,7 +1,7 @@
 import inspect
 import logging
-from functools import lru_cache
 from inspect import findsource
+
 from stubmaker.builder.common import BaseDefinition
 
 

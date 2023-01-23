@@ -4,7 +4,6 @@ __all__ = [
     'TaskSuiteOverlapPatch',
     'TaskSuitePatch',
 ]
-import attr._make
 import datetime
 import toloka.client.primitives.base
 import toloka.client.primitives.infinite_overlap
@@ -63,7 +62,7 @@ class TaskSuite(toloka.client.primitives.infinite_overlap.InfiniteOverlapParamet
         infinite_overlap=None,
         overlap=None,
         pool_id: typing.Optional[str] = None,
-        tasks: typing.Optional[typing.List[toloka.client.task.BaseTask]] = attr._make._Nothing.NOTHING,
+        tasks: typing.Optional[typing.List[toloka.client.task.BaseTask]] = ...,
         reserved_for: typing.Optional[typing.List[str]] = None,
         unavailable_for: typing.Optional[typing.List[str]] = None,
         issuing_order_override: typing.Optional[float] = None,
