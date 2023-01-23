@@ -33,6 +33,12 @@ def test_client_pickleable(random_url):
     assert loaded
 
 
+def test_async_client_pickleable(async_toloka_client):
+    dumped = pickle.dumps(async_toloka_client)
+    loaded = pickle.loads(dumped)
+    assert loaded
+
+
 @pytest.fixture
 def requester_mapping():
     return {

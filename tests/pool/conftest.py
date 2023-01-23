@@ -88,7 +88,6 @@ def pool_map():
             ]
         },
         'quality_control': {
-            'captcha_frequency': 'LOW',
             'checkpoints_config': {
                 'real_settings': {
                     'target_overlap': 5,
@@ -106,21 +105,21 @@ def pool_map():
             'configs': [
                 {
                     'collector_config': {
-                        'type': 'CAPTCHA',
+                        'type': 'ASSIGNMENT_SUBMIT_TIME',
                         'parameters': {'history_size': 5},
                     },
                     'rules': [
                         {
                             'conditions': [
                                 {
-                                    'key': 'stored_results_count',
+                                    'key': 'total_submitted_count',
                                     'operator': 'EQ',
                                     'value': 5
                                 },
                                 {
-                                    'key': 'success_rate',
-                                    'operator': 'LTE',
-                                    'value': 60.0,
+                                    'key': 'fast_submitted_count',
+                                    'operator': 'GTE',
+                                    'value': 3,
                                 }
                             ],
                             'action': {

@@ -8,6 +8,7 @@ import functools
 import logging
 import threading
 from decimal import Decimal
+from typing import Optional
 
 import attr
 import httpx
@@ -49,6 +50,12 @@ class AsyncTolokaClient:
         All function fields should be already overridden with `generate_async_methods_from`."""
         return getattr(self._sync_client, name)
 
+    def __getstate__(self):
+        return self.__dict__
+
+    def __setstate__(self, state):
+        self.__dict__ = state
+
     @classmethod
     def from_sync_client(cls, client: TolokaClient) -> 'AsyncTolokaClient':
         async_client = cls.__new__(cls)
@@ -85,8 +92,9 @@ class AsyncTolokaClient:
     async def _request(self, method, path, **kwargs):
         return (await self._raw_request(method, path, **kwargs)).json(parse_float=Decimal)
 
-    async def _find_all(self, find_function, request, sort_field: str = 'id', items_field: str = 'items'):
-        result = await find_function(request, sort=[sort_field])
+    async def _find_all(self, find_function, request, sort_field: str = 'id',
+                        items_field: str = 'items', batch_size: Optional[int] = None):
+        result = await find_function(request, sort=[sort_field], limit=batch_size)
         items = getattr(result, items_field)
         while result.has_more:
             request = attr.evolve(request, **{f'{sort_field}_gt': getattr(items[-1], sort_field)})
