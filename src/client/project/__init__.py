@@ -72,8 +72,7 @@ class Project(BaseTolokaObject):
     * Input data parameters. These parameters describe the objects to display in a task, such as images or text.
     * Output data parameters. These parameters describe Tolokers' responses. They are used for validating the
         responses entered: the data type (integer, string, etc.), range of values, string length, and so on.
-    * Task interface. For more information about how to define the appearance of tasks, see the document
-        Toloka. requester's guide.
+    * Task interface. To learn how to define the appearance of tasks, see [Task interface](https://toloka.ai/en/docs/en/guide/concepts/spec).
 
     Pools and training pools are related to a project.
 
@@ -221,18 +220,18 @@ class Project(BaseTolokaObject):
             How to add russian translation to the project:
 
             >>> project = toloka.Project(
-            >>>     public_name='cats vs dogs',
-            >>>     public_description='image classification',
-            >>>     public_instructions='do it pls',
+            >>>     public_name='Cats vs dogs',
+            >>>     public_description='A simple image classification',
+            >>>     public_instructions='Determine which animal is in an image',
             >>>     ...
             >>> )
             >>> project.set_default_language('EN')
             >>> project.add_requester_translation(
             >>>     language='RU',
-            >>>     public_name='кошки против собак'
-            >>>     public_description='классификация изображений'
+            >>>     public_name='Кошки или собаки'
+            >>>     public_description='Простая классификация изображений'
             >>> )
-            >>> project.add_requester_translation(language='RU', public_instructions='сделай это, пожалуйста')
+            >>> project.add_requester_translation(language='RU', public_instructions='Определите, какое животное изображено')
         """
         assert language
 

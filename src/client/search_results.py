@@ -131,8 +131,8 @@ OperationSearchResult = _create_search_result_class_for(
     Attributes:
         items: List of found operations
         has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+            * `True` — Not all elements are included in the output due to restrictions in the limit parameter.
+            * `False` — The output lists all the items.
     """
 )
 AppProjectSearchResult = _create_search_result_class_for(

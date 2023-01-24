@@ -190,7 +190,7 @@ class NewUserBonuses(BaseMetric):
     Args:
         count_name: Metric name for a count of new bonuses.
         money_name: Metric name for amount of money in new bonuses.
-        join_events: Count all events in one point.  Default False.
+        join_events: Count all events in one point.  Default `False`.
 
     Example:
         How to collect this metrics:
@@ -265,7 +265,7 @@ class NewUserSkills(BaseMetric):
         skill_id: Which skill we will be tracking.
         count_name: Metric name for a count of new skill assignments. When skill changes it counts to.
         value_name: Metric name for exact values of new skill level for each skill assignment. It could be useful to track mean value or some medians.
-        join_events: Count all events in one point.  Default False. "Values" never join.
+        join_events: Count all events in one point.  Default `False`. "Values" never join.
 
     Example:
         How to collect this metrics:
@@ -351,7 +351,7 @@ class NewMessageThreads(BaseMetric):
         count_name: Metric name for a count of new messages.
         projects_name: Dictionary that allows count messages on exact projects. {project_id: line_name}
         pools_name: Dictionary that allows count messages on exact pools. {pool_id: line_name}
-        join_events: Count all events in one point. Default False. "Values" never join.
+        join_events: Count all events in one point. Default `False`. "Values" never join.
 
     Example:
         How to collect this metrics:

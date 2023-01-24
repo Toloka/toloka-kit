@@ -37,8 +37,8 @@ class Assignment(BaseTolokaObject):
         bonus_ids: IDs of rewards issued for the task.
         tasks: Data for the tasks.
         automerged: Flag of the response received as a result of merging identical tasks. Value:
-            * True — The response was recorded when identical tasks were merged.
-            * False — Normal Toloker response.
+            * `True` — The response was recorded when identical tasks were merged.
+            * `False` — Normal Toloker response.
         created: The date and time when the task suite was assigned to a Toloker.
         submitted: The date and time when the task suite was completed by a Toloker.
         accepted: The date and time when the responses for the task suite were accepted by the requester.

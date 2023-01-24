@@ -30,13 +30,13 @@ class Training(BaseTolokaObject):
         assignment_max_duration_seconds: Time limit to complete a task suite.
             Take into account loading a page with a task suite and sending responses to the server. It is recommended that you set at least 60 seconds.
         mix_tasks_in_creation_order:
-            * True — Tasks are grouped in suites in the order they were created.
-            * False — Tasks are chosen for a task suite in a random order.
+            * `True` — Tasks are grouped in suites in the order they were created.
+            * `False` — Tasks are chosen for a task suite in a random order.
 
             Default: `True`.
         shuffle_tasks_in_task_suite:
-            * True — Tasks from a task suite are shuffled on the page.
-            * False — Tasks from a task suite are placed on the page in the order they were created.
+            * `True` — Tasks from a task suite are shuffled on the page.
+            * `False` — Tasks from a task suite are placed on the page in the order they were created.
 
             Default: `True`.
         training_tasks_in_task_suite_count: The number of training tasks in one task suite.
@@ -44,20 +44,20 @@ class Training(BaseTolokaObject):
         retry_training_after_days: The training can be completed again after the specified number of days to update the training skill.
             If the parameter is not specified, then the training skill is issued for an unlimited time.
         inherited_instructions:
-            * True — Project instructions are used in the training.
-            * False — Instruction, specified in the `public_instructions` parameter, are used.
+            * `True` — Project instructions are used in the training.
+            * `False` — Instruction, specified in the `public_instructions` parameter, are used.
 
             Default: `False`.
-        public_instructions: Instructions for Tolokers used when the `inherited_instructions` parameter is False. Describe in the instructions how to complete training tasks.
+        public_instructions: Instructions for Tolokers used when the `inherited_instructions` parameter is `False`. Describe in the instructions how to complete training tasks.
             You can use HTML markup inside `public_instructions`.
         metadata: A dictionary with metadata.
         owner: The training owner.
-        id: The ID of the training. Read only.
-        status: The training status. Read only.
-        last_close_reason: A reason why the training was closed last time. Read only.
-        created: The UTC date and time when the training was created. Read only.
-        last_started: The UTC date and time when the training was started last time. Read only.
-        last_stopped: The UTC date and time when the training was stopped last time. Read only.
+        id: The ID of the training. Read-only field.
+        status: The training status. Read-only field.
+        last_close_reason: A reason why the training was closed last time. Read-only field.
+        created: The UTC date and time when the training was created. Read-only field.
+        last_started: The UTC date and time when the training was started last time. Read-only field.
+        last_stopped: The UTC date and time when the training was stopped last time. Read-only field.
     """
 
     @unique
