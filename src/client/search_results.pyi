@@ -398,8 +398,8 @@ class OperationSearchResult(toloka.client.primitives.base.BaseTolokaObject):
     Attributes:
         items: List of found operations
         has_more: Whether the list is complete:
-            * True - Not all elements are included in the output due to restrictions in the limit parameter.
-            * False - The output lists all the items.
+            * `True` — Not all elements are included in the output due to restrictions in the limit parameter.
+            * `False` — The output lists all the items.
     """
 
     def __init__(

@@ -102,10 +102,10 @@ class AsyncTolokaClient:
             The example shows how to aggregate responses in a pool.
 
             >>> aggregation_operation = toloka_client.aggregate_solutions_by_pool(
-            >>>         type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
+            >>>         type=toloka.client.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
             >>>         pool_id=some_existing_pool_id,
             >>>         answer_weight_skill_id=some_skill_id,
-            >>>         fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
+            >>>         fields=[toloka.client.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
             >>>     )
             >>> aggregation_operation = toloka_client.wait_operation(aggregation_operation)
             >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
@@ -142,10 +142,10 @@ class AsyncTolokaClient:
             The example shows how to aggregate responses in a pool.
 
             >>> aggregation_operation = toloka_client.aggregate_solutions_by_pool(
-            >>>         type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
+            >>>         type=toloka.client.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
             >>>         pool_id=some_existing_pool_id,
             >>>         answer_weight_skill_id=some_skill_id,
-            >>>         fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
+            >>>         fields=[toloka.client.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
             >>>     )
             >>> aggregation_operation = toloka_client.wait_operation(aggregation_operation)
             >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
@@ -173,11 +173,10 @@ class AsyncTolokaClient:
             The example shows how to aggregate responses to a single task.
 
             >>> aggregated_response = toloka_client.aggregate_solutions_by_task(
-            >>>     type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
             >>>     pool_id=some_existing_pool_id,
             >>>     task_id=some_existing_task_id,
             >>>     answer_weight_skill_id=some_skill_id,
-            >>>     fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
+            >>>     fields=[toloka.client.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
             >>> )
             >>> print(aggregated_response.output_values['result'])
             ...
@@ -211,11 +210,10 @@ class AsyncTolokaClient:
             The example shows how to aggregate responses to a single task.
 
             >>> aggregated_response = toloka_client.aggregate_solutions_by_task(
-            >>>     type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
             >>>     pool_id=some_existing_pool_id,
             >>>     task_id=some_existing_task_id,
             >>>     answer_weight_skill_id=some_skill_id,
-            >>>     fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
+            >>>     fields=[toloka.client.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
             >>> )
             >>> print(aggregated_response.output_values['result'])
             ...
@@ -1377,7 +1375,7 @@ class AsyncTolokaClient:
 
         Emulates cloning behavior via Toloka interface:
         - the same skills will be used
-        - the same quality control collectors will be used (could be changed by reuse_controllers=False)
+        - the same quality control collectors will be used (could be changed by `reuse_controllers=False`)
         - the expiration date will not be changed in the new project
         - etc.
 
@@ -1386,7 +1384,7 @@ class AsyncTolokaClient:
 
         Args:
             project_id: ID of the project to be cloned.
-            reuse_controllers: Use same quality controllers in cloned and created projects. Defaults to True.
+            reuse_controllers: Use same quality controllers in cloned and created projects. Defaults to `True`.
                 This means that all quality control rules will be applied to both projects.
                 For example, if you have rule "fast_submitted_count", fast responses counts across both projects.
 
@@ -3118,7 +3116,7 @@ class AsyncTolokaClient:
         Task suites can be created in different pools. You can create general and control tasks or task suites in different pools with a single method call.
 
         By default, `create_task_suites` starts asynchronous operation internally and waits for the completion of it. Do not
-        change `async_mode` to False, if you do not understand clearly why you need it.
+        change `async_mode` to `False`, if you do not understand clearly why you need it.
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
         It is recommended that you create no more than 10,000 task suites in a single request if the `async_mode` parameter is `True`.
@@ -3171,7 +3169,7 @@ class AsyncTolokaClient:
         Task suites can be created in different pools. You can create general and control tasks or task suites in different pools with a single method call.
 
         By default, `create_task_suites` starts asynchronous operation internally and waits for the completion of it. Do not
-        change `async_mode` to False, if you do not understand clearly why you need it.
+        change `async_mode` to `False`, if you do not understand clearly why you need it.
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
         It is recommended that you create no more than 10,000 task suites in a single request if the `async_mode` parameter is `True`.

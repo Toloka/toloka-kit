@@ -79,7 +79,8 @@ class ViewSpec(toloka.client.primitives.base.BaseTolokaObject):
 
 class ClassicViewSpec(ViewSpec):
     """A classic view specification defined with HTML, CSS and JS.
-    For more information, see [Toloka Requester's guide](https://toloka.ai/en/docs/)
+
+    For more information, see the [guide](https://toloka.ai/en/docs/guide/concepts/spec).
 
     Attributes:
         script: JavaScript interface for the task.
@@ -99,10 +100,9 @@ class ClassicViewSpec(ViewSpec):
             style_urls: Links to CSS libraries.
             script_urls: Links to JavaScript libraries and Toloka assets.
                 Toloka assets:
-                * "$TOLOKA_ASSETS/js/toloka-handlebars-templates.js" — Handlebars. See the description on the template
-                    engine website [here](http://handlebarsjs.com/)
-                * "$TOLOKA_ASSETS/js/image-annotation.js" — Image labeling interface. See image with area selection in
-                    the Requester's guide [here](https://toloka.ai/en/docs/guide/concepts/t-components/image-annotation)
+                * "$TOLOKA_ASSETS/js/toloka-handlebars-templates.js" — [Handlebars template engine](http://handlebarsjs.com/).
+                * "$TOLOKA_ASSETS/js/image-annotation.js" — Image labeling interface.
+                    For more information, see [Image with area selection](https://toloka.ai/en/docs/guide/concepts/t-components/image-annotation).
                 Note that the image labeling interface should only be connected together with the Handlebars helpers.
                 The order of connection matters.
 
@@ -165,8 +165,8 @@ class TemplateBuilderViewSpec(ViewSpec):
         core_version: Default template components version. Most likely you do not need to change this parameter.
         infer_data_spec: You can configure the data specification automatically or manually. You can change the way the
             specification is configured using the infer_data_spec option:
-            * True – The specifications of input and output data are generated automatically depending on the task interface settings.
-            * False – You can configure the specification manually. In this case, automatic detection of input and output data doesn't work.
+            * `True` – The specifications of input and output data are generated automatically depending on the task interface settings.
+            * `False` – You can configure the specification manually. In this case, automatic detection of input and output data doesn't work.
                 You may need to enable this option if:
                 * You don't want the specification version to be affected by changes in the instructions or other project fields.
                 * You have fields that you need but they become optional or are deleted after automatic generation.

@@ -52,7 +52,7 @@ class AssignmentEventsInPool(BasePoolMetric):
         rejected_name : Metric name for a count of rejected events. Default 'rejected_events_in_pool'.
         skipped_name: Metric name for a count of skipped events. Default None.
         expired_name: Metric name for a count of expired events. Default None.
-        join_events: Count all events in one point.  Default False.
+        join_events: Count all events in one point.  Default `False`.
 
     Raises:
         ValueError: If all metric names are set to None or if there are duplicate metric names.
@@ -360,7 +360,7 @@ class BansInPool(BasePoolMetric):
         count_name: Metric name for a count of bans.
         filter_by_comment: Allow to split Toloker restriction into several lines based on comment.
             Dictionary where, key - comment string, and value - name for line in which will be aggregated bans with this comments.
-        join_events: Count all events in one point. Default False.
+        join_events: Count all events in one point. Default `False`.
 
     Example:
         How to collect this metrics:
