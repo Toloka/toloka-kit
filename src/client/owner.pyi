@@ -12,8 +12,8 @@ class Owner(toloka.client.primitives.base.BaseTolokaObject):
         id: Customer ID.
         myself: An object accessory marker.
             Possible values:
-                * True - an object created by the customer whose OAuth-токен in the request;
-                * False - an object does not belong to the customer whose OAuth-токен in the request.
+                * `True` — An object is created by the customer whose OAuth token is used in the request.
+                * `False` — An object does not belong to the customer whose OAuth token is used in the request.
         company_id: ID of the customer's company.
     """
 

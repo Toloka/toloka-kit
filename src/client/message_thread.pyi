@@ -45,7 +45,7 @@ class Interlocutor(toloka.client.primitives.base.BaseTolokaObject):
     Attributes:
         id: ID of the sender or recipient.
         role: Role of the sender or recipient in Toloka.
-        myself: Marks a sender or recipient with your ID. f the ID belongs to you, the value is specified true.
+        myself: Marks a sender or recipient with your ID. If the ID belongs to you, the value is `True`.
     """
 
     class InterlocutorRole(toloka.util._extendable_enum.ExtendableStrEnum):
@@ -90,17 +90,17 @@ class MessageThread(toloka.client.primitives.base.BaseTolokaObject):
         id: Message thread ID.
         topic: Message thread title.
         interlocutors_inlined: Access information about the sender and recipients.
-            * True - information is available in the field interlocutors.
-            * False - information is available on a separate request.
+            * `True` — information is available in the field interlocutors.
+            * `False` — information is available on a separate request.
         interlocutors: Information about the sender and recipients, sorted by IDs.
         messages_inlined: Access to message threads:
-            * True — The message is available in the messages field.
-            * False — The message is available in a separate request.
+            * `True` — The message is available in the messages field.
+            * `False` — The message is available in a separate request.
         messages: Messages in the thread. Sorted by creation date (new first).
         meta: Meta
         answerable: Ability to reply to a message:
-            * True — The Toloker can respond to the message.
-            * False — The Toloker cannot respond to the message.
+            * `True` — The Toloker can respond to the message.
+            * `False` — The Toloker cannot respond to the message.
         folders: Folders where the thread is located.
         compose_details: For messages that you sent: details of the POST request for creating the message.
         created: The date the first message in the chain was created.
@@ -249,8 +249,8 @@ class MessageThreadCompose(toloka.client.primitives.base.BaseTolokaObject):
         text: Message text. You can provide text in several languages (the message will come in the Toloker's language).
             Format: "<language RU/EN/TR/ID/FR>": "<message text>".
         answerable: Ability to reply to a message:
-            * True — The Toloker can respond to the message.
-            * False — The Toloker can't respond to the message.
+            * `True` — The Toloker can respond to the message.
+            * `False` — The Toloker can't respond to the message.
         recipients_ids: List of IDs of Tolokers to whom the message will be sent.
         recipients_filter: Filter to select recipients.
     """

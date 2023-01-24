@@ -32,19 +32,19 @@ class MixerConfig(toloka.client.primitives.base.BaseTolokaObject):
         force_last_assignment: A setting used when the number of remaining general tasks in the pool is less than the `min_real_tasks_count` value.
             Note, that there must be enough control and training tasks to create a task suite.
 
-            * True — An incomplete task suite is assigned.
-            * False — An incomplete task suite is not assigned. It is useful if you add tasks to an open pool.
+            * `True` — An incomplete task suite is assigned.
+            * `False` — An incomplete task suite is not assigned. It is useful if you add tasks to an open pool.
 
             Default: `True`.
         force_last_assignment_delay_seconds: Time in seconds before assigning the last task suite. This parameter is used if `force_last_assignment` is set to `True`.
 
             Allowed range: from 0 to 86,400 seconds (one day).
         mix_tasks_in_creation_order:
-            * True — Tasks are grouped in task suites in the order they were created.
-            * False — Tasks are chosen for a task suite in a random order.
+            * `True` — Tasks are grouped in task suites in the order they were created.
+            * `False` — Tasks are chosen for a task suite in a random order.
         shuffle_tasks_in_task_suite:
-            * True — Tasks in a task suite are shuffled on the page.
-            * False — Tasks in a task suite are placed on the page in the order they were created.
+            * `True` — Tasks in a task suite are shuffled on the page.
+            * `False` — Tasks in a task suite are placed on the page in the order they were created.
         golden_task_distribution_function: Customizing the number of control tasks in a task suite depending on completed tasks by a Toloker.
         training_task_distribution_function: Customizing the number of training tasks in a task suite depending on completed tasks by a Toloker.
     """

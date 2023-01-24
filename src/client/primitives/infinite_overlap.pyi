@@ -9,11 +9,11 @@ class InfiniteOverlapParametersMixin:
     and is responsible for maintaining their consistency.
 
     Possible states:
-    * `overlap` is None and `infinite_overlap` is None:
+    * `overlap` is `None` and `infinite_overlap` is `None`:
         Interpreted as "overlap was not provided"
-    * `overlap` is None and `infinite_overlap` is True:
+    * `overlap` is `None` and `infinite_overlap` is `True`:
         Interpreted as "infinite overlap"
-    * `overlap` is not None and `infinite_overlap` is False:
+    * `overlap` is not `None` and `infinite_overlap` is `False`:
         Interpreted as "finite overlap of `overlap`"
 
     All other states are considered invalid

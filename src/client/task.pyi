@@ -86,7 +86,7 @@ class Task(toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMi
         message_on_unknown_solution: A hint used in training tasks.
         id: The ID of a task.
         pool_id: The ID of the pool that the task belongs to.
-        remaining_overlap: The number of times left for this task to be assigned to Tolokers. This parameter is read only.
+        remaining_overlap: The number of times left for this task to be assigned to Tolokers. Read-only field.
         reserved_for: IDs of Tolokers who have access to the task.
         unavailable_for: IDs of Tolokers who don't have access to the task.
         traits_all_of: The task can be assigned to Tolokers who have all of the specified traits.
@@ -174,8 +174,8 @@ class CreateTaskParameters(toloka.client.primitives.parameter.Parameters):
 
     Attributes:
         allow_defaults: Active overlap setting:
-            * True — Use the overlap that is set in the `defaults.default_overlap_for_new_tasks` pool parameter.
-            * False — Use the overlap that is set in the `overlap` task parameter.
+            * `True` — Use the overlap that is set in the `defaults.default_overlap_for_new_tasks` pool parameter.
+            * `False` — Use the overlap that is set in the `overlap` task parameter.
 
             Default value: `False`.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
@@ -204,8 +204,8 @@ class CreateTaskAsyncParameters(CreateTaskParameters):
 
     Attributes:
         allow_defaults: Active overlap setting:
-            * True — Use the overlap that is set in the `defaults.default_overlap_for_new_tasks` pool parameter.
-            * False — Use the overlap that is set in the `overlap` task parameter.
+            * `True` — Use the overlap that is set in the `defaults.default_overlap_for_new_tasks` pool parameter.
+            * `False` — Use the overlap that is set in the `overlap` task parameter.
 
             Default value: `False`.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
@@ -238,21 +238,21 @@ class CreateTasksParameters(CreateTaskParameters):
 
     Attributes:
         allow_defaults: Active overlap setting:
-            * True — Use the overlap that is set in the `defaults.default_overlap_for_new_tasks` pool parameter.
-            * False — Use the overlap that is set in the `overlap` task parameter.
+            * `True` — Use the overlap that is set in the `defaults.default_overlap_for_new_tasks` pool parameter.
+            * `False` — Use the overlap that is set in the `overlap` task parameter.
 
             Default value: `False`.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
             Default value: `False`.
         skip_invalid_items: Task validation option:
-            * True — All valid tasks are added. If a task does not pass validation, then it is not added to Toloka. All such tasks are listed in the response.
-            * False — If any task does not pass validation, then the operation is cancelled and no tasks are added to Toloka.
+            * `True` — All valid tasks are added. If a task does not pass validation, then it is not added to Toloka. All such tasks are listed in the response.
+            * `False` — If any task does not pass validation, then the operation is cancelled and no tasks are added to Toloka.
 
             Default value: `False`.
         operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122). Use it if the `async_mode` is set to `True`.
         async_mode: Request processing mode:
-            * True — Asynchronous operation is started internally and `create_tasks` waits for the completion of it. It is recommended to create no more than 10,000 tasks per request in this mode.
-            * False — The request is processed synchronously. A maximum of 5000 tasks can be added in a single request in this mode.
+            * `True` — Asynchronous operation is started internally and `create_tasks` waits for the completion of it. It is recommended to create no more than 10,000 tasks per request in this mode.
+            * `False` — The request is processed synchronously. A maximum of 5000 tasks can be added in a single request in this mode.
 
             Default value: `False`.
     """
@@ -284,8 +284,8 @@ class TaskOverlapPatch(toloka.client.primitives.base.BaseTolokaObject):
     Attributes:
         overlap: The new overlap value.
         infinite_overlap:
-            * True — The task is assigned to all Tolokers. It is usually set for training and control tasks.
-            * False — An overlap value specified for the task or for the pool is used.
+            * `True` — The task is assigned to all Tolokers. It is usually set for training and control tasks.
+            * `False` — An overlap value specified for the task or for the pool is used.
 
             Default value: `False`.
     """
@@ -310,8 +310,8 @@ class TaskPatch(TaskOverlapPatch):
 
     Attributes:
         overlap: The new overlap value.
-        infinite_overlap: * True — The task is assigned to all Tolokers. It is usually set for training and control tasks.
-            * False — An overlap value specified for the task or for the pool is used.
+        infinite_overlap: * `True` — The task is assigned to all Tolokers. It is usually set for training and control tasks.
+            * `False` — An overlap value specified for the task or for the pool is used.
 
             Default value: `False`.
         baseline_solutions: Preliminary responses for dynamic overlap and aggregation of results by a skill. They are used to calculate a confidence level of the first responses from Tolokers.

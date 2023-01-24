@@ -75,8 +75,8 @@ class AudioFieldV1(BaseFieldV1):
     Attributes:
         data: Data with values that will be processed or changed.
         multiple: Determines whether multiple audio files can be recorded (or uploaded):
-            False (default) — forbidden.
-            True — allowed.
+            * `False` (default) — forbidden.
+            * `True` — allowed.
         hint: Hint text.
         label: Label above the component.
         validation: Validation based on condition.
@@ -225,10 +225,10 @@ class CheckboxFieldV1(BaseFieldV1):
 
     Attributes:
         data: Data with values that will be processed or changed.
-        disabled: Property that disables the component. If true, the component will not be unavailable.
+        disabled: Property that disables the component. If `True`, the component will not be unavailable.
         preserve_false: Property that specifies whether to return false values in the results. By default, if the
-            component returns false, this result will not be added to the output. To add false to the results, specify
-            "preserveFalse": true.
+            component returns `False`, this result will not be added to the output. To add `False` to the results, specify
+            `preserve_false=True`.
         hint: Hint text.
         label: Label above the component.
         validation: Validation based on condition.
@@ -265,10 +265,10 @@ class CheckboxGroupFieldV1(BaseFieldV1):
     Attributes:
         data: Data with values that will be processed or changed.
         options: Options, where value is the key that the option controls, and label is the text near the option.
-        disabled: If `true', the options are inactive.
+        disabled: If `True', the options are inactive.
         preserve_false: Property that specifies whether to return false values in the results. By default, if the
             component returns false, this result will not be added to the output. To add false to the results, specify
-            "preserveFalse": true.
+            `preserve_false = True`.
         hint: Hint text.
         label: Label above the component.
         validation: Validation based on condition.
@@ -413,8 +413,8 @@ class FileFieldV1(BaseFieldV1):
             Specify the types in the [certain format](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types).
             For example, you can allow only images to be uploaded by adding the image/jpeg and image/png types.
         multiple: Determines whether multiple files can be uploaded:
-            * false (default) — forbidden.
-            * true — allowed.
+            * `False` (default) — forbidden.
+            * `True` — allowed.
         hint: Hint text.
         label: Label above the component.
         validation: Validation based on condition.
@@ -457,11 +457,11 @@ class ImageAnnotationFieldV1(BaseFieldV1):
         data: Data with values that will be processed or changed.
         image: The image you want to select areas in.
         disabled: Determines whether adding and deleting areas is allowed:
-            * false (default) — Allowed.
-            * true — Not allowed.
+            * `False` (default) — Allowed.
+            * `True` — Not allowed.
             You can use this feature when creating an interface to check whether the selection is correct,
              or if you need to allow selection only when a certain condition is met.
-        full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
+        full_height: If `True`, the element takes up all the vertical free space. The element is set to a minimum height
             of 400 pixels.
         labels: Used to classify areas.
             You can add several area types. When adding an area type, a button to select it appears in the interface,
@@ -470,10 +470,10 @@ class ImageAnnotationFieldV1(BaseFieldV1):
             select cars and a different one for pedestrians.
         min_width: Minimum width of the element in pixels. Takes priority over max_width.
         ratio: An array of two numbers that sets the relative dimensions of the sides: width (first number) to height
-            (second number). Not valid if full_height=true.
+            (second number). Not valid if `full_height=True`.
         shapes: Used to add and hide selection modes: points, polygons, and rectangles. All three modes are available
             by default.
-            Use this property if you only need to keep certain modes. Modes with the true value are available.
+            Use this property if you only need to keep certain modes. Modes with the `True` value are available.
         hint: Hint text.
         label: Label above the component.
         validation: Validation based on condition.
@@ -566,7 +566,7 @@ class ListFieldV1(BaseFieldV1):
         button_label: Text on the button for adding list items.
         direction: The direction of the list.
         editable: A property that indicates whether adding and removing list items is allowed. Set false to disable.
-            By default it is true (allowed).
+            By default it is `True` (allowed).
         max_length: Maximum number of list items.
         size: The distance between list items. Acceptable values in ascending order: s, m (default).
         hint: Hint text.
@@ -619,8 +619,8 @@ class MediaFileFieldV1(BaseFieldV1):
 
     Attributes:
         data: Data with values that will be processed or changed.
-        accept: Adds different buttons for four types of uploads. Pass the true value for the ones that you need.
-            For example, if you need a button for uploading files from the gallery, add the "gallery": true property
+        accept: Adds different buttons for four types of uploads. Pass the `True` value for the ones that you need.
+            For example, if you need a button for uploading files from the gallery, add the `gallery=True`.
         multiple: Determines whether multiple files can be uploaded:
         hint: Hint text.
         label: Label above the component.
@@ -698,8 +698,7 @@ class NumberFieldV1(BaseFieldV1):
     The box already has validation: by default, Tolokers can enter only numbers and decimal separators. They can use either
     a dot or a comma as a separator, but there will always be a dot in the output.
 
-    When the Toloker is entering a number, the separator automatically changes to the one specified in the regional
-    settings. For Russia, the separator is a comma.
+    When the Toloker is entering a number, the separator automatically changes to the one specified in the regional settings.
 
     Negative numbers are allowed by default. To disable them, use the validation property. Pressing the up or down arrow
     keys will increase or decrease the number by one.
@@ -788,7 +787,7 @@ class RadioGroupFieldV1(BaseFieldV1):
     Attributes:
         data: Data with values that will be processed or changed.
         options: List of options to choose from
-        disabled: This property prevents clicking the button. If the value is true, the button is not active (the Toloker
+        disabled: This property prevents clicking the button. If the value is `True`, the button is not active (the Toloker
             will not be able to click it).
         hint: Hint text.
         label: Label above the component.
@@ -903,7 +902,7 @@ class TextFieldV1(BaseFieldV1):
 
     Attributes:
         data: Data with values that will be processed or changed.
-        disabled: If true, editing is not available.
+        disabled: If `True`, editing is not available.
         placeholder: A semi-transparent label that is shown in the box when it is empty.
         hint: Hint text.
         label: Label above the component.
@@ -948,8 +947,8 @@ class TextAnnotationFieldV1(BaseFieldV1):
         adjust: If the property value is set to words, only words can be selected in the text. If you don't use this
             property, any part of a line can be selected.
         content: The text where the Toloker has to select part of a line.
-        disabled: This property blocks the component. If true, the component is unavailable to the Toloker. The
-            default value is false.
+        disabled: This property blocks the component. If `True`, the component is unavailable to the Toloker. The
+            default value is `False`.
         labels: A category.
         hint: Hint text.
         label: Label above the component.
@@ -1016,11 +1015,11 @@ class TextareaFieldV1(BaseFieldV1):
 
     Attributes:
         data: Data with values that will be processed or changed.
-        disabled: If true, editing is not available.
+        disabled: If `True`, editing is not available.
         placeholder: A semi-transparent label that is shown when the box is empty. Use it to provide an example or a
             hint for the response.
-        resizable: Changing the box size. When set to true (the default value), the Toloker can change the height. To
-            prevent resizing, set the value to false.
+        resizable: Changing the box size. When set to `True` (the default value), the Toloker can change the height. To
+            prevent resizing, set the value to `False`.
         rows: The height of the text box in lines.
         hint: Hint text.
         label: Label above the component.

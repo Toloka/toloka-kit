@@ -90,7 +90,7 @@ class Operation(toloka.client.primitives.base.BaseTolokaObject):
         _unexpected: typing.Optional[typing.Dict[str, typing.Any]]
 
     def is_completed(self):
-        """Returns True if the operation is completed. Status equals SUCCESS or FAIL.
+        """Returns `True` if the operation is completed. Status equals SUCCESS or FAIL.
         """
         ...
 
@@ -699,13 +699,13 @@ class TasksCreateOperation(Operation):
         finished: The UTC date and time the operation finished.
         details: Details of the operation completion.
         parameters.skip_invalid_items: Validation parameters for JSON objects:
-            * True - Create the tasks that passed validation. Skip the rest of the tasks.
-            * False - If at least one of the tasks didn't pass validation, stop the operation and
+            * `True` — Create the tasks that passed validation. Skip the rest of the tasks.
+            * `False` — If at least one of the tasks didn't pass validation, stop the operation and
                 don't create any tasks.
         parameters.allow_defaults: Overlap settings:
-            * True - Use the overlap that is set in the pool parameters
+            * `True` — Use the overlap that is set in the pool parameters
                 (in the defaults.default_overlap_for_new_tasks key).
-            * False - Use the overlap that is set in the task parameters (in the overlap field).
+            * `False` — Use the overlap that is set in the task parameters (in the overlap field).
         parameters.open_pool: Open the pool immediately after creating the tasks, if the pool is closed.
     """
 
@@ -768,12 +768,12 @@ class TaskSuiteCreateBatchOperation(Operation):
         finished: The UTC date and time the operation finished.
         details: Details of the operation completion.
         parameters.skip_invalid_items: Validation parameters for JSON objects:
-            * True - Create the task suites that passed validation. Skip the rest of the task suites.
-            * False - If at least one of the task suites didn't pass validation, stop the operation and
+            * `True` — Create the task suites that passed validation. Skip the rest of the task suites.
+            * `False` — If at least one of the task suites didn't pass validation, stop the operation and
                 don't create any task suites.
         parameters.allow_defaults: Overlap settings:
-            * True - Use the overlap that is set in the pool parameters.
-            * False - Use the overlap that is set in the task parameters (in the overlap field).
+            * `True` — Use the overlap that is set in the pool parameters.
+            * `False` — Use the overlap that is set in the task parameters (in the overlap field).
         parameters.open_pool: Open the pool immediately after creating the task suites, if the pool is closed.
     """
 
@@ -887,8 +887,8 @@ class UserBonusCreateBatchOperation(Operation):
         parameters: Operation parameters (depending on the operation type).
         details: Details of the operation completion.
         parameters.skip_invalid_items: Validation parameters for JSON objects:
-            * True - Create rewards using `UserBonus` instances that passed validation. Skip the rest of the `UserBonus` instances.
-            * False - If at least one of the `UserBonus` instances didn't pass validation, stop the operation and
+            * `True` — Create rewards using `UserBonus` instances that passed validation. Skip the rest of the `UserBonus` instances.
+            * `False` — If at least one of the `UserBonus` instances didn't pass validation, stop the operation and
                 don't create any rewards.
         details.pool_id: 
         details.total_count: The number of bonuses in the request.
