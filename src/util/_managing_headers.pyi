@@ -3,10 +3,13 @@ __all__ = [
     'async_add_headers',
     'form_additional_headers',
     'set_variable',
+    'top_level_method_var',
 ]
 import contextvars
 import typing
 
+
+top_level_method_var: contextvars.ContextVar
 
 def set_variable(var, value): ...
 

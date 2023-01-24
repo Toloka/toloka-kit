@@ -5,6 +5,7 @@ __all__ = [
     'TaskSuitePatch'
 ]
 import datetime
+import uuid
 from typing import List
 from uuid import UUID
 
@@ -98,7 +99,7 @@ class TaskSuiteCreateRequestParameters(Parameters):
             Default value: `True`.
     """
 
-    operation_id: UUID
+    operation_id: UUID = attribute(factory=uuid.uuid4)
     skip_invalid_items: bool
     allow_defaults: bool
     open_pool: bool

@@ -12,8 +12,6 @@ import uuid
 from typing import Any, Dict, List
 from uuid import UUID
 
-import attr
-
 from .primitives.base import BaseTolokaObject
 from .primitives.infinite_overlap import InfiniteOverlapParametersMixin
 from .primitives.parameter import Parameters
@@ -121,7 +119,7 @@ class CreateTaskParameters(Parameters):
 
     allow_defaults: bool
     open_pool: bool
-    operation_id: UUID = attr.ib(factory=lambda: uuid.uuid4())
+    operation_id: UUID = attribute(factory=uuid.uuid4)
 
 
 @inherit_docstrings
