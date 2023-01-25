@@ -2754,7 +2754,8 @@ class TolokaClient:
         task: toloka.client.task.Task,
         *,
         allow_defaults: typing.Optional[bool] = None,
-        open_pool: typing.Optional[bool] = None
+        open_pool: typing.Optional[bool] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...
     ) -> toloka.client.task.Task:
         """Creates a new task in Toloka.
 
@@ -2846,8 +2847,8 @@ class TolokaClient:
         *,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None,
-        operation_id: typing.Optional[uuid.UUID] = None,
         async_mode: typing.Optional[bool] = True
     ) -> toloka.client.batch_create_results.TaskBatchCreateResult:
         """Creates several tasks in Toloka.
@@ -2940,8 +2941,8 @@ class TolokaClient:
         *,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None,
-        operation_id: typing.Optional[uuid.UUID] = None,
         async_mode: typing.Optional[bool] = True
     ) -> toloka.client.operations.TasksCreateOperation:
         """Creates tasks in Toloka asynchronously.
@@ -3258,7 +3259,7 @@ class TolokaClient:
         self,
         task_suite: toloka.client.task_suite.TaskSuite,
         *,
-        operation_id: typing.Optional[uuid.UUID] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
@@ -3344,7 +3345,7 @@ class TolokaClient:
         self,
         task_suites: typing.List[toloka.client.task_suite.TaskSuite],
         *,
-        operation_id: typing.Optional[uuid.UUID] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
@@ -3435,7 +3436,7 @@ class TolokaClient:
         self,
         task_suites: typing.List[toloka.client.task_suite.TaskSuite],
         *,
-        operation_id: typing.Optional[uuid.UUID] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,

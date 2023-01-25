@@ -3,6 +3,7 @@ __all__ = [
     'async_add_headers',
     'form_additional_headers',
     'set_variable',
+    'top_level_method_var',
 ]
 
 import asyncio

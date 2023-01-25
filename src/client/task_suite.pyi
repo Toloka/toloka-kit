@@ -127,7 +127,7 @@ class TaskSuiteCreateRequestParameters(toloka.client.primitives.parameter.Parame
     def __init__(
         self,
         *,
-        operation_id: typing.Optional[uuid.UUID] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
