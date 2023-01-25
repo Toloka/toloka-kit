@@ -3745,7 +3745,7 @@ class AsyncTolokaClient:
         self,
         user_bonus: toloka.client.user_bonus.UserBonus,
         *,
-        operation_id: typing.Optional[str] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.user_bonus.UserBonus:
         """Issues payments directly to a Toloker.
@@ -3841,7 +3841,7 @@ class AsyncTolokaClient:
         self,
         user_bonuses: typing.List[toloka.client.user_bonus.UserBonus],
         *,
-        operation_id: typing.Optional[str] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.batch_create_results.UserBonusBatchCreateResult:
         """Creates rewards for Tolokers.
@@ -3950,7 +3950,7 @@ class AsyncTolokaClient:
         self,
         user_bonuses: typing.List[toloka.client.user_bonus.UserBonus],
         *,
-        operation_id: typing.Optional[str] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.operations.UserBonusCreateBatchOperation:
         """Issues payments directly to Tolokers, asynchronously creates many `UserBonus` instances.
