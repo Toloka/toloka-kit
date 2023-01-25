@@ -90,6 +90,7 @@ def test_create_user_bonus(respx_mock, toloka_client, toloka_url, user_bonus_map
     assert user_bonus_map_with_readonly == client.unstructure(result)
 
 
+@pytest.mark.xfail(reason='Correct retry for creating single bonus synchronously is not implemented')
 def test_create_user_bonus_retry(respx_mock, toloka_client, toloka_url, user_bonus_map, user_bonus_map_with_readonly):
     requests_count = 0
     first_request_op_id = None

@@ -3029,9 +3029,12 @@ class TolokaClient:
             >>> toloka_client.wait_operation(create_bonuses)
             ...
         """
-        params = {'async_mode': True, **(unstructure(parameters) or {})}
-        response = self._request('post', '/v1/user-bonuses', json=unstructure(user_bonuses), params=params)
-        return structure(response, operations.UserBonusCreateBatchOperation)
+        if not parameters.async_mode:
+            logger.warning('async_mode=False ignored in TolokaClient.create_user_bonuses_async')
+        parameters.async_mode = True
+        return self._try_to_async_create_objects(
+            '/v1/user-bonuses', user_bonuses, parameters, operations.UserBonusCreateBatchOperation
+        )
 
     @expand('request')
     @add_headers('client')

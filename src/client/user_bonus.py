@@ -2,6 +2,9 @@ __all__ = [
     'UserBonus',
     'UserBonusCreateRequestParameters'
 ]
+
+import uuid
+
 from attr.validators import optional, instance_of
 import datetime
 from decimal import Decimal
@@ -98,5 +101,7 @@ class UserBonusCreateRequestParameters(Parameters):
             * False - Default behavior. Stop the operation and don't award bonuses if at least one object didn't pass validation.
     """
 
-    operation_id: str
+    operation_id: uuid.UUID = attribute(factory=uuid.uuid4)
     skip_invalid_items: bool
+
+    async_mode: bool = attribute(init=False)
