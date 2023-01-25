@@ -400,7 +400,6 @@ def test_create_task_suites_retry_sync_through_async(
     respx_mock.get(url__regex=rf'{toloka_url}/operations/.*/log').mock(side_effect=get_log)
     respx_mock.get(f'{toloka_url}/task-suites').mock(side_effect=task_suites)
 
-    # Operations API should be mocked for create_tasks to work. This test checks retrying of the first request
     result = toloka_client.create_task_suites(
         task_suites=[client.structure(task_suite, client.TaskSuite) for task_suite in task_suites_map]
     )
@@ -440,7 +439,6 @@ def test_create_task_suites_async_retry(respx_mock, toloka_client, toloka_url, t
     ).mock(httpx.Response(json=operation_success_map, status_code=200))
     respx_mock.post(f'{toloka_url}/task-suites').mock(side_effect=task_suites)
 
-    # Operations API should be mocked for create_tasks to work. This test checks retrying of the first request
     result = toloka_client.create_task_suites_async(
         task_suites=[client.structure(task_suite, client.TaskSuite) for task_suite in task_suites_map]
     )
