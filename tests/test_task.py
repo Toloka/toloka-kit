@@ -459,7 +459,7 @@ def test_create_tasks_async(respx_mock, toloka_client, toloka_url, tasks_map, cr
 
 def test_create_tasks_retry_sync_through_async(
     respx_mock, toloka_client, toloka_url, tasks_map, task_create_result_map, operation_success_map, create_tasks_log,
-    no_uuid_random, created_tasks_21_map, created_tasks_22_map
+    no_uuid_random, created_tasks_21_map, created_tasks_22_map,
 ):
     requests_count = 0
     first_request_op_id = None
@@ -499,12 +499,12 @@ def test_create_tasks_retry_sync_through_async(
     respx_mock.get(re.compile(rf'{toloka_url}/operations/.*/log')).mock(side_effect=tasks_log)
     respx_mock.get(f'{toloka_url}/tasks').mock(side_effect=return_tasks_by_pool)
 
-    # Operations API should be mocked for create_tasks to work. This test checks retrying of the first request
-    toloka_client.create_tasks(
+    result = toloka_client.create_tasks(
         tasks=[client.structure(task, client.task.Task) for task in tasks_map]
     )
 
     assert requests_count == 2
+    assert task_create_result_map == client.unstructure(result)
 
 
 def test_create_tasks_async_retry(
@@ -540,12 +540,12 @@ def test_create_tasks_async_retry(
     ).mock(httpx.Response(json=operation_success_map, status_code=200))
     respx_mock.post(f'{toloka_url}/tasks').mock(side_effect=tasks)
 
-    # Operations API should be mocked for create_tasks to work. This test checks retrying of the first request
-    toloka_client.create_tasks_async(
+    result = toloka_client.create_tasks_async(
         tasks=[client.structure(task, client.task.Task) for task in tasks_map]
     )
 
     assert requests_count == 2
+    assert operation_success_map == client.unstructure(result)
 
 
 def test_find_tasks(respx_mock, toloka_client, toloka_url, task_map_with_readonly):
