@@ -6,6 +6,7 @@ import re
 import uuid
 from typing import List, Union
 
+import attr
 import cattr
 from ..util._extendable_enum import ExtendableStrEnum
 
@@ -21,6 +22,53 @@ converter.register_unstructure_hook_func(  # type: ignore
     lambda obj: obj.unstructure()  # type: ignore
 )
 
+
+def gen_structure_func(cl):
+    from cattr.gen import is_generic, get_origin, _generate_mapping
+    from functools import partial
+
+    def get_mapped_type(t, mapping):
+        if isinstance(t, typing.TypeVar):
+            return mapping.get(t.__name__, t)
+        try:
+            origin_type = t.__dict__['__origin__']
+            type_args = t.__dict__.get('__args__', [])
+            mapped_args = tuple(get_mapped_type(t_arg, mapping) for t_arg in type_args)
+            if origin_type == typing.Union:
+                return typing.Union[mapped_args]
+            if origin_type == dict:
+                return dict[mapped_args[0], mapped_args[1]]
+            if origin_type == list:
+                return list[mapped_args]
+            return t
+        except Exception as err:
+            return t
+
+    def f(obj, cl):
+        mapping = {}
+        if is_generic(cl):
+            base = get_origin(cl)
+            mapping = _generate_mapping(cl, mapping)
+            cl = base
+
+        for base in getattr(cl, "__orig_bases__", ()):
+            if is_generic(base) and not str(base).startswith("typing.Generic"):
+                mapping = _generate_mapping(base, mapping)
+                break
+        mapped_fields = []
+        for field in attr.fields(cl):
+            field = field.evolve(type=get_mapped_type(field.type, mapping))
+            mapped_fields.append(field)
+        struct_func = getattr(cl, 'structure')
+        struct_func_with_mapped_attrs = partial(struct_func, attr_fields=mapped_fields)
+        return struct_func_with_mapped_attrs(obj)
+
+    return f
+
+converter.register_structure_hook_factory(
+    lambda type_: cattr._compat.has_with_generic and hasattr(type_, 'structure'),
+    gen_structure_func
+)
 
 converter.register_structure_hook(uuid.UUID, lambda data, type_: type_(data))  # type: ignore
 converter.register_unstructure_hook(uuid.UUID, str)
