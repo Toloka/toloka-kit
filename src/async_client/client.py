@@ -94,13 +94,13 @@ class AsyncTolokaClient:
 
     async def _find_all(self, find_function, request, sort_field: str = 'id',
                         items_field: str = 'items', batch_size: Optional[int] = None):
-        result = await find_function(request, sort=[sort_field])
+        result = await find_function(request, sort=[sort_field], limit=batch_size)
         items = getattr(result, items_field)
         while result.has_more:
             request = attr.evolve(request, **{f'{sort_field}_gt': getattr(items[-1], sort_field)})
             for item in items:
                 yield item
-            result = await find_function(request, sort=[sort_field])
+            result = await find_function(request, sort=[sort_field], limit=batch_size)
             items = getattr(result, items_field)
 
         for item in items:
