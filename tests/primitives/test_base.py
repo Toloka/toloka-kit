@@ -1,10 +1,12 @@
+import attr
 import pytest
 import pickle
 import inspect
+from toloka.client import structure, unstructure
 from toloka.util._codegen import attribute
 from toloka.client.primitives.base import BaseTolokaObject, autocast_to_enum
 from ..utils.test_extendable_enum import test_enum, test_extendable_enum  # noqa: F401
-from typing import Optional, List, Union, Dict
+from typing import Optional, List, Union, Dict, TypeVar, Generic
 
 
 @pytest.fixture()
@@ -17,6 +19,22 @@ def base_toloka_object():
 def test_base_toloka_object_is_pickle_serializable(base_toloka_object):
     deserialized = pickle.loads(pickle.dumps(base_toloka_object))
     assert deserialized == base_toloka_object
+
+
+def test_generic_base_inherited_object():
+
+    T1 = TypeVar('T1')
+    T = TypeVar('T')
+
+    @attr.s(auto_attribs=True)
+    class GenericAttr(Generic[T1]):
+        data: Dict[str, T1]
+
+    class GenericBaseInheritedClass(Generic[T], BaseTolokaObject):
+        data: Dict[str, T]
+
+    assert structure({'data': {'a': 1}}, GenericAttr[int]) == GenericAttr(data={'a': 1})
+    assert structure({'data': {'a': 1}}, GenericBaseInheritedClass[int]) == GenericBaseInheritedClass(data={'a': 1})
 
 
 @pytest.fixture
