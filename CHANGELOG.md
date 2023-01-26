@@ -1,3 +1,21 @@
+1.1.2
+-------------------
+Bugfixes:
+* Methods for the batch creation of tasks, task suites or user bonuses could create duplicate items in case of unstable connection:
+  * `TolokaClient.create_tasks_async`, `TolokaClient.create_task_suites_async` and `TolokaClient.create_user_bonuses_async` as well as `TolokaClient.create_tasks`, `TolokaClient.create_task_suites` with `async_mode=True` now guaranteed to create not more than one batch of items for a single function call.
+  * `TolokaClient.create_user_bonuses` and `TolokaClient.create_user_bonus` are guaranteed to create not more than one batch of items for a single function call but may raise an exception if there was an attempt to create the same batch of items for the second time due to the unstable connection.
+
+1.1.1
+-------------------
+Features:
+* Introduced `batch_size` parameter to `TolokaClient.get_*` methods family. This parameter can be used to control the items limit for every underlying request that is made while iterating.
+
+Deprecated:
+* CAPTCHA frequency and CAPTCHA-based quality control settings are deprecated and will be removed in the future. CAPTCHAs are now included automatically for better quality control.
+
+Bugfixes:
+* `AsyncTolokaClient` can be serialized and deserialized with pickle now.
+
 1.1.0
 -------------------
 Features:
