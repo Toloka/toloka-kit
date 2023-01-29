@@ -2,6 +2,7 @@ __all__ = [
     'TolokaRetry',
     'SyncRetryingOverURLLibRetry',
     'AsyncRetryingOverURLLibRetry',
+    'STATUSES_TO_RETRY',
 ]
 import abc
 import tenacity
@@ -9,6 +10,8 @@ import typing
 import urllib3.response
 import urllib3.util.retry
 
+
+STATUSES_TO_RETRY = ...
 
 class TolokaRetry(urllib3.util.retry.Retry):
     """Retry toloka quotas. By default only minutes quotas.

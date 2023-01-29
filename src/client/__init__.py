@@ -140,7 +140,8 @@ from .assignment import Assignment, AssignmentPatch, GetAssignmentsTsvParameters
 from .attachment import Attachment
 from .clone_results import CloneResults
 from .exceptions import (
-    raise_on_api_error, ValidationApiError, InternalApiError, TooManyRequestsApiError, RemoteServiceUnavailableApiError
+    IncorrectActionsApiError, raise_on_api_error, ValidationApiError, InternalApiError, TooManyRequestsApiError,
+    RemoteServiceUnavailableApiError,
 )
 from .message_thread import (
     Folder, MessageThread, MessageThreadReply, MessageThreadFolders, MessageThreadCompose
@@ -160,7 +161,7 @@ from .user_restriction import UserRestriction
 from .user_skill import SetUserSkillRequest, UserSkill
 from .user import User
 from ..util import identity
-from ..util._managing_headers import add_headers, form_additional_headers
+from ..util._managing_headers import add_headers, form_additional_headers, top_level_method_var
 from ..util._codegen import expand
 from .webhook_subscription import WebhookSubscription
 
@@ -383,16 +384,31 @@ class TolokaClient:
             params['limit'] = limit
         return self._request(method, path, params=params)
 
-    def _find_all(self, find_function, request, sort_field: str = 'id', items_field: str = 'items'):
-        result = find_function(request, sort=[sort_field])
+    def _find_all(self, find_function, request, sort_field: str = 'id', items_field: str = 'items', batch_size: Optional[int] = None):
+        result = find_function(request, sort=[sort_field], limit=batch_size)
         items = getattr(result, items_field)
         while result.has_more:
             request = attr.evolve(request, **{f'{sort_field}_gt': getattr(items[-1], sort_field)})
             yield from items
-            result = find_function(request, sort=[sort_field])
+            result = find_function(request, sort=[sort_field], limit=batch_size)
             items = getattr(result, items_field)
 
         yield from items
+
+    def _try_to_async_create_objects(self, url, objects, parameters, operation_type):
+        try:
+            response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
+            insert_operation = structure(response, operation_type)
+        except IncorrectActionsApiError as exc:
+            if exc.code != 'OPERATION_ALREADY_EXISTS':
+                raise
+
+            insert_operation = self.get_operation(operation_id=str(parameters.operation_id))
+            if not isinstance(insert_operation, operation_type):
+                raise
+            logger.info(f'Objects were not created by {top_level_method_var.get()}: '
+                        f'operation {parameters.operation_id} is already submitted.')
+        return insert_operation
 
     def _sync_via_async(self, objects, parameters, url, result_type, operation_type, output_id_field, get_method):
         if not parameters.async_mode:
@@ -405,8 +421,7 @@ class TolokaClient:
             obj._unexpected['__client_uuid'] = uuid.uuid4().hex
             client_uuid_to_index[obj._unexpected['__client_uuid']] = str(i)
 
-        response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
-        insert_operation = structure(response, operation_type)
+        insert_operation = self._try_to_async_create_objects(url, objects, parameters, operation_type)
         insert_operation = self.wait_operation(insert_operation, datetime.timedelta(minutes=60))
 
         pools = {}
@@ -574,7 +589,8 @@ class TolokaClient:
     @add_headers('client')
     def get_aggregated_solutions(
         self,
-        operation_id: str, request: search_requests.AggregatedSolutionSearchRequest
+        operation_id: str, request: search_requests.AggregatedSolutionSearchRequest,
+        batch_size: Optional[int] = None
     ) -> Generator[AggregatedSolution, None, None]:
         """Finds all aggregated responses that match certain criteria.
 
@@ -593,6 +609,7 @@ class TolokaClient:
         Args:
             operation_id: The ID of the aggregation operation.
             request: Search criteria.
+            batch_size: Returned aggregated responses limit for each request. The default batch_size is 50. The maximum allowed limit is 100,000.
 
         Yields:
             AggregatedSolution: The next matching aggregated response.
@@ -611,7 +628,7 @@ class TolokaClient:
             ...
         """
         find_function = functools.partial(self.find_aggregated_solutions, operation_id)
-        generator = self._find_all(find_function, request, sort_field='task_id')
+        generator = self._find_all(find_function, request, sort_field='task_id', batch_size=batch_size)
         yield from generator
 
     # Assignments section
@@ -683,7 +700,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_assignments(self, request: search_requests.AssignmentSearchRequest) -> Generator[Assignment, None, None]:
+    def get_assignments(
+        self,
+        request: search_requests.AssignmentSearchRequest,
+        batch_size: Optional[int] = None
+    ) -> Generator[Assignment, None, None]:
         """Finds all assignments that match certain criteria.
 
         `get_assignments` returns a generator. You can iterate over all found assignments using the generator. Several requests to the Toloka server are possible while iterating.
@@ -692,6 +713,7 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned assignments limit for each request. The default batch_size  is 50. The maximum allowed batch_size  is 100,000.
 
         Yields:
             Assignment: The next matching assignment.
@@ -704,7 +726,7 @@ class TolokaClient:
             >>> result_list = [assignment.id for assignment in assignments]
             ...
         """
-        generator = self._find_all(self.find_assignments, request)
+        generator = self._find_all(self.find_assignments, request, batch_size=batch_size)
         yield from generator
 
     @expand('patch')
@@ -801,7 +823,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_attachments(self, request: search_requests.AttachmentSearchRequest) -> Generator[Attachment, None, None]:
+    def get_attachments(
+        self,
+        request: search_requests.AttachmentSearchRequest,
+        batch_size: Optional[int] = None
+    ) -> Generator[Attachment, None, None]:
         """Finds all attachments that match certain criteria and returns their metadata.
 
         `get_attachments` returns a generator. You can iterate over all found attachments using the generator. Several requests to the Toloka server are possible while iterating.
@@ -810,6 +836,7 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned attachments limit for each request. The maximum allowed batch_size is 100.
 
         Yields:
             Attachment: The next matching attachment.
@@ -820,7 +847,7 @@ class TolokaClient:
             >>> results_list = list(toloka_client.get_attachments(pool_id='1'))
             ...
         """
-        generator = self._find_all(self.find_attachments, request)
+        generator = self._find_all(self.find_attachments, request, batch_size=batch_size)
         yield from generator
 
     @add_headers('client')
@@ -950,7 +977,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_message_threads(self, request: search_requests.MessageThreadSearchRequest) -> Generator[MessageThread, None, None]:
+    def get_message_threads(
+        self,
+        request: search_requests.MessageThreadSearchRequest,
+        batch_size: Optional[int] = None
+    ) -> Generator[MessageThread, None, None]:
         """Finds all message threads that match certain criteria.
 
         `get_message_threads` returns a generator. You can iterate over all found message threads using the generator. Several requests to the Toloka server are possible while iterating.
@@ -959,6 +990,7 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned message threads limit for each request. The default batch_size is 50. The maximum allowed batch_size is 300.
 
         Yields:
             MessageThread: The next matching message thread.
@@ -969,7 +1001,7 @@ class TolokaClient:
             >>> message_threads = toloka_client.get_message_threads(folder=['INBOX', 'UNREAD'])
             ...
         """
-        generator = self._find_all(self.find_message_threads, request)
+        generator = self._find_all(self.find_message_threads, request, batch_size=batch_size)
         yield from generator
 
     @autocast_to_enum
@@ -1121,7 +1153,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_projects(self, request: search_requests.ProjectSearchRequest) -> Generator[Project, None, None]:
+    def get_projects(
+        self,
+        request: search_requests.ProjectSearchRequest,
+        batch_size: Optional[int] = None
+    ) -> Generator[Project, None, None]:
         """Finds all projects that match certain criteria.
 
         `get_projects` returns a generator. You can iterate over all found projects using the generator. Several requests to the Toloka server are possible while iterating.
@@ -1130,6 +1166,7 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned projects limit for each request. The default batch_size is 20. The maximum allowed batch_size is 300.
 
         Yields:
             Project: The next matching project.
@@ -1144,7 +1181,7 @@ class TolokaClient:
             >>> my_projects = toloka_client.get_projects()
             ...
         """
-        generator = self._find_all(self.find_projects, request)
+        generator = self._find_all(self.find_projects, request, batch_size=batch_size)
         yield from generator
 
     @add_headers('client')
@@ -1536,7 +1573,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_pools(self, request: search_requests.PoolSearchRequest) -> Generator[Pool, None, None]:
+    def get_pools(
+        self,
+        request: search_requests.PoolSearchRequest,
+        batch_size: Optional[int] = None
+    ) -> Generator[Pool, None, None]:
         """Finds all pools that match certain criteria.
 
         `get_pools` returns a generator. You can iterate over all found pools using the generator. Several requests to the Toloka server are possible while iterating.
@@ -1545,6 +1586,7 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned pools limit for each request. The default batch_size is 20. The maximum allowed batch_size is 300.
 
         Yields:
             Pool: The next matching pool.
@@ -1560,7 +1602,7 @@ class TolokaClient:
             >>> all_pools = toloka_client.get_pools(project_id='1')
             ...
         """
-        generator = self._find_all(self.find_pools, request)
+        generator = self._find_all(self.find_pools, request, batch_size=batch_size)
         yield from generator
 
     @add_headers('client')
@@ -1903,7 +1945,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_trainings(self, request: search_requests.TrainingSearchRequest) -> Generator[Training, None, None]:
+    def get_trainings(
+        self,
+        request: search_requests.TrainingSearchRequest,
+        batch_size: Optional[int] = None
+    ) -> Generator[Training, None, None]:
         """Finds all trainings that match certain criteria.
 
         `get_trainings` returns a generator. You can iterate over all found trainings using the generator. Several requests to the Toloka server are possible while iterating.
@@ -1912,6 +1958,7 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned trainings limit for each request. The maximum allowed batch_size is 300.
 
         Yields:
             Training: The next matching training.
@@ -1922,7 +1969,7 @@ class TolokaClient:
             >>> trainings = toloka_client.get_trainings(project_id='1')
             ...
         """
-        generator = self._find_all(self.find_trainings, request)
+        generator = self._find_all(self.find_trainings, request, batch_size=batch_size)
         yield from generator
 
     @add_headers('client')
@@ -2081,7 +2128,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_skills(self, request: search_requests.SkillSearchRequest) -> Generator[Skill, None, None]:
+    def get_skills(
+        self,
+        request: search_requests.SkillSearchRequest,
+        batch_size: Optional[int] = None
+    ) -> Generator[Skill, None, None]:
         """Finds all skills that match certain criteria.
 
         `get_skills` returns a generator. You can iterate over all found skills using the generator. Several requests to the Toloka server are possible while iterating.
@@ -2090,6 +2141,7 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned skills limit for each request. The maximum allowed batch_size is 100.
 
         Yields:
             Skill: The next matching skill.
@@ -2104,7 +2156,7 @@ class TolokaClient:
             >>>     print('Create new segmentation skill here')
             ...
         """
-        generator = self._find_all(self.find_skills, request)
+        generator = self._find_all(self.find_skills, request, batch_size=batch_size)
         yield from generator
 
     @add_headers('client')
@@ -2279,9 +2331,10 @@ class TolokaClient:
             >>> toloka_client.wait_operation(tasks_op)
             ...
         """
-        params = {**(unstructure(parameters) or {}), 'async_mode': True}
-        response = self._request('post', '/v1/tasks', json=unstructure(tasks), params=params)
-        return structure(response, operations.TasksCreateOperation)
+        if not parameters.async_mode:
+            logger.warning('async_mode=False ignored in TolokaClient.create_tasks_async')
+        parameters.async_mode = True
+        return self._try_to_async_create_objects('/v1/tasks', tasks, parameters, operations.TasksCreateOperation)
 
     @expand('request')
     @add_headers('client')
@@ -2331,7 +2384,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_tasks(self, request: search_requests.TaskSearchRequest) -> Generator[Task, None, None]:
+    def get_tasks(
+        self,
+        request: search_requests.TaskSearchRequest,
+        batch_size: Optional[int] = None
+    ) -> Generator[Task, None, None]:
         """Finds all tasks that match certain criteria.
 
         `get_tasks` returns a generator. You can iterate over all found tasks using the generator. Several requests to the Toloka server are possible while iterating.
@@ -2340,6 +2397,7 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned tasks limit for each request. The default batch_size is 50. The maximum allowed batch_size is 100,000.
 
         Yields:
             Task: The next matching task.
@@ -2350,7 +2408,7 @@ class TolokaClient:
             >>> results_list = list(toloka_client.get_tasks(pool_id='1'))
             ...
         """
-        generator = self._find_all(self.find_tasks, request)
+        generator = self._find_all(self.find_tasks, request, batch_size=batch_size)
         yield from generator
 
     @expand('patch')
@@ -2526,9 +2584,12 @@ class TolokaClient:
             >>> toloka_client.wait_operation(task_suites_op)
             ...
         """
-        params = {**(unstructure(parameters) or {}), 'async_mode': True}
-        response = self._request('post', '/v1/task-suites', json=unstructure(task_suites), params=params)
-        return structure(response, operations.TaskSuiteCreateBatchOperation)
+        if not parameters.async_mode:
+            logger.warning('async_mode=False ignored in TolokaClient.create_task_suites_async')
+        parameters.async_mode = True
+        return self._try_to_async_create_objects(
+            '/v1/task-suites', task_suites, parameters, operations.TaskSuiteCreateBatchOperation
+        )
 
     @expand('request')
     @add_headers('client')
@@ -2579,7 +2640,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_task_suites(self, request: search_requests.TaskSuiteSearchRequest) -> Generator[TaskSuite, None, None]:
+    def get_task_suites(
+        self,
+        request: search_requests.TaskSuiteSearchRequest,
+        batch_size: Optional[int] = None
+    ) -> Generator[TaskSuite, None, None]:
         """Finds all task suites that match certain criteria.
 
         `get_task_suites` returns a generator. You can iterate over all found task suites using the generator. Several requests to the Toloka server are possible while iterating.
@@ -2588,6 +2653,7 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned task suites limit for each request. The default batch_size is 50. The maximum allowed batch_size is 100,000.
 
         Yields:
             TaskSuite: The next matching task suite.
@@ -2598,7 +2664,7 @@ class TolokaClient:
             >>> results_list = list(toloka_client.get_task_suites(pool_id='1'))
             ...
         """
-        generator = self._find_all(self.find_task_suites, request)
+        generator = self._find_all(self.find_task_suites, request, batch_size=batch_size)
         yield from generator
 
     @expand('patch')
@@ -2762,7 +2828,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_operations(self, request: search_requests.OperationSearchRequest) -> Generator[operations.Operation, None, None]:
+    def get_operations(
+        self,
+        request: search_requests.OperationSearchRequest,
+        batch_size: Optional[int] = None
+    ) -> Generator[operations.Operation, None, None]:
         """Finds all operations that match certain rules and returns them in an iterable object
 
        `get_operations` returns a generator. You can iterate over all found operations using the generator. Several requests to the Toloka server are possible while iterating.
@@ -2771,6 +2841,7 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned operations limit for each request. The default batch_size is 50. The maximum allowed batch_size is 500.
 
         Yields:
             Operation: The next matching operations.
@@ -2779,7 +2850,7 @@ class TolokaClient:
             >>> bonuses = list(toloka_client.get_operations(submitted_lt='2021-06-01T00:00:00'))
             ...
         """
-        generator = self._find_all(self.find_operations, request)
+        generator = self._find_all(self.find_operations, request, batch_size=batch_size)
         yield from generator
 
     @add_headers('client')
@@ -2957,9 +3028,12 @@ class TolokaClient:
             >>> toloka_client.wait_operation(create_bonuses)
             ...
         """
-        params = {'async_mode': True, **(unstructure(parameters) or {})}
-        response = self._request('post', '/v1/user-bonuses', json=unstructure(user_bonuses), params=params)
-        return structure(response, operations.UserBonusCreateBatchOperation)
+        if not parameters.async_mode:
+            logger.warning('async_mode=False ignored in TolokaClient.create_user_bonuses_async')
+        parameters.async_mode = True
+        return self._try_to_async_create_objects(
+            '/v1/user-bonuses', user_bonuses, parameters, operations.UserBonusCreateBatchOperation
+        )
 
     @expand('request')
     @add_headers('client')
@@ -3007,7 +3081,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_user_bonuses(self, request: search_requests.UserBonusSearchRequest) -> Generator[UserBonus, None, None]:
+    def get_user_bonuses(
+        self,
+        request: search_requests.UserBonusSearchRequest,
+        batch_size: Optional[int] = None
+    ) -> Generator[UserBonus, None, None]:
         """Finds all Tolokers' rewards that match certain rules and returns them in an iterable object
 
        `get_user_bonuses` returns a generator. You can iterate over all found Tolokers' rewards using the generator. Several requests to the Toloka server are possible while iterating.
@@ -3016,6 +3094,7 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned Tolokers' rewards limit for each request. The maximum allowed batch_size is 300.
 
         Yields:
             UserBonus: The next matching Toloker's reward.
@@ -3024,7 +3103,7 @@ class TolokaClient:
             >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00'))
             ...
         """
-        generator = self._find_all(self.find_user_bonuses, request)
+        generator = self._find_all(self.find_user_bonuses, request, batch_size=batch_size)
         yield from generator
 
     # User restrictions
@@ -3079,7 +3158,8 @@ class TolokaClient:
     @add_headers('client')
     def get_user_restrictions(
         self,
-        request: search_requests.UserRestrictionSearchRequest
+        request: search_requests.UserRestrictionSearchRequest,
+        batch_size: Optional[int] = None
     ) -> Generator[UserRestriction, None, None]:
         """Finds all Toloker restrictions that match certain criteria.
 
@@ -3089,6 +3169,7 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned Toloker restrictions limit for each request. The maximum allowed batch_size is 500.
 
         Yields:
             UserRestriction: The next matching Toloker restriction.
@@ -3097,7 +3178,7 @@ class TolokaClient:
             >>> results_list = list(toloka_client.get_user_restrictions(scope='ALL_PROJECTS'))
             ...
         """
-        generator = self._find_all(self.find_user_restrictions, request)
+        generator = self._find_all(self.find_user_restrictions, request, batch_size=batch_size)
         yield from generator
 
     @add_headers('client')
@@ -3217,7 +3298,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_user_skills(self, request: search_requests.UserSkillSearchRequest) -> Generator[UserSkill, None, None]:
+    def get_user_skills(
+        self,
+        request: search_requests.UserSkillSearchRequest,
+        batch_size: Optional[int] = None
+    ) -> Generator[UserSkill, None, None]:
         """Finds all Toloker's skills that match certain criteria.
 
         `get_user_skills` returns a generator. You can iterate over all found Toloker's skills using the generator. Several requests to the Toloka server are possible while iterating.
@@ -3226,6 +3311,7 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned skills limit for each request. The maximum allowed batch_size is 1000.
 
         Yields:
             UserSkill: The next matching Toloker's skill.
@@ -3234,7 +3320,7 @@ class TolokaClient:
             >>> results_list = list(toloka_client.get_user_skills())
             ...
         """
-        generator = self._find_all(self.find_user_skills, request)
+        generator = self._find_all(self.find_user_skills, request, batch_size=batch_size)
         yield from generator
 
     @add_headers('client')
@@ -3363,7 +3449,8 @@ class TolokaClient:
     @add_headers('client')
     def get_webhook_subscriptions(
         self,
-        request: search_requests.WebhookSubscriptionSearchRequest
+        request: search_requests.WebhookSubscriptionSearchRequest,
+        batch_size: Optional[int] = None
     ) -> Generator[WebhookSubscription, None, None]:
         """Finds all webhook subscriptions that match certain criteria.
 
@@ -3373,11 +3460,12 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned webhook subscriptions limit for each request. The maximum allowed batch_size is 300.
 
         Yields:
             WebhookSubscription: The next matching webhook subscription.
         """
-        generator = self._find_all(self.find_webhook_subscriptions, request, sort_field='created')
+        generator = self._find_all(self.find_webhook_subscriptions, request, sort_field='created', batch_size=batch_size)
         yield from generator
 
     @add_headers('client')
@@ -3474,7 +3562,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_app_projects(self, request: search_requests.AppProjectSearchRequest) -> Generator[AppProject, None, None]:
+    def get_app_projects(
+        self,
+        request: search_requests.AppProjectSearchRequest,
+        batch_size: Optional[int] = None
+    ) -> Generator[AppProject, None, None]:
         """Finds all App projects that match certain criteria.
 
         `get_app_projects` returns a generator. You can iterate over all found projects using the generator. Several requests to the Toloka server are possible while iterating.
@@ -3483,6 +3575,7 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned projects limit for each request. The maximum batch_size is 5000.
 
         Yields:
             AppProject: The next matching App project.
@@ -3491,7 +3584,7 @@ class TolokaClient:
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
 
-        generator = self._find_all(self.find_app_projects, request, items_field='content')
+        generator = self._find_all(self.find_app_projects, request, items_field='content', batch_size=batch_size)
         yield from generator
 
     @add_headers('client')
@@ -3597,7 +3690,11 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_apps(self, request: search_requests.AppSearchRequest) -> Generator[App, None, None]:
+    def get_apps(
+        self,
+        request: search_requests.AppSearchRequest,
+        batch_size: Optional[int] = None
+    ) -> Generator[App, None, None]:
         """Finds all App solutions that match certain criteria.
 
         `get_apps` returns a generator. You can iterate over all found solutions using the generator. Several requests to the Toloka server are possible while iterating.
@@ -3606,6 +3703,7 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned solutions limit for each request. The maximum allowed batch_size is 1000.
 
         Yields:
             App: The next matching solution.
@@ -3614,7 +3712,7 @@ class TolokaClient:
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
 
-        generator = self._find_all(self.find_apps, request, items_field='content')
+        generator = self._find_all(self.find_apps, request, items_field='content', batch_size=batch_size)
         yield from generator
 
     @add_headers('client')
@@ -3669,7 +3767,8 @@ class TolokaClient:
     @add_headers('client')
     def get_app_items(
         self,
-        app_project_id: str, request: search_requests.AppItemSearchRequest
+        app_project_id: str, request: search_requests.AppItemSearchRequest,
+        batch_size: Optional[int] = None
     ) -> Generator[AppItem, None, None]:
         """Finds all App task items that match certain criteria in an App project.
 
@@ -3680,6 +3779,7 @@ class TolokaClient:
         Args:
             app_project_id: The ID of the App project.
             request: Search criteria.
+            batch_size: Returned items limit for each request. The maximum allowed batch_size is 1000.
 
         Yields:
             AppItem: The next matching item.
@@ -3689,7 +3789,7 @@ class TolokaClient:
             raise RuntimeError('this method supports only production environment')
 
         find_function = functools.partial(self.find_app_items, app_project_id)
-        generator = self._find_all(find_function, request, items_field='content')
+        generator = self._find_all(find_function, request, items_field='content', batch_size=batch_size)
         yield from generator
 
     @expand('app_item')
@@ -3776,9 +3876,12 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def get_app_batches(self,
-                        app_project_id: str,
-                        request: search_requests.AppBatchSearchRequest) -> Generator[AppBatch, None, None]:
+    def get_app_batches(
+        self,
+        app_project_id: str,
+        request: search_requests.AppBatchSearchRequest,
+        batch_size: Optional[int] = None
+    ) -> Generator[AppBatch, None, None]:
         """Finds all batches that match certain criteria in an App project.
 
         `get_app_batches` returns a generator. You can iterate over all found batches using the generator. Several requests to the Toloka server are possible while iterating.
@@ -3788,6 +3891,7 @@ class TolokaClient:
         Args:
             app_project_id: The ID of the App project.
             request: Search criteria.
+            batch_size: Returned app batches limit for each request. The maximum allowed batch_size is 1000.
 
         Yields:
             AppBatch: The next matching batch.
@@ -3797,7 +3901,7 @@ class TolokaClient:
             raise RuntimeError('this method supports only production environment')
 
         find_function = functools.partial(self.find_app_batches, app_project_id)
-        generator = self._find_all(find_function, request, items_field='content')
+        generator = self._find_all(find_function, request, items_field='content', batch_size=batch_size)
         yield from generator
 
     @expand('request')

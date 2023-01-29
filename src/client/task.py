@@ -8,6 +8,7 @@ __all__ = [
     'TaskPatch'
 ]
 import datetime
+import uuid
 from typing import Any, Dict, List
 from uuid import UUID
 
@@ -118,6 +119,7 @@ class CreateTaskParameters(Parameters):
 
     allow_defaults: bool
     open_pool: bool
+    operation_id: UUID = attribute(factory=uuid.uuid4)
 
 
 @inherit_docstrings
@@ -129,7 +131,7 @@ class CreateTaskAsyncParameters(CreateTaskParameters):
     Attributes:
         operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
     """
-    operation_id: UUID
+    pass
 
 
 @inherit_docstrings
@@ -154,7 +156,6 @@ class CreateTasksParameters(CreateTaskParameters):
     """
 
     skip_invalid_items: bool
-    operation_id: UUID
     async_mode: bool = attribute(default=True)
 
 

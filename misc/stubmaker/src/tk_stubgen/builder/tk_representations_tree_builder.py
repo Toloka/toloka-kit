@@ -1,7 +1,8 @@
 import inspect
 
+import attr
+from stubmaker.builder.common import BaseDefinition, Node
 from stubmaker.builder.representations_tree_builder import RepresentationsTreeBuilder
-from stubmaker.builder.common import Node, BaseDefinition
 
 from .definitions.expanded_function_def import ExpandedFunctionDef
 
@@ -21,4 +22,11 @@ class TolokaKitRepresentationTreeBuilder(RepresentationsTreeBuilder):
     def get_literal(self, node):
         if inspect.isclass(node.obj) and 'BaseComponentOr' in str(node.obj.__name__) and hasattr(node.obj, 'union_type'):
             return super().get_literal(self.create_node_for_object(node.namespace, None, node.obj.union_type))
+
+        # Since attrs>=22.2.0 NOTHING is enum field instead of a singleton object, but the enum itself (_Nothing) is not
+        # accessible correctly due to the attrs stub files. Therefore, stubs for the NOTHING object can not be generated
+        # correctly using current fullpath syntax
+        if node.obj is attr.NOTHING:
+            node.obj = ...
+
         return super().get_literal(node)

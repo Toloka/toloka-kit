@@ -1,4 +1,5 @@
 import datetime
+import re
 from decimal import Decimal
 from operator import itemgetter
 from typing import List
@@ -9,6 +10,7 @@ import pytest
 import simplejson
 import toloka.client as client
 from httpx import QueryParams
+from toloka.client.exceptions import IncorrectActionsApiError
 
 from .testutils.util_functions import check_headers
 
@@ -68,7 +70,9 @@ def test_create_user_bonus(respx_mock, toloka_client, toloka_url, user_bonus_map
         }
         check_headers(request, expected_headers)
 
-        assert QueryParams(skip_invalid_items='true') == request.url.params
+        assert QueryParams(
+            operation_id=request.url.params['operation_id'], skip_invalid_items='true'
+        ) == request.url.params
         assert user_bonus_map == simplejson.loads(request.content, parse_float=Decimal)
         return httpx.Response(text=simplejson.dumps(user_bonus_map_with_readonly), status_code=201)
 
@@ -82,6 +86,40 @@ def test_create_user_bonus(respx_mock, toloka_client, toloka_url, user_bonus_map
     assert user_bonus_map_with_readonly == client.unstructure(result)
 
     # Expanded syntax
+    result = toloka_client.create_user_bonus(user_bonus, skip_invalid_items=True)
+    assert user_bonus_map_with_readonly == client.unstructure(result)
+
+
+@pytest.mark.xfail(reason='Correct retry for creating single bonus synchronously is not implemented')
+def test_create_user_bonus_retry(respx_mock, toloka_client, toloka_url, user_bonus_map, user_bonus_map_with_readonly):
+    requests_count = 0
+    first_request_op_id = None
+
+    def user_bonuses(request):
+        nonlocal requests_count
+        nonlocal first_request_op_id
+
+        requests_count += 1
+        if requests_count == 1:
+            first_request_op_id = request.url.params['operation_id']
+            return httpx.Response(status_code=500)
+
+        assert request.url.params['operation_id'] == first_request_op_id
+        unstructured_error = client.unstructure(
+            IncorrectActionsApiError(
+                code='OPERATION_ALREADY_EXISTS',
+            )
+        )
+        del unstructured_error['status_code']
+
+        return httpx.Response(
+            json=unstructured_error,
+            status_code=409
+        )
+
+    respx_mock.post(f'{toloka_url}/user-bonuses').mock(side_effect=user_bonuses)
+    user_bonus = client.structure(user_bonus_map, client.user_bonus.UserBonus)
+
     result = toloka_client.create_user_bonus(user_bonus, skip_invalid_items=True)
     assert user_bonus_map_with_readonly == client.unstructure(result)
 
@@ -108,7 +146,9 @@ def test_create_user_bonuses(respx_mock, toloka_client, toloka_url, user_bonus_m
         }
         check_headers(request, expected_headers)
 
-        assert QueryParams(skip_invalid_items='true') == request.url.params
+        assert QueryParams(
+            operation_id=request.url.params['operation_id'], skip_invalid_items='true'
+        ) == request.url.params
         assert [{'user_id': 'user-2', 'amount': -5}, user_bonus_map] == simplejson.loads(request.content, parse_float=Decimal)
         return httpx.Response(text=simplejson.dumps(raw_result), status_code=201)
 
@@ -149,7 +189,9 @@ def test_create_user_bonuses_without_message(
         }
         check_headers(request, expected_headers)
 
-        assert QueryParams(skip_invalid_items='true') == request.url.params
+        assert QueryParams(
+            operation_id=request.url.params['operation_id'], skip_invalid_items='true'
+        ) == request.url.params
         assert [user_bonus_map_without_message] == simplejson.loads(request.content, parse_float=Decimal)
         return httpx.Response(text=simplejson.dumps(raw_result), status_code=201)
 
@@ -170,23 +212,35 @@ def test_create_user_bonuses_without_message(
     assert raw_result == client.unstructure(result)
 
 
-def test_create_user_bonuses_async(respx_mock, toloka_client, toloka_url):
-
-    user_bonuses_map = [
+@pytest.fixture
+def user_bonus_map_async():
+    return [
         {'user_id': 'user-1', 'amount': Decimal('10.00')},
         {'user_id': 'user-2', 'amount': Decimal('12.00')},
     ]
 
-    operation_id = '09ee3f76-5cdc-4388-adcc-c580a3ab4c53'
 
-    raw_result = {
-        'id': operation_id,
+@pytest.fixture
+def create_user_bonuses_operation_id():
+    return '09ee3f76-5cdc-4388-adcc-c580a3ab4c53'
+
+
+@pytest.fixture
+def create_user_bonuses_operation_map(create_user_bonuses_operation_id):
+    return {
+        'id': create_user_bonuses_operation_id,
         'type': 'USER_BONUS.BATCH_CREATE',
         'status': 'SUCCESS',
         'submitted': '2016-10-23T14:02:01',
         'started': '2016-10-23T14:02:02',
         'finished': '2016-10-23T14:02:03',
     }
+
+
+def test_create_user_bonuses_async(
+    respx_mock, toloka_client, toloka_url, user_bonus_map_async, create_user_bonuses_operation_id,
+    create_user_bonuses_operation_map
+):
 
     def user_bonuses(request):
         expected_headers = {
@@ -198,26 +252,64 @@ def test_create_user_bonuses_async(respx_mock, toloka_client, toloka_url):
 
         assert QueryParams(
             async_mode='true',
-            operation_id=operation_id,
+            operation_id=create_user_bonuses_operation_id,
         ) == request.url.params
-        assert simplejson.dumps(user_bonuses_map) == request.content.decode('utf8')
-        return httpx.Response(text=simplejson.dumps(raw_result), status_code=202)
+        assert simplejson.dumps(user_bonus_map_async) == request.content.decode('utf8')
+        return httpx.Response(text=simplejson.dumps(create_user_bonuses_operation_map), status_code=202)
 
     respx_mock.post(f'{toloka_url}/user-bonuses').mock(side_effect=user_bonuses)
 
     # Request object syntax
     result = toloka_client.create_user_bonuses_async(
-        client.structure(user_bonuses_map, List[client.UserBonus]),
-        client.UserBonusCreateRequestParameters(operation_id=operation_id)
+        client.structure(user_bonus_map_async, List[client.UserBonus]),
+        client.UserBonusCreateRequestParameters(operation_id=create_user_bonuses_operation_id)
     )
-    assert raw_result == client.unstructure(result)
+    assert create_user_bonuses_operation_map == client.unstructure(result)
 
     # Expanded syntax
     result = toloka_client.create_user_bonuses_async(
-        client.structure(user_bonuses_map, List[client.UserBonus]),
-        operation_id=operation_id
+        client.structure(user_bonus_map_async, List[client.UserBonus]),
+        operation_id=create_user_bonuses_operation_id
     )
-    assert raw_result == client.unstructure(result)
+    assert create_user_bonuses_operation_map == client.unstructure(result)
+
+
+def test_create_user_bonuses_async_retry(
+    respx_mock, toloka_client, toloka_url, user_bonus_map_async, create_user_bonuses_operation_map
+):
+    requests_count = 0
+    first_request_op_id = None
+
+    def user_bonuses(request):
+        nonlocal requests_count
+        nonlocal first_request_op_id
+
+        requests_count += 1
+        if requests_count == 1:
+            first_request_op_id = request.url.params['operation_id']
+            return httpx.Response(status_code=500)
+
+        assert request.url.params['operation_id'] == first_request_op_id
+        unstructured_error = client.unstructure(
+            IncorrectActionsApiError(
+                code='OPERATION_ALREADY_EXISTS',
+            )
+        )
+        del unstructured_error['status_code']
+
+        return httpx.Response(
+            json=unstructured_error,
+            status_code=409
+        )
+
+    respx_mock.get(
+        re.compile(rf'{toloka_url}/operations/.*')
+    ).mock(httpx.Response(json=create_user_bonuses_operation_map, status_code=200))
+    respx_mock.post(f'{toloka_url}/user-bonuses').mock(side_effect=user_bonuses)
+
+    result = toloka_client.create_user_bonuses_async(client.structure(user_bonus_map_async, List[client.UserBonus]))
+    assert requests_count == 2
+    assert create_user_bonuses_operation_map == client.unstructure(result)
 
 
 def test_find_user_bonuses(respx_mock, toloka_client, toloka_url, user_bonus_map_with_readonly):

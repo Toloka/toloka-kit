@@ -63,6 +63,10 @@ class AsyncTolokaClient:
         """
         ...
 
+    def __getstate__(self): ...
+
+    def __setstate__(self, state): ...
+
     @classmethod
     def from_sync_client(cls, client: toloka.client.TolokaClient) -> 'AsyncTolokaClient': ...
 
@@ -98,10 +102,10 @@ class AsyncTolokaClient:
             The example shows how to aggregate responses in a pool.
 
             >>> aggregation_operation = toloka_client.aggregate_solutions_by_pool(
-            >>>         type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
+            >>>         type=toloka.client.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
             >>>         pool_id=some_existing_pool_id,
             >>>         answer_weight_skill_id=some_skill_id,
-            >>>         fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
+            >>>         fields=[toloka.client.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
             >>>     )
             >>> aggregation_operation = toloka_client.wait_operation(aggregation_operation)
             >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
@@ -138,10 +142,10 @@ class AsyncTolokaClient:
             The example shows how to aggregate responses in a pool.
 
             >>> aggregation_operation = toloka_client.aggregate_solutions_by_pool(
-            >>>         type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
+            >>>         type=toloka.client.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
             >>>         pool_id=some_existing_pool_id,
             >>>         answer_weight_skill_id=some_skill_id,
-            >>>         fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
+            >>>         fields=[toloka.client.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
             >>>     )
             >>> aggregation_operation = toloka_client.wait_operation(aggregation_operation)
             >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
@@ -169,11 +173,10 @@ class AsyncTolokaClient:
             The example shows how to aggregate responses to a single task.
 
             >>> aggregated_response = toloka_client.aggregate_solutions_by_task(
-            >>>     type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
             >>>     pool_id=some_existing_pool_id,
             >>>     task_id=some_existing_task_id,
             >>>     answer_weight_skill_id=some_skill_id,
-            >>>     fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
+            >>>     fields=[toloka.client.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
             >>> )
             >>> print(aggregated_response.output_values['result'])
             ...
@@ -207,11 +210,10 @@ class AsyncTolokaClient:
             The example shows how to aggregate responses to a single task.
 
             >>> aggregated_response = toloka_client.aggregate_solutions_by_task(
-            >>>     type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
             >>>     pool_id=some_existing_pool_id,
             >>>     task_id=some_existing_task_id,
             >>>     answer_weight_skill_id=some_skill_id,
-            >>>     fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
+            >>>     fields=[toloka.client.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
             >>> )
             >>> print(aggregated_response.output_values['result'])
             ...
@@ -311,7 +313,8 @@ class AsyncTolokaClient:
     def get_aggregated_solutions(
         self,
         operation_id: str,
-        request: toloka.client.search_requests.AggregatedSolutionSearchRequest
+        request: toloka.client.search_requests.AggregatedSolutionSearchRequest,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.aggregation.AggregatedSolution, None]:
         """Finds all aggregated responses that match certain criteria.
 
@@ -330,6 +333,7 @@ class AsyncTolokaClient:
         Args:
             operation_id: The ID of the aggregation operation.
             request: Search criteria.
+            batch_size: Returned aggregated responses limit for each request. The default batch_size is 50. The maximum allowed limit is 100,000.
 
         Yields:
             AggregatedSolution: The next matching aggregated response.
@@ -356,7 +360,8 @@ class AsyncTolokaClient:
         task_id_lt: typing.Optional[str] = None,
         task_id_lte: typing.Optional[str] = None,
         task_id_gt: typing.Optional[str] = None,
-        task_id_gte: typing.Optional[str] = None
+        task_id_gte: typing.Optional[str] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.aggregation.AggregatedSolution, None]:
         """Finds all aggregated responses that match certain criteria.
 
@@ -375,6 +380,7 @@ class AsyncTolokaClient:
         Args:
             operation_id: The ID of the aggregation operation.
             request: Search criteria.
+            batch_size: Returned aggregated responses limit for each request. The default batch_size is 50. The maximum allowed limit is 100,000.
 
         Yields:
             AggregatedSolution: The next matching aggregated response.
@@ -522,7 +528,11 @@ class AsyncTolokaClient:
         ...
 
     @typing.overload
-    def get_assignments(self, request: toloka.client.search_requests.AssignmentSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.assignment.Assignment, None]:
+    def get_assignments(
+        self,
+        request: toloka.client.search_requests.AssignmentSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.assignment.Assignment, None]:
         """Finds all assignments that match certain criteria.
 
         `get_assignments` returns a generator. You can iterate over all found assignments using the generator. Several requests to the Toloka server are possible while iterating.
@@ -531,6 +541,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned assignments limit for each request. The default batch_size  is 50. The maximum allowed batch_size  is 100,000.
 
         Yields:
             Assignment: The next matching assignment.
@@ -580,7 +591,8 @@ class AsyncTolokaClient:
         expired_lt: typing.Optional[datetime.datetime] = None,
         expired_lte: typing.Optional[datetime.datetime] = None,
         expired_gt: typing.Optional[datetime.datetime] = None,
-        expired_gte: typing.Optional[datetime.datetime] = None
+        expired_gte: typing.Optional[datetime.datetime] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.assignment.Assignment, None]:
         """Finds all assignments that match certain criteria.
 
@@ -590,6 +602,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned assignments limit for each request. The default batch_size  is 50. The maximum allowed batch_size  is 100,000.
 
         Yields:
             Assignment: The next matching assignment.
@@ -768,7 +781,11 @@ class AsyncTolokaClient:
         ...
 
     @typing.overload
-    def get_attachments(self, request: toloka.client.search_requests.AttachmentSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.attachment.Attachment, None]:
+    def get_attachments(
+        self,
+        request: toloka.client.search_requests.AttachmentSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.attachment.Attachment, None]:
         """Finds all attachments that match certain criteria and returns their metadata.
 
         `get_attachments` returns a generator. You can iterate over all found attachments using the generator. Several requests to the Toloka server are possible while iterating.
@@ -777,6 +794,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned attachments limit for each request. The maximum allowed batch_size is 100.
 
         Yields:
             Attachment: The next matching attachment.
@@ -806,7 +824,8 @@ class AsyncTolokaClient:
         created_lt: typing.Optional[datetime.datetime] = None,
         created_lte: typing.Optional[datetime.datetime] = None,
         created_gt: typing.Optional[datetime.datetime] = None,
-        created_gte: typing.Optional[datetime.datetime] = None
+        created_gte: typing.Optional[datetime.datetime] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.attachment.Attachment, None]:
         """Finds all attachments that match certain criteria and returns their metadata.
 
@@ -816,6 +835,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned attachments limit for each request. The maximum allowed batch_size is 100.
 
         Yields:
             Attachment: The next matching attachment.
@@ -1023,7 +1043,11 @@ class AsyncTolokaClient:
         ...
 
     @typing.overload
-    def get_message_threads(self, request: toloka.client.search_requests.MessageThreadSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.message_thread.MessageThread, None]:
+    def get_message_threads(
+        self,
+        request: toloka.client.search_requests.MessageThreadSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.message_thread.MessageThread, None]:
         """Finds all message threads that match certain criteria.
 
         `get_message_threads` returns a generator. You can iterate over all found message threads using the generator. Several requests to the Toloka server are possible while iterating.
@@ -1032,6 +1056,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned message threads limit for each request. The default batch_size is 50. The maximum allowed batch_size is 300.
 
         Yields:
             MessageThread: The next matching message thread.
@@ -1056,7 +1081,8 @@ class AsyncTolokaClient:
         created_lt: typing.Optional[datetime.datetime] = None,
         created_lte: typing.Optional[datetime.datetime] = None,
         created_gt: typing.Optional[datetime.datetime] = None,
-        created_gte: typing.Optional[datetime.datetime] = None
+        created_gte: typing.Optional[datetime.datetime] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.message_thread.MessageThread, None]:
         """Finds all message threads that match certain criteria.
 
@@ -1066,6 +1092,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned message threads limit for each request. The default batch_size is 50. The maximum allowed batch_size is 300.
 
         Yields:
             MessageThread: The next matching message thread.
@@ -1250,7 +1277,11 @@ class AsyncTolokaClient:
         ...
 
     @typing.overload
-    def get_projects(self, request: toloka.client.search_requests.ProjectSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.project.Project, None]:
+    def get_projects(
+        self,
+        request: toloka.client.search_requests.ProjectSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.project.Project, None]:
         """Finds all projects that match certain criteria.
 
         `get_projects` returns a generator. You can iterate over all found projects using the generator. Several requests to the Toloka server are possible while iterating.
@@ -1259,6 +1290,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned projects limit for each request. The default batch_size is 20. The maximum allowed batch_size is 300.
 
         Yields:
             Project: The next matching project.
@@ -1286,7 +1318,8 @@ class AsyncTolokaClient:
         created_lt: typing.Optional[datetime.datetime] = None,
         created_lte: typing.Optional[datetime.datetime] = None,
         created_gt: typing.Optional[datetime.datetime] = None,
-        created_gte: typing.Optional[datetime.datetime] = None
+        created_gte: typing.Optional[datetime.datetime] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.project.Project, None]:
         """Finds all projects that match certain criteria.
 
@@ -1296,6 +1329,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned projects limit for each request. The default batch_size is 20. The maximum allowed batch_size is 300.
 
         Yields:
             Project: The next matching project.
@@ -1341,7 +1375,7 @@ class AsyncTolokaClient:
 
         Emulates cloning behavior via Toloka interface:
         - the same skills will be used
-        - the same quality control collectors will be used (could be changed by reuse_controllers=False)
+        - the same quality control collectors will be used (could be changed by `reuse_controllers=False`)
         - the expiration date will not be changed in the new project
         - etc.
 
@@ -1350,7 +1384,7 @@ class AsyncTolokaClient:
 
         Args:
             project_id: ID of the project to be cloned.
-            reuse_controllers: Use same quality controllers in cloned and created projects. Defaults to True.
+            reuse_controllers: Use same quality controllers in cloned and created projects. Defaults to `True`.
                 This means that all quality control rules will be applied to both projects.
                 For example, if you have rule "fast_submitted_count", fast responses counts across both projects.
 
@@ -1366,16 +1400,17 @@ class AsyncTolokaClient:
         ...
 
     async def archive_pool(self, pool_id: str) -> toloka.client.pool.Pool:
-        """Sends pool to archive
+        """Archives a pool.
 
-        The pool must be in the status "closed".
-        The archived pool is not deleted. You can access it when you will need it.
+        Only closed pools can be archived.
+
+        You can't open archived pools, but you can [clone](toloka.client.TolokaClient.clone_pool.md) them if needed.
 
         Args:
-            pool_id: ID of pool that will be archived.
+            pool_id: The ID of the pool to be archived.
 
         Returns:
-            Pool: Object with updated status.
+            Pool: The pool with updated status.
 
         Example:
             >>> closed_pool = next(toloka_client.get_pools(status='CLOSED'))
@@ -1385,17 +1420,17 @@ class AsyncTolokaClient:
         ...
 
     async def archive_pool_async(self, pool_id: str) -> typing.Optional[toloka.client.operations.PoolArchiveOperation]:
-        """Sends pool to archive, asynchronous version
+        """Archives a pool. Sends an asynchronous request to Toloka.
 
-        The pool must be in the status "closed".
-        The archived pool is not deleted. You can access it when you will need it.
+        Only closed pools can be archived.
+
+        You can't open archived pools, but you can [clone](toloka.client.TolokaClient.clone_pool.md) them if needed.
 
         Args:
-            pool_id: ID of pool that will be archived.
+            pool_id: The ID of the pool to be archived.
 
         Returns:
-            PoolArchiveOperation: An operation upon completion of which you can get the pool with updated status. If
-                pool is already archived then None is returned
+            PoolArchiveOperation: An object to track the progress of the operation. If the pool is already archived then `None` is returned.
 
         Example:
             >>> closed_pool = next(toloka_client.get_pools(status='CLOSED'))
@@ -1406,15 +1441,15 @@ class AsyncTolokaClient:
         ...
 
     async def close_pool(self, pool_id: str) -> toloka.client.pool.Pool:
-        """Stops distributing tasks from the pool
+        """Closes a pool.
 
-        If all tasks done, the pool will be closed automatically.
+        If all tasks in a pool are completed, then the pool is closed automatically.
 
         Args:
-            pool_id: ID of the pool that will be closed.
+            pool_id: The ID of the pool to be closed.
 
         Returns:
-            Pool: Pool object with new status.
+            Pool: The pool with updated status.
 
         Example:
             >>> open_pool = next(toloka_client.get_pools(status='OPEN'))
@@ -1424,16 +1459,15 @@ class AsyncTolokaClient:
         ...
 
     async def close_pool_async(self, pool_id: str) -> typing.Optional[toloka.client.operations.PoolCloseOperation]:
-        """Stops distributing tasks from the pool, asynchronous version
+        """Closes a pool. Sends an asynchronous request to Toloka.
 
-        If all tasks done, the pool will be closed automatically.
+        If all tasks in a pool are completed, then the pool is closed automatically.
 
         Args:
-            pool_id: ID of the pool that will be closed.
+            pool_id: The ID of the pool to be closed.
 
         Returns:
-            Optional[PoolCloseOperation]: An operation upon completion of which you can get the pool with updated
-                status. If pool is already closed then None is returned.
+            PoolCloseOperation: An object to track the progress of the operation. If the pool is already closed then `None` is returned.
 
         Example:
             >>> open_pool = next(toloka_client.get_pools(status='OPEN'))
@@ -1444,13 +1478,16 @@ class AsyncTolokaClient:
         ...
 
     async def close_pool_for_update(self, pool_id: str) -> toloka.client.pool.Pool:
-        """Closes pool for update
+        """Closes a pool that is to be updated.
+
+        To make changes to a pool, close it before updating parameters.
+        If you don't open the pool after updating, it opens automatically in 15 minutes.
 
         Args:
-            pool_id: ID of the pool that will be closed for update.
+            pool_id: The ID of the pool to be closed.
 
         Returns:
-            Pool: Pool object with new status.
+            Pool: The pool with updated status.
 
         Example:
             >>> toloka_client.close_pool_for_update(pool_id='1')
@@ -1459,14 +1496,16 @@ class AsyncTolokaClient:
         ...
 
     async def close_pool_for_update_async(self, pool_id: str) -> typing.Optional[toloka.client.operations.PoolCloseOperation]:
-        """Closes pool for update, asynchronous version
+        """Closes a pool that is to be updated. Sends an asynchronous request to Toloka.
+
+        To make changes to a pool, close it before updating parameters.
+        If you don't open the pool after updating, it opens automatically in 15 minutes.
 
         Args:
-            pool_id: ID of the pool that will be closed for update.
+            pool_id: The ID of the pool to be closed.
 
         Returns:
-            Optional[PoolCloseOperation]: An operation upon completion of which you can get the pool with updated
-                status. If pool is already closed for update then None is returned.
+            PoolCloseOperation: An object to track the progress of the operation. If the pool is already closed then `None` is returned.
 
         Example:
             >>> close_op = toloka_client.close_pool_for_update_async(pool_id='1')
@@ -1476,16 +1515,16 @@ class AsyncTolokaClient:
         ...
 
     async def clone_pool(self, pool_id: str) -> toloka.client.pool.Pool:
-        """Duplicates existing pool
+        """Clones an existing pool.
 
-        An empty pool with the same parameters will be created.
-        A new pool will be attached to the same project.
+        An empty pool with the same parameters is created.
+        The new pool is attached to the same project.
 
         Args:
-            pool_id: ID of the existing pool.
+            pool_id: The ID of the pool to be cloned.
 
         Returns:
-            Pool: New pool.
+            Pool: The new pool.
 
         Example:
             >>> toloka_client.clone_pool(pool_id='1')
@@ -1494,47 +1533,47 @@ class AsyncTolokaClient:
         ...
 
     async def clone_pool_async(self, pool_id: str) -> toloka.client.operations.PoolCloneOperation:
-        """Duplicates existing pool, asynchronous version
+        """Clones an existing pool. Sends an asynchronous request to Toloka.
 
-        An empty pool with the same parameters will be created.
-        A new pool will be attached to the same project.
+        An empty pool with the same parameters is created.
+        The new pool is attached to the same project.
 
         Args:
-            pool_id: ID of the existing pool.
+            pool_id: The ID of the pool to be cloned.
 
         Returns:
-            PoolCloneOperation: An operation upon completion of which you can get the new pool.
+            PoolCloneOperation: An object to track the progress of the operation.
 
         Example:
-            >>> new_pool = toloka_client.clone_pool_async(pool_id='1')
-            >>> toloka_client.wait_operation(new_pool)
+            >>> clone_op = toloka_client.clone_pool_async(pool_id='1')
+            >>> toloka_client.wait_operation(clone_op)
             ...
         """
         ...
 
     async def create_pool(self, pool: toloka.client.pool.Pool) -> toloka.client.pool.Pool:
-        """Creates a new pool
+        """Creates a new pool in Toloka.
 
         You can send a maximum of 20 requests of this kind per minute and 100 requests per day.
 
         Args:
-            pool: New Pool with set parameters.
+            pool: The pool to be created.
 
         Returns:
-            Pool: Created pool. With read-only fields.
+            Pool: The pool with updated read-only fields.
 
         Example:
-            How to create a new pool in a project.
+            Creating a new pool.
 
-            >>> new_pool = toloka.pool.Pool(
-            >>>     project_id=existing_project_id,
+            >>> new_pool = toloka.client.Pool(
+            >>>     project_id='1',
             >>>     private_name='Pool 1',
             >>>     may_contain_adult_content=False,
             >>>     will_expire=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=365),
             >>>     reward_per_assignment=0.01,
             >>>     assignment_max_duration_seconds=60*20,
-            >>>     defaults=toloka.pool.Pool.Defaults(default_overlap_for_new_task_suites=3),
-            >>>     filter=toloka.filter.Languages.in_('EN'),
+            >>>     defaults=toloka.client.Pool.Defaults(default_overlap_for_new_task_suites=3),
+            >>>     filter=toloka.client.filter.Languages.in_('EN'),
             >>> )
             >>> new_pool.set_mixer_config(real_tasks_count=10, golden_tasks_count=0, training_tasks_count=0)
             >>> new_pool.quality_control.add_action(...)
@@ -1566,17 +1605,17 @@ class AsyncTolokaClient:
            PoolSearchResult: Found pools and a flag showing whether there are more matching pools exceeding the limit.
 
         Examples:
-            Find all pools in all projects.
+            Finding all pools in all projects.
 
             >>> pools = toloka_client.find_pools()
             ...
 
-            Find all open pools in all projects.
+            Finding all open pools in all projects.
 
             >>> pools = toloka_client.find_pools(status='OPEN')
             ...
 
-            Find open pools in a specific project.
+            Finding open pools in a specific project.
 
             >>> pools = toloka_client.find_pools(status='OPEN', project_id='1')
             ...
@@ -1620,17 +1659,17 @@ class AsyncTolokaClient:
            PoolSearchResult: Found pools and a flag showing whether there are more matching pools exceeding the limit.
 
         Examples:
-            Find all pools in all projects.
+            Finding all pools in all projects.
 
             >>> pools = toloka_client.find_pools()
             ...
 
-            Find all open pools in all projects.
+            Finding all open pools in all projects.
 
             >>> pools = toloka_client.find_pools(status='OPEN')
             ...
 
-            Find open pools in a specific project.
+            Finding open pools in a specific project.
 
             >>> pools = toloka_client.find_pools(status='OPEN', project_id='1')
             ...
@@ -1640,10 +1679,10 @@ class AsyncTolokaClient:
         ...
 
     async def get_pool(self, pool_id: str) -> toloka.client.pool.Pool:
-        """Reads one specific pool
+        """Gets pool data from Toloka.
 
         Args:
-            pool_id: ID of the pool.
+            pool_id: The ID of the pool.
 
         Returns:
             Pool: The pool.
@@ -1655,7 +1694,11 @@ class AsyncTolokaClient:
         ...
 
     @typing.overload
-    def get_pools(self, request: toloka.client.search_requests.PoolSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.pool.Pool, None]:
+    def get_pools(
+        self,
+        request: toloka.client.search_requests.PoolSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.pool.Pool, None]:
         """Finds all pools that match certain criteria.
 
         `get_pools` returns a generator. You can iterate over all found pools using the generator. Several requests to the Toloka server are possible while iterating.
@@ -1664,6 +1707,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned pools limit for each request. The default batch_size is 20. The maximum allowed batch_size is 300.
 
         Yields:
             Pool: The next matching pool.
@@ -1697,7 +1741,8 @@ class AsyncTolokaClient:
         last_started_lt: typing.Optional[datetime.datetime] = None,
         last_started_lte: typing.Optional[datetime.datetime] = None,
         last_started_gt: typing.Optional[datetime.datetime] = None,
-        last_started_gte: typing.Optional[datetime.datetime] = None
+        last_started_gte: typing.Optional[datetime.datetime] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.pool.Pool, None]:
         """Finds all pools that match certain criteria.
 
@@ -1707,6 +1752,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned pools limit for each request. The default batch_size is 20. The maximum allowed batch_size is 300.
 
         Yields:
             Pool: The next matching pool.
@@ -1725,18 +1771,18 @@ class AsyncTolokaClient:
         ...
 
     async def open_pool(self, pool_id: str) -> toloka.client.pool.Pool:
-        """Starts distributing tasks from the pool
+        """Opens a pool.
 
-        Tolokers will see your tasks only after that call.
+        After opening the pool, tasks can be assigned to Tolokers.
 
         Args:
-            pool_id: ID of the pool that will be started.
+            pool_id: The ID of the pool.
 
         Returns:
-            Pool: Pool object with new status.
+            Pool: The pool with updated status.
 
         Example:
-            Open the pool for Tolokers.
+            Opening a pool.
 
             >>> toloka_client.open_pool(pool_id='1')
             ...
@@ -1744,22 +1790,21 @@ class AsyncTolokaClient:
         ...
 
     async def open_pool_async(self, pool_id: str) -> typing.Optional[toloka.client.operations.PoolOpenOperation]:
-        """Starts distributing tasks from the pool, asynchronous version
+        """Opens a pool. Sends an asynchronous request to Toloka.
 
-        Tolokers will see your tasks only after that call.
+        After opening the pool, tasks can be assigned to Tolokers.
 
         Args:
-            pool_id: ID of the pool that will be started.
+            pool_id: The ID of the pool.
 
         Returns:
-            PoolOpenOperation: An operation upon completion of which you can get the pool with new status. If pool is
-                already opened then None is returned.
+            PoolOpenOperation: An object to track the progress of the operation. If the pool is already opened then `None` is returned.
 
         Example:
-            Open the pool for Tolokers.
+            Opening a pool.
 
-            >>> open_pool = toloka_client.open_pool(pool_id='1')
-            >>> toloka_client.wait_operation(open_pool)
+            >>> open_op = toloka_client.open_pool(pool_id='1')
+            >>> toloka_client.wait_operation(open_op)
             ...
         """
         ...
@@ -1770,17 +1815,19 @@ class AsyncTolokaClient:
         pool_id: str,
         request: toloka.client.pool.PoolPatchRequest
     ) -> toloka.client.pool.Pool:
-        """Changes the priority of the pool issue
+        """Changes pool parameters in Toloka.
+
+        If a parameter is not specified in the `patch_pool` method, then it is left unchanged in Toloka.
 
         Args:
-            pool_id: ID of the pool that will be patched.
-            request: New priority of the pool.
+            pool_id: The ID of the pool to be changed.
+            request: New pool parameters.
 
         Returns:
-            Pool: Object with updated priority.
+            Pool: The pool with updated parameters.
 
         Example:
-            Set the highest priority to a specified pool.
+            Changing priority of a pool.
 
             >>> toloka_client.patch_pool(pool_id='1', priority=100)
             ...
@@ -1793,17 +1840,19 @@ class AsyncTolokaClient:
         pool_id: str,
         priority: typing.Optional[int] = None
     ) -> toloka.client.pool.Pool:
-        """Changes the priority of the pool issue
+        """Changes pool parameters in Toloka.
+
+        If a parameter is not specified in the `patch_pool` method, then it is left unchanged in Toloka.
 
         Args:
-            pool_id: ID of the pool that will be patched.
-            request: New priority of the pool.
+            pool_id: The ID of the pool to be changed.
+            request: New pool parameters.
 
         Returns:
-            Pool: Object with updated priority.
+            Pool: The pool with updated parameters.
 
         Example:
-            Set the highest priority to a specified pool.
+            Changing priority of a pool.
 
             >>> toloka_client.patch_pool(pool_id='1', priority=100)
             ...
@@ -1815,32 +1864,35 @@ class AsyncTolokaClient:
         pool_id: str,
         pool: toloka.client.pool.Pool
     ) -> toloka.client.pool.Pool:
-        """Makes changes to the pool
+        """Updates all pool parameters in Toloka.
 
         Args:
-            pool_id: ID of the pool that will be changed.
-            pool: A pool object with all the fields: those that will be updated and those that will not.
+            pool_id: The ID of the pool to be updated.
+            pool: The pool with new parameters.
 
         Returns:
-            Pool: Pool object with all fields.
+            Pool: The pool with updated parameters.
 
         Example:
-            >>> updated_pool = toloka_client.update_pool(pool_id=old_pool_id, pool=new_pool_object)
+            >>> updated_pool = toloka_client.get_pool(pool_id='1')
+            >>> updated_pool.will_expire = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=30)
+            >>> toloka_client.update_pool(pool_id=updated_pool.id, pool=updated_pool)
             ...
         """
         ...
 
     async def archive_training(self, training_id: str) -> toloka.client.training.Training:
-        """Sends training to archive
+        """Archives a training.
 
-        The training must be in the status "closed".
-        The archived training is not deleted. You can access it when you will need it.
+        Only closed trainings can be archived.
+
+        You can access archived trainings later.
 
         Args:
-            training_id: ID of training that will be archived.
+            training_id: The ID of the training to be archived.
 
         Returns:
-            Training: Object with updated status.
+            Training: The training with updated status.
 
         Example:
             >>> closed_training = next(toloka_client.get_trainings(status='CLOSED'))
@@ -1850,17 +1902,17 @@ class AsyncTolokaClient:
         ...
 
     async def archive_training_async(self, training_id: str) -> typing.Optional[toloka.client.operations.TrainingArchiveOperation]:
-        """Sends training to archive, asynchronous version
+        """Archives a training. Sends an asynchronous request to Toloka.
 
-        The training must be in the status "closed".
-        The archived training is not deleted. You can access it when you will need it.
+        Only closed trainings can be archived.
+
+        You can access archived trainings later.
 
         Args:
-            training_id: ID of training that will be archived.
+            training_id: The ID of the training to be archived.
 
         Returns:
-            TrainingArchiveOperation: An operation upon completion of which you can get the training with updated
-                status. If pool is already archived then None is returned.
+            TrainingArchiveOperation: An object to track the progress of the operation. If the training is already archived then `None` is returned.
 
         Example:
             >>> closed_training = next(toloka_client.find_trainings(status='CLOSED'))
@@ -1871,50 +1923,53 @@ class AsyncTolokaClient:
         ...
 
     async def close_training(self, training_id: str) -> toloka.client.training.Training:
-        """Stops distributing tasks from the training
+        """Closes a training.
+
+        Tasks from closed trainings are not assigned to Tolokers.
 
         Args:
-            training_id: ID of the training that will be closed.
+            training_id: The ID of the training to be closed.
 
         Returns:
-            Training: Training object with new status.
+            Training: The training with updated status.
 
         Example:
-            >>> open_training = next(toloka_client.get_trainings(status='OPEN'))
-            >>> toloka_client.close_training(training_id=open_training.id)
+            >>> opened_training = next(toloka_client.get_trainings(status='OPEN'))
+            >>> toloka_client.close_training(training_id=opened_training.id)
             ...
         """
         ...
 
     async def close_training_async(self, training_id: str) -> typing.Optional[toloka.client.operations.TrainingCloseOperation]:
-        """Stops distributing tasks from the training, asynchronous version
+        """Closes a training. Sends an asynchronous request to Toloka.
+
+        Tasks from closed trainings are not assigned to Tolokers.
 
         Args:
-            training_id: ID of the training that will be closed.
+            training_id: The ID of the training to be closed.
 
         Returns:
-            TrainingCloseOperation: An operation upon completion of which you can get the training with updated status.
-                If training is already closed then None is returned.
+            TrainingCloseOperation: An object to track the progress of the operation. If the training is already closed then `None` is returned.
 
         Example:
-            >>> open_training = next(toloka_client.get_trainings(status='OPEN'))
-            >>> close_training = toloka_client.close_training_async(training_id=open_training.id)
-            >>> toloka_client.wait_operation(close_training)
+            >>> opened_training = next(toloka_client.get_trainings(status='OPEN'))
+            >>> close_op = toloka_client.close_training_async(training_id=opened_training.id)
+            >>> toloka_client.wait_operation(close_op)
             ...
         """
         ...
 
     async def clone_training(self, training_id: str) -> toloka.client.training.Training:
-        """Duplicates existing training
+        """Clones an existing training.
 
-        An empty training with the same parameters will be created.
-        A new training will be attached to the same project.
+        An empty training with the same parameters is created.
+        The new training is attached to the same project.
 
         Args:
-            training_id: ID of the existing training.
+            training_id: The ID of the training to be cloned.
 
         Returns:
-            Training: New training.
+            Training: The new training.
 
         Example:
             >>> toloka_client.clone_training(training_id='1')
@@ -1923,41 +1978,41 @@ class AsyncTolokaClient:
         ...
 
     async def clone_training_async(self, training_id: str) -> toloka.client.operations.TrainingCloneOperation:
-        """Duplicates existing training, asynchronous version
+        """Clones an existing training. Sends an asynchronous request to Toloka.
 
-        An empty training with the same parameters will be created.
-        A new training will be attached to the same project.
+        An empty training with the same parameters is created.
+        The new training is attached to the same project.
 
         Args:
-            training_id: ID of the existing training.
+            training_id: The ID of the training to be cloned.
 
         Returns:
-            TrainingCloneOperation: An operation upon completion of which you can get the new training.
+            TrainingCloneOperation: An object to track the progress of the operation.
 
         Example:
-            >>> clone_training = toloka_client.clone_training_async(training_id='1')
-            >>> toloka_client.wait_operation(clone_training)
+            >>> clone_op = toloka_client.clone_training_async(training_id='1')
+            >>> toloka_client.wait_operation(clone_op)
             ...
         """
         ...
 
     async def create_training(self, training: toloka.client.training.Training) -> toloka.client.training.Training:
-        """Creates a new training
+        """Creates a new training in Toloka.
 
         Args:
-            training: New Training with set parameters.
+            training: A training to be created.
 
         Returns:
-            Training: Created training. With read-only fields.
+            Training: Created training with initialized read-only fields.
 
         Example:
-            How to create a new training in a project.
+            Creating a new training.
 
-            >>> new_training = toloka.training.Training(
-            >>>     project_id=existing_project_id,
+            >>> new_training = toloka.client.Training(
+            >>>     project_id='1',
             >>>     private_name='Some training in my project',
             >>>     may_contain_adult_content=True,
-            >>>     assignment_max_duration_seconds=10000,
+            >>>     assignment_max_duration_seconds=60*5,
             >>>     mix_tasks_in_creation_order=True,
             >>>     shuffle_tasks_in_task_suite=True,
             >>>     training_tasks_in_task_suite_count=3,
@@ -1979,37 +2034,37 @@ class AsyncTolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.TrainingSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.TrainingSearchResult:
-        """Finds training pools that match certain criteria.
+        """Finds trainings that match certain criteria.
 
-        The number of returned pools is limited. To find remaining pools call `find_trainings` with updated search criteria.
+        The number of returned trainings is limited. To find remaining trainings call `find_trainings` with updated search criteria.
 
-        To iterate over all matching training pools you may use the [get_trainings](toloka.client.TolokaClient.get_trainings.md) method.
+        To iterate over all matching trainings you may use the [get_trainings](toloka.client.TolokaClient.get_trainings.md) method.
 
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned training pools limit. The maximum allowed limit is 300.
+            limit: Returned trainings limit. The maximum allowed limit is 300.
 
         Returns:
-           TrainingSearchResult: Found training pools and a flag showing whether there are more matching pools exceeding the limit.
+           TrainingSearchResult: Found trainings and a flag showing whether there are more matching trainings exceeding the limit.
 
         Examples:
-            Find all training pools in all projects.
+            Finding all trainings in all projects.
 
-            >>> pools = toloka_client.find_trainings()
+            >>> trainings = toloka_client.find_trainings()
             ...
 
-            Find all open training pools in all projects.
+            Finding all opened trainings in all projects.
 
-            >>> pools = toloka_client.find_trainings(status='OPEN')
+            >>> trainings = toloka_client.find_trainings(status='OPEN')
             ...
 
-            Find all open training pools in a specific project.
+            Finding all opened trainings in a specific project.
 
-            >>> pools = toloka_client.find_trainings(status='OPEN', project_id='1')
+            >>> trainings = toloka_client.find_trainings(status='OPEN', project_id='1')
             ...
 
-            If there are pools exceeding the `limit`, then `pools.has_more` is set to `True`.
+            If there are trainings exceeding the `limit`, then `trainings.has_more` is set to `True`.
         """
         ...
 
@@ -2033,73 +2088,78 @@ class AsyncTolokaClient:
         sort: typing.Union[typing.List[str], toloka.client.search_requests.TrainingSortItems, None] = None,
         limit: typing.Optional[int] = None
     ) -> toloka.client.search_results.TrainingSearchResult:
-        """Finds training pools that match certain criteria.
+        """Finds trainings that match certain criteria.
 
-        The number of returned pools is limited. To find remaining pools call `find_trainings` with updated search criteria.
+        The number of returned trainings is limited. To find remaining trainings call `find_trainings` with updated search criteria.
 
-        To iterate over all matching training pools you may use the [get_trainings](toloka.client.TolokaClient.get_trainings.md) method.
+        To iterate over all matching trainings you may use the [get_trainings](toloka.client.TolokaClient.get_trainings.md) method.
 
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned training pools limit. The maximum allowed limit is 300.
+            limit: Returned trainings limit. The maximum allowed limit is 300.
 
         Returns:
-           TrainingSearchResult: Found training pools and a flag showing whether there are more matching pools exceeding the limit.
+           TrainingSearchResult: Found trainings and a flag showing whether there are more matching trainings exceeding the limit.
 
         Examples:
-            Find all training pools in all projects.
+            Finding all trainings in all projects.
 
-            >>> pools = toloka_client.find_trainings()
+            >>> trainings = toloka_client.find_trainings()
             ...
 
-            Find all open training pools in all projects.
+            Finding all opened trainings in all projects.
 
-            >>> pools = toloka_client.find_trainings(status='OPEN')
+            >>> trainings = toloka_client.find_trainings(status='OPEN')
             ...
 
-            Find all open training pools in a specific project.
+            Finding all opened trainings in a specific project.
 
-            >>> pools = toloka_client.find_trainings(status='OPEN', project_id='1')
+            >>> trainings = toloka_client.find_trainings(status='OPEN', project_id='1')
             ...
 
-            If there are pools exceeding the `limit`, then `pools.has_more` is set to `True`.
+            If there are trainings exceeding the `limit`, then `trainings.has_more` is set to `True`.
         """
         ...
 
     async def get_training(self, training_id: str) -> toloka.client.training.Training:
-        """Reads one specific training
+        """Gets information about a training from Toloka.
 
         Args:
-            training_id: ID of the training.
+            training_id: The ID of the training.
 
         Returns:
             Training: The training.
 
         Example:
-            >>> toloka_client.get_training(training_id='1')
+            >>> t = toloka_client.get_training(training_id='1')
             ...
         """
         ...
 
     @typing.overload
-    def get_trainings(self, request: toloka.client.search_requests.TrainingSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.training.Training, None]:
-        """Finds all training pools that match certain criteria.
+    def get_trainings(
+        self,
+        request: toloka.client.search_requests.TrainingSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.training.Training, None]:
+        """Finds all trainings that match certain criteria.
 
-        `get_trainings` returns a generator. You can iterate over all found training pools using the generator. Several requests to the Toloka server are possible while iterating.
+        `get_trainings` returns a generator. You can iterate over all found trainings using the generator. Several requests to the Toloka server are possible while iterating.
 
-        If you need to sort training pools use the [find_trainings](toloka.client.TolokaClient.find_trainings.md) method.
+        If you need to sort trainings use the [find_trainings](toloka.client.TolokaClient.find_trainings.md) method.
 
         Args:
             request: Search criteria.
+            batch_size: Returned trainings limit for each request. The maximum allowed batch_size is 300.
 
         Yields:
-            Training: The next matching training pool.
+            Training: The next matching training.
 
         Example:
-            How to get all training pools in a project.
+            Getting all trainings in a project.
 
-            >>> trainings = toloka_client.get_trainings(project_id=project_id)
+            >>> trainings = toloka_client.get_trainings(project_id='1')
             ...
         """
         ...
@@ -2120,39 +2180,43 @@ class AsyncTolokaClient:
         last_started_lt: typing.Optional[datetime.datetime] = None,
         last_started_lte: typing.Optional[datetime.datetime] = None,
         last_started_gt: typing.Optional[datetime.datetime] = None,
-        last_started_gte: typing.Optional[datetime.datetime] = None
+        last_started_gte: typing.Optional[datetime.datetime] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.training.Training, None]:
-        """Finds all training pools that match certain criteria.
+        """Finds all trainings that match certain criteria.
 
-        `get_trainings` returns a generator. You can iterate over all found training pools using the generator. Several requests to the Toloka server are possible while iterating.
+        `get_trainings` returns a generator. You can iterate over all found trainings using the generator. Several requests to the Toloka server are possible while iterating.
 
-        If you need to sort training pools use the [find_trainings](toloka.client.TolokaClient.find_trainings.md) method.
+        If you need to sort trainings use the [find_trainings](toloka.client.TolokaClient.find_trainings.md) method.
 
         Args:
             request: Search criteria.
+            batch_size: Returned trainings limit for each request. The maximum allowed batch_size is 300.
 
         Yields:
-            Training: The next matching training pool.
+            Training: The next matching training.
 
         Example:
-            How to get all training pools in a project.
+            Getting all trainings in a project.
 
-            >>> trainings = toloka_client.get_trainings(project_id=project_id)
+            >>> trainings = toloka_client.get_trainings(project_id='1')
             ...
         """
         ...
 
     async def open_training(self, training_id: str) -> toloka.client.training.Training:
-        """Starts distributing tasks from the training
+        """Opens a training.
+
+        Tasks from opened trainings can be assigned to Tolokers.
 
         Args:
-            training_id: ID of the training that will be started.
+            training_id: The ID of the training.
 
         Returns:
-            Training: Training object with new status.
+            Training: The training with updated status.
 
         Example:
-            Open the training for Tolokers.
+            Opening a training.
 
             >>> toloka_client.open_training(training_id='1')
             ...
@@ -2160,20 +2224,22 @@ class AsyncTolokaClient:
         ...
 
     async def open_training_async(self, training_id: str) -> typing.Optional[toloka.client.operations.TrainingOpenOperation]:
-        """Starts distributing tasks from the training, asynchronous version
+        """Opens a training. Sends an asynchronous request to Toloka.
+
+        Tasks from opened trainings can be assigned to Tolokers.
 
         Args:
-            training_id: ID of the training that will be started.
+            training_id: The ID of the training.
 
         Returns:
-            TrainingOpenOperation: An operation upon completion of which you can get the training with new status. If
-                training is already opened then None is returned.
+            TrainingOpenOperation: An object to track the progress of the operation.
+                If the training is already opened then `None` is returned.
 
         Example:
-            Open the training for Tolokers.
+            Opening a training.
 
-            >>> open_training = toloka_client.open_training_async(training_id='1')
-            >>> toloka_client.wait_operation(open_training)
+            >>> open_op = toloka_client.open_training_async(training_id='1')
+            >>> toloka_client.wait_operation(open_op)
             ...
         """
         ...
@@ -2183,19 +2249,21 @@ class AsyncTolokaClient:
         training_id: str,
         training: toloka.client.training.Training
     ) -> toloka.client.training.Training:
-        """Makes changes to the training
+        """Updates parameters of a training in Toloka.
 
         Args:
-            training_id: ID of the training that will be changed.
-            training: A training object with all the fields: those that will be updated and those that will not.
+            training_id: The ID of the training to be updated.
+            training: A training object with new parameter values.
 
         Returns:
-            Training: Training object with all fields.
+            Training: The updated training.
 
         Example:
-            If you want to update any configurations of the existing training.
+            The example shows how to set new time limit in a training.
 
-            >>> updated_training = toloka_client.update_training(training_id=old_training_id, training=new_training_object)
+            >>> updated_training = toloka_client.get_training(training_id='1')
+            >>> updated_training.assignment_max_duration_seconds = 600
+            >>> toloka_client.update_training(training_id=updated_training.id, training=updated_training)
             ...
         """
         ...
@@ -2347,7 +2415,11 @@ class AsyncTolokaClient:
         ...
 
     @typing.overload
-    def get_skills(self, request: toloka.client.search_requests.SkillSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.skill.Skill, None]:
+    def get_skills(
+        self,
+        request: toloka.client.search_requests.SkillSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.skill.Skill, None]:
         """Finds all skills that match certain criteria.
 
         `get_skills` returns a generator. You can iterate over all found skills using the generator. Several requests to the Toloka server are possible while iterating.
@@ -2356,6 +2428,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned skills limit for each request. The maximum allowed batch_size is 100.
 
         Yields:
             Skill: The next matching skill.
@@ -2383,7 +2456,8 @@ class AsyncTolokaClient:
         created_lt: typing.Optional[datetime.datetime] = None,
         created_lte: typing.Optional[datetime.datetime] = None,
         created_gt: typing.Optional[datetime.datetime] = None,
-        created_gte: typing.Optional[datetime.datetime] = None
+        created_gte: typing.Optional[datetime.datetime] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.skill.Skill, None]:
         """Finds all skills that match certain criteria.
 
@@ -2393,6 +2467,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned skills limit for each request. The maximum allowed batch_size is 100.
 
         Yields:
             Skill: The next matching skill.
@@ -2490,7 +2565,8 @@ class AsyncTolokaClient:
         task: toloka.client.task.Task,
         *,
         allow_defaults: typing.Optional[bool] = None,
-        open_pool: typing.Optional[bool] = None
+        open_pool: typing.Optional[bool] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...
     ) -> toloka.client.task.Task:
         """Creates a new task in Toloka.
 
@@ -2582,8 +2658,8 @@ class AsyncTolokaClient:
         *,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None,
-        operation_id: typing.Optional[uuid.UUID] = None,
         async_mode: typing.Optional[bool] = True
     ) -> toloka.client.batch_create_results.TaskBatchCreateResult:
         """Creates several tasks in Toloka.
@@ -2676,8 +2752,8 @@ class AsyncTolokaClient:
         *,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None,
-        operation_id: typing.Optional[uuid.UUID] = None,
         async_mode: typing.Optional[bool] = True
     ) -> toloka.client.operations.TasksCreateOperation:
         """Creates tasks in Toloka asynchronously.
@@ -2791,7 +2867,11 @@ class AsyncTolokaClient:
         ...
 
     @typing.overload
-    def get_tasks(self, request: toloka.client.search_requests.TaskSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.task.Task, None]:
+    def get_tasks(
+        self,
+        request: toloka.client.search_requests.TaskSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.task.Task, None]:
         """Finds all tasks that match certain criteria.
 
         `get_tasks` returns a generator. You can iterate over all found tasks using the generator. Several requests to the Toloka server are possible while iterating.
@@ -2800,6 +2880,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned tasks limit for each request. The default batch_size is 50. The maximum allowed batch_size is 100,000.
 
         Yields:
             Task: The next matching task.
@@ -2828,7 +2909,8 @@ class AsyncTolokaClient:
         overlap_lt: typing.Optional[int] = None,
         overlap_lte: typing.Optional[int] = None,
         overlap_gt: typing.Optional[int] = None,
-        overlap_gte: typing.Optional[int] = None
+        overlap_gte: typing.Optional[int] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.task.Task, None]:
         """Finds all tasks that match certain criteria.
 
@@ -2838,6 +2920,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned tasks limit for each request. The default batch_size is 50. The maximum allowed batch_size is 100,000.
 
         Yields:
             Task: The next matching task.
@@ -2987,7 +3070,7 @@ class AsyncTolokaClient:
         self,
         task_suite: toloka.client.task_suite.TaskSuite,
         *,
-        operation_id: typing.Optional[uuid.UUID] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
@@ -3034,7 +3117,7 @@ class AsyncTolokaClient:
         Task suites can be created in different pools. You can create general and control tasks or task suites in different pools with a single method call.
 
         By default, `create_task_suites` starts asynchronous operation internally and waits for the completion of it. Do not
-        change `async_mode` to False, if you do not understand clearly why you need it.
+        change `async_mode` to `False`, if you do not understand clearly why you need it.
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
         It is recommended that you create no more than 10,000 task suites in a single request if the `async_mode` parameter is `True`.
@@ -3073,7 +3156,7 @@ class AsyncTolokaClient:
         self,
         task_suites: typing.List[toloka.client.task_suite.TaskSuite],
         *,
-        operation_id: typing.Optional[uuid.UUID] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
@@ -3087,7 +3170,7 @@ class AsyncTolokaClient:
         Task suites can be created in different pools. You can create general and control tasks or task suites in different pools with a single method call.
 
         By default, `create_task_suites` starts asynchronous operation internally and waits for the completion of it. Do not
-        change `async_mode` to False, if you do not understand clearly why you need it.
+        change `async_mode` to `False`, if you do not understand clearly why you need it.
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
         It is recommended that you create no more than 10,000 task suites in a single request if the `async_mode` parameter is `True`.
@@ -3164,7 +3247,7 @@ class AsyncTolokaClient:
         self,
         task_suites: typing.List[toloka.client.task_suite.TaskSuite],
         *,
-        operation_id: typing.Optional[uuid.UUID] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
@@ -3290,7 +3373,11 @@ class AsyncTolokaClient:
         ...
 
     @typing.overload
-    def get_task_suites(self, request: toloka.client.search_requests.TaskSuiteSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.task_suite.TaskSuite, None]:
+    def get_task_suites(
+        self,
+        request: toloka.client.search_requests.TaskSuiteSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.task_suite.TaskSuite, None]:
         """Finds all task suites that match certain criteria.
 
         `get_task_suites` returns a generator. You can iterate over all found task suites using the generator. Several requests to the Toloka server are possible while iterating.
@@ -3299,6 +3386,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned task suites limit for each request. The default batch_size is 50. The maximum allowed batch_size is 100,000.
 
         Yields:
             TaskSuite: The next matching task suite.
@@ -3328,7 +3416,8 @@ class AsyncTolokaClient:
         overlap_lt: typing.Optional[int] = None,
         overlap_lte: typing.Optional[int] = None,
         overlap_gt: typing.Optional[int] = None,
-        overlap_gte: typing.Optional[int] = None
+        overlap_gte: typing.Optional[int] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.task_suite.TaskSuite, None]:
         """Finds all task suites that match certain criteria.
 
@@ -3338,6 +3427,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned task suites limit for each request. The default batch_size is 50. The maximum allowed batch_size is 100,000.
 
         Yields:
             TaskSuite: The next matching task suite.
@@ -3529,7 +3619,11 @@ class AsyncTolokaClient:
         ...
 
     @typing.overload
-    def get_operations(self, request: toloka.client.search_requests.OperationSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.operations.Operation, None]:
+    def get_operations(
+        self,
+        request: toloka.client.search_requests.OperationSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.operations.Operation, None]:
         """Finds all operations that match certain rules and returns them in an iterable object
 
         `get_operations` returns a generator. You can iterate over all found operations using the generator. Several requests to the Toloka server are possible while iterating.
@@ -3538,6 +3632,7 @@ class AsyncTolokaClient:
 
          Args:
              request: Search criteria.
+             batch_size: Returned operations limit for each request. The default batch_size is 50. The maximum allowed batch_size is 500.
 
          Yields:
              Operation: The next matching operations.
@@ -3564,7 +3659,8 @@ class AsyncTolokaClient:
         finished_lt: typing.Optional[datetime.datetime] = None,
         finished_lte: typing.Optional[datetime.datetime] = None,
         finished_gt: typing.Optional[datetime.datetime] = None,
-        finished_gte: typing.Optional[datetime.datetime] = None
+        finished_gte: typing.Optional[datetime.datetime] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.operations.Operation, None]:
         """Finds all operations that match certain rules and returns them in an iterable object
 
@@ -3574,6 +3670,7 @@ class AsyncTolokaClient:
 
          Args:
              request: Search criteria.
+             batch_size: Returned operations limit for each request. The default batch_size is 50. The maximum allowed batch_size is 500.
 
          Yields:
              Operation: The next matching operations.
@@ -3648,7 +3745,7 @@ class AsyncTolokaClient:
         self,
         user_bonus: toloka.client.user_bonus.UserBonus,
         *,
-        operation_id: typing.Optional[str] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.user_bonus.UserBonus:
         """Issues payments directly to a Toloker.
@@ -3744,7 +3841,7 @@ class AsyncTolokaClient:
         self,
         user_bonuses: typing.List[toloka.client.user_bonus.UserBonus],
         *,
-        operation_id: typing.Optional[str] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.batch_create_results.UserBonusBatchCreateResult:
         """Creates rewards for Tolokers.
@@ -3853,7 +3950,7 @@ class AsyncTolokaClient:
         self,
         user_bonuses: typing.List[toloka.client.user_bonus.UserBonus],
         *,
-        operation_id: typing.Optional[str] = None,
+        operation_id: typing.Optional[uuid.UUID] = ...,
         skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.operations.UserBonusCreateBatchOperation:
         """Issues payments directly to Tolokers, asynchronously creates many `UserBonus` instances.
@@ -3983,7 +4080,11 @@ class AsyncTolokaClient:
         ...
 
     @typing.overload
-    def get_user_bonuses(self, request: toloka.client.search_requests.UserBonusSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.user_bonus.UserBonus, None]:
+    def get_user_bonuses(
+        self,
+        request: toloka.client.search_requests.UserBonusSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.user_bonus.UserBonus, None]:
         """Finds all Tolokers' rewards that match certain rules and returns them in an iterable object
 
         `get_user_bonuses` returns a generator. You can iterate over all found Tolokers' rewards using the generator. Several requests to the Toloka server are possible while iterating.
@@ -3992,6 +4093,7 @@ class AsyncTolokaClient:
 
          Args:
              request: Search criteria.
+             batch_size: Returned Tolokers' rewards limit for each request. The maximum allowed batch_size is 300.
 
          Yields:
              UserBonus: The next matching Toloker's reward.
@@ -4015,7 +4117,8 @@ class AsyncTolokaClient:
         created_lt: typing.Optional[datetime.datetime] = None,
         created_lte: typing.Optional[datetime.datetime] = None,
         created_gt: typing.Optional[datetime.datetime] = None,
-        created_gte: typing.Optional[datetime.datetime] = None
+        created_gte: typing.Optional[datetime.datetime] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.user_bonus.UserBonus, None]:
         """Finds all Tolokers' rewards that match certain rules and returns them in an iterable object
 
@@ -4025,6 +4128,7 @@ class AsyncTolokaClient:
 
          Args:
              request: Search criteria.
+             batch_size: Returned Tolokers' rewards limit for each request. The maximum allowed batch_size is 300.
 
          Yields:
              UserBonus: The next matching Toloker's reward.
@@ -4120,7 +4224,11 @@ class AsyncTolokaClient:
         ...
 
     @typing.overload
-    def get_user_restrictions(self, request: toloka.client.search_requests.UserRestrictionSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.user_restriction.UserRestriction, None]:
+    def get_user_restrictions(
+        self,
+        request: toloka.client.search_requests.UserRestrictionSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.user_restriction.UserRestriction, None]:
         """Finds all Toloker restrictions that match certain criteria.
 
         `get_user_restrictions` returns a generator. You can iterate over all found Toloker restrictions using the generator. Several requests to the Toloka server are possible while iterating.
@@ -4129,6 +4237,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned Toloker restrictions limit for each request. The maximum allowed batch_size is 500.
 
         Yields:
             UserRestriction: The next matching Toloker restriction.
@@ -4153,7 +4262,8 @@ class AsyncTolokaClient:
         created_lt: typing.Optional[datetime.datetime] = None,
         created_lte: typing.Optional[datetime.datetime] = None,
         created_gt: typing.Optional[datetime.datetime] = None,
-        created_gte: typing.Optional[datetime.datetime] = None
+        created_gte: typing.Optional[datetime.datetime] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.user_restriction.UserRestriction, None]:
         """Finds all Toloker restrictions that match certain criteria.
 
@@ -4163,6 +4273,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned Toloker restrictions limit for each request. The maximum allowed batch_size is 500.
 
         Yields:
             UserRestriction: The next matching Toloker restriction.
@@ -4320,7 +4431,11 @@ class AsyncTolokaClient:
         ...
 
     @typing.overload
-    def get_user_skills(self, request: toloka.client.search_requests.UserSkillSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.user_skill.UserSkill, None]:
+    def get_user_skills(
+        self,
+        request: toloka.client.search_requests.UserSkillSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.user_skill.UserSkill, None]:
         """Finds all Toloker's skills that match certain criteria.
 
         `get_user_skills` returns a generator. You can iterate over all found Toloker's skills using the generator. Several requests to the Toloka server are possible while iterating.
@@ -4329,6 +4444,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned skills limit for each request. The maximum allowed batch_size is 1000.
 
         Yields:
             UserSkill: The next matching Toloker's skill.
@@ -4355,7 +4471,8 @@ class AsyncTolokaClient:
         modified_lt: typing.Optional[datetime.datetime] = None,
         modified_lte: typing.Optional[datetime.datetime] = None,
         modified_gt: typing.Optional[datetime.datetime] = None,
-        modified_gte: typing.Optional[datetime.datetime] = None
+        modified_gte: typing.Optional[datetime.datetime] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.user_skill.UserSkill, None]:
         """Finds all Toloker's skills that match certain criteria.
 
@@ -4365,6 +4482,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned skills limit for each request. The maximum allowed batch_size is 1000.
 
         Yields:
             UserSkill: The next matching Toloker's skill.
@@ -4540,7 +4658,11 @@ class AsyncTolokaClient:
         ...
 
     @typing.overload
-    def get_webhook_subscriptions(self, request: toloka.client.search_requests.WebhookSubscriptionSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.webhook_subscription.WebhookSubscription, None]:
+    def get_webhook_subscriptions(
+        self,
+        request: toloka.client.search_requests.WebhookSubscriptionSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.webhook_subscription.WebhookSubscription, None]:
         """Finds all webhook subscriptions that match certain criteria.
 
         `get_webhook_subscriptions` returns a generator. You can iterate over all found webhook subscriptions using the generator. Several requests to the Toloka server are possible while iterating.
@@ -4549,6 +4671,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned webhook subscriptions limit for each request. The maximum allowed batch_size is 300.
 
         Yields:
             WebhookSubscription: The next matching webhook subscription.
@@ -4567,7 +4690,8 @@ class AsyncTolokaClient:
         created_lt: typing.Optional[datetime.datetime] = None,
         created_lte: typing.Optional[datetime.datetime] = None,
         created_gt: typing.Optional[datetime.datetime] = None,
-        created_gte: typing.Optional[datetime.datetime] = None
+        created_gte: typing.Optional[datetime.datetime] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.webhook_subscription.WebhookSubscription, None]:
         """Finds all webhook subscriptions that match certain criteria.
 
@@ -4577,6 +4701,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned webhook subscriptions limit for each request. The maximum allowed batch_size is 300.
 
         Yields:
             WebhookSubscription: The next matching webhook subscription.
@@ -4756,7 +4881,11 @@ class AsyncTolokaClient:
         ...
 
     @typing.overload
-    def get_app_projects(self, request: toloka.client.search_requests.AppProjectSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.app.AppProject, None]:
+    def get_app_projects(
+        self,
+        request: toloka.client.search_requests.AppProjectSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.app.AppProject, None]:
         """Finds all App projects that match certain criteria.
 
         `get_app_projects` returns a generator. You can iterate over all found projects using the generator. Several requests to the Toloka server are possible while iterating.
@@ -4765,6 +4894,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned projects limit for each request. The maximum batch_size is 5000.
 
         Yields:
             AppProject: The next matching App project.
@@ -4791,7 +4921,8 @@ class AsyncTolokaClient:
         created_lt: typing.Optional[datetime.datetime] = None,
         created_lte: typing.Optional[datetime.datetime] = None,
         created_gt: typing.Optional[datetime.datetime] = None,
-        created_gte: typing.Optional[datetime.datetime] = None
+        created_gte: typing.Optional[datetime.datetime] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.app.AppProject, None]:
         """Finds all App projects that match certain criteria.
 
@@ -4801,6 +4932,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned projects limit for each request. The maximum batch_size is 5000.
 
         Yields:
             AppProject: The next matching App project.
@@ -4907,7 +5039,11 @@ class AsyncTolokaClient:
         ...
 
     @typing.overload
-    def get_apps(self, request: toloka.client.search_requests.AppSearchRequest) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.app.App, None]:
+    def get_apps(
+        self,
+        request: toloka.client.search_requests.AppSearchRequest,
+        batch_size: typing.Optional[int] = None
+    ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.app.App, None]:
         """Finds all App solutions that match certain criteria.
 
         `get_apps` returns a generator. You can iterate over all found solutions using the generator. Several requests to the Toloka server are possible while iterating.
@@ -4916,6 +5052,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned solutions limit for each request. The maximum allowed batch_size is 1000.
 
         Yields:
             App: The next matching solution.
@@ -4930,7 +5067,8 @@ class AsyncTolokaClient:
         id_lt: typing.Optional[str] = None,
         id_lte: typing.Optional[str] = None,
         id_gt: typing.Optional[str] = None,
-        id_gte: typing.Optional[str] = None
+        id_gte: typing.Optional[str] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.app.App, None]:
         """Finds all App solutions that match certain criteria.
 
@@ -4940,6 +5078,7 @@ class AsyncTolokaClient:
 
         Args:
             request: Search criteria.
+            batch_size: Returned solutions limit for each request. The maximum allowed batch_size is 1000.
 
         Yields:
             App: The next matching solution.
@@ -5030,7 +5169,8 @@ class AsyncTolokaClient:
     def get_app_items(
         self,
         app_project_id: str,
-        request: toloka.client.search_requests.AppItemSearchRequest
+        request: toloka.client.search_requests.AppItemSearchRequest,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.app.AppItem, None]:
         """Finds all App task items that match certain criteria in an App project.
 
@@ -5041,6 +5181,7 @@ class AsyncTolokaClient:
         Args:
             app_project_id: The ID of the App project.
             request: Search criteria.
+            batch_size: Returned items limit for each request. The maximum allowed batch_size is 1000.
 
         Yields:
             AppItem: The next matching item.
@@ -5065,7 +5206,8 @@ class AsyncTolokaClient:
         finished_lt: typing.Optional[datetime.datetime] = None,
         finished_lte: typing.Optional[datetime.datetime] = None,
         finished_gt: typing.Optional[datetime.datetime] = None,
-        finished_gte: typing.Optional[datetime.datetime] = None
+        finished_gte: typing.Optional[datetime.datetime] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.app.AppItem, None]:
         """Finds all App task items that match certain criteria in an App project.
 
@@ -5076,6 +5218,7 @@ class AsyncTolokaClient:
         Args:
             app_project_id: The ID of the App project.
             request: Search criteria.
+            batch_size: Returned items limit for each request. The maximum allowed batch_size is 1000.
 
         Yields:
             AppItem: The next matching item.
@@ -5231,7 +5374,8 @@ class AsyncTolokaClient:
     def get_app_batches(
         self,
         app_project_id: str,
-        request: toloka.client.search_requests.AppBatchSearchRequest
+        request: toloka.client.search_requests.AppBatchSearchRequest,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.app.AppBatch, None]:
         """Finds all batches that match certain criteria in an App project.
 
@@ -5242,6 +5386,7 @@ class AsyncTolokaClient:
         Args:
             app_project_id: The ID of the App project.
             request: Search criteria.
+            batch_size: Returned app batches limit for each request. The maximum allowed batch_size is 1000.
 
         Yields:
             AppBatch: The next matching batch.
@@ -5265,7 +5410,8 @@ class AsyncTolokaClient:
         created_lt: typing.Optional[datetime.datetime] = None,
         created_lte: typing.Optional[datetime.datetime] = None,
         created_gt: typing.Optional[datetime.datetime] = None,
-        created_gte: typing.Optional[datetime.datetime] = None
+        created_gte: typing.Optional[datetime.datetime] = None,
+        batch_size: typing.Optional[int] = None
     ) -> toloka.util.async_utils.AsyncGenAdapter[toloka.client.app.AppBatch, None]:
         """Finds all batches that match certain criteria in an App project.
 
@@ -5276,6 +5422,7 @@ class AsyncTolokaClient:
         Args:
             app_project_id: The ID of the App project.
             request: Search criteria.
+            batch_size: Returned app batches limit for each request. The maximum allowed batch_size is 1000.
 
         Yields:
             AppBatch: The next matching batch.

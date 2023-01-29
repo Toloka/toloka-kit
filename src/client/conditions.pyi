@@ -253,7 +253,7 @@ class CorrectAnswersRate(ComparableRuleCondition):
 
 
 class FailRate(ComparableRuleCondition):
-    """The percentage of unsolved captchas.
+    """Deprecated. The percentage of unsolved captchas.
 
     `FailRate` is used with collectors:
     - [Captcha](toloka.client.collectors.Captcha.md)
@@ -558,7 +558,7 @@ class SkippedInRowCount(ComparableRuleCondition):
 
 
 class StoredResultsCount(ComparableRuleCondition):
-    """The number of times a Toloker entered captcha.
+    """Deprecated. The number of times a Toloker entered captcha.
 
     `StoredResultsCount` is used with collectors:
     - [Captcha](toloka.client.collectors.Captcha.md)
@@ -594,7 +594,7 @@ class SubmittedAssignmentsCount(ComparableRuleCondition):
 
 
 class SuccessRate(ComparableRuleCondition):
-    """A percentage of solved captchas out of all entered captchas.
+    """Deprecated. A percentage of solved captchas out of all entered captchas.
 
     `SuccessRate` is used with collectors:
     - [Captcha](toloka.client.collectors.Captcha.md)

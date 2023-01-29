@@ -1964,7 +1964,6 @@ items:
     href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.from_sync_client.md
     hidden: true
   - name: AsyncTolokaClient methods
-    hidden: true
     items:
     - name: aggregation
       items:

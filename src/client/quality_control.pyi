@@ -18,7 +18,7 @@ class QualityControl(toloka.client.primitives.base.BaseTolokaObject):
 
     Attributes:
         training_requirement: Parameters of the training pool that is linked to the pool with the main tasks.
-        captcha_frequency: Frequency of captcha display (By default, captcha is not shown):
+        captcha_frequency: Deprecated. Frequency of captcha display (By default, captcha is not shown):
             LOW - show every 20 tasks.
             MEDIUM, HIGH - show every 10 tasks.
         configs: List of quality control units. See QualityControl.QualityControlConfig
