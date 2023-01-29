@@ -18,15 +18,15 @@ from ...util._extendable_enum import ExtendableStrEnum
 
 
 class ViewSpec(BaseTolokaObject, spec_enum='Type', spec_field='type'):
-    """Description of the task interface"""
+    """The description of a task interface."""
 
     @unique
     class Type(ExtendableStrEnum):
-        """A view spec type
+        """A `ViewSpec` type.
 
         Attributes:
-            CLASSIC: A view defined with HTML, CSS and JS
-            TEMPLATE_BUILDER: A view defined with template builder components
+            CLASSIC: A task interface is defined with HTML, CSS and JS.
+            TEMPLATE_BUILDER: A task interface is defined with the [TemplateBuilder](toloka.client.project.template_builder.TemplateBuilder.md) components.
         """
         CLASSIC = 'classic'
         TEMPLATE_BUILDER = 'tb'
@@ -35,18 +35,18 @@ class ViewSpec(BaseTolokaObject, spec_enum='Type', spec_field='type'):
     TEMPLATE_BUILDER = Type.TEMPLATE_BUILDER
 
     class Settings(BaseTolokaObject):
-        """ViewSpec Settings
+        """`ViewSpec` settings.
 
         Attributes:
-            show_finish: Show the Back to main page button.
-            show_fullscreen: Show the Expand to fullscreen button.
-            show_instructions: Show the Instructions button.
-            show_message: Show the Message for the requester button.
-            show_reward: Show the price per task page.
-            show_skip: Show the Skip button.
-            show_submit: Show the Next button.
-            show_timer: Show the timer.
-            show_title: Show the project name in task titles.
+            show_finish: Show the **Back to main page** button. The default is to show the button.
+            show_fullscreen: Show the **Expand to fullscreen** button. The default is to show the button.
+            show_instructions: Show the **Instructions** button. The default is to show the button.
+            show_message: Show the **Message for the requester** button. The default is to show the button.
+            show_reward: Show the price per task page. The default is to show the price.
+            show_skip: Show the **Skip** button. The default is to show the button.
+            show_submit: Show the **Next** button. The default is to show the button.
+            show_timer: Show the timer. The default is to show the timer.
+            show_title: Show the project name in task titles. The default is to show the name.
         """
 
         show_finish: bool = attribute(origin='showFinish')
@@ -63,41 +63,40 @@ class ViewSpec(BaseTolokaObject, spec_enum='Type', spec_field='type'):
 
 
 class ClassicViewSpec(ViewSpec, spec_value=ViewSpec.CLASSIC):
-    """A classic view specification defined with HTML, CSS and JS.
+    """A task interface defined with HTML, CSS and JS.
 
     For more information, see the [guide](https://toloka.ai/en/docs/guide/concepts/spec).
 
     Attributes:
-        script: JavaScript interface for the task.
-        markup: Task interface.
-        styles: CSS task interface.
-        assets: Linked files such as:
-            * CSS styles
-            * JavaScript libraries
-            * Toloka assets with the $TOLOKA_ASSETS prefix
-            Add items in the order they should be linked when running the task interface.
-
+        markup: HTML markup of the task interface.
+        styles: CSS for the task interface.
+        script: JavaScript code for the task interface.
+        assets: Links to external files.
     """
 
     class Assets(BaseTolokaObject):
-        """Linked files with assets.
+        """Links to external files.
+
+        You can link:
+            * CSS libraries
+            * JavaScript libraries
+            * Toloka assets — libraries that can be accessed with the `$TOLOKA_ASSETS` path:
+                * `$TOLOKA_ASSETS/js/toloka-handlebars-templates.js` — [Handlebars template engine](http://handlebarsjs.com/).
+                * `$TOLOKA_ASSETS/js/image-annotation.js` — Image labeling interface. Note, that this library requires Handlebars and must be linked after it.
+                    For more information, see [Image with area selection](https://toloka.ai/en/docs/guide/concepts/t-components/image-annotation).
+
+            Add items in the order they should be linked when running the task interface.
 
         Attributes:
             style_urls: Links to CSS libraries.
             script_urls: Links to JavaScript libraries and Toloka assets.
-                Toloka assets:
-                * "$TOLOKA_ASSETS/js/toloka-handlebars-templates.js" — [Handlebars template engine](http://handlebarsjs.com/).
-                * "$TOLOKA_ASSETS/js/image-annotation.js" — Image labeling interface.
-                    For more information, see [Image with area selection](https://toloka.ai/en/docs/guide/concepts/t-components/image-annotation).
-                Note that the image labeling interface should only be connected together with the Handlebars helpers.
-                The order of connection matters.
 
         Examples:
             >>> from toloka.client.project.view_spec import ClassicViewSpec
             >>> view_spec = ClassicViewSpec(
             >>>     ...,
             >>>     assets = ClassicViewSpec.Assets(
-            >>>         script_utls = [
+            >>>         script_urls = [
             >>>             "$TOLOKA_ASSETS/js/toloka-handlebars-templates.js",
             >>>             "$TOLOKA_ASSETS/js/image-annotation.js",
             >>>         ]
@@ -114,21 +113,18 @@ class ClassicViewSpec(ViewSpec, spec_value=ViewSpec.CLASSIC):
 
 
 class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
-    """A template builder view specification that defines an interface with
-    template builder components
+    """A task interface defined with the [Template Builder](https://toloka.ai/en/docs/template-builder) components.
 
     Attributes:
-        view:
-        plugins:
-        vars:
-        core_version: Default template components version. Most likely you do not need to change this parameter.
-        infer_data_spec: You can configure the data specification automatically or manually. You can change the way the
-            specification is configured using the infer_data_spec option:
+        view: A top level component like [SideBySideLayoutV1](toloka.client.project.template_builder.layouts.SideBySideLayoutV1.md).
+        plugins: An array of plugins.
+        vars: Reusable data. It is referenced with the [RefComponent](toloka.client.project.template_builder.base.RefComponent.md).
+        core_version: The default template components version. Most likely you do not need to change this parameter.
+        infer_data_spec:
             * `True` – The specifications of input and output data are generated automatically depending on the task interface settings.
-            * `False` – You can configure the specification manually. In this case, automatic detection of input and output data doesn't work.
-                You may need to enable this option if:
-                * You don't want the specification version to be affected by changes in the instructions or other project fields.
-                * You have fields that you need but they become optional or are deleted after automatic generation.
+            * `False` – You configure the specifications manually. Use manual configuration if:
+                * You don't want the specification to be affected by changes in instructions or other project parameters.
+                * You have to change automatically generated specifications to suite your needs.
 
 
     Example:

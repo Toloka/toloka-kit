@@ -62,9 +62,9 @@ from ...util._extendable_enum import ExtendableStrEnum
 
 
 class Project(BaseTolokaObject):
-    """Top-level object in Toloka. All other entities are contained in some project.
+    """Top-level object in Toloka that describes one type of task from the requester's point of view.
 
-    Describes one type of task from the requester's point of view. For example: one project can describe image segmentation,
+    For example: one project can describe image segmentation,
     another project can test this segmentation. The easier the task, the better the results. If your task contains more
     than one question, it may be worth dividing it into several projects.
 
@@ -74,36 +74,35 @@ class Project(BaseTolokaObject):
         responses entered: the data type (integer, string, etc.), range of values, string length, and so on.
     * Task interface. To learn how to define the appearance of tasks, see [Task interface](https://toloka.ai/en/docs/en/guide/concepts/spec).
 
-    Pools and training pools are related to a project.
+    All project tasks are grouped into [pools](toloka.client.pool.Pool.md) and [training pools](toloka.client.training.Training.md).
 
     Attributes:
-        public_name: Name of the project. Visible to Tolokers.
-        public_description: Description of the project. Visible to Tolokers.
-        public_instructions: Instructions for completing the task. You can use any HTML markup in the instructions.
-        private_comment: Comments about the project. Visible only to the requester.
-        task_spec: Parameters for input and output data and the task interface.
-        assignments_issuing_type: How to assign tasks. The default value is AUTOMATED.
-        assignments_automerge_enabled: Solve merging identical tasks in the project.
-        max_active_assignments_count: The number of task suites a Toloker can complete simultaneously (“Active” status)
-        quality_control: The quality control rule.
-        metadata: Additional information about project.
-        status: Project status.
-        created: The UTC date and time the project was created.
-        id: Project ID (assigned automatically).
+        public_name: The name of the project. Visible to Tolokers.
+        public_description: The description of the project. Visible to Tolokers.
         public_instructions: Instructions for completing tasks. You can use any HTML markup in the instructions.
-        private_comment: Comment on the project. Available only to the customer.
+        private_comment: Comments about the project. Visible only to the requester.
+        task_spec: Input and output data specification and the task interface which can be defined with HTML, CSS, and JS or using the [Template Builder](https://toloka.ai/en/docs/template-builder/) components.
+        assignments_issuing_type: Settings for assigning tasks. The default value is `AUTOMATED`.
+        assignments_issuing_view_config: The configuration of task view on the map.
+        assignments_automerge_enabled: [Merging tasks](https://toloka.ai/en/docs/api/concepts/tasks#task-merge) control.
+        max_active_assignments_count: The number of task suites simultaneously assigned to a Toloker. Toloka counts assignments having the `ACTIVE` status.
+        quality_control: Quality control rules.
+        localization_config: Translations into other languages.
+        metadata: Additional information about the project.
+        id: The ID of the project. Read-only field.
+        status: A project status. Read-only field.
+        created: The UTC date and time when the project was created. Read-only field.
 
     Example:
         How to create a new project.
 
-        >>> toloka_client = toloka.TolokaClient(your_token, 'PRODUCTION')
-        >>> new_project = toloka.project.Project(
-        >>>     public_name='My best project!!!',
+        >>> new_project = toloka.client.project.Project(
+        >>>     public_name='My best project',
         >>>     public_description='Look at the instruction and do it well',
         >>>     public_instructions='Describe your task for Tolokers here!',
-        >>>     task_spec=toloka.project.task_spec.TaskSpec(
-        >>>         input_spec={'image': toloka.project.field_spec.UrlSpec()},
-        >>>         output_spec={'result': toloka.project.field_spec.StringSpec(allowed_values=['OK', 'BAD'])},
+        >>>     task_spec=toloka.client.project.task_spec.TaskSpec(
+        >>>         input_spec={'image': toloka.client.project.field_spec.UrlSpec()},
+        >>>         output_spec={'result': toloka.client.project.field_spec.StringSpec(allowed_values=['OK', 'BAD'])},
         >>>         view_spec=verification_interface_prepared_before,
         >>>     ),
         >>> )
@@ -114,13 +113,13 @@ class Project(BaseTolokaObject):
 
     @unique
     class AssignmentsIssuingType(ExtendableStrEnum):
-        """How to assign tasks:
+        """Settings for assigning tasks.
 
         Attributes:
             AUTOMATED: A Toloker is assigned a task suite from the pool. You can configure the order
                 for assigning task suites.
-            MAP_SELECTOR: A Toloker chooses a task suite on the map. If you are using MAP_SELECTOR,
-                specify the text to display in the map by setting assignments_issuing_view_config.
+            MAP_SELECTOR: A Toloker chooses a task suite on the map.
+                A task view on the map is configured with the `Project.assignments_issuing_view_config` parameters.
         """
 
         AUTOMATED = 'AUTOMATED'
@@ -128,33 +127,34 @@ class Project(BaseTolokaObject):
 
     @unique
     class ProjectStatus(ExtendableStrEnum):
-        """Project status:
+        """A project status.
 
         Attributes:
-            ACTIVE: A project is active
-            ARCHIVED: A project is archived
+            ACTIVE: A project is active.
+            ARCHIVED: A project is archived.
         """
 
         ACTIVE = 'ACTIVE'
         ARCHIVED = 'ARCHIVED'
 
     class AssignmentsIssuingViewConfig(BaseTolokaObject):
-        """How the task will be displayed on the map
+        """Task view on the map.
 
-        Used only then assignments_issuing_type == MAP_SELECTOR
+        These parameters are used when `Project.assignments_issuing_type` is set to `MAP_SELECTOR`.
 
         Attributes:
-            title_template: Name of the task. Tolokers will see it in the task preview mode.
-            description_template: Brief description of the task. Tolokers will see it in the task preview mode.
+            title_template: The name of a task. Tolokers see it in the task preview mode.
+            description_template: The brief description of a task. Tolokers see it in the task preview mode.
+            map_provider: A map provider.
         """
 
         @unique
         class MapProvider(ExtendableStrEnum):
-            """Map provider for assignments_issuing_view_config:
+            """A map provider.
 
             Attributes:
-                YANDEX: Use Yandex Maps as a map provider
-                GOOGLE: Use Google Maps as a map provider
+                YANDEX: Yandex Maps.
+                GOOGLE: Google Maps.
             """
 
             YANDEX = 'YANDEX'
@@ -194,30 +194,30 @@ class Project(BaseTolokaObject):
             assert self.assignments_issuing_view_config is not None
 
     def set_default_language(self, language: str):
-        """Sets the source language used in the fields public_name, public_description, and public_instructions.
+        """Sets the main language used in the project text parameters.
 
-        You must set the default language if you want to use the translation in the project to other languages.
+        You must set the default language if you want to translate the project to other languages.
         Args:
-            language: The source language.
+            language: Two-letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) language code in upper case.
         """
         if self.localization_config is None:
             self.localization_config = LocalizationConfig()
         self.localization_config.default_language = language
 
     def add_requester_translation(self, language: str, public_name: Optional[str] = None, public_description: Optional[str] = None, public_instructions: Optional[str] = None):
-        """Add new translations to other language.
+        """Adds a project interface translation to other language.
 
-        You can call it several times for different languages.
-        If you call it for the same language, it overwrites new values, but don't overwrite values, that you don't pass.
+        To translate to different languages call this method several times.
+        Subsequent calls with the same `language` update the translation of passed parameters and do not touch skipped parameters.
 
         Args:
-            language (str): Target language. A string from ISO 639-1.
-            public_name (str): Translation of the project name.
-            public_description (str): Translation of the project description.
-            public_instructions (str): Translation of instructions for completing tasks.
+            language: Two-letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) language code in upper case.
+            public_name: A translated project name.
+            public_description: A translated project description.
+            public_instructions: A translated instructions for Tolokers.
 
         Examples:
-            How to add russian translation to the project:
+            How to add russian translation to the project.
 
             >>> project = toloka.Project(
             >>>     public_name='Cats vs dogs',
