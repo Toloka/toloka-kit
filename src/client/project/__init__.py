@@ -64,30 +64,31 @@ from ...util._extendable_enum import ExtendableStrEnum
 class Project(BaseTolokaObject):
     """Top-level object in Toloka that describes one type of task from the requester's point of view.
 
-    For example: one project can describe image segmentation,
-    another project can test this segmentation. The easier the task, the better the results. If your task contains more
-    than one question, it may be worth dividing it into several projects.
+    The easier the task, the better the results.
+    If your task contains more than one question, consider to divide it into several projects.
+    For example, one project finds images with some objects, another project describes image segmentation, and the third project checks this segmentation.
 
     In a project, you set properties for tasks and responses:
-    * Input data parameters. These parameters describe the objects to display in a task, such as images or text.
-    * Output data parameters. These parameters describe Tolokers' responses. They are used for validating the
-        responses entered: the data type (integer, string, etc.), range of values, string length, and so on.
-    * Task interface. To learn how to define the appearance of tasks, see [Task interface](https://toloka.ai/en/docs/en/guide/concepts/spec).
+    * Input data parameters describe what kind of input data you have: images, text, and other.
+    * Output data parameters describe Tolokers' responses. They are used for validation: the data type, range of values, string length, and so on.
+    * Task interface. To learn how to define the appearance of tasks, see [Task interface](https://toloka.ai/en/docs/en/guide/concepts/spec) in the guide.
 
-    All project tasks are grouped into [pools](toloka.client.pool.Pool.md) and [training pools](toloka.client.training.Training.md).
+    You upload [tasks](toloka.client.task.Task.md) to project [pools](toloka.client.pool.Pool.md) and [training pools](toloka.client.training.Training.md).
+    They are grouped into [task suites](toloka.client.task_suite.TaskSuite.md) and assigned to Tolokers.
 
     Attributes:
         public_name: The name of the project. Visible to Tolokers.
         public_description: The description of the project. Visible to Tolokers.
-        public_instructions: Instructions for completing tasks. You can use any HTML markup in the instructions.
+        public_instructions: Instructions for Tolokers. Describe what to do in the tasks. You can use any HTML markup in the instructions.
         private_comment: Comments about the project. Visible only to the requester.
-        task_spec: Input and output data specification and the task interface which can be defined with HTML, CSS, and JS or using the [Template Builder](https://toloka.ai/en/docs/template-builder/) components.
-        assignments_issuing_type: Settings for assigning tasks. The default value is `AUTOMATED`.
-        assignments_issuing_view_config: The configuration of task view on the map.
+        task_spec: Input and output data specification and the task interface.
+            The interface can be defined with HTML, CSS, and JS or using the [Template Builder](https://toloka.ai/en/docs/template-builder/) components.
+        assignments_issuing_type: Settings for assigning tasks. Default value: `AUTOMATED`.
+        assignments_issuing_view_config: The configuration of task view on the map. Provide it if `assignments_issuing_type=MAP_SELECTOR`.
         assignments_automerge_enabled: [Merging tasks](https://toloka.ai/en/docs/api/concepts/tasks#task-merge) control.
-        max_active_assignments_count: The number of task suites simultaneously assigned to a Toloker. Toloka counts assignments having the `ACTIVE` status.
+        max_active_assignments_count: The number of task suites simultaneously assigned to a Toloker. Note, that Toloka counts assignments having the `ACTIVE` status only.
         quality_control: Quality control rules.
-        localization_config: Translations into other languages.
+        localization_config: Translations to other languages.
         metadata: Additional information about the project.
         id: The ID of the project. Read-only field.
         status: A project status. Read-only field.
@@ -116,8 +117,8 @@ class Project(BaseTolokaObject):
         """Settings for assigning tasks.
 
         Attributes:
-            AUTOMATED: A Toloker is assigned a task suite from the pool. You can configure the order
-                for assigning task suites.
+            AUTOMATED: A Toloker is assigned a task suite from a pool. You can configure the order
+                of assigning task suites.
             MAP_SELECTOR: A Toloker chooses a task suite on the map.
                 A task view on the map is configured with the `Project.assignments_issuing_view_config` parameters.
         """
@@ -130,8 +131,8 @@ class Project(BaseTolokaObject):
         """A project status.
 
         Attributes:
-            ACTIVE: A project is active.
-            ARCHIVED: A project is archived.
+            ACTIVE: The project is active.
+            ARCHIVED: The project is archived.
         """
 
         ACTIVE = 'ACTIVE'
@@ -194,7 +195,7 @@ class Project(BaseTolokaObject):
             assert self.assignments_issuing_view_config is not None
 
     def set_default_language(self, language: str):
-        """Sets the main language used in the project text parameters.
+        """Sets the main language used in the project parameters.
 
         You must set the default language if you want to translate the project to other languages.
         Args:
@@ -207,8 +208,8 @@ class Project(BaseTolokaObject):
     def add_requester_translation(self, language: str, public_name: Optional[str] = None, public_description: Optional[str] = None, public_instructions: Optional[str] = None):
         """Adds a project interface translation to other language.
 
-        To translate to different languages call this method several times.
-        Subsequent calls with the same `language` update the translation of passed parameters and do not touch skipped parameters.
+        To translate to several languages call this method for each translation.
+        Subsequent call with the same `language` updates the translation of passed parameters and doesn't touch omitted parameters.
 
         Args:
             language: Two-letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) language code in upper case.
@@ -219,7 +220,7 @@ class Project(BaseTolokaObject):
         Examples:
             How to add russian translation to the project.
 
-            >>> project = toloka.Project(
+            >>> project = toloka.client.Project(
             >>>     public_name='Cats vs dogs',
             >>>     public_description='A simple image classification',
             >>>     public_instructions='Determine which animal is in an image',

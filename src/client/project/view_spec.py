@@ -38,15 +38,15 @@ class ViewSpec(BaseTolokaObject, spec_enum='Type', spec_field='type'):
         """`ViewSpec` settings.
 
         Attributes:
-            show_finish: Show the **Back to main page** button. The default is to show the button.
+            show_finish: Show the **Exit** button. The default is to show the button.
             show_fullscreen: Show the **Expand to fullscreen** button. The default is to show the button.
             show_instructions: Show the **Instructions** button. The default is to show the button.
             show_message: Show the **Message for the requester** button. The default is to show the button.
             show_reward: Show the price per task page. The default is to show the price.
             show_skip: Show the **Skip** button. The default is to show the button.
-            show_submit: Show the **Next** button. The default is to show the button.
+            show_submit: Show the **Submit** button. The default is to show the button.
             show_timer: Show the timer. The default is to show the timer.
-            show_title: Show the project name in task titles. The default is to show the name.
+            show_title: Show the project name on the top of a page. The default is to show the name.
         """
 
         show_finish: bool = attribute(origin='showFinish')
@@ -113,7 +113,7 @@ class ClassicViewSpec(ViewSpec, spec_value=ViewSpec.CLASSIC):
 
 
 class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
-    """A task interface defined with the [Template Builder](https://toloka.ai/en/docs/template-builder) components.
+    """A task interface defined with the [TemplateBuilder](toloka.client.project.template_builder.TemplateBuilder.md).
 
     Attributes:
         view: A top level component like [SideBySideLayoutV1](toloka.client.project.template_builder.layouts.SideBySideLayoutV1.md).
@@ -122,16 +122,16 @@ class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
         core_version: The default template components version. Most likely you do not need to change this parameter.
         infer_data_spec:
             * `True` – The specifications of input and output data are generated automatically depending on the task interface settings.
-            * `False` – You configure the specifications manually. Use manual configuration if:
+            * `False` – You configure the specifications manually, if:
                 * You don't want the specification to be affected by changes in instructions or other project parameters.
                 * You have to change automatically generated specifications to suite your needs.
 
 
     Example:
-        How to declare simple interface:
+        Creating a simple interface based on [ListViewV1](toloka.client.project.template_builder.view.ListViewV1.md):
 
         >>> import toloka.client.project.template_builder as tb
-        >>> project_interface = toloka.project.view_spec.TemplateBuilderViewSpec(
+        >>> project_interface = toloka.client.project.view_spec.TemplateBuilderViewSpec(
         >>>     view=tb.view.ListViewV1(
         >>>         items=[header, output_field, radiobuttons],
         >>>         validation=some_validation,

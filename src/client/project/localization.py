@@ -10,7 +10,7 @@ from ...util._codegen import attribute
 
 
 class AdditionalLanguage(BaseTolokaObject):
-    """A translation of a project interface into one language.
+    """A translation of a project interface.
 
     Args:
         language: The language into which the translation is made. Two-letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) language code in upper case.
@@ -24,12 +24,12 @@ class AdditionalLanguage(BaseTolokaObject):
 
         Args:
             value: A translated text.
-            source: A translation source.
+            source: A translation origin.
         """
 
         @unique
         class Source(Enum):
-            """A translation source.
+            """A translation origin.
 
             The only value 'REQUESTER' is supported so far.
             """
@@ -46,10 +46,10 @@ class AdditionalLanguage(BaseTolokaObject):
 
 
 class LocalizationConfig(BaseTolokaObject):
-    """All translations of a project interface into other languages.
+    """All translations of a project interface.
     Args:
         default_language: The main language used for text parameters when the project was created. It is a required parameter.
-        additional_languages: A list of translations into other languages.
+        additional_languages: A list of translations to other languages.
     """
     default_language: str
     additional_languages: List[AdditionalLanguage] = attribute(factory=list)

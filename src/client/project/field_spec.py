@@ -47,14 +47,12 @@ class FieldType(ExtendableStrEnum):
 
 
 class FieldSpec(BaseTolokaObject, spec_enum=FieldType, spec_field='type'):
-    """A base class for field specifications used in project's `input_spec` and `output_spec`
-    for input and response data validation specification respectively. Use subclasses of this
-    class defined below to define the data type (string, integer, URL, etc.) and specify
-    validation parameters (such as string length).
+    """A base class for field specifications used in project's `input_spec` and `output_spec` for input and response data validation.
+    Use subclasses of this class to define the data type and set constraints such as maximum string length.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
     """
     required: bool = True
     hidden: bool = False
@@ -65,7 +63,7 @@ class BooleanSpec(FieldSpec, spec_value=FieldType.BOOLEAN):
     """A boolean field specification.
 
     Attributes:
-        allowed_values: Allowed values.
+        allowed_values: A list of allowed values.
     """
     allowed_values: List[bool]
 
@@ -77,7 +75,7 @@ class StringSpec(FieldSpec, spec_value=FieldType.STRING):
     Attributes:
         min_length: The minimum length of the string.
         max_length: The maximum length of the string.
-        allowed_values: Allowed values.
+        allowed_values: A list of allowed values.
     """
     min_length: int
     max_length: int
@@ -91,7 +89,7 @@ class IntegerSpec(FieldSpec, spec_value=FieldType.INTEGER):
     Attributes:
         min_value: The minimum value.
         max_value: The maximum value.
-        allowed_values: Allowed values.
+        allowed_values: A list of allowed values.
     """
     min_value: int
     max_value: int
@@ -100,7 +98,7 @@ class IntegerSpec(FieldSpec, spec_value=FieldType.INTEGER):
 
 @inherit_docstrings
 class FloatSpec(FieldSpec, spec_value=FieldType.FLOAT):
-    """A floating point number field specification.
+    """A floating-point number field specification.
 
     Attributes:
         min_value: The minimum value.
@@ -181,7 +179,7 @@ class ArrayIntegerSpec(IntegerSpec, spec_value=FieldType.ARRAY_INTEGER):
 
 @inherit_docstrings
 class ArrayFloatSpec(FloatSpec, spec_value=FieldType.ARRAY_FLOAT):
-    """A floating point number array field specification.
+    """A floating-point array field specification.
 
     Attributes:
         min_size: The minimum number of elements in the array.
