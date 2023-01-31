@@ -1,10 +1,12 @@
 import attr
 from toloka.client import structure, unstructure
 from toloka.client.primitives.operators import (
-    InclusionOperator, InclusionConditionMixin,
-    IdentityOperator, IdentityConditionMixin,
-    CompareOperator, ComparableConditionMixin,
-    # ComparableConditionMixin
+    InclusionOperator,
+    InclusionConditionMixin,
+    IdentityOperator,
+    IdentityConditionMixin,
+    CompareOperator,
+    ComparableConditionMixin,
 )
 
 
