@@ -9,7 +9,7 @@ __all__ = [
 
 import inspect
 import typing
-from copy import copy
+from copy import copy, deepcopy
 from enum import Enum
 from functools import update_wrapper, partial
 from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union, Tuple
@@ -192,6 +192,25 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
             enum = getattr(cls, spec_enum) if isinstance(spec_enum, str) else spec_enum
             cls._variant_registry = VariantRegistry(spec_field, enum)
 
+            class _UnknownVariant:
+
+                def __init__(self, **kwargs):
+                    self.__dict__.update(kwargs)
+
+                @classmethod
+                def structure(cls, data: Any):
+                    return cls(**data)
+
+                def unstructure(self):
+                    data = deepcopy(self.__dict__)
+                    data.update(converter.unstructure(cls.get_variant_specs()))
+                    return data
+
+                def __eq__(self, other):
+                    return self.__dict__ == other.__dict__
+
+            cls._variant_registry.registered_classes['_unknown_variant'] = _UnknownVariant
+
     # Unexpected fields access
 
     def __getattr__(self, item):
@@ -221,7 +240,7 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
         variant_specs = {}
         for base in cls.__mro__:
             registry = base.__dict__.get('_variant_registry')
-            if registry:
+            if registry and hasattr(cls, registry.field):
                 variant_specs[registry.field] = getattr(cls, registry.field)
 
         return variant_specs
@@ -262,13 +281,15 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
             # TODO: Optimize copying
             data = dict(data)  # Do not modify input data
             spec_field = cls._variant_registry.field
-            data_field = data.pop(spec_field)
+            data_field = data[spec_field]
             try:
                 spec_value = cls._variant_registry.enum(data_field)
                 spec_class = cls._variant_registry.registered_classes[spec_value]
+                del data[spec_field]
             except Exception:
-                raise SpecClassIdentificationError(spec_field=spec_field,
-                                                   spec_enum=cls._variant_registry.enum.__name__)
+                spec_class = cls._variant_registry.registered_classes['_unknown_variant']
+                # raise SpecClassIdentificationError(spec_field=spec_field,
+                #                                    spec_enum=cls._variant_registry.enum.__name__)
             return spec_class.structure(data)
 
         data = copy(data)

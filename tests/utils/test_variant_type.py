@@ -92,6 +92,33 @@ def test_structure_variant():
         converter.structure({'type': 'list', 'method': 'pop', 'argument': 'abc'})
 
 
+def test_structure_unknown_variant():
+    unstructured_with_unknown_high_level_variant = {'type':  'dict', 'method': 'pop'}
+    unstructured_with_unknown_low_level_variant = {'type': 'list', 'method': 'index'}
+    unstructured_with_unknown_both_levels_variants = {'type': 'dict', 'method': 'get'}
+
+    method_call_with_unknown_high_level_variant = converter.structure(unstructured_with_unknown_high_level_variant,
+                                                                      MethodCall)
+    method_call_with_unknown_low_level_variant = converter.structure(unstructured_with_unknown_low_level_variant,
+                                                                     MethodCall)
+    method_call_with_unknown_both_levels_variants = converter.structure(unstructured_with_unknown_both_levels_variants,
+                                                                        MethodCall)
+
+    assert MethodCall._variant_registry['_unknown_variant'](**unstructured_with_unknown_high_level_variant) \
+           == method_call_with_unknown_high_level_variant
+    assert ListMethodCall._variant_registry['_unknown_variant'](method='index') \
+           == method_call_with_unknown_low_level_variant
+    assert MethodCall._variant_registry['_unknown_variant'](**unstructured_with_unknown_both_levels_variants) == \
+           method_call_with_unknown_both_levels_variants
+
+    assert converter.unstructure(
+        method_call_with_unknown_high_level_variant) == unstructured_with_unknown_high_level_variant
+    assert converter.unstructure(
+        method_call_with_unknown_low_level_variant) == unstructured_with_unknown_low_level_variant
+    assert converter.unstructure(
+        method_call_with_unknown_both_levels_variants) == unstructured_with_unknown_both_levels_variants
+
+
 def test_unstructure_variant():
     assert {'type': 'set', 'method': 'pop'} == converter.unstructure(SetPopMethodCall())
     assert {'type': 'list', 'method': 'pop'} == converter.unstructure(ListPopMethodCall())
