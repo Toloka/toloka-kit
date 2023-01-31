@@ -1,4 +1,5 @@
 __all__: list = []
+from copy import deepcopy
 import datetime
 from decimal import Decimal
 import typing
@@ -8,6 +9,8 @@ from typing import List, Union
 
 import attr
 import cattr
+from cattr.gen import is_generic, get_origin, _generate_mapping
+from cattr._compat import has_with_generic
 from ..util._extendable_enum import ExtendableStrEnum
 
 
@@ -23,9 +26,7 @@ converter.register_unstructure_hook_func(  # type: ignore
 )
 
 
-def gen_structure_func(cl):
-    from cattr.gen import is_generic, get_origin, _generate_mapping
-    from functools import partial
+def structure_obj_to_generic_class(obj, cl):
 
     def get_mapped_type(t, mapping):
         if isinstance(t, typing.TypeVar):
@@ -44,30 +45,28 @@ def gen_structure_func(cl):
         except Exception as err:
             return t
 
-    def f(obj, cl):
-        mapping = {}
-        if is_generic(cl):
-            base = get_origin(cl)
-            mapping = _generate_mapping(cl, mapping)
-            cl = base
+    mapping = {}
+    if is_generic(cl):
+        base = get_origin(cl)
+        mapping = _generate_mapping(cl, mapping)
+        cl = base
 
-        for base in getattr(cl, "__orig_bases__", ()):
-            if is_generic(base) and not str(base).startswith("typing.Generic"):
-                mapping = _generate_mapping(base, mapping)
-                break
-        mapped_fields = []
-        for field in attr.fields(cl):
-            field = field.evolve(type=get_mapped_type(field.type, mapping))
-            mapped_fields.append(field)
-        struct_func = getattr(cl, 'structure')
-        struct_func_with_mapped_attrs = partial(struct_func, attr_fields=mapped_fields)
-        return struct_func_with_mapped_attrs(obj)
+    for base in getattr(cl, "__orig_bases__", ()):
+        if is_generic(base) and not str(base).startswith("typing.Generic"):
+            mapping = _generate_mapping(base, mapping)
+            break
+    mapped_fields = []
+    for field in attr.fields(cl):
+        field = field.evolve(type=get_mapped_type(field.type, mapping))
+        mapped_fields.append(field)
+    cl_copy = deepcopy(cl)
+    cl_copy.__attrs_attrs__ = mapped_fields
+    return cl.structure(obj)
 
-    return f
 
-converter.register_structure_hook_factory(
-    lambda type_: cattr._compat.has_with_generic and hasattr(type_, 'structure'),
-    gen_structure_func
+converter.register_structure_hook_func(
+    lambda type_: has_with_generic and hasattr(type_, 'structure'),
+    lambda data, type_: structure_obj_to_generic_class(data, type_)
 )
 
 converter.register_structure_hook(uuid.UUID, lambda data, type_: type_(data))  # type: ignore

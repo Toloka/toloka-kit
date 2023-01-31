@@ -254,7 +254,7 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
         return data or None
 
     @classmethod
-    def structure(cls, data: Any, attr_fields=None):
+    def structure(cls, data: Any):
 
         # If a class is an incomplete variant type we structure it into
         # one of its subclasses
@@ -274,8 +274,7 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
         data = copy(data)
         kwargs = {}
 
-        attr_fields = attr_fields or attr.fields(cls)
-        for field in attr_fields:
+        for field in attr.fields(cls):
             key = field.metadata.get(ORIGIN_KEY, field.name)
             if key not in data:
                 continue

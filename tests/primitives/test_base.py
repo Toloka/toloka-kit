@@ -23,12 +23,11 @@ def test_base_toloka_object_is_pickle_serializable(base_toloka_object):
 
 def test_generic_base_inherited_object():
 
-    T1 = TypeVar('T1')
     T = TypeVar('T')
 
     @attr.s(auto_attribs=True)
-    class GenericAttr(Generic[T1]):
-        data: Dict[str, T1]
+    class GenericAttr(Generic[T]):
+        data: Dict[str, T]
 
     class GenericBaseInheritedClass(Generic[T], BaseTolokaObject):
         data: Dict[str, T]
