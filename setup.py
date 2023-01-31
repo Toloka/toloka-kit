@@ -42,7 +42,7 @@ setup(
     install_requires=[
         'attrs >= 20.3.0',
         # cattr 22.2.0 breaks tests/primitives/test_operator.py
-        'cattrs >= 1.1.1, < 22.2.0',
+        'cattrs >= 1.1.1',
         'cached-property; python_version < "3.8.0"',
         'filelock >= 3.2.0',
         'requests',
