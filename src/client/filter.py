@@ -176,7 +176,7 @@ class Condition(FilterCondition, spec_field='category', spec_enum='Category'):
 
 
 @inherit_docstrings
-class Profile(Condition, spec_value=Condition.Category.PROFILE, spec_field='key', spec_enum='Key'):
+class Profile(Condition, spec_value=Condition.Category.PROFILE, spec_field='key', spec_enum='Key', extend_spec=True):
     """A base class for a category of filters that use Toloker's profile.
     """
 
@@ -197,7 +197,7 @@ class Profile(Condition, spec_value=Condition.Category.PROFILE, spec_field='key'
 
 
 @inherit_docstrings
-class Computed(Condition, spec_value=Condition.Category.COMPUTED, spec_field='key', spec_enum='Key'):
+class Computed(Condition, spec_value=Condition.Category.COMPUTED, spec_field='key', spec_enum='Key', extend_spec=True):
     """A base class for a category of filters that use connection and client information.
     """
 

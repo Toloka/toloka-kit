@@ -124,7 +124,7 @@ class BaseTemplate(BaseTolokaObject, metaclass=BaseTemplateMetaclass):
         return super().structure(data)
 
 
-class BaseComponent(BaseTemplate, spec_enum=ComponentType, spec_field='type'):
+class BaseComponent(BaseTemplate, spec_enum=ComponentType, spec_field='type', extend_spec=True):
 
     @classmethod
     def structure(cls, data: dict):
