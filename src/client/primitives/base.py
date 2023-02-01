@@ -17,6 +17,7 @@ from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union, Tu
 import attr
 import simplejson as json
 
+from ...util._extendable_enum import ExtendableStrEnumMetaclass
 from .._converter import converter
 from ..exceptions import SpecClassIdentificationError
 from ...util._codegen import (
@@ -30,6 +31,8 @@ E = TypeVar('E', bound=Enum)
 class VariantRegistry:
 
     def __init__(self, field: str, enum: Type[E], extendable: bool = False):
+        if extendable and not isinstance(enum, ExtendableStrEnumMetaclass):
+            raise ValueError('VariantRegistry could be extendable only if spec_enum is extendable.')
         self.field: str = field
         self.enum: Type[E] = enum
         self.registered_classes: Dict[E, type] = {}
@@ -52,12 +55,12 @@ class VariantRegistry:
         if not self.extendable:
             raise NotImplementedError()
 
-        class _UnknownVariant(type_, spec_value=value):
-            ...
+        generated_type_name = '_Generated' + value.value.title() + type_.__name__
+        BaseTolokaObjectMetaclass(generated_type_name, (type_,), {}, spec_value=value)
 
         return self.registered_classes[value]
 
-    def __getitem__(self, value: E):
+    def __getitem__(self, value: E) -> type:
         return self.registered_classes[value]
 
 
@@ -239,7 +242,7 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
         variant_specs = {}
         for base in cls.__mro__:
             registry = base.__dict__.get('_variant_registry')
-            if registry and hasattr(cls, registry.field):
+            if registry:
                 variant_specs[registry.field] = getattr(cls, registry.field)
 
         return variant_specs
