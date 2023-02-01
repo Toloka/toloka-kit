@@ -8,6 +8,7 @@ __all__ = [
 ]
 
 import inspect
+import logging
 import typing
 from copy import copy
 from enum import Enum
@@ -26,6 +27,8 @@ from ...util._codegen import (
 )
 
 E = TypeVar('E', bound=Enum)
+
+logger = logging.getLogger(__file__)
 
 
 class VariantRegistry:
@@ -53,11 +56,13 @@ class VariantRegistry:
 
     def generate_subtype(self, type_: type, value: E) -> type:
         if not self.extendable:
-            raise NotImplementedError()
+            raise NotImplementedError("Only extendable VariantRegistry can generate subtype")
 
         generated_type_name = '_Generated' + value.value.title() + type_.__name__
         BaseTolokaObjectMetaclass(generated_type_name, (type_,), {}, spec_value=value)
-
+        logger.error(f'{generated_type_name} class was generated. Probably it is a new functionality on the platform.\n'
+                    'If you want it to be supported by toloka-kit faster '
+                    'you can make feature request here: https://github.com/Toloka/toloka-kit/issues/new/choose.')
         return self.registered_classes[value]
 
     def __getitem__(self, value: E) -> type:
