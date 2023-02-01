@@ -4,20 +4,21 @@ from typing import Any, Optional
 import pytest
 from toloka.client._converter import converter
 from toloka.client.primitives.base import BaseTolokaObject
+from toloka.util._extendable_enum import ExtendableStrEnum
 
 
 @unique
-class ItemType(Enum):
+class ItemType(ExtendableStrEnum):
     LIST = 'list'
     SET = 'set'
 
 
 @unique
-class SetMethod(Enum):
+class SetMethod(ExtendableStrEnum):
     POP = 'pop'
 
 
-class MethodCall(BaseTolokaObject, spec_enum=ItemType, spec_field='type'):
+class MethodCall(BaseTolokaObject, spec_enum=ItemType, spec_field='type', extend_spec=True):
     pass
 
 
@@ -29,10 +30,10 @@ class SetPopMethodCall(SetMethodCall, spec_value=SetMethod.POP):
     pass
 
 
-class ListMethodCall(MethodCall, spec_value=ItemType.LIST, spec_enum='Method', spec_field='method'):
+class ListMethodCall(MethodCall, spec_value=ItemType.LIST, spec_enum='Method', spec_field='method', extend_spec=True):
 
     @unique
-    class Method(Enum):
+    class Method(ExtendableStrEnum):
         APPEND = 'append'
         POP = 'pop'
 
@@ -104,12 +105,9 @@ def test_structure_unknown_variant():
     method_call_with_unknown_both_levels_variants = converter.structure(unstructured_with_unknown_both_levels_variants,
                                                                         MethodCall)
 
-    assert MethodCall._variant_registry['_unknown_variant'](**unstructured_with_unknown_high_level_variant) \
-           == method_call_with_unknown_high_level_variant
-    assert ListMethodCall._variant_registry['_unknown_variant'](method='index') \
-           == method_call_with_unknown_low_level_variant
-    assert MethodCall._variant_registry['_unknown_variant'](**unstructured_with_unknown_both_levels_variants) == \
-           method_call_with_unknown_both_levels_variants
+    assert isinstance(method_call_with_unknown_high_level_variant, MethodCall)
+    assert isinstance(method_call_with_unknown_low_level_variant, ListMethodCall)
+    assert isinstance(method_call_with_unknown_both_levels_variants, MethodCall)
 
     assert converter.unstructure(
         method_call_with_unknown_high_level_variant) == unstructured_with_unknown_high_level_variant

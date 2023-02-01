@@ -9,7 +9,7 @@ __all__ = [
 
 import inspect
 import typing
-from copy import copy, deepcopy
+from copy import copy
 from enum import Enum
 from functools import update_wrapper, partial
 from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union, Tuple
@@ -29,10 +29,11 @@ E = TypeVar('E', bound=Enum)
 
 class VariantRegistry:
 
-    def __init__(self, field: str, enum: Type[E]):
+    def __init__(self, field: str, enum: Type[E], extendable: bool = False):
         self.field: str = field
         self.enum: Type[E] = enum
         self.registered_classes: Dict[E, type] = {}
+        self.extendable = extendable
 
     def register(self, type_: type, value: E) -> type:
 
@@ -46,6 +47,15 @@ class VariantRegistry:
         self.registered_classes[value] = type_
 
         return type_
+
+    def generate_subtype(self, type_: type, value: E) -> type:
+        if not self.extendable:
+            raise NotImplementedError()
+
+        class _UnknownVariant(type_, spec_value=value):
+            ...
+
+        return self.registered_classes[value]
 
     def __getitem__(self, value: E):
         return self.registered_classes[value]
@@ -171,12 +181,20 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
         return super().__new__(cls)
 
     @classmethod
-    def __init_subclass__(cls, spec_enum: Optional[Union[str, Type[E]]] = None,
-                          spec_field: Optional[str] = None, spec_value=None):
+    def __init_subclass__(
+            cls,
+            spec_enum: Optional[Union[str, Type[E]]] = None,
+            spec_field: Optional[str] = None,
+            spec_value=None,
+            extend_spec: bool = False,
+    ):
         super().__init_subclass__()
         # Completing a variant type
         if spec_value is not None:
             cls._variant_registry.register(cls, spec_value)
+
+        if extend_spec and (spec_enum is None or spec_field is None):
+            raise ValueError('extend_spec could be True only with spec_enum and spec_field provided')
 
         # Making into a variant type
         if spec_enum is not None or spec_field is not None:
@@ -190,26 +208,7 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
 
             # TODO: Possibly make it immutable
             enum = getattr(cls, spec_enum) if isinstance(spec_enum, str) else spec_enum
-            cls._variant_registry = VariantRegistry(spec_field, enum)
-
-            class _UnknownVariant:
-
-                def __init__(self, **kwargs):
-                    self.__dict__.update(kwargs)
-
-                @classmethod
-                def structure(cls, data: Any):
-                    return cls(**data)
-
-                def unstructure(self):
-                    data = deepcopy(self.__dict__)
-                    data.update(converter.unstructure(cls.get_variant_specs()))
-                    return data
-
-                def __eq__(self, other):
-                    return self.__dict__ == other.__dict__
-
-            cls._variant_registry.registered_classes['_unknown_variant'] = _UnknownVariant
+            cls._variant_registry = VariantRegistry(spec_field, enum, extend_spec)
 
     # Unexpected fields access
 
@@ -281,15 +280,17 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
             # TODO: Optimize copying
             data = dict(data)  # Do not modify input data
             spec_field = cls._variant_registry.field
-            data_field = data[spec_field]
+            data_field = data.pop(spec_field)
             try:
                 spec_value = cls._variant_registry.enum(data_field)
-                spec_class = cls._variant_registry.registered_classes[spec_value]
-                del data[spec_field]
+
+                if spec_value in cls._variant_registry.registered_classes:
+                    spec_class = cls._variant_registry[spec_value]
+                else:
+                    spec_class = cls._variant_registry.generate_subtype(cls, spec_value)
             except Exception:
-                spec_class = cls._variant_registry.registered_classes['_unknown_variant']
-                # raise SpecClassIdentificationError(spec_field=spec_field,
-                #                                    spec_enum=cls._variant_registry.enum.__name__)
+                raise SpecClassIdentificationError(spec_field=spec_field,
+                                                   spec_enum=cls._variant_registry.enum.__name__)
             return spec_class.structure(data)
 
         data = copy(data)
