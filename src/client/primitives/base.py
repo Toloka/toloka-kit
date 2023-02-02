@@ -33,7 +33,9 @@ logger = logging.getLogger(__file__)
 
 class VariantRegistry:
 
-    def __init__(self, field: str, enum: Type[E], extendable: bool = False):
+    def __init__(self, field: str, enum: Type[E], extendable: Optional[bool] = None):
+        if extendable is None:
+            extendable = isinstance(enum, ExtendableStrEnumMetaclass)
         if extendable and not isinstance(enum, ExtendableStrEnumMetaclass):
             raise ValueError('VariantRegistry could be extendable only if spec_enum is extendable.')
         self.field: str = field
@@ -56,13 +58,14 @@ class VariantRegistry:
 
     def generate_subtype(self, type_: type, value: E) -> type:
         if not self.extendable:
-            raise NotImplementedError("Only extendable VariantRegistry can generate subtype")
+            raise NotImplementedError('Only extendable VariantRegistry can generate subtype')
 
         generated_type_name = '_Generated' + value.value.title() + type_.__name__
         BaseTolokaObjectMetaclass(generated_type_name, (type_,), {}, spec_value=value)
-        logger.error(f'{generated_type_name} class was generated. Probably it is a new functionality on the platform.\n'
-                    'If you want it to be supported by toloka-kit faster '
-                    'you can make feature request here: https://github.com/Toloka/toloka-kit/issues/new/choose.')
+        logger.info(f'{generated_type_name} class was generated. '
+                    f'Probably it is a new functionality on the platform.\n'
+                    f'If you want it to be supported by toloka-kit faster you can make feature request here:'
+                    f'https://github.com/Toloka/toloka-kit/issues/new/choose.')
         return self.registered_classes[value]
 
     def __getitem__(self, value: E) -> type:
@@ -194,7 +197,7 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
             spec_enum: Optional[Union[str, Type[E]]] = None,
             spec_field: Optional[str] = None,
             spec_value=None,
-            extend_spec: bool = False,
+            extend_spec: Optional[bool] = None,
     ):
         super().__init_subclass__()
         # Completing a variant type

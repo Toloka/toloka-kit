@@ -67,7 +67,7 @@ class RuleConditionKey(ExtendableStrEnum):
     TOTAL_SUBMITTED_COUNT = 'total_submitted_count'
 
 
-class RuleCondition(BaseTolokaObject, spec_enum=RuleConditionKey, spec_field='key', extend_spec=True):
+class RuleCondition(BaseTolokaObject, spec_enum=RuleConditionKey, spec_field='key'):
     operator: Any
     value: Any
 

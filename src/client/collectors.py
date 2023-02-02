@@ -39,7 +39,7 @@ def _captcha_deprecation_warning(*args, **kwargs):
     )
 
 
-class CollectorConfig(BaseParameters, spec_enum='Type', spec_field='type', extend_spec=True):
+class CollectorConfig(BaseParameters, spec_enum='Type', spec_field='type'):
     """Base class for all collectors.
 
     Attributes:

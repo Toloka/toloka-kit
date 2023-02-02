@@ -29,7 +29,7 @@ class RuleType(ExtendableStrEnum):
     APPROVE_ALL_ASSIGNMENTS = 'APPROVE_ALL_ASSIGNMENTS'
 
 
-class RuleAction(BaseParameters, spec_enum=RuleType, spec_field='type', extend_spec=True):
+class RuleAction(BaseParameters, spec_enum=RuleType, spec_field='type'):
     """Base class for all actions in quality controls configurations
     """
 

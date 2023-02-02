@@ -2,8 +2,9 @@ from enum import Enum, unique
 from typing import Any, Optional
 
 import pytest
-from toloka.client._converter import converter
+from toloka.client.exceptions import SpecClassIdentificationError
 from toloka.client.primitives.base import BaseTolokaObject
+from toloka.client._converter import converter
 from toloka.util._extendable_enum import ExtendableStrEnum
 
 
@@ -14,11 +15,11 @@ class ItemType(ExtendableStrEnum):
 
 
 @unique
-class SetMethod(ExtendableStrEnum):
+class SetMethod(Enum):
     POP = 'pop'
 
 
-class MethodCall(BaseTolokaObject, spec_enum=ItemType, spec_field='type', extend_spec=True):
+class MethodCall(BaseTolokaObject, spec_enum=ItemType, spec_field='type'):
     pass
 
 
@@ -30,7 +31,7 @@ class SetPopMethodCall(SetMethodCall, spec_value=SetMethod.POP):
     pass
 
 
-class ListMethodCall(MethodCall, spec_value=ItemType.LIST, spec_enum='Method', spec_field='method', extend_spec=True):
+class ListMethodCall(MethodCall, spec_value=ItemType.LIST, spec_enum='Method', spec_field='method'):
 
     @unique
     class Method(ExtendableStrEnum):
@@ -115,6 +116,10 @@ def test_structure_unknown_variant():
         method_call_with_unknown_low_level_variant) == unstructured_with_unknown_low_level_variant
     assert converter.unstructure(
         method_call_with_unknown_both_levels_variants) == unstructured_with_unknown_both_levels_variants
+
+    with pytest.raises(SpecClassIdentificationError):
+        unstructured_unextendable = {'type': 'set', 'method': 'new_method'}
+        converter.structure(unstructured_unextendable, MethodCall)
 
 
 def test_unstructure_variant():

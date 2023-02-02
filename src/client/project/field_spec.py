@@ -46,7 +46,7 @@ class FieldType(ExtendableStrEnum):
     ARRAY_JSON = 'array_json'
 
 
-class FieldSpec(BaseTolokaObject, spec_enum=FieldType, spec_field='type', extend_spec=True):
+class FieldSpec(BaseTolokaObject, spec_enum=FieldType, spec_field='type'):
     """A base class for field specifications used in project's `input_spec` and `output_spec`
     for input and response data validation specification respectively. Use subclasses of this
     class defined below to define the data type (string, integer, URL, etc.) and specify
