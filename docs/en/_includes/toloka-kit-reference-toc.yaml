@@ -1012,6 +1012,9 @@ items:
       - name: VariantRegistry.register
         href: ../toloka-kit/reference/toloka.client.primitives.base.VariantRegistry.register.md
         hidden: true
+      - name: VariantRegistry.generate_subtype
+        href: ../toloka-kit/reference/toloka.client.primitives.base.VariantRegistry.generate_subtype.md
+        hidden: true
     - name: infinite_overlap
       items:
       - name: InfiniteOverlapParametersMixin
