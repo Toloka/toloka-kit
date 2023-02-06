@@ -1190,17 +1190,19 @@ class TolokaClient:
 
     @add_headers('client')
     def update_project(self, project_id: str, project: Project) -> Project:
-        """Makes changes to the project
+        """Updates all project parameters in Toloka.
 
         Args:
-            project_id: Project ID that will be changed.
-            project: A project object with all the fields: those that will be updated and those that will not.
+            project_id: The ID of the project to be updated.
+            project: The project with new parameters.
 
         Returns:
-            Project: Project object with all fields.
+            Project: The project with updated parameters.
 
         Example:
-            >>> updated_project = toloka_client.update_project(project_id=old_project.id, project=new_project_object)
+            >>> updated_project = toloka_client.get_project(project_id='1')
+            >>> updated_project.private_comment = 'example project'
+            >>> updated_project = toloka_client.update_project(project_id=updated_project.id, project=updated_project)
             ...
         """
         response = self._request('put', f'/v1/projects/{project_id}', json=unstructure(project))
@@ -1213,10 +1215,10 @@ class TolokaClient:
         `clone_project` emulates cloning behavior via Toloka interface. Note that it calls several API methods. If some method fails then the project may be partially cloned.
 
         Important notes:
-        * General, training, and control tasks are not cloned.
-        * The same skills are used.
+        * No tasks are cloned.
         * The expiration date is not changed in the new project.
-        * If `reuse_controllers` is `True`, quality control collectors monitors both projects.
+        * The same skills are used.
+        * If `reuse_controllers` is `True`, quality control collectors monitor both projects.
             For example, the `fast_submitted_count` rule counts fast responses in the cloned and new projects together.
 
         Args:

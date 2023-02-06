@@ -80,12 +80,12 @@ class ClassicViewSpec(ViewSpec, spec_value=ViewSpec.CLASSIC):
         You can link:
             * CSS libraries
             * JavaScript libraries
-            * Toloka assets — libraries that can be accessed with the `$TOLOKA_ASSETS` path:
+            * Toloka assets — libraries that can be linked using the `$TOLOKA_ASSETS` path:
                 * `$TOLOKA_ASSETS/js/toloka-handlebars-templates.js` — [Handlebars template engine](http://handlebarsjs.com/).
                 * `$TOLOKA_ASSETS/js/image-annotation.js` — Image labeling interface. Note, that this library requires Handlebars and must be linked after it.
                     For more information, see [Image with area selection](https://toloka.ai/en/docs/guide/concepts/t-components/image-annotation).
 
-            Add items in the order they should be linked when running the task interface.
+            Add items in the order they should be linked.
 
         Attributes:
             style_urls: Links to CSS libraries.
@@ -115,6 +115,8 @@ class ClassicViewSpec(ViewSpec, spec_value=ViewSpec.CLASSIC):
 class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
     """A task interface defined with the [TemplateBuilder](toloka.client.project.template_builder.TemplateBuilder.md).
 
+    See also [Template Builder](https://toloka.ai/en/docs/template-builder/) in the guide.
+
     Attributes:
         view: A top level component like [SideBySideLayoutV1](toloka.client.project.template_builder.layouts.SideBySideLayoutV1.md).
         plugins: An array of plugins.
@@ -125,7 +127,6 @@ class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
             * `False` – You configure the specifications manually, if:
                 * You don't want the specification to be affected by changes in instructions or other project parameters.
                 * You have to change automatically generated specifications to suite your needs.
-
 
     Example:
         Creating a simple interface based on [ListViewV1](toloka.client.project.template_builder.view.ListViewV1.md):
