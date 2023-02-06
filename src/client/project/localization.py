@@ -16,7 +16,7 @@ class AdditionalLanguage(BaseTolokaObject):
         language: The language into which the translation is made. Two-letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) language code in upper case.
         public_name: A translated project name.
         public_description: A translated project description.
-        public_instructions: A translated instructions for Tolokers.
+        public_instructions: Translated instructions for Tolokers.
     """
 
     class FieldTranslation(BaseTolokaObject):
@@ -47,6 +47,7 @@ class AdditionalLanguage(BaseTolokaObject):
 
 class LocalizationConfig(BaseTolokaObject):
     """All translations of a project interface.
+
     Args:
         default_language: The main language used for text parameters when the project was created. It is a required parameter.
         additional_languages: A list of translations to other languages.
