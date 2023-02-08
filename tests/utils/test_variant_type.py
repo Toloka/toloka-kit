@@ -2,12 +2,14 @@ from enum import Enum, unique
 from typing import Any, Optional
 
 import pytest
-from toloka.client._converter import converter
+from toloka.client.exceptions import SpecClassIdentificationError
 from toloka.client.primitives.base import BaseTolokaObject
+from toloka.client._converter import converter
+from toloka.util._extendable_enum import ExtendableStrEnum
 
 
 @unique
-class ItemType(Enum):
+class ItemType(ExtendableStrEnum):
     LIST = 'list'
     SET = 'set'
 
@@ -32,7 +34,7 @@ class SetPopMethodCall(SetMethodCall, spec_value=SetMethod.POP):
 class ListMethodCall(MethodCall, spec_value=ItemType.LIST, spec_enum='Method', spec_field='method'):
 
     @unique
-    class Method(Enum):
+    class Method(ExtendableStrEnum):
         APPEND = 'append'
         POP = 'pop'
 
@@ -90,6 +92,34 @@ def test_structure_variant():
         converter.structure({'type': 'list', 'method': 'append'})
     with pytest.raises(TypeError):
         converter.structure({'type': 'list', 'method': 'pop', 'argument': 'abc'})
+
+
+def test_structure_unknown_variant():
+    unstructured_with_unknown_high_level_variant = {'type':  'dict', 'method': 'pop'}
+    unstructured_with_unknown_low_level_variant = {'type': 'list', 'method': 'index'}
+    unstructured_with_unknown_both_levels_variants = {'type': 'dict', 'method': 'get'}
+
+    method_call_with_unknown_high_level_variant = converter.structure(unstructured_with_unknown_high_level_variant,
+                                                                      MethodCall)
+    method_call_with_unknown_low_level_variant = converter.structure(unstructured_with_unknown_low_level_variant,
+                                                                     MethodCall)
+    method_call_with_unknown_both_levels_variants = converter.structure(unstructured_with_unknown_both_levels_variants,
+                                                                        MethodCall)
+
+    assert isinstance(method_call_with_unknown_high_level_variant, MethodCall)
+    assert isinstance(method_call_with_unknown_low_level_variant, ListMethodCall)
+    assert isinstance(method_call_with_unknown_both_levels_variants, MethodCall)
+
+    assert converter.unstructure(
+        method_call_with_unknown_high_level_variant) == unstructured_with_unknown_high_level_variant
+    assert converter.unstructure(
+        method_call_with_unknown_low_level_variant) == unstructured_with_unknown_low_level_variant
+    assert converter.unstructure(
+        method_call_with_unknown_both_levels_variants) == unstructured_with_unknown_both_levels_variants
+
+    with pytest.raises(SpecClassIdentificationError):
+        unstructured_unextendable = {'type': 'set', 'method': 'new_method'}
+        converter.structure(unstructured_unextendable, MethodCall)
 
 
 def test_unstructure_variant():
