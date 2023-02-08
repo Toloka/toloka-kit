@@ -243,15 +243,16 @@ class SameDomainConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_
 
     Links must be specified in full, including the protocol (http, https, ftp).
 
-    The www. subdomain is ignored when checking, meaning that links to www.example.ru and example.ru are considered
-    to be the same.
+    The `www.` subdomain is ignored when checking, meaning that links to `www.example.com` and `example.com` are
+    considered to be the same.
 
     How to pass a link address:
 
     * Specify it explicitly as a string.
-    * (../operations/work-with-data. dita).
-    * Refer to another element using $ref.
-    * Use helpers and conditions to get the value.
+    * [Get the value from your data](https://toloka.ai/en/docs/template-builder/operations/work-with-data).
+    * Refer to another element using `$ref`.
+    * Use [helpers](https://toloka.ai/en/docs/template-builder/reference/helpers) and 
+    [conditions](https://toloka.ai/en/docs/template-builder/reference/conditions) to get the value.
 
     Attributes:
         data: The link address to be checked. If you don't specify it, the value returned by the parent component
