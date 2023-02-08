@@ -1093,7 +1093,7 @@ items:
       href: ../toloka-kit/reference/toloka.client.project.Project.AssignmentsIssuingViewConfig.md
       hidden: true
     - name: Project.AssignmentsIssuingViewConfig.MapProvider
-      href: ../toloka-kit/reference/toloka.client.project.Project.AssignmentsIssuingType.MapProvider.md
+      href: ../toloka-kit/reference/toloka.client.project.Project.AssignmentsIssuingViewConfig.MapProvider.md
       hidden: true
     - name: Project.ProjectStatus
       href: ../toloka-kit/reference/toloka.client.project.Project.ProjectStatus.md
