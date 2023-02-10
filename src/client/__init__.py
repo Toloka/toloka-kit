@@ -82,6 +82,7 @@ import attr
 import httpx
 import simplejson
 from httpx import HTTPStatusError, RequestError
+from httpx._types import VerifyTypes
 
 try:
     import pandas as pd
@@ -222,6 +223,10 @@ class TolokaClient:
             All requests will be made using a specified account. See [Shared access to the requester's account](https://toloka.ai/en/docs/guide/concepts/multiple-access)
             documentation page. ID of the requester can be retrieved using the [get_requester](toloka.client.TolokaClient.get_requester.md)
             method (this method should be called by the account owner using account's token).
+        verify: SSL certificates (a.k.a CA bundle) used to
+            verify the identity of requested hosts. Either `True` (default CA bundle),
+            a path to an SSL certificate file, an `ssl.SSLContext`, or `False`
+            (which will disable verification)
 
     Example:
         How to create `TolokaClient` instance and make your first request to Toloka.
@@ -269,6 +274,7 @@ class TolokaClient:
         retry_quotas: Union[List[str], str, None] = TolokaRetry.Unit.MIN,
         retryer_factory: Optional[Callable[[], Retry]] = None,
         act_under_account_id: Optional[str] = None,
+        verify: VerifyTypes = True,
     ):
         if url is None and environment is None:
             raise ValueError('You must pass at least one parameter: url or environment.')
@@ -299,6 +305,7 @@ class TolokaClient:
             self.retryer_factory = functools.partial(self._default_retryer_factory, retries, retry_quotas)
 
         self.act_under_account_id = act_under_account_id
+        self.verify = verify
 
         self.retrying = SyncRetryingOverURLLibRetry(
             base_url=str(self._session.base_url), retry=self.retryer_factory(), reraise=True,
@@ -344,7 +351,7 @@ class TolokaClient:
 
     @functools.lru_cache(maxsize=128)
     def _session_for_thread(self, thread_id: int) -> httpx.Client:
-        client = httpx.Client(headers=self._headers, base_url=self.url)
+        client = httpx.Client(headers=self._headers, base_url=self.url, verify=self.verify)
         return client
 
     def _prepare_request(self, kwargs):
