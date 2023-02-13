@@ -19,7 +19,8 @@ class VariantRegistry:
     def __init__(
         self,
         field: str,
-        enum: typing.Type[E]
+        enum: typing.Type[E],
+        extendable: typing.Optional[bool] = None
     ): ...
 
     def register(
@@ -28,7 +29,13 @@ class VariantRegistry:
         value: E
     ) -> type: ...
 
-    def __getitem__(self, value: E): ...
+    def generate_subtype(
+        self,
+        type_: type,
+        value: E
+    ) -> type: ...
+
+    def __getitem__(self, value: E) -> type: ...
 
 
 class BaseTolokaObjectMetaclass(type):
