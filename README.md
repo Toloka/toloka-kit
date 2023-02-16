@@ -17,7 +17,7 @@ Toloka-Kit is a Python library for working with [Toloka API](https://toloka.ai/d
 The API allows you to build scalable and fully automated human-in-the-loop ML pipelines, and integrate them into your processes. The toolkit makes integration easier. You can use it with Jupyter notebooks.
 
 * Support for all common Toloka use cases: creating projects, adding pools, uploading tasks, and so on.
-* Toloka entities are represented as Python classes. You can use them instead of accessing the API directly via HTTPS.
+* Toloka entities are represented as Python classes. You can use them instead of accessing the API using JSON representations.
 * There’s no need to validate JSON files and work with them directly.
 * Support of both synchronous and asynchronous usages.
 * Streaming support: send and receive data to Toloka in real time. It’s useful when you need to pass data between two related projects: one for data labeling, and another for its validation.  
