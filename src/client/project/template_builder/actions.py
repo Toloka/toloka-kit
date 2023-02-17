@@ -25,55 +25,52 @@ from ....util._extendable_enum import ExtendableStrEnum
 
 
 class BaseActionV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):
-    """Perform various actions, such as showing notifications.
-
+    """A base class for actions.
     """
 
     pass
 
 
 class BulkActionV1(BaseActionV1, spec_value=ComponentType.ACTION_BULK):
-    """Use this component to call multiple actions at the same time, like to show more than one notification when a button is clicked.
+    """A group of actions to be called together.
 
-    Actions are invoked in the order in which they are listed. This means that if two actions write a value to the same
-    variable, the variable will always have the second value.
+    For more information, see [action.bulk](https://toloka.ai/en/docs/template-builder/reference/action.bulk).
+
     Attributes:
-        payload: An array of actions that you want to call.
+        payload: A list of actions.
     """
 
     payload: base_component_or(List[BaseComponent], 'ListBaseComponent')  # noqa: F821
 
 
 class NotifyActionV1(BaseActionV1, spec_value=ComponentType.ACTION_NOTIFY):
-    """The component creates a message in the lower-left corner of the screen.
+    """The action shows a popup message.
 
-    You can set the how long the message will be active, the delay before displaying it, and the background color.
+    For more information, see [action.notify](https://toloka.ai/en/docs/template-builder/reference/action.notify).
+
     Attributes:
-        payload: Parameters for the message.
+        payload: Popup parameters.
     """
 
     class Payload(BaseTemplate):
-        """Parameters for the message.
+        """Popup parameters.
 
         Attributes:
-            content: Message text
-            theme: The background color of the message.
-            delay: The duration of the delay (in milliseconds) before the message appears.
-            duration: The duration of the message activity (in milliseconds), which includes the duration of the delay
-                before displaying it.
-                For example, if duration is 1000 and delay is 400, the message will be displayed for
-                600 milliseconds.
+            content: Popup content. You can assign text or other components to the `content`.
+            theme: A background color.
+            delay: A delay in milliseconds before showing the popup.
+            duration: A duration in milliseconds of showing the popup. It includes the delay.
         """
 
         @unique
         class Theme(ExtendableStrEnum):
-            """The background color of the message.
+            """The background color of a popup.
 
             Attributes:
-                INFO: blue
-                SUCCESS: green
-                WARNING: yellow
-                DANGER: red
+                INFO: Blue.
+                SUCCESS: Green.
+                WARNING: Yellow.
+                DANGER: Red.
             """
 
             DANGER = 'danger'
@@ -90,49 +87,52 @@ class NotifyActionV1(BaseActionV1, spec_value=ComponentType.ACTION_NOTIFY):
 
 
 class OpenCloseActionV1(BaseActionV1, spec_value=ComponentType.ACTION_OPEN_CLOSE):
-    """This component changes the display mode of another component by opening or closing it.
+    """The action changes the display mode of another component.
 
-    What happens to the component depends on the type of component:
-        view.image — expands the image to full screen.
-        view.collapse — expands or collapses a collapsible section of content.
+    It can expand an [image](toloka.client.project.template_builder.view.ImageViewV1.md) to a full screen
+    or collapse a [section](toloka.client.project.template_builder.view.CollapseViewV1.md).
+
+    For more information, see [action.open-close](https://toloka.ai/en/docs/template-builder/reference/action.open-close).
+
     Attributes:
-        view: Points to the component to perform the action with.
+        view: References the component to perform the action with.
     """
 
     view: base_component_or(RefComponent)
 
 
 class OpenLinkActionV1(BaseActionV1, spec_value=ComponentType.ACTION_OPEN_LINK):
-    """Opens a new tab in the browser with the specified web page.
+    """The action opens an URL in a new browser tab.
 
-    For example, you can open a link when a button is clicked.
+    For more information, see [action.open-link](https://toloka.ai/en/docs/template-builder/reference/action.open-link).
+
     Attributes:
-        payload: URL of the web page.
+        payload: The URL.
     """
 
     payload: base_component_or(Any)
 
 
 class PlayPauseActionV1(BaseActionV1, spec_value=ComponentType.ACTION_PLAY_PAUSE):
-    """This component controls audio or video playback. It stops playback in progress or starts if it is stopped.
+    """The action pauses an audio or video player or resumes it.
 
-    For example, this component will allow you to play two videos simultaneously.
+    For more information, see [action.play-pause](https://toloka.ai/en/docs/template-builder/reference/action.play-pause).
 
-    You can also stop or start playback for some event (plugin. trigger) or by pressing the hotkey (plugin.hotkeys).
     Attributes:
-        view: Points to the component that plays audio or video.
+        view: A reference to the audio or video player.
     """
 
     view: base_component_or(RefComponent)
 
 
 class RotateActionV1(BaseActionV1, spec_value=ComponentType.ACTION_ROTATE):
-    """Rotates the specified component by 90 degrees.
+    """The action rotates a component by 90 degrees.
 
-    By default it rotates to the right, but you can specify the direction in the payload property.
+    For more information, see [action.rotate](https://toloka.ai/en/docs/template-builder/reference/action.rotate).
+
     Attributes:
-        view: Points to the component to perform the action with.
-        payload: Sets the direction of rotation.
+        view: A reference to the component.
+        payload: The direction of rotation.
     """
 
     @unique
@@ -145,11 +145,38 @@ class RotateActionV1(BaseActionV1, spec_value=ComponentType.ACTION_ROTATE):
 
 
 class SetActionV1(BaseActionV1, spec_value=ComponentType.ACTION_SET):
-    """Sets the value from payload in the data in the data property.
+    """The action sets the value of a data field.
+
+    For more information, see [action.set](https://toloka.ai/en/docs/template-builder/reference/action.set).
+
+    Example:
+        The [hot key](toloka.client.project.template_builder.plugins.HotkeysPluginV1.md) `1`
+        fills a [text field](toloka.client.project.template_builder.fields.TextFieldV1.md) with a predefined text.
+        The [RefComponent](toloka.client.project.template_builder.base.RefComponent.md) is used to reference the output data field.
+
+        >>> from toloka.client.project.template_builder import *
+        >>> from toloka.client.project.template_builder.base import RefComponent
+        >>>
+        >>> tb_config = TemplateBuilder(
+        >>>     vars={'0': OutputData('result')},
+        >>>     view=TextFieldV1(
+        >>>         data=RefComponent('vars.0'),
+        >>>         label=InputData('question'),
+        >>>     ),
+        >>>     plugins=[
+        >>>         HotkeysPluginV1(
+        >>>             key_1=SetActionV1(
+        >>>                 data=RefComponent('vars.0'),
+        >>>                 payload='It is not a question'
+        >>>             )
+        >>>         )
+        >>>     ]
+        >>> )
+        ...
 
     Attributes:
-        data: Data with values that will be processed or changed.
-        payload: The value to write to the data.
+        data: The data field to set.
+        payload: The value.
     """
 
     data: BaseComponent
@@ -157,10 +184,12 @@ class SetActionV1(BaseActionV1, spec_value=ComponentType.ACTION_SET):
 
 
 class ToggleActionV1(BaseActionV1, spec_value=ComponentType.ACTION_TOGGLE):
-    """The component changes the value in the data from true to false and vice versa.
+    """The action toggles the value of a boolean data field.
+
+    For more information, see [action.toggle](https://toloka.ai/en/docs/template-builder/reference/action.toggle).
 
     Attributes:
-        data: Data in which the value will be changed. The data type must be boolean.
+        data: The data field.
     """
 
     data: BaseComponent

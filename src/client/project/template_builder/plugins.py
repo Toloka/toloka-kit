@@ -17,36 +17,32 @@ from ....util._extendable_enum import ExtendableStrEnum
 
 
 class BasePluginV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):
-    """Plugins that provide expanded functionality. For example, you can use plugin.hotkeys to set up shortcuts.
-
+    """A base class for plugins.
     """
 
     pass
 
 
 class ImageAnnotationHotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_IMAGE_ANNOTATION_HOTKEYS):
-    """Used to set hotkeys for the field.image-annotation component.
+    """Hotkeys for the [ImageAnnotationFieldV1](toloka.client.project.template_builder.fields.ImageAnnotationFieldV1.md) component.
 
-    You can set hotkeys to select area types and selection modes and to confirm or cancel area creation. When setting
-    hotkeys, you can use the up and down arrows (up,down), numbers, and Latin letters.
+    For more information, see [plugin.field.image-annotation.hotkeys](https://toloka.ai/en/docs/template-builder/reference/plugin.field.image-annotation.hotkeys).
 
     Attributes:
-        cancel: Keyboard shortcut for canceling area creation.
-        confirm: Keyboard shortcut for confirming area creation.
-        labels: Keyboard shortcuts for choosing area types. They're assigned to buttons in the order they are shown if
-            you enabled the option to choose multiple area types.
-        modes: Keyboard shortcuts for choosing selection modes.
+        cancel: A hotkey for canceling area creation.
+        confirm: A hotkey for confirming area creation.
+        labels: A list of hotkeys for choosing area labels.
+        modes: Hotkeys for switching selection modes.
     """
 
     class Mode(BaseTemplate):
-        """
-        Mode
+        """Selection mode hotkeys.
 
         Attributes:
-            point: Keyboard shortcut for selecting areas using points.
-            polygon: Keyboard shortcut for selecting areas using polygons.
-            rectangle: Keyboard shortcut for selecting areas using rectangles.
-            select: Keyboard shortcut for selecting shapes and points.
+            point: A hotkey for a point selection mode.
+            polygon: A hotkey for a polygon selection mode.
+            rectangle: A hotkey for a rectangle selection mode.
+            select: A hotkey for a mode for editing selections.
         """
 
         point: str = attribute(kw_only=True)
@@ -64,13 +60,13 @@ ImageAnnotationHotkeysPluginV1.__init__ = \
 
 
 class TextAnnotationHotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TEXT_ANNOTATION_HOTKEYS):
-    """Use this to set keyboard shortcuts for the field.text-annotation component.
+    """Hotkeys for the [TextAnnotationFieldV1](toloka.client.project.template_builder.fields.TextAnnotationFieldV1.md) component.
+
+    For more information, see [plugin.field.text-annotation.hotkeys](https://toloka.ai/en/docs/template-builder/reference/plugin.field.text-annotation.hotkeys).
 
     Attributes:
-        labels: Keyboard shortcuts for selecting categories. They're assigned to buttons with categories in the order
-            they're shown.
-        remove: Use this property to allow a Toloker to deselect an entire line or part of it. The key that you
-            assign to this property will deselect.
+        labels: A list of hotkeys for choosing labels.
+        remove: A hotkey for clearing the label of the annotated text.
     """
 
     labels: base_component_or(List[str], 'ListStr')  # noqa: F821
@@ -78,14 +74,17 @@ class TextAnnotationHotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGI
 
 
 class HotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_HOTKEYS):
-    """Lets you set keyboard shortcuts for actions.
+    """Hotkeys for actions.
 
-    Attributes:
-        key_ + [a-z|0-9|up|down]: An action that is triggered when you press the specified keyboard key. The keyboard
-            shortcut is set in the key, and the action is specified in the value
+    You can use as hotkeys:
+    * Letters
+    * Numbers
+    * Up and down arrows
+
+    Choose a hotkey using a named parameter of the `HotkeysPluginV1` and assign an action to it.
 
     Example:
-        How to create hotkeys for classification buttons.
+        Creating hotkeys for classification buttons.
 
         >>> hot_keys_plugin = tb.HotkeysPluginV1(
         >>>     key_1=tb.SetActionV1(tb.OutputData('result'), 'cat'),
@@ -136,27 +135,23 @@ class HotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_HOTKEYS):
 
 
 class TriggerPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TRIGGER):
-    """Use this to configure triggers that trigger a specific action when an event occurs.
+    """A plugin for triggering actions when events occur.
 
-    The action is set in the action property, and the event is described in the other fields.
+    For more information, see [plugin.trigger](https://toloka.ai/en/docs/template-builder/reference/plugin.trigger).
 
-    The event can be triggered immediately when the task is loaded ("fireImmediately": true) or when data changes in
-    the property specified in onChangeOf.
-
-    You can also set conditions in the conditions property that must be met in order for the trigger to fire.
     Attributes:
-        action: The action to perform when the trigger fires.
-        condition: The condition that must be met in order to fire the trigger.
-        fire_immediately: Flag indicating whether the trigger should be fired immediately after the task is loaded.
-        on_change_of: The data that triggers the action when changed.
+        action: An action to trigger.
+        condition: A condition that must be met in order to trigger the action.
+        fire_immediately: If `True` then the action is triggered immediately after the task is loaded.
+        on_change_of: The data change event that triggers the action.
 
     Example:
-        How to save Toloker's coordinates to the output.
+        How to save Toloker's coordinates.
 
         >>> coordinates_save_plugin = tb.plugins.TriggerPluginV1(
         >>>     fire_immediately=True,
         >>>     action=tb.actions.SetActionV1(
-        >>>         data=tb.data.OutputData(path='performer_coordinates'),
+        >>>         data=tb.data.OutputData(path='toloker_coordinates'),
         >>>         payload=tb.data.LocationData()
         >>>     ),
         >>> )
@@ -172,32 +167,34 @@ class TriggerPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TRIGGER):
 class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
     """A plugin with extra settings for tasks in Toloka.
 
+    For more information, see [plugin.toloka](https://toloka.ai/en/docs/template-builder/reference/plugin.toloka).
+
     Attributes:
         layout: Settings for the task appearance in Toloka.
         notifications: Notifications shown at the top of the page.
 
     Example:
-        How to set the task width on the task page.
+        Setting the width of the task block on a page.
 
         >>> task_width_plugin = tb.plugins.TolokaPluginV1(
-        >>>     'scroll',
+        >>>     kind='scroll',
         >>>     task_width=400,
         >>> )
         ...
     """
 
     class TolokaPluginLayout(BaseTemplate):
-        """How to display task.
+        """A task block layout.
 
         """
 
         @unique
         class Kind(ExtendableStrEnum):
-            """An enumeration.
+            """A task block layout mode.
 
             Attributes:
-                SCROLL: (default) display multiple tasks on the page at the same time.
-                PAGER: display only one task on the page, with a button to switch between tasks at the bottom.
+                SCROLL: All tasks from a task suite are displayed on a page. It is the default mode.
+                PAGER: A single task is displayed on a page. Buttons at the bottom of the page show other tasks from a task suite.
             """
 
             PAGER = 'pager'
