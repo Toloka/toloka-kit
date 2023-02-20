@@ -257,6 +257,7 @@ class Skill(toloka.client.primitives.operators.StatefulComparableConditionMixin,
     Example:
         Selecting Tolokers with a skill with ID '224' greater than 70.
         >>> filter = toloka.client.filter.Skill('224') > 70
+        ...
 
     Attributes:
         key: The ID of a skill.

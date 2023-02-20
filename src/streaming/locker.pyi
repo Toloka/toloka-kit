@@ -47,8 +47,8 @@ class FileLocker(BaseSequentialIdLocker):
         >>> locker_1 = FileLocker()
         >>> locker_2 = FileLocker(timeout=0)
         >>> with locker_1('some_key') as lock_1:
-        ...     with locker_2('some_key') as lock_2:  # => raise an error: timeout
-        ...         pass
+        >>>     with locker_2('some_key') as lock_2:  # => raise an error: timeout
+        >>>         pass
         ...
 
         Try to lock the same key sequentially.
@@ -56,11 +56,11 @@ class FileLocker(BaseSequentialIdLocker):
         >>> locker_1 = FileLocker()
         >>> locker_2 = FileLocker()
         >>> with locker_1('some_key'):
-        ...     pass
+        >>>     pass
         >>> with locker_2('some_key'):
-        ...     pass
+        >>>     pass
         >>> with locker_1('some_key'):  # raise an error: NewerInstanceDetectedError
-        ...     pass
+        >>>     pass
         ...
     """
 
@@ -113,13 +113,13 @@ class ZooKeeperLocker(BaseSequentialIdLocker):
         >>> zk.start()
         >>> locker = ZooKeeperLocker(zk, '/my-locks')
 
-        Try to lock the same key at the same time..
+        Try to lock the same key at the same time.
 
         >>> locker_1 = ZooKeeperLocker(zk, '/locks')
         >>> locker_2 = ZooKeeperLocker(zk, '/locks', timeout=0)
         >>> with locker_1('some_key') as lock_1:
-        ...     with locker_2('some_key') as lock_2:  # => raise an error: timeout
-        ...         pass
+        >>>     with locker_2('some_key') as lock_2:  # => raise an error: timeout
+        >>>         pass
         ...
 
         Try to lock the same key sequentially.
@@ -127,11 +127,11 @@ class ZooKeeperLocker(BaseSequentialIdLocker):
         >>> locker_1 = ZooKeeperLocker(zk, '/locks')
         >>> locker_2 = ZooKeeperLocker(zk, '/locks')
         >>> with locker_1('some_key'):
-        ...     pass
+        >>>     pass
         >>> with locker_2('some_key'):
-        ...     pass
+        >>>     pass
         >>> with locker_1('some_key'):  # raise an error: NewerInstanceDetectedError
-        ...     pass
+        >>>     pass
         ...
     """
 

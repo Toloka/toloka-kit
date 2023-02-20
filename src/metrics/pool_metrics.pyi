@@ -64,11 +64,14 @@ class AssignmentEventsInPool(BasePoolMetric):
         >>>
         >>> collector = MetricCollector([AssignmentEventsInPool(pool_id, toloka_client=toloka_client)], print_metric)
         >>> asyncio.run(collector.run())
-        {
-            'submitted_events_in_pool': [(datetime.datetime(2021, 8, 11, 15, 13, 4, 31000), 5)],
-            'accepted_events_in_pool': [(datetime.datetime(2021, 8, 11, 15, 13, 3, 65000), 1)],
-            'rejected_events_in_pool': [],
-        }
+        ...
+
+        >>> {
+        >>>     'submitted_events_in_pool': [(datetime.datetime(2021, 8, 11, 15, 13, 4, 31000), 5)],
+        >>>     'accepted_events_in_pool': [(datetime.datetime(2021, 8, 11, 15, 13, 3, 65000), 1)],
+        >>>     'rejected_events_in_pool': [],
+        >>> }
+        ...
     """
 
     def get_line_names(self) -> typing.List[str]:
@@ -125,9 +128,12 @@ class PoolCompletedPercentage(BasePoolMetric):
         >>>
         >>> collector = MetricCollector([PoolCompletedPercentage(pool_id, toloka_client=toloka_client)], print_metric)
         >>> asyncio.run(collector.run())
-        {
-            'completion_percentage': [(datetime.datetime(2021, 8, 11, 15, 13, 4, 31000), 55)],
-        }
+        ...
+
+        >>> {
+        >>>     'completion_percentage': [(datetime.datetime(2021, 8, 11, 15, 13, 4, 31000), 55)],
+        >>> }
+        ...
     """
 
     def get_line_names(self) -> typing.List[str]:
@@ -177,11 +183,14 @@ class AssignmentsInPool(BasePoolMetric):
         >>>
         >>> collector = MetricCollector([AssignmentsInPool(pool_id, toloka_client=toloka_client)], print_metric)
         >>> asyncio.run(collector.run())
-        {
-            'rejected_assignments_in_pool': [(datetime.datetime(2021, 8, 12, 10, 4, 44, 895232), 0)],
-            'submitted_assignments_in_pool': [(datetime.datetime(2021, 8, 12, 10, 4, 45, 321904), 75)],
-            'accepted_assignments_in_pool': [(datetime.datetime(2021, 8, 12, 10, 4, 45, 951156), 75)],
-        }
+        ...
+
+        >>> {
+        >>>     'rejected_assignments_in_pool': [(datetime.datetime(2021, 8, 12, 10, 4, 44, 895232), 0)],
+        >>>     'submitted_assignments_in_pool': [(datetime.datetime(2021, 8, 12, 10, 4, 45, 321904), 75)],
+        >>>     'accepted_assignments_in_pool': [(datetime.datetime(2021, 8, 12, 10, 4, 45, 951156), 75)],
+        >>> }
+        ...
     """
 
     def get_line_names(self) -> typing.List[str]:
@@ -229,9 +238,12 @@ class TasksInPool(BasePoolMetric):
         >>>
         >>> collector = MetricCollector([TasksInPool(pool_id, toloka_client=toloka_client)], print_metric)
         >>> asyncio.run(collector.run())
-        {
-            'tasks_count': [(datetime.datetime(2021, 11, 18, 9, 36, 34, 163000), 40)],
-        }
+        ...
+
+        >>> {
+        >>>     'tasks_count': [(datetime.datetime(2021, 11, 18, 9, 36, 34, 163000), 40)],
+        >>> }
+        ...
     """
 
     def get_line_names(self) -> typing.List[str]:
@@ -273,9 +285,12 @@ class SpentBudgetOnPool(BasePoolMetric):
         >>>
         >>> collector = MetricCollector([SpentBudgetOnPool(pool_id, toloka_client=toloka_client)], print_metric)
         >>> asyncio.run(collector.run())
-        {
-            'spent_money': [(datetime.datetime(2021, 11, 18, 9, 36, 34, 163000), Decimal('0.3'))],
-        }
+        ...
+
+        >>> {
+        >>>     'spent_money': [(datetime.datetime(2021, 11, 18, 9, 36, 34, 163000), Decimal('0.3'))],
+        >>> }
+        ...
     """
 
     def get_line_names(self) -> typing.List[str]:
@@ -318,9 +333,12 @@ class WorkersByFilterOnPool(BasePoolMetric):
         >>>
         >>> collector = MetricCollector([WorkersByFilterOnPool(pool_id, toloka_client=toloka_client)], print_metric)
         >>> asyncio.run(collector.run())
-        {
-            'workers_count': [(datetime.datetime(2021, 11, 18, 9, 36, 34, 163000), 2697)],
-        }
+        ...
+
+        >>> {
+        >>>     'workers_count': [(datetime.datetime(2021, 11, 18, 9, 36, 34, 163000), 2697)],
+        >>> }
+        ...
     """
 
     def get_line_names(self) -> typing.List[str]:
@@ -369,9 +387,12 @@ class BansInPool(BasePoolMetric):
         >>>
         >>> collector = MetricCollector([BansInPool(pool_id, toloka_client=toloka_client)], print_metric)
         >>> asyncio.run(collector.run())
-        {
-            'bans_count': [(datetime.datetime(2021, 11, 18, 13, 30, 11, 522000), 1)],
-        }
+        ...
+
+        >>> {
+        >>>     'bans_count': [(datetime.datetime(2021, 11, 18, 13, 30, 11, 522000), 1)],
+        >>> }
+        ...
 
         How to split bans onto several metrics.
         >>> collector = MetricCollector(
@@ -385,10 +406,13 @@ class BansInPool(BasePoolMetric):
         >>>     print_metric
         >>> )
         >>> asyncio.run(collector.run())
-        {
-            'honeypots': [(datetime.datetime(2021, 11, 18, 13, 32, 52, 475000), 1)],
-            'fast': [(datetime.datetime(2021, 11, 18, 13, 32, 50, 453000), 1)],
-        }
+        ...
+
+        >>> {
+        >>>     'honeypots': [(datetime.datetime(2021, 11, 18, 13, 32, 52, 475000), 1)],
+        >>>     'fast': [(datetime.datetime(2021, 11, 18, 13, 32, 50, 453000), 1)],
+        >>> }
+        ...
     """
 
     def get_line_names(self) -> typing.List[str]:
