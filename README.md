@@ -19,8 +19,8 @@ The API allows you to build scalable and fully automated human-in-the-loop ML pi
 * Support for all common Toloka use cases: creating projects, adding pools, uploading tasks, and so on.
 * Toloka entities are represented as Python classes. You can use them instead of accessing the API using JSON representations.
 * There’s no need to validate JSON files and work with them directly.
-* Support of both synchronous and asynchronous usages.
-* Streaming support: send and receive data to Toloka in real time. It’s useful when you need to pass data between two related projects: one for data labeling, and another for its validation.  
+* Support of both synchronous and asynchronous (via async/await) executions.
+* Streaming support: build complex pipelines which send and receive data in real time. For example, you can [pass data between two related projects](https://github.com/Toloka/toloka-kit/blob/main/examples/6.streaming_pipelines/streaming_pipelines.ipynb): one for data labeling, and another for its validation. 
 * [AutoQuality](https://medium.com/toloka/automating-crowdsourcing-quality-control-ad057baf00fd) feature which automatically finds the best fitting quality control rules for your project.
 
 ## Prerequisites
@@ -36,7 +36,7 @@ Before you begin, make sure that:
 ```
 $ pip install toloka-kit
 ```
-For production environments, specify the exact package version. The latest stable version is 1.1.3.
+For production environments, specify the exact package version. For the latest stable version, check the [project page at pypi.org](https://pypi.org/project/toloka-kit/).
 
 **Note**: Starting with v1.0.0 release only the core version of the package is installed by default. See the Optional dependencies section for the details.
 
@@ -59,7 +59,7 @@ If the code above has not raised any errors or exceptions, it means that everyth
 
 3. Follow our [Learn the basics](https://github.com/Toloka/toloka-kit/blob/main/examples/0.getting_started/0.learn_the_basics/learn_the_basics.ipynb) tutorial to learn how to work with Toloka API using Toloka-Kit.
 
-Optional dependencies
+## Optional dependencies
 Run this command to install toloka-kit with all additional dependencies:
 ```shell
 $ pip install toloka-kit[all]
