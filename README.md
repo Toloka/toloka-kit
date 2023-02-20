@@ -85,5 +85,5 @@ $ pip install toloka-kit[pandas,autoquality,s3,zookeeper,jupyter-metrics] # remo
 Feel free to contribute to toloka-kit. Right now, we need more [usage examples](https://github.com/Toloka/toloka-kit/tree/main/examples#need-more-examples).
 
 ## License
-© YANDEX LLC, 2020-2021.
+© YANDEX LLC, 2020.
 Licensed under the terms of the Apache License, Version 2.0. See [LICENSE](https://github.com/Toloka/toloka-kit/blob/main/LICENSE) for more details.
