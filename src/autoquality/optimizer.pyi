@@ -52,6 +52,7 @@ class AutoQuality:
         >>> aq.create_tasks(aq_tasks)
         >>> aq.run()
         >>> aq.best_pool_params
+        ...
     """
 
     def setup_pools(self):

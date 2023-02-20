@@ -63,14 +63,16 @@ class BaseMetric:
         means that is nothing being gathered on this step. This is not zero value!
 
         Return example:
-        {
-            'rejected_assignments_in_pool': [(datetime.datetime(2021, 8, 12, 10, 4, 44, 895232), 0)],
-            'submitted_assignments_in_pool': [(datetime.datetime(2021, 8, 12, 10, 4, 45, 321904), 75)],
-            'accepted_assignments_in_pool': [(datetime.datetime(2021, 8, 12, 10, 4, 45, 951156), 75)],
-            'accepted_events_in_pool': [(datetime.datetime(2021, 8, 11, 15, 13, 3, 65000), 1), ... ],
-            'rejected_events_in_pool': [],
-            # no toloka_requester_balance on this iteration
-        }
+
+        >>> {
+        >>>     'rejected_assignments_in_pool': [(datetime.datetime(2021, 8, 12, 10, 4, 44, 895232), 0)],
+        >>>     'submitted_assignments_in_pool': [(datetime.datetime(2021, 8, 12, 10, 4, 45, 321904), 75)],
+        >>>     'accepted_assignments_in_pool': [(datetime.datetime(2021, 8, 12, 10, 4, 45, 951156), 75)],
+        >>>     'accepted_events_in_pool': [(datetime.datetime(2021, 8, 11, 15, 13, 3, 65000), 1), ... ],
+        >>>     'rejected_events_in_pool': [],
+        >>>     # no toloka_requester_balance on this iteration
+        >>> }
+        ...
         """
         ...
 
@@ -116,9 +118,12 @@ class Balance(BaseMetric):
         >>>
         >>> collector = MetricCollector([Balance(toloka_client=toloka_client)], print_metric)
         >>> asyncio.run(collector.run())
-        {
-            toloka_requester_balance: [(datetime.datetime(2021, 8, 30, 10, 30, 59, 628239), Decimal('123.4500'))],
-        }
+        ...
+
+        >>> {
+        >>>     toloka_requester_balance: [(datetime.datetime(2021, 8, 30, 10, 30, 59, 628239), Decimal('123.4500'))],
+        >>> }
+        ...
     """
 
     def get_line_names(self) -> typing.List[str]:
@@ -159,10 +164,13 @@ class NewUserBonuses(BaseMetric):
         >>>
         >>> collector = MetricCollector([NewUserBonuses(toloka_client=toloka_client)], print_metric)
         >>> asyncio.run(collector.run())
-        {
-            'bonus_count': [(datetime.datetime(2021, 11, 18, 8, 29, 9, 734373), 0)],
-            'bonus_money': [(datetime.datetime(2021, 11, 18, 8, 29, 9, 734377), Decimal('0'))]
-        }
+        ...
+
+        >>> {
+        >>>     'bonus_count': [(datetime.datetime(2021, 11, 18, 8, 29, 9, 734373), 0)],
+        >>>     'bonus_money': [(datetime.datetime(2021, 11, 18, 8, 29, 9, 734377), Decimal('0'))]
+        >>> }
+        ...
     """
 
     def get_line_names(self) -> typing.List[str]:
@@ -218,10 +226,13 @@ class NewUserSkills(BaseMetric):
         >>>     print_metric
         >>> )
         >>> asyncio.run(collector.run())
-        {
-            'count': [(datetime.datetime(2021, 11, 18, 8, 31, 54, 11000), 1)],
-            'values':  [(datetime.datetime(2021, 11, 18, 8, 31, 54, 11000), Decimal('50.000000000000'))],
-        }
+        ...
+
+        >>> {
+        >>>     'count': [(datetime.datetime(2021, 11, 18, 8, 31, 54, 11000), 1)],
+        >>>     'values':  [(datetime.datetime(2021, 11, 18, 8, 31, 54, 11000), Decimal('50.000000000000'))],
+        >>> }
+        ...
     """
 
     def get_line_names(self) -> typing.List[str]:
@@ -284,17 +295,20 @@ class NewMessageThreads(BaseMetric):
         >>>     print_metric
         >>> )
         >>> asyncio.run(collector.run())
-        {
-            # all messages in all projects and pools
-            'messages_count': [(datetime.datetime(2021, 11, 19, 9, 40, 15, 970000), 10)],
-            # messages on this exact pool
-            'my_train_pool': [(datetime.datetime(2021, 11, 19, 12, 42, 50, 554830), 4)],
-            # with 'join_events=True' it will be zero if no messages
-            'my_working_pool': [(datetime.datetime(2021, 11, 19, 12, 42, 50, 554830), 0)],
-            'pedestrian_proj': [(datetime.datetime(2021, 11, 19, 12, 42, 50, 554830), 1)],
-            # total count != sum of other counts, because could exist different pools and projects
-            'checking_proj': [(datetime.datetime(2021, 11, 19, 12, 42, 50, 554830), 1)],
-        }
+        ...
+
+        >>> {
+        >>>     # all messages in all projects and pools
+        >>>     'messages_count': [(datetime.datetime(2021, 11, 19, 9, 40, 15, 970000), 10)],
+        >>>     # messages on this exact pool
+        >>>     'my_train_pool': [(datetime.datetime(2021, 11, 19, 12, 42, 50, 554830), 4)],
+        >>>     # with 'join_events=True' it will be zero if no messages
+        >>>     'my_working_pool': [(datetime.datetime(2021, 11, 19, 12, 42, 50, 554830), 0)],
+        >>>     'pedestrian_proj': [(datetime.datetime(2021, 11, 19, 12, 42, 50, 554830), 1)],
+        >>>     # total count != sum of other counts, because could exist different pools and projects
+        >>>     'checking_proj': [(datetime.datetime(2021, 11, 19, 12, 42, 50, 554830), 1)],
+        >>> }
+        ...
     """
 
     def get_line_names(self) -> typing.List[str]:

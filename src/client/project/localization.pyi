@@ -8,27 +8,27 @@ import typing
 
 
 class AdditionalLanguage(toloka.client.primitives.base.BaseTolokaObject):
-    """Description for additional language in project
+    """A translation of a project interface.
 
     Args:
-        language: The language into which the translation is made. A string from ISO 639-1.
-        public_name: Translation of the project field 'public_name' into the specified language.
-        public_description: Translation of the project field 'public_description' into the specified language.
-        public_instructions: Translation of the project field 'public_instructions' into the specified language.
+        language: The language into which the translation is made. Two-letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) language code in upper case.
+        public_name: A translated project name.
+        public_description: A translated project description.
+        public_instructions: Translated instructions for Tolokers.
     """
 
     class FieldTranslation(toloka.client.primitives.base.BaseTolokaObject):
-        """Translation of one specific field
+        """A translation of a text parameter.
 
         Args:
-            value: A string translated into the desired language.
-            source: In creation you can pass only 'REQUESTER' right now.
+            value: A translated text.
+            source: A translation origin.
         """
 
         class Source(enum.Enum):
-            """Possible values of sources
+            """A translation origin.
 
-            In creation you can pass only 'REQUESTER' right now.
+            The only value 'REQUESTER' is supported so far.
             """
 
             REQUESTER = 'REQUESTER'
@@ -67,15 +67,11 @@ class AdditionalLanguage(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class LocalizationConfig(toloka.client.primitives.base.BaseTolokaObject):
-    """Translates the part of the project visible to Tolokers into different languages
-
-    It is used to make it easier for Tolokers from other countries who do not speak the necessary language to
-    understand and complete tasks.
+    """All translations of a project interface.
 
     Args:
-        default_language: The source language used in the fields public_name, public_description, and public_instructions.
-            Required parameter.
-        additional_languages: List of translations into other languages. One element - one translation.
+        default_language: The main language used for text parameters when the project was created. It is a required parameter.
+        additional_languages: A list of translations to other languages.
     """
 
     def __init__(

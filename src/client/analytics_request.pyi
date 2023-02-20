@@ -97,11 +97,9 @@ class RealTasksCountPoolAnalytics(PoolAnalyticsRequest):
 
 
 class SubmittedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
-    """Number of assignments in the "submitted" status in the pool
+    """The total number of completed assignments in the pool.
 
-    Do not confuse it with the approved status.
-    "Submitted" status means that the task was completed by a Toloker and sent for review.
-    "Approved" status means that the task has passed review and money has been paid for it.
+    The assignments can have one of the following statuses: "submitted", "approved", or "rejected".
 
     Attributes:
         subject_id: ID of the object you want to get analytics about.
