@@ -8,81 +8,82 @@
 [![Coverage](https://codecov.io/gh/Toloka/toloka-kit/branch/main/graph/badge.svg)](https://codecov.io/gh/Toloka/toloka-kit)
 [![GitHub Tests](https://github.com/Toloka/toloka-kit/workflows/Tests/badge.svg?branch=main)](//github.com/Toloka/toloka-kit/actions?query=workflow:Tests)
 
-
-[**<span style="color:red">Documentation</span>**](https://toloka.ai/en/docs/toloka-kit/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
-
-[Website](https://toloka.ai/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) |
-[API Documentation](https://toloka.ai/en/docs/api/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) |
-[Platform](http://platform.toloka.ai/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
+[Toloka website](https://toloka.ai/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) | [Documentation](https://toloka.ai/en/docs/toloka-kit/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) | [Issue tracker](https://github.com/Toloka/toloka-kit/issues)
 
 
-Designed by engineers for engineers, Toloka lets you integrate an on-demand workforce directly into your processes. Our cloud-based crowdsourcing platform is a fast and efficient way to collect and label large data sources for machine learning and other business purposes.
 
-Main advantages of Toloka:
-  - **Top-quality data** -  Collect and annotate training data that meets and exceeds industry quality standards thanks to multiple quality control methods and mechanisms available in Toloka.
-  - **Scalable projects** - Have any amounts of image, text, speech, audio, or video data collected and labeled for you by millions of skilled Toloka users across the globe.
-  - **Cost-efficiency** - Save time and money with this purpose-built platform for handling large-scale data collection and annotation projects, on-demand 24/7, at your own price and within your timeframe.
-  - **Free, powerful API** - Build scalable and fully automated human-in-the-loop machine learning pipelines with a powerful open API.
+Toloka-Kit is a Python library for working with [Toloka API](https://toloka.ai/docs/api/concepts/about.html/?utm_source=github&utm_medium=site&utm_campaign=tolokakit). 
 
-**⚠️ toloka-kit==1.0.0 breaking changes ⚠️**
+The API allows you to build scalable and fully automated human-in-the-loop ML pipelines, and integrate them into your processes. The toolkit makes integration easier. You can use it with Jupyter notebooks.
 
-Starting with 1.0.0 release only the core version of the package is installed by default. See "Optional dependencies"
-section for details.
+* Support for all common Toloka use cases: creating projects, adding pools, uploading tasks, and so on.
+* Toloka entities are represented as Python classes. You can use them instead of accessing the API using JSON representations.
+* There’s no need to validate JSON files and work with them directly.
+* Support of both synchronous and asynchronous (via async/await) executions.
+* Streaming support: build complex pipelines which send and receive data in real time. For example, you can [pass data between two related projects](https://github.com/Toloka/toloka-kit/blob/main/examples/6.streaming_pipelines/streaming_pipelines.ipynb): one for data labeling, and another for its validation. 
+* [AutoQuality](https://medium.com/toloka/automating-crowdsourcing-quality-control-ad057baf00fd) feature which automatically finds the best fitting quality control rules for your project.
 
-Requirements
---------------
-- Python 3.7+
-- Register in [Toloka.ai](https://toloka.ai/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) as requester. Registration process described [here](https://toloka.ai/en/docs/guide/concepts/access?utm_source=github&utm_medium=site&utm_campaign=tolokakit).
-- [Topping up your account](https://toloka.ai/en/docs/guide/concepts/refill.html?utm_source=github&utm_medium=site&utm_campaign=tolokakit).
-- Getting an OAuth. Learn more in [help](https://toloka.ai/en/docs/api/concepts/access?utm_source=github&utm_medium=site&utm_campaign=tolokakit) and in the image below.
+## Prerequisites
 
+Before you begin, make sure that:
+* You are using [Python](https://www.python.org/) v3.7 or higher.
+* You are [registered](https://toloka.ai/docs/guide/concepts/access.html/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) in Toloka as a requester.
+* You have [topped up](https://toloka.ai/docs/guide/concepts/refill.html/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) your Toloka account.
+* You have [set up an OAuth token](https://toloka.ai/docs/api/concepts/access.html/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) to access Toloka API.
 
-![How to get OAuth token](https://yastatic.net/s3/doc-binary/src/support/toloka/en/toloka-kit/learn-basics/get-oauth-token.png "How to get OAuth token")
-
-Get Started
---------------
-Installing toloka-kit is as easy as:
+## Get Started
+1. Install the Toloka-Kit package. Run the following command in the command shell:
 ```
 $ pip install toloka-kit
 ```
-Note: this project is still under heavy development and interfaces may change slightly. For production environments please specify exact package version. For example: `toloka-kit==0.1.26`
+For production environments, specify the exact package version. For the latest stable version, check the [project page at pypi.org](https://pypi.org/project/toloka-kit/).
 
-### Optional dependencies
-If you want to install toloka-kit with all additional dependencies:
+**Note**: Starting with v1.0.0 release only the core version of the package is installed by default. See the Optional dependencies section for the details.
+
+If you are just starting to use Toloka-Kit, the core package is enough. Our docs explicitly state which features require other packages, so you can install them later if you need them.
+
+2. Check access to the API with the following Python script. The script imports the package, asks to enter the OAuth token, and requests general information about your account.
+```python
+import toloka.client as toloka
+from getpass import getpass
+
+
+# Uncomment one of the following two lines to specify where to send requests to: sandbox or production version of Toloka
+target = 'SANDBOX'
+# target = 'PRODUCTION'
+
+toloka_client = toloka.TolokaClient(getpass("Enter your token:"), target)
+print(toloka_client.get_requester())
+```
+If the code above has not raised any errors or exceptions, it means that everything works correctly.
+
+3. Follow our [Learn the basics](https://github.com/Toloka/toloka-kit/blob/main/examples/0.getting_started/0.learn_the_basics/learn_the_basics.ipynb) tutorial to learn how to work with Toloka API using Toloka-Kit.
+
+## Optional dependencies
+Run this command to install toloka-kit with all additional dependencies:
 ```shell
 $ pip install toloka-kit[all]
 ```
-or install only required extra dependencies (see our [documentation](https://toloka.ai/en/docs/toloka-kit/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)):
+To install specific dependencies, run:
 ```shell
-$ pip install toloka-kit[pandas,autoquality,s3,zookeeper,jupyter-metrics]  # remove unnecessary requirements from the list
+$ pip install toloka-kit[pandas,autoquality,s3,zookeeper,jupyter-metrics] # remove unnecessary requirements from the list
 ```
 
-**Try your first program and checks the validity of the OAuth token:**
-```python
-import toloka.client as toloka
+## Usage examples
+[Toloka-kit usage examples](https://github.com/Toloka/toloka-kit/tree/main/examples#toloka-kit-usage-examples) - tutorials for specific data labeling tasks. They demonstrate how to work with Toloka API using Toloka-Kit.
 
-toloka_client = toloka.TolokaClient(input("Enter your token:"), 'PRODUCTION')
-print(toloka_client.get_requester())
-```
+## Documentation
+* [Toloka-Kit documentation](https://toloka.ai/en/docs/toloka-kit/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
+* [Toloka API reference](https://toloka.ai/docs/api/concepts/about.html/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
+* [Toloka web interface documentation](https://toloka.ai/docs/guide/concepts/overview.html/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
 
-Useful Links
---------------
-- [Toloka homepage](https://toloka.ai/?utm_source=github&utm_medium=site&utm_campaign=tolokakit).
-- [Toloka requester's guide](https://toloka.ai/en/docs/?utm_source=github&utm_medium=site&utm_campaign=tolokakit).
-- We recommend that you first get acquainted with Toloka through the web interface and implement [one of the tutorials](https://toloka.ai/en/docs/guide/concepts/usecases?utm_source=github&utm_medium=site&utm_campaign=tolokakit).
-- [Toloka API documentation](https://toloka.ai/en/docs/api/?utm_source=github&utm_medium=site&utm_campaign=tolokakit).
-- [Toloka-kit usage examples](https://github.com/Toloka/toloka-kit/tree/main/examples#toloka-kit-usage-examples).
+## Support
+* To suggest a feature or report a bug, go to our [issues page](https://github.com/Toloka/toloka-kit/issues).
+* If you have any questions, feel free to ask our [Slack community](https://toloka.ai/community/?utm_source=github&utm_medium=site&utm_campaign=tolokakit).
 
-Questions and bug reports
---------------
-* For reporting bugs please use the [Toloka/bugreport](https://github.com/Toloka/toloka-kit/issues) page.
-* Join our English-speaking [slack community](https://toloka.ai/community?utm_source=github&utm_medium=site&utm_campaign=tolokakit) for both tech and abstract questions.
+## Contributing
+Feel free to contribute to toloka-kit. Right now, we need more [usage examples](https://github.com/Toloka/toloka-kit/tree/main/examples#need-more-examples).
 
-
-Contributing
--------
-Feel free to contribute to toloka-kit. Right now, we really need more [usage examples](https://github.com/Toloka/toloka-kit/tree/main/examples#need-more-examples).
-
-License
--------
-© YANDEX LLC, 2020-2021. Licensed under the Apache License, Version 2.0. See LICENSE file for more details.
+## License
+© YANDEX LLC, 2020.
+Licensed under the terms of the Apache License, Version 2.0. See [LICENSE](https://github.com/Toloka/toloka-kit/blob/main/LICENSE) for more details.
