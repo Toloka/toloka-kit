@@ -61,7 +61,7 @@ class AsyncTolokaClient:
         async_client = cls.__new__(cls)
         async_client.__init__(
             token=client.token, url=client.url, retries=client.retryer_factory(), timeout=client.default_timeout,
-            act_under_account_id=client.act_under_account_id, retry_quotas=None,
+            act_under_account_id=client.act_under_account_id, retry_quotas=None, verify=client.verify,
         )
         async_client._sync_client = client
         return async_client
@@ -72,7 +72,7 @@ class AsyncTolokaClient:
 
     @functools.lru_cache(maxsize=128)
     def _session_for_thread(self, thread_id: int) -> httpx.AsyncClient:
-        client = httpx.AsyncClient(headers=self._headers, base_url=self.url)
+        client = httpx.AsyncClient(headers=self._headers, base_url=self.url, verify=self.verify)
         return client
 
     @property
