@@ -6,6 +6,7 @@ import pickle
 import httpx
 import pytest
 import simplejson
+import ssl
 from pytest_lazyfixture import lazy_fixture
 
 from toloka.client import TolokaClient
@@ -13,6 +14,7 @@ import toloka.client as client
 
 from .testutils.util_functions import check_headers
 from .conftest import SyncOverAsyncTolokaClient
+
 
 @pytest.fixture
 def random_url():
@@ -116,3 +118,34 @@ def test_client_act_as(respx_mock, client_act_under_account, shared_account_id, 
     respx_mock.get(f'{client_act_under_account.url}/api/v1/requester').mock(side_effect=get_requester)
 
     client_act_under_account.get_requester()
+
+
+@pytest.fixture
+def sync_client_no_verify_sync(sync_toloka_client):
+    client = copy.deepcopy(sync_toloka_client)
+    client.verify = False
+    return client
+
+
+@pytest.fixture
+def async_client_no_verify_sync(async_toloka_client):
+    client = copy.deepcopy(async_toloka_client)
+    client.verify = False
+    return client
+
+
+def get_verify_mode(client: TolokaClient):
+    return client._session._transport_for_url(client.url)._pool._ssl_context.verify_mode
+
+
+@pytest.mark.parametrize(
+    'toloka_client,expected_ssl_context',
+    [
+        (lazy_fixture('sync_toloka_client'), ssl.CERT_REQUIRED),
+        (lazy_fixture('sync_client_no_verify_sync'), ssl.CERT_NONE),
+        (lazy_fixture('async_toloka_client'), ssl.CERT_REQUIRED),
+        (lazy_fixture('async_client_no_verify_sync'), ssl.CERT_NONE),
+    ],
+)
+def test_client_ssl_verify(toloka_client, expected_ssl_context):
+    assert get_verify_mode(toloka_client) == expected_ssl_context
