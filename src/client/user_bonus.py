@@ -3,16 +3,15 @@ __all__ = [
     'UserBonusCreateRequestParameters'
 ]
 
-import uuid
-
 from attr.validators import optional, instance_of
 import datetime
 from decimal import Decimal
 from typing import Dict
 
 from .primitives.base import BaseTolokaObject
-from .primitives.parameter import Parameters
+from .primitives.parameter import IdempotentOperationParameters
 from ..util._codegen import attribute
+from ..util._docstrings import inherit_docstrings
 
 
 class UserBonus(BaseTolokaObject):
@@ -87,21 +86,16 @@ class UserBonus(BaseTolokaObject):
     created: datetime.datetime = attribute(readonly=True)
 
 
-class UserBonusCreateRequestParameters(Parameters):
+@inherit_docstrings
+class UserBonusCreateRequestParameters(IdempotentOperationParameters):
     """Parameters for creating bonuses for Tolokers.
 
     Used in methods 'create_user_bonus', 'create_user_bonuses' и 'create_user_bonuses_async' of the class TolokaClient,
     to clarify the behavior when creating bonuses.
 
     Attributes:
-        operation_id: Operation ID. If asynchronous creation is used, by this identifier you can later get
-            results of creating bonuses.
         skip_invalid_items: Validation parameters of objects:
             * `True` — Award a bonus if the object with bonus information passed validation. Otherwise, skip the bonus.
             * `False` — Default behavior. Stop the operation and don't award bonuses if at least one object didn't pass validation.
     """
-
-    operation_id: uuid.UUID = attribute(factory=uuid.uuid4)
     skip_invalid_items: bool
-
-    async_mode: bool = attribute(init=False)

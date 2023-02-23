@@ -13,9 +13,10 @@ from typing import Optional
 import attr
 import httpx
 
-from ..client import TolokaClient
+from ..client import TolokaClient, structure, unstructure, batch_create_results
 from ..client.exceptions import (
     raise_on_api_error,
+    ValidationApiError,
 )
 from ..client.operations import Operation
 from ..client.primitives.retry import AsyncRetryingOverURLLibRetry
@@ -146,3 +147,64 @@ class AsyncTolokaClient:
             await asyncio.sleep(default_time_to_wait.total_seconds())
             if datetime.datetime.now(datetime.timezone.utc) > wait_until_time:
                 raise TimeoutError
+
+    async def _sync_via_async(
+            self, objects, parameters, url: str,
+            result_type, operation_type, output_id_field: str, get_method,
+    ):
+        # TODO: do not duplicate so many things here
+        if not parameters.async_mode:
+            response = await self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
+            return structure(response, result_type)
+
+        # Emulates synchronous operation, through asynchronous calls and reading operation logs.
+
+        # Index objects to restore sequence in the future
+        is_single = not isinstance(objects, list)
+        if is_single:
+            objects._unexpected['__item_idx'] = '0'
+        else:
+            for item_idx, obj in enumerate(objects):
+                obj._unexpected['__item_idx'] = str(item_idx)
+
+        insert_operation = await self._async_create_objects_idempotent(url, objects, parameters, operation_type)
+        insert_operation = await self.wait_operation(insert_operation, datetime.timedelta(minutes=60))
+
+        item_id_to_idx = {}
+        validation_errors = {}
+        for log_item in await self.get_operation_log(insert_operation.id):
+            if '__item_idx' in log_item.input:
+                index = log_item.input['__item_idx']
+            else:
+                continue  # operation could be not just creating objects (e.g. open_pool while creating_object)
+            if log_item.success:
+                item_id_to_idx[log_item.output[output_id_field]] = index
+            else:
+                validation_errors[index] = {
+                    name: structure(error, batch_create_results.FieldValidationError)
+                    for name, error in log_item.output.items()
+                }
+
+        # Emulates the response as in a synchronous method:
+        # it will throw an exception even if the skip_invalid_items parameter is passed
+        # but no objects are created
+        if validation_errors and not item_id_to_idx:
+            raise ValidationApiError(
+                code='VALIDATION_ERROR',
+                message='Validation failed',
+                payload=validation_errors,
+            )
+
+        if is_single:
+            item_id = list(item_id_to_idx.keys())[0]
+            return get_method(item_id)
+        else:
+            items = {}
+            obj_it = get_method(
+                id_gte=min(item_id_to_idx.keys()),
+                id_lte=max(item_id_to_idx.keys()),
+            )
+            async for obj in obj_it:
+                if obj.id in item_id_to_idx:
+                    items[item_id_to_idx[obj.id]] = obj
+            return result_type(items=items, validation_errors=validation_errors or {})

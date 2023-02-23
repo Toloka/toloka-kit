@@ -13,9 +13,10 @@ import attr
 
 from .primitives.base import BaseTolokaObject
 from .primitives.infinite_overlap import InfiniteOverlapParametersMixin
-from .primitives.parameter import Parameters
+from .primitives.parameter import IdempotentOperationParameters
 from .task import BaseTask
 from ..util._codegen import attribute, expand
+from ..util._docstrings import inherit_docstrings
 
 
 class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
@@ -76,11 +77,11 @@ class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
         return self
 
 
-class TaskSuiteCreateRequestParameters(Parameters):
+@inherit_docstrings
+class TaskSuiteCreateRequestParameters(IdempotentOperationParameters):
     """Parameters for creating task suites.
 
     Attributes:
-        operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122). Use it if the `async_mode` is set to `True`.
         skip_invalid_items: Task suite validation option:
             * `True` — All valid task suites are added. If a task suite does not pass validation, then it is not added to Toloka.
             * `False` — If any task suite does not pass validation, then operation is cancelled and no task suites are added to Toloka.
@@ -92,18 +93,10 @@ class TaskSuiteCreateRequestParameters(Parameters):
 
             Default value: `False`.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
-        async_mode: Request processing mode:
-            * `True` — Asynchronous operation is started internally.
-            * `False` — The request is processed synchronously. A maximum of 5000 task suites can be added in a single request in this mode.
-
-            Default value: `True`.
     """
-
-    operation_id: UUID = attribute(factory=uuid.uuid4)
     skip_invalid_items: bool
     allow_defaults: bool
     open_pool: bool
-    async_mode: bool = attribute(default=True)
 
 
 class TaskSuiteOverlapPatch(BaseTolokaObject):

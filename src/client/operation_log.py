@@ -4,6 +4,7 @@ from typing import Any, Dict
 from .primitives.base import BaseTolokaObject
 
 
+# TODO: Add spec_enum for type + need to spec based not only on enums but on success
 class OperationLogItem(BaseTolokaObject):
     """Objects of which the operation log consists
 
@@ -21,3 +22,4 @@ class OperationLogItem(BaseTolokaObject):
 
     input: Dict[str, Any]
     output: Dict[str, Any]
+

@@ -61,7 +61,7 @@ def task_suite_map_with_readonly(task_suite_map):
     }
 
 
-def test_create_task_suite(respx_mock, toloka_client, toloka_url, task_suite_map, task_suite_map_with_readonly):
+def test_create_task_suite_sync(respx_mock, toloka_client, toloka_url, task_suite_map, task_suite_map_with_readonly):
 
     def task_suites(request):
         expected_headers = {
@@ -77,7 +77,7 @@ def test_create_task_suite(respx_mock, toloka_client, toloka_url, task_suite_map
     respx_mock.post(f'{toloka_url}/task-suites').mock(side_effect=task_suites)
 
     # TODO: test creation parameters
-    result = toloka_client.create_task_suite(client.unstructure(task_suite_map))
+    result = toloka_client.create_task_suite(client.unstructure(task_suite_map), async_mode=False)
     assert task_suite_map_with_readonly == client.unstructure(result)
 
 
@@ -174,7 +174,7 @@ def create_log():
             'input': {
                 'pool_id': '21',
                 'tasks': [{'input_values': {'image': 'http://images.com/1.png'}}],
-                 '__client_uuid': "e3e70682c2094cac629f6fbed82c07cd",
+                 '__item_idx': "0",
             },
             'output': {
                 'task_suite_id': '00013b0abd--60094b06c680984b001e0071',
@@ -186,7 +186,7 @@ def create_log():
             'input': {
                 'pool_id': '21',
                 'tasks': [{'input_values': {'image': 'http://images.com/2.png'}}],
-                '__client_uuid': 'f728b4fa42485e3a0a5d2f346baa9455',
+                '__item_idx': '1',
             },
             'output': {
                 'task_suite_id': '00013b0abd--60094b06c680984b001e0072',
@@ -205,7 +205,7 @@ def get_task_suites_map():
             'pool_id': '21',
             'tasks': [{'input_values': {'image': 'http://images.com/1.png'}}],
             'mixed': False,
-           'created': '2016-07-09T14:39:00',
+            'created': '2016-07-09T14:39:00',
         },
         {
             'id': '00013b0abd--60094b06c680984b001e0072',
@@ -263,8 +263,8 @@ def test_create_task_suites_sync_through_async(
         ) == request.url.params
         imcoming_task_suites = []
         for t in simplejson.loads(request.content):
-            assert '__client_uuid' in t
-            t.pop('__client_uuid')
+            assert '__item_idx' in t
+            t.pop('__item_idx')
             imcoming_task_suites.append(t)
         assert task_suites_map == imcoming_task_suites
         return httpx.Response(json=operation_running_map, status_code=201)

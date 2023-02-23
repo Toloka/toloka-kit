@@ -60,7 +60,7 @@ def user_bonus_map_without_message_with_readonly(user_bonus_map_without_message)
     )
 
 
-def test_create_user_bonus(respx_mock, toloka_client, toloka_url, user_bonus_map, user_bonus_map_with_readonly):
+def test_create_user_bonus_sync(respx_mock, toloka_client, toloka_url, user_bonus_map, user_bonus_map_with_readonly):
 
     def user_bonuses(request):
         expected_headers = {
@@ -71,7 +71,9 @@ def test_create_user_bonus(respx_mock, toloka_client, toloka_url, user_bonus_map
         check_headers(request, expected_headers)
 
         assert QueryParams(
-            operation_id=request.url.params['operation_id'], skip_invalid_items='true'
+            operation_id=request.url.params['operation_id'],
+            skip_invalid_items='true',
+            async_mode='false',
         ) == request.url.params
         assert user_bonus_map == simplejson.loads(request.content, parse_float=Decimal)
         return httpx.Response(text=simplejson.dumps(user_bonus_map_with_readonly), status_code=201)
@@ -81,12 +83,12 @@ def test_create_user_bonus(respx_mock, toloka_client, toloka_url, user_bonus_map
     assert user_bonus.amount == Decimal('1.50')
     result = toloka_client.create_user_bonus(
         user_bonus,
-        client.user_bonus.UserBonusCreateRequestParameters(skip_invalid_items=True),
+        client.user_bonus.UserBonusCreateRequestParameters(skip_invalid_items=True, async_mode=False),
     )
     assert user_bonus_map_with_readonly == client.unstructure(result)
 
     # Expanded syntax
-    result = toloka_client.create_user_bonus(user_bonus, skip_invalid_items=True)
+    result = toloka_client.create_user_bonus(user_bonus, skip_invalid_items=True, async_mode=False)
     assert user_bonus_map_with_readonly == client.unstructure(result)
 
 
@@ -147,7 +149,9 @@ def test_create_user_bonuses(respx_mock, toloka_client, toloka_url, user_bonus_m
         check_headers(request, expected_headers)
 
         assert QueryParams(
-            operation_id=request.url.params['operation_id'], skip_invalid_items='true'
+            operation_id=request.url.params['operation_id'],
+            skip_invalid_items='true',
+            async_mode='false',
         ) == request.url.params
         assert [{'user_id': 'user-2', 'amount': -5}, user_bonus_map] == simplejson.loads(request.content, parse_float=Decimal)
         return httpx.Response(text=simplejson.dumps(raw_result), status_code=201)
@@ -160,7 +164,7 @@ def test_create_user_bonuses(respx_mock, toloka_client, toloka_url, user_bonus_m
             client.user_bonus.UserBonus(user_id='user-2', amount=Decimal('-5.')),
             client.structure(user_bonus_map, client.user_bonus.UserBonus),
         ],
-        client.user_bonus.UserBonusCreateRequestParameters(skip_invalid_items=True),
+        client.user_bonus.UserBonusCreateRequestParameters(skip_invalid_items=True, async_mode=False),
     )
     assert raw_result == client.unstructure(result)
 
@@ -171,6 +175,7 @@ def test_create_user_bonuses(respx_mock, toloka_client, toloka_url, user_bonus_m
             client.structure(user_bonus_map, client.user_bonus.UserBonus),
         ],
         skip_invalid_items=True,
+        async_mode=False,
     )
     assert raw_result == client.unstructure(result)
 
@@ -190,7 +195,9 @@ def test_create_user_bonuses_without_message(
         check_headers(request, expected_headers)
 
         assert QueryParams(
-            operation_id=request.url.params['operation_id'], skip_invalid_items='true'
+            operation_id=request.url.params['operation_id'],
+            skip_invalid_items='true',
+            async_mode='false',
         ) == request.url.params
         assert [user_bonus_map_without_message] == simplejson.loads(request.content, parse_float=Decimal)
         return httpx.Response(text=simplejson.dumps(raw_result), status_code=201)
@@ -200,7 +207,7 @@ def test_create_user_bonuses_without_message(
     # Request object syntax
     result = toloka_client.create_user_bonuses(
         [client.structure(user_bonus_map_without_message, client.user_bonus.UserBonus)],
-        client.user_bonus.UserBonusCreateRequestParameters(skip_invalid_items=True),
+        client.user_bonus.UserBonusCreateRequestParameters(skip_invalid_items=True, async_mode=False),
     )
     assert raw_result == client.unstructure(result)
 
@@ -208,6 +215,7 @@ def test_create_user_bonuses_without_message(
     result = toloka_client.create_user_bonuses(
         [client.structure(user_bonus_map_without_message, client.user_bonus.UserBonus)],
         skip_invalid_items=True,
+        async_mode=False
     )
     assert raw_result == client.unstructure(result)
 

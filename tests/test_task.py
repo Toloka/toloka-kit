@@ -67,10 +67,13 @@ def test_task_to_json(task_map):
 
 @pytest.fixture
 def task_map_with_readonly(task_map):
-    return {**task_map, 'created': '2016-10-09T11:42:01'}
+    return {
+        **task_map,
+        'created': '2016-10-09T11:42:01',
+    }
 
 
-def test_create_task(respx_mock, toloka_client, toloka_url, task_map, task_map_with_readonly):
+def test_create_task_sync(respx_mock, toloka_client, toloka_url, task_map, task_map_with_readonly):
 
     def tasks(request):
         expected_headers = {
@@ -84,7 +87,7 @@ def test_create_task(respx_mock, toloka_client, toloka_url, task_map, task_map_w
         return httpx.Response(json=task_map_with_readonly, status_code=201)
 
     respx_mock.post(f'{toloka_url}/tasks').mock(side_effect=tasks)
-    result = toloka_client.create_task(client.structure(task_map, client.task.Task))
+    result = toloka_client.create_task(client.structure(task_map, client.task.Task), async_mode=False)
     assert task_map_with_readonly == client.unstructure(result)
 
 
@@ -167,7 +170,7 @@ def create_tasks_log():
                     'image': 'http://images.com/1.png'
                 },
                 'pool_id': '21',
-                '__client_uuid': 'e3e70682c2094cac629f6fbed82c07cd',
+                '__item_idx': '0',
             },
             'output': {
                 'task_id': '00014495f0--60213f7c25a8b84e2ffb7a2c'
@@ -181,7 +184,7 @@ def create_tasks_log():
                     'image': 'http://images.com/2.png'
                 },
                 'pool_id': '22',
-                '__client_uuid': 'f728b4fa42485e3a0a5d2f346baa9455',
+                '__item_idx': '1',
             },
             'output': {
                 'task_id': '00014495f0--60213f7c25a8b84e2ffb7a3b'
@@ -195,7 +198,7 @@ def create_tasks_log():
                     'image': 'http://images.com/2.png'
                 },
                 'pool_id': '22',
-                '__client_uuid': 'eb1167b367a9c3787c65c1e582e2e662',
+                '__item_idx': '2',
             },
             'output': {
                 'input_values.image': {
@@ -212,7 +215,7 @@ def create_tasks_log():
         },
         {
             'input': {
-                'pool_id': 22
+                'pool_id': 22,
             },
             'output': {
                 'code': 'EMPTY_POOL',
@@ -227,52 +230,34 @@ def create_tasks_log():
 
 @pytest.fixture
 def created_tasks_21_map():
-    return [
-        {
-            'id': '00014495f0--60213f7c25a8b84e2ffb7a2c',
-            'pool_id': '21',
-            'input_values': {'image': 'http://images.com/1.png'},
-            'overlap': 1,
-            'infinite_overlap': False,
-            'remaining_overlap': 1,
-        }
-    ]
+    return {
+        'id': '00014495f0--60213f7c25a8b84e2ffb7a2c',
+        'pool_id': '21',
+        'input_values': {'image': 'http://images.com/1.png'},
+        'overlap': 1,
+        'infinite_overlap': False,
+        'remaining_overlap': 1,
+    }
 
 
 @pytest.fixture
 def created_tasks_22_map():
-    return [
-        {
-            'id': '00014495f0--60213f7c25a8b84e2ffb7a3b',
-            'pool_id': '22',
-            'input_values': {'image': 'http://images.com/2.png'},
-            'overlap': 1,
-            'infinite_overlap': False,
-            'remaining_overlap': 1,
-        }
-    ]
+    return {
+        'id': '00014495f0--60213f7c25a8b84e2ffb7a3b',
+        'pool_id': '22',
+        'input_values': {'image': 'http://images.com/2.png'},
+        'overlap': 1,
+        'infinite_overlap': False,
+        'remaining_overlap': 1,
+    }
 
 
 @pytest.fixture
-def task_create_result_map():
+def task_create_result_map(created_tasks_21_map, created_tasks_22_map):
     return {
         'items': {
-            '0': {
-                'input_values': {'image': 'http://images.com/1.png'},
-                'id': '00014495f0--60213f7c25a8b84e2ffb7a2c',
-                'infinite_overlap': False,
-                'overlap': 1,
-                'pool_id': '21',
-                'remaining_overlap': 1
-            },
-            '1': {
-                'input_values': {'image': 'http://images.com/2.png'},
-                'id': '00014495f0--60213f7c25a8b84e2ffb7a3b',
-                'infinite_overlap': False,
-                'overlap': 1,
-                'pool_id': '22',
-                'remaining_overlap': 1
-            },
+            '0': created_tasks_21_map,
+            '1': created_tasks_22_map,
         },
         'validation_errors':
         {
@@ -312,12 +297,12 @@ def test_create_tasks_sync_through_async(
             open_pool='true',
             async_mode='true',
         ) == request.url.params
-        imcoming_tasks = []
+        incoming_tasks = []
         for t in simplejson.loads(request.content):
-            assert '__client_uuid' in t
-            t.pop('__client_uuid')
-            imcoming_tasks.append(t)
-        assert tasks_map == imcoming_tasks
+            assert '__item_idx' in t
+            t.pop('__item_idx')
+            incoming_tasks.append(t)
+        assert tasks_map == incoming_tasks
         return httpx.Response(json=operation_running_map, status_code=201)
 
     def operation_success(request):
@@ -349,8 +334,12 @@ def test_create_tasks_sync_through_async(
         check_headers(request, expected_headers)
 
         params = request.url.params
-        res_map = created_tasks_21_map if params['pool_id'] == '21' else created_tasks_22_map
-        return httpx.Response(json={'items': res_map, 'has_more': False}, status_code=201)
+        created_tasks = [created_tasks_21_map, created_tasks_22_map]
+        created_tasks.sort(key=itemgetter('id'))
+        min_id_task = min(created_tasks, key=itemgetter('id'))
+        max_id_task = max(created_tasks, key=itemgetter('id'))
+        assert params['id_gte'] <= min_id_task['id'] <= max_id_task['id'] <= params['id_lte']
+        return httpx.Response(json={'items': created_tasks, 'has_more': False}, status_code=201)
 
     # mocks
     # create_task -> operation
@@ -489,8 +478,12 @@ def test_create_tasks_retry_sync_through_async(
 
     def return_tasks_by_pool(request):
         params = request.url.params
-        res_map = created_tasks_21_map if params['pool_id'] == '21' else created_tasks_22_map
-        return httpx.Response(json={'items': res_map, 'has_more': False}, status_code=201)
+        created_tasks = [created_tasks_21_map, created_tasks_22_map]
+        created_tasks.sort(key=itemgetter('id'))
+        min_id_task = min(created_tasks, key=itemgetter('id'))
+        max_id_task = max(created_tasks, key=itemgetter('id'))
+        assert params['id_gte'] <= min_id_task['id'] <= max_id_task['id'] <= params['id_lte']
+        return httpx.Response(json={'items': created_tasks, 'has_more': False}, status_code=201)
 
     respx_mock.get(
         url__regex=rf'{toloka_url}/operations/.*(?<!log)$'

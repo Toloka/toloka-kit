@@ -76,7 +76,7 @@ import io
 import logging
 import threading
 import time
-import uuid
+import inspect
 
 import attr
 import httpx
@@ -151,6 +151,7 @@ from .operation_log import OperationLogItem
 from .pool import Pool, PoolPatchRequest
 from .primitives.retry import TolokaRetry, SyncRetryingOverURLLibRetry, STATUSES_TO_RETRY
 from .primitives.base import autocast_to_enum
+from .primitives.parameter import Parameters
 from .project import Project
 from .training import Training
 from .requester import Requester
@@ -402,7 +403,13 @@ class TolokaClient:
 
         yield from items
 
-    def _try_to_async_create_objects(self, url, objects, parameters, operation_type):
+    def _async_create_objects_idempotent(
+            self,
+            url: str,
+            objects: List,
+            parameters,
+            operation_type,
+    ):
         try:
             response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
             insert_operation = structure(response, operation_type)
@@ -417,33 +424,42 @@ class TolokaClient:
                         f'operation {parameters.operation_id} is already submitted.')
         return insert_operation
 
-    def _sync_via_async(self, objects, parameters, url, result_type, operation_type, output_id_field, get_method):
+    def _sync_via_async(
+            self,
+            objects: List,
+            parameters: Parameters,
+            url: str,
+            result_type,
+            operation_type: operations.Operation,
+            output_id_field: str,
+            get_method: Callable,
+    ):
         if not parameters.async_mode:
             response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
             return structure(response, result_type)
 
         # Emulates synchronous operation, through asynchronous calls and reading operation logs.
-        client_uuid_to_index = {}
-        for i, obj in enumerate(objects):
-            obj._unexpected['__client_uuid'] = uuid.uuid4().hex
-            client_uuid_to_index[obj._unexpected['__client_uuid']] = str(i)
 
-        insert_operation = self._try_to_async_create_objects(url, objects, parameters, operation_type)
+        # Index objects to restore sequence in the future
+        is_single = not isinstance(objects, list)
+        if is_single:
+            objects._unexpected['__item_idx'] = '0'
+        else:
+            for item_idx, obj in enumerate(objects):
+                obj._unexpected['__item_idx'] = str(item_idx)
+
+        insert_operation = self._async_create_objects_idempotent(url, objects, parameters, operation_type)
         insert_operation = self.wait_operation(insert_operation, datetime.timedelta(minutes=60))
 
-        pools = {}
+        item_id_to_idx = {}
         validation_errors = {}
-
         for log_item in self.get_operation_log(insert_operation.id):
-            if log_item.type not in ['TASK_CREATE', 'TASK_VALIDATE', 'TASK_SUITE_VALIDATE', 'TASK_SUITE_CREATE']:
-                continue
-            if '__client_uuid' in log_item.input and log_item.input['__client_uuid'] in client_uuid_to_index:
-                index = client_uuid_to_index[log_item.input['__client_uuid']]
+            if '__item_idx' in log_item.input:
+                index = log_item.input['__item_idx']
             else:
-                continue
+                continue  # operation could be not just creating objects (e.g. open_pool while creating_object)
             if log_item.success:
-                numerated_ids = pools.setdefault(log_item.input['pool_id'], {})
-                numerated_ids[log_item.output[output_id_field]] = index
+                item_id_to_idx[log_item.output[output_id_field]] = index
             else:
                 validation_errors[index] = {
                     name: structure(error, batch_create_results.FieldValidationError)
@@ -453,29 +469,27 @@ class TolokaClient:
         # Emulates the response as in a synchronous method:
         # it will throw an exception even if the skip_invalid_items parameter is passed
         # but no objects are created
-        if not pools:
+        if validation_errors and not item_id_to_idx:
             raise ValidationApiError(
                 code='VALIDATION_ERROR',
                 message='Validation failed',
-                payload=validation_errors
+                payload=validation_errors,
             )
 
-        # get object from all pools
-        items = self._collect_from_pools(get_method, pools)
-        return result_type(items=items, validation_errors=validation_errors or {})
-
-    def _collect_from_pools(self, get_method, pools):
-        items = {}
-        for pool_id, numerated_ids in pools.items():
+        if is_single:
+            item_id = list(item_id_to_idx.keys())[0]
+            return get_method(item_id)
+        else:
+            items = {}
             obj_it = get_method(
-                pool_id=pool_id,
-                id_gte=min(numerated_ids.keys()),
-                id_lte=max(numerated_ids.keys()),
+                id_gte=min(item_id_to_idx.keys()),
+                id_lte=max(item_id_to_idx.keys()),
             )
             for obj in obj_it:
-                if obj.id in numerated_ids:
-                    items[numerated_ids[obj.id]] = obj
-        return items
+                if obj.id in item_id_to_idx:
+                    items[item_id_to_idx[obj.id]] = obj
+            return result_type(items=items, validation_errors=validation_errors or {})
+
 
     # Aggregation section
 
@@ -2225,7 +2239,7 @@ class TolokaClient:
 
     @expand('parameters')
     @add_headers('client')
-    def create_task(self, task: Task, parameters: Optional[task.CreateTaskParameters] = None) -> Task:
+    def create_task(self, task: Task, parameters: Optional[task.CreateTasksParameters] = None) -> Task:
         """Creates a new task in Toloka.
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
@@ -2248,8 +2262,15 @@ class TolokaClient:
             >>> toloka_client.create_task(task=task, allow_defaults=True)
             ...
         """
-        response = self._request('post', '/v1/tasks', json=unstructure(task), params=unstructure(parameters))
-        return structure(response, Task)
+        return self._sync_via_async(
+            objects=task,
+            parameters=parameters,
+            url='/v1/tasks',
+            result_type=Task,
+            operation_type=operations.TasksCreateOperation,
+            output_id_field='task_id',
+            get_method=self.get_task,
+        )
 
     @expand('parameters')
     @add_headers('client')
@@ -2308,8 +2329,6 @@ class TolokaClient:
             >>> print(len(result.items))
             ...
         """
-        if not parameters:
-            parameters = task.CreateTasksParameters()
         return self._sync_via_async(
             objects=tasks,
             parameters=parameters,
@@ -2317,7 +2336,7 @@ class TolokaClient:
             result_type=batch_create_results.TaskBatchCreateResult,
             operation_type=operations.TasksCreateOperation,
             output_id_field='task_id',
-            get_method=self.get_tasks
+            get_method=self.get_tasks,
         )
 
     @expand('parameters')
@@ -2349,7 +2368,7 @@ class TolokaClient:
         if not parameters.async_mode:
             logger.warning('async_mode=False ignored in TolokaClient.create_tasks_async')
         parameters.async_mode = True
-        return self._try_to_async_create_objects('/v1/tasks', tasks, parameters, operations.TasksCreateOperation)
+        return self._async_create_objects_idempotent('/v1/tasks', tasks, parameters, operations.TasksCreateOperation)
 
     @expand('request')
     @add_headers('client')
@@ -2501,9 +2520,15 @@ class TolokaClient:
             >>> toloka_client.create_task_suite(new_task_suite)
             ...
         """
-        params = {**(unstructure(parameters) or {}), 'async_mode': False}
-        response = self._request('post', '/v1/task-suites', json=unstructure(task_suite), params=unstructure(params))
-        return structure(response, TaskSuite)
+        return self._sync_via_async(
+            objects=task_suite,
+            parameters=parameters,
+            url='/v1/task-suites',
+            result_type=TaskSuite,
+            operation_type=operations.TaskSuiteCreateBatchOperation,
+            output_id_field='task_suite_id',
+            get_method=self.get_task_suite,
+        )
 
     @expand('parameters')
     @add_headers('client')
@@ -2551,8 +2576,6 @@ class TolokaClient:
             >>> task_suites = toloka_client.create_task_suites(task_suites)
             ...
         """
-        if not parameters:
-            parameters = task_suite.TaskSuiteCreateRequestParameters()
         return self._sync_via_async(
             objects=task_suites,
             parameters=parameters,
@@ -2560,7 +2583,7 @@ class TolokaClient:
             result_type=batch_create_results.TaskSuiteBatchCreateResult,
             operation_type=operations.TaskSuiteCreateBatchOperation,
             output_id_field='task_suite_id',
-            get_method=self.get_task_suites
+            get_method=self.get_task_suites,
         )
 
     @expand('parameters')
@@ -2602,7 +2625,7 @@ class TolokaClient:
         if not parameters.async_mode:
             logger.warning('async_mode=False ignored in TolokaClient.create_task_suites_async')
         parameters.async_mode = True
-        return self._try_to_async_create_objects(
+        return self._async_create_objects_idempotent(
             '/v1/task-suites', task_suites, parameters, operations.TaskSuiteCreateBatchOperation
         )
 
@@ -2929,11 +2952,15 @@ class TolokaClient:
             >>> )
             ...
         """
-        response = self._request(
-            'post', '/v1/user-bonuses', json=unstructure(user_bonus),
-            params=({} if parameters is None else unstructure(parameters))
+        return self._sync_via_async(
+            objects=user_bonus,
+            parameters=parameters,
+            url='/v1/user-bonuses',
+            result_type=UserBonus,
+            operation_type=operations.UserBonusCreateBatchOperation,
+            output_id_field='user_bonus_id',
+            get_method=self.get_user_bonus,
         )
-        return structure(response, UserBonus)
 
     @expand('parameters')
     @add_headers('client')
@@ -2987,11 +3014,15 @@ class TolokaClient:
             >>> toloka_client.create_user_bonuses(new_bonuses)
             ...
         """
-        response = self._request(
-            'post', '/v1/user-bonuses', json=unstructure(user_bonuses),
-            params=({} if parameters is None else unstructure(parameters))
+        return self._sync_via_async(
+            objects=user_bonuses,
+            parameters=parameters,
+            url='/v1/user-bonuses',
+            result_type=batch_create_results.UserBonusBatchCreateResult,
+            operation_type=operations.UserBonusCreateBatchOperation,
+            output_id_field='user_bonus_id',
+            get_method=self.get_user_bonuses,
         )
-        return structure(response, batch_create_results.UserBonusBatchCreateResult)
 
     @expand('parameters')
     @add_headers('client')
@@ -3046,7 +3077,7 @@ class TolokaClient:
         if not parameters.async_mode:
             logger.warning('async_mode=False ignored in TolokaClient.create_user_bonuses_async')
         parameters.async_mode = True
-        return self._try_to_async_create_objects(
+        return self._async_create_objects_idempotent(
             '/v1/user-bonuses', user_bonuses, parameters, operations.UserBonusCreateBatchOperation
         )
 
