@@ -76,7 +76,6 @@ import io
 import logging
 import threading
 import time
-import inspect
 
 import attr
 import httpx

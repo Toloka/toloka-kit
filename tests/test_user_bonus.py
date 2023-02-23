@@ -1,9 +1,9 @@
 import datetime
 import re
+import uuid
 from decimal import Decimal
 from operator import itemgetter
 from typing import List
-from urllib.parse import urlparse, parse_qs
 
 import httpx
 import pytest
@@ -92,18 +92,66 @@ def test_create_user_bonus_sync(respx_mock, toloka_client, toloka_url, user_bonu
     assert user_bonus_map_with_readonly == client.unstructure(result)
 
 
-@pytest.mark.xfail(reason='Correct retry for creating single bonus synchronously is not implemented')
-def test_create_user_bonus_retry(respx_mock, toloka_client, toloka_url, user_bonus_map, user_bonus_map_with_readonly):
+@pytest.fixture
+def create_user_bonus_operation():
+    return {
+        'id': '26e130ad3652443a3dc5094791e48ef9',
+        'type': 'USER_BONUS.BATCH_CREATE',
+        'status': 'SUCCESS',
+        'submitted': '2020-12-13T23:32:01',
+        'started': '2020-12-13T23:33:00',
+        'finished': '2020-12-13T23:34:12',
+        'parameters': {
+            'skip_invalid_items': True
+        },
+        'details': {
+            'total_count': 1,
+            'valid_count': 1,
+            'not_valid_count': 0,
+            'success_count': 1,
+            'failed_count': 0,
+        }
+    }
+
+
+@pytest.fixture
+def create_user_bonus_log():
+    return [
+        {
+            'input': {
+                '__item_idx': '0',
+                'user_id': 'user-1',
+                'amount': '1.50',
+                'private_comment': 'pool_23214',
+                'assignment_id': 'assignment-1',
+                'public_title': {
+                    'EN': 'Good Job!',
+                    'RU': 'Молодец!',
+                },
+                'public_message': {
+                    'EN': 'Ten tasks completed',
+                    'RU': 'Выполнено 10 заданий',
+                }
+            },
+            'output': {
+                'user_bonus_id': 'user-bonus-1',
+            },
+            'success': True,
+            'type': 'USER_BONUS_PERSIST',
+        },
+    ]
+
+
+def test_create_user_bonus_retry(respx_mock, toloka_client, toloka_url, user_bonus_map, user_bonus_map_with_readonly,
+                                 create_user_bonus_operation, create_user_bonus_log):
     requests_count = 0
-    first_request_op_id = None
+    first_request_op_id = '26e130ad3652443a3dc5094791e48ef9'
 
     def user_bonuses(request):
         nonlocal requests_count
-        nonlocal first_request_op_id
 
         requests_count += 1
         if requests_count == 1:
-            first_request_op_id = request.url.params['operation_id']
             return httpx.Response(status_code=500)
 
         assert request.url.params['operation_id'] == first_request_op_id
@@ -119,10 +167,25 @@ def test_create_user_bonus_retry(respx_mock, toloka_client, toloka_url, user_bon
             status_code=409
         )
 
+    def user_bonus_op(request):
+        return httpx.Response(json=create_user_bonus_operation, status_code=201)
+
+    def user_bonus_log(request):
+        return httpx.Response(json=create_user_bonus_log, status_code=201)
+
+    def user_bonus(request):
+        return httpx.Response(text=simplejson.dumps(user_bonus_map_with_readonly), status_code=200)
+
     respx_mock.post(f'{toloka_url}/user-bonuses').mock(side_effect=user_bonuses)
+
+    respx_mock.get(f'{toloka_url}/operations/{first_request_op_id}').mock(side_effect=user_bonus_op)
+    respx_mock.get(f'{toloka_url}/operations/{first_request_op_id}/log').mock(side_effect=user_bonus_log)
+
+    respx_mock.get(f'{toloka_url}/user-bonuses/user-bonus-1').mock(side_effect=user_bonus)
+
     user_bonus = client.structure(user_bonus_map, client.user_bonus.UserBonus)
 
-    result = toloka_client.create_user_bonus(user_bonus, skip_invalid_items=True)
+    result = toloka_client.create_user_bonus(user_bonus, skip_invalid_items=True, operation_id=first_request_op_id)
     assert user_bonus_map_with_readonly == client.unstructure(result)
 
 
@@ -215,7 +278,7 @@ def test_create_user_bonuses_without_message(
     result = toloka_client.create_user_bonuses(
         [client.structure(user_bonus_map_without_message, client.user_bonus.UserBonus)],
         skip_invalid_items=True,
-        async_mode=False
+        async_mode=False,
     )
     assert raw_result == client.unstructure(result)
 
@@ -270,14 +333,14 @@ def test_create_user_bonuses_async(
     # Request object syntax
     result = toloka_client.create_user_bonuses_async(
         client.structure(user_bonus_map_async, List[client.UserBonus]),
-        client.UserBonusCreateRequestParameters(operation_id=create_user_bonuses_operation_id)
+        client.UserBonusCreateRequestParameters(operation_id=create_user_bonuses_operation_id),
     )
     assert create_user_bonuses_operation_map == client.unstructure(result)
 
     # Expanded syntax
     result = toloka_client.create_user_bonuses_async(
         client.structure(user_bonus_map_async, List[client.UserBonus]),
-        operation_id=create_user_bonuses_operation_id
+        operation_id=create_user_bonuses_operation_id,
     )
     assert create_user_bonuses_operation_map == client.unstructure(result)
 

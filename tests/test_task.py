@@ -67,10 +67,7 @@ def test_task_to_json(task_map):
 
 @pytest.fixture
 def task_map_with_readonly(task_map):
-    return {
-        **task_map,
-        'created': '2016-10-09T11:42:01',
-    }
+    return {**task_map,'created': '2016-10-09T11:42:01'}
 
 
 def test_create_task_sync(respx_mock, toloka_client, toloka_url, task_map, task_map_with_readonly):

@@ -197,7 +197,7 @@ class AsyncTolokaClient:
 
         if is_single:
             item_id = list(item_id_to_idx.keys())[0]
-            return get_method(item_id)
+            return await get_method(item_id)
         else:
             items = {}
             obj_it = get_method(
