@@ -1,21 +1,22 @@
-import pytest
+import copy
 import json
 
+import pytest
 from toloka.client.project.field_spec import JsonSpec
-from toloka.client.project.view_spec import ViewSpec
 from toloka.client.project.template_builder import TemplateBuilder, get_input_and_output
 from toloka.client.project.template_builder.actions import SetActionV1
 from toloka.client.project.template_builder.base import RefComponent
 from toloka.client.project.template_builder.conditions import RequiredConditionV1
-from toloka.client.project.template_builder.data import OutputData, InputData
-from toloka.client.project.template_builder.fields import RadioGroupFieldV1, TextareaFieldV1, GroupFieldOption
+from toloka.client.project.template_builder.data import InputData, OutputData
+from toloka.client.project.template_builder.fields import GroupFieldOption, RadioGroupFieldV1, TextareaFieldV1
 from toloka.client.project.template_builder.layouts import SideBySideLayoutV1
 from toloka.client.project.template_builder.plugins import HotkeysPluginV1
-from toloka.client.project.template_builder.view import ListViewV1, ImageViewV1, TextViewV1
+from toloka.client.project.template_builder.view import ImageViewV1, ListViewV1, TextViewV1
+from toloka.client.project.view_spec import ViewSpec
 
 
 @pytest.fixture
-def view_spec_map():
+def view_spec_map_with_empty_lock():
     return {
         'settings': {
             'resolution': 1024,
@@ -124,18 +125,30 @@ def view_spec_map():
                 }
             }
         }),
-        "lock": {
-            'core': '1.0.0',
-            'condition.required': '1.0.0',
-            'field.textarea': '1.0.0',
-            'field.radio-group': '1.0.0',
-            'view.list': '1.0.0',
-            'view.image': '1.2.3',
-            'layout.side-by-side': '1.0.0',
-            'plugin.hotkeys': '1.0.0',
-            'action.set': '1.0.0',
-        }
+        'lock': None
     }
+
+
+def test_view_spec_map_with_empty_lock_is_structured_with_default_version(view_spec_map_with_empty_lock):
+    view_spec = ViewSpec.structure(view_spec_map_with_empty_lock)
+    assert view_spec.config.view.version == '1.0.0'
+
+
+@pytest.fixture
+def view_spec_map(view_spec_map_with_empty_lock):
+    view_spec_map = copy.deepcopy(view_spec_map_with_empty_lock)
+    view_spec_map['lock'] = {
+        'core': '1.0.0',
+        'condition.required': '1.0.0',
+        'field.textarea': '1.0.0',
+        'field.radio-group': '1.0.0',
+        'view.list': '1.0.0',
+        'view.image': '1.2.3',
+        'layout.side-by-side': '1.0.0',
+        'plugin.hotkeys': '1.0.0',
+        'action.set': '1.0.0',
+    }
+    return view_spec_map
 
 
 def test_result(view_spec_map):

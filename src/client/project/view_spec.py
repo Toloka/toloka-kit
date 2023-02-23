@@ -181,11 +181,12 @@ class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
         lock = data_copy.pop('lock')
 
         data_copy['config'] = json.loads(data['config'])
-        data_copy['core_version'] = lock['core']
+        if lock:
+            data_copy['core_version'] = lock['core']
 
-        for dct in traverse_dicts_recursively(data_copy['config']):
-            if dct.get('type') in lock:
-                dct['version'] = lock[dct['type']]
+            for dct in traverse_dicts_recursively(data_copy['config']):
+                if dct.get('type') in lock:
+                    dct['version'] = lock[dct['type']]
 
         return super().structure(data_copy)
 
