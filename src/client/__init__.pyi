@@ -71,6 +71,7 @@ import datetime
 import decimal
 import enum
 import pandas
+import ssl
 import toloka.client.aggregation
 import toloka.client.analytics_request
 import toloka.client.app
@@ -235,6 +236,10 @@ class TolokaClient:
             All requests will be made using a specified account. See [Shared access to the requester's account](https://toloka.ai/en/docs/guide/concepts/multiple-access)
             documentation page. ID of the requester can be retrieved using the [get_requester](toloka.client.TolokaClient.get_requester.md)
             method (this method should be called by the account owner using account's token).
+        verify: SSL certificates (a.k.a CA bundle) used to
+            verify the identity of requested hosts. Either `True` (default CA bundle),
+            a path to an SSL certificate file, an `ssl.SSLContext`, or `False`
+            (which will disable verification)
 
     Example:
         How to create `TolokaClient` instance and make your first request to Toloka.
@@ -266,7 +271,8 @@ class TolokaClient:
         url: typing.Optional[str] = None,
         retry_quotas: typing.Union[typing.List[str], str, None] = 'MIN',
         retryer_factory: typing.Optional[typing.Callable[[], urllib3.util.retry.Retry]] = None,
-        act_under_account_id: typing.Optional[str] = None
+        act_under_account_id: typing.Optional[str] = None,
+        verify: typing.Union[str, bool, ssl.SSLContext] = True
     ): ...
 
     @typing.overload

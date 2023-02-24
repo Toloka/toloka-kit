@@ -4,6 +4,7 @@ __all__ = [
 import datetime
 import decimal
 import pandas
+import ssl
 import toloka.client
 import toloka.client.aggregation
 import toloka.client.analytics_request
@@ -53,7 +54,8 @@ class AsyncTolokaClient:
         url: typing.Optional[str] = None,
         retry_quotas: typing.Union[typing.List[str], str, None] = 'MIN',
         retryer_factory: typing.Optional[typing.Callable[[], urllib3.util.retry.Retry]] = None,
-        act_under_account_id: typing.Optional[str] = None
+        act_under_account_id: typing.Optional[str] = None,
+        verify: typing.Union[str, bool, ssl.SSLContext] = True
     ): ...
 
     def __getattr__(self, name):
