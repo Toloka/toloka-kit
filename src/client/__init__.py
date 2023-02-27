@@ -55,7 +55,6 @@ __all__ = [
     'Task',
     'Training',
     'UserBonus',
-    'UserBonusCreateRequestParameters',
     'UserRestriction',
     'UserSkill',
     'User',
@@ -428,7 +427,6 @@ class TolokaClient:
         objects,
         parameters: Parameters,
         url: str,
-        result_type,
         operation_type: operations.Operation,
     ):
         # Index objects to restore sequence in the future
@@ -457,7 +455,7 @@ class TolokaClient:
             response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
             return structure(response, result_type)
         is_single = not isinstance(objects, list)
-        insert_operation = self._start_sync_via_async(objects, parameters, url, result_type, operation_type)
+        insert_operation = self._start_sync_via_async(objects, parameters, url, operation_type)
 
         pools = {}
         validation_errors = {}
@@ -489,8 +487,7 @@ class TolokaClient:
             items = self._collect_from_pools(get_method, pools)
             return result_type(items=items, validation_errors=validation_errors or {})
 
-    @staticmethod
-    def _collect_from_pools(get_method, pools):
+    def _collect_from_pools(self, get_method, pools):
         items = {}
         for pool_id, numerated_ids in pools.items():
             obj_it = get_method(
@@ -517,7 +514,7 @@ class TolokaClient:
             response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
             return structure(response, result_type)
         is_single = not isinstance(objects, list)
-        insert_operation = self._start_sync_via_async(objects, parameters, url, result_type, operation_type)
+        insert_operation = self._start_sync_via_async(objects, parameters, url, operation_type)
 
         item_id_to_idx = {}
         validation_errors = {}
