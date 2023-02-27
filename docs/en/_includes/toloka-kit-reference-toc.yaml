@@ -1543,8 +1543,6 @@ items:
       hidden: true
     - name: CreateTaskParameters
       href: ../toloka-kit/reference/toloka.client.task.CreateTaskParameters.md
-    - name: CreateTaskAsyncParameters
-      href: ../toloka-kit/reference/toloka.client.task.CreateTaskAsyncParameters.md
     - name: CreateTasksParameters
       href: ../toloka-kit/reference/toloka.client.task.CreateTasksParameters.md
     - name: TaskOverlapPatch
@@ -1573,6 +1571,8 @@ items:
       hidden: true
     - name: TaskSuiteCreateRequestParameters
       href: ../toloka-kit/reference/toloka.client.task_suite.TaskSuiteCreateRequestParameters.md
+    - name: TaskSuitesCreateRequestParameters
+      href: ../toloka-kit/reference/toloka.client.task_suite.TaskSuitesCreateRequestParameters.md
     - name: TaskSuiteOverlapPatch
       href: ../toloka-kit/reference/toloka.client.task_suite.TaskSuiteOverlapPatch.md
     - name: TaskSuitePatch
@@ -1931,6 +1931,8 @@ items:
       href: ../toloka-kit/reference/toloka.client.user_bonus.UserBonus.md
     - name: UserBonusCreateRequestParameters
       href: ../toloka-kit/reference/toloka.client.user_bonus.UserBonusCreateRequestParameters.md
+    - name: UserBonusesCreateRequestParameters
+      href: ../toloka-kit/reference/toloka.client.user_bonus.UserBonusesCreateRequestParameters.md
   - name: user_restriction
     items:
     - name: UserRestriction

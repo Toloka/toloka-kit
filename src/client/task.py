@@ -1,6 +1,7 @@
 __all__ = [
     'BaseTask',
     'Task',
+    'CreateTaskParameters',
     'CreateTasksParameters',
     'TaskOverlapPatch',
     'TaskPatch'
@@ -101,9 +102,8 @@ class Task(InfiniteOverlapParametersMixin, BaseTask):
 
 
 @inherit_docstrings
-class CreateTasksParameters(IdempotentOperationParameters):
-    """Parameters used with the [create_task](toloka.client.TolokaClient.create_task.md),
-    [create_tasks](toloka.client.TolokaClient.create_tasks.md) and [create_tasks_async](toloka.client.TolokaClient.create_tasks_async.md) methods.
+class CreateTaskParameters(IdempotentOperationParameters):
+    """Parameters used with the [create_task](toloka.client.TolokaClient.create_task.md) method.
 
     If the operation is started in an asynchronous mode,
     we recommend that you send the `operation_id` to avoid creating the same tasks multiple times. You can use this ID later to get information about the operation.
@@ -116,14 +116,26 @@ class CreateTasksParameters(IdempotentOperationParameters):
             Default value: `False`.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
             Default value: `False`.
+    """
+    allow_defaults: bool
+    open_pool: bool
+
+
+@inherit_docstrings
+class CreateTasksParameters(CreateTaskParameters):
+    """Parameters used with the [create_tasks](toloka.client.TolokaClient.create_tasks.md)
+    and [create_tasks_async](toloka.client.TolokaClient.create_tasks_async.md) methods.
+
+    If the operation is started in an asynchronous mode,
+    we recommend that you send the `operation_id` to avoid creating the same tasks multiple times. You can use this ID later to get information about the operation.
+
+    Attributes:
         skip_invalid_items: Task validation option:
             * `True` — All valid tasks are added. If a task does not pass validation, then it is not added to Toloka. All such tasks are listed in the response.
             * `False` — If any task does not pass validation, then the operation is cancelled and no tasks are added to Toloka.
 
             Default value: `False`.
     """
-    allow_defaults: bool
-    open_pool: bool
     skip_invalid_items: bool
 
 

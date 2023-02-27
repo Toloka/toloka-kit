@@ -340,7 +340,7 @@ def test_create_task_suites_async(respx_mock, toloka_client, toloka_url, task_su
     request = client.structure(task_suites_map, List[client.task_suite.TaskSuite])
 
     # Request object syntax
-    parameters = client.task_suite.TaskSuiteCreateRequestParameters(
+    parameters = client.task_suite.TaskSuitesCreateRequestParameters(
         skip_invalid_items=True,
         allow_defaults=True,
         open_pool=True,
@@ -445,7 +445,6 @@ def test_create_task_suites_async_retry(respx_mock, toloka_client, toloka_url, t
 
     assert requests_count == 2
     assert operation_success_map == client.unstructure(result)
-
 
 
 def test_find_task_suites(respx_mock, toloka_client, toloka_url, task_suite_map_with_readonly):

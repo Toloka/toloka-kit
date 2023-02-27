@@ -1,6 +1,7 @@
 __all__ = [
     'UserBonus',
-    'UserBonusCreateRequestParameters'
+    'UserBonusCreateRequestParameters',
+    'UserBonusesCreateRequestParameters',
 ]
 
 from attr.validators import optional, instance_of
@@ -88,9 +89,18 @@ class UserBonus(BaseTolokaObject):
 
 @inherit_docstrings
 class UserBonusCreateRequestParameters(IdempotentOperationParameters):
+    """Parameters for creating bonus for Toloker.
+
+    Used in methods 'create_user_bonus' of the class TolokaClient.
+    """
+    ...
+
+
+@inherit_docstrings
+class UserBonusesCreateRequestParameters(UserBonusCreateRequestParameters):
     """Parameters for creating bonuses for Tolokers.
 
-    Used in methods 'create_user_bonus', 'create_user_bonuses' и 'create_user_bonuses_async' of the class TolokaClient,
+    Used in methods 'create_user_bonuses' и 'create_user_bonuses_async' of the class TolokaClient,
     to clarify the behavior when creating bonuses.
 
     Attributes:

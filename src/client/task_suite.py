@@ -1,6 +1,7 @@
 __all__ = [
     'TaskSuite',
     'TaskSuiteCreateRequestParameters',
+    'TaskSuitesCreateRequestParameters',
     'TaskSuiteOverlapPatch',
     'TaskSuitePatch'
 ]
@@ -77,6 +78,22 @@ class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
 
 @inherit_docstrings
 class TaskSuiteCreateRequestParameters(IdempotentOperationParameters):
+    """Parameters for creating task suite.
+
+    Attributes:
+        allow_defaults: Active overlap setting:
+            * `True` — Use the overlap that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
+            * `False` — Use the overlap that is set in the `overlap` task suite parameter.
+
+            Default value: `False`.
+        open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
+    """
+    allow_defaults: bool
+    open_pool: bool
+
+
+@inherit_docstrings
+class TaskSuitesCreateRequestParameters(TaskSuiteCreateRequestParameters):
     """Parameters for creating task suites.
 
     Attributes:
@@ -85,16 +102,8 @@ class TaskSuiteCreateRequestParameters(IdempotentOperationParameters):
             * `False` — If any task suite does not pass validation, then operation is cancelled and no task suites are added to Toloka.
 
             Default value: `False`.
-        allow_defaults: Active overlap setting:
-            * `True` — Use the overlap that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.
-            * `False` — Use the overlap that is set in the `overlap` task suite parameter.
-
-            Default value: `False`.
-        open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
     """
     skip_invalid_items: bool
-    allow_defaults: bool
-    open_pool: bool
 
 
 class TaskSuiteOverlapPatch(BaseTolokaObject):

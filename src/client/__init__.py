@@ -157,7 +157,7 @@ from .requester import Requester
 from .skill import Skill
 from .task import Task
 from .task_suite import TaskSuite
-from .user_bonus import UserBonus, UserBonusCreateRequestParameters
+from .user_bonus import UserBonus
 from .user_restriction import UserRestriction
 from .user_skill import SetUserSkillRequest, UserSkill
 from .user import User
@@ -523,7 +523,7 @@ class TolokaClient:
         validation_errors = {}
         for log_item in self.get_operation_log(insert_operation.id):
             if '__item_idx' in log_item.input:
-                index = log_iftem.input['__item_idx']
+                index = log_item.input['__item_idx']
             else:
                 continue  # operation could be not just creating objects (e.g. open_pool while creating_object)
             if log_item.success:
@@ -2302,7 +2302,7 @@ class TolokaClient:
 
     @expand('parameters')
     @add_headers('client')
-    def create_task(self, task: Task, parameters: Optional[task.CreateTasksParameters] = None) -> Task:
+    def create_task(self, task: Task, parameters: Optional[task.CreateTaskParameters] = None) -> Task:
         """Creates a new task in Toloka.
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
@@ -2597,7 +2597,7 @@ class TolokaClient:
     @add_headers('client')
     def create_task_suites(
         self,
-        task_suites: List[TaskSuite], parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None
+        task_suites: List[TaskSuite], parameters: Optional[task_suite.TaskSuitesCreateRequestParameters] = None
     ) -> batch_create_results.TaskSuiteBatchCreateResult:
         """Creates several task suites in Toloka.
 
@@ -2653,7 +2653,7 @@ class TolokaClient:
     @add_headers('client')
     def create_task_suites_async(
         self,
-        task_suites: List[TaskSuite], parameters: Optional[task_suite.TaskSuiteCreateRequestParameters] = None
+        task_suites: List[TaskSuite], parameters: Optional[task_suite.TaskSuitesCreateRequestParameters] = None
     ) -> operations.TaskSuiteCreateBatchOperation:
         """Creates several task suites in Toloka asynchronously.
 
@@ -2981,7 +2981,7 @@ class TolokaClient:
     @add_headers('client')
     def create_user_bonus(
         self,
-        user_bonus: UserBonus, parameters: Optional[UserBonusCreateRequestParameters] = None
+        user_bonus: UserBonus, parameters: Optional[user_bonus.UserBonusCreateRequestParameters] = None
     ) -> UserBonus:
         """Issues payments directly to a Toloker.
 
@@ -3029,7 +3029,7 @@ class TolokaClient:
     @add_headers('client')
     def create_user_bonuses(
         self,
-        user_bonuses: List[UserBonus], parameters: Optional[UserBonusCreateRequestParameters] = None
+        user_bonuses: List[UserBonus], parameters: Optional[user_bonus.UserBonusesCreateRequestParameters] = None
     ) -> batch_create_results.UserBonusBatchCreateResult:
         """Creates rewards for Tolokers.
 
@@ -3090,7 +3090,7 @@ class TolokaClient:
     @expand('parameters')
     @add_headers('client')
     def create_user_bonuses_async(
-        self, user_bonuses: List[UserBonus], parameters: Optional[UserBonusCreateRequestParameters] = None
+        self, user_bonuses: List[UserBonus], parameters: Optional[user_bonus.UserBonusesCreateRequestParameters] = None
     ) -> operations.UserBonusCreateBatchOperation:
         """Issues payments directly to Tolokers, asynchronously creates many `UserBonus` instances.
 
