@@ -2850,7 +2850,7 @@ class TolokaClient:
     ) -> Generator[operations.Operation, None, None]:
         """Finds all operations that match certain rules and returns them in an iterable object
 
-       `get_operations` returns a generator. You can iterate over all found operations using the generator. Several requests to the Toloka server are possible while iterating.
+        `get_operations` returns a generator. You can iterate over all found operations using the generator. Several requests to the Toloka server are possible while iterating.
 
         If you need to sort operations use the [find_operations](toloka.client.TolokaClient.find_operations.md) method.
 
@@ -3103,7 +3103,7 @@ class TolokaClient:
     ) -> Generator[UserBonus, None, None]:
         """Finds all Tolokers' rewards that match certain rules and returns them in an iterable object
 
-       `get_user_bonuses` returns a generator. You can iterate over all found Tolokers' rewards using the generator. Several requests to the Toloka server are possible while iterating.
+        `get_user_bonuses` returns a generator. You can iterate over all found Tolokers' rewards using the generator. Several requests to the Toloka server are possible while iterating.
 
         If you need to sort rewards use the [find_user_bonuses](toloka.client.TolokaClient.find_user_bonuses.md) method.
 
