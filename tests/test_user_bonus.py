@@ -121,7 +121,7 @@ def create_user_bonus_log():
             'input': {
                 '__item_idx': '0',
                 'user_id': 'user-1',
-                'amount': '1.50',
+                'amount': Decimal('1.50'),
                 'private_comment': 'pool_23214',
                 'assignment_id': 'assignment-1',
                 'public_title': {
@@ -171,7 +171,7 @@ def test_create_user_bonus_retry(respx_mock, toloka_client, toloka_url, user_bon
         return httpx.Response(json=create_user_bonus_operation, status_code=201)
 
     def user_bonus_log(request):
-        return httpx.Response(json=create_user_bonus_log, status_code=201)
+        return httpx.Response(text=simplejson.dumps(create_user_bonus_log), status_code=201)
 
     def user_bonus(request):
         return httpx.Response(text=simplejson.dumps(user_bonus_map_with_readonly), status_code=200)

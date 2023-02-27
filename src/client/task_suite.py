@@ -5,9 +5,7 @@ __all__ = [
     'TaskSuitePatch'
 ]
 import datetime
-import uuid
 from typing import List
-from uuid import UUID
 
 import attr
 

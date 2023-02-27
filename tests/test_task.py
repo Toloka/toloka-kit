@@ -67,7 +67,7 @@ def test_task_to_json(task_map):
 
 @pytest.fixture
 def task_map_with_readonly(task_map):
-    return {**task_map,'created': '2016-10-09T11:42:01'}
+    return {**task_map, 'created': '2016-10-09T11:42:01'}
 
 
 def test_create_task_sync(respx_mock, toloka_client, toloka_url, task_map, task_map_with_readonly):
@@ -331,12 +331,8 @@ def test_create_tasks_sync_through_async(
         check_headers(request, expected_headers)
 
         params = request.url.params
-        created_tasks = [created_tasks_21_map, created_tasks_22_map]
-        created_tasks.sort(key=itemgetter('id'))
-        min_id_task = min(created_tasks, key=itemgetter('id'))
-        max_id_task = max(created_tasks, key=itemgetter('id'))
-        assert params['id_gte'] <= min_id_task['id'] <= max_id_task['id'] <= params['id_lte']
-        return httpx.Response(json={'items': created_tasks, 'has_more': False}, status_code=201)
+        res_map = [created_tasks_21_map] if params['pool_id'] == '21' else [created_tasks_22_map]
+        return httpx.Response(json={'items': res_map, 'has_more': False}, status_code=201)
 
     # mocks
     # create_task -> operation
@@ -475,12 +471,8 @@ def test_create_tasks_retry_sync_through_async(
 
     def return_tasks_by_pool(request):
         params = request.url.params
-        created_tasks = [created_tasks_21_map, created_tasks_22_map]
-        created_tasks.sort(key=itemgetter('id'))
-        min_id_task = min(created_tasks, key=itemgetter('id'))
-        max_id_task = max(created_tasks, key=itemgetter('id'))
-        assert params['id_gte'] <= min_id_task['id'] <= max_id_task['id'] <= params['id_lte']
-        return httpx.Response(json={'items': created_tasks, 'has_more': False}, status_code=201)
+        res_map = [created_tasks_21_map] if params['pool_id'] == '21' else [created_tasks_22_map]
+        return httpx.Response(json={'items': res_map, 'has_more': False}, status_code=201)
 
     respx_mock.get(
         url__regex=rf'{toloka_url}/operations/.*(?<!log)$'

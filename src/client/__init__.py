@@ -403,11 +403,11 @@ class TolokaClient:
         yield from items
 
     def _async_create_objects_idempotent(
-            self,
-            url: str,
-            objects: List,
-            parameters,
-            operation_type,
+        self,
+        url,
+        objects,
+        parameters,
+        operation_type,
     ):
         try:
             response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
@@ -423,6 +423,86 @@ class TolokaClient:
                         f'operation {parameters.operation_id} is already submitted.')
         return insert_operation
 
+    def _start_sync_via_async(
+        self,
+        objects,
+        parameters: Parameters,
+        url: str,
+        result_type,
+        operation_type: operations.Operation,
+    ):
+        # Index objects to restore sequence in the future
+        is_single = not isinstance(objects, list)
+        if is_single:
+            objects._unexpected['__item_idx'] = '0'
+        else:
+            for item_idx, obj in enumerate(objects):
+                obj._unexpected['__item_idx'] = str(item_idx)
+
+        insert_operation = self._async_create_objects_idempotent(url, objects, parameters, operation_type)
+        insert_operation = self.wait_operation(insert_operation, datetime.timedelta(minutes=60))
+        return insert_operation
+
+    def _sync_via_async_pool_related(
+            self,
+            objects,
+            parameters: Parameters,
+            url: str,
+            result_type,
+            operation_type: operations.Operation,
+            output_id_field: str,
+            get_method: Callable,
+    ):
+        if not parameters.async_mode:
+            response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
+            return structure(response, result_type)
+        is_single = not isinstance(objects, list)
+        insert_operation = self._start_sync_via_async(objects, parameters, url, result_type, operation_type)
+
+        pools = {}
+        validation_errors = {}
+        for log_item in self.get_operation_log(insert_operation.id):
+            if '__item_idx' in log_item.input:
+                index = log_item.input['__item_idx']
+            else:
+                continue  # operation could be not just creating objects (e.g. open_pool while creating_object)
+            if log_item.success:
+                numerated_ids = pools.setdefault(log_item.input['pool_id'], {})
+                numerated_ids[log_item.output[output_id_field]] = index
+            else:
+                validation_errors[index] = log_item.output
+
+        # Like as in sync methods Exception will raise
+        # even if the skip_invalid_items=True but no objects are created
+        if validation_errors and not pools:
+            raise ValidationApiError(
+                code='VALIDATION_ERROR',
+                message='Validation failed',
+                payload=validation_errors,
+            )
+
+        if is_single:
+            pool_id = list(pools.keys())[0]
+            item_id = list(pools[pool_id].keys())[0]
+            return get_method(item_id)
+        else:
+            items = self._collect_from_pools(get_method, pools)
+            return result_type(items=items, validation_errors=validation_errors or {})
+
+    @staticmethod
+    def _collect_from_pools(get_method, pools):
+        items = {}
+        for pool_id, numerated_ids in pools.items():
+            obj_it = get_method(
+                pool_id=pool_id,
+                id_gte=min(numerated_ids.keys()),
+                id_lte=max(numerated_ids.keys()),
+            )
+            for obj in obj_it:
+                if obj.id in numerated_ids:
+                    items[numerated_ids[obj.id]] = obj
+        return items
+
     def _sync_via_async(
             self,
             objects: List,
@@ -436,38 +516,23 @@ class TolokaClient:
         if not parameters.async_mode:
             response = self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
             return structure(response, result_type)
-
-        # Emulates synchronous operation, through asynchronous calls and reading operation logs.
-
-        # Index objects to restore sequence in the future
         is_single = not isinstance(objects, list)
-        if is_single:
-            objects._unexpected['__item_idx'] = '0'
-        else:
-            for item_idx, obj in enumerate(objects):
-                obj._unexpected['__item_idx'] = str(item_idx)
-
-        insert_operation = self._async_create_objects_idempotent(url, objects, parameters, operation_type)
-        insert_operation = self.wait_operation(insert_operation, datetime.timedelta(minutes=60))
+        insert_operation = self._start_sync_via_async(objects, parameters, url, result_type, operation_type)
 
         item_id_to_idx = {}
         validation_errors = {}
         for log_item in self.get_operation_log(insert_operation.id):
             if '__item_idx' in log_item.input:
-                index = log_item.input['__item_idx']
+                index = log_iftem.input['__item_idx']
             else:
                 continue  # operation could be not just creating objects (e.g. open_pool while creating_object)
             if log_item.success:
                 item_id_to_idx[log_item.output[output_id_field]] = index
             else:
-                validation_errors[index] = {
-                    name: structure(error, batch_create_results.FieldValidationError)
-                    for name, error in log_item.output.items()
-                }
+                validation_errors[index] = log_item.output
 
-        # Emulates the response as in a synchronous method:
-        # it will throw an exception even if the skip_invalid_items parameter is passed
-        # but no objects are created
+        # Like as in sync methods Exception will raise
+        # even if the skip_invalid_items=True but no objects are created
         if validation_errors and not item_id_to_idx:
             raise ValidationApiError(
                 code='VALIDATION_ERROR',
@@ -489,14 +554,13 @@ class TolokaClient:
                     items[item_id_to_idx[obj.id]] = obj
             return result_type(items=items, validation_errors=validation_errors or {})
 
-
     # Aggregation section
 
     @expand('request')
     @add_headers('client')
     def aggregate_solutions_by_pool(
         self,
-        request: aggregation.PoolAggregatedSolutionRequest
+        request: aggregation.PoolAggregatedSolutionRequest,
     ) -> operations.AggregatedSolutionOperation:
         """Starts aggregation of responses in all completed tasks in a pool.
 
@@ -2328,7 +2392,7 @@ class TolokaClient:
             >>> print(len(result.items))
             ...
         """
-        return self._sync_via_async(
+        return self._sync_via_async_pool_related(
             objects=tasks,
             parameters=parameters,
             url='/v1/tasks',
@@ -2575,7 +2639,7 @@ class TolokaClient:
             >>> task_suites = toloka_client.create_task_suites(task_suites)
             ...
         """
-        return self._sync_via_async(
+        return self._sync_via_async_pool_related(
             objects=task_suites,
             parameters=parameters,
             url='/v1/task-suites',
