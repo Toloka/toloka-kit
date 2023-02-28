@@ -46,7 +46,7 @@ setup(
         'filelock >= 3.2.0',
         'requests',
         'httpx',
-        'tenacity',
+        'tenacity >= 7.0.0',  # https://github.com/jd/tenacity/issues/139
         'typing-extensions',
         'urllib3 >= 1.26.0',
         'simplejson',
