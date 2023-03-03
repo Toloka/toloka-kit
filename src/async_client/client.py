@@ -18,7 +18,7 @@ from ..client.exceptions import (
     ValidationApiError,
 )
 from ..client.operations import Operation
-from ..client.primitives.parameter import Parameters
+from ..client.primitives.parameter import IdempotentOperationParameters
 from ..client.primitives.retry import AsyncRetryingOverURLLibRetry
 from ..util._managing_headers import add_headers
 from ..util.async_utils import generate_async_methods_from
@@ -138,7 +138,7 @@ class AsyncTolokaClient:
     async def _sync_via_async_pool_related(
             self,
             objects,
-            parameters: Parameters,
+            parameters: IdempotentOperationParameters,
             url: str,
             result_type,
             operation_type: Operation,
@@ -164,7 +164,7 @@ class AsyncTolokaClient:
             else:
                 validation_errors[index] = log_item.output
 
-        # Like as in sync methods Exception will raise
+        # Like in sync methods Exception will raise
         # even if the skip_invalid_items=True but no objects are created
         if validation_errors and not pools:
             raise ValidationApiError(
@@ -197,7 +197,7 @@ class AsyncTolokaClient:
     async def _sync_via_async(
             self,
             objects: List,
-            parameters: Parameters,
+            parameters: IdempotentOperationParameters,
             url: str,
             result_type,
             operation_type: Operation,

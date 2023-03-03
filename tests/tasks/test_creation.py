@@ -378,7 +378,7 @@ def test_create_tasks_async(respx_mock, toloka_client, toloka_url, tasks_map, cr
     assert create_tasks_operation_map == client.unstructure(result)
 
 
-def test_create_tasks_retry_sync_through_async(
+def test_create_tasks_sync_through_async_retry(
     respx_mock, toloka_client, toloka_url, tasks_map, task_create_result_map, operation_success_map, create_tasks_log,
     no_uuid_random, created_tasks_21_map, created_tasks_22_map,
 ):

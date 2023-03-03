@@ -308,7 +308,7 @@ def test_create_task_suites_async(respx_mock, toloka_client, toloka_url, task_su
     assert operation_success_map == client.unstructure(result)
 
 
-def test_create_task_suites_retry_sync_through_async(
+def test_create_task_suites_sync_through_async_retry(
     respx_mock, toloka_client, toloka_url, task_suites_map, operation_success_map, create_log, no_uuid_random,
     get_task_suites_map, task_suites_result_map
 ):

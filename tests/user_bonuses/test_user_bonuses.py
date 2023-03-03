@@ -2,11 +2,23 @@ import datetime
 from operator import itemgetter
 
 import httpx
+import pytest
 import simplejson
 import toloka.client as client
 from httpx import QueryParams
 
 from ..testutils.util_functions import check_headers
+
+
+@pytest.mark.parametrize('value_from', [0.05, '0.05', 5])
+def test_create_user_bonus_from_different_amount(value_from):
+    with pytest.raises(TypeError):
+        client.user_bonus.UserBonus(amount=value_from)
+
+
+def test_create_user_bonus_with_none_amount():
+    user_bonus = client.user_bonus.UserBonus(amount=None)
+    assert user_bonus.amount is None
 
 
 def test_find_user_bonuses(respx_mock, toloka_client, toloka_url, user_bonus_map_with_readonly):

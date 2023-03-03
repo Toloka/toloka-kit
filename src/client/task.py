@@ -116,6 +116,10 @@ class CreateTaskParameters(IdempotentOperationParameters):
             Default value: `False`.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
             Default value: `False`.
+        async_mode: Request processing mode:
+            * `True` — Asynchronous operation is started internally and `create_tasks` waits for the completion of it. It is recommended to create no more than 10,000 tasks per request in this mode.
+            * `False` — The request is processed synchronously. A maximum of 5000 tasks can be added in a single request in this mode.
+            Default value: `True`.
     """
     allow_defaults: bool
     open_pool: bool

@@ -149,7 +149,7 @@ from .operation_log import OperationLogItem
 from .pool import Pool, PoolPatchRequest
 from .primitives.retry import TolokaRetry, SyncRetryingOverURLLibRetry, STATUSES_TO_RETRY
 from .primitives.base import autocast_to_enum
-from .primitives.parameter import Parameters
+from .primitives.parameter import IdempotentOperationParameters
 from .project import Project
 from .training import Training
 from .requester import Requester
@@ -425,7 +425,7 @@ class TolokaClient:
     def _start_sync_via_async(
         self,
         objects,
-        parameters: Parameters,
+        parameters: IdempotentOperationParameters,
         url: str,
         operation_type: operations.Operation,
     ):
@@ -444,7 +444,7 @@ class TolokaClient:
     def _sync_via_async_pool_related(
             self,
             objects,
-            parameters: Parameters,
+            parameters: IdempotentOperationParameters,
             url: str,
             result_type,
             operation_type: operations.Operation,
@@ -470,7 +470,7 @@ class TolokaClient:
             else:
                 validation_errors[index] = log_item.output
 
-        # Like as in sync methods Exception will raise
+        # Like in sync methods Exception will raise
         # even if the skip_invalid_items=True but no objects are created
         if validation_errors and not pools:
             raise ValidationApiError(
@@ -485,7 +485,7 @@ class TolokaClient:
             return get_method(item_id)
         else:
             items = self._collect_from_pools(get_method, pools)
-            return result_type(items=items, validation_errors=validation_errors or {})
+            return result_type(items=items, validation_errors=validation_errors)
 
     def _collect_from_pools(self, get_method, pools):
         items = {}
@@ -503,7 +503,7 @@ class TolokaClient:
     def _sync_via_async(
             self,
             objects: List,
-            parameters: Parameters,
+            parameters: IdempotentOperationParameters,
             url: str,
             result_type,
             operation_type: operations.Operation,
@@ -549,7 +549,7 @@ class TolokaClient:
             for obj in obj_it:
                 if obj.id in item_id_to_idx:
                     items[item_id_to_idx[obj.id]] = obj
-            return result_type(items=items, validation_errors=validation_errors or {})
+            return result_type(items=items, validation_errors=validation_errors)
 
     # Aggregation section
 

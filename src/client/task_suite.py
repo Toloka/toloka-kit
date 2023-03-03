@@ -102,6 +102,10 @@ class TaskSuitesCreateRequestParameters(TaskSuiteCreateRequestParameters):
             * `False` — If any task suite does not pass validation, then operation is cancelled and no task suites are added to Toloka.
 
             Default value: `False`.
+        async_mode: Request processing mode:
+            * `True` — Asynchronous operation is started internally.
+            * `False` — The request is processed synchronously. A maximum of 5000 task suites can be added in a single request in this mode.
+            Default value: `True`.
     """
     skip_invalid_items: bool
 

@@ -12,17 +12,6 @@ from toloka.client.exceptions import IncorrectActionsApiError
 from ..testutils.util_functions import check_headers
 
 
-@pytest.mark.parametrize('value_from', [0.05, '0.05', 5])
-def test_create_user_bonus_from_different_amount(value_from):
-    with pytest.raises(TypeError):
-        client.user_bonus.UserBonus(amount=value_from)
-
-
-def test_create_user_bonus_with_none_amount():
-    user_bonus = client.user_bonus.UserBonus(amount=None)
-    assert user_bonus.amount is None
-
-
 def test_create_user_bonus_sync(respx_mock, toloka_client, toloka_url, user_bonus_map, user_bonus_map_with_readonly):
 
     def user_bonuses(request):
@@ -157,8 +146,10 @@ def create_user_bonus_log():
     ]
 
 
-def test_create_user_bonus_retry(respx_mock, toloka_client, toloka_url, user_bonus_map, user_bonus_map_with_readonly,
-                                 create_user_bonus_operation, create_user_bonus_log):
+def test_create_user_bonus_sync_via_async_retry(
+        respx_mock, toloka_client, toloka_url,
+        user_bonus_map, user_bonus_map_with_readonly, create_user_bonus_operation, create_user_bonus_log
+):
     requests_count = 0
     first_request_op_id = '26e130ad3652443a3dc5094791e48ef9'
 

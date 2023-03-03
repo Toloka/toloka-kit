@@ -4,7 +4,9 @@ from typing import Any, Dict
 from .primitives.base import BaseTolokaObject
 
 
-# TODO: Add spec_enum for type + need to spec based not only on enums but on bool (success field)
+# TODO: Add children through spec_field type and success.
+#  Add simple way of getting different objects of interest for every child.
+#  e.g. user_bonus_id for type=USER_BONUS_PERSIST, success=True (https://toloka.ai/docs/api/get-operation-log/)
 class OperationLogItem(BaseTolokaObject):
     """Objects of which the operation log consists
 
