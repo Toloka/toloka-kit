@@ -234,6 +234,7 @@ class Skill(StatefulComparableConditionMixin, Condition, order=False, eq=False, 
     Example:
         Selecting Tolokers with a skill with ID '224' greater than 70.
         >>> filter = toloka.client.filter.Skill('224') > 70
+        ...
 
     Attributes:
         key: The ID of a skill.
@@ -561,6 +562,16 @@ class OSFamily(Computed, IdentityConditionMixin, spec_value=Computed.Key.OS_FAMI
     @unique
     class OSFamily(ExtendableStrEnum):
         """OS families.
+
+        Attributes:
+            WINDOWS: Microsoft Windows operating system developed and marketed by Microsoft for personal computers.
+            OS_X: macOS operating system developed by Apple Inc. since 2001 for Mac computers.
+            MAC_OS: Classic Mac OS operating system developed by Apple Inc. before 2001 for the Macintosh family of personal computers.
+            LINUX: A family of open-source Unix-like operating systems based on the Linux kernel.
+            BSD: An operating system based on Research Unix, developed and distributed by the CSRG, and its open-source descendants like FreeBSD, OpenBSD, NetBSD, and DragonFly BSD.
+            ANDROID: Android mobile operating system based on a modified version of the Linux kernel, designed primarily for touchscreen mobile devices.
+            IOS:  iOS mobile operating system developed by Apple Inc. exclusively for its mobile devices.
+            BLACKBERRY: BlackBerry OS mobile operating system developed by BlackBerry Limited for its BlackBerry smartphone devices.
         """
 
         WINDOWS = 'WINDOWS'

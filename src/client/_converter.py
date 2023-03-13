@@ -5,6 +5,7 @@ from decimal import Decimal
 import typing
 import re
 import uuid
+import pkg_resources
 from typing import List, Union
 
 import attr
@@ -13,8 +14,11 @@ from cattr.gen import is_generic, get_origin, _generate_mapping
 from cattr._compat import has_with_generic
 from ..util._extendable_enum import ExtendableStrEnum
 
-
-converter = cattr.Converter()
+_CATTRS_VERSION = tuple(map(int, pkg_resources.get_distribution('cattrs').version.split('.')))
+if _CATTRS_VERSION < (22, 2, 0):
+    converter = cattr.Converter()
+else:
+    converter = cattr.converters.BaseConverter()
 
 converter.register_structure_hook_func(
     lambda type_: hasattr(type_, 'structure'),

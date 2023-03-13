@@ -33,9 +33,9 @@ class ConcatArraysHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_CONCAT_
     """Merging multiple arrays into a single array.
 
     For example, let's say you have multiple arrays:
-    ([1, 2, 3], [4, 5, 6], [7, 8, 9])
+    `([1, 2, 3], [4, 5, 6], [7, 8, 9])`
     Their elements can be combined into a single array to show simultaneously:
-    [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    `[1, 2, 3, 4, 5, 6, 7, 8, 9]`
     Attributes:
         items: Arrays to combine.
     """
@@ -47,18 +47,21 @@ class Entries2ObjectHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_ENTRI
     """Creating an object from a specified array of key-value pairs.
 
     For example, let's say you have an array like this:
-    [
-        {
-            "key": "foo",
-            "value": "hello"
-        },
-        {
-            "key": "bar",
-            "value": "world"
-        }
-    ]
+
+    >>> [
+    >>>     {
+    >>>         "key": "foo",
+    >>>         "value": "hello"
+    >>>     },
+    >>>     {
+    >>>         "key": "bar",
+    >>>         "value": "world"
+    >>>     }
+    >>> ]
+    ...
+
     It is converted to an object whose elements consist of the values of the original array:
-    { "foo": "hello", "bar": "world" }
+    `{ "foo": "hello", "bar": "world" }`
     Attributes:
         entries: Source array of key-value pairs.
     """
@@ -119,21 +122,27 @@ class Object2EntriesHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_OBJEC
     """Creating an array of key-value pairs from the specified object.
 
     For example, let's say you have an object that looks like this:
-    {
-        "foo": "hello",
-        "bar": "world"
-    }
+
+    >>> {
+    >>>     "foo": "hello",
+    >>>     "bar": "world"
+    >>> }
+    ...
+
     It will be converted to an array whose objects will pair data from the source object and their designations:
-    [
-        {
-            "key": "foo",
-            "value": "hello"
-        },
-        {
-            "key": "bar",
-            "value": "world"
-        }
-    ]
+
+    >>> [
+    >>>     {
+    >>>         "key": "foo",
+    >>>         "value": "hello"
+    >>>     },
+    >>>     {
+    >>>         "key": "bar",
+    >>>         "value": "world"
+    >>>     }
+    >>> ]
+    ...
+
     Attributes:
         data: The object to convert.
     """
@@ -271,10 +280,11 @@ class TranslateHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_TRANSLATE)
 
     In the properties that should be displayed in different languages, add:
 
-    {
-      "type": "helper.translate",
-      "key": "<key name>"
-    {
+    >>> {
+    >>>     "type": "helper.translate",
+    >>>     "key": "<key name>"
+    >>> }
+    ...
 
     Adding the key property displays a field for entering the key text. Enter the text in the source language. In the
     "Translations" step, add translations for the keys in the desired languages.

@@ -7,14 +7,15 @@ from ..primitives.base import BaseTolokaObject
 
 
 class TaskSpec(BaseTolokaObject):
-    """Parameters for input and output data and the task interface.
+    """Task interface description and input and output data specifications.
+
+    Input and output data specifications are dictionaries.
+    Field IDs are keys and field specifications are values.
 
     Attributes:
-        input_spec: The input data parameters for tasks. The complete list of parameters is shown in the
-            Input and output data table.
-        output_spec: Parameters for output data from the input fields. The complete list of parameters is
-            shown in the Input and output data table.
-        view_spec: Description of the task interface.
+        input_spec: Input data specification.
+        output_spec: Output data specification.
+        view_spec: The description of the task interface.
     """
 
     input_spec: Dict[str, FieldSpec]

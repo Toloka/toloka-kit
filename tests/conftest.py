@@ -46,6 +46,12 @@ class SyncOverAsyncTolokaClient:
 
         return member
 
+    def __setattr__(self, key, value):
+        if key in ['async_client', 'use_async_gen_adapter_as_gen']:
+            object.__setattr__(self, key, value)
+        else:
+            setattr(self.async_client, key, value)
+
     def __getstate__(self):
         return self.async_client.__dict__
 

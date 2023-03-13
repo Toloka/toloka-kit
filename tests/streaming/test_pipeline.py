@@ -12,6 +12,7 @@ from toloka.async_client import AsyncTolokaClient
 from toloka.streaming import Pipeline
 from toloka.streaming.locker import NewerInstanceDetectedError
 from toloka.streaming.observer import AssignmentsObserver, BaseObserver, PoolStatusObserver
+from toloka.streaming.pipeline import IterationMode
 from toloka.streaming.storage import JSONLocalStorage
 from toloka.util.async_utils import AsyncMultithreadWrapper, ComplexException
 
@@ -328,6 +329,66 @@ def test_save_and_load(
     assert 3 == handler_new.iteration  # One successfull iteration before restore + 2 after. The errored one wasn't saved.
     assert [] == handler_new.errors, handler_new.errors  # Error attempt was not saved.
     assert 12 == len(handler_new.saved), handler_new.saved  # Start from the previous stop.
+
+
+
+
+class ObserverWithInnerReference(BaseObserver):
+    def __init__(self, name: str):
+        super().__init__(name=name)
+        self.other = None
+
+    def register_other(self, other: 'ObserverWithInnerReference'):
+        self.other = other
+
+    def inject(self, injection: 'ObserverWithInnerReference') -> None:
+        self.other = injection.other
+
+    async def should_resume(self) -> bool:
+        return True
+
+    async def __call__(self) -> None:
+        pass
+
+
+@pytest.mark.xfail(
+    reason='Pipeline save/load implementation does not preserve references between observers in the same pipeline'
+)
+@pytest.mark.asyncio
+async def test_pipeline_save_load_preserves_inner_references(tmp_path):
+    dirname = tmp_path / 'storage'
+    dirname.mkdir()
+    assert len(list(dirname.iterdir())) == 0
+
+    pipeline = Pipeline(
+        storage=JSONLocalStorage(dirname=str(dirname)),
+        period=datetime.timedelta(seconds=0),
+        iteration_mode=IterationMode.ALL_COMPLETED
+    )
+    first_observer = ObserverWithInnerReference('first')
+    second_observer = ObserverWithInnerReference('second')
+    pipeline.register(first_observer)
+    pipeline.register(second_observer)
+    pipeline_copy = copy.deepcopy(pipeline)
+
+    first_observer.register_other(second_observer)
+    second_observer.register_other(first_observer)
+
+    # run original pipeline to save cross-observer references
+    pipeline_iterator = pipeline.run_manually()
+    await pipeline_iterator.__anext__()
+
+    assert len(list(dirname.iterdir())) > 0, 'Pipeline state was not saved'
+    first_observer, second_observer = list(pipeline.observers_iter())
+    assert first_observer.other is second_observer, 'Observer reference was corrupted in the original pipeline'
+    assert second_observer.other is first_observer, 'Observer reference was corrupted in the original pipeline'
+
+    # run pipeline from initial state and expect it to load updated observer states correctly
+    pipeline_copy_iterator = pipeline_copy.run_manually()
+    await pipeline_copy_iterator.__anext__()
+    first_observer, second_observer = list(pipeline_copy.observers_iter())
+    assert first_observer.other is second_observer, 'Observer reference was corrupted in the saved pipeline'
+    assert second_observer.other is first_observer, 'Observer reference was corrupted in the saved pipeline'
 
 
 @attr.s

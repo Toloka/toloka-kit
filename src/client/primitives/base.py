@@ -8,6 +8,7 @@ __all__ = [
 ]
 
 import inspect
+import logging
 import typing
 from copy import copy
 from enum import Enum
@@ -17,6 +18,7 @@ from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union, Tu
 import attr
 import simplejson as json
 
+from ...util._extendable_enum import ExtendableStrEnumMetaclass
 from .._converter import converter
 from ..exceptions import SpecClassIdentificationError
 from ...util._codegen import (
@@ -26,13 +28,20 @@ from ...util._codegen import (
 
 E = TypeVar('E', bound=Enum)
 
+logger = logging.getLogger(__file__)
+
 
 class VariantRegistry:
 
-    def __init__(self, field: str, enum: Type[E]):
+    def __init__(self, field: str, enum: Type[E], extendable: Optional[bool] = None):
+        if extendable is None:
+            extendable = isinstance(enum, ExtendableStrEnumMetaclass)
+        if extendable and not isinstance(enum, ExtendableStrEnumMetaclass):
+            raise ValueError('VariantRegistry could be extendable only if spec_enum is extendable.')
         self.field: str = field
         self.enum: Type[E] = enum
         self.registered_classes: Dict[E, type] = {}
+        self.extendable = extendable
 
     def register(self, type_: type, value: E) -> type:
 
@@ -47,7 +56,19 @@ class VariantRegistry:
 
         return type_
 
-    def __getitem__(self, value: E):
+    def generate_subtype(self, type_: type, value: E) -> type:
+        if not self.extendable:
+            raise NotImplementedError('Only extendable VariantRegistry can generate subtype')
+
+        generated_type_name = '_Generated' + value.value.title() + type_.__name__
+        BaseTolokaObjectMetaclass(generated_type_name, (type_,), {}, spec_value=value)
+        logger.info(f'{generated_type_name} class was generated. '
+                    f'Probably it is a new functionality on the platform.\n'
+                    f'If you want it to be supported by toloka-kit faster you can make feature request here:'
+                    f'https://github.com/Toloka/toloka-kit/issues/new/choose.')
+        return self.registered_classes[value]
+
+    def __getitem__(self, value: E) -> type:
         return self.registered_classes[value]
 
 
@@ -171,12 +192,20 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
         return super().__new__(cls)
 
     @classmethod
-    def __init_subclass__(cls, spec_enum: Optional[Union[str, Type[E]]] = None,
-                          spec_field: Optional[str] = None, spec_value=None):
+    def __init_subclass__(
+            cls,
+            spec_enum: Optional[Union[str, Type[E]]] = None,
+            spec_field: Optional[str] = None,
+            spec_value=None,
+            extend_spec: Optional[bool] = None,
+    ):
         super().__init_subclass__()
         # Completing a variant type
         if spec_value is not None:
             cls._variant_registry.register(cls, spec_value)
+
+        if extend_spec and (spec_enum is None or spec_field is None):
+            raise ValueError('extend_spec could be True only with spec_enum and spec_field provided')
 
         # Making into a variant type
         if spec_enum is not None or spec_field is not None:
@@ -190,7 +219,7 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
 
             # TODO: Possibly make it immutable
             enum = getattr(cls, spec_enum) if isinstance(spec_enum, str) else spec_enum
-            cls._variant_registry = VariantRegistry(spec_field, enum)
+            cls._variant_registry = VariantRegistry(spec_field, enum, extend_spec)
 
     # Unexpected fields access
 
@@ -265,7 +294,11 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
             data_field = data.pop(spec_field)
             try:
                 spec_value = cls._variant_registry.enum(data_field)
-                spec_class = cls._variant_registry.registered_classes[spec_value]
+
+                if spec_value in cls._variant_registry.registered_classes:
+                    spec_class = cls._variant_registry[spec_value]
+                else:
+                    spec_class = cls._variant_registry.generate_subtype(cls, spec_value)
             except Exception:
                 raise SpecClassIdentificationError(spec_field=spec_field,
                                                    spec_enum=cls._variant_registry.enum.__name__)

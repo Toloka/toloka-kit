@@ -45,14 +45,12 @@ class FieldType(toloka.util._extendable_enum.ExtendableStrEnum):
 
 
 class FieldSpec(toloka.client.primitives.base.BaseTolokaObject):
-    """A base class for field specifications used in project's `input_spec` and `output_spec`
-    for input and response data validation specification respectively. Use subclasses of this
-    class defined below to define the data type (string, integer, URL, etc.) and specify
-    validation parameters (such as string length).
+    """A base class for field specifications used in project's `input_spec` and `output_spec` for input and response data validation.
+    Use subclasses of this class to define the data type and set constraints such as maximum string length.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
     """
 
     def __init__(
@@ -71,12 +69,12 @@ class FieldSpec(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class BooleanSpec(FieldSpec):
-    """A boolean field specification
+    """A boolean field specification.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
-        allowed_values: Allowed values
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
+        allowed_values: A list of allowed values.
     """
 
     def __init__(
@@ -97,14 +95,14 @@ class BooleanSpec(FieldSpec):
 
 
 class StringSpec(FieldSpec):
-    """A string field specification
+    """A string field specification.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
-        min_length: Minimum length of the string
-        max_length: Maximum length of the string
-        allowed_values: Allowed values
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
+        min_length: The minimum length of the string.
+        max_length: The maximum length of the string.
+        allowed_values: A list of allowed values.
     """
 
     def __init__(
@@ -129,14 +127,14 @@ class StringSpec(FieldSpec):
 
 
 class IntegerSpec(FieldSpec):
-    """An integer field specification
+    """An integer field specification.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
-        min_value: Minimum value of the number
-        max_value: Maximum value of the number
-        allowed_values: Allowed values
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
+        min_value: The minimum value.
+        max_value: The maximum value.
+        allowed_values: A list of allowed values.
     """
 
     def __init__(
@@ -161,13 +159,13 @@ class IntegerSpec(FieldSpec):
 
 
 class FloatSpec(FieldSpec):
-    """An floating point field specification
+    """A floating-point number field specification.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
-        min_value: Minimum value of the number
-        max_value: Maximum value of the number
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
+        min_value: The minimum value.
+        max_value: The maximum value.
     """
 
     def __init__(
@@ -190,11 +188,11 @@ class FloatSpec(FieldSpec):
 
 
 class UrlSpec(FieldSpec):
-    """A url field specification
+    """A URL field specification.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
     """
 
     def __init__(
@@ -213,11 +211,13 @@ class UrlSpec(FieldSpec):
 
 
 class FileSpec(FieldSpec):
-    """A file field specification (only for output data)
+    """A file field specification.
+
+    `FileSpec` is used for output data only.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
     """
 
     def __init__(
@@ -236,13 +236,15 @@ class FileSpec(FieldSpec):
 
 
 class CoordinatesSpec(FieldSpec):
-    """Geographical coordinates field specification, such as “53.910236,27.531110
+    """Geographical coordinates field specification.
+
+    `CoordinatesSpec` stores values like `“53.910236,27.531110`.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
-        current_location: put the Toloker's current coordinates in the field (true/false).
-            Used in tasks for the mobile app.
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
+        current_location: `True` — saves Toloker's current coordinates.
+            The attribute can be used in tasks for the mobile application.
     """
 
     def __init__(
@@ -263,11 +265,11 @@ class CoordinatesSpec(FieldSpec):
 
 
 class JsonSpec(FieldSpec):
-    """A JSON object field specification
+    """A JSON object field specification.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
     """
 
     def __init__(
@@ -286,14 +288,14 @@ class JsonSpec(FieldSpec):
 
 
 class ArrayBooleanSpec(BooleanSpec):
-    """A boolean array field specification
+    """A boolean array field specification.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
-        allowed_values: Allowed values
-        min_size: Minimum number of elements in the array
-        max_size: Maximum number of elements in the array
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
+        allowed_values: A list of allowed values.
+        min_size: The minimum number of elements in the array.
+        max_size: The maximum number of elements in the array.
     """
 
     def __init__(
@@ -318,16 +320,16 @@ class ArrayBooleanSpec(BooleanSpec):
 
 
 class ArrayStringSpec(StringSpec):
-    """A string array field specification
+    """A string array field specification.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
-        min_length: Minimum length of the string
-        max_length: Maximum length of the string
-        allowed_values: Allowed values
-        min_size: Minimum number of elements in the array
-        max_size: Maximum number of elements in the array
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
+        min_length: The minimum length of the string.
+        max_length: The maximum length of the string.
+        allowed_values: A list of allowed values.
+        min_size: The minimum number of elements in the array.
+        max_size: The maximum number of elements in the array.
     """
 
     def __init__(
@@ -356,16 +358,16 @@ class ArrayStringSpec(StringSpec):
 
 
 class ArrayIntegerSpec(IntegerSpec):
-    """An integer array field specification
+    """An integer array field specification.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
-        min_value: Minimum value of the number
-        max_value: Maximum value of the number
-        allowed_values: Allowed values
-        min_size: Minimum number of elements in the array
-        max_size: Maximum number of elements in the array
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
+        min_value: The minimum value.
+        max_value: The maximum value.
+        allowed_values: A list of allowed values.
+        min_size: The minimum number of elements in the array.
+        max_size: The maximum number of elements in the array.
     """
 
     def __init__(
@@ -394,15 +396,15 @@ class ArrayIntegerSpec(IntegerSpec):
 
 
 class ArrayFloatSpec(FloatSpec):
-    """An floating point array field specification
+    """A floating-point array field specification.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
-        min_value: Minimum value of the number
-        max_value: Maximum value of the number
-        min_size: Minimum number of elements in the array
-        max_size: Maximum number of elements in the array
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
+        min_value: The minimum value.
+        max_value: The maximum value.
+        min_size: The minimum number of elements in the array.
+        max_size: The maximum number of elements in the array.
     """
 
     def __init__(
@@ -429,13 +431,13 @@ class ArrayFloatSpec(FloatSpec):
 
 
 class ArrayUrlSpec(UrlSpec):
-    """A url array field specification
+    """A URL array field specification.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
-        min_size: Minimum number of elements in the array
-        max_size: Maximum number of elements in the array
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
+        min_size: The minimum number of elements in the array.
+        max_size: The maximum number of elements in the array.
     """
 
     def __init__(
@@ -458,13 +460,15 @@ class ArrayUrlSpec(UrlSpec):
 
 
 class ArrayFileSpec(FileSpec):
-    """A file array field specification (only for output data)
+    """A file array field specification.
+
+    `ArrayFileSpec` is used for output data only.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
-        min_size: Minimum number of elements in the array
-        max_size: Maximum number of elements in the array
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
+        min_size: The minimum number of elements in the array.
+        max_size: The maximum number of elements in the array.
     """
 
     def __init__(
@@ -487,15 +491,15 @@ class ArrayFileSpec(FileSpec):
 
 
 class ArrayCoordinatesSpec(CoordinatesSpec):
-    """Geographical coordinates array field specification
+    """Geographical coordinates array field specification.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
-        current_location: put the Toloker's current coordinates in the field (true/false).
-            Used in tasks for the mobile app.
-        min_size: Minimum number of elements in the array
-        max_size: Maximum number of elements in the array
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
+        current_location: `True` — saves Toloker's current coordinates.
+            The attribute can be used in tasks for the mobile application.
+        min_size: The minimum number of elements in the array.
+        max_size: The maximum number of elements in the array.
     """
 
     def __init__(

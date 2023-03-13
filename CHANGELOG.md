@@ -1,3 +1,18 @@
+1.1.4
+-------------------
+Features:
+* Added `verify` parameter to `TolokaClient` and `AsyncTolokaClient`. This parameter controls SSL certificate verification settings.
+
+Bugfixes:
+* Fixed deserialization of legacy Toloka projects bug which was caused by an attempt to parse view spec with empty `lock` field.
+
+
+1.1.3
+-------------------
+Bugfixes:
+* Removed upper bound on `cattrs` version.
+* While structuring objects with unknown `spec_value` corresponding classes are generated in runtime now. Thus objects like filters, rule actions and others that are not fully documented in api/experimental/removed in past from toloka-kit could be safely structured now.
+
 1.1.2
 -------------------
 Bugfixes:

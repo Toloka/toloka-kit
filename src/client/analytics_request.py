@@ -76,11 +76,9 @@ class RealTasksCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalytics
 
 @inherit_docstrings
 class SubmittedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.SUBMITTED_ASSIGNMENTS_COUNT):
-    """Number of assignments in the "submitted" status in the pool
+    """The total number of completed assignments in the pool.
 
-    Do not confuse it with the approved status.
-    "Submitted" status means that the task was completed by a Toloker and sent for review.
-    "Approved" status means that the task has passed review and money has been paid for it.
+    The assignments can have one of the following statuses: "submitted", "approved", or "rejected".
     """
     pass
 

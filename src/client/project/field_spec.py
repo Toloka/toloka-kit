@@ -47,14 +47,12 @@ class FieldType(ExtendableStrEnum):
 
 
 class FieldSpec(BaseTolokaObject, spec_enum=FieldType, spec_field='type'):
-    """A base class for field specifications used in project's `input_spec` and `output_spec`
-    for input and response data validation specification respectively. Use subclasses of this
-    class defined below to define the data type (string, integer, URL, etc.) and specify
-    validation parameters (such as string length).
+    """A base class for field specifications used in project's `input_spec` and `output_spec` for input and response data validation.
+    Use subclasses of this class to define the data type and set constraints such as maximum string length.
 
     Attributes:
-        required: Whether the object or input field is required.
-        hidden: Whether to hide the input field from Tolokers.
+        required: Whether a field is required. Default value: `True`.
+        hidden: Whether to hide an input field from Tolokers. Output fields can't be hidden. Default value: `False`.
     """
     required: bool = True
     hidden: bool = False
@@ -62,22 +60,22 @@ class FieldSpec(BaseTolokaObject, spec_enum=FieldType, spec_field='type'):
 
 @inherit_docstrings
 class BooleanSpec(FieldSpec, spec_value=FieldType.BOOLEAN):
-    """A boolean field specification
+    """A boolean field specification.
 
     Attributes:
-        allowed_values: Allowed values
+        allowed_values: A list of allowed values.
     """
     allowed_values: List[bool]
 
 
 @inherit_docstrings
 class StringSpec(FieldSpec, spec_value=FieldType.STRING):
-    """A string field specification
+    """A string field specification.
 
     Attributes:
-        min_length: Minimum length of the string
-        max_length: Maximum length of the string
-        allowed_values: Allowed values
+        min_length: The minimum length of the string.
+        max_length: The maximum length of the string.
+        allowed_values: A list of allowed values.
     """
     min_length: int
     max_length: int
@@ -86,12 +84,12 @@ class StringSpec(FieldSpec, spec_value=FieldType.STRING):
 
 @inherit_docstrings
 class IntegerSpec(FieldSpec, spec_value=FieldType.INTEGER):
-    """An integer field specification
+    """An integer field specification.
 
     Attributes:
-        min_value: Minimum value of the number
-        max_value: Maximum value of the number
-        allowed_values: Allowed values
+        min_value: The minimum value.
+        max_value: The maximum value.
+        allowed_values: A list of allowed values.
     """
     min_value: int
     max_value: int
@@ -100,11 +98,11 @@ class IntegerSpec(FieldSpec, spec_value=FieldType.INTEGER):
 
 @inherit_docstrings
 class FloatSpec(FieldSpec, spec_value=FieldType.FLOAT):
-    """An floating point field specification
+    """A floating-point number field specification.
 
     Attributes:
-        min_value: Minimum value of the number
-        max_value: Maximum value of the number
+        min_value: The minimum value.
+        max_value: The maximum value.
     """
     min_value: float
     max_value: float
@@ -112,40 +110,44 @@ class FloatSpec(FieldSpec, spec_value=FieldType.FLOAT):
 
 @inherit_docstrings
 class UrlSpec(FieldSpec, spec_value=FieldType.URL):
-    """A url field specification
+    """A URL field specification.
     """
 
 
 @inherit_docstrings
 class FileSpec(FieldSpec, spec_value=FieldType.FILE):
-    """A file field specification (only for output data)
+    """A file field specification.
+
+    `FileSpec` is used for output data only.
     """
 
 
 @inherit_docstrings
 class CoordinatesSpec(FieldSpec, spec_value=FieldType.COORDINATES):
-    """Geographical coordinates field specification, such as “53.910236,27.531110
+    """Geographical coordinates field specification.
+
+    `CoordinatesSpec` stores values like `“53.910236,27.531110`.
 
     Attributes:
-        current_location: put the Toloker's current coordinates in the field (true/false).
-            Used in tasks for the mobile app.
+        current_location: `True` — saves Toloker's current coordinates.
+            The attribute can be used in tasks for the mobile application.
     """
     current_location: bool
 
 
 @inherit_docstrings
 class JsonSpec(FieldSpec, spec_value=FieldType.JSON):
-    """A JSON object field specification
+    """A JSON object field specification.
     """
 
 
 @inherit_docstrings
 class ArrayBooleanSpec(BooleanSpec, spec_value=FieldType.ARRAY_BOOLEAN):
-    """A boolean array field specification
+    """A boolean array field specification.
 
     Attributes:
-        min_size: Minimum number of elements in the array
-        max_size: Maximum number of elements in the array
+        min_size: The minimum number of elements in the array.
+        max_size: The maximum number of elements in the array.
     """
     min_size: int
     max_size: int
@@ -153,11 +155,11 @@ class ArrayBooleanSpec(BooleanSpec, spec_value=FieldType.ARRAY_BOOLEAN):
 
 @inherit_docstrings
 class ArrayStringSpec(StringSpec, spec_value=FieldType.ARRAY_STRING):
-    """A string array field specification
+    """A string array field specification.
 
     Attributes:
-        min_size: Minimum number of elements in the array
-        max_size: Maximum number of elements in the array
+        min_size: The minimum number of elements in the array.
+        max_size: The maximum number of elements in the array.
     """
     min_size: int
     max_size: int
@@ -165,11 +167,11 @@ class ArrayStringSpec(StringSpec, spec_value=FieldType.ARRAY_STRING):
 
 @inherit_docstrings
 class ArrayIntegerSpec(IntegerSpec, spec_value=FieldType.ARRAY_INTEGER):
-    """An integer array field specification
+    """An integer array field specification.
 
     Attributes:
-        min_size: Minimum number of elements in the array
-        max_size: Maximum number of elements in the array
+        min_size: The minimum number of elements in the array.
+        max_size: The maximum number of elements in the array.
     """
     min_size: int
     max_size: int
@@ -177,11 +179,11 @@ class ArrayIntegerSpec(IntegerSpec, spec_value=FieldType.ARRAY_INTEGER):
 
 @inherit_docstrings
 class ArrayFloatSpec(FloatSpec, spec_value=FieldType.ARRAY_FLOAT):
-    """An floating point array field specification
+    """A floating-point array field specification.
 
     Attributes:
-        min_size: Minimum number of elements in the array
-        max_size: Maximum number of elements in the array
+        min_size: The minimum number of elements in the array.
+        max_size: The maximum number of elements in the array.
     """
     min_size: int
     max_size: int
@@ -189,11 +191,11 @@ class ArrayFloatSpec(FloatSpec, spec_value=FieldType.ARRAY_FLOAT):
 
 @inherit_docstrings
 class ArrayUrlSpec(UrlSpec, spec_value=FieldType.ARRAY_URL):
-    """A url array field specification
+    """A URL array field specification.
 
     Attributes:
-        min_size: Minimum number of elements in the array
-        max_size: Maximum number of elements in the array
+        min_size: The minimum number of elements in the array.
+        max_size: The maximum number of elements in the array.
     """
     min_size: int
     max_size: int
@@ -201,11 +203,13 @@ class ArrayUrlSpec(UrlSpec, spec_value=FieldType.ARRAY_URL):
 
 @inherit_docstrings
 class ArrayFileSpec(FileSpec, spec_value=FieldType.ARRAY_FILE):
-    """A file array field specification (only for output data)
+    """A file array field specification.
+
+    `ArrayFileSpec` is used for output data only.
 
     Attributes:
-        min_size: Minimum number of elements in the array
-        max_size: Maximum number of elements in the array
+        min_size: The minimum number of elements in the array.
+        max_size: The maximum number of elements in the array.
     """
     min_size: int
     max_size: int
@@ -213,11 +217,11 @@ class ArrayFileSpec(FileSpec, spec_value=FieldType.ARRAY_FILE):
 
 @inherit_docstrings
 class ArrayCoordinatesSpec(CoordinatesSpec, spec_value=FieldType.ARRAY_COORDINATES):
-    """Geographical coordinates array field specification
+    """Geographical coordinates array field specification.
 
     Attributes:
-        min_size: Minimum number of elements in the array
-        max_size: Maximum number of elements in the array
+        min_size: The minimum number of elements in the array.
+        max_size: The maximum number of elements in the array.
     """
     min_size: int
     max_size: int
@@ -225,11 +229,11 @@ class ArrayCoordinatesSpec(CoordinatesSpec, spec_value=FieldType.ARRAY_COORDINAT
 
 @inherit_docstrings
 class ArrayJsonSpec(JsonSpec, spec_value=FieldType.ARRAY_JSON):
-    """A JSON object field specification
+    """An array of JSON objects.
 
     Attributes:
-        min_size: Minimum number of elements in the array
-        max_size: Maximum number of elements in the array
+        min_size: The minimum number of elements in the array.
+        max_size: The maximum number of elements in the array.
     """
     min_size: int
     max_size: int

@@ -243,6 +243,7 @@ class AutoQuality:
         >>> aq.create_tasks(aq_tasks)
         >>> aq.run()
         >>> aq.best_pool_params
+        ...
     """
     toloka_client: TolokaClient
     project_id: str

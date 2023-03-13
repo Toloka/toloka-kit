@@ -73,4 +73,4 @@ class SyncRetryingOverURLLibRetry(RetryingOverURLLibRetry, tenacity.Retrying):
 
 
 class AsyncRetryingOverURLLibRetry(RetryingOverURLLibRetry, tenacity.AsyncRetrying):
-    ...
+    sleep: typing.Callable[[float], typing.Awaitable[typing.Any]]

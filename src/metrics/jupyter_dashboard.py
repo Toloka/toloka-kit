@@ -20,8 +20,8 @@ __all__ = [
 
 import plotly.graph_objects as go
 from jupyter_dash import JupyterDash
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc
+from dash import html
 from dash.dependencies import Input, Output
 
 import asyncio
@@ -66,10 +66,11 @@ class Chart:
         >>> Chart(
         >>>     'Answers count',
         >>>     [
-                    metrics.AssignmentsInPool('123', submitted_name='submitted in 123', accepted_name='accepted in 123', toloka_client=client1),
-                    metrics.AssignmentsInPool('456', submitted_name='submitted in 456', accepted_name='accepted in 456', toloka_client=client2),
-                ]
+        >>>         metrics.AssignmentsInPool('123', submitted_name='submitted in 123', accepted_name='accepted in 123', toloka_client=client1),
+        >>>         metrics.AssignmentsInPool('456', submitted_name='submitted in 456', accepted_name='accepted in 456', toloka_client=client2),
+        >>>     ]
         >>> )
+        ...
     """
     LineStats = namedtuple('LineStats', ['x', 'y', 'name'])
 
