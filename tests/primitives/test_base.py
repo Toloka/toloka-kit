@@ -29,7 +29,7 @@ def test_generic_base_inherited_object():
         data: Dict[str, T]
 
     class CustomClass(BaseTolokaObject):
-        a: list[int]
+        a: List[int]
         b: str
 
     unstructured_data = {'data': {'a': 1}}

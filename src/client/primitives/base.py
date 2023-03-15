@@ -10,6 +10,7 @@ __all__ = [
 import inspect
 import logging
 import typing
+import pkg_resources
 from copy import copy
 from enum import Enum
 from functools import update_wrapper, partial
@@ -17,6 +18,12 @@ from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union, Tu
 
 import attr
 import simplejson as json
+
+_CATTRS_VERSION = tuple(map(int, pkg_resources.get_distribution('cattrs').version.split('.')))
+if _CATTRS_VERSION < (22, 1, 0):
+    from cattr.gen import is_generic, get_origin, _generate_mapping
+else:
+    from cattrs.gen import is_generic, get_origin, _generate_mapping
 
 from ...util._extendable_enum import ExtendableStrEnumMetaclass
 from .._converter import converter
@@ -285,6 +292,16 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
     @classmethod
     def structure(cls, data: Any):
 
+        type_var_mapping = {}
+        if is_generic(cls):
+            base = get_origin(cls)
+            type_var_mapping = _generate_mapping(cls, type_var_mapping)
+            cls = base
+        for base in getattr(cls, "__orig_bases__", ()):
+            if is_generic(base) and not str(base).startswith("typing.Generic"):
+                type_var_mapping = _generate_mapping(base, type_var_mapping)
+                break
+
         # If a class is an incomplete variant type we structure it into
         # one of its subclasses
         if cls.is_variant_incomplete():
@@ -314,7 +331,12 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
 
             value = data.pop(key)
             if field.type is not None:
-                value = converter.structure(value, field.type)
+                # if isinstance(field.type, typing.TypeVar) and field.type.__name__ in type_var_mapping:
+                #     target_type = type_var_mapping[field.type.__name__]
+                # else:
+                #     target_type = field.type
+                target_type = get_mapped_type(field.type, type_var_mapping)
+                value = converter.structure(value, target_type)
 
             kwargs[field.name] = value
         obj = cls(**kwargs)
@@ -334,6 +356,26 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
     @classmethod
     def from_json(cls, json_str: str):
         return cls.structure(json.loads(json_str, use_decimal=True))
+
+
+def get_mapped_type(t, mapping):
+    if isinstance(t, typing.TypeVar):
+        return mapping.get(t.__name__, t)
+    try:
+        origin_type = t.__dict__['__origin__']
+        type_args = t.__dict__.get('__args__', [])
+        mapped_args = tuple(get_mapped_type(t_arg, mapping) for t_arg in type_args)
+
+        # TODO: support all generic types including custom generics
+        if origin_type == typing.Union:
+            return typing.Union[mapped_args]
+        if origin_type in [typing.Dict, dict]:
+            return typing.Dict[mapped_args[0], mapped_args[1]]
+        if origin_type in [typing.List, list]:
+            return typing.List[mapped_args]
+        return t
+    except Exception as err:
+        return t
 
 
 @universal_decorator(has_parameters=False)
