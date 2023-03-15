@@ -10,11 +10,17 @@ from typing import List, Union
 
 import attr
 import cattr
-from cattr.gen import is_generic, get_origin, _generate_mapping
-from cattr._compat import has_with_generic
 from ..util._extendable_enum import ExtendableStrEnum
 
 _CATTRS_VERSION = tuple(map(int, pkg_resources.get_distribution('cattrs').version.split('.')))
+
+if _CATTRS_VERSION < (22, 1, 0):
+    from cattr.gen import is_generic, get_origin, _generate_mapping
+    from cattr._compat import has_with_generic
+else:
+    from cattrs.gen import is_generic, get_origin, _generate_mapping
+    from cattrs._compat import has_with_generic
+
 if _CATTRS_VERSION < (22, 2, 0):
     converter = cattr.Converter()
 else:
@@ -39,6 +45,8 @@ def structure_obj_to_generic_class(obj, cl):
             origin_type = t.__dict__['__origin__']
             type_args = t.__dict__.get('__args__', [])
             mapped_args = tuple(get_mapped_type(t_arg, mapping) for t_arg in type_args)
+
+            # TODO: support all generic types including custom generics
             if origin_type == typing.Union:
                 return typing.Union[mapped_args]
             if origin_type == dict:
@@ -61,15 +69,16 @@ def structure_obj_to_generic_class(obj, cl):
             break
     mapped_fields = []
     for field in attr.fields(cl):
-        field = field.evolve(type=get_mapped_type(field.type, mapping))
-        mapped_fields.append(field)
-    cl_copy = deepcopy(cl)
+        field_with_mapped_type = deepcopy(field).evolve(type=get_mapped_type(field.type, mapping))
+        mapped_fields.append(field_with_mapped_type)
+
+    cl_copy = type(f'{cl.__name__}_generated', cl.__bases__, dict(cl.__dict__))
     cl_copy.__attrs_attrs__ = mapped_fields
-    return cl.structure(obj)
+    return cl_copy.structure(obj)
 
 
 converter.register_structure_hook_func(
-    lambda type_: has_with_generic and hasattr(type_, 'structure'),
+    lambda type_: has_with_generic(type_) and hasattr(type_, 'structure'),
     lambda data, type_: structure_obj_to_generic_class(data, type_)
 )
 

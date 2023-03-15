@@ -25,15 +25,20 @@ def test_generic_base_inherited_object():
 
     T = TypeVar('T')
 
-    @attr.s(auto_attribs=True)
-    class GenericAttr(Generic[T]):
-        data: Dict[str, T]
-
     class GenericBaseInheritedClass(Generic[T], BaseTolokaObject):
         data: Dict[str, T]
 
-    assert structure({'data': {'a': 1}}, GenericAttr[int]) == GenericAttr(data={'a': 1})
-    assert structure({'data': {'a': 1}}, GenericBaseInheritedClass[int]) == GenericBaseInheritedClass(data={'a': 1})
+    class CustomClass(BaseTolokaObject):
+        a: list[int]
+        b: str
+
+    unstructured_data = {'data': {'a': 1}}
+    structured_data = structure(unstructured_data, GenericBaseInheritedClass[int])
+    assert unstructure(structured_data) == unstructured_data
+
+    unstructured_data = {'data': {'nested_class': {'a': [1], 'b': 'hello'}}}
+    structured = structure(unstructured_data, GenericBaseInheritedClass[CustomClass])
+    assert unstructure(structured) == unstructured_data
 
 
 @pytest.fixture
