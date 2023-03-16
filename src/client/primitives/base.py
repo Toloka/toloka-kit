@@ -335,7 +335,7 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
                 #     target_type = type_var_mapping[field.type.__name__]
                 # else:
                 #     target_type = field.type
-                target_type = get_mapped_type(field.type, type_var_mapping)
+                target_type = _get_mapped_type(field.type, type_var_mapping)
                 value = converter.structure(value, target_type)
 
             kwargs[field.name] = value
@@ -358,24 +358,34 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
         return cls.structure(json.loads(json_str, use_decimal=True))
 
 
-def get_mapped_type(t, mapping):
+def _get_mapped_type(t, mapping):
     if isinstance(t, typing.TypeVar):
         return mapping.get(t.__name__, t)
     try:
         origin_type = t.__dict__['__origin__']
         type_args = t.__dict__.get('__args__', [])
-        mapped_args = tuple(get_mapped_type(t_arg, mapping) for t_arg in type_args)
+    except AttributeError:
+        return t
+    except KeyError:
+        return t
+    mapped_args = tuple(_get_mapped_type(t_arg, mapping) for t_arg in type_args)
 
-        # TODO: support all generic types including custom generics
-        if origin_type == typing.Union:
-            return typing.Union[mapped_args]
-        if origin_type in [typing.Dict, dict]:
-            return typing.Dict[mapped_args[0], mapped_args[1]]
-        if origin_type in [typing.List, list]:
-            return typing.List[mapped_args]
-        return t
-    except Exception as err:
-        return t
+    # TODO: support all generic types including custom generics
+    origin_type_mapped = {
+        tuple: typing.Tuple,
+        list: typing.List,
+        dict: typing.Dict,
+    }
+    origin_type = origin_type_mapped.get(origin_type, origin_type)
+
+    if origin_type in [typing.Union, typing.List, typing.Dict, typing.Tuple] and not mapped_args:
+        return origin_type
+    if origin_type in [typing.Union, typing.List, typing.Tuple]:
+        return origin_type[mapped_args]
+    if origin_type in [typing.Dict]:
+        return typing.Dict[mapped_args[0], mapped_args[1]]
+
+    return t
 
 
 @universal_decorator(has_parameters=False)
