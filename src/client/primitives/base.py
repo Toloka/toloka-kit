@@ -10,7 +10,6 @@ __all__ = [
 import inspect
 import logging
 import typing
-import pkg_resources
 from copy import copy
 from enum import Enum
 from functools import update_wrapper, partial
@@ -19,11 +18,6 @@ from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union, Tu
 import attr
 import simplejson as json
 
-_CATTRS_VERSION = tuple(map(int, pkg_resources.get_distribution('cattrs').version.split('.')))
-if _CATTRS_VERSION < (22, 1, 0):
-    from cattr.gen import is_generic, get_origin, _generate_mapping
-else:
-    from cattrs.gen import is_generic, get_origin, _generate_mapping
 
 from ...util._extendable_enum import ExtendableStrEnumMetaclass
 from .._converter import converter
@@ -32,6 +26,7 @@ from ...util._codegen import (
     attribute, expand, fix_attrs_converters, REQUIRED_KEY, ORIGIN_KEY, AUTOCAST_KEY,
     universal_decorator,
 )
+from ...util._typing import generate_type_var_mapping
 
 E = TypeVar('E', bound=Enum)
 
@@ -292,15 +287,7 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
     @classmethod
     def structure(cls, data: Any):
 
-        type_var_mapping = {}
-        if is_generic(cls):
-            base = get_origin(cls)
-            type_var_mapping = _generate_mapping(cls, type_var_mapping)
-            cls = base
-        for base in getattr(cls, "__orig_bases__", ()):
-            if is_generic(base) and not str(base).startswith("typing.Generic"):
-                type_var_mapping = _generate_mapping(base, type_var_mapping)
-                break
+        cls, type_var_mapping = generate_type_var_mapping(cls)
 
         # If a class is an incomplete variant type we structure it into
         # one of its subclasses
