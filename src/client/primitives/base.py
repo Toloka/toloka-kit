@@ -331,10 +331,6 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
 
             value = data.pop(key)
             if field.type is not None:
-                # if isinstance(field.type, typing.TypeVar) and field.type.__name__ in type_var_mapping:
-                #     target_type = type_var_mapping[field.type.__name__]
-                # else:
-                #     target_type = field.type
                 target_type = _get_mapped_type(field.type, type_var_mapping)
                 value = converter.structure(value, target_type)
 
@@ -370,7 +366,7 @@ def _get_mapped_type(t, mapping):
         return t
     mapped_args = tuple(_get_mapped_type(t_arg, mapping) for t_arg in type_args)
 
-    # TODO: support all generic types including custom generics
+    # TODO: support all generic types
     origin_type_mapped = {
         tuple: typing.Tuple,
         list: typing.List,
