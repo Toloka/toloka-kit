@@ -179,7 +179,7 @@ class SetActionV1(BaseActionV1, spec_value=ComponentType.ACTION_SET):
         payload: The value.
     """
 
-    data: BaseComponent
+    data: base_component_or(RefComponent)
     payload: base_component_or(Any)
 
 
@@ -192,4 +192,4 @@ class ToggleActionV1(BaseActionV1, spec_value=ComponentType.ACTION_TOGGLE):
         data: The data field.
     """
 
-    data: BaseComponent
+    data: base_component_or(RefComponent)
