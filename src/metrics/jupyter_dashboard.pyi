@@ -41,10 +41,11 @@ class Chart:
         >>> Chart(
         >>>     'Answers count',
         >>>     [
-                    metrics.AssignmentsInPool('123', submitted_name='submitted in 123', accepted_name='accepted in 123', toloka_client=client1),
-                    metrics.AssignmentsInPool('456', submitted_name='submitted in 456', accepted_name='accepted in 456', toloka_client=client2),
-                ]
+        >>>         metrics.AssignmentsInPool('123', submitted_name='submitted in 123', accepted_name='accepted in 123', toloka_client=client1),
+        >>>         metrics.AssignmentsInPool('456', submitted_name='submitted in 456', accepted_name='accepted in 456', toloka_client=client2),
+        >>>     ]
         >>> )
+        ...
     """
 
     class LineStats(tuple):

@@ -4,6 +4,7 @@ __all__ = [
 import datetime
 import decimal
 import pandas
+import ssl
 import toloka.client
 import toloka.client.aggregation
 import toloka.client.analytics_request
@@ -53,7 +54,8 @@ class AsyncTolokaClient:
         url: typing.Optional[str] = None,
         retry_quotas: typing.Union[typing.List[str], str, None] = 'MIN',
         retryer_factory: typing.Optional[typing.Callable[[], urllib3.util.retry.Retry]] = None,
-        act_under_account_id: typing.Optional[str] = None
+        act_under_account_id: typing.Optional[str] = None,
+        verify: typing.Union[str, bool, ssl.SSLContext] = True
     ): ...
 
     def __getattr__(self, name):
@@ -1126,16 +1128,17 @@ class AsyncTolokaClient:
         ...
 
     async def archive_project(self, project_id: str) -> toloka.client.project.Project:
-        """Sends project to archive
+        """Archives a project.
 
-        Use it when you have no need this project anymore. To perform the operation, all pools in the project must be archived.
-        The archived project is not deleted. You can access it when you will need it.
+        All pools in the project must be archived before archiving the project.
+
+        The archived project is not deleted. You can access it if you need.
 
         Args:
-            project_id: ID of project that will be archived.
+            project_id: The ID of project to be archived.
 
         Returns:
-            Project: Object with updated status.
+            Project: The project with the updated status.
 
         Example:
             >>> toloka_client.archive_project(project_id='1')
@@ -1144,16 +1147,17 @@ class AsyncTolokaClient:
         ...
 
     async def archive_project_async(self, project_id: str) -> toloka.client.operations.ProjectArchiveOperation:
-        """Sends project to archive, asynchronous version
+        """Archives a project. Sends an asynchronous request to Toloka.
 
-        Use when you have no need this project anymore. To perform the operation, all pools in the project must be archived.
-        The archived project is not deleted. You can access it when you will need it.
+        All pools in the project must be archived before archiving the project.
+
+        The archived project is not deleted. You can access it if you need.
 
         Args:
-            project_id: ID of project that will be archived.
+            project_id: The ID of project to be archived.
 
         Returns:
-            ProjectArchiveOperation: An operation upon completion of which you can get the project with updated status.
+            ProjectArchiveOperation: An object to track the progress of the operation.
 
         Example:
             >>> archive_op = toloka_client.archive_project_async(project_id='1')
@@ -1163,25 +1167,27 @@ class AsyncTolokaClient:
         ...
 
     async def create_project(self, project: toloka.client.project.Project) -> toloka.client.project.Project:
-        """Creates a new project
+        """Creates a new project in Toloka.
+
+        You can send a maximum of 20 requests of this kind per minute and a maximum of 100 requests per day.
 
         Args:
-            project: New Project with set parameters.
+            project: The project to be created.
 
         Returns:
-            Project: Created project. With read-only fields.
+            Project: The project with updated read-only fields.
 
         Example:
-            How to create a new project.
+            Creating a new project.
 
-            >>> new_project = toloka.project.Project(
-            >>>     assignments_issuing_type=toloka.project.Project.AssignmentsIssuingType.AUTOMATED,
+            >>> new_project = toloka.client.project.Project(
+            >>>     assignments_issuing_type=toloka.client.project.Project.AssignmentsIssuingType.AUTOMATED,
             >>>     public_name='My best project',
             >>>     public_description='Describe the picture',
             >>>     public_instructions='Describe in a few words what is happening in the image.',
-            >>>     task_spec=toloka.project.task_spec.TaskSpec(
-            >>>         input_spec={'image': toloka.project.field_spec.UrlSpec()},
-            >>>         output_spec={'result': toloka.project.field_spec.StringSpec()},
+            >>>     task_spec=toloka.client.project.task_spec.TaskSpec(
+            >>>         input_spec={'image': toloka.client.project.field_spec.UrlSpec()},
+            >>>         output_spec={'result': toloka.client.project.field_spec.StringSpec()},
             >>>         view_spec=project_interface,
             >>>     ),
             >>> )
@@ -1262,10 +1268,10 @@ class AsyncTolokaClient:
         ...
 
     async def get_project(self, project_id: str) -> toloka.client.project.Project:
-        """Reads one specific project
+        """Gets project data from Toloka.
 
         Args:
-            project_id: ID of the project.
+            project_id: The ID of the project.
 
         Returns:
             Project: The project.
@@ -1351,17 +1357,19 @@ class AsyncTolokaClient:
         project_id: str,
         project: toloka.client.project.Project
     ) -> toloka.client.project.Project:
-        """Makes changes to the project
+        """Updates all project parameters in Toloka.
 
         Args:
-            project_id: Project ID that will be changed.
-            project: A project object with all the fields: those that will be updated and those that will not.
+            project_id: The ID of the project to be updated.
+            project: The project with new parameters.
 
         Returns:
-            Project: Project object with all fields.
+            Project: The project with updated parameters.
 
         Example:
-            >>> updated_project = toloka_client.update_project(project_id=old_project.id, project=new_project_object)
+            >>> updated_project = toloka_client.get_project(project_id='1')
+            >>> updated_project.private_comment = 'example project'
+            >>> updated_project = toloka_client.update_project(project_id=updated_project.id, project=updated_project)
             ...
         """
         ...
@@ -1371,25 +1379,27 @@ class AsyncTolokaClient:
         project_id: str,
         reuse_controllers: bool = True
     ) -> toloka.client.clone_results.CloneResults:
-        """Synchronously clones the project, all pools and trainings
+        """Clones a project and all pools and trainings inside it.
 
-        Emulates cloning behavior via Toloka interface:
-        - the same skills will be used
-        - the same quality control collectors will be used (could be changed by `reuse_controllers=False`)
-        - the expiration date will not be changed in the new project
-        - etc.
+        `clone_project` emulates cloning behavior via Toloka interface. Note that it calls several API methods. If some method fails then the project may be partially cloned.
 
-        Doesn't have transaction - can clone project, and then raise on cloning pool.
-        Doesn't copy tasks/golden tasks/training tasks.
+        Important notes:
+        * No tasks are cloned.
+        * The expiration date is not changed in the new project.
+        * The same skills are used.
+        * If `reuse_controllers` is `True`, quality control collectors monitor both projects.
+            For example, the `fast_submitted_count` rule counts fast responses in the cloned and new projects together.
 
         Args:
-            project_id: ID of the project to be cloned.
-            reuse_controllers: Use same quality controllers in cloned and created projects. Defaults to `True`.
-                This means that all quality control rules will be applied to both projects.
-                For example, if you have rule "fast_submitted_count", fast responses counts across both projects.
+            project_id: The ID of the project to be cloned.
+            reuse_controllers:
+                * `True` — Use same quality controllers in cloned and created projects.
+                * `False` — Use separate quality controllers.
+
+                Default value: `True`.
 
         Returns:
-            Tuple[Project, List[Pool], List[Training]]: All created objects project, pools and trainings.
+            Tuple[Project, List[Pool], List[Training]]: Created project, pools and trainings.
 
         Example:
 

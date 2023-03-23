@@ -2,19 +2,16 @@ __all__ = [
     'BaseTask',
     'Task',
     'CreateTaskParameters',
-    'CreateTaskAsyncParameters',
     'CreateTasksParameters',
     'TaskOverlapPatch',
     'TaskPatch'
 ]
 import datetime
-import uuid
 from typing import Any, Dict, List
-from uuid import UUID
 
 from .primitives.base import BaseTolokaObject
 from .primitives.infinite_overlap import InfiniteOverlapParametersMixin
-from .primitives.parameter import Parameters
+from .primitives.parameter import IdempotentOperationParameters
 from ..util._codegen import attribute
 from ..util._docstrings import inherit_docstrings
 
@@ -104,8 +101,12 @@ class Task(InfiniteOverlapParametersMixin, BaseTask):
     baseline_solutions: List[BaselineSolution]
 
 
-class CreateTaskParameters(Parameters):
+@inherit_docstrings
+class CreateTaskParameters(IdempotentOperationParameters):
     """Parameters used with the [create_task](toloka.client.TolokaClient.create_task.md) method.
+
+    If the operation is started in an asynchronous mode,
+    we recommend that you send the `operation_id` to avoid creating the same tasks multiple times. You can use this ID later to get information about the operation.
 
     Attributes:
         allow_defaults: Active overlap setting:
@@ -115,28 +116,19 @@ class CreateTaskParameters(Parameters):
             Default value: `False`.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
             Default value: `False`.
+        async_mode: Request processing mode:
+            * `True` — Asynchronous operation is started internally and `create_tasks` waits for the completion of it. It is recommended to create no more than 10,000 tasks per request in this mode.
+            * `False` — The request is processed synchronously. A maximum of 5000 tasks can be added in a single request in this mode.
+            Default value: `True`.
     """
-
     allow_defaults: bool
     open_pool: bool
-    operation_id: UUID = attribute(factory=uuid.uuid4)
-
-
-@inherit_docstrings
-class CreateTaskAsyncParameters(CreateTaskParameters):
-    """Parameters used with the [create_tasks_async](toloka.client.TolokaClient.create_tasks_async.md) method.
-
-    Send the `operation_id` to avoid creating the same tasks multiple times. You can use this ID later to get information about the operation.
-
-    Attributes:
-        operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
-    """
-    pass
 
 
 @inherit_docstrings
 class CreateTasksParameters(CreateTaskParameters):
-    """Parameters used with the [create_tasks](toloka.client.TolokaClient.create_tasks.md) method.
+    """Parameters used with the [create_tasks](toloka.client.TolokaClient.create_tasks.md)
+    and [create_tasks_async](toloka.client.TolokaClient.create_tasks_async.md) methods.
 
     If the operation is started in an asynchronous mode,
     we recommend that you send the `operation_id` to avoid creating the same tasks multiple times. You can use this ID later to get information about the operation.
@@ -147,16 +139,8 @@ class CreateTasksParameters(CreateTaskParameters):
             * `False` — If any task does not pass validation, then the operation is cancelled and no tasks are added to Toloka.
 
             Default value: `False`.
-        operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122). Use it if the `async_mode` is set to `True`.
-        async_mode: Request processing mode:
-            * `True` — Asynchronous operation is started internally and `create_tasks` waits for the completion of it. It is recommended to create no more than 10,000 tasks per request in this mode.
-            * `False` — The request is processed synchronously. A maximum of 5000 tasks can be added in a single request in this mode.
-
-            Default value: `False`.
     """
-
     skip_invalid_items: bool
-    async_mode: bool = attribute(default=True)
 
 
 class TaskOverlapPatch(BaseTolokaObject):

@@ -1,3 +1,12 @@
+1.1.4
+-------------------
+Features:
+* Added `verify` parameter to `TolokaClient` and `AsyncTolokaClient`. This parameter controls SSL certificate verification settings.
+
+Bugfixes:
+* Fixed deserialization of legacy Toloka projects bug which was caused by an attempt to parse view spec with empty `lock` field.
+
+
 1.1.3
 -------------------
 Bugfixes:
