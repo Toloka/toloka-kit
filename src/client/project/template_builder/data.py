@@ -30,7 +30,7 @@ class BaseDataMetaclass(BaseTemplateMetaclass):
 class BaseData(BaseComponent, metaclass=BaseDataMetaclass):
     """A base class for data components.
 
-    For more information, see [Working with data](https://toloka.ai/en/docs/template-builder/operations/work-with-data).
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
 
      Attributes:
         path: A path to a data property in a component hierarchy.
@@ -47,7 +47,7 @@ class BaseData(BaseComponent, metaclass=BaseDataMetaclass):
 class InputData(BaseData, spec_value=ComponentType.DATA_INPUT):
     """Input data.
 
-    For more information, see [Working with data](https://toloka.ai/en/docs/template-builder/operations/work-with-data).
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
     """
 
     pass
@@ -59,7 +59,7 @@ class InternalData(BaseData, spec_value=ComponentType.DATA_INTERNAL):
 
     Use it to store intermediate values.
 
-    For more information, see [Working with data](https://toloka.ai/en/docs/template-builder/operations/work-with-data).
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
     """
 
     pass
@@ -71,7 +71,7 @@ class LocalData(BaseData, spec_value=ComponentType.DATA_LOCAL):
 
     It is used in some components, like [TransformHelperV1](toloka.client.project.template_builder.helpers.TransformHelperV1.md).
 
-    For more information, see [Working with data](https://toloka.ai/en/docs/template-builder/operations/work-with-data).
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
     """
 
     pass
@@ -92,7 +92,7 @@ class LocationData(BaseComponent, spec_value=ComponentType.DATA_LOCATION):
 class OutputData(BaseData, spec_value=ComponentType.DATA_OUTPUT):
     """Output data.
 
-    For more information, see [Working with data](https://toloka.ai/en/docs/template-builder/operations/work-with-data).
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
     """
 
     pass
@@ -102,7 +102,7 @@ class OutputData(BaseData, spec_value=ComponentType.DATA_OUTPUT):
 class RelativeData(BaseData, spec_value=ComponentType.DATA_RELATIVE):
     """A component for saving data in the [ListFieldV1](toloka.client.project.template_builder.fields.ListFieldV1).
 
-    For more information, see [Working with data](https://toloka.ai/en/docs/template-builder/operations/work-with-data).
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
     """
 
     pass

@@ -45,7 +45,7 @@ class BaseConditionV1(BaseComponent, metaclass=BaseConditionV1Metaclass):
 class AllConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ALL):
     """Checks that all nested conditions are met.
 
-    For more information, see [condition.all](https://toloka.ai/en/docs/template-builder/reference/condition.all).
+    For more information, see [condition.all](https://toloka.ai/docs/template-builder/reference/condition.all).
 
     Attributes:
         conditions: A list of conditions.
@@ -75,7 +75,7 @@ class AllConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ALL):
 class AnyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ANY):
     """Checks that at least one nested condition is met.
 
-    For more information, see [condition.any](https://toloka.ai/en/docs/template-builder/reference/condition.any).
+    For more information, see [condition.any](https://toloka.ai/docs/template-builder/reference/condition.any).
 
     Attributes:
         conditions: A list of conditions.
@@ -88,7 +88,7 @@ class AnyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_ANY):
 class DistanceConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_YANDEX_DISTANCE):
     """Checks a distance between two coordinates.
 
-    For more information, see [condition.distance](https://toloka.ai/en/docs/template-builder/reference/condition.distance).
+    For more information, see [condition.distance](https://toloka.ai/docs/template-builder/reference/condition.distance).
 
     Attributes:
         from_: The first point.
@@ -117,7 +117,7 @@ class DistanceConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_YA
 class EmptyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_EMPTY):
     """Checks that data is empty or undefined.
 
-    For more information, see [condition.empty](https://toloka.ai/en/docs/template-builder/reference/condition.empty).
+    For more information, see [condition.empty](https://toloka.ai/docs/template-builder/reference/condition.empty).
 
     Attributes:
         data: Data to check. If not specified, data of the parent component is checked.
@@ -130,7 +130,7 @@ class EmptyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_EMPTY
 class EqualsConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_EQUALS):
     """Checks whether two values are equal.
 
-    For more information, see [condition.equals](https://toloka.ai/en/docs/template-builder/reference/condition.equals).
+    For more information, see [condition.equals](https://toloka.ai/docs/template-builder/reference/condition.equals).
 
     Attributes:
         data: The first value. If it is not specified, then the value returned by the parent component is used.
@@ -145,7 +145,7 @@ class EqualsConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_EQUA
 class LinkOpenedConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_LINK_OPENED):
     """Checks that a Toloker clicked a link.
 
-    For more information, see [condition.link-opened](https://toloka.ai/en/docs/template-builder/reference/condition.link-opened).
+    For more information, see [condition.link-opened](https://toloka.ai/docs/template-builder/reference/condition.link-opened).
 
     Attributes:
         url: The link URL.
@@ -158,7 +158,7 @@ class LinkOpenedConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_
 class NotConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_NOT):
     """Inverts a condition.
 
-    For more information, see [condition.not](https://toloka.ai/en/docs/template-builder/reference/condition.not).
+    For more information, see [condition.not](https://toloka.ai/docs/template-builder/reference/condition.not).
 
     Attributes:
         condition: The condition to invert.
@@ -171,7 +171,7 @@ class NotConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_NOT):
 class PlayedConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_PLAYED):
     """Checks that playback has started.
 
-    For more information, see [condition.played](https://toloka.ai/en/docs/template-builder/reference/condition.played).
+    For more information, see [condition.played](https://toloka.ai/docs/template-builder/reference/condition.played).
     """
 
     pass
@@ -181,7 +181,7 @@ class PlayedConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_PLAY
 class PlayedFullyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_PLAYED_FULLY):
     """Checks that playback is complete.
 
-    For more information, see [condition.played-fully](https://toloka.ai/en/docs/template-builder/reference/condition.played-fully).
+    For more information, see [condition.played-fully](https://toloka.ai/docs/template-builder/reference/condition.played-fully).
     """
 
     pass
@@ -191,7 +191,7 @@ class PlayedFullyConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION
 class RequiredConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_REQUIRED):
     """Checks that a data field is present in a response.
 
-    For more information, see [condition.required](https://toloka.ai/en/docs/template-builder/reference/condition.required).
+    For more information, see [condition.required](https://toloka.ai/docs/template-builder/reference/condition.required).
 
     Attributes:
         data: The data field. If it is not specified, the data of the parent component is used.
@@ -214,7 +214,7 @@ class RequiredConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_RE
 class SameDomainConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_SAME_DOMAIN):
     """Checks that domains in two URLs are the same.
 
-    For more information, see [condition.same-domain](https://toloka.ai/en/docs/template-builder/reference/condition.same-domain).
+    For more information, see [condition.same-domain](https://toloka.ai/docs/template-builder/reference/condition.same-domain).
 
     Attributes:
         data: The first URL. If it is not specified, then the value returned by the parent component is used.
@@ -229,7 +229,7 @@ class SameDomainConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_
 class SchemaConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_SCHEMA):
     """Validates data using the [JSON Schema](https://json-schema.org/learn/getting-started-step-by-step.html).
 
-    For more information, see [condition.schema](https://toloka.ai/en/docs/template-builder/reference/condition.schema).
+    For more information, see [condition.schema](https://toloka.ai/docs/template-builder/reference/condition.schema).
 
     Attributes:
         data: Data to be validated.
@@ -244,7 +244,7 @@ class SchemaConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_SCHE
 class SubArrayConditionV1(BaseConditionV1, spec_value=ComponentType.CONDITION_SUB_ARRAY):
     """Checks that an array is a subarray of another array.
 
-    For more information, see [condition.sub-array](https://toloka.ai/en/docs/template-builder/reference/condition.sub-array).
+    For more information, see [condition.sub-array](https://toloka.ai/docs/template-builder/reference/condition.sub-array).
 
     Attributes:
         data: The array to check.

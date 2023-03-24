@@ -31,7 +31,7 @@ class BaseHelperV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):
 class ConcatArraysHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_CONCAT_ARRAYS):
     """Concatenates multiple arrays into a single array.
 
-    For more information, see [helper.concat-arrays](https://toloka.ai/en/docs/template-builder/reference/helper.concat-arrays).
+    For more information, see [helper.concat-arrays](https://toloka.ai/docs/template-builder/reference/helper.concat-arrays).
 
     Attributes:
         items: Arrays to concatenate.
@@ -47,7 +47,7 @@ class Entries2ObjectHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_ENTRI
     `[ {"key":"foo", "value":"hello"}, {"key":"bar","value":"world"} ]`
     is converted to `{ "foo": "hello", "bar": "world" }`.
 
-    For more information, see [helper.entries2object](https://toloka.ai/en/docs/template-builder/reference/helper.entries2object).
+    For more information, see [helper.entries2object](https://toloka.ai/docs/template-builder/reference/helper.entries2object).
 
     Attributes:
         entries: A source array of key-value pairs.
@@ -63,7 +63,7 @@ class Entries2ObjectHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_ENTRI
 class IfHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_IF):
     """The `if then else` operator.
 
-    For more information, see [helper.if](https://toloka.ai/en/docs/template-builder/reference/helper.if).
+    For more information, see [helper.if](https://toloka.ai/docs/template-builder/reference/helper.if).
 
     Attributes:
         condition: A condition to check.
@@ -88,7 +88,7 @@ class IfHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_IF):
 class JoinHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_JOIN):
     """Joins strings into a single string.
 
-    For more information, see [helper.join](https://toloka.ai/en/docs/template-builder/reference/helper.join).
+    For more information, see [helper.join](https://toloka.ai/docs/template-builder/reference/helper.join).
 
     Attributes:
         items: A list of strings to join.
@@ -106,7 +106,7 @@ class Object2EntriesHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_OBJEC
     `{ "foo": "hello", "bar": "world" }` is converted to
     `[ {"key":"foo", "value":"hello"}, {"key":"bar","value":"world"} ]`.
 
-    For more information, see [helper.object2entries](https://toloka.ai/en/docs/template-builder/reference/helper.object2entries).
+    For more information, see [helper.object2entries](https://toloka.ai/docs/template-builder/reference/helper.object2entries).
 
     Attributes:
         data: An object to convert.
@@ -118,7 +118,7 @@ class Object2EntriesHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_OBJEC
 class ReplaceHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_REPLACE):
     """Replaces a substring in a string.
 
-    For more information, see [helper.replace](https://toloka.ai/en/docs/template-builder/reference/helper.replace).
+    For more information, see [helper.replace](https://toloka.ai/docs/template-builder/reference/helper.replace).
 
     Attributes:
         data: An input string.
@@ -134,7 +134,7 @@ class ReplaceHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_REPLACE):
 class SearchQueryHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_SEARCH_QUERY):
     """Creates a query for a search engine.
 
-    For more information, see [helper.search-query](https://toloka.ai/en/docs/template-builder/reference/helper.search-query).
+    For more information, see [helper.search-query](https://toloka.ai/docs/template-builder/reference/helper.search-query).
 
     Attributes:
         query: A query.
@@ -162,7 +162,7 @@ class SearchQueryHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_SEARCH_Q
 class SwitchHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_SWITCH):
     """Chooses one variant from multiple cases.
 
-    For more information, see [helper.switch](https://toloka.ai/en/docs/template-builder/reference/helper.switch).
+    For more information, see [helper.switch](https://toloka.ai/docs/template-builder/reference/helper.switch).
 
     Attributes:
         cases: A list of cases.
@@ -188,7 +188,7 @@ class SwitchHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_SWITCH):
 class TextTransformHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_TEXT_TRANSFORM):
     """Converts a text to uppercase, lowercase, or capitalize it.
 
-    For more information, see [helper.text-transform](https://toloka.ai/en/docs/template-builder/reference/helper.text-transform).
+    For more information, see [helper.text-transform](https://toloka.ai/docs/template-builder/reference/helper.text-transform).
 
     Attributes:
         data: A text to convert.
@@ -213,7 +213,7 @@ class TransformHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_TRANSFORM)
 
     For example, you can create an array of `view.image` components from an array of links to images.
 
-    For more information, see [helper.transform](https://toloka.ai/en/docs/template-builder/reference/helper.transform).
+    For more information, see [helper.transform](https://toloka.ai/docs/template-builder/reference/helper.transform).
 
     Attributes:
         into: The template of an element of the new array.
@@ -228,7 +228,7 @@ class TransformHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_TRANSFORM)
 class TranslateHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_TRANSLATE):
     """A component for translating interface elements to other languages.
 
-    For more information, see [helper.translate](https://toloka.ai/en/docs/template-builder/reference/helper.translate).
+    For more information, see [helper.translate](https://toloka.ai/docs/template-builder/reference/helper.translate).
 
     Attributes:
         key: The key of a phrase that has translations.
@@ -240,7 +240,7 @@ class TranslateHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_TRANSLATE)
 class YandexDiskProxyHelperV1(BaseHelperV1, spec_value=ComponentType.HELPER_YANDEX_DISK_PROXY):
     """A component for downloading files from Yandex&#160;Disk.
 
-    For more information, see [helper.proxy](https://toloka.ai/en/docs/template-builder/reference/helper.proxy).
+    For more information, see [helper.proxy](https://toloka.ai/docs/template-builder/reference/helper.proxy).
 
     Attributes:
         path: A path to a file in the `/<Proxy name>/<File name>.<type>` format.

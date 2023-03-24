@@ -194,7 +194,7 @@ class RefComponent(BaseTemplate):
 
     Pass to the `RefComponent` constructor a path in the Template Builder component hierarchy.
 
-    For more information, see [Reuse code](https://toloka.ai/en/docs/template-builder/best-practices/reuse).
+    For more information, see [Reuse code](https://toloka.ai/docs/template-builder/best-practices/reuse).
 
     Example:
         >>> from toloka.client.project.template_builder import *

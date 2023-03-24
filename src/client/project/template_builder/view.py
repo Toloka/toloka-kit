@@ -66,7 +66,7 @@ class BaseViewV1(BaseComponent, metaclass=BaseViewV1Metaclass):
 class ActionButtonViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ACTION_BUTTON):
     """A button that calls an action.
 
-    For more information, see [view.action-button](https://toloka.ai/en/docs/template-builder/reference/view.action-button).
+    For more information, see [view.action-button](https://toloka.ai/docs/template-builder/reference/view.action-button).
 
     Attributes:
         action: The action.
@@ -80,7 +80,7 @@ class ActionButtonViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ACTION_BUTTON
 class AlertViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ALERT):
     """A view used to highlight important information.
 
-    For more information, see [view.alert](https://toloka.ai/en/docs/template-builder/reference/view.alert).
+    For more information, see [view.alert](https://toloka.ai/docs/template-builder/reference/view.alert).
 
     Attributes:
         content: The content.
@@ -111,7 +111,7 @@ class AlertViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ALERT):
 class AudioViewV1(BaseViewV1, spec_value=ComponentType.VIEW_AUDIO):
     """An audio player.
 
-    For more information, see [view.audio](https://toloka.ai/en/docs/template-builder/reference/view.audio).
+    For more information, see [view.audio](https://toloka.ai/docs/template-builder/reference/view.audio).
 
     Attributes:
         url: A link to the audio.
@@ -128,7 +128,7 @@ class AudioViewV1(BaseViewV1, spec_value=ComponentType.VIEW_AUDIO):
 class CollapseViewV1(BaseViewV1, spec_value=ComponentType.VIEW_COLLAPSE):
     """An expandable block.
 
-    For more information, see [view.collapse](https://toloka.ai/en/docs/template-builder/reference/view.collapse).
+    For more information, see [view.collapse](https://toloka.ai/docs/template-builder/reference/view.collapse).
 
     Attributes:
         label: The block heading.
@@ -149,7 +149,7 @@ class CollapseViewV1(BaseViewV1, spec_value=ComponentType.VIEW_COLLAPSE):
 class DeviceFrameViewV1(BaseViewV1, spec_value=ComponentType.VIEW_DEVICE_FRAME):
     """A view with a frame that is similar to a mobile phone frame.
 
-    For more information, see [view.device-frame](https://toloka.ai/en/docs/template-builder/reference/view.device-frame).
+    For more information, see [view.device-frame](https://toloka.ai/docs/template-builder/reference/view.device-frame).
 
     Attributes:
         content: The content of the frame.
@@ -172,7 +172,7 @@ class DeviceFrameViewV1(BaseViewV1, spec_value=ComponentType.VIEW_DEVICE_FRAME):
 class DividerViewV1(BaseViewV1, spec_value=ComponentType.VIEW_DIVIDER):
     """A horizontal delimiter.
 
-    For more information, see [view.divider](https://toloka.ai/en/docs/template-builder/reference/view.divider).
+    For more information, see [view.divider](https://toloka.ai/docs/template-builder/reference/view.divider).
 
     Attributes:
         label: A label in the center of the delimiter. Note, that line breaks are not supported.
@@ -185,7 +185,7 @@ class DividerViewV1(BaseViewV1, spec_value=ComponentType.VIEW_DIVIDER):
 class GroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_GROUP):
     """A view with a frame.
 
-    For more information, see [view.group](https://toloka.ai/en/docs/template-builder/reference/view.group).
+    For more information, see [view.group](https://toloka.ai/docs/template-builder/reference/view.group).
 
     Attributes:
         content: A content.
@@ -200,7 +200,7 @@ class GroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_GROUP):
 class IframeViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IFRAME):
     """A frame displaying a web page.
 
-    For more information, see [view.iframe](https://toloka.ai/en/docs/template-builder/reference/view.iframe).
+    For more information, see [view.iframe](https://toloka.ai/docs/template-builder/reference/view.iframe).
 
     Attributes:
         url: The URL of the web page.
@@ -223,7 +223,7 @@ class IframeViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IFRAME):
 class ImageViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IMAGE):
     """A component for displaying an image.
 
-    For more information, see [view.image](https://toloka.ai/en/docs/template-builder/reference/view.image).
+    For more information, see [view.image](https://toloka.ai/docs/template-builder/reference/view.image).
 
     Attributes:
         url: The URL of the image.
@@ -268,7 +268,7 @@ class ImageViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IMAGE):
 class LabeledListViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LABELED_LIST):
     """A list of components with labels placed on the left.
 
-    For more information, see [view.labeled-list](https://toloka.ai/en/docs/template-builder/reference/view.labeled-list).
+    For more information, see [view.labeled-list](https://toloka.ai/docs/template-builder/reference/view.labeled-list).
 
     Attributes:
         items: List items.
@@ -304,7 +304,7 @@ class LabeledListViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LABELED_LIST):
 class LinkViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK):
     """A component showing a link.
 
-    For more information, see [view.link](https://toloka.ai/en/docs/template-builder/reference/view.link).
+    For more information, see [view.link](https://toloka.ai/docs/template-builder/reference/view.link).
 
     Attributes:
         url: A URL.
@@ -319,7 +319,7 @@ class LinkViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK):
 class LinkGroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK_GROUP):
     """A group of links.
 
-    For more information, see [view.link-group](https://toloka.ai/en/docs/template-builder/reference/view.link-group).
+    For more information, see [view.link-group](https://toloka.ai/docs/template-builder/reference/view.link-group).
 
     Attributes:
         links: A list of links.
@@ -362,7 +362,7 @@ class LinkGroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK_GROUP):
 class ListViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LIST):
     """A list of components.
 
-    For more information, see [view.list](https://toloka.ai/en/docs/template-builder/reference/view.list).
+    For more information, see [view.list](https://toloka.ai/docs/template-builder/reference/view.list).
 
     Attributes:
         items: List items.
@@ -388,7 +388,7 @@ class MarkdownViewV1(BaseViewV1, spec_value=ComponentType.VIEW_MARKDOWN):
     The Markdown content must not contain line breaks. To insert them, place `\n` in the text.
     Straight quotation marks must be escaped: `\"`.
 
-    For more information, see [view.markdown](https://toloka.ai/en/docs/template-builder/reference/view.markdown).
+    For more information, see [view.markdown](https://toloka.ai/docs/template-builder/reference/view.markdown).
 
     Attributes:
         content: A text with Markdown.
@@ -407,7 +407,7 @@ class MarkdownViewV1(BaseViewV1, spec_value=ComponentType.VIEW_MARKDOWN):
 class TextViewV1(BaseViewV1, spec_value=ComponentType.VIEW_TEXT):
     """A view for displaying a text.
 
-    For more information, see [view.text](https://toloka.ai/en/docs/template-builder/reference/view.text).
+    For more information, see [view.text](https://toloka.ai/docs/template-builder/reference/view.text).
 
     Attributes:
         content: The text. To insert a new line, use `\n`.
@@ -424,7 +424,7 @@ class TextViewV1(BaseViewV1, spec_value=ComponentType.VIEW_TEXT):
 class VideoViewV1(BaseViewV1, spec_value=ComponentType.VIEW_VIDEO):
     """A video player.
 
-    For more information, see [view.video](https://toloka.ai/en/docs/template-builder/reference/view.video).
+    For more information, see [view.video](https://toloka.ai/docs/template-builder/reference/view.video).
 
     Attributes:
         url: The video URL.
@@ -446,7 +446,7 @@ class VideoViewV1(BaseViewV1, spec_value=ComponentType.VIEW_VIDEO):
 class MapViewV1(BaseViewV1, spec_value=ComponentType.VIEW_MAP):
     """A component for displaying a map.
 
-    For more information, see [view.map](https://toloka.ai/en/docs/template-builder/reference/view.map).
+    For more information, see [view.map](https://toloka.ai/docs/template-builder/reference/view.map).
 
     Attributes:
         center: The coordinates of the map center. You can use:

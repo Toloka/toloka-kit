@@ -26,7 +26,7 @@ class BasePluginV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):
 class ImageAnnotationHotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_IMAGE_ANNOTATION_HOTKEYS):
     """Hotkeys for the [ImageAnnotationFieldV1](toloka.client.project.template_builder.fields.ImageAnnotationFieldV1.md) component.
 
-    For more information, see [plugin.field.image-annotation.hotkeys](https://toloka.ai/en/docs/template-builder/reference/plugin.field.image-annotation.hotkeys).
+    For more information, see [plugin.field.image-annotation.hotkeys](https://toloka.ai/docs/template-builder/reference/plugin.field.image-annotation.hotkeys).
 
     Attributes:
         cancel: A hotkey for canceling area creation.
@@ -62,7 +62,7 @@ ImageAnnotationHotkeysPluginV1.__init__ = \
 class TextAnnotationHotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TEXT_ANNOTATION_HOTKEYS):
     """Hotkeys for the [TextAnnotationFieldV1](toloka.client.project.template_builder.fields.TextAnnotationFieldV1.md) component.
 
-    For more information, see [plugin.field.text-annotation.hotkeys](https://toloka.ai/en/docs/template-builder/reference/plugin.field.text-annotation.hotkeys).
+    For more information, see [plugin.field.text-annotation.hotkeys](https://toloka.ai/docs/template-builder/reference/plugin.field.text-annotation.hotkeys).
 
     Attributes:
         labels: A list of hotkeys for choosing labels.
@@ -137,7 +137,7 @@ class HotkeysPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_HOTKEYS):
 class TriggerPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TRIGGER):
     """A plugin for triggering actions when events occur.
 
-    For more information, see [plugin.trigger](https://toloka.ai/en/docs/template-builder/reference/plugin.trigger).
+    For more information, see [plugin.trigger](https://toloka.ai/docs/template-builder/reference/plugin.trigger).
 
     Attributes:
         action: An action to trigger.
@@ -167,7 +167,7 @@ class TriggerPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TRIGGER):
 class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
     """A plugin with extra settings for tasks in Toloka.
 
-    For more information, see [plugin.toloka](https://toloka.ai/en/docs/template-builder/reference/plugin.toloka).
+    For more information, see [plugin.toloka](https://toloka.ai/docs/template-builder/reference/plugin.toloka).
 
     Attributes:
         layout: Settings for the task appearance in Toloka.

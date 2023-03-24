@@ -34,7 +34,7 @@ class BaseActionV1(BaseComponent, metaclass=VersionedBaseComponentMetaclass):
 class BulkActionV1(BaseActionV1, spec_value=ComponentType.ACTION_BULK):
     """A group of actions to be called together.
 
-    For more information, see [action.bulk](https://toloka.ai/en/docs/template-builder/reference/action.bulk).
+    For more information, see [action.bulk](https://toloka.ai/docs/template-builder/reference/action.bulk).
 
     Attributes:
         payload: A list of actions.
@@ -46,7 +46,7 @@ class BulkActionV1(BaseActionV1, spec_value=ComponentType.ACTION_BULK):
 class NotifyActionV1(BaseActionV1, spec_value=ComponentType.ACTION_NOTIFY):
     """The action shows a popup message.
 
-    For more information, see [action.notify](https://toloka.ai/en/docs/template-builder/reference/action.notify).
+    For more information, see [action.notify](https://toloka.ai/docs/template-builder/reference/action.notify).
 
     Attributes:
         payload: Popup parameters.
@@ -92,7 +92,7 @@ class OpenCloseActionV1(BaseActionV1, spec_value=ComponentType.ACTION_OPEN_CLOSE
     It can expand an [image](toloka.client.project.template_builder.view.ImageViewV1.md) to a full screen
     or collapse a [section](toloka.client.project.template_builder.view.CollapseViewV1.md).
 
-    For more information, see [action.open-close](https://toloka.ai/en/docs/template-builder/reference/action.open-close).
+    For more information, see [action.open-close](https://toloka.ai/docs/template-builder/reference/action.open-close).
 
     Attributes:
         view: References the component to perform the action with.
@@ -104,7 +104,7 @@ class OpenCloseActionV1(BaseActionV1, spec_value=ComponentType.ACTION_OPEN_CLOSE
 class OpenLinkActionV1(BaseActionV1, spec_value=ComponentType.ACTION_OPEN_LINK):
     """The action opens an URL in a new browser tab.
 
-    For more information, see [action.open-link](https://toloka.ai/en/docs/template-builder/reference/action.open-link).
+    For more information, see [action.open-link](https://toloka.ai/docs/template-builder/reference/action.open-link).
 
     Attributes:
         payload: The URL.
@@ -116,7 +116,7 @@ class OpenLinkActionV1(BaseActionV1, spec_value=ComponentType.ACTION_OPEN_LINK):
 class PlayPauseActionV1(BaseActionV1, spec_value=ComponentType.ACTION_PLAY_PAUSE):
     """The action pauses an audio or video player or resumes it.
 
-    For more information, see [action.play-pause](https://toloka.ai/en/docs/template-builder/reference/action.play-pause).
+    For more information, see [action.play-pause](https://toloka.ai/docs/template-builder/reference/action.play-pause).
 
     Attributes:
         view: A reference to the audio or video player.
@@ -128,7 +128,7 @@ class PlayPauseActionV1(BaseActionV1, spec_value=ComponentType.ACTION_PLAY_PAUSE
 class RotateActionV1(BaseActionV1, spec_value=ComponentType.ACTION_ROTATE):
     """The action rotates a component by 90 degrees.
 
-    For more information, see [action.rotate](https://toloka.ai/en/docs/template-builder/reference/action.rotate).
+    For more information, see [action.rotate](https://toloka.ai/docs/template-builder/reference/action.rotate).
 
     Attributes:
         view: A reference to the component.
@@ -147,7 +147,7 @@ class RotateActionV1(BaseActionV1, spec_value=ComponentType.ACTION_ROTATE):
 class SetActionV1(BaseActionV1, spec_value=ComponentType.ACTION_SET):
     """The action sets the value of a data field.
 
-    For more information, see [action.set](https://toloka.ai/en/docs/template-builder/reference/action.set).
+    For more information, see [action.set](https://toloka.ai/docs/template-builder/reference/action.set).
 
     Example:
         The [hot key](toloka.client.project.template_builder.plugins.HotkeysPluginV1.md) `1`
@@ -186,7 +186,7 @@ class SetActionV1(BaseActionV1, spec_value=ComponentType.ACTION_SET):
 class ToggleActionV1(BaseActionV1, spec_value=ComponentType.ACTION_TOGGLE):
     """The action toggles the value of a boolean data field.
 
-    For more information, see [action.toggle](https://toloka.ai/en/docs/template-builder/reference/action.toggle).
+    For more information, see [action.toggle](https://toloka.ai/docs/template-builder/reference/action.toggle).
 
     Attributes:
         data: The data field.

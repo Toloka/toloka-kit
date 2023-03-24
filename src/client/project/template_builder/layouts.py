@@ -41,7 +41,7 @@ class BaseLayoutV1(BaseComponent, metaclass=BaseLayoutV1Metaclass):
 class BarsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_BARS):
     """A layout with top and bottom bars.
 
-    For more information, see [layout.bars](https://toloka.ai/en/docs/template-builder/reference/layout.bars).
+    For more information, see [layout.bars](https://toloka.ai/docs/template-builder/reference/layout.bars).
 
     Attributes:
         content: The main content.
@@ -58,7 +58,7 @@ class BarsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_BARS):
 class ColumnsLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COLUMNS):
     """A layout with columns.
 
-    For more information, see [layout.columns](https://toloka.ai/en/docs/template-builder/reference/layout.columns).
+    For more information, see [layout.columns](https://toloka.ai/docs/template-builder/reference/layout.columns).
 
     Attributes:
         items: A list of components. Every component is placed in an individual column.
@@ -107,7 +107,7 @@ class CompareLayoutItem(BaseTemplate):
 class CompareLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COMPARE):
     """A layout for comparing several items.
 
-    For more information, see [layout.compare](https://toloka.ai/en/docs/template-builder/reference/layout.compare).
+    For more information, see [layout.compare](https://toloka.ai/docs/template-builder/reference/layout.compare).
 
     Attributes:
         common_controls: A component containing common controls.
@@ -130,7 +130,7 @@ class CompareLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_COMPARE):
 class SideBySideLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_SIDE_BY_SIDE):
     """A layout with several blocks of the same width on a single horizontal panel.
 
-    For more information, see [layout.side-by-side](https://toloka.ai/en/docs/template-builder/reference/layout.side-by-side).
+    For more information, see [layout.side-by-side](https://toloka.ai/docs/template-builder/reference/layout.side-by-side).
 
     Attributes:
         controls: A component with controls.
@@ -151,7 +151,7 @@ class SidebarLayoutV1(BaseLayoutV1, spec_value=ComponentType.LAYOUT_SIDEBAR):
         * Widescreen — The control panel is placed to the right of the main block.
         * Compact — The controls are placed under the main block and stretch to the entire width.
 
-    For more information, see [layout.sidebar](https://toloka.ai/en/docs/template-builder/reference/layout.sidebar).
+    For more information, see [layout.sidebar](https://toloka.ai/docs/template-builder/reference/layout.sidebar).
 
     Attributes:
         content: The main block.

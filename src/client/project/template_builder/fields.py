@@ -76,7 +76,7 @@ class BaseFieldV1(BaseComponent, metaclass=BaseFieldV1Metaclass):
 class AudioFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_AUDIO):
     """A component for recording audio.
 
-    For more information, see [field.audio](https://toloka.ai/en/docs/template-builder/reference/field.audio).
+    For more information, see [field.audio](https://toloka.ai/docs/template-builder/reference/field.audio).
 
     Attributes:
         multiple:
@@ -93,7 +93,7 @@ class AudioFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_AUDIO):
 class ButtonRadioFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON_RADIO):
     """A button to choose an answer.
 
-    For more information, see [field.button-radio](https://toloka.ai/en/docs/template-builder/reference/field.button-radio).
+    For more information, see [field.button-radio](https://toloka.ai/docs/template-builder/reference/field.button-radio).
 
     Attributes:
         value_to_set: A value to write to data.
@@ -120,7 +120,7 @@ class GroupFieldOption(BaseTemplate):
 class ButtonRadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON_RADIO_GROUP):
     """A group of buttons for choosing one option.
 
-    For more information, see [field.button-radio-group](https://toloka.ai/en/docs/template-builder/reference/field.button-radio-group).
+    For more information, see [field.button-radio-group](https://toloka.ai/docs/template-builder/reference/field.button-radio-group).
 
     Attributes:
         options: A list of options.
@@ -144,7 +144,7 @@ class ButtonRadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON
 class CheckboxFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_CHECKBOX):
     """A checkbox.
 
-    For more information, see [field.checkbox](https://toloka.ai/en/docs/template-builder/reference/field.checkbox).
+    For more information, see [field.checkbox](https://toloka.ai/docs/template-builder/reference/field.checkbox).
 
     Attributes:
         disabled: Disabling the checkbox.
@@ -165,7 +165,7 @@ class CheckboxGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_CHECKBOX_
 
     This component creates a dictionary in the output data. Values from `options` are used as keys in the dictionary.
 
-    For more information, see [field.checkbox-group](https://toloka.ai/en/docs/template-builder/reference/field.checkbox-group).
+    For more information, see [field.checkbox-group](https://toloka.ai/docs/template-builder/reference/field.checkbox-group).
 
     Attributes:
         options: A list of options.
@@ -186,7 +186,7 @@ class CheckboxGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_CHECKBOX_
 class DateFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_DATE):
     """A field for entering a date and time.
 
-    For more information, see [field.date](https://toloka.ai/en/docs/template-builder/reference/field.date).
+    For more information, see [field.date](https://toloka.ai/docs/template-builder/reference/field.date).
 
     Attributes:
         format: The format of the field:
@@ -212,7 +212,7 @@ class DateFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_DATE):
 class EmailFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_EMAIL):
     """A field for entering an email address.
 
-    For more information, see [field.email](https://toloka.ai/en/docs/template-builder/reference/field.email).
+    For more information, see [field.email](https://toloka.ai/docs/template-builder/reference/field.email).
 
     Attributes:
         placeholder: A text that is shown when no address is entered.
@@ -225,7 +225,7 @@ class EmailFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_EMAIL):
 class FileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_FILE):
     """A component for uploading files.
 
-    For more information, see [field.file](https://toloka.ai/en/docs/template-builder/reference/field.file).
+    For more information, see [field.file](https://toloka.ai/docs/template-builder/reference/field.file).
 
     Attributes:
         accept: A list of file types that can be uploaded.
@@ -247,7 +247,7 @@ class FileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_FILE):
 class ImageAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_IMAGE_ANNOTATION):
     """A component for annotating areas in an image.
 
-    For more information, see [field.image-annotation](https://toloka.ai/en/docs/template-builder/reference/field.image-annotation).
+    For more information, see [field.image-annotation](https://toloka.ai/docs/template-builder/reference/field.image-annotation).
 
     Attributes:
         image: The URL of the image.
@@ -301,7 +301,7 @@ class ListFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_LIST):
     Use RelativeData(toloka.client.project.template_builder.data.RelativeData.md) in list items,
     otherwise all list items will change the same data.
 
-    For more information, see [field.list](https://toloka.ai/en/docs/template-builder/reference/field.list).
+    For more information, see [field.list](https://toloka.ai/docs/template-builder/reference/field.list).
 
     Attributes:
         render: A template for the list item.
@@ -334,7 +334,7 @@ class ListFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_LIST):
 class MediaFileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_MEDIA_FILE):
     """A component for uploading media files.
 
-    For more information, see [field.media-file](https://toloka.ai/en/docs/template-builder/reference/field.media-file).
+    For more information, see [field.media-file](https://toloka.ai/docs/template-builder/reference/field.media-file).
 
     Attributes:
         accept: Selecting file sources. Every source adds an upload button.
@@ -380,7 +380,7 @@ class MediaFileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_MEDIA_FILE):
 class NumberFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_NUMBER):
     """A field for entering a number.
 
-    For more information, see [field.number](https://toloka.ai/en/docs/template-builder/reference/field.number).
+    For more information, see [field.number](https://toloka.ai/docs/template-builder/reference/field.number).
 
     Attributes:
         maximum: The maximum number that can be entered.
@@ -397,7 +397,7 @@ class NumberFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_NUMBER):
 class PhoneNumberFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_PHONE_NUMBER):
     """A field for entering a phone number.
 
-    For more information, see [field.phone-number](https://toloka.ai/en/docs/template-builder/reference/field.phone-number).
+    For more information, see [field.phone-number](https://toloka.ai/docs/template-builder/reference/field.phone-number).
 
     Attributes:
         placeholder: A text that is shown if no phone number is entered.
@@ -410,7 +410,7 @@ class PhoneNumberFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_PHONE_NUMBE
 class RadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_RADIO_GROUP):
     """A component for selecting one value out of several options.
 
-    For more information, see [field.radio-group](https://toloka.ai/en/docs/template-builder/reference/field.radio-group).
+    For more information, see [field.radio-group](https://toloka.ai/docs/template-builder/reference/field.radio-group).
 
     Attributes:
         options: A list of options.
@@ -440,7 +440,7 @@ class RadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_RADIO_GROUP)
 class SelectFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_SELECT):
     """A field for selecting from a drop-down list of options.
 
-    For more information, see [field.select](https://toloka.ai/en/docs/template-builder/reference/field.select).
+    For more information, see [field.select](https://toloka.ai/docs/template-builder/reference/field.select).
 
     Attributes:
         options: A list of options.
@@ -466,7 +466,7 @@ class SelectFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_SELECT):
 class TextFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXT):
     """A field for entering a single text line.
 
-    For more information, see [field.text](https://toloka.ai/en/docs/template-builder/reference/field.text).
+    For more information, see [field.text](https://toloka.ai/docs/template-builder/reference/field.text).
 
     Attributes:
         disabled: Disabling the field:
@@ -485,7 +485,7 @@ class TextFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXT):
 class TextAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXT_ANNOTATION):
     """A component for text annotation.
 
-    For more information, see [field.text-annotation](https://toloka.ai/en/docs/template-builder/reference/field.text-annotation).
+    For more information, see [field.text-annotation](https://toloka.ai/docs/template-builder/reference/field.text-annotation).
 
     Attributes:
         adjust: If `adjust` is set to `words`, entire words are selected and annotated.
@@ -517,7 +517,7 @@ class TextAnnotationFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXT_ANN
 class TextareaFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_TEXTAREA):
     """A field for entering multiline text.
 
-    For more information, see [field.textarea](https://toloka.ai/en/docs/template-builder/reference/field.textarea).
+    For more information, see [field.textarea](https://toloka.ai/docs/template-builder/reference/field.textarea).
 
     Attributes:
         disabled:
