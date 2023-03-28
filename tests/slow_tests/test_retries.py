@@ -126,7 +126,7 @@ def test_retries_off(connection_error_server_url, retries_before_response):
         'fake-token',
         url=connection_error_server_url,
         retries=0,
-        timeout=0.1
+        timeout=0.5
     )
 
     with pytest.raises(httpx.HTTPStatusError):
@@ -142,7 +142,7 @@ async def test_retries_off_async(connection_error_server_url, retries_before_res
         'fake-token',
         url=connection_error_server_url,
         retries=0,
-        timeout=0.1
+        timeout=0.5
     )
 
     with pytest.raises(httpx.HTTPStatusError):
@@ -157,7 +157,7 @@ def test_retries_from_int(connection_error_server_url, retries_before_response):
         'fake-token',
         url=connection_error_server_url,
         retries=retries_before_response - 1,
-        timeout=0.1
+        timeout=0.5
     )
 
     with pytest.raises(httpx.HTTPStatusError):
@@ -173,7 +173,7 @@ async def test_retries_from_int_async(connection_error_server_url, retries_befor
         'fake-token',
         url=connection_error_server_url,
         retries=retries_before_response - 1,
-        timeout=0.1
+        timeout=0.5
     )
 
     with pytest.raises(httpx.HTTPStatusError):
@@ -189,7 +189,7 @@ def test_retries_from_class(connection_error_server_url, retries_before_response
         url=connection_error_server_url,
         retries=Retry(retries_before_response - 1, status_forcelist={500}, backoff_factor=0),
         retry_quotas=None,
-        timeout=0.1
+        timeout=0.5
     )
 
     with pytest.raises(httpx.HTTPStatusError):
@@ -206,7 +206,7 @@ async def test_retries_from_class_async(connection_error_server_url, retries_bef
         url=connection_error_server_url,
         retries=Retry(retries_before_response - 1, status_forcelist={500}, backoff_factor=0),
         retry_quotas=None,
-        timeout=0.1
+        timeout=0.5
     )
 
     with pytest.raises(httpx.HTTPStatusError):
