@@ -48,7 +48,13 @@ def create_requester_socket_timeout_server(
 @pytest.fixture
 def requester_socket_timeout_server(retries_before_response, fake_requester):
     address = ('localhost', unused_port())
-    server_socket = socket.create_server(address, family=socket.AF_INET6, dualstack_ipv6=True, backlog=100)
+
+    # in python3.8+ socket.create_server can be used
+    server_socket = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+    if socket.has_ipv6:
+        server_socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
+    server_socket.bind(address)
+    server_socket.listen(100)
 
     connection_counter = ConnectionCounter()
     t = Thread(
@@ -66,7 +72,7 @@ def test_socket_timeout_is_retried(requester_socket_timeout_server, fake_request
         url=requester_socket_timeout_server[0],
         retries=Retry(retries_before_response, backoff_factor=0),
         retry_quotas=None,
-        timeout=0.1
+        timeout=0.1,
     )
     assert toloka_client.get_requester() == fake_requester
 
@@ -80,7 +86,7 @@ async def test_socket_timeout_is_retried_async(
         url=requester_socket_timeout_server[0],
         retries=Retry(retries_before_response, backoff_factor=0),
         retry_quotas=None,
-        timeout=0.1
+        timeout=0.1,
     )
 
     assert await toloka_client.get_requester() == fake_requester
@@ -94,7 +100,7 @@ def test_read_timeout_when_not_retried_enough(
         url=requester_socket_timeout_server[0],
         retries=Retry(retries_before_response - 1, backoff_factor=0),
         retry_quotas=None,
-        timeout=0.1
+        timeout=0.1,
     )
 
     with pytest.raises(httpx.ReadTimeout):
@@ -112,7 +118,7 @@ async def test_read_timeout_when_not_retried_enough_async(
         url=requester_socket_timeout_server[0],
         retries=Retry(retries_before_response - 1, backoff_factor=0),
         retry_quotas=None,
-        timeout=0.1
+        timeout=0.1,
     )
 
     with pytest.raises(httpx.ReadTimeout):
@@ -126,7 +132,7 @@ def test_retries_off(connection_error_server_url, retries_before_response):
         'fake-token',
         url=connection_error_server_url,
         retries=0,
-        timeout=0.5
+        timeout=0.5,
     )
 
     with pytest.raises(httpx.HTTPStatusError):
@@ -142,7 +148,7 @@ async def test_retries_off_async(connection_error_server_url, retries_before_res
         'fake-token',
         url=connection_error_server_url,
         retries=0,
-        timeout=0.5
+        timeout=0.5,
     )
 
     with pytest.raises(httpx.HTTPStatusError):
@@ -157,7 +163,7 @@ def test_retries_from_int(connection_error_server_url, retries_before_response):
         'fake-token',
         url=connection_error_server_url,
         retries=retries_before_response - 1,
-        timeout=0.5
+        timeout=0.5,
     )
 
     with pytest.raises(httpx.HTTPStatusError):
@@ -173,7 +179,7 @@ async def test_retries_from_int_async(connection_error_server_url, retries_befor
         'fake-token',
         url=connection_error_server_url,
         retries=retries_before_response - 1,
-        timeout=0.5
+        timeout=0.5,
     )
 
     with pytest.raises(httpx.HTTPStatusError):
@@ -189,7 +195,7 @@ def test_retries_from_class(connection_error_server_url, retries_before_response
         url=connection_error_server_url,
         retries=Retry(retries_before_response - 1, status_forcelist={500}, backoff_factor=0),
         retry_quotas=None,
-        timeout=0.5
+        timeout=0.5,
     )
 
     with pytest.raises(httpx.HTTPStatusError):
@@ -206,7 +212,7 @@ async def test_retries_from_class_async(connection_error_server_url, retries_bef
         url=connection_error_server_url,
         retries=Retry(retries_before_response - 1, status_forcelist={500}, backoff_factor=0),
         retry_quotas=None,
-        timeout=0.5
+        timeout=0.5,
     )
 
     with pytest.raises(httpx.HTTPStatusError):
