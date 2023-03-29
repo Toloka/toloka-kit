@@ -10,7 +10,6 @@ from toloka.async_client import AsyncTolokaClient
 from toloka.client import TolokaClient
 from urllib3.util import Retry
 
-
 logger = logging.getLogger(__file__)
 
 
@@ -23,7 +22,7 @@ class ConnectionCounter:
 
 
 def create_requester_socket_timeout_server(
-    server_socket, retries_before_response, requester, accepted_connections_counter: ConnectionCounter
+    server_socket, retries_before_response, requester, accepted_connections_counter: ConnectionCounter, requester_sender
 ):
     try:
         seen_connections = []
@@ -36,17 +35,39 @@ def create_requester_socket_timeout_server(
 
         conn, client_address = server_socket.accept()
         accepted_connections_counter.increment()
-        conn.recv(1024).decode()
-        conn.sendall(
-            f'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n{requester.to_json()}'.encode()
-        )
-        conn.close()
+        requester_sender(conn, requester)
     except Exception as exc:
         logger.error(exc)
 
 
-@pytest.fixture
-def requester_socket_timeout_server(retries_before_response, fake_requester):
+def _send_requester_to_connection(conn, requester):
+    conn.recv(1024).decode()
+    conn.sendall(
+        f'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n{requester.to_json()}'.encode()
+    )
+    conn.close()
+
+
+def _send_requester_to_connection_chunked(conn, requester):
+    conn.recv(1024).decode()
+    response_body = requester.to_json()
+    conn.sendall(
+        f'HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\nContent-Type: application/json\r\n\r\n'.encode()
+    )
+    conn.sendall(
+        f'{"%X" % len(response_body[:10])}\r\n{response_body[:10]}\r\n'.encode()
+    )
+    conn.sendall(
+        f'{"%X" % len(response_body[10:])}\r\n{response_body[10:]}\r\n'.encode()
+    )
+    conn.sendall(
+        '0\r\n\r\n'.encode()
+    )
+    conn.close()
+
+
+@pytest.fixture(params=[_send_requester_to_connection, _send_requester_to_connection_chunked])
+def requester_socket_timeout_server(request, retries_before_response, fake_requester):
     address = ('localhost', unused_port())
 
     # in python3.8+ socket.create_server can be used
@@ -59,7 +80,7 @@ def requester_socket_timeout_server(retries_before_response, fake_requester):
     connection_counter = ConnectionCounter()
     t = Thread(
         target=create_requester_socket_timeout_server,
-        args=(server_socket, retries_before_response, fake_requester, connection_counter),
+        args=(server_socket, retries_before_response, fake_requester, connection_counter, request.param),
         daemon=True,
     )
     t.start()
