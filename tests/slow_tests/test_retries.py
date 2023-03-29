@@ -93,7 +93,7 @@ def test_socket_timeout_is_retried(requester_socket_timeout_server, fake_request
         url=requester_socket_timeout_server[0],
         retries=Retry(retries_before_response, backoff_factor=0),
         retry_quotas=None,
-        timeout=0.1,
+        timeout=0.5,
     )
     assert toloka_client.get_requester() == fake_requester
 
@@ -107,7 +107,7 @@ async def test_socket_timeout_is_retried_async(
         url=requester_socket_timeout_server[0],
         retries=Retry(retries_before_response, backoff_factor=0),
         retry_quotas=None,
-        timeout=0.1,
+        timeout=0.5,
     )
 
     assert await toloka_client.get_requester() == fake_requester
@@ -121,7 +121,7 @@ def test_read_timeout_when_not_retried_enough(
         url=requester_socket_timeout_server[0],
         retries=Retry(retries_before_response - 1, backoff_factor=0),
         retry_quotas=None,
-        timeout=0.1,
+        timeout=0.5,
     )
 
     with pytest.raises(httpx.ReadTimeout):
@@ -139,7 +139,7 @@ async def test_read_timeout_when_not_retried_enough_async(
         url=requester_socket_timeout_server[0],
         retries=Retry(retries_before_response - 1, backoff_factor=0),
         retry_quotas=None,
-        timeout=0.1,
+        timeout=0.5,
     )
 
     with pytest.raises(httpx.ReadTimeout):
