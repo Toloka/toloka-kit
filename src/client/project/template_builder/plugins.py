@@ -185,7 +185,6 @@ class TolokaPluginV1(BasePluginV1, spec_value=ComponentType.PLUGIN_TOLOKA):
 
     class TolokaPluginLayout(BaseTemplate):
         """A task block layout.
-
         """
 
         @unique
