@@ -22,7 +22,7 @@ class ConnectionCounter:
 
 
 def create_requester_socket_timeout_server(
-    server_socket, retries_before_response, requester, accepted_connections_counter: ConnectionCounter, requester_sender
+    server_socket, retries_before_response, requester, accepted_connections_counter: ConnectionCounter
 ):
     try:
         seen_connections = []
@@ -35,38 +35,59 @@ def create_requester_socket_timeout_server(
 
         conn, client_address = server_socket.accept()
         accepted_connections_counter.increment()
-        requester_sender(conn, requester)
+        conn.recv(1024).decode()
+        conn.sendall(
+            f'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n{requester.to_json()}'.encode()
+        )
+        conn.close()
     except Exception as exc:
         logger.error(exc)
 
 
-def _send_requester_to_connection(conn, requester):
-    conn.recv(1024).decode()
-    conn.sendall(
-        f'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n{requester.to_json()}'.encode()
-    )
-    conn.close()
-
-
-def _send_requester_to_connection_chunked(conn, requester):
-    conn.recv(1024).decode()
+def create_requester_socket_timeout_middle_connection_server(
+    server_socket, retries_before_response, requester, accepted_connections_counter: ConnectionCounter
+):
     response_body = requester.to_json()
-    conn.sendall(
-        f'HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\nContent-Type: application/json\r\n\r\n'.encode()
-    )
-    conn.sendall(
-        f'{"%X" % len(response_body[:10])}\r\n{response_body[:10]}\r\n'.encode()
-    )
-    conn.sendall(
-        f'{"%X" % len(response_body[10:])}\r\n{response_body[10:]}\r\n'.encode()
-    )
-    conn.sendall(
-        '0\r\n\r\n'.encode()
-    )
-    conn.close()
+
+    try:
+        seen_connections = []
+        # sends part of response and hangs connection without closing it retries_before_response times
+        for i in range(retries_before_response):
+            accepted_socket, accepted_address = server_socket.accept()
+            accepted_socket.sendall(
+                f'HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\nContent-Type: application/json\r\n\r\n'.encode()
+            )
+            accepted_socket.sendall(
+                f'{"%X" % len(response_body[:10])}\r\n{response_body[:10]}\r\n'.encode()
+            )
+            # reference socket to prevent closing it by garbage collector
+            seen_connections.append(accepted_socket)
+            accepted_connections_counter.increment()
+
+        conn, client_address = server_socket.accept()
+        accepted_connections_counter.increment()
+        conn.recv(1024).decode()
+        conn.sendall(
+            f'HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\nContent-Type: application/json\r\n\r\n'.encode()
+        )
+        conn.sendall(
+            f'{"%X" % len(response_body[:10])}\r\n{response_body[:10]}\r\n'.encode()
+        )
+        conn.sendall(
+            f'{"%X" % len(response_body[10:])}\r\n{response_body[10:]}\r\n'.encode()
+        )
+        conn.sendall(
+            '0\r\n\r\n'.encode()
+        )
+        conn.close()
+    except Exception as exc:
+        logger.error(exc)
 
 
-@pytest.fixture(params=[_send_requester_to_connection, _send_requester_to_connection_chunked])
+@pytest.fixture(params=[
+    create_requester_socket_timeout_server,
+    create_requester_socket_timeout_middle_connection_server
+])
 def requester_socket_timeout_server(request, retries_before_response, fake_requester):
     address = ('localhost', unused_port())
 
@@ -79,8 +100,8 @@ def requester_socket_timeout_server(request, retries_before_response, fake_reque
 
     connection_counter = ConnectionCounter()
     t = Thread(
-        target=create_requester_socket_timeout_server,
-        args=(server_socket, retries_before_response, fake_requester, connection_counter, request.param),
+        target=request.param,
+        args=(server_socket, retries_before_response, fake_requester, connection_counter),
         daemon=True,
     )
     t.start()
