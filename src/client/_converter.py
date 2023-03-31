@@ -11,6 +11,7 @@ import cattr
 from ..util._extendable_enum import ExtendableStrEnum
 
 _CATTRS_VERSION = tuple(map(int, pkg_resources.get_distribution('cattrs').version.split('.')))
+
 if _CATTRS_VERSION < (22, 2, 0):
     converter = cattr.Converter()
 else:
@@ -18,13 +19,12 @@ else:
 
 converter.register_structure_hook_func(
     lambda type_: hasattr(type_, 'structure'),
-    lambda data, type_: type_.structure(data)  # type: ignore
+    lambda data, type_: getattr(type_, 'structure').__func__(type_, data)  # type: ignore
 )
 converter.register_unstructure_hook_func(  # type: ignore
     lambda obj: hasattr(obj, 'unstructure'),
     lambda obj: obj.unstructure()  # type: ignore
 )
-
 
 converter.register_structure_hook(uuid.UUID, lambda data, type_: type_(data))  # type: ignore
 converter.register_unstructure_hook(uuid.UUID, str)

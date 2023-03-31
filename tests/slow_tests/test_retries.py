@@ -168,7 +168,6 @@ async def test_read_timeout_when_not_retried_enough_async(
 
     assert requester_socket_timeout_server[1].connections_count == retries_before_response
 
-
 def test_retries_off(connection_error_server_url, retries_before_response):
     toloka_client = TolokaClient(
         'fake-token',
