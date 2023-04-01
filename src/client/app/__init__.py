@@ -274,9 +274,9 @@ class AppBatchCreateRequest(BaseTolokaObject):
 
 
 class AppBatchPatch(BaseTolokaObject):
-    """"Parameters for changing name of a specific AppBatch
+    """Parameters of a request for updating an App batch.
 
     Attributes:
-        name: Batch name.
+        name: The new batch name.
     """
     name: str
