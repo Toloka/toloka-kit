@@ -18,6 +18,7 @@ from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union, Tu
 import attr
 import simplejson as json
 
+
 from ...util._extendable_enum import ExtendableStrEnumMetaclass
 from .._converter import converter
 from ..exceptions import SpecClassIdentificationError
@@ -25,6 +26,7 @@ from ...util._codegen import (
     attribute, expand, fix_attrs_converters, REQUIRED_KEY, ORIGIN_KEY, AUTOCAST_KEY,
     universal_decorator,
 )
+from ...util._typing import generate_type_var_mapping
 
 E = TypeVar('E', bound=Enum)
 
@@ -285,6 +287,8 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
     @classmethod
     def structure(cls, data: Any):
 
+        cls, type_var_mapping = generate_type_var_mapping(cls)
+
         # If a class is an incomplete variant type we structure it into
         # one of its subclasses
         if cls.is_variant_incomplete():
@@ -314,10 +318,10 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
 
             value = data.pop(key)
             if field.type is not None:
-                value = converter.structure(value, field.type)
+                target_type = _get_mapped_type(field.type, type_var_mapping)
+                value = converter.structure(value, target_type)
 
             kwargs[field.name] = value
-
         obj = cls(**kwargs)
         obj._unexpected = data
         return obj
@@ -335,6 +339,36 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
     @classmethod
     def from_json(cls, json_str: str):
         return cls.structure(json.loads(json_str, use_decimal=True))
+
+
+def _get_mapped_type(t, mapping):
+    if isinstance(t, typing.TypeVar):
+        return mapping.get(t.__name__, t)
+    try:
+        origin_type = t.__dict__['__origin__']
+        type_args = t.__dict__.get('__args__', [])
+    except AttributeError:
+        return t
+    except KeyError:
+        return t
+    mapped_args = tuple(_get_mapped_type(t_arg, mapping) for t_arg in type_args)
+
+    # TODO: support all generic types
+    origin_type_mapped = {
+        tuple: typing.Tuple,
+        list: typing.List,
+        dict: typing.Dict,
+    }
+    origin_type = origin_type_mapped.get(origin_type, origin_type)
+
+    if origin_type in [typing.Union, typing.List, typing.Dict, typing.Tuple] and not mapped_args:
+        return origin_type
+    if origin_type in [typing.Union, typing.List, typing.Tuple]:
+        return origin_type[mapped_args]
+    if origin_type in [typing.Dict]:
+        return typing.Dict[mapped_args[0], mapped_args[1]]
+
+    return t
 
 
 @universal_decorator(has_parameters=False)

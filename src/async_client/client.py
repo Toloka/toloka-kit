@@ -84,7 +84,6 @@ class AsyncTolokaClient:
         @self.retrying.wraps
         async def wrapped(method, path, **kwargs):
             response = await self._session.request(method, path, **kwargs)
-            await response.aread()
             raise_on_api_error(response)
             return response
 
