@@ -4014,8 +4014,8 @@ class TolokaClient:
         """Creates an App task item in Toloka.
 
         Example:
-            The following example is suitable for the Product search relevance solution.
-            The solution requires `query` and `website_url` keys to be present in input data.
+            The following example is suitable for a project
+            that requires `query` and `website_url` keys to be present in input data.
 
             >>> new_item = {
             >>>     'batch_id' : '4Va2BBWKL88S4QyAgVje',
@@ -4047,8 +4047,8 @@ class TolokaClient:
         """Creates task items in an App project in Toloka and adds them to an existing batch.
 
         Example:
-            The following example is suitable for Product search relevance solution.
-            The solution requires `query` and `website_url` keys to be present in input items.
+            The following example is suitable for a project
+            that requires `query` and `website_url` keys to be present in input data.
 
             >>> new_items = [
             >>>     {'id':'20', 'query':'toloka kit', 'website_url':'https://toloka.ai/en/docs/toloka-kit'},
@@ -4163,8 +4163,8 @@ class TolokaClient:
         """Creates a batch with task items in an App project in Toloka.
 
         Example:
-            The following example is suitable for the Product search relevance solution.
-            The solution requires `query` and `website_url` keys to be present in input data.
+            The following example is suitable for a project
+            that requires `query` and `website_url` keys to be present in input data.
 
             >>> new_items = [
             >>>     {'id':'30', 'query':'toloka kit', 'website_url':'https://toloka.ai/en/docs/toloka-kit'},
