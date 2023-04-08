@@ -2270,11 +2270,11 @@ class TolokaClient:
 
     @add_headers('client')
     def get_analytics(self, stats: List[AnalyticsRequest]) -> operations.Operation:
-        """Sends analytics queries, for example, to estimate the percentage of completed tasks in the pool
+        """Sends analytics requests, for example, to estimate the percentage of completed tasks in the pool.
 
         Only pool analytics queries are available.
         The values of different analytical metrics will be returned in the "details" field of the operation when it is
-        completed. See the example.
+        completed.
         You can request up to 10 metrics at a time.
 
         Args:
