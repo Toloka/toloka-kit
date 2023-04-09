@@ -13,7 +13,7 @@ import pytest
 import toloka.client as client
 from httpx import QueryParams
 from toloka.client.exceptions import InternalApiError, ValidationApiError, IncorrectActionsApiError
-from .template_builder.test_template_builder import view_spec_map as tb_view_spec_map  # noqa: F401
+from .template_builder.test_template_builder import view_spec_map, view_spec_map_with_empty_lock  # noqa: F401
 
 from .testutils.util_functions import check_headers
 
@@ -80,8 +80,8 @@ def project_map():
 
 
 @pytest.fixture
-def tb_project_map(project_map, tb_view_spec_map):  # noqa F811
-    project_map['task_spec']['view_spec'] = tb_view_spec_map
+def tb_project_map(project_map, view_spec_map):  # noqa F811
+    project_map['task_spec']['view_spec'] = view_spec_map
     return project_map
 
 

@@ -1,23 +1,24 @@
 __all__ = [
     'AsyncTolokaClient',
 ]
-
 import asyncio
 import datetime
 import functools
 import logging
 import threading
 from decimal import Decimal
-from typing import Optional
+from typing import Optional, Callable, List
 
 import attr
 import httpx
 
-from ..client import TolokaClient
+from ..client import TolokaClient, structure, unstructure
 from ..client.exceptions import (
     raise_on_api_error,
+    ValidationApiError,
 )
 from ..client.operations import Operation
+from ..client.primitives.parameter import IdempotentOperationParameters
 from ..client.primitives.retry import AsyncRetryingOverURLLibRetry
 from ..util._managing_headers import add_headers
 from ..util.async_utils import generate_async_methods_from
@@ -61,7 +62,7 @@ class AsyncTolokaClient:
         async_client = cls.__new__(cls)
         async_client.__init__(
             token=client.token, url=client.url, retries=client.retryer_factory(), timeout=client.default_timeout,
-            act_under_account_id=client.act_under_account_id, retry_quotas=None,
+            act_under_account_id=client.act_under_account_id, retry_quotas=None, verify=client.verify,
         )
         async_client._sync_client = client
         return async_client
@@ -72,7 +73,7 @@ class AsyncTolokaClient:
 
     @functools.lru_cache(maxsize=128)
     def _session_for_thread(self, thread_id: int) -> httpx.AsyncClient:
-        client = httpx.AsyncClient(headers=self._headers, base_url=self.url)
+        client = httpx.AsyncClient(headers=self._headers, base_url=self.url, verify=self.verify)
         return client
 
     @property
@@ -83,7 +84,6 @@ class AsyncTolokaClient:
         @self.retrying.wraps
         async def wrapped(method, path, **kwargs):
             response = await self._session.request(method, path, **kwargs)
-            await response.aread()
             raise_on_api_error(response)
             return response
 
@@ -105,19 +105,6 @@ class AsyncTolokaClient:
 
         for item in items:
             yield item
-
-    async def _collect_from_pools(self, get_method, pools):
-        items = {}
-        for pool_id, numerated_ids in pools.items():
-            obj_it = get_method(
-                pool_id=pool_id,
-                id_gte=min(numerated_ids.keys()),
-                id_lte=max(numerated_ids.keys()),
-            )
-            async for obj in obj_it:
-                if obj.id in numerated_ids:
-                    items[numerated_ids[obj.id]] = obj
-        return items
 
     @add_headers('async_client')
     async def wait_operation(
@@ -146,3 +133,113 @@ class AsyncTolokaClient:
             await asyncio.sleep(default_time_to_wait.total_seconds())
             if datetime.datetime.now(datetime.timezone.utc) > wait_until_time:
                 raise TimeoutError
+
+    async def _sync_via_async_pool_related(
+            self,
+            objects,
+            parameters: IdempotentOperationParameters,
+            url: str,
+            result_type,
+            operation_type: Operation,
+            output_id_field: str,
+            get_method: Callable,
+    ):
+        if not parameters.async_mode:
+            response = await self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
+            return structure(response, result_type)
+        is_single = not isinstance(objects, list)
+        insert_operation = await self._start_sync_via_async(objects, parameters, url, operation_type)
+
+        pools = {}
+        validation_errors = {}
+        for log_item in await self.get_operation_log(insert_operation.id):
+            if '__item_idx' in log_item.input:
+                index = log_item.input['__item_idx']
+            else:
+                continue  # operation could be not just creating objects (e.g. open_pool while creating_object)
+            if log_item.success:
+                numerated_ids = pools.setdefault(log_item.input['pool_id'], {})
+                numerated_ids[log_item.output[output_id_field]] = index
+            else:
+                validation_errors[index] = log_item.output
+
+        # Like in sync methods Exception will raise
+        # even if the skip_invalid_items=True but no objects are created
+        if validation_errors and not pools:
+            raise ValidationApiError(
+                code='VALIDATION_ERROR',
+                message='Validation failed',
+                payload=validation_errors,
+            )
+
+        if is_single:
+            pool_id = list(pools.keys())[0]
+            item_id = list(pools[pool_id].keys())[0]
+            return await get_method(item_id)
+        else:
+            items = await self._collect_from_pools(get_method, pools)
+            return result_type(items=items, validation_errors=validation_errors or {})
+
+    async def _collect_from_pools(self, get_method, pools):
+        items = {}
+        for pool_id, numerated_ids in pools.items():
+            obj_it = get_method(
+                pool_id=pool_id,
+                id_gte=min(numerated_ids.keys()),
+                id_lte=max(numerated_ids.keys()),
+            )
+            async for obj in obj_it:
+                if obj.id in numerated_ids:
+                    items[numerated_ids[obj.id]] = obj
+        return items
+
+    async def _sync_via_async(
+            self,
+            objects: List,
+            parameters: IdempotentOperationParameters,
+            url: str,
+            result_type,
+            operation_type: Operation,
+            output_id_field: str,
+            get_method: Callable,
+    ):
+        if not parameters.async_mode:
+            response = await self._request('post', url, json=unstructure(objects), params=unstructure(parameters))
+            return structure(response, result_type)
+        is_single = not isinstance(objects, list)
+        insert_operation = await self._start_sync_via_async(objects, parameters, url, operation_type)
+
+        item_id_to_idx = {}
+        validation_errors = {}
+        for log_item in await self.get_operation_log(insert_operation.id):
+            if '__item_idx' in log_item.input:
+                index = log_item.input['__item_idx']
+            else:
+                continue  # operation could be not just creating objects (e.g. open_pool while creating_object)
+            if log_item.success:
+                item_id_to_idx[log_item.output[output_id_field]] = index
+            else:
+                validation_errors[index] = log_item.output
+
+        # Like as in sync methods Exception will raise
+        # even if the skip_invalid_items=True but no objects are created
+        if validation_errors and not item_id_to_idx:
+            raise ValidationApiError(
+                code='VALIDATION_ERROR',
+                message='Validation failed',
+                payload=validation_errors,
+            )
+
+        if is_single:
+            item_id = list(item_id_to_idx.keys())[0]
+            return await get_method(item_id)
+        else:
+            items = {}
+            obj_it = get_method(
+                id_gte=min(item_id_to_idx.keys()),
+                id_lte=max(item_id_to_idx.keys()),
+            )
+            async for obj in obj_it:
+                if obj.id in item_id_to_idx:
+                    items[item_id_to_idx[obj.id]] = obj
+            return result_type(items=items, validation_errors=validation_errors or {})

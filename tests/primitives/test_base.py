@@ -1,10 +1,11 @@
 import pytest
 import pickle
 import inspect
+from toloka.client import structure, unstructure
 from toloka.util._codegen import attribute
 from toloka.client.primitives.base import BaseTolokaObject, autocast_to_enum
 from ..utils.test_extendable_enum import test_enum, test_extendable_enum  # noqa: F401
-from typing import Optional, List, Union, Dict
+from typing import Optional, List, Union, Tuple, Dict, TypeVar, Generic
 
 
 @pytest.fixture()
@@ -17,6 +18,48 @@ def base_toloka_object():
 def test_base_toloka_object_is_pickle_serializable(base_toloka_object):
     deserialized = pickle.loads(pickle.dumps(base_toloka_object))
     assert deserialized == base_toloka_object
+
+
+def test_generic_base_inherited_object():
+
+    T = TypeVar('T')
+    X = TypeVar('X')
+    V = TypeVar('V')
+
+    class GenericBaseInheritedClass(Generic[T, X], BaseTolokaObject):
+        dict_data: Dict[str, T]
+        list_data: List[X]
+        tuple_data: Tuple[str, ...]
+
+    class CustomClass(Generic[V], BaseTolokaObject):
+        a: V
+
+    class NonGenericSubclass(GenericBaseInheritedClass[int, float]):
+        simple_data: int
+
+    unstructured_data = {
+        'dict_data': {'a': 1},
+        'list_data': [1.5, 10],
+        'tuple_data': ('hello', 'world'),
+    }
+    structured_data = structure(unstructured_data, GenericBaseInheritedClass[int, float])
+    assert unstructure(structured_data) == unstructured_data
+
+    unstructured_data_with_nested_class = {
+        **unstructured_data,
+        'dict_data': {'nested_class': {'a': True}},
+    }
+    structured_with_nested_class = structure(
+        unstructured_data_with_nested_class, GenericBaseInheritedClass[CustomClass[bool], float]
+    )
+    assert unstructure(structured_with_nested_class) == unstructured_data_with_nested_class
+
+    unstructured_data_with_simple_field = {
+        **unstructured_data,
+        'simple_data': 10,
+    }
+    structured_with_simple_field = structure(unstructured_data_with_simple_field, NonGenericSubclass)
+    assert unstructure(structured_with_simple_field) == unstructured_data_with_simple_field
 
 
 @pytest.fixture

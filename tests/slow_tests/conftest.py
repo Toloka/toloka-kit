@@ -1,5 +1,6 @@
 import asyncio
 import json
+import socket
 import time
 from copy import copy
 from decimal import Decimal
@@ -23,7 +24,7 @@ def fake_requester():
 
 @pytest.fixture(scope='session')
 def retries_before_response():
-    return 3
+    return 2
 
 
 class RetryCountingHandler:
@@ -31,27 +32,15 @@ class RetryCountingHandler:
         self.retries_left = retries_before_response
         self.requester = copy(requester)
         self.requester.balance = float(self.requester.balance)
-        self.streaming_mode = True
 
     async def get_requester(self, request):
-        if self.streaming_mode:
-            response = web.StreamResponse()
-            response.content_type = 'application/json'
-            response.enable_chunked_encoding()
-            await response.prepare(request)
-            self.retries_left -= 1
-            if self.retries_left >= 0:
-                await asyncio.sleep(10)
-            await response.write(json.dumps(self.requester.unstructure()).encode('utf-8'))
-            return response
-        else:
-            self.retries_left -= 1
-            if self.retries_left >= 0:
-                return web.Response(status=500)
-            return web.Response(
-                content_type='application/json',
-                body=json.dumps(self.requester.unstructure())
-            )
+        self.retries_left -= 1
+        if self.retries_left >= 0:
+            return web.Response(status=500)
+        return web.Response(
+            content_type='application/json',
+            body=json.dumps(self.requester.unstructure())
+        )
 
     async def get_retries_before_response(self, request):
         return web.Response(text=str(self.retries_left))
@@ -59,7 +48,6 @@ class RetryCountingHandler:
     async def reset_server(self, request):
         reset_params = await request.json()
         self.retries_left = int(reset_params['retries'])
-        self.streaming_mode = bool(reset_params['streaming_mode'])
 
         return web.Response(text='OK')
 
@@ -116,15 +104,6 @@ def launched_test_server_url(server_url, server_port, fake_requester, retries_be
     else:
         raise RuntimeError("Can't start server")
     yield url
-
-
-@pytest.fixture
-def timeout_server_url(launched_test_server_url, retries_before_response):
-    requests.post(f'{launched_test_server_url}/reset', json={
-        'retries': retries_before_response,
-        'streaming_mode': True,
-    })
-    return launched_test_server_url
 
 
 @pytest.fixture
