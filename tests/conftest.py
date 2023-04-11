@@ -61,13 +61,18 @@ class SyncOverAsyncTolokaClient:
 
 
 @pytest.fixture
-def sync_toloka_client():
-    return TolokaClient('fake-token', 'SANDBOX', timeout=0.1, retries=1)
+def environment():
+    return 'SANDBOX'
 
 
 @pytest.fixture
-def async_toloka_client():
-    return AsyncTolokaClient('fake-token', 'SANDBOX', timeout=0.1, retries=1)
+def sync_toloka_client(environment):
+    return TolokaClient('fake-token', environment, timeout=0.1, retries=1)
+
+
+@pytest.fixture
+def async_toloka_client(environment):
+    return AsyncTolokaClient('fake-token', environment, timeout=0.1, retries=1)
 
 
 @pytest.fixture(params=[True, False])
@@ -103,8 +108,8 @@ def toloka_client_prod(request) -> TolokaClient:
 
 
 @pytest.fixture
-def toloka_api_url(toloka_client) -> str:
-    return f'{toloka_client.url}/api'
+def toloka_api_url(environment) -> str:
+    return f'{TolokaClient.Environment[environment.upper()].value}/api'
 
 
 @pytest.fixture
