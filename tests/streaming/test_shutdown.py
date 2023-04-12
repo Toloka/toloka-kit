@@ -25,7 +25,7 @@ def storage_directory(tmp_path):
     return dirname
 
 
-OBSERVER_DURATION = 0.4
+OBSERVER_DURATION = 2
 
 
 @attr.s
