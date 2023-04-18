@@ -6,9 +6,10 @@ import pytest
 import simplejson
 import toloka.client as client
 from httpx import QueryParams
+from toloka.client.batch_create_results import TaskSuiteBatchCreateResult
 from toloka.client.exceptions import IncorrectActionsApiError
 
-from ..testutils.util_functions import check_headers
+from ..testutils.util_functions import assert_retried_object_creation_returns_already_existing_object, check_headers
 
 
 def test_create_task_suite_sync(respx_mock, toloka_client, toloka_url, task_suite_map, task_suite_map_with_readonly):
@@ -276,50 +277,26 @@ def test_create_task_suite_sync_through_async_retry(
         respx_mock, toloka_client, toloka_url, no_uuid_random, task_suites_map, operation_success_map_single_task_suite,
         create_log, task_suite_1
 ):
-    requests_count = 0
-    first_request_op_id = None
     task_suite = task_suites_map[0]
     create_log = create_log[:1]
-
-    def check_task_suite(request):
-        nonlocal requests_count
-        nonlocal first_request_op_id
-
-        requests_count += 1
-        if requests_count == 1:
-            first_request_op_id = request.url.params['operation_id']
-            return httpx.Response(status_code=500)
-
-        assert request.url.params['operation_id'] == first_request_op_id
-        unstructured_error = client.unstructure(
-            IncorrectActionsApiError(
-                code='OPERATION_ALREADY_EXISTS',
-            )
-        )
-        del unstructured_error['status_code']
-
-        return httpx.Response(
-            json=unstructured_error,
-            status_code=409
-        )
-
-    def get_log(request):
-        return httpx.Response(json=create_log, status_code=201)
 
     def return_task_suite(request):
         return httpx.Response(json=task_suite_1, status_code=201)
 
-    respx_mock.post(f'{toloka_url}/task-suites').mock(side_effect=check_task_suite)
-    respx_mock.get(url__regex=rf'{toloka_url}/operations/.*/log').mock(side_effect=get_log)
-    respx_mock.get(
-        url__regex=rf'{toloka_url}/operations/.*(?<!log)$'
-    ).mock(httpx.Response(json=operation_success_map_single_task_suite, status_code=200))
-    respx_mock.get(f'{toloka_url}/task-suites/{task_suite_1["id"]}').mock(side_effect=return_task_suite)
-
-    result = toloka_client.create_task_suite(client.structure(task_suite, client.TaskSuite))
-
-    assert requests_count == 2
-    assert task_suite_1 == client.unstructure(result)
+    assert_retried_object_creation_returns_already_existing_object(
+        respx_mock=respx_mock,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_task_suite,
+        create_method_kwargs={
+            'task_suite': client.structure(task_suite, client.TaskSuite)
+        },
+        get_object_side_effect=return_task_suite,
+        expected_response_object=client.structure(task_suite_1, client.TaskSuite),
+        success_operation_map=operation_success_map_single_task_suite,
+        operation_log=create_log,
+        create_object_path='task-suites',
+        get_object_path=f'task-suites/{task_suite_1["id"]}',
+    )
 
 
 def test_create_task_suites_sync_through_async(
@@ -444,50 +421,23 @@ def test_create_task_suites_sync_through_async_retry(
     respx_mock, toloka_client, toloka_url, task_suites_map, operation_success_map, create_log, no_uuid_random,
     get_task_suites_map, task_suites_result_map
 ):
-    requests_count = 0
-    first_request_op_id = None
-
-    def check_task_suites(request):
-        nonlocal requests_count
-        nonlocal first_request_op_id
-
-        requests_count += 1
-        if requests_count == 1:
-            first_request_op_id = request.url.params['operation_id']
-            return httpx.Response(status_code=500)
-
-        assert request.url.params['operation_id'] == first_request_op_id
-        unstructured_error = client.unstructure(
-            IncorrectActionsApiError(
-                code='OPERATION_ALREADY_EXISTS',
-            )
-        )
-        del unstructured_error['status_code']
-
-        return httpx.Response(
-            json=unstructured_error,
-            status_code=409
-        )
-
-    def get_log(request):
-        return httpx.Response(json=create_log, status_code=201)
-
     def task_suites(request):
         return httpx.Response(json={'items': get_task_suites_map, 'has_more': False}, status_code=201)
 
-    respx_mock.get(
-        url__regex=rf'{toloka_url}/operations/.*(?<!log)$'
-    ).mock(httpx.Response(json=operation_success_map, status_code=200))
-    respx_mock.post(f'{toloka_url}/task-suites').mock(side_effect=check_task_suites)
-    respx_mock.get(url__regex=rf'{toloka_url}/operations/.*/log').mock(side_effect=get_log)
-    respx_mock.get(f'{toloka_url}/task-suites').mock(side_effect=task_suites)
-
-    result = toloka_client.create_task_suites(
-        task_suites=[client.structure(task_suite, client.TaskSuite) for task_suite in task_suites_map]
+    assert_retried_object_creation_returns_already_existing_object(
+        respx_mock=respx_mock,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_task_suites,
+        create_method_kwargs={
+            'task_suites': [client.structure(task_suite, client.TaskSuite) for task_suite in task_suites_map]
+        },
+        get_object_side_effect=task_suites,
+        expected_response_object=TaskSuiteBatchCreateResult.structure(task_suites_result_map),
+        success_operation_map=operation_success_map,
+        operation_log=create_log,
+        create_object_path='task-suites',
+        get_object_path='task-suites',
     )
-
-    assert requests_count == 2
-    assert task_suites_result_map == client.unstructure(result)
 
 
 def test_create_task_suites_async_retry(respx_mock, toloka_client, toloka_url, task_suites_map, operation_success_map):

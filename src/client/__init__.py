@@ -81,6 +81,7 @@ import httpx
 import simplejson
 from httpx import HTTPStatusError, RequestError
 from httpx._types import VerifyTypes
+from toloka.client.batch_create_results import FieldValidationError
 
 try:
     import pandas as pd
@@ -92,7 +93,7 @@ from decimal import Decimal
 from enum import Enum, unique
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
-from typing import BinaryIO, Callable, ClassVar, Generator, List, Optional, Sequence, Tuple, Union
+from typing import BinaryIO, Callable, ClassVar, Dict, Generator, List, Optional, Sequence, Tuple, Union
 from urllib3.util.retry import Retry
 
 from . import actions
@@ -418,6 +419,7 @@ class TolokaClient:
             insert_operation = self.get_operation(operation_id=str(parameters.operation_id))
             if not isinstance(insert_operation, operation_type):
                 raise
+            insert_operation.raise_on_fail()
             logger.info(f'Objects were not created by {top_level_method_var.get()}: '
                         f'operation {parameters.operation_id} is already submitted.')
         return insert_operation
@@ -468,7 +470,7 @@ class TolokaClient:
                 numerated_ids = pools.setdefault(log_item.input['pool_id'], {})
                 numerated_ids[log_item.output[output_id_field]] = index
             else:
-                validation_errors[index] = log_item.output
+                validation_errors[index] = structure(log_item.output, Dict[str, FieldValidationError])
 
         # Like in sync methods Exception will raise
         # even if the skip_invalid_items=True but no objects are created
