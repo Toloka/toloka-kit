@@ -9,7 +9,7 @@ def test_async_client_survives_event_loop_change(connection_error_server_url, re
     toloka_client = AsyncTolokaClient(
         'fake-token',
         url=connection_error_server_url,
-        retries=Retry(retries_before_response, status_forcelist={500}, backoff_factor=0),
+        retryer_factory=lambda: Retry(retries_before_response, status_forcelist={500}, backoff_factor=0),
         retry_quotas=None,
         timeout=0.5,
     )
@@ -29,7 +29,7 @@ def test_async_client_can_be_multithreaded(connection_error_server_url, retries_
     toloka_client = AsyncTolokaClient(
         'fake-token',
         url=connection_error_server_url,
-        retries=Retry(retries_before_response, status_forcelist={500}, backoff_factor=0),
+        retryer_factory=lambda: Retry(retries_before_response, status_forcelist={500}, backoff_factor=0),
         retry_quotas=None,
         timeout=0.5,
     )
