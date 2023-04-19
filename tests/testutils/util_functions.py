@@ -95,7 +95,7 @@ def assert_async_object_creation_is_successful(
     )
 
     result = create_method(**create_method_kwargs)
-    assert result == Operation.structure(success_operation_map)
+    assert result.unstructure() == success_operation_map
 
 
 def assert_retried_async_object_creation_returns_existing_operation(
