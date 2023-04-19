@@ -310,7 +310,7 @@ def test_create_project(respx_mock, toloka_client, toloka_url, simple_project_ma
     with caplog.at_level(logging.INFO):
         caplog.clear()
         result = toloka_client.create_project(project)
-        assert caplog.record_tuples == [(
+        assert [log for log in caplog.record_tuples if log[0] == 'toloka.client'] == [(
             'toloka.client', logging.INFO,
             'A new project with ID "10" has been created. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/project/10'
         )]

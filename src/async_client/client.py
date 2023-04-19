@@ -72,19 +72,19 @@ class AsyncTolokaClient:
         return self._sync_client
 
     @functools.lru_cache(maxsize=128)
-    def _session_for_thread(self, thread_id: int) -> httpx.AsyncClient:
+    def _session_for_thread_for_event_loop(self, thread_id: int, event_loop_id: int) -> httpx.AsyncClient:
         client = httpx.AsyncClient(headers=self._headers, base_url=self.url, verify=self.verify)
         return client
 
     @property
     def _session(self):
-        return self._session_for_thread(threading.current_thread().ident)
+        event_loop_id = id(asyncio.get_event_loop())
+        return self._session_for_thread_for_event_loop(threading.current_thread().ident, event_loop_id)
 
     async def _do_request_with_retries(self, method, path, **kwargs):
         @self.retrying.wraps
         async def wrapped(method, path, **kwargs):
             response = await self._session.request(method, path, **kwargs)
-            await response.aread()
             raise_on_api_error(response)
             return response
 
