@@ -137,7 +137,7 @@ def test_create_skill(skill_sample, skill_header, respx_mock, toloka_client, tol
     with caplog.at_level(logging.INFO):
         caplog.clear()
         result = toloka_client.create_skill(client.Skill(**skill_header))
-        assert caplog.record_tuples == [(
+        assert [log for log in caplog.record_tuples if log[0] == 'toloka.client'] == [(
             'toloka.client',
             logging.INFO,
             'A new skill with ID "21" has been created. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/quality/skill/21'

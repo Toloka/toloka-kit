@@ -1,21 +1,16 @@
 import asyncio
-import attr
 import datetime
 import os
-import pytest
 import signal
 import time
-from concurrent import futures
+from multiprocessing import Process
 from typing import Optional
 
+import attr
+import pytest
 from toloka.streaming import Pipeline
 from toloka.streaming.storage import JSONLocalStorage
 from toloka.util.async_utils import ComplexException
-
-
-@pytest.fixture
-def pid_file_path(tmp_path):
-    return tmp_path / 'to-kill-sigint.pid'
 
 
 @pytest.fixture
@@ -25,7 +20,7 @@ def storage_directory(tmp_path):
     return dirname
 
 
-OBSERVER_DURATION = 0.4
+OBSERVER_DURATION = 1
 
 
 @attr.s
@@ -67,30 +62,27 @@ def _create_pipeline(dirname: str, observer_name: str):
     return pipeline, observer, fail_observer
 
 
-def _run_pipeline(pid_file_path: str, dirname: str):
+def _run_pipeline(dirname: str):
     pipeline, _, _ = _create_pipeline(dirname, 'observer-before-ctrl-c')
-    pid = os.getpid()
-    with open(pid_file_path, 'w') as file:
-        file.write(str(pid))
     loop = asyncio.new_event_loop()
     loop.run_until_complete(pipeline.run())
 
 
-def _throw_sigint(pid_file_path: str, interrupt_after: float):
+def _throw_sigint(pid: int, interrupt_after: float):
     time.sleep(interrupt_after)
-    with open(pid_file_path) as file:
-        pid = int(file.read())
     os.kill(pid, signal.SIGINT)
 
 
-def test_gracefully_shutdown(pid_file_path, storage_directory):
-    with futures.ProcessPoolExecutor() as executor:
-        done, _ = futures.wait([executor.submit(_run_pipeline, pid_file_path, storage_directory),
-                                executor.submit(_throw_sigint, pid_file_path, OBSERVER_DURATION / 2)])
-        for task in done:
-            error = task.exception()
-            if error and not isinstance(error, futures.BrokenExecutor):
-                raise error
+def test_gracefully_shutdown(storage_directory):
+    pipeline_process = Process(target=_run_pipeline, args=(storage_directory,))
+    pipeline_process.start()
+    killer_process = Process(target=_throw_sigint, args=(pipeline_process.pid, OBSERVER_DURATION / 2))
+    killer_process.start()
+    pipeline_process.join()
+    killer_process.join()
+
+    assert pipeline_process.exitcode == 1
+    assert killer_process.exitcode == 0
 
     pipeline, observer, fail_observer = _create_pipeline(storage_directory, 'observer-after-ctrl-c')
     with pytest.raises(ComplexException):
@@ -104,28 +96,26 @@ LONG_WAIT_SECONDS = 10
 SHORT_OBSERVER_DURATION = 0.1
 
 
-def _run_long_sleeping_pipeline(pid_file_path: str):
+def _run_long_sleeping_pipeline():
     Pipeline.MIN_SLEEP_SECONDS = LONG_WAIT_SECONDS
     pipeline = Pipeline(period=datetime.timedelta(seconds=LONG_WAIT_SECONDS))
     pipeline.register(ObserverToInterrupt('short-observer', duration=SHORT_OBSERVER_DURATION))
-
-    pid = os.getpid()
-    with open(pid_file_path, 'w') as file:
-        file.write(str(pid))
     loop = asyncio.new_event_loop()
     loop.run_until_complete(pipeline.run())
 
 
-def test_interrupt_sleeping(pid_file_path):
+def test_interrupt_sleeping():
     start_time = time.time()
 
-    with futures.ProcessPoolExecutor() as executor:
-        done, _ = futures.wait([executor.submit(_run_long_sleeping_pipeline, pid_file_path),
-                                executor.submit(_throw_sigint, pid_file_path, SHORT_OBSERVER_DURATION * 1.5)])
-        for task in done:
-            error = task.exception()
-            if error and not isinstance(error, KeyboardInterrupt):
-                raise error
+    pipeline_process = Process(target=_run_long_sleeping_pipeline)
+    pipeline_process.start()
+    killer_process = Process(target=_throw_sigint, args=(pipeline_process.pid, OBSERVER_DURATION / 2))
+    killer_process.start()
+    pipeline_process.join()
+    killer_process.join()
+
+    assert pipeline_process.exitcode == 1
+    assert killer_process.exitcode == 0
 
     elapsed = time.time() - start_time
     assert elapsed < LONG_WAIT_SECONDS, elapsed

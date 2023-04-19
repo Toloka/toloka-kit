@@ -24,6 +24,13 @@ jobs:
     - name: Run tox with Python ${{ matrix.python-version }}
       run: |
         python -m tox
+    - name: Upload to codecov
+      if: ${{ matrix.python-version == '3.8' }}
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage_py38.xml
+        fail_ci_if_error: true
   build-docs:
     runs-on: ubuntu-latest
     steps:

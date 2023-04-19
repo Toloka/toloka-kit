@@ -174,7 +174,7 @@ def test_create_pool(respx_mock, toloka_client, toloka_url, pool_map, pool_map_w
     with caplog.at_level(logging.INFO):
         caplog.clear()
         result = toloka_client.create_pool(pool)
-        assert caplog.record_tuples == [(
+        assert [log for log in caplog.record_tuples if log[0] == 'toloka.client'] == [(
             'toloka.client', logging.INFO,
             'A new pool with ID "21" has been created. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/project/10/pool/21'
         )]
@@ -973,7 +973,7 @@ def test_clone_pool(respx_mock, toloka_client, toloka_url,
     with caplog.at_level(logging.INFO):
         caplog.clear()
         result = toloka_client.clone_pool('21')
-        assert caplog.record_tuples == [(
+        assert [log for log in caplog.record_tuples if log[0] == 'toloka.client'] == [(
             'toloka.client',
             logging.INFO,
             'A new pool with ID "22" has been cloned. Link to open in web interface: https://sandbox.toloka.yandex.com/requester/project/10/pool/22'
