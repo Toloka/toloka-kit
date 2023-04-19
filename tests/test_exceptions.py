@@ -60,7 +60,7 @@ def test_api_error_with_bad_payload_falls_back_to_printing_raw_response():
         Code of error: INTERNAL_ERROR
         Error details: None
         Additional information about the error:
-        failed to parse error payload as JSON, falling back to naive string representation
+        failed to parse payload as JSON! Falling back to raw representation:
         {str(bad_payload)}
         request id: asd123. It needs to be specified when contacting support.'''
     )
