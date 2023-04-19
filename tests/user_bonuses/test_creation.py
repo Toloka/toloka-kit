@@ -12,7 +12,10 @@ from toloka.client import UserBonus
 from toloka.client.batch_create_results import UserBonusBatchCreateResult
 from toloka.client.exceptions import FailedOperation, IncorrectActionsApiError
 
-from ..testutils.util_functions import assert_retried_object_creation_returns_already_existing_object, check_headers
+from ..testutils.util_functions import (
+    assert_retried_failed_operation_fails_with_failed_operation_exception,
+    assert_retried_sync_via_async_object_creation_returns_already_existing_object, check_headers,
+)
 
 
 def test_create_user_bonus_sync(respx_mock, toloka_client, toloka_url, user_bonus_map, user_bonus_map_with_readonly):
@@ -224,12 +227,12 @@ def test_create_user_bonus_sync_via_async_retry(
     def user_bonus(request):
         return httpx.Response(text=simplejson.dumps(user_bonus_map_with_readonly), status_code=200)
 
-    assert_retried_object_creation_returns_already_existing_object(
+    assert_retried_sync_via_async_object_creation_returns_already_existing_object(
         respx_mock=respx_mock,
         toloka_url=toloka_url,
         create_method=toloka_client.create_user_bonus,
         create_method_kwargs={'user_bonus': UserBonus.structure(user_bonus_map)},
-        get_object_side_effect=user_bonus,
+        returned_object=user_bonus,
         expected_response_object=UserBonus.structure(user_bonus_map_with_readonly),
         success_operation_map=create_user_bonus_operation_success,
         operation_log=create_user_bonus_log,
@@ -365,6 +368,11 @@ def create_user_bonuses_operation_running(create_user_bonuses_operation_id):
 
 
 @pytest.fixture
+def create_user_bonuses_operation_fail(create_user_bonuses_operation_running):
+    return {**create_user_bonuses_operation_running, 'status': 'FAIL'}
+
+
+@pytest.fixture
 def create_user_bonuses_operation_success(create_user_bonuses_operation_running):
     return {**create_user_bonuses_operation_running, 'status': 'SUCCESS'}
 
@@ -476,14 +484,44 @@ def test_create_user_bonuses_sync_via_async_retry(
         for user_bonus_map in user_bonus_map_async
     ]
 
-    assert_retried_object_creation_returns_already_existing_object(
+    assert_retried_sync_via_async_object_creation_returns_already_existing_object(
+        respx_mock=respx_mock,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_user_bonuses,
+        create_method_kwargs={'user_bonuses': user_bonuses},
+        returned_object=return_user_bonuses,
+        expected_response_object=UserBonusBatchCreateResult.structure(user_bonuses_result_map),
+        success_operation_map=create_user_bonuses_operation_success,
+        operation_log=create_user_bonuses_log,
+        create_object_path='user-bonuses',
+        get_object_path='user-bonuses',
+    )
+
+
+def test_create_user_bonuses_sync_via_async_retry_failed_operation(
+    respx_mock, toloka_client, toloka_url, no_uuid_random,
+    user_bonus_map_async, create_user_bonuses_operation_id, user_bonus_map_async_with_read_only,
+    create_user_bonuses_operation_fail, create_user_bonuses_log,
+    user_bonuses_result_map
+):
+    def return_user_bonuses(request):
+        return httpx.Response(
+            text=simplejson.dumps({'items': user_bonus_map_async_with_read_only, 'has_more': False}),
+            status_code=200
+        )
+
+    user_bonuses = [
+        client.structure(user_bonus_map, client.user_bonus.UserBonus)
+        for user_bonus_map in user_bonus_map_async
+    ]
+
+    assert_retried_failed_operation_fails_with_failed_operation_exception(
         respx_mock=respx_mock,
         toloka_url=toloka_url,
         create_method=toloka_client.create_user_bonuses,
         create_method_kwargs={'user_bonuses': user_bonuses},
         get_object_side_effect=return_user_bonuses,
-        expected_response_object=UserBonusBatchCreateResult.structure(user_bonuses_result_map),
-        success_operation_map=create_user_bonuses_operation_success,
+        failed_operation_map=create_user_bonuses_operation_fail,
         operation_log=create_user_bonuses_log,
         create_object_path='user-bonuses',
         get_object_path='user-bonuses',

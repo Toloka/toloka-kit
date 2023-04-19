@@ -8,8 +8,14 @@ import toloka.client as client
 from httpx import QueryParams
 from toloka.client.batch_create_results import TaskSuiteBatchCreateResult
 from toloka.client.exceptions import IncorrectActionsApiError
+from toloka.client.operations import Operation
 
-from ..testutils.util_functions import assert_retried_object_creation_returns_already_existing_object, check_headers
+from ..testutils.util_functions import (
+    assert_async_object_creation_is_successful, assert_retried_async_object_creation_returns_existing_operation,
+    assert_sync_via_async_object_creation_is_successful,
+    assert_retried_failed_operation_fails_with_failed_operation_exception,
+    assert_retried_sync_via_async_object_creation_returns_already_existing_object, check_headers,
+)
 
 
 def test_create_task_suite_sync(respx_mock, toloka_client, toloka_url, task_suite_map, task_suite_map_with_readonly):
@@ -119,11 +125,21 @@ def operation_success_map_single_task_suite(operation_running_map_single_task_su
 
 
 @pytest.fixture
+def operation_fail_map_single_task_suite(operation_running_map_single_task_suite):
+    return {**operation_running_map_single_task_suite, 'status': 'FAIL'}
+
+
+@pytest.fixture
 def operation_running_map(operation_running_map_single_task_suite):
     return {
         **operation_running_map_single_task_suite,
         'details': {'items_count': 2},
     }
+
+
+@pytest.fixture
+def operation_fail_map(operation_running_map):
+    return {**operation_running_map, 'status': 'FAIL'}
 
 
 @pytest.fixture
@@ -204,95 +220,74 @@ def test_create_task_suite_sync_through_async(
         task_suites_map, operation_running_map_single_task_suite, operation_success_map_single_task_suite,
         create_log, task_suite_1,
 ):
-    task_suite = task_suites_map[0]
+    task_suite = client.task_suite.TaskSuite.structure(task_suites_map[0])
     create_log = create_log[:1]
 
-    def check_task_suite(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_task_suite',
-            'X-Low-Level-Method': 'create_task_suite',
-        }
-        check_headers(request, expected_headers)
-
-        assert QueryParams(
-            operation_id='operation-i1d',
-            allow_defaults='true',
-            open_pool='true',
-            async_mode='true'
-        ) == request.url.params
-        incoming_task_suite = simplejson.loads(request.content)
-        assert '__item_idx' in incoming_task_suite
-        incoming_task_suite.pop('__item_idx')
-        assert task_suite == incoming_task_suite
-        return httpx.Response(json=operation_running_map_single_task_suite, status_code=201)
-
-    def operation_success(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_task_suite',
-            'X-Low-Level-Method': 'get_operation',
-        }
-        check_headers(request, expected_headers)
-
-        return httpx.Response(json=operation_success_map_single_task_suite, status_code=201)
-
-    def get_log(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_task_suite',
-            'X-Low-Level-Method': 'get_operation_log',
-        }
-        check_headers(request, expected_headers)
-
-        return httpx.Response(json=create_log, status_code=201)
-
-    def return_task_suite(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_task_suite',
-            'X-Low-Level-Method': 'get_task_suite',
-        }
-        check_headers(request, expected_headers)
-
-        return httpx.Response(json=task_suite_1, status_code=201)
-
-    # mocks
-    respx_mock.post(f'{toloka_url}/task-suites').mock(side_effect=check_task_suite)
-    respx_mock.get(f'{toloka_url}/operations/{operation_running_map_single_task_suite["id"]}').mock(side_effect=operation_success)
-    respx_mock.get(f'{toloka_url}/operations/{operation_running_map_single_task_suite["id"]}/log').mock(side_effect=get_log)
-    respx_mock.get(f'{toloka_url}/task-suites/{task_suite_1["id"]}').mock(side_effect=return_task_suite)
-
-    # Expanded syntax
-    result = toloka_client.create_task_suite(
-        client.structure(task_suite, client.task_suite.TaskSuite),
-        operation_id='operation-i1d',
-        allow_defaults=True,
-        open_pool=True,
+    assert_sync_via_async_object_creation_is_successful(
+        respx_mock=respx_mock,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_task_suite,
+        create_method_kwargs={
+            'task_suite': task_suite,
+            'operation_id': 'operation-i1d',
+            'allow_defaults': True,
+            'open_pool': True,
+        },
+        returned_object=task_suite_1,
+        expected_response_object=client.task_suite.TaskSuite.structure(task_suite_1),
+        operation_log=create_log,
+        create_object_path='task-suites',
+        get_object_path=f'task-suites/{task_suite_1["id"]}',
+        operation_running=Operation.structure(operation_running_map_single_task_suite),
+        success_operation=Operation.structure(operation_success_map_single_task_suite),
+        expected_query_params={
+            'operation_id': 'operation-i1d',
+            'allow_defaults': 'true',
+            'open_pool': 'true',
+            'async_mode': 'true',
+        },
     )
-    assert task_suite_1 == client.unstructure(result)
 
 
 def test_create_task_suite_sync_through_async_retry(
-        respx_mock, toloka_client, toloka_url, no_uuid_random, task_suites_map, operation_success_map_single_task_suite,
-        create_log, task_suite_1
+    respx_mock, toloka_client, toloka_url, no_uuid_random, task_suites_map, operation_success_map_single_task_suite,
+    create_log, task_suite_1
 ):
     task_suite = task_suites_map[0]
     create_log = create_log[:1]
 
-    def return_task_suite(request):
-        return httpx.Response(json=task_suite_1, status_code=201)
-
-    assert_retried_object_creation_returns_already_existing_object(
+    assert_retried_sync_via_async_object_creation_returns_already_existing_object(
         respx_mock=respx_mock,
         toloka_url=toloka_url,
         create_method=toloka_client.create_task_suite,
         create_method_kwargs={
             'task_suite': client.structure(task_suite, client.TaskSuite)
         },
-        get_object_side_effect=return_task_suite,
+        returned_object=task_suite_1,
         expected_response_object=client.structure(task_suite_1, client.TaskSuite),
         success_operation_map=operation_success_map_single_task_suite,
+        operation_log=create_log,
+        create_object_path='task-suites',
+        get_object_path=f'task-suites/{task_suite_1["id"]}',
+    )
+
+
+def test_create_task_suite_sync_through_async_retry_failed_operation(
+    respx_mock, toloka_client, toloka_url, no_uuid_random, task_suites_map, operation_fail_map_single_task_suite,
+    create_log, task_suite_1
+):
+    task_suite = task_suites_map[0]
+    create_log = create_log[:1]
+
+    assert_retried_failed_operation_fails_with_failed_operation_exception(
+        respx_mock=respx_mock,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_task_suite,
+        create_method_kwargs={
+            'task_suite': client.structure(task_suite, client.TaskSuite)
+        },
+        returned_object=task_suite_1,
+        failed_operation_map=operation_fail_map_single_task_suite,
         operation_log=create_log,
         create_object_path='task-suites',
         get_object_path=f'task-suites/{task_suite_1["id"]}',
@@ -304,134 +299,46 @@ def test_create_task_suites_sync_through_async(
     task_suites_map, operation_running_map, operation_success_map,
     create_log, get_task_suites_map, task_suites_result_map
 ):
-
-    def check_task_suites(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_task_suites',
-            'X-Low-Level-Method': 'create_task_suites',
-        }
-        check_headers(request, expected_headers)
-
-        assert QueryParams(
-            operation_id='operation-i1d',
-            skip_invalid_items='true',
-            allow_defaults='true',
-            open_pool='true',
-            async_mode='true'
-        ) == request.url.params
-        incoming_task_suites = []
-        for t in simplejson.loads(request.content):
-            assert '__item_idx' in t
-            t.pop('__item_idx')
-            incoming_task_suites.append(t)
-        assert task_suites_map == incoming_task_suites
-        return httpx.Response(json=operation_running_map, status_code=201)
-
-    def operation_success(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_task_suites',
-            'X-Low-Level-Method': 'get_operation',
-        }
-        check_headers(request, expected_headers)
-
-        return httpx.Response(json=operation_success_map, status_code=201)
-
-    def get_log(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_task_suites',
-            'X-Low-Level-Method': 'get_operation_log',
-        }
-        check_headers(request, expected_headers)
-
-        return httpx.Response(json=create_log, status_code=201)
-
-    def task_suites(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_task_suites',
-            'X-Low-Level-Method': 'find_task_suites',
-        }
-        check_headers(request, expected_headers)
-
-        return httpx.Response(json={'items': get_task_suites_map, 'has_more': False}, status_code=201)
-
-    # mocks
-    respx_mock.post(f'{toloka_url}/task-suites').mock(side_effect=check_task_suites)
-    respx_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}').mock(side_effect=operation_success)
-    respx_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}/log').mock(side_effect=get_log)
-    respx_mock.get(f'{toloka_url}/task-suites').mock(side_effect=task_suites)
-
-    # Expanded syntax
-    result = toloka_client.create_task_suites(
-        [client.structure(t, client.task_suite.TaskSuite) for t in task_suites_map],
-        operation_id='operation-i1d',
-        skip_invalid_items=True,
-        allow_defaults=True,
-        open_pool=True,
+    assert_sync_via_async_object_creation_is_successful(
+        respx_mock=respx_mock,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_task_suites,
+        create_method_kwargs={
+            'task_suites': [client.structure(t, client.task_suite.TaskSuite) for t in task_suites_map],
+            'operation_id': 'operation-i1d',
+            'skip_invalid_items': True,
+            'allow_defaults': True,
+            'open_pool': True,
+        },
+        returned_object={'items': get_task_suites_map, 'has_more': False},
+        expected_response_object=TaskSuiteBatchCreateResult.structure(task_suites_result_map),
+        operation_log=create_log,
+        create_object_path='task-suites',
+        get_object_path=f'task-suites',
+        operation_running=Operation.structure(operation_running_map),
+        success_operation=Operation.structure(operation_success_map),
+        expected_query_params={
+            'operation_id': 'operation-i1d',
+            'allow_defaults': 'true',
+            'open_pool': 'true',
+            'async_mode': 'true',
+            'skip_invalid_items': 'true',
+        },
     )
-    assert task_suites_result_map == client.unstructure(result)
-
-
-def test_create_task_suites_async(respx_mock, toloka_client, toloka_url, task_suites_map, operation_success_map):
-    def task_suites(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_task_suites_async',
-            'X-Low-Level-Method': 'create_task_suites_async',
-        }
-        check_headers(request, expected_headers)
-
-        assert QueryParams(
-            skip_invalid_items='true',
-            allow_defaults='true',
-            open_pool='true',
-            async_mode='true',
-            operation_id=request.url.params['operation_id']
-        ) == request.url.params
-        assert task_suites_map == simplejson.loads(request.content)
-        return httpx.Response(json=operation_success_map, status_code=200)
-
-    respx_mock.post(f'{toloka_url}/task-suites').mock(side_effect=task_suites)
-
-    request = client.structure(task_suites_map, List[client.task_suite.TaskSuite])
-
-    # Request object syntax
-    parameters = client.task_suite.TaskSuitesCreateRequestParameters(
-        skip_invalid_items=True,
-        allow_defaults=True,
-        open_pool=True,
-    )
-    result = toloka_client.create_task_suites_async(request, parameters)
-    assert operation_success_map == client.unstructure(result)
-
-    # Expanded syntax
-    result = toloka_client.create_task_suites_async(
-        request,
-        skip_invalid_items=True,
-        allow_defaults=True,
-        open_pool=True,
-    )
-    assert operation_success_map == client.unstructure(result)
 
 
 def test_create_task_suites_sync_through_async_retry(
     respx_mock, toloka_client, toloka_url, task_suites_map, operation_success_map, create_log, no_uuid_random,
     get_task_suites_map, task_suites_result_map
 ):
-    def task_suites(request):
-        return httpx.Response(json={'items': get_task_suites_map, 'has_more': False}, status_code=201)
-
-    assert_retried_object_creation_returns_already_existing_object(
+    assert_retried_sync_via_async_object_creation_returns_already_existing_object(
         respx_mock=respx_mock,
         toloka_url=toloka_url,
         create_method=toloka_client.create_task_suites,
         create_method_kwargs={
             'task_suites': [client.structure(task_suite, client.TaskSuite) for task_suite in task_suites_map]
         },
-        get_object_side_effect=task_suites,
+        returned_object={'items': get_task_suites_map, 'has_more': False},
         expected_response_object=TaskSuiteBatchCreateResult.structure(task_suites_result_map),
         success_operation_map=operation_success_map,
         operation_log=create_log,
@@ -440,40 +347,62 @@ def test_create_task_suites_sync_through_async_retry(
     )
 
 
-def test_create_task_suites_async_retry(respx_mock, toloka_client, toloka_url, task_suites_map, operation_success_map):
-    requests_count = 0
-    first_request_op_id = None
-
-    def task_suites(request):
-        nonlocal requests_count
-        nonlocal first_request_op_id
-
-        requests_count += 1
-        if requests_count == 1:
-            first_request_op_id = request.url.params['operation_id']
-            return httpx.Response(status_code=500)
-
-        assert request.url.params['operation_id'] == first_request_op_id
-        unstructured_error = client.unstructure(
-            IncorrectActionsApiError(
-                code='OPERATION_ALREADY_EXISTS',
-            )
-        )
-        del unstructured_error['status_code']
-
-        return httpx.Response(
-            json=unstructured_error,
-            status_code=409
-        )
-
-    respx_mock.get(
-        re.compile(rf'{toloka_url}/operations/.*')
-    ).mock(httpx.Response(json=operation_success_map, status_code=200))
-    respx_mock.post(f'{toloka_url}/task-suites').mock(side_effect=task_suites)
-
-    result = toloka_client.create_task_suites_async(
-        task_suites=[client.structure(task_suite, client.TaskSuite) for task_suite in task_suites_map]
+def test_create_task_suites_sync_through_async_retry_failed_operation(
+    respx_mock, toloka_client, toloka_url, no_uuid_random,
+    task_suites_map, operation_running_map, operation_fail_map,
+    create_log, get_task_suites_map, task_suites_result_map
+):
+    assert_retried_failed_operation_fails_with_failed_operation_exception(
+        respx_mock=respx_mock,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_task_suites,
+        create_method_kwargs={
+            'task_suites': [client.structure(t, client.task_suite.TaskSuite) for t in task_suites_map],
+            'skip_invalid_items': True,
+            'allow_defaults': True,
+            'open_pool': True,
+        },
+        returned_object={'items': get_task_suites_map, 'has_more': False},
+        failed_operation_map=operation_fail_map,
+        operation_log=create_log,
+        create_object_path='task-suites',
+        get_object_path=f'task-suites',
     )
 
-    assert requests_count == 2
-    assert operation_success_map == client.unstructure(result)
+
+def test_create_task_suites_async(respx_mock, toloka_client, toloka_url, task_suites_map, operation_success_map):
+    assert_async_object_creation_is_successful(
+        respx_mock=respx_mock,
+        toloka_client=toloka_client,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_task_suites_async,
+        create_method_kwargs={
+            'task_suites': client.structure(task_suites_map, List[client.task_suite.TaskSuite]),
+            'skip_invalid_items': True,
+            'allow_defaults': True,
+            'open_pool': True,
+        },
+        create_object_path='task-suites',
+        success_operation_map=operation_success_map,
+        expected_query_params={
+            'skip_invalid_items': 'true',
+            'allow_defaults': 'true',
+            'open_pool': 'true',
+            'async_mode': 'true',
+        },
+        top_level_method_header='create_task_suites_async',
+        low_level_method_header='create_task_suites_async',
+    )
+
+
+def test_create_task_suites_async_retry(respx_mock, toloka_client, toloka_url, task_suites_map, operation_success_map):
+    assert_retried_async_object_creation_returns_existing_operation(
+        respx_mock=respx_mock,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_task_suites_async,
+        create_method_kwargs={
+            'task_suites': [client.structure(task_suite, client.TaskSuite) for task_suite in task_suites_map]
+        },
+        create_object_path='task-suites',
+        success_operation_map=operation_success_map
+    )
