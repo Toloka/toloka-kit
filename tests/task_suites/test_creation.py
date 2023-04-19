@@ -216,7 +216,7 @@ def task_suites_result_map(task_suite_1, task_suite_2):
 
 
 def test_create_task_suite_sync_through_async(
-        respx_mock, toloka_client, toloka_url, no_uuid_random,
+        respx_mock, toloka_client, toloka_url,
         task_suites_map, operation_running_map_single_task_suite, operation_success_map_single_task_suite,
         create_log, task_suite_1,
 ):
@@ -226,6 +226,7 @@ def test_create_task_suite_sync_through_async(
     assert_sync_via_async_object_creation_is_successful(
         respx_mock=respx_mock,
         toloka_url=toloka_url,
+        toloka_client=toloka_client,
         create_method=toloka_client.create_task_suite,
         create_method_kwargs={
             'task_suite': task_suite,
@@ -246,11 +247,13 @@ def test_create_task_suite_sync_through_async(
             'open_pool': 'true',
             'async_mode': 'true',
         },
+        top_level_method_header='create_task_suite',
+        low_level_method_header='create_task_suite'
     )
 
 
 def test_create_task_suite_sync_through_async_retry(
-    respx_mock, toloka_client, toloka_url, no_uuid_random, task_suites_map, operation_success_map_single_task_suite,
+    respx_mock, toloka_client, toloka_url, task_suites_map, operation_success_map_single_task_suite,
     create_log, task_suite_1
 ):
     task_suite = task_suites_map[0]
@@ -273,11 +276,9 @@ def test_create_task_suite_sync_through_async_retry(
 
 
 def test_create_task_suite_sync_through_async_retry_failed_operation(
-    respx_mock, toloka_client, toloka_url, no_uuid_random, task_suites_map, operation_fail_map_single_task_suite,
-    create_log, task_suite_1
+    respx_mock, toloka_client, toloka_url, task_suites_map, operation_fail_map_single_task_suite,
 ):
     task_suite = task_suites_map[0]
-    create_log = create_log[:1]
 
     assert_retried_failed_operation_fails_with_failed_operation_exception(
         respx_mock=respx_mock,
@@ -286,22 +287,20 @@ def test_create_task_suite_sync_through_async_retry_failed_operation(
         create_method_kwargs={
             'task_suite': client.structure(task_suite, client.TaskSuite)
         },
-        returned_object=task_suite_1,
         failed_operation_map=operation_fail_map_single_task_suite,
-        operation_log=create_log,
         create_object_path='task-suites',
-        get_object_path=f'task-suites/{task_suite_1["id"]}',
     )
 
 
 def test_create_task_suites_sync_through_async(
-    respx_mock, toloka_client, toloka_url, no_uuid_random,
+    respx_mock, toloka_client, toloka_url,
     task_suites_map, operation_running_map, operation_success_map,
     create_log, get_task_suites_map, task_suites_result_map
 ):
     assert_sync_via_async_object_creation_is_successful(
         respx_mock=respx_mock,
         toloka_url=toloka_url,
+        toloka_client=toloka_client,
         create_method=toloka_client.create_task_suites,
         create_method_kwargs={
             'task_suites': [client.structure(t, client.task_suite.TaskSuite) for t in task_suites_map],
@@ -324,11 +323,13 @@ def test_create_task_suites_sync_through_async(
             'async_mode': 'true',
             'skip_invalid_items': 'true',
         },
+        top_level_method_header='create_task_suites',
+        low_level_method_header='create_task_suites',
     )
 
 
 def test_create_task_suites_sync_through_async_retry(
-    respx_mock, toloka_client, toloka_url, task_suites_map, operation_success_map, create_log, no_uuid_random,
+    respx_mock, toloka_client, toloka_url, task_suites_map, operation_success_map, create_log,
     get_task_suites_map, task_suites_result_map
 ):
     assert_retried_sync_via_async_object_creation_returns_already_existing_object(
@@ -348,9 +349,7 @@ def test_create_task_suites_sync_through_async_retry(
 
 
 def test_create_task_suites_sync_through_async_retry_failed_operation(
-    respx_mock, toloka_client, toloka_url, no_uuid_random,
-    task_suites_map, operation_running_map, operation_fail_map,
-    create_log, get_task_suites_map, task_suites_result_map
+    respx_mock, toloka_client, toloka_url, task_suites_map, operation_fail_map,
 ):
     assert_retried_failed_operation_fails_with_failed_operation_exception(
         respx_mock=respx_mock,
@@ -362,11 +361,8 @@ def test_create_task_suites_sync_through_async_retry_failed_operation(
             'allow_defaults': True,
             'open_pool': True,
         },
-        returned_object={'items': get_task_suites_map, 'has_more': False},
         failed_operation_map=operation_fail_map,
-        operation_log=create_log,
         create_object_path='task-suites',
-        get_object_path=f'task-suites',
     )
 
 
@@ -405,4 +401,19 @@ def test_create_task_suites_async_retry(respx_mock, toloka_client, toloka_url, t
         },
         create_object_path='task-suites',
         success_operation_map=operation_success_map
+    )
+
+
+def test_create_task_suites_async_retry_failed_operation(
+    respx_mock, toloka_client, toloka_url, task_suites_map, operation_fail_map
+):
+    assert_retried_failed_operation_fails_with_failed_operation_exception(
+        respx_mock=respx_mock,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_task_suites_async,
+        create_method_kwargs={
+            'task_suites': [client.structure(task_suite, client.TaskSuite) for task_suite in task_suites_map]
+        },
+        failed_operation_map=operation_fail_map,
+        create_object_path='task-suites',
     )

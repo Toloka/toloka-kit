@@ -19,19 +19,28 @@ def check_headers(request, expected_headers):
 
 def assert_sync_via_async_object_creation_is_successful(
     respx_mock,
+    toloka_client,
     toloka_url: str,
     create_method: Callable,
     create_method_kwargs: dict,
-    returned_object: Union[dict, Callable],
+    returned_object: Union[str, dict, Callable],
     expected_response_object: BaseTolokaObject,
-    operation_log: Optional[list],
+    operation_log: Union[list, str],
     create_object_path: str,
     get_object_path: str,
     operation_running: Operation,
     success_operation: Operation,
     expected_query_params: dict,
+    top_level_method_header: str,
+    low_level_method_header: str,
 ):
     def create_object(request):
+        expected_headers = {
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
+            'X-Top-Level-Method': top_level_method_header,
+            'X-Low-Level-Method': low_level_method_header,
+        }
+        check_headers(request, expected_headers)
         assert QueryParams(**expected_query_params) == request.url.params
         return httpx.Response(json=operation_running.unstructure(), status_code=201)
 
@@ -39,12 +48,17 @@ def assert_sync_via_async_object_creation_is_successful(
     respx_mock.get(url__regex=rf'{toloka_url}/operations/.*(?<!log)$').mock(
         httpx.Response(json=success_operation.unstructure(), status_code=201)
     )
-    if operation_log is not None:
-        respx_mock.get(re.compile(rf'{toloka_url}/operations/.*/log')).mock(
-            httpx.Response(json=operation_log, status_code=201)
-        )
+
+    if isinstance(operation_log, list):
+        log_response = httpx.Response(json=operation_log, status_code=201)
+    else:
+        log_response = httpx.Response(text=operation_log, status_code=201)
+    respx_mock.get(re.compile(rf'{toloka_url}/operations/.*/log')).mock(log_response)
+
     if isinstance(returned_object, dict):
         respx_mock.get(f'{toloka_url}/{get_object_path}').mock(httpx.Response(json=returned_object, status_code=200))
+    elif isinstance(returned_object, str):
+        respx_mock.get(f'{toloka_url}/{get_object_path}').mock(httpx.Response(text=returned_object, status_code=200))
     else:
         respx_mock.get(f'{toloka_url}/{get_object_path}').mock(side_effect=returned_object)
 
@@ -132,7 +146,7 @@ def assert_retried_sync_via_async_object_creation_returns_already_existing_objec
     toloka_url: str,
     create_method: Callable,
     create_method_kwargs: dict,
-    returned_object: Union[Callable, dict],
+    returned_object: Union[str, dict, Callable],
     expected_response_object: BaseTolokaObject,
     success_operation_map: dict,
     operation_log: Optional[list],
@@ -161,21 +175,18 @@ def assert_retried_failed_operation_fails_with_failed_operation_exception(
     toloka_url: str,
     create_method: Callable,
     create_method_kwargs: dict,
-    returned_object: Union[Callable, dict],
     failed_operation_map: dict,
-    operation_log: Optional[list],
     create_object_path: str,
-    get_object_path: str,
 ):
     requests_counter = _mock_faulty_object_creation_environment(
         create_object_path=create_object_path,
-        get_object_path=get_object_path,
-        returned_object=returned_object,
-        operation_log=operation_log,
         respx_mock=respx_mock,
         operation_map=failed_operation_map,
         toloka_url=toloka_url,
+        get_object_path='',
         create_method_kwargs=create_method_kwargs,
+        operation_log=None,
+        returned_object=lambda: ...,
     )
 
     with pytest.raises(FailedOperation):
@@ -192,7 +203,7 @@ class Counter:
 def _mock_faulty_object_creation_environment(
     create_object_path,
     get_object_path,
-    returned_object: Union[Callable, dict],
+    returned_object: Union[str, Callable, dict],
     operation_log,
     respx_mock,
     operation_map,
@@ -211,7 +222,7 @@ def _mock_faulty_object_creation_environment(
             first_request_op_id = request.url.params['operation_id']
             expected_operation_id = create_method_kwargs.get('operation_id')
             if expected_operation_id:
-                assert first_request_op_id == expected_operation_id
+                assert first_request_op_id == str(expected_operation_id)
             return httpx.Response(status_code=500)
 
         assert request.url.params['operation_id'] == str(first_request_op_id)
@@ -239,6 +250,10 @@ def _mock_faulty_object_creation_environment(
     if isinstance(returned_object, dict):
         respx_mock.get(f'{toloka_url}/{get_object_path}').mock(
             httpx.Response(json=returned_object, status_code=201)
+        )
+    elif isinstance(returned_object, str):
+        respx_mock.get(f'{toloka_url}/{get_object_path}').mock(
+            httpx.Response(text=returned_object, status_code=201)
         )
     else:
         respx_mock.get(f'{toloka_url}/{get_object_path}').mock(side_effect=returned_object)
