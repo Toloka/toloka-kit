@@ -2269,7 +2269,7 @@ class TolokaClient:
     # Statistics section
 
     @add_headers('client')
-    def get_analytics(self, stats: List[AnalyticsRequest]) -> operations.Operation:
+    def get_analytics(self, stats: List[AnalyticsRequest]) -> operations.AnalyticsOperation:
         """Sends analytics requests, for example, to estimate the percentage of completed tasks in the pool.
 
         Only pool analytics queries are available.
@@ -2281,7 +2281,7 @@ class TolokaClient:
             stats: Analytics queries list.
 
         Returns:
-            operations.Operation: An operation that you can wait for to get the required statistics.
+            operations.AnalyticsOperation: An operation that you can wait for to get the required statistics.
 
         Example:
             How to get task completion percentage for one pool.
@@ -2293,7 +2293,7 @@ class TolokaClient:
             ...
         """
         response = self._request('post', '/staging/analytics-2', json=unstructure(stats))
-        return structure(response, operations.Operation)
+        return structure(response, operations.AnalyticsOperation)
 
     # Task section
 
