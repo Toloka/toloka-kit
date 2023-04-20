@@ -70,7 +70,7 @@ class PoolAnalyticsRequest(
 class RealTasksCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.REAL_TASKS_COUNT):
     """Counts the number of general tasks in a pool.
 
-    `RealTasksCountPoolAnalytics` doesn't take into account control and training tasks, and task overlap.
+    Note, that `RealTasksCountPoolAnalytics` doesn't take into account control and training tasks, and task overlap.
     """
     pass
 
@@ -148,7 +148,7 @@ class UniqueSubmittersCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAn
 class ActiveWorkersByFilterCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.ACTIVE_WORKERS_BY_FILTER_COUNT):
     """Counts the number of active Tolokers that match pool filters.
 
-    The request counts Tolokers who viewed and completed tasks recently.
+    Active Tolokers are Tolokers who viewed and completed tasks recently.
 
     Attributes:
         interval_hours: The interval in hours to take into account.
