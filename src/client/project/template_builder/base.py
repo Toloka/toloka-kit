@@ -190,15 +190,27 @@ class UnknownComponent(BaseTemplate):
 
 
 class RefComponent(BaseTemplate):
-    """If you need to insert the same or similar code snippets many times, reuse them.
+    """A reference to a component.
 
-    This helps make your configuration shorter and makes it easier for you to edit duplicate chunks of code.
+    Pass to the `RefComponent` constructor a path in the Template Builder component hierarchy.
 
-    You can insert a code snippet from another part of the configuration anywhere inside the configuration. To do this,
-    use the structure RefComponent("path.to.element").
+    For more information, see [Reuse code](https://toloka.ai/docs/template-builder/best-practices/reuse).
 
-    This is useful when you need to insert the same snippet at multiple places in your code. For example, if you need
-    to run the same action using multiple buttons, put this action in a variable and call it using RefComponent.
+    Example:
+        >>> from toloka.client.project.template_builder import *
+        >>> from toloka.client.project.template_builder.base import RefComponent
+        >>>
+        >>> tb_config = TemplateBuilder(
+        >>>     vars = {
+        >>>         '0' : InputData('question'),
+        >>>         '1' : OutputData('answer')
+        >>>     },
+        >>>     view = TextFieldV1(
+        >>>         data = RefComponent('vars.1'),
+        >>>         label = RefComponent('vars.0')
+        >>>     )
+        >>> )
+        ...
     """
 
     ref: str = attribute(origin='$ref')  # example: "vars.path.to.element"

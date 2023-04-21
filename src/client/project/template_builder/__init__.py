@@ -12,6 +12,7 @@ __all__ = [
 
     'TemplateBuilder',
     'get_input_and_output',
+    'RefComponent',
     'BulkActionV1',
     'NotifyActionV1',
     'OpenCloseActionV1',
@@ -214,7 +215,7 @@ from .view import (
     TextViewV1,
     VideoViewV1,
 )
-from .base import ComponentType, BaseComponent, base_component_or
+from .base import ComponentType, BaseComponent, RefComponent, base_component_or
 from ..field_spec import FieldSpec, JsonSpec
 from ...primitives.base import BaseTolokaObject
 from ....util import traverse_dicts_recursively

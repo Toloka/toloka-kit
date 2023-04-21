@@ -2574,9 +2574,10 @@ class AsyncTolokaClient:
         self,
         task: toloka.client.task.Task,
         *,
+        operation_id: typing.Optional[uuid.UUID] = ...,
+        async_mode: typing.Optional[bool] = True,
         allow_defaults: typing.Optional[bool] = None,
-        open_pool: typing.Optional[bool] = None,
-        operation_id: typing.Optional[uuid.UUID] = ...
+        open_pool: typing.Optional[bool] = None
     ) -> toloka.client.task.Task:
         """Creates a new task in Toloka.
 
@@ -2666,11 +2667,11 @@ class AsyncTolokaClient:
         self,
         tasks: typing.List[toloka.client.task.Task],
         *,
+        operation_id: typing.Optional[uuid.UUID] = ...,
+        async_mode: typing.Optional[bool] = True,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
-        operation_id: typing.Optional[uuid.UUID] = ...,
-        skip_invalid_items: typing.Optional[bool] = None,
-        async_mode: typing.Optional[bool] = True
+        skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.batch_create_results.TaskBatchCreateResult:
         """Creates several tasks in Toloka.
 
@@ -2760,11 +2761,11 @@ class AsyncTolokaClient:
         self,
         tasks: typing.List[toloka.client.task.Task],
         *,
+        operation_id: typing.Optional[uuid.UUID] = ...,
+        async_mode: typing.Optional[bool] = True,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
-        operation_id: typing.Optional[uuid.UUID] = ...,
-        skip_invalid_items: typing.Optional[bool] = None,
-        async_mode: typing.Optional[bool] = True
+        skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.operations.TasksCreateOperation:
         """Creates tasks in Toloka asynchronously.
 
@@ -3081,10 +3082,9 @@ class AsyncTolokaClient:
         task_suite: toloka.client.task_suite.TaskSuite,
         *,
         operation_id: typing.Optional[uuid.UUID] = ...,
-        skip_invalid_items: typing.Optional[bool] = None,
+        async_mode: typing.Optional[bool] = True,
         allow_defaults: typing.Optional[bool] = None,
-        open_pool: typing.Optional[bool] = None,
-        async_mode: typing.Optional[bool] = True
+        open_pool: typing.Optional[bool] = None
     ) -> toloka.client.task_suite.TaskSuite:
         """Creates a task suite in Toloka.
 
@@ -3117,7 +3117,7 @@ class AsyncTolokaClient:
     async def create_task_suites(
         self,
         task_suites: typing.List[toloka.client.task_suite.TaskSuite],
-        parameters: typing.Optional[toloka.client.task_suite.TaskSuiteCreateRequestParameters] = None
+        parameters: typing.Optional[toloka.client.task_suite.TaskSuitesCreateRequestParameters] = None
     ) -> toloka.client.batch_create_results.TaskSuiteBatchCreateResult:
         """Creates several task suites in Toloka.
 
@@ -3167,10 +3167,10 @@ class AsyncTolokaClient:
         task_suites: typing.List[toloka.client.task_suite.TaskSuite],
         *,
         operation_id: typing.Optional[uuid.UUID] = ...,
-        skip_invalid_items: typing.Optional[bool] = None,
+        async_mode: typing.Optional[bool] = True,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
-        async_mode: typing.Optional[bool] = True
+        skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.batch_create_results.TaskSuiteBatchCreateResult:
         """Creates several task suites in Toloka.
 
@@ -3218,7 +3218,7 @@ class AsyncTolokaClient:
     async def create_task_suites_async(
         self,
         task_suites: typing.List[toloka.client.task_suite.TaskSuite],
-        parameters: typing.Optional[toloka.client.task_suite.TaskSuiteCreateRequestParameters] = None
+        parameters: typing.Optional[toloka.client.task_suite.TaskSuitesCreateRequestParameters] = None
     ) -> toloka.client.operations.TaskSuiteCreateBatchOperation:
         """Creates several task suites in Toloka asynchronously.
 
@@ -3258,10 +3258,10 @@ class AsyncTolokaClient:
         task_suites: typing.List[toloka.client.task_suite.TaskSuite],
         *,
         operation_id: typing.Optional[uuid.UUID] = ...,
-        skip_invalid_items: typing.Optional[bool] = None,
+        async_mode: typing.Optional[bool] = True,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
-        async_mode: typing.Optional[bool] = True
+        skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.operations.TaskSuiteCreateBatchOperation:
         """Creates several task suites in Toloka asynchronously.
 
@@ -3638,18 +3638,18 @@ class AsyncTolokaClient:
 
         `get_operations` returns a generator. You can iterate over all found operations using the generator. Several requests to the Toloka server are possible while iterating.
 
-         If you need to sort operations use the [find_operations](toloka.client.TolokaClient.find_operations.md) method.
+        If you need to sort operations use the [find_operations](toloka.client.TolokaClient.find_operations.md) method.
 
-         Args:
-             request: Search criteria.
-             batch_size: Returned operations limit for each request. The default batch_size is 50. The maximum allowed batch_size is 500.
+        Args:
+            request: Search criteria.
+            batch_size: Returned operations limit for each request. The default batch_size is 50. The maximum allowed batch_size is 500.
 
-         Yields:
-             Operation: The next matching operations.
+        Yields:
+            Operation: The next matching operations.
 
-         Example:
-             >>> bonuses = list(toloka_client.get_operations(submitted_lt='2021-06-01T00:00:00'))
-             ...
+        Example:
+            >>> bonuses = list(toloka_client.get_operations(submitted_lt='2021-06-01T00:00:00'))
+            ...
         """
         ...
 
@@ -3676,18 +3676,18 @@ class AsyncTolokaClient:
 
         `get_operations` returns a generator. You can iterate over all found operations using the generator. Several requests to the Toloka server are possible while iterating.
 
-         If you need to sort operations use the [find_operations](toloka.client.TolokaClient.find_operations.md) method.
+        If you need to sort operations use the [find_operations](toloka.client.TolokaClient.find_operations.md) method.
 
-         Args:
-             request: Search criteria.
-             batch_size: Returned operations limit for each request. The default batch_size is 50. The maximum allowed batch_size is 500.
+        Args:
+            request: Search criteria.
+            batch_size: Returned operations limit for each request. The default batch_size is 50. The maximum allowed batch_size is 500.
 
-         Yields:
-             Operation: The next matching operations.
+        Yields:
+            Operation: The next matching operations.
 
-         Example:
-             >>> bonuses = list(toloka_client.get_operations(submitted_lt='2021-06-01T00:00:00'))
-             ...
+        Example:
+            >>> bonuses = list(toloka_client.get_operations(submitted_lt='2021-06-01T00:00:00'))
+            ...
         """
         ...
 
@@ -3756,7 +3756,7 @@ class AsyncTolokaClient:
         user_bonus: toloka.client.user_bonus.UserBonus,
         *,
         operation_id: typing.Optional[uuid.UUID] = ...,
-        skip_invalid_items: typing.Optional[bool] = None
+        async_mode: typing.Optional[bool] = True
     ) -> toloka.client.user_bonus.UserBonus:
         """Issues payments directly to a Toloker.
 
@@ -3796,7 +3796,7 @@ class AsyncTolokaClient:
     async def create_user_bonuses(
         self,
         user_bonuses: typing.List[toloka.client.user_bonus.UserBonus],
-        parameters: typing.Optional[toloka.client.user_bonus.UserBonusCreateRequestParameters] = None
+        parameters: typing.Optional[toloka.client.user_bonus.UserBonusesCreateRequestParameters] = None
     ) -> toloka.client.batch_create_results.UserBonusBatchCreateResult:
         """Creates rewards for Tolokers.
 
@@ -3852,6 +3852,7 @@ class AsyncTolokaClient:
         user_bonuses: typing.List[toloka.client.user_bonus.UserBonus],
         *,
         operation_id: typing.Optional[uuid.UUID] = ...,
+        async_mode: typing.Optional[bool] = True,
         skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.batch_create_results.UserBonusBatchCreateResult:
         """Creates rewards for Tolokers.
@@ -3906,7 +3907,7 @@ class AsyncTolokaClient:
     async def create_user_bonuses_async(
         self,
         user_bonuses: typing.List[toloka.client.user_bonus.UserBonus],
-        parameters: typing.Optional[toloka.client.user_bonus.UserBonusCreateRequestParameters] = None
+        parameters: typing.Optional[toloka.client.user_bonus.UserBonusesCreateRequestParameters] = None
     ) -> toloka.client.operations.UserBonusCreateBatchOperation:
         """Issues payments directly to Tolokers, asynchronously creates many `UserBonus` instances.
 
@@ -3961,6 +3962,7 @@ class AsyncTolokaClient:
         user_bonuses: typing.List[toloka.client.user_bonus.UserBonus],
         *,
         operation_id: typing.Optional[uuid.UUID] = ...,
+        async_mode: typing.Optional[bool] = True,
         skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.operations.UserBonusCreateBatchOperation:
         """Issues payments directly to Tolokers, asynchronously creates many `UserBonus` instances.
@@ -4099,18 +4101,18 @@ class AsyncTolokaClient:
 
         `get_user_bonuses` returns a generator. You can iterate over all found Tolokers' rewards using the generator. Several requests to the Toloka server are possible while iterating.
 
-         If you need to sort rewards use the [find_user_bonuses](toloka.client.TolokaClient.find_user_bonuses.md) method.
+        If you need to sort rewards use the [find_user_bonuses](toloka.client.TolokaClient.find_user_bonuses.md) method.
 
-         Args:
-             request: Search criteria.
-             batch_size: Returned Tolokers' rewards limit for each request. The maximum allowed batch_size is 300.
+        Args:
+            request: Search criteria.
+            batch_size: Returned Tolokers' rewards limit for each request. The maximum allowed batch_size is 300.
 
-         Yields:
-             UserBonus: The next matching Toloker's reward.
+        Yields:
+            UserBonus: The next matching Toloker's reward.
 
-         Example:
-             >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00'))
-             ...
+        Example:
+            >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00'))
+            ...
         """
         ...
 
@@ -4134,18 +4136,18 @@ class AsyncTolokaClient:
 
         `get_user_bonuses` returns a generator. You can iterate over all found Tolokers' rewards using the generator. Several requests to the Toloka server are possible while iterating.
 
-         If you need to sort rewards use the [find_user_bonuses](toloka.client.TolokaClient.find_user_bonuses.md) method.
+        If you need to sort rewards use the [find_user_bonuses](toloka.client.TolokaClient.find_user_bonuses.md) method.
 
-         Args:
-             request: Search criteria.
-             batch_size: Returned Tolokers' rewards limit for each request. The maximum allowed batch_size is 300.
+        Args:
+            request: Search criteria.
+            batch_size: Returned Tolokers' rewards limit for each request. The maximum allowed batch_size is 300.
 
-         Yields:
-             UserBonus: The next matching Toloker's reward.
+        Yields:
+            UserBonus: The next matching Toloker's reward.
 
-         Example:
-             >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00'))
-             ...
+        Example:
+            >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00'))
+            ...
         """
         ...
 
