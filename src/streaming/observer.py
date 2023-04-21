@@ -30,7 +30,7 @@ class BaseObserver:
     _deleted: bool = attr.ib(default=False, init=False)
 
     def get_unique_key(self) -> Tuple:
-        """This method should return identifier for this observer unique in the current pipeline context.
+        """This method should return identifier for this observer that is unique in the current pipeline context.
         """
 
         return (self.__class__.__name__, self.name or '')
