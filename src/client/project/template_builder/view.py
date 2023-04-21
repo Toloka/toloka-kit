@@ -51,12 +51,12 @@ class BaseViewV1Metaclass(VersionedBaseComponentMetaclass):
 
 
 class BaseViewV1(BaseComponent, metaclass=BaseViewV1Metaclass):
-    """Elements displayed in the interface, such as text, list, audio player, or image.
+    """A base class for components that present data, such as a text, list, audio player, or image.
 
     Attributes:
-        label: Label above the component.
-        hint: Hint text.
-        validation: Validation based on condition.
+        label: A label above the component.
+        hint: A hint text.
+        validation: Validation rules.
     """
 
     pass
@@ -64,12 +64,13 @@ class BaseViewV1(BaseComponent, metaclass=BaseViewV1Metaclass):
 
 @inherit_docstrings
 class ActionButtonViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ACTION_BUTTON):
-    """Button that calls an action.
+    """A button that calls an action.
 
-    When clicking the button, an action specified in the action property is called.
+    For more information, see [view.action-button](https://toloka.ai/docs/template-builder/reference/view.action-button).
+
     Attributes:
-        action: Action called when clicking the button.
-        label: Button text.
+        action: The action.
+        label: A label on the button.
     """
 
     action: BaseComponent
@@ -77,20 +78,21 @@ class ActionButtonViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ACTION_BUTTON
 
 @inherit_docstrings
 class AlertViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ALERT):
-    """The component creates a color block to highlight important information.
+    """A view used to highlight important information.
 
-    You can use both plain text and other visual components inside it.
+    For more information, see [view.alert](https://toloka.ai/docs/template-builder/reference/view.alert).
+
     Attributes:
-        content: Content of the block with important information.
-        theme: Determines the block color.
+        content: The content.
+        theme: The theme that sets the background color. The default color is blue.
     """
 
     @unique
     class Theme(ExtendableStrEnum):
-        """An enumeration
+        """A view background color.
 
         Attributes:
-            INFO: (default) Blue.
+            INFO: Blue.
             SUCCESS: Green.
             WARNING: Yellow.
             DANGER: Red.
@@ -107,12 +109,15 @@ class AlertViewV1(BaseViewV1, spec_value=ComponentType.VIEW_ALERT):
 
 @inherit_docstrings
 class AudioViewV1(BaseViewV1, spec_value=ComponentType.VIEW_AUDIO):
-    """The component plays audio.
+    """An audio player.
 
-    Format support depends on the Toloker's browser, OS, and device. We recommend using MP3.
+    For more information, see [view.audio](https://toloka.ai/docs/template-builder/reference/view.audio).
+
     Attributes:
-        url: Audio link.
-        loop: Automatically replay audio.
+        url: A link to the audio.
+        loop:
+            * `True` — Play audio in a loop.
+            * `False` — Play once.
     """
 
     url: base_component_or(Any)
@@ -121,18 +126,18 @@ class AudioViewV1(BaseViewV1, spec_value=ComponentType.VIEW_AUDIO):
 
 @inherit_docstrings
 class CollapseViewV1(BaseViewV1, spec_value=ComponentType.VIEW_COLLAPSE):
-    """Expandable block.
+    """An expandable block.
 
-    Lets you add hidden content that doesn't need to be shown initially or that takes up a large space.
+    For more information, see [view.collapse](https://toloka.ai/docs/template-builder/reference/view.collapse).
 
-    The block heading is always visible.
-
-    If you set the defaultOpened property to true, the block is expanded immediately, but it can be collapsed.
     Attributes:
-        label: Block heading.
-        content: Content hidden in the block.
-        default_opened: If true, the block is immediately displayed in expanded form. By default, false (the block is
-            collapsed).
+        label: The block heading.
+        content: The block content.
+        default_opened: Initial state of the block:
+            `True` — Expanded
+            `False` — Collapsed
+
+            Default value: `False`.
     """
 
     label: base_component_or(Any)
@@ -142,17 +147,18 @@ class CollapseViewV1(BaseViewV1, spec_value=ComponentType.VIEW_COLLAPSE):
 
 @inherit_docstrings
 class DeviceFrameViewV1(BaseViewV1, spec_value=ComponentType.VIEW_DEVICE_FRAME):
-    """Wraps the content of a component in a frame that is similar to a mobile phone.
+    """A view with a frame that is similar to a mobile phone frame.
 
-    You can place other components inside the frame.
+    For more information, see [view.device-frame](https://toloka.ai/docs/template-builder/reference/view.device-frame).
+
     Attributes:
-        content: Content inside the frame.
-        full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
-            of 400 pixels.
-        max_width: Maximum width of the element in pixels, must be greater than min_width.
-        min_width: Minimum width of the element in pixels. Takes priority over max_width.
-        ratio: An array of two numbers that sets the relative dimensions of the sides: width (first number) to
-            height (second number). Not valid if full_height=true.
+        content: The content of the frame.
+        full_height: If `True`, the component takes up all the vertical free space.
+            Note, that the minimum height required by the component is 400 pixels.
+        max_width: The maximum width of the component in pixels.
+        min_width: The minimum width of the component in pixels. It takes priority over the `max_width`.
+        ratio: A list with the aspect ratio of the component. Specify the relative width first and then the relative height.
+            This setting is not used if `full_height=True`.
     """
 
     content: BaseComponent
@@ -164,11 +170,12 @@ class DeviceFrameViewV1(BaseViewV1, spec_value=ComponentType.VIEW_DEVICE_FRAME):
 
 @inherit_docstrings
 class DividerViewV1(BaseViewV1, spec_value=ComponentType.VIEW_DIVIDER):
-    """Horizontal delimiter.
+    """A horizontal delimiter.
 
-    You can place extra elements in the center of the delimiter, like a popup hint and label.
+    For more information, see [view.divider](https://toloka.ai/docs/template-builder/reference/view.divider).
+
     Attributes:
-        label: A label in the center of the delimiter. Line breaks are not supported.
+        label: A label in the center of the delimiter. Note, that line breaks are not supported.
     """
 
     pass
@@ -176,13 +183,14 @@ class DividerViewV1(BaseViewV1, spec_value=ComponentType.VIEW_DIVIDER):
 
 @inherit_docstrings
 class GroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_GROUP):
-    """Groups components visually into framed blocks.
+    """A view with a frame.
+
+    For more information, see [view.group](https://toloka.ai/docs/template-builder/reference/view.group).
 
     Attributes:
-        content: Content of a group block.
-        label: Group heading.
-        hint: Explanation of the group heading. To insert a new line, use
-            .
+        content: A content.
+        label: A header.
+        hint: A hint. To insert a line break in the hint, use `\n`.
     """
 
     content: BaseComponent
@@ -190,16 +198,18 @@ class GroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_GROUP):
 
 @inherit_docstrings
 class IframeViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IFRAME):
-    """Displays the web page at the URL in an iframe window.
+    """A frame displaying a web page.
+
+    For more information, see [view.iframe](https://toloka.ai/docs/template-builder/reference/view.iframe).
 
     Attributes:
-        url: URL of the web page.
-        full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
-            of 400 pixels.
-        max_width: Maximum width of the element in pixels, must be greater than min_width.
-        min_width: Minimum width of the element in pixels. Takes priority over max_width.
-        ratio: An array of two numbers that sets the relative dimensions of the sides: width (first number) to
-            height (second number). Not valid if full_height=true.
+        url: The URL of the web page.
+        full_height: If `True`, the component takes up all the vertical free space.
+            Note, that the minimum height required by the component is 400 pixels.
+        max_width: The maximum width of the component in pixels.
+        min_width: The minimum width of the component in pixels. It takes priority over the `max_width`.
+        ratio: A list with the aspect ratio of the component. Specify the relative width first and then the relative height.
+            This setting is not used if `full_height=True`.
     """
 
     url: base_component_or(str)
@@ -211,26 +221,35 @@ class IframeViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IFRAME):
 
 @inherit_docstrings
 class ImageViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IMAGE):
-    """Displays an image.
+    """A component for displaying an image.
+
+    For more information, see [view.image](https://toloka.ai/docs/template-builder/reference/view.image).
 
     Attributes:
-        url: Image link.
-        full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
-            of 400 pixels.
-        max_width: Maximum width of the element in pixels, must be greater than min_width.
-        min_width: Minimum width of the element in pixels. Takes priority over max_width.
-        no_border: Controls the display of a frame around an image. By default, true (the frame is hidden). Set false
-            to display the frame.
-        no_lazy_load: Disables lazy loading. If true, images start loading immediately, even if they aren't in the
-            viewport. Useful for icons. By default, false (lazy loading is enabled). In this mode, images start loading
-            only when a Toloker scrolls to them.
-        popup: Specifies whether opening a full-size image with a click is allowed. By default, it is true (allowed).
-        ratio: An array of two numbers that sets the relative dimensions of the sides: width (first number) to
-            height (second number). Not valid if full_height=true.
-        scrollable: When set to true, an image has scroll bars if it doesn't fit in the parent element.
-            If false, the image fits in the parent element and, when clicked, opens in its original size in the module
-            window.
-            Images in SVG format with no size specified always fit in their parent elements.
+        url: The URL of the image.
+        full_height: If `True`, the component takes up all the vertical free space.
+            Note, that the minimum height required by the component is 400 pixels.
+        max_width: The maximum width of the component in pixels.
+        min_width: The minimum width of the component in pixels. It takes priority over the `max_width`.
+        no_border: Displaying borders around the image.
+            * `True` — The borders are hidden.
+            * `False` — The borders are visible.
+
+            Default value: `True`.
+        no_lazy_load: Loading mode:
+            * `False` — The component starts loading the image when the component becomes visible to a Toloker.
+            * `True` — The image is loaded immediately. This mode is useful for icons.
+
+            Default value: `False` — lazy loading is enabled.
+        popup: If `True`, a Toloker can open a full sized image in a popup. It is a default behavior.
+        ratio: A list with the aspect ratio of the component. Specify the relative width first and then the relative height.
+            This setting is not used if `full_height=True`.
+        rotatable: If `True`, an image can be rotated.
+        scrollable: The way of displaying an image which is larger than the component:
+            * `True` — Scroll bars are shown.
+            * `False` — The image is scaled to fit the component.
+
+            Note, that images in SVG format with no size specified always fit the component.
     """
 
     url: base_component_or(Any)
@@ -247,25 +266,29 @@ class ImageViewV1(BaseViewV1, spec_value=ComponentType.VIEW_IMAGE):
 
 @inherit_docstrings
 class LabeledListViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LABELED_LIST):
-    """Displaying components as a list with labels placed on the left.
+    """A list of components with labels placed on the left.
 
-    If you don't need labels, use view.list.
+    For more information, see [view.labeled-list](https://toloka.ai/docs/template-builder/reference/view.labeled-list).
+
     Attributes:
         items: List items.
-        min_width: The minimum width of list content. If the component width is less than the specified value, it
-            switches to compact mode.
+        min_width: The minimum width of the component.
+            If the width is less than the specified value, the list is displayed in compact mode.
+            Labels are placed above the items in this mode.
     """
 
     class Item(BaseTemplate):
-        """Item.
+        """A labeled list item.
 
         Attributes:
-            content: List item content.
-            label: A label displayed next to a list item.
-            center_label: If true, a label is center-aligned relative to the content of a list item (content). Use it
-                if the list consists of large items, such as images or multi-line text.
-                By default, false (the label is aligned to the top of the content block).
-            hint: A pop-up hint displayed next to a label.
+            content: The content of the item.
+            label: An item label.
+            center_label: Label vertical alignment.
+                * `True` — The label is centered.
+                * `False` — The label is aligned to the top of the item content.
+
+                Default value: `False`.
+            hint: A hint.
         """
 
         content: BaseComponent
@@ -279,18 +302,13 @@ class LabeledListViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LABELED_LIST):
 
 @inherit_docstrings
 class LinkViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK):
-    """Universal way to add a link.
+    """A component showing a link.
 
-    This link changes color when clicked.
+    For more information, see [view.link](https://toloka.ai/docs/template-builder/reference/view.link).
 
-    We recommend using this component if you need to insert a link without additional formatting.
-
-    If you want to insert a button that will open the link, use the view.action-button and action.open-link components.
-
-    To insert a link with a search query, use helper.search-query.
     Attributes:
-        url: Link URL.
-        content: Link text displayed to the Toloker.
+        url: A URL.
+        content: A link text.
     """
 
     url: base_component_or(Any)
@@ -299,17 +317,14 @@ class LinkViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK):
 
 @inherit_docstrings
 class LinkGroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK_GROUP):
-    """Puts links into groups
+    """A group of links.
 
-    The most important link in a group can be highlighted with a border: set the theme property to primary for this link.
-    This only groups links, unlike GroupViewV1.
+    For more information, see [view.link-group](https://toloka.ai/docs/template-builder/reference/view.link-group).
 
     Attributes:
-        links: Array of links that make up a group.
+        links: A list of links.
 
     Example:
-        How to add several links.
-
         >>> links = tb.view.LinkGroupViewV1(
         >>>     [
         >>>         tb.view.LinkGroupViewV1.Link(
@@ -326,12 +341,14 @@ class LinkGroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK_GROUP):
     """
 
     class Link(BaseTemplate):
-        """Link parameters
+        """A link for the `LinkGroupViewV1`.
 
         Attributes:
-            url: Link address
-            content: Link text that's displayed to a Toloker. Unvisited links are blue and underlined, and visited links are purple.
-            theme: Defines the appearance of the link. If you specify "theme": "primary", it's a button, otherwise it's a text link.
+            url: A URL.
+            content: A link text.
+            theme: The appearance of the link.
+                If `theme` is omitted, the link is displayed as an underlined text.
+                If `theme` is set to `primary`, a button is displayed.
         """
 
         url: base_component_or(str)
@@ -343,13 +360,20 @@ class LinkGroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK_GROUP):
 
 @inherit_docstrings
 class ListViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LIST):
-    """Block for displaying data in a list.
+    """A list of components.
+
+    For more information, see [view.list](https://toloka.ai/docs/template-builder/reference/view.list).
 
     Attributes:
-        items:  Array of list items.
-        direction: Determines the direction of the list.
-        size: Specifies the size of the margins between elements. Acceptable values in ascending order: s, m (default
-            value).
+        items: List items.
+        direction: The direction of the list:
+            * `vertical`
+            * `horizontal`
+
+            Default value: `vertical`.
+        size: A spacing between list items:
+            `m` — The default spacing.
+            `s` — Narrower spacing.
     """
 
     items: base_component_or(List[BaseComponent], 'ListBaseComponent')  # noqa: F821
@@ -359,22 +383,18 @@ class ListViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LIST):
 
 @inherit_docstrings
 class MarkdownViewV1(BaseViewV1, spec_value=ComponentType.VIEW_MARKDOWN):
-    """Block for displaying text in Markdown.
+    """A component for formatting Markdown.
 
-    The contents of the block are written to the content property in a single line. To insert line breaks, use \\n
-    Straight quotation marks (") must be escaped like this: \\".
+    The Markdown content must not contain line breaks. To insert them, place `\n` in the text.
+    Straight quotation marks must be escaped: `\"`.
 
-    Note that the view.markdown component is resource-intensive and might overload weak devices.
-    Do not use this component to display plain text. If you need to display text without formatting, use the view.text
-    component. If you need to insert a link, use view.link, and for an image use view.image.
-    Links with Markdown are appended with target="_blank" (the link opens in a new tab), as well as
-    rel="noopener noreferrer"
+    For more information, see [view.markdown](https://toloka.ai/docs/template-builder/reference/view.markdown).
 
     Attributes:
-        content: Text in Markdown.
+        content: A text with Markdown.
 
     Example:
-        How to add a title and description on the task interface.
+        Adding a title and description using Markdown.
 
         >>> header = tb.view.MarkdownViewV1('# Some Header:\n---\nSome detailed description')
         ...
@@ -385,15 +405,14 @@ class MarkdownViewV1(BaseViewV1, spec_value=ComponentType.VIEW_MARKDOWN):
 
 @inherit_docstrings
 class TextViewV1(BaseViewV1, spec_value=ComponentType.VIEW_TEXT):
-    """Block for displaying text.
+    """A view for displaying a text.
 
-    If you need formatted text, use view.markdown.
+    For more information, see [view.text](https://toloka.ai/docs/template-builder/reference/view.text).
+
     Attributes:
-        content: The text displayed in the block. To insert a new line, use \n
+        content: The text. To insert a new line, use `\n`.
 
     Example:
-        How to show labeled field from the task inputs.
-
         >>> text_view = tb.view.TextViewV1(tb.data.InputData('input_field_name'), label='My label:')
         ...
     """
@@ -403,21 +422,17 @@ class TextViewV1(BaseViewV1, spec_value=ComponentType.VIEW_TEXT):
 
 @inherit_docstrings
 class VideoViewV1(BaseViewV1, spec_value=ComponentType.VIEW_VIDEO):
-    """Player for video playback.
+    """A video player.
 
-    The player is a rectangular block with a frame and buttons to control the video. You can set the block size using
-    the ratio, fullHeight, minWidth, and maxWidth properties.
+    For more information, see [view.video](https://toloka.ai/docs/template-builder/reference/view.video).
 
-    The video resolution does not affect the size of the block — the video will fit into the block and will not be
-    cropped.
     Attributes:
-        url: Link to the video file.
-        full_height: If true, the element takes up all the vertical free space. The element is set to a minimum height
-            of 400 pixels.
-        max_width: Maximum width of the element in pixels, must be greater than min_width.
-        min_width: Minimum width of the element in pixels. Takes priority over max_width.
-        ratio: The aspect ratio of the video block. An array of two numbers: the first sets the width of the block and
-            the second sets the height.
+        url: The video URL.
+        full_height: If `True`, the component takes up all the vertical free space.
+            Note, that the minimum height required by the component is 400 pixels.
+        max_width: The maximum width of the component in pixels.
+        min_width: The minimum width of the component in pixels. It takes priority over the `max_width`.
+        ratio: A list with the aspect ratio of the component. Specify the relative width first and then the relative height.
     """
 
     url: base_component_or(Any)
@@ -429,44 +444,40 @@ class VideoViewV1(BaseViewV1, spec_value=ComponentType.VIEW_VIDEO):
 
 @inherit_docstrings
 class MapViewV1(BaseViewV1, spec_value=ComponentType.VIEW_MAP):
-    """Adds a map to your task.
+    """A component for displaying a map.
 
-    Use this component to set the targets for the tasks with the markers, select the areas with polygons.
-    Specify the position and colors for the elements on the map.
+    For more information, see [view.map](https://toloka.ai/docs/template-builder/reference/view.map).
 
-    You can set the following map properties: scale, position of the map center, label, and hint for Tolokers.
     Attributes:
-        center: Determines the position of the map center. Specify the coordinates in the string format, for example,
-            "29.748713,-95.404287", or use the data.location component to set the center of the map to the
-            Toloker's current position.
-        markers: Specifies the markers present on the map.
-        polygons: Specifies the polygonal objects that you can use to select areas on the map.
-        zoom: The map initial scale. Use the values from 0 to 19. Bigger values give a more detailed map view.
+        center: The coordinates of the map center. You can use:
+            * A string. For example, `29.748713,-95.404287`
+            * The [LocationData](toloka.client.project.template_builder.data.LocationData.md) to set Toloker's current position.
+        markers: A list of map markers.
+        polygons: A list of areas highlighted on the map.
+        zoom: An initial map scale. Use values from 0 to 19. Higher values zoom in the map.
     """
 
     class Marker(BaseTemplate):
-        """Marker parameters.
+        """A map marker.
 
         Attributes:
-            position: Determines the marker position. Specify the coordinates in the string format, for example,
-                "29.748713,-95.404287", or use the data.location component to set the marker to the Toloker's current
-                position.
-            color: Determines the marker color. Use the hexadecimal values preceded by the # sign to specify the color.
-            label: The label for the marker that tells Tolokers what this marker is for and helps distinguish it
-                from other markers.
+            position: The coordinates of the marker. You can use:
+                * A string. For example, `29.748713,-95.404287`.
+                * The [LocationData](toloka.client.project.template_builder.data.LocationData.md) to set Toloker's current position.
+            color: The marker color. Use the hexadecimal values preceded by the `#`. For example, `#f00` makes the marker red.
+            label: A marker label.
         """
         position: base_component_or(str)
         color: base_component_or(str) = attribute(kw_only=True)
         label: base_component_or(str) = attribute(kw_only=True)
 
     class Polygon(BaseTemplate):
-        """Polygon parameters.
+        """A map polygon.
 
         Attributes:
-            points: The list of the polygonal selection area points.
-                Specify the coordinates in the string format, for example, "29.748713,-95.404287".
-            color: Determines the polygonal selection area color. Use the hexadecimal values preceded by the # sign to
-                specify the color.
+            points: A list of polygon coordinates.
+                Specify the coordinates in the string format, for example `29.748713,-95.404287`.
+            color: The color of the polygon. Use the hexadecimal values preceded by the `#`. For example, `#f00` makes the polygon red.
         """
         points: base_component_or(List[base_component_or(str)], 'ListBaseComponentOrStr')  # noqa: F821
         color: base_component_or(str) = attribute(kw_only=True)

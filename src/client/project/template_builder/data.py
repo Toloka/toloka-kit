@@ -28,13 +28,16 @@ class BaseDataMetaclass(BaseTemplateMetaclass):
 
 
 class BaseData(BaseComponent, metaclass=BaseDataMetaclass):
-    """Components used for working with data: input, output, or intermediate.
+    """A base class for data components.
+
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
 
      Attributes:
-        path: Path to the property containing data. Dots are used as separators: path.to.some.element. To specify the
-            path to the array element, specify its sequence number starting from zero, for example: items.0
-        default: The value to be used as the default data. This value will be shown in the interface, so it might hide
-            some placeholders, for example, in the field.text component.
+        path: A path to a data property in a component hierarchy.
+            Dots are used as separators: `path.to.some.element`.
+            For an array element, specify its sequence number after a dot: `items.0`.
+        default: A default data value.
+            Note, that it is shown in the interface, so it might hide placeholders, for example, in text fields.
     """
 
     pass
@@ -42,10 +45,9 @@ class BaseData(BaseComponent, metaclass=BaseDataMetaclass):
 
 @inherit_docstrings
 class InputData(BaseData, spec_value=ComponentType.DATA_INPUT):
-    """The input data.
+    """Input data.
 
-    For example, links to images that will be shown to Tolokers. In the Template Builder sandbox, you can
-    set an example of input data.
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
     """
 
     pass
@@ -53,9 +55,11 @@ class InputData(BaseData, spec_value=ComponentType.DATA_INPUT):
 
 @inherit_docstrings
 class InternalData(BaseData, spec_value=ComponentType.DATA_INTERNAL):
-    """The data available only from within the task.
+    """Internal task data.
 
-    This data is not saved to the results. Use this data to calculate or store intermediate values.
+    Use it to store intermediate values.
+
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
     """
 
     pass
@@ -63,18 +67,22 @@ class InternalData(BaseData, spec_value=ComponentType.DATA_INTERNAL):
 
 @inherit_docstrings
 class LocalData(BaseData, spec_value=ComponentType.DATA_LOCAL):
-    """The local data available only from inside the component.
+    """Component data.
 
-    This data is used in some auxiliary components, such as helper.transform.
+    It is used in some components, like [TransformHelperV1](toloka.client.project.template_builder.helpers.TransformHelperV1.md).
+
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
     """
 
     pass
 
 
 class LocationData(BaseComponent, spec_value=ComponentType.DATA_LOCATION):
-    """This component sends the device coordinates
+    """Device coordinates.
 
-    To find out if the transmitted coordinates match the ones that you specified, use the conditions.DistanceConditionV1.
+    Use this component with the [DistanceConditionV1](toloka.client.project.template_builder.conditions.DistanceConditionV1.md) condition.
+
+    For more information, see [data.location](https://toloka.ai/docs/template-builder/reference/data.location/).
     """
 
     pass
@@ -82,9 +90,9 @@ class LocationData(BaseComponent, spec_value=ComponentType.DATA_LOCATION):
 
 @inherit_docstrings
 class OutputData(BaseData, spec_value=ComponentType.DATA_OUTPUT):
-    """The output data.
+    """Output data.
 
-    This is what you get when you click the Send button.
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
     """
 
     pass
@@ -92,9 +100,9 @@ class OutputData(BaseData, spec_value=ComponentType.DATA_OUTPUT):
 
 @inherit_docstrings
 class RelativeData(BaseData, spec_value=ComponentType.DATA_RELATIVE):
-    """A special component for saving data.
+    """A component for saving data in the [ListFieldV1](toloka.client.project.template_builder.fields.ListFieldV1).
 
-    It's only available in the field.list component.
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
     """
 
     pass
