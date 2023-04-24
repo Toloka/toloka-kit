@@ -145,7 +145,7 @@ class Pipeline:
             pending: currently not running workers
         """
 
-        def add_new_observers(self, new_observers: typing.Iterable[toloka.streaming.observer.BaseObserver]) -> None: ...
+        def update_observers(self, pipeline: 'Pipeline'): ...
 
         def __init__(
             self,
@@ -183,5 +183,5 @@ class Pipeline:
     storage: typing.Optional[toloka.streaming.storage.BaseStorage]
     iteration_mode: IterationMode
     name: typing.Optional[str]
-    _observers: typing.Dict[int, toloka.streaming.observer.BaseObserver]
+    _observers: typing.Dict[typing.Tuple, toloka.streaming.observer.BaseObserver]
     _got_sigint: bool

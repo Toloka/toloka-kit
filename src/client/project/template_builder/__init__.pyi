@@ -10,6 +10,7 @@ __all__ = [
     'view',
     'TemplateBuilder',
     'get_input_and_output',
+    'RefComponent',
     'BulkActionV1',
     'NotifyActionV1',
     'OpenCloseActionV1',
@@ -123,6 +124,7 @@ from toloka.client.project.template_builder.actions import (
     SetActionV1,
     ToggleActionV1,
 )
+from toloka.client.project.template_builder.base import RefComponent
 from toloka.client.project.template_builder.conditions import (
     AllConditionV1,
     AnyConditionV1,
