@@ -41,7 +41,7 @@ class ObserverToInterrupt:
     async def should_resume(self):
         return self._should_resume
 
-    def _get_unique_key(self):
+    def get_unique_key(self):
         return f'some-uniq-key-for-{type(self).__name__}'
 
     def inject(self, other: 'ObserverToInterrupt') -> None:

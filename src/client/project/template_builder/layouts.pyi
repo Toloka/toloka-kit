@@ -24,12 +24,12 @@ class BaseLayoutV1Metaclass(toloka.client.project.template_builder.base.Versione
 
 
 class BaseLayoutV1(toloka.client.project.template_builder.base.BaseComponent, metaclass=BaseLayoutV1Metaclass):
-    """Options for positioning elements in the interface, such as in columns or side-by-side.
+    """A base component for layouts.
 
-    If you have more than one element in the interface, these components will help you arrange them the way you want.
+    Layout components are used for positioning elements in the interface, such as in columns or side-by-side.
 
     Attributes:
-        validation: Validation based on condition.
+        validation: Validation rules.
     """
 
     def __init__(
@@ -48,18 +48,15 @@ class BaseLayoutV1(toloka.client.project.template_builder.base.BaseComponent, me
 
 
 class BarsLayoutV1(BaseLayoutV1):
-    """A component that adds top and bottom bars to the content.
+    """A layout with top and bottom bars.
 
-    You can use other components inside each part of this component, such as images, text, or options.
-
-    The top bar is located at the top edge of the component, and the bottom one is at the bottom edge. The content is
-    placed between the bars and takes up all available space.
+    For more information, see [layout.bars](https://toloka.ai/docs/template-builder/reference/layout.bars).
 
     Attributes:
         content: The main content.
-        bar_after: The bar displayed at the bottom edge of the component.
-        bar_before: The bar displayed at the top edge of the component.
-        validation: Validation based on condition.
+        bar_after: The bar displayed below the main content.
+        bar_before: The bar displayed above the main content.
+        validation: Validation rules.
     """
 
     def __init__(
@@ -84,33 +81,28 @@ class BarsLayoutV1(BaseLayoutV1):
 
 
 class ColumnsLayoutV1(BaseLayoutV1):
-    """A component for placing content in columns.
+    """A layout with columns.
 
-    Use it to customize the display of content: set the column width and adjust the vertical alignment of content.
+    For more information, see [layout.columns](https://toloka.ai/docs/template-builder/reference/layout.columns).
 
     Attributes:
-        items: Columns to divide the interface into.
-        full_height: Switches the component to column mode at full height and with individual scrolling. Otherwise, the
-            height is determined by the height of the column that is filled in the most.
-        min_width: The minimum width of the component; if it is narrower, columns are output sequentially, one by one.
-        ratio: An array of values that specify the relative width of columns. For example, if you have 3 columns, the
-            value [1,2,1] divides the space into 4 parts and the column in the middle is twice as large as the other
-            columns.
-            If the number of columns exceeds the number of values in the ratio property, the values are repeated. For
-            example, if you have 4 columns and the ratio is set to [1,2], the result is the same as for [1,2,1,2].
-            If the number of columns is less than the number of values in the ratio property, extra values are simply
-            ignored.
-        vertical_align: Vertical alignment of column content.
-        validation: Validation based on condition.
+        items: A list of components. Every component is placed in an individual column.
+        full_height: A height mode:
+            * `True` — The component occupies all available vertical space. Columns have individual scrolling.
+            * `False` — The height of the component is determined by the highest column.
+        min_width: The minimum width of the component when columns are used. If the component is narrower than `min_width`, then all content is shown in one column.
+        ratio: A list of relative column widths.
+        vertical_align: The vertical alignment of column content.
+        validation: Validation rules.
     """
 
     class VerticalAlign(toloka.util._extendable_enum.ExtendableStrEnum):
-        """Vertical alignment of column content.
+        """The vertical alignment of column content.
 
         Attributes:
-            TOP: Aligned to the top of a column.
-            MIDDLE: Aligned to the middle of the column that is filled in the most.
-            BOTTOM: Aligned to the bottom of a column.
+            TOP: Aligning to the top of a column.
+            MIDDLE: Aligning to the middle of the highest.
+            BOTTOM: Aligning to the bottom of a column.
         """
 
         BOTTOM = 'bottom'
@@ -143,12 +135,11 @@ class ColumnsLayoutV1(BaseLayoutV1):
 
 
 class CompareLayoutItem(toloka.client.project.template_builder.base.BaseTemplate):
-    """The compared element.
+    """An item for the `CompareLayoutV1`.
 
     Attributes:
-        content: The content of the element that's being compared. Add images, audio recordings, videos, links,
-            or other types of data.
-        controls: Configure the input fields to make the Toloker select an item.
+        content: The content of the item.
+        controls: Item controls.
     """
 
     def __init__(
@@ -166,26 +157,19 @@ class CompareLayoutItem(toloka.client.project.template_builder.base.BaseTemplate
 
 
 class CompareLayoutV1(BaseLayoutV1):
-    """Use it to arrange interface elements for comparing them. For example, you can compare several photos.
+    """A layout for comparing several items.
 
-    Selection buttons can be placed under each of the compared items. You can also add common elements, such as a
-    field for comments.
-
-    Differences from layout.side-by-side:
-
-    * No buttons for hiding items. These are useful if you need to compare 5 photos at once and it's
-    difficult to choose between two of them.
-    * You can add individual selection buttons for every item being compared.
+    For more information, see [layout.compare](https://toloka.ai/docs/template-builder/reference/layout.compare).
 
     Attributes:
-        common_controls: The common fields of the component. Add information blocks that are common to all the
-            elements being compared.
-        items: An array with properties of the elements being compared. Set the appearance of the component blocks.
-        min_width: Minimum width of the element in pixels. Default: 400 pixels.
-        wide_common_controls: This property increases the common field size of the elements being compared.
-            It's set to false by default: the common fields are displayed in the center, not stretched. If true,
-            the fields are wider than with the default value.
-        validation: Validation based on condition.
+        common_controls: A component containing common controls.
+        items: A list of items to be compared.
+        min_width: The minimum width of the component in pixels. Default value: `400`.
+        wide_common_controls: * `True` — The common controls are stretched horizontally.
+            * `False` — The common controls are centered.
+
+            Default value: `False`.
+        validation: Validation rules.
     """
 
     def __init__(
@@ -212,18 +196,15 @@ class CompareLayoutV1(BaseLayoutV1):
 
 
 class SideBySideLayoutV1(BaseLayoutV1):
-    """The component displays several data blocks of the same width on a single horizontal panel.
+    """A layout with several blocks of the same width on a single horizontal panel.
 
-    For example, you can use this to compare several photos.
-
-    You can set the minimum width for data blocks.
+    For more information, see [layout.side-by-side](https://toloka.ai/docs/template-builder/reference/layout.side-by-side).
 
     Attributes:
-        controls: Components that let Tolokers perform the required actions.
-            For example: field.checkbox-group or field.button-radio-group.
-        items: An array of data blocks.
-        min_item_width: The minimum width of a data block, at least 400 pixels.
-        validation: Validation based on condition.
+        controls: A component with controls.
+        items: A list of blocks.
+        min_item_width: The minimum width of a block, at least 400 pixels.
+        validation: Validation rules.
     """
 
     def __init__(
@@ -248,29 +229,24 @@ class SideBySideLayoutV1(BaseLayoutV1):
 
 
 class SidebarLayoutV1(BaseLayoutV1):
-    """An option for placing (layout) items, which lets you arrange on a page:
+    """A layout with a main content block and a panel with controls.
 
-    * The main content block.
-    * An adjacent panel with controls.
+    The component supports modes:
+        * Widescreen — The control panel is placed to the right of the main block.
+        * Compact — The controls are placed under the main block and stretch to the entire width.
 
-    The minWidth property sets the threshold for switching between widescreen and compact modes: when the width of the
-    layout.sidebar component itself becomes less than the value set by the minWidth property, compact mode is enabled.
-
-    In widescreen mode, the control panel is located to the right of the main block.
-
-    In compact mode, controls stretch to the entire width and are located under each other.
-
-    To add an extra panel with controls, use the extraControls property.
+    For more information, see [layout.sidebar](https://toloka.ai/docs/template-builder/reference/layout.sidebar).
 
     Attributes:
-        content: Content placed in the main area.
-        controls: Content of the control panel.
-        controls_width: The width of the control panel in widescreen mode. In compact mode, the panel takes up the
-            entire available width. Default: 200 pixels.
-        extra_controls: An additional panel with controls. Located below the main panel.
-        min_width: The minimum width, in pixels, for widescreen mode. If the component width becomes less than the
-            specified value, the interface switches to compact mode. Default: 400 pixels.
-        validation: Validation based on condition.
+        content: The main block.
+        controls: The control panel.
+        controls_width: The width in pixels of the control panel in the widescreen mode.
+            Default value: `200`.
+        extra_controls: An additional panel with controls. It is placed below the controls.
+        min_width: The minimum width in pixels of the component in a widescreen mode.
+            If the component width is less than the specified value, the interface switches to the compact mode.
+            Default value: `400`.
+        validation: Validation rules.
     """
 
     def __init__(
