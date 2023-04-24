@@ -58,7 +58,7 @@ class _Worker:
 
     @classmethod
     def _from_observer(cls, observer: BaseObserver) -> '_Worker':
-        return cls(str(observer._get_unique_key()), observer)
+        return cls(str(observer.get_unique_key()), observer)
 
     @staticmethod
     def _no_one_should_resume(workers: Iterable['_Worker']) -> bool:
@@ -138,7 +138,7 @@ class Pipeline:
     storage: Optional[BaseStorage] = attr.ib(default=None)
     iteration_mode: IterationMode = attr.ib(default=IterationMode.FIRST_COMPLETED)
     name: Optional[str] = attr.ib(default=None, kw_only=True)
-    _observers: Dict[int, BaseObserver] = attr.ib(factory=dict, init=False)
+    _observers: Dict[Tuple, BaseObserver] = attr.ib(factory=dict, init=False)
     _got_sigint: bool = attr.ib(default=False, init=False)
 
     @contextmanager
@@ -179,7 +179,7 @@ class Pipeline:
 
     def _get_unique_key(self) -> Tuple:
         return (self.__class__.__name__, self.name or '', tuple(sorted(
-            observer._get_unique_key()
+            observer.get_unique_key()
             for observer in self._observers.values()
         )))
 
@@ -205,7 +205,11 @@ class Pipeline:
             >>> toloka_loop.register(SomeObserver(pool_id='123')).do_some_preparations(...)
             ...
         """
-        self._observers[id(observer)] = observer
+        observer_key = observer.get_unique_key()
+        if observer_key in self._observers:
+            raise ValueError(f'Failed to register observer to pipeline: observer with key {observer_key} is already '
+                             f'registered')
+        self._observers[observer_key] = observer
         return observer
 
     def observers_iter(self) -> Iterator[BaseObserver]:
@@ -267,14 +271,22 @@ class Pipeline:
         waiting: Dict[_Worker, asyncio.Task] = attr.ib(on_setattr=attr.setters.frozen, factory=lambda: {})
         pending: Dict[_Worker, datetime] = attr.ib(on_setattr=attr.setters.frozen, factory=lambda: {})
 
-        def add_new_observers(self, new_observers: Iterable[BaseObserver]) -> None:
+        def update_observers(self, pipeline: 'Pipeline'):
+            known_observers_keys = {worker.observer.get_unique_key() for worker in self.workers.keys()}
+            new_observers = [
+                observer
+                for observer in pipeline.observers_iter()
+                if observer.get_unique_key() not in known_observers_keys
+            ]
+            if len(new_observers) > 0:
+                logger.info(f'New observers found in quantity: {len(new_observers)}')
             new_workers = _OrderedSet(_Worker._from_observer(observer) for observer in new_observers)
             self.workers.update(new_workers)
             self.pending.update({worker: datetime.min for worker in new_workers})
 
     def _create_state(self):
         state = Pipeline.RunState(pipeline_key=str(self._get_unique_key()))
-        state.add_new_observers(self.observers_iter())
+        state.update_observers(self)
         with self._lock(state.pipeline_key):
             # Get checkpoint from the storage.
             self._storage_load(state.pipeline_key, state.workers)
@@ -317,7 +329,7 @@ class Pipeline:
                 if to_remove:
                     logger.info('Found observers to remove count: %d', len(to_remove))
                     for worker in to_remove:
-                        self._observers.pop(id(worker.observer))
+                        self._observers.pop(worker.observer.get_unique_key())
                         state.workers.pop(worker)
 
                 if not self._got_sigint:
@@ -364,7 +376,7 @@ class Pipeline:
                 else:
                     check_mode = False
 
-            self._update_observers(state)
+            state.update_observers(self)
 
             if self._got_sigint:
                 logger.warning('Execute next iteration immediately due to SIGINT handling')
@@ -372,13 +384,6 @@ class Pipeline:
                 logger.warning('Execute next iteration immediately due to check mode handling')
             else:
                 yield state
-
-    def _update_observers(self, state):
-        new_observers_ids = self._observers.keys() - {id(worker.observer) for worker in state.workers}
-        if new_observers_ids:
-            logger.info('New observers found in quantity: %d', len(new_observers_ids))
-            new_observers = (self._observers[id_] for id_ in new_observers_ids)
-            state.add_new_observers(new_observers)
 
     async def _initialize_run(self):
         state = self._create_state()
