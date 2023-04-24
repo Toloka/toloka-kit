@@ -86,6 +86,8 @@ class AppProject(toloka.client.primitives.base.BaseTolokaObject):
         item_price: The price you pay for a processed item.
         errors: Errors found during a project check.
         read_only:
+            * `True` — The project is read-only.
+            * `False` — The project can be modified.
         app: Brief information about the project template.
     """
 
@@ -280,8 +282,8 @@ class AppItemImport(toloka.client.primitives.base.BaseTolokaObject):
 
     Attributes:
         id:
-        records_count: Number of items in the loading operation.
-        records_processed: Number of successfully loaded items in the loading operation.
+        records_count: The number of items in the loading operation.
+        records_processed: The number of successfully loaded items in the loading operation.
         errors: Errors during the loading operation.
     """
 
@@ -331,7 +333,7 @@ class AppBatch(toloka.client.primitives.base.BaseTolokaObject):
         read_only:
         last_items_import: Meta-information on asynchronous loading operation (possible via UI).
         confidence_avg: Average labeling quality.
-        items_processed_count: Number of labeled items.
+        items_processed_count: The number of labeled items.
         eta: Expected date and time when batch processing will be completed.
         items_per_state: Statistics on the number of items in each state.
     """
@@ -400,8 +402,8 @@ class AppBatchCreateRequest(toloka.client.primitives.base.BaseTolokaObject):
     """Parameters of a request for creating multiple App task items in a batch.
 
     Attributes:
-        name: Batch name.
-        items: A list with task items. The items must follow the solution schema described in `App.input_spec`.
+        name: The batch name.
+        items: A list with task items. The items must follow the solution schema described in the `App.input_spec`.
     """
 
     def __init__(
@@ -420,10 +422,10 @@ class AppBatchCreateRequest(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppBatchPatch(toloka.client.primitives.base.BaseTolokaObject):
-    """"Parameters for changing name of a specific AppBatch
+    """Parameters of a request for updating an App batch.
 
     Attributes:
-        name: Batch name.
+        name: The new batch name.
     """
 
     def __init__(self, *, name: typing.Optional[str] = None) -> None:
