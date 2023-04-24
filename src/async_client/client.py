@@ -7,10 +7,11 @@ import functools
 import logging
 import threading
 from decimal import Decimal
-from typing import Optional, Callable, List
+from typing import Dict, Optional, Callable, List
 
 import attr
 import httpx
+from toloka.client.batch_create_results import FieldValidationError
 
 from ..client import TolokaClient, structure, unstructure
 from ..client.exceptions import (
@@ -162,7 +163,7 @@ class AsyncTolokaClient:
                 numerated_ids = pools.setdefault(log_item.input['pool_id'], {})
                 numerated_ids[log_item.output[output_id_field]] = index
             else:
-                validation_errors[index] = log_item.output
+                validation_errors[index] = structure(log_item.output, Dict[str, FieldValidationError])
 
         # Like in sync methods Exception will raise
         # even if the skip_invalid_items=True but no objects are created

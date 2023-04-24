@@ -74,7 +74,11 @@ class ApiError(Exception):
         code = f'Code of error: {self.code}'
         error_details = f'Error details: {self.message}'
         if self.payload:
-            additional_info = 'Additional information about the error:\n' + json.dumps(self.payload, indent=4)
+            try:
+                payload_str = json.dumps(self.payload, indent=4)
+            except TypeError:
+                payload_str = f'failed to parse payload as JSON! Falling back to raw representation:\n{self.payload}'
+            additional_info = 'Additional information about the error:\n' + payload_str
         else:
             additional_info = ''
         request_id = f'request id: {self.request_id}. It needs to be specified when contacting support.'

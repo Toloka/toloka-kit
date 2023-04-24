@@ -1,13 +1,22 @@
 import re
+from uuid import UUID
 
 import httpx
 import pytest
 import simplejson
 import toloka.client as client
 from httpx import QueryParams
-from toloka.client.exceptions import IncorrectActionsApiError
+from toloka.client import Task
+from toloka.client.batch_create_results import TaskBatchCreateResult
+from toloka.client.exceptions import FailedOperation, IncorrectActionsApiError
+from toloka.client.operations import Operation, TasksCreateOperation
 
-from ..testutils.util_functions import check_headers
+from ..testutils.util_functions import (
+    assert_async_object_creation_is_successful, assert_retried_async_object_creation_returns_existing_operation,
+    assert_retried_failed_operation_fails_with_failed_operation_exception,
+    assert_retried_sync_via_async_object_creation_returns_already_existing_object,
+    assert_sync_via_async_object_creation_is_successful, check_headers,
+)
 
 
 # TEST SYNC CREATION
@@ -170,6 +179,11 @@ def operation_success_map_single_task(operation_running_map_single_task):
 
 
 @pytest.fixture
+def operation_fail_map_single_task(operation_running_map_single_task):
+    return {**operation_running_map_single_task, 'status': 'FAIL'}
+
+
+@pytest.fixture
 def operation_running_map(operation_running_map_single_task):
     return {
         **operation_running_map_single_task,
@@ -180,6 +194,11 @@ def operation_running_map(operation_running_map_single_task):
 @pytest.fixture
 def operation_success_map(operation_running_map):
     return {**operation_running_map, 'status': 'SUCCESS'}
+
+
+@pytest.fixture
+def operation_fail_map(operation_running_map):
+    return {**operation_running_map, 'status': 'FAIL'}
 
 
 @pytest.fixture
@@ -257,171 +276,76 @@ def test_create_task_sync_through_async(
     task = tasks_map[0]
     create_task_log = create_tasks_log[:1]
 
-    def check_tasks(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_task',
-            'X-Low-Level-Method': 'create_task',
-        }
-        check_headers(request, expected_headers)
-
-        assert QueryParams(
-            operation_id='281073ea-ab34-416e-a028-47421ff1b166',
-            allow_defaults='true',
-            open_pool='true',
-            async_mode='true',
-        ) == request.url.params
-        task_content = simplejson.loads(request.content)
-        assert '__item_idx' in task_content
-        task_content.pop('__item_idx')
-        assert tasks_map[0] == task_content
-        return httpx.Response(json=operation_running_map_single_task, status_code=201)
-
-    def operation_success(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_task',
-            'X-Low-Level-Method': 'get_operation',
-        }
-        check_headers(request, expected_headers)
-
-        return httpx.Response(json=operation_success_map_single_task, status_code=201)
-
-    def tasks_log(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_task',
-            'X-Low-Level-Method': 'get_operation_log',
-        }
-        check_headers(request, expected_headers)
-
-        return httpx.Response(json=create_task_log, status_code=201)
-
-    def return_task(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_task',
-            'X-Low-Level-Method': 'get_task',
-        }
-        check_headers(request, expected_headers)
-
-        return httpx.Response(json=created_tasks_21_map, status_code=201)
-
-    respx_mock.post(f'{toloka_url}/tasks').mock(side_effect=check_tasks)
-    respx_mock.get(f'{toloka_url}/operations/{operation_running_map_single_task["id"]}').mock(side_effect=operation_success)
-    respx_mock.get(f'{toloka_url}/operations/{operation_running_map_single_task["id"]}/log').mock(side_effect=tasks_log)
-    respx_mock.get(f'{toloka_url}/tasks/{created_tasks_21_map["id"]}').mock(side_effect=return_task)
-
-    # Expanded syntax
-    result = toloka_client.create_task(
-        client.structure(task, client.task.Task),
-        operation_id='281073ea-ab34-416e-a028-47421ff1b166',
-        allow_defaults=True,
-        open_pool=True,
+    assert_sync_via_async_object_creation_is_successful(
+        respx_mock=respx_mock,
+        toloka_client=toloka_client,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_task,
+        create_method_kwargs={
+            'task': Task.structure(task),
+            'operation_id': UUID('281073ea-ab34-416e-a028-47421ff1b166'),
+            'allow_defaults': True,
+            'open_pool': True,
+        },
+        returned_object=created_tasks_21_map,
+        expected_response_object=Task.structure(created_tasks_21_map),
+        operation_log=create_task_log,
+        create_object_path='tasks',
+        get_object_path=f'tasks/{created_tasks_21_map["id"]}',
+        operation_running=Operation.structure(operation_running_map_single_task),
+        success_operation=Operation.structure(operation_success_map_single_task),
+        expected_query_params={
+            'operation_id': '281073ea-ab34-416e-a028-47421ff1b166',
+            'allow_defaults': 'true',
+            'open_pool': 'true',
+            'async_mode': 'true',
+        },
+        top_level_method_header='create_task',
+        low_level_method_header='create_task',
     )
-    assert created_tasks_21_map == client.unstructure(result)
 
 
 def test_create_task_sync_through_async_retry(
-    respx_mock, toloka_client, toloka_url,
-    tasks_map, operation_running_map_single_task, operation_success_map_single_task, create_tasks_log,
-    no_uuid_random, created_tasks_21_map,
+    respx_mock, toloka_client, toloka_url, tasks_map, operation_success_map_single_task, create_tasks_log,
+    created_tasks_21_map,
 ):
-    requests_count = 0
-    first_request_op_id = None
-    task = tasks_map[0]
-    create_task_log = create_tasks_log[:1]
-
-    def tasks(request):
-        nonlocal requests_count
-        nonlocal first_request_op_id
-
-        requests_count += 1
-        if requests_count == 1:
-            first_request_op_id = request.url.params['operation_id']
-            return httpx.Response(status_code=500)
-
-        assert request.url.params['operation_id'] == first_request_op_id
-        unstructured_error = client.unstructure(IncorrectActionsApiError(
-            code='OPERATION_ALREADY_EXISTS',
-        ))
-        del unstructured_error['status_code']
-
-        return httpx.Response(
-            json=unstructured_error,
-            status_code=409
-        )
-
-    def tasks_log(request):
-        return httpx.Response(json=create_task_log, status_code=201)
-
-    def return_task(request):
-        return httpx.Response(json=created_tasks_21_map, status_code=201)
-
-    respx_mock.post(f'{toloka_url}/tasks').mock(side_effect=tasks)
-
-    respx_mock.get(re.compile(rf'{toloka_url}/operations/.*/log')).mock(side_effect=tasks_log)
-    respx_mock.get(re.compile(rf'{toloka_url}/operations/.*')).mock(
-        httpx.Response(json=operation_success_map_single_task, status_code=200)
+    assert_retried_sync_via_async_object_creation_returns_already_existing_object(
+        respx_mock=respx_mock,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_task,
+        create_method_kwargs={
+            'task': Task.structure(tasks_map[0]),
+        },
+        returned_object=created_tasks_21_map,
+        expected_response_object=Task.structure(created_tasks_21_map),
+        create_object_path='tasks',
+        get_object_path=f'tasks/{created_tasks_21_map["id"]}',
+        operation_log=create_tasks_log[:1],
+        success_operation_map=operation_success_map_single_task,
     )
-    respx_mock.get(f'{toloka_url}/tasks/{created_tasks_21_map["id"]}').mock(side_effect=return_task)
 
-    result = toloka_client.create_task(client.structure(task, client.task.Task))
 
-    assert requests_count == 2
-    assert created_tasks_21_map == client.unstructure(result)
+def test_create_task_sync_through_async_retry_failed_operation(
+    respx_mock, toloka_client, toloka_url, tasks_map, operation_fail_map_single_task,
+):
+    assert_retried_failed_operation_fails_with_failed_operation_exception(
+        respx_mock=respx_mock,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_task,
+        create_method_kwargs={
+            'task': Task.structure(tasks_map[0]),
+        },
+        create_object_path='tasks',
+        failed_operation_map=operation_fail_map_single_task,
+    )
 
 
 def test_create_tasks_sync_through_async(
-    respx_mock, toloka_client, toloka_url, no_uuid_random,
+    respx_mock, toloka_client, toloka_url,
     tasks_map, operation_running_map, operation_success_map,
     create_tasks_log, created_tasks_21_map, created_tasks_22_map,
     task_create_result_map
 ):
-
-    def check_tasks(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_tasks',
-            'X-Low-Level-Method': 'create_tasks',
-        }
-        check_headers(request, expected_headers)
-
-        assert QueryParams(
-            operation_id='281073ea-ab34-416e-a028-47421ff1b166',
-            skip_invalid_items='true',
-            allow_defaults='true',
-            open_pool='true',
-            async_mode='true',
-        ) == request.url.params
-        incoming_tasks = []
-        for t in simplejson.loads(request.content):
-            assert '__item_idx' in t
-            t.pop('__item_idx')
-            incoming_tasks.append(t)
-        assert tasks_map == incoming_tasks
-        return httpx.Response(json=operation_running_map, status_code=201)
-
-    def operation_success(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_tasks',
-            'X-Low-Level-Method': 'get_operation',
-        }
-        check_headers(request, expected_headers)
-
-        return httpx.Response(json=operation_success_map, status_code=201)
-
-    def tasks_log(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_tasks',
-            'X-Low-Level-Method': 'get_operation_log',
-        }
-        check_headers(request, expected_headers)
-
-        return httpx.Response(json=create_tasks_log, status_code=201)
-
     def return_tasks_by_pool(request):
         expected_headers = {
             'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
@@ -434,25 +358,75 @@ def test_create_tasks_sync_through_async(
         res_map = [created_tasks_21_map] if params['pool_id'] == '21' else [created_tasks_22_map]
         return httpx.Response(json={'items': res_map, 'has_more': False}, status_code=201)
 
-    # mocks
-    # create_task -> operation
-    respx_mock.post(f'{toloka_url}/tasks').mock(side_effect=check_tasks,)
-    # wait_operation -> operation Success
-    respx_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}').mock(side_effect=operation_success)
-    # get_log -> log_res
-    respx_mock.get(f'{toloka_url}/operations/{operation_running_map["id"]}/log').mock(side_effect=tasks_log)
-    # get tasks from pools (2 calls - for each pool)
-    respx_mock.get(f'{toloka_url}/tasks').mock(side_effect=return_tasks_by_pool)
-
-    # Expanded syntax
-    result = toloka_client.create_tasks(
-        [client.structure(task, client.task.Task) for task in tasks_map],
-        operation_id='281073ea-ab34-416e-a028-47421ff1b166',
-        skip_invalid_items=True,
-        allow_defaults=True,
-        open_pool=True,
+    assert_sync_via_async_object_creation_is_successful(
+        respx_mock=respx_mock,
+        toloka_client=toloka_client,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_tasks,
+        create_method_kwargs={
+            'tasks': [client.structure(task, client.task.Task) for task in tasks_map],
+            'operation_id': UUID('281073ea-ab34-416e-a028-47421ff1b166'),
+            'skip_invalid_items': True,
+            'allow_defaults': True,
+            'open_pool': True,
+        },
+        returned_object=return_tasks_by_pool,
+        expected_response_object=TaskBatchCreateResult.structure(task_create_result_map),
+        operation_log=create_tasks_log,
+        create_object_path='tasks',
+        get_object_path='tasks',
+        operation_running=Operation.structure(operation_running_map),
+        success_operation=Operation.structure(operation_success_map),
+        expected_query_params={
+            'operation_id': '281073ea-ab34-416e-a028-47421ff1b166',
+            'skip_invalid_items': 'true',
+            'allow_defaults': 'true',
+            'open_pool': 'true',
+            'async_mode': 'true',
+        },
+        top_level_method_header='create_tasks',
+        low_level_method_header='create_tasks',
     )
-    assert task_create_result_map == client.unstructure(result)
+
+
+def test_create_tasks_sync_through_async_retry(
+    respx_mock, toloka_client, toloka_url, tasks_map, task_create_result_map, operation_success_map, create_tasks_log,
+    created_tasks_21_map, created_tasks_22_map,
+):
+    def return_tasks_by_pool(request):
+        params = request.url.params
+        res_map = [created_tasks_21_map] if params['pool_id'] == '21' else [created_tasks_22_map]
+        return httpx.Response(json={'items': res_map, 'has_more': False}, status_code=201)
+
+    assert_retried_sync_via_async_object_creation_returns_already_existing_object(
+        respx_mock=respx_mock,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_tasks,
+        create_method_kwargs={
+            'tasks': [client.structure(task, client.task.Task) for task in tasks_map]
+        },
+        returned_object=return_tasks_by_pool,
+        expected_response_object=TaskBatchCreateResult.structure(task_create_result_map),
+        create_object_path='tasks',
+        get_object_path='tasks',
+        operation_log=create_tasks_log,
+        success_operation_map=operation_success_map
+    )
+
+
+def test_create_tasks_sync_through_async_retry_failed_operation(
+    respx_mock, toloka_client, toloka_url, tasks_map, operation_fail_map,
+):
+    assert_retried_failed_operation_fails_with_failed_operation_exception(
+        respx_mock=respx_mock,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_tasks,
+        create_method_kwargs={
+            'tasks': [client.structure(task, client.task.Task) for task in tasks_map],
+        },
+        create_object_path='tasks',
+        failed_operation_map=operation_fail_map,
+    )
 
 
 @pytest.fixture
@@ -469,136 +443,58 @@ def create_tasks_operation_map():
 
 
 def test_create_tasks_async(respx_mock, toloka_client, toloka_url, tasks_map, create_tasks_operation_map):
-
-    def tasks(request):
-        expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
-            'X-Top-Level-Method': 'create_tasks_async',
-            'X-Low-Level-Method': 'create_tasks_async',
-        }
-        check_headers(request, expected_headers)
-
-        assert QueryParams(
-            operation_id='281073ea-ab34-416e-a028-47421ff1b166',
-            skip_invalid_items='true',
-            allow_defaults='true',
-            open_pool='true',
-            async_mode='true',
-        ) == request.url.params
-        assert tasks_map == simplejson.loads(request.content)
-        return httpx.Response(json=create_tasks_operation_map, status_code=201)
-
-    respx_mock.post(f'{toloka_url}/tasks').mock(side_effect=tasks)
-
-    # Request object syntax
-    result = toloka_client.create_tasks_async(
-        [client.structure(task, client.task.Task) for task in tasks_map],
-        client.task.CreateTasksParameters(
-            operation_id='281073ea-ab34-416e-a028-47421ff1b166',
-            skip_invalid_items=True,
-            allow_defaults=True,
-            open_pool=True,
-        )
+    assert_async_object_creation_is_successful(
+        respx_mock=respx_mock,
+        toloka_client=toloka_client,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_tasks_async,
+        create_method_kwargs={
+            'tasks': [client.structure(task, client.task.Task) for task in tasks_map],
+            'operation_id': UUID('281073ea-ab34-416e-a028-47421ff1b166'),
+            'skip_invalid_items': True,
+            'allow_defaults': True,
+            'open_pool': True,
+        },
+        create_object_path='tasks',
+        success_operation_map=create_tasks_operation_map,
+        expected_query_params={
+            'operation_id': '281073ea-ab34-416e-a028-47421ff1b166',
+            'skip_invalid_items': 'true',
+            'allow_defaults': 'true',
+            'open_pool': 'true',
+            'async_mode': 'true',
+        },
+        top_level_method_header='create_tasks_async',
+        low_level_method_header='create_tasks_async',
     )
-    assert create_tasks_operation_map == client.unstructure(result)
-
-    # Expanded syntax
-    result = toloka_client.create_tasks_async(
-        [client.structure(task, client.task.Task) for task in tasks_map],
-        operation_id='281073ea-ab34-416e-a028-47421ff1b166',
-        skip_invalid_items=True,
-        allow_defaults=True,
-        open_pool=True,
-    )
-    assert create_tasks_operation_map == client.unstructure(result)
-
-
-def test_create_tasks_sync_through_async_retry(
-    respx_mock, toloka_client, toloka_url, tasks_map, task_create_result_map, operation_success_map, create_tasks_log,
-    no_uuid_random, created_tasks_21_map, created_tasks_22_map,
-):
-    requests_count = 0
-    first_request_op_id = None
-
-    def tasks(request):
-        nonlocal requests_count
-        nonlocal first_request_op_id
-
-        requests_count += 1
-        if requests_count == 1:
-            first_request_op_id = request.url.params['operation_id']
-            return httpx.Response(status_code=500)
-
-        assert request.url.params['operation_id'] == first_request_op_id
-        unstructured_error = client.unstructure(IncorrectActionsApiError(
-            code='OPERATION_ALREADY_EXISTS',
-        ))
-        del unstructured_error['status_code']
-
-        return httpx.Response(
-            json=unstructured_error,
-            status_code=409
-        )
-
-    def tasks_log(request):
-        return httpx.Response(json=create_tasks_log, status_code=201)
-
-    def return_tasks_by_pool(request):
-        params = request.url.params
-        res_map = [created_tasks_21_map] if params['pool_id'] == '21' else [created_tasks_22_map]
-        return httpx.Response(json={'items': res_map, 'has_more': False}, status_code=201)
-
-    respx_mock.get(
-        url__regex=rf'{toloka_url}/operations/.*(?<!log)$'
-    ).mock(httpx.Response(json=operation_success_map, status_code=200))
-    respx_mock.post(f'{toloka_url}/tasks').mock(side_effect=tasks)
-    respx_mock.get(re.compile(rf'{toloka_url}/operations/.*/log')).mock(side_effect=tasks_log)
-    respx_mock.get(f'{toloka_url}/tasks').mock(side_effect=return_tasks_by_pool)
-
-    result = toloka_client.create_tasks(
-        tasks=[client.structure(task, client.task.Task) for task in tasks_map]
-    )
-
-    assert requests_count == 2
-    assert task_create_result_map == client.unstructure(result)
 
 
 def test_create_tasks_async_retry(
-    respx_mock, toloka_client, toloka_url, tasks_map, task_create_result_map, operation_success_map
+    respx_mock, toloka_client, toloka_url, tasks_map, operation_success_map
 ):
-    requests_count = 0
-    first_request_op_id = None
-
-    def tasks(request):
-        nonlocal requests_count
-        nonlocal first_request_op_id
-
-        requests_count += 1
-        if requests_count == 1:
-            first_request_op_id = request.url.params['operation_id']
-            return httpx.Response(status_code=500)
-
-        assert request.url.params['operation_id'] == first_request_op_id
-        unstructured_error = client.unstructure(
-            IncorrectActionsApiError(
-                code='OPERATION_ALREADY_EXISTS',
-            )
-        )
-        del unstructured_error['status_code']
-
-        return httpx.Response(
-            json=unstructured_error,
-            status_code=409
-        )
-
-    respx_mock.get(
-        re.compile(rf'{toloka_url}/operations/.*')
-    ).mock(httpx.Response(json=operation_success_map, status_code=200))
-    respx_mock.post(f'{toloka_url}/tasks').mock(side_effect=tasks)
-
-    result = toloka_client.create_tasks_async(
-        tasks=[client.structure(task, client.task.Task) for task in tasks_map]
+    assert_retried_async_object_creation_returns_existing_operation(
+        respx_mock=respx_mock,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_tasks_async,
+        create_method_kwargs={
+            'tasks': [client.structure(task, client.task.Task) for task in tasks_map]
+        },
+        create_object_path='tasks',
+        success_operation_map=operation_success_map
     )
 
-    assert requests_count == 2
-    assert operation_success_map == client.unstructure(result)
+
+def test_create_tasks_async_retry_failed_operation(
+    respx_mock, toloka_client, toloka_url, tasks_map, operation_fail_map
+):
+    assert_retried_failed_operation_fails_with_failed_operation_exception(
+        respx_mock=respx_mock,
+        toloka_url=toloka_url,
+        create_method=toloka_client.create_tasks_async,
+        create_method_kwargs={
+            'tasks': [client.structure(task, client.task.Task) for task in tasks_map]
+        },
+        create_object_path='tasks',
+        failed_operation_map=operation_fail_map,
+    )
+
