@@ -18,7 +18,8 @@ import json
 from typing import Any, List, Optional
 
 import attr
-from httpx import HTTPStatusError, Response as HTTPXResponse
+import httpx
+from httpx import HTTPStatusError
 
 from .error_codes import CommonErrorCodes, InternalErrorCodes
 from ..util._docstrings import inherit_docstrings
@@ -63,11 +64,13 @@ class ApiError(Exception):
         payload: additional payload
     """
 
-    status_code: Optional[int] = None
     request_id: Optional[str] = None
     code: Optional[str] = None
     message: Optional[str] = None
     payload: Optional[Any] = None
+
+    status_code: Optional[int] = None
+    response: Optional[httpx.Response] = None
 
     def __str__(self):
         head = f'You have got a(n) {type(self).__name__} with http status code: {self.status_code}'
@@ -158,7 +161,7 @@ _ERROR_MAP = {
 }
 
 
-def raise_on_api_error(response: HTTPXResponse):
+def raise_on_api_error(response: httpx.Response):
     if 200 <= response.status_code < 300:
         return
 
@@ -173,4 +176,7 @@ def raise_on_api_error(response: HTTPXResponse):
         if key not in class_fields:
             response_json.pop(key)
 
-    raise error_class(status_code=response.status_code, **response_json)
+    error = error_class(**response_json)
+    error.status_code = response.status_code
+    error.response = response
+    raise error

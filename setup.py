@@ -18,7 +18,7 @@ with open('README.md') as f:
     readme = f.read()
 
 EXTRAS_REQUIRE = {
-    'dev': ['respx', 'aiohttp', 'pytest', 'pytest-lazy-fixture', 'pytest-asyncio', 'pytest-mock'],
+    'dev': ['respx', 'aiohttp', 'pytest', 'pytest-lazy-fixture', 'pytest-asyncio', 'pytest-timeout', 'pytest-mock'],
     'pandas': ['pandas'],
     'autoquality': ['crowd-kit >= 1.0.0'],
     's3': ['boto3 >= 1.4.7'],

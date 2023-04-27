@@ -1,6 +1,4 @@
-import asyncio
 import json
-import socket
 import time
 from copy import copy
 from decimal import Decimal
@@ -8,11 +6,9 @@ from multiprocessing import Process
 
 import pytest
 import requests
-from toloka.client.requester import Requester
-
-
 from aiohttp import web
 from aiohttp.test_utils import unused_port
+from toloka.client.requester import Requester
 
 
 # local test requester server
@@ -107,9 +103,6 @@ def launched_test_server_url(server_url, server_port, fake_requester, retries_be
 
 
 @pytest.fixture
-def connection_error_server_url(launched_test_server_url, retries_before_response):
-    requests.post(f'{launched_test_server_url}/reset', json={
-        'retries': retries_before_response,
-        'streaming_mode': False,
-    })
+def internal_error_server_url(launched_test_server_url, retries_before_response):
+    requests.post(f'{launched_test_server_url}/reset', json={'retries': retries_before_response})
     return launched_test_server_url
