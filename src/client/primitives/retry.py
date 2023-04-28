@@ -1,5 +1,5 @@
 __all__ = [
-    'TolokaRetry', 'SyncRetryingOverURLLibRetry', 'AsyncRetryingOverURLLibRetry', 'STATUSES_TO_RETRY'
+    'TolokaRetry', 'SyncRetryingOverURLLibRetry', 'AsyncRetryingOverURLLibRetry', 'STATUSES_TO_RETRY',
 ]
 
 import json
@@ -38,6 +38,7 @@ class TolokaRetry(Retry):
             * HOUR - Retry hourly quotas. This is means that the program just sleeps for an hour! Be careful.
             * DAY - Retry daily quotas. We strongly not recommended retrying these quotas.
     """
+
     class Unit:
         MIN = 'MIN'
         HOUR = 'HOUR'
@@ -45,8 +46,8 @@ class TolokaRetry(Retry):
 
     seconds_to_wait = {
         Unit.MIN: 60,
-        Unit.HOUR: 60*60,
-        Unit.DAY: 60*60*24,
+        Unit.HOUR: 60 * 60,
+        Unit.DAY: 60 * 60 * 24,
     }
 
     _retry_quotas: Union[List[str], str, None] = None
@@ -115,7 +116,8 @@ class RetryingOverURLLibRetry(BaseRetrying):
             recursively calls urlopen;
         * this class matches the raised exception against exception_to_retry field in retry callback: if the exception
             is not matched the retry callback returns False and the exception is raised in user code. Otherwise, retry
-            callback returns True and the `Retry.increment` is called inside the `after` callback.
+            callback returns True and the `Retry.increment` is called inside the `after` callback with the
+            corresponding urllib3 exception.
     * If request returned a response:
         * urllib3 checks if retry should happen using `Retry.is_retry` method, calls `Retry.increment` with the
             received urllib3.Response object and makes recursive call with the new `Retry` instance. If not retry
@@ -158,7 +160,8 @@ class RetryingOverURLLibRetry(BaseRetrying):
 
     def __getstate__(self):
         return {
-            'base_url': self.base_url, 'urllib3_retry': self.urllib3_retry, 'exception_to_retry': self.exception_to_retry
+            'base_url': self.base_url, 'urllib3_retry': self.urllib3_retry,
+            'exception_to_retry': self.exception_to_retry
         }
 
     def __setstate__(self, state):
@@ -176,6 +179,7 @@ class RetryingOverURLLibRetry(BaseRetrying):
             if getattr(retry_state, 'urllib3_retry', None) is None:
                 retry_state.urllib3_retry = self.urllib3_retry
             return func(*args, **kwargs)
+
         return wrapped
 
     @staticmethod
@@ -247,6 +251,7 @@ class RetryingOverURLLibRetry(BaseRetrying):
                 try:
                     map_urllib3_exception_for_retrying(urllib3_exception)
                 except RuntimeError:
+                    # exception will be reraised
                     return False
 
                 return isinstance(exception, retry_state.retry_object.exception_to_retry)
