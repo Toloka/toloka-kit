@@ -79,7 +79,7 @@ import time
 import attr
 import httpx
 import simplejson
-from httpx import HTTPStatusError, RequestError
+from httpx import HTTPStatusError
 from httpx._types import VerifyTypes
 from toloka.client.batch_create_results import FieldValidationError
 

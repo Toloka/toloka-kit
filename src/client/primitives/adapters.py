@@ -20,7 +20,6 @@ def _get_url(error: httpx.HTTPError) -> Optional[str]:
         return None
 
 
-
 @singledispatch
 def _map_httpx_exception_to_urllib3_exception(exception: BaseException):
     return urllib3.exceptions.HTTPError()
