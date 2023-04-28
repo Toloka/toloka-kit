@@ -7,7 +7,8 @@ import logging
 import sys
 from functools import wraps
 from inspect import signature
-from typing import Callable, List, Optional, Protocol, Tuple, Type, TypeVar, Union
+from typing_extensions import Protocol
+from typing import Callable, List, Optional, Tuple, Type, Union
 
 import httpx
 import urllib3

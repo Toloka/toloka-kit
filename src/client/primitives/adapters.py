@@ -22,7 +22,7 @@ def _get_url(error: httpx.HTTPError) -> Optional[str]:
 
 
 @singledispatch
-def _map_httpx_exception_to_urllib3_exception(exception: httpx.HTTPError):
+def _map_httpx_exception_to_urllib3_exception(exception: BaseException):
     return urllib3.exceptions.HTTPError()
 
 
@@ -75,9 +75,7 @@ def _(exception: httpx.NetworkError):
 
 @_map_httpx_exception_to_urllib3_exception.register
 def _(exception: httpx.ConnectError):
-    return urllib3.exceptions.NewConnectionError(
-        pool=None, message=str(exception)
-    )
+    return urllib3.exceptions.NewConnectionError(pool=None, message=str(exception))  # type: ignore
 
 
 @_map_httpx_exception_to_urllib3_exception.register
