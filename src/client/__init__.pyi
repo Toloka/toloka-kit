@@ -2703,27 +2703,27 @@ class TolokaClient:
         """
         ...
 
-    def get_analytics(self, stats: typing.List[toloka.client.analytics_request.AnalyticsRequest]) -> toloka.client.operations.Operation:
-        """Sends analytics queries, for example, to estimate the percentage of completed tasks in the pool
+    def get_analytics(self, stats: typing.List[toloka.client.analytics_request.AnalyticsRequest]) -> toloka.client.operations.AnalyticsOperation:
+        """Sends analytics requests to Toloka.
 
-        Only pool analytics queries are available.
-        The values of different analytical metrics will be returned in the "details" field of the operation when it is
-        completed. See the example.
         You can request up to 10 metrics at a time.
 
+        The values of different analytical metrics are returned in the `details` field of the operation when it is completed.
+
         Args:
-            stats: Analytics queries list.
+            stats: A list of analytics requests.
 
         Returns:
-            operations.Operation: An operation that you can wait for to get the required statistics.
+            operations.AnalyticsOperation: An object to track the progress of the operation.
 
         Example:
-            How to get task completion percentage for one pool.
+            The example shows how get the percentage of completed tasks in the pool.
 
             >>> from toloka.client.analytics_request import CompletionPercentagePoolAnalytics
-            >>> operation = toloka_client.get_analytics([CompletionPercentagePoolAnalytics(subject_id=pool_id)])
+            >>> operation = toloka_client.get_analytics([CompletionPercentagePoolAnalytics(subject_id='1080020')])
             >>> operation = toloka_client.wait_operation(operation)
-            >>> print(operation.details['value'][0]['result']['value'])
+            >>> print(operation.details['value'][0])
+            >>> completed_task_percentage = operation.details['value'][0]['result']['value']
             ...
         """
         ...
