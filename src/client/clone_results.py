@@ -7,12 +7,14 @@ from .training import Training
 
 
 class CloneResults(NamedTuple):
-    """Objects created as a result of deep cloning of the project
+    """The result of deep cloning a project.
+
+    `CloneResults` are returned by the [clone_project](toloka.client.TolokaClient.clone_project.md) method.
 
     Attributes:
-        project (Project): New project
-        pools (List[Pool]): New pools. Can be empty.
-        trainings (List[Training]): New trainings. Can be empty.
+        project: The cloned project.
+        pools: A list of cloned pools.
+        trainings: A list of cloned trainings.
     """
 
     project: Project
