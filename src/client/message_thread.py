@@ -60,7 +60,7 @@ class Interlocutor(BaseTolokaObject):
 
         Attributes:
             USER: A Toloker.
-            REQUESTER: A requester.
+            REQUESTER: A Requester.
             ADMINISTRATOR: An administrator.
             SYSTEM: The Toloka itself. This role is used for messages that are sent automatically.
         """
@@ -85,13 +85,13 @@ class MessageThread(BaseTolokaObject):
 
     Attributes:
         id: The ID of the thread.
-        topic: The message thread title. The `topic` is a dictionary with language codes as keys.
+        topic: The message thread title. `topic` is a dictionary with two letter language codes as keys.
         interlocutors_inlined: The way of accessing information about the sender and recipients:
             * `True` — Information is available in the `interlocutors` list.
             * `False` — Information is available on a separate request.
         interlocutors: A list with information about the sender and recipients, sorted by IDs.
         messages_inlined: The way of accessing messages:
-            * `True` — The `messages` list contains the thread messages.
+            * `True` — The messages are in the `messages` list.
             * `False` — The messages are available on a separate request.
         messages: A list with thread messages. The list is sorted by creation date: newer messages come first.
         meta: Thread meta information.
@@ -125,7 +125,7 @@ class MessageThread(BaseTolokaObject):
         """A message in a thread.
 
         Attributes:
-            text: The message text. The `text` is a dictionary with language codes as keys.
+            text: The message text. The `text` is a dictionary with two letter language codes as keys.
             from_: Information about the sender.
             created: The date and time when the message was created.
         """
@@ -155,7 +155,7 @@ class MessageThreadReply(BaseTolokaObject):
 
     Attributes:
         text: A dictionary with the message text.
-            Two letter language code is a key in the dictionary. The message in a Toloker's language is sent to a Toloker, if available.
+            Two letter language code is a key in the dictionary. The message in a preferred Toloker's language is sent, if available.
     """
 
     text: Dict[str, str]
@@ -174,12 +174,13 @@ class MessageThreadFolders(BaseTolokaObject):
 class MessageThreadCompose(BaseTolokaObject):
     """Parameters for creating a message thread with the first message.
 
+    The `topic` and `text` parameters are dictionaries.
+    Two letter language code is a key in the dictionaries. If available, the text in a Toloker preferred language is used.
+
     Attributes:
         recipients_select_type: The way of specifying message recipients.
-        topic: A dictionary with the message thread title.
-            Two letter language code is a key in the dictionary. If available, the title is shown to a Toloker in his preferred language.
-        text: A dictionary with the message.
-            Two letter language code is a key in the dictionary. If available, the message is shown to a Toloker in his preferred language.
+        topic: The message thread title.
+        text: The message text.
         answerable:
             * `True` — Tolokers can respond to your messages.
             * `False` — Tolokers can't respond to your messages.

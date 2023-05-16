@@ -22,7 +22,7 @@ class Attachment(BaseTolokaObject, spec_enum='Type', spec_field='attachment_type
         name: The file name.
         details: Attachment details: a pool, task, and Toloker who uploaded the file.
         created: The date and time when the file was uploaded.
-        media_type: The file MIME data type.
+        media_type: The file [MIME](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) data type.
         owner: The owner of the attachment.
     """
 

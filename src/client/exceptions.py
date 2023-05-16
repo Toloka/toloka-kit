@@ -31,7 +31,7 @@ class SpecClassIdentificationError(Exception):
 
     Attributes:
         spec_field: The field specification name.
-        spec_enum: An enumeration with all possible specification types.
+        spec_enum: An enumeration with all known specification names.
     """
 
     spec_field: Optional[str] = None
@@ -53,7 +53,7 @@ class FailedOperation(Exception):
 # API errors
 @attr.attrs(auto_attribs=True, kw_only=True)
 class ApiError(Exception):
-    """A base class for exceptions raised when an API methods return errors.
+    """A base class for exceptions that are raised when API methods return errors.
 
     Attributes:
         status_code: A HTTP response status code.

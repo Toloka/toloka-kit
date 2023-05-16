@@ -980,7 +980,7 @@ class TolokaClient:
     @expand('compose')
     @add_headers('client')
     def compose_message_thread(self, compose: MessageThreadCompose) -> MessageThread:
-        """Creates a message thread and sends the first message to Tolokers.
+        """Creates a message thread and sends the first thread message to Tolokers.
 
         Args:
             compose: Parameters for creating the message thread.
@@ -3485,17 +3485,16 @@ class TolokaClient:
         self,
         subscriptions: List[WebhookSubscription]
     ) -> batch_create_results.WebhookSubscriptionBatchCreateResult:
-        """Creates (upsert) many webhook-subscriptions.
+        """Creates (upsert) webhook subscriptions.
 
         Args:
-            subscriptions: List of webhook-subscriptions, that will be created.
+            subscriptions: A list of webhook subscriptions to be created.
 
         Returns:
-            batch_create_results.WebhookSubscriptionBatchCreateResult: Result of subscriptions creation.
-                Contains created subscriptions in `items` and problems in "validation_errors".
+            batch_create_results.WebhookSubscriptionBatchCreateResult: The result of the operation.
 
         Raises:
-            ValidationApiError: If no subscriptions were created.
+            ValidationApiError: No subscriptions were created.
 
         Example:
             How to create several subscriptions.
