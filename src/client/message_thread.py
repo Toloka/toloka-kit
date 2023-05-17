@@ -20,12 +20,12 @@ from ..util._extendable_enum import ExtendableStrEnum
 
 @unique
 class RecipientsSelectType(ExtendableStrEnum):
-    """Method for specifying recipients.
+    """The way of specifying message recipients.
 
     Attributes:
-        DIRECT: specify IDs of Tolokers.
-        FILTER: select Tolokers using a filter.
-        ALL: send a message to all Tolokers who have tried to complete your tasks at least once.
+        DIRECT: A list of Toloker IDs.
+        FILTER: A filter for selecting Tolokers.
+        ALL: All Tolokers who completed any of your tasks at least once.
     """
 
     DIRECT = 'DIRECT'
@@ -35,7 +35,7 @@ class RecipientsSelectType(ExtendableStrEnum):
 
 @unique
 class Folder(ExtendableStrEnum):
-    """Folders for a thread.
+    """A folder with threads.
     """
 
     INBOX = 'INBOX'
@@ -46,23 +46,23 @@ class Folder(ExtendableStrEnum):
 
 
 class Interlocutor(BaseTolokaObject):
-    """Information about the sender or recipient.
+    """Information about a message sender or recipient.
 
     Attributes:
-        id: ID of the sender or recipient.
-        role: Role of the sender or recipient in Toloka.
-        myself: Marks a sender or recipient with your ID. If the ID belongs to you, the value is `True`.
+        id: The ID of the sender or recipient.
+        role: The role in Toloka.
+        myself: A flag that is set to `True` when the ID is yours.
     """
 
     @unique
     class InterlocutorRole(ExtendableStrEnum):
-        """Role of the sender or recipient in Toloka.
+        """A role in Toloka.
 
         Attributes:
             USER: A Toloker.
-            REQUESTER: A requester.
+            REQUESTER: A Requester.
             ADMINISTRATOR: An administrator.
-            SYSTEM: For messages sent automatically.
+            SYSTEM: The Toloka itself. This role is used for messages that are sent automatically.
         """
 
         USER = 'USER'
@@ -76,38 +76,40 @@ class Interlocutor(BaseTolokaObject):
 
 
 class MessageThread(BaseTolokaObject):
-    """Message thread.
+    """A message thread.
 
-    The sent message is added to the new message thread. Until the first response is received the message chain is in
-    the folder UNREAD. If there are several addresses in the chain and one of them responds, a new message chain
-    will be created
+    A message thread is created when you send a new message. Then responses are placed to the thread.
+    Until the first response is received the message thread is in the `UNREAD` folder.
+
+    If the message has several recipients then a message thread is created for each recipient when they responds.
+
     Attributes:
-        id: Message thread ID.
-        topic: Message thread title.
-        interlocutors_inlined: Access information about the sender and recipients.
-            * `True` — information is available in the field interlocutors.
-            * `False` — information is available on a separate request.
-        interlocutors: Information about the sender and recipients, sorted by IDs.
-        messages_inlined: Access to message threads:
-            * `True` — The message is available in the messages field.
-            * `False` — The message is available in a separate request.
-        messages: Messages in the thread. Sorted by creation date (new first).
-        meta: Meta
-        answerable: Ability to reply to a message:
-            * `True` — The Toloker can respond to the message.
-            * `False` — The Toloker cannot respond to the message.
-        folders: Folders where the thread is located.
-        compose_details: For messages that you sent: details of the POST request for creating the message.
-        created: The date the first message in the chain was created.
+        id: The ID of the thread.
+        topic: The message thread title. `topic` is a dictionary with two letter language codes as keys.
+        interlocutors_inlined: The way of accessing information about the sender and recipients:
+            * `True` — Information is available in the `interlocutors` list.
+            * `False` — Information is available on a separate request.
+        interlocutors: A list with information about the sender and recipients, sorted by IDs.
+        messages_inlined: The way of accessing messages:
+            * `True` — The messages are in the `messages` list.
+            * `False` — The messages are available on a separate request.
+        messages: A list with thread messages. The list is sorted by creation date: newer messages come first.
+        meta: Thread meta information.
+        answerable:
+            * `True` — Tolokers can respond to your messages.
+            * `False` — Tolokers can't respond to your messages.
+        folders: Folders containing the thread.
+        compose_details: The details of selecting recipients. This information is provided if the first message in the thread was yours.
+        created: The date and time when the first message in the thread was created.
     """
 
     class ComposeDetails(BaseTolokaObject):
-        """For messages that you sent: details of the POST request for creating the message.
+        """The details of selecting recipients.
 
         Attributes:
-            recipients_select_type: Method for specifying recipients.
-            recipients_ids: List of recipients IDs.
-            recipients_filter: Condition to filter recipients.
+            recipients_select_type: The way of specifying message recipients.
+            recipients_ids: A list of Toloker IDs. It is filled if `recipients_select_type` is `DIRECT`.
+            recipients_filter: A filter for selecting Tolokers. It is set if `recipients_select_type` is `FILTER`.
         """
 
         recipients_select_type: RecipientsSelectType = attribute(autocast=True)
@@ -120,12 +122,12 @@ class MessageThread(BaseTolokaObject):
         assignment_id: str
 
     class Message(BaseTolokaObject):
-        """Message in the thread.
+        """A message in a thread.
 
         Attributes:
-            text: Message text.
+            text: The message text. The `text` is a dictionary with two letter language codes as keys.
             from_: Information about the sender.
-            created: Date the message was created.
+            created: The date and time when the message was created.
         """
 
         text: Dict[str, str]
@@ -149,40 +151,41 @@ class MessageThread(BaseTolokaObject):
 
 
 class MessageThreadReply(BaseTolokaObject):
-    """Reply to message thread.
+    """A reply in a message thread.
 
     Attributes:
-        text: Message text. You can provide text in several languages (the message will come in the Toloker's language).
-            Format: {"<language RU / EN/TR/ID / FR>": "<message text>"}.
+        text: A dictionary with the message text.
+            Two letter language code is a key in the dictionary. The message in a preferred Toloker's language is sent, if available.
     """
 
     text: Dict[str, str]
 
 
 class MessageThreadFolders(BaseTolokaObject):
-    """Add a message thread to one or more folders
+    """Folders for a message thread.
 
     Attributes:
-        folders: Folders to add/remove a message thread to/from.
+        folders: A list of folders for a message thread.
     """
 
     folders: List[Folder]
 
 
 class MessageThreadCompose(BaseTolokaObject):
-    """Sent message to a Toloker.
+    """Parameters for creating a message thread with the first message.
+
+    The `topic` and `text` parameters are dictionaries.
+    Two letter language code is a key in the dictionaries. If available, the text in a Toloker preferred language is used.
 
     Attributes:
-        recipients_select_type: Method for specifying recipients
-        topic: Post title. You can provide a title in several languages (the message will come in the Toloker's language).
-            Format: "<language RU/EN/TR/ID/FR>": "<topic text>".
-        text: Message text. You can provide text in several languages (the message will come in the Toloker's language).
-            Format: "<language RU/EN/TR/ID/FR>": "<message text>".
-        answerable: Ability to reply to a message:
-            * `True` — The Toloker can respond to the message.
-            * `False` — The Toloker can't respond to the message.
-        recipients_ids: List of IDs of Tolokers to whom the message will be sent.
-        recipients_filter: Filter to select recipients.
+        recipients_select_type: The way of specifying message recipients.
+        topic: The message thread title.
+        text: The message text.
+        answerable:
+            * `True` — Tolokers can respond to your messages.
+            * `False` — Tolokers can't respond to your messages.
+        recipients_ids: A list of Toloker IDs. It is filled if `recipients_select_type` is `DIRECT`.
+        recipients_filter: A filter for selecting Tolokers. It is set if `recipients_select_type` is `FILTER`.
     """
 
     recipients_select_type: RecipientsSelectType = attribute(autocast=True)
