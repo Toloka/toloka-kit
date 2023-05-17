@@ -23,12 +23,12 @@ from ..util._extendable_enum import ExtendableStrEnum
 
 
 class AnalyticsRequest(BaseTolokaObject, spec_field='subject', spec_enum='Subject'):
-    """Base class for all analytics requests in Toloka
+    """A base class for analytics requests.
 
-    How to use this requests and get some useful information see in example in "TolokaClient.get_analytics".
+    Make analytics requests to Toloka with the [get_analytics](toloka.client.TolokaClient.get_analytics.md) method.
 
     Attributes:
-        subject_id: ID of the object you want to get analytics about.
+        subject_id: The ID of an object to get analytics about.
     """
     @unique
     class Subject(ExtendableStrEnum):
@@ -44,9 +44,10 @@ class PoolAnalyticsRequest(
     spec_field='name',
     spec_enum='Subject'
 ):
-    """Base class for all analytics requests about pools
+    """A base class for analytics requests about pools.
 
-    Right now you can get analytics only about pool.
+    Attributes:
+        subject_id: The ID of a pool to get analytics about.
     """
 
     @unique
@@ -67,88 +68,90 @@ class PoolAnalyticsRequest(
 
 @inherit_docstrings
 class RealTasksCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.REAL_TASKS_COUNT):
-    """The number of tasks in the pool
+    """Counts the number of general tasks in a pool.
 
-    It does not take into account the overlap, how many tasks will be on one page, or the presence of golden tasks.
+    Note, that `RealTasksCountPoolAnalytics` doesn't take into account control and training tasks, and task overlap.
     """
     pass
 
 
 @inherit_docstrings
 class SubmittedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.SUBMITTED_ASSIGNMENTS_COUNT):
-    """The total number of completed assignments in the pool.
+    """Counts the total number of completed assignments in a pool.
 
-    The assignments can have one of the following statuses: "submitted", "approved", or "rejected".
+    It counts assignments with the `SUBMITTED`, `ACCEPTED`, or `REJECTED` status.
     """
     pass
 
 
 @inherit_docstrings
 class SkippedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.SKIPPED_ASSIGNMENTS_COUNT):
-    """Number of assignments in the "skipped" status in the pool
+    """Counts the number of assignments with the `SKIPPED` status in a pool.
     """
     pass
 
 
 @inherit_docstrings
 class RejectedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.REJECTED_ASSIGNMENTS_COUNT):
-    """Number of assignments in the "rejected" status in the pool
+    """Counts the number of assignments with the `REJECTED` status in a pool.
     """
     pass
 
 
 @inherit_docstrings
 class ApprovedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.APPROVED_ASSIGNMENTS_COUNT):
-    """Number of assignments in the "approved" status in the pool
+    """Counts the number of assignments with the `ACCEPTED` status in a pool.
 
-    Do not confuse it with the submitted status.
-    "Submitted" status means that the task was completed by a Toloker and sent for review.
-    "Approved" status means that the task has passed review and money has been paid for it.
+    Do not confuse these task statuses:
+        * `SUBMITTED` tasks are completed by Tolokers and sent for a review.
+        * `ACCEPTED` tasks have passed the review and have been paid for.
     """
     pass
 
 
 @inherit_docstrings
 class CompletionPercentagePoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.COMPLETION_PERCENTAGE):
-    """Approximate percentage of completed tasks in the pool
+    """Calculates the percentage of completed tasks in a pool.
     """
     pass
 
 
 @inherit_docstrings
 class AvgSubmitAssignmentMillisPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.AVG_SUBMIT_ASSIGNMENT_MILLIS):
-    """Average time to complete one task page in milliseconds
+    """Calculates the average time in milliseconds for completing one task suite.
     """
     pass
 
 
 @inherit_docstrings
 class SpentBudgetPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.SPENT_BUDGET):
-    """How much money has already been spent on this pool, excluding fee
+    """Shows money spent on a pool, excluding fees.
     """
     pass
 
 
 @inherit_docstrings
 class UniqueWorkersCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.UNIQUE_WORKERS_COUNT):
-    """The number of unique Tolokers who took tasks from the pool
+    """Counts the number of Tolokers who took tasks from a pool.
     """
     pass
 
 
 @inherit_docstrings
 class UniqueSubmittersCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.UNIQUE_SUBMITTERS_COUNT):
-    """The number of unique Tolokers who have submitted to the pool
+    """Counts the number of Tolokers who completed at least one task suite in a pool.
     """
     pass
 
 
 @inherit_docstrings
 class ActiveWorkersByFilterCountPoolAnalytics(PoolAnalyticsRequest, spec_value=PoolAnalyticsRequest.Subject.ACTIVE_WORKERS_BY_FILTER_COUNT):
-    """The number of active Tolokers matching the pool filters for the last hours
+    """Counts the number of active Tolokers that match pool filters.
+
+    Active Tolokers are Tolokers who viewed and completed tasks recently.
 
     Attributes:
-        interval_hours: The number of hours to take into account when collecting statistics.
+        interval_hours: The interval in hours to take into account.
     """
     interval_hours: int = attribute(required=True)
 

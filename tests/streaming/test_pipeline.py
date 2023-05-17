@@ -2,13 +2,14 @@ import asyncio
 import copy
 import datetime
 import logging
-from typing import List, Set, Tuple
+import pickle
+from typing import ClassVar, List, Set, Tuple
 
 import attr
 import httpx
 import pytest
-from toloka.client import TolokaClient, unstructure
 from toloka.async_client import AsyncTolokaClient
+from toloka.client import unstructure
 from toloka.streaming import Pipeline
 from toloka.streaming.locker import NewerInstanceDetectedError
 from toloka.streaming.observer import AssignmentsObserver, BaseObserver, PoolStatusObserver
@@ -208,9 +209,9 @@ def test_inject(toloka_client):
     handler_class_new = observer_new_2.on_accepted(HandlerClass('w_new', 'x_new'))
     handler_class_custom_inject_new = observer_new_3.on_accepted(HandlerClassCustomInject('y_new', 'z_new'))
 
-    observer_by_key_old = {observer._get_unique_key(): observer for observer in pipeline_old._observers.values()}
+    observer_by_key_old = {observer.get_unique_key(): observer for observer in pipeline_old._observers.values()}
     for observer in pipeline_new._observers.values():
-        injection = observer_by_key_old[observer._get_unique_key()]
+        injection = observer_by_key_old[observer.get_unique_key()]
         observer.inject(injection)
 
     assert 'w_old' == handler_class_new.w
@@ -331,8 +332,6 @@ def test_save_and_load(
     assert 12 == len(handler_new.saved), handler_new.saved  # Start from the previous stop.
 
 
-
-
 class ObserverWithInnerReference(BaseObserver):
     def __init__(self, name: str):
         super().__init__(name=name)
@@ -413,7 +412,7 @@ def test_async_observers():
         _count: int = attr.ib(default=0)
         _should_resume: bool = attr.ib(default=True)
 
-        def _get_unique_key(self):
+        def get_unique_key(self):
             return self.name
 
         async def __call__(self):
@@ -570,4 +569,28 @@ def test_delete_observer():
     asyncio.new_event_loop().run_until_complete(pipeline.run())
 
     assert observer.count == 1
+    assert observer not in pipeline.observers_iter()
+
+
+@attr.s
+class GlobalObserverToDeleteSelf(BaseObserver):
+    TOTAL_COUNT: ClassVar[int] = 0
+
+    async def should_resume(self) -> bool:
+        return True
+
+    async def __call__(self) -> None:
+        self.TOTAL_COUNT += 1
+        self.delete()
+
+
+@pytest.mark.asyncio
+async def test_pickling_between_iterations_respects_delete_observer():
+    pipeline = Pipeline(iteration_mode=IterationMode.ALL_COMPLETED)
+    observer = pipeline.register(GlobalObserverToDeleteSelf())
+    await pipeline.run_manually().__anext__()
+    pipeline = pickle.loads(pickle.dumps(pipeline))
+    with pytest.raises(StopAsyncIteration):
+        await pipeline.run_manually().__anext__()
+    assert observer.TOTAL_COUNT == 1
     assert observer not in pipeline.observers_iter()

@@ -2514,27 +2514,27 @@ class AsyncTolokaClient:
         """
         ...
 
-    async def get_analytics(self, stats: typing.List[toloka.client.analytics_request.AnalyticsRequest]) -> toloka.client.operations.Operation:
-        """Sends analytics queries, for example, to estimate the percentage of completed tasks in the pool
+    async def get_analytics(self, stats: typing.List[toloka.client.analytics_request.AnalyticsRequest]) -> toloka.client.operations.AnalyticsOperation:
+        """Sends analytics requests to Toloka.
 
-        Only pool analytics queries are available.
-        The values of different analytical metrics will be returned in the "details" field of the operation when it is
-        completed. See the example.
         You can request up to 10 metrics at a time.
 
+        The values of different analytical metrics are returned in the `details` field of the operation when it is completed.
+
         Args:
-            stats: Analytics queries list.
+            stats: A list of analytics requests.
 
         Returns:
-            operations.Operation: An operation that you can wait for to get the required statistics.
+            operations.AnalyticsOperation: An object to track the progress of the operation.
 
         Example:
-            How to get task completion percentage for one pool.
+            The example shows how get the percentage of completed tasks in the pool.
 
             >>> from toloka.client.analytics_request import CompletionPercentagePoolAnalytics
-            >>> operation = toloka_client.get_analytics([CompletionPercentagePoolAnalytics(subject_id=pool_id)])
+            >>> operation = toloka_client.get_analytics([CompletionPercentagePoolAnalytics(subject_id='1080020')])
             >>> operation = toloka_client.wait_operation(operation)
-            >>> print(operation.details['value'][0]['result']['value'])
+            >>> print(operation.details['value'][0])
+            >>> completed_task_percentage = operation.details['value'][0]['result']['value']
             ...
         """
         ...
@@ -2574,9 +2574,10 @@ class AsyncTolokaClient:
         self,
         task: toloka.client.task.Task,
         *,
+        operation_id: typing.Optional[uuid.UUID] = ...,
+        async_mode: typing.Optional[bool] = True,
         allow_defaults: typing.Optional[bool] = None,
-        open_pool: typing.Optional[bool] = None,
-        operation_id: typing.Optional[uuid.UUID] = ...
+        open_pool: typing.Optional[bool] = None
     ) -> toloka.client.task.Task:
         """Creates a new task in Toloka.
 
@@ -2666,11 +2667,11 @@ class AsyncTolokaClient:
         self,
         tasks: typing.List[toloka.client.task.Task],
         *,
+        operation_id: typing.Optional[uuid.UUID] = ...,
+        async_mode: typing.Optional[bool] = True,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
-        operation_id: typing.Optional[uuid.UUID] = ...,
-        skip_invalid_items: typing.Optional[bool] = None,
-        async_mode: typing.Optional[bool] = True
+        skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.batch_create_results.TaskBatchCreateResult:
         """Creates several tasks in Toloka.
 
@@ -2760,11 +2761,11 @@ class AsyncTolokaClient:
         self,
         tasks: typing.List[toloka.client.task.Task],
         *,
+        operation_id: typing.Optional[uuid.UUID] = ...,
+        async_mode: typing.Optional[bool] = True,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
-        operation_id: typing.Optional[uuid.UUID] = ...,
-        skip_invalid_items: typing.Optional[bool] = None,
-        async_mode: typing.Optional[bool] = True
+        skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.operations.TasksCreateOperation:
         """Creates tasks in Toloka asynchronously.
 
@@ -3081,10 +3082,9 @@ class AsyncTolokaClient:
         task_suite: toloka.client.task_suite.TaskSuite,
         *,
         operation_id: typing.Optional[uuid.UUID] = ...,
-        skip_invalid_items: typing.Optional[bool] = None,
+        async_mode: typing.Optional[bool] = True,
         allow_defaults: typing.Optional[bool] = None,
-        open_pool: typing.Optional[bool] = None,
-        async_mode: typing.Optional[bool] = True
+        open_pool: typing.Optional[bool] = None
     ) -> toloka.client.task_suite.TaskSuite:
         """Creates a task suite in Toloka.
 
@@ -3117,7 +3117,7 @@ class AsyncTolokaClient:
     async def create_task_suites(
         self,
         task_suites: typing.List[toloka.client.task_suite.TaskSuite],
-        parameters: typing.Optional[toloka.client.task_suite.TaskSuiteCreateRequestParameters] = None
+        parameters: typing.Optional[toloka.client.task_suite.TaskSuitesCreateRequestParameters] = None
     ) -> toloka.client.batch_create_results.TaskSuiteBatchCreateResult:
         """Creates several task suites in Toloka.
 
@@ -3167,10 +3167,10 @@ class AsyncTolokaClient:
         task_suites: typing.List[toloka.client.task_suite.TaskSuite],
         *,
         operation_id: typing.Optional[uuid.UUID] = ...,
-        skip_invalid_items: typing.Optional[bool] = None,
+        async_mode: typing.Optional[bool] = True,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
-        async_mode: typing.Optional[bool] = True
+        skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.batch_create_results.TaskSuiteBatchCreateResult:
         """Creates several task suites in Toloka.
 
@@ -3218,7 +3218,7 @@ class AsyncTolokaClient:
     async def create_task_suites_async(
         self,
         task_suites: typing.List[toloka.client.task_suite.TaskSuite],
-        parameters: typing.Optional[toloka.client.task_suite.TaskSuiteCreateRequestParameters] = None
+        parameters: typing.Optional[toloka.client.task_suite.TaskSuitesCreateRequestParameters] = None
     ) -> toloka.client.operations.TaskSuiteCreateBatchOperation:
         """Creates several task suites in Toloka asynchronously.
 
@@ -3258,10 +3258,10 @@ class AsyncTolokaClient:
         task_suites: typing.List[toloka.client.task_suite.TaskSuite],
         *,
         operation_id: typing.Optional[uuid.UUID] = ...,
-        skip_invalid_items: typing.Optional[bool] = None,
+        async_mode: typing.Optional[bool] = True,
         allow_defaults: typing.Optional[bool] = None,
         open_pool: typing.Optional[bool] = None,
-        async_mode: typing.Optional[bool] = True
+        skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.operations.TaskSuiteCreateBatchOperation:
         """Creates several task suites in Toloka asynchronously.
 
@@ -3638,18 +3638,18 @@ class AsyncTolokaClient:
 
         `get_operations` returns a generator. You can iterate over all found operations using the generator. Several requests to the Toloka server are possible while iterating.
 
-         If you need to sort operations use the [find_operations](toloka.client.TolokaClient.find_operations.md) method.
+        If you need to sort operations use the [find_operations](toloka.client.TolokaClient.find_operations.md) method.
 
-         Args:
-             request: Search criteria.
-             batch_size: Returned operations limit for each request. The default batch_size is 50. The maximum allowed batch_size is 500.
+        Args:
+            request: Search criteria.
+            batch_size: Returned operations limit for each request. The default batch_size is 50. The maximum allowed batch_size is 500.
 
-         Yields:
-             Operation: The next matching operations.
+        Yields:
+            Operation: The next matching operations.
 
-         Example:
-             >>> bonuses = list(toloka_client.get_operations(submitted_lt='2021-06-01T00:00:00'))
-             ...
+        Example:
+            >>> bonuses = list(toloka_client.get_operations(submitted_lt='2021-06-01T00:00:00'))
+            ...
         """
         ...
 
@@ -3676,18 +3676,18 @@ class AsyncTolokaClient:
 
         `get_operations` returns a generator. You can iterate over all found operations using the generator. Several requests to the Toloka server are possible while iterating.
 
-         If you need to sort operations use the [find_operations](toloka.client.TolokaClient.find_operations.md) method.
+        If you need to sort operations use the [find_operations](toloka.client.TolokaClient.find_operations.md) method.
 
-         Args:
-             request: Search criteria.
-             batch_size: Returned operations limit for each request. The default batch_size is 50. The maximum allowed batch_size is 500.
+        Args:
+            request: Search criteria.
+            batch_size: Returned operations limit for each request. The default batch_size is 50. The maximum allowed batch_size is 500.
 
-         Yields:
-             Operation: The next matching operations.
+        Yields:
+            Operation: The next matching operations.
 
-         Example:
-             >>> bonuses = list(toloka_client.get_operations(submitted_lt='2021-06-01T00:00:00'))
-             ...
+        Example:
+            >>> bonuses = list(toloka_client.get_operations(submitted_lt='2021-06-01T00:00:00'))
+            ...
         """
         ...
 
@@ -3756,7 +3756,7 @@ class AsyncTolokaClient:
         user_bonus: toloka.client.user_bonus.UserBonus,
         *,
         operation_id: typing.Optional[uuid.UUID] = ...,
-        skip_invalid_items: typing.Optional[bool] = None
+        async_mode: typing.Optional[bool] = True
     ) -> toloka.client.user_bonus.UserBonus:
         """Issues payments directly to a Toloker.
 
@@ -3796,7 +3796,7 @@ class AsyncTolokaClient:
     async def create_user_bonuses(
         self,
         user_bonuses: typing.List[toloka.client.user_bonus.UserBonus],
-        parameters: typing.Optional[toloka.client.user_bonus.UserBonusCreateRequestParameters] = None
+        parameters: typing.Optional[toloka.client.user_bonus.UserBonusesCreateRequestParameters] = None
     ) -> toloka.client.batch_create_results.UserBonusBatchCreateResult:
         """Creates rewards for Tolokers.
 
@@ -3852,6 +3852,7 @@ class AsyncTolokaClient:
         user_bonuses: typing.List[toloka.client.user_bonus.UserBonus],
         *,
         operation_id: typing.Optional[uuid.UUID] = ...,
+        async_mode: typing.Optional[bool] = True,
         skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.batch_create_results.UserBonusBatchCreateResult:
         """Creates rewards for Tolokers.
@@ -3906,7 +3907,7 @@ class AsyncTolokaClient:
     async def create_user_bonuses_async(
         self,
         user_bonuses: typing.List[toloka.client.user_bonus.UserBonus],
-        parameters: typing.Optional[toloka.client.user_bonus.UserBonusCreateRequestParameters] = None
+        parameters: typing.Optional[toloka.client.user_bonus.UserBonusesCreateRequestParameters] = None
     ) -> toloka.client.operations.UserBonusCreateBatchOperation:
         """Issues payments directly to Tolokers, asynchronously creates many `UserBonus` instances.
 
@@ -3961,6 +3962,7 @@ class AsyncTolokaClient:
         user_bonuses: typing.List[toloka.client.user_bonus.UserBonus],
         *,
         operation_id: typing.Optional[uuid.UUID] = ...,
+        async_mode: typing.Optional[bool] = True,
         skip_invalid_items: typing.Optional[bool] = None
     ) -> toloka.client.operations.UserBonusCreateBatchOperation:
         """Issues payments directly to Tolokers, asynchronously creates many `UserBonus` instances.
@@ -4099,18 +4101,18 @@ class AsyncTolokaClient:
 
         `get_user_bonuses` returns a generator. You can iterate over all found Tolokers' rewards using the generator. Several requests to the Toloka server are possible while iterating.
 
-         If you need to sort rewards use the [find_user_bonuses](toloka.client.TolokaClient.find_user_bonuses.md) method.
+        If you need to sort rewards use the [find_user_bonuses](toloka.client.TolokaClient.find_user_bonuses.md) method.
 
-         Args:
-             request: Search criteria.
-             batch_size: Returned Tolokers' rewards limit for each request. The maximum allowed batch_size is 300.
+        Args:
+            request: Search criteria.
+            batch_size: Returned Tolokers' rewards limit for each request. The maximum allowed batch_size is 300.
 
-         Yields:
-             UserBonus: The next matching Toloker's reward.
+        Yields:
+            UserBonus: The next matching Toloker's reward.
 
-         Example:
-             >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00'))
-             ...
+        Example:
+            >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00'))
+            ...
         """
         ...
 
@@ -4134,18 +4136,18 @@ class AsyncTolokaClient:
 
         `get_user_bonuses` returns a generator. You can iterate over all found Tolokers' rewards using the generator. Several requests to the Toloka server are possible while iterating.
 
-         If you need to sort rewards use the [find_user_bonuses](toloka.client.TolokaClient.find_user_bonuses.md) method.
+        If you need to sort rewards use the [find_user_bonuses](toloka.client.TolokaClient.find_user_bonuses.md) method.
 
-         Args:
-             request: Search criteria.
-             batch_size: Returned Tolokers' rewards limit for each request. The maximum allowed batch_size is 300.
+        Args:
+            request: Search criteria.
+            batch_size: Returned Tolokers' rewards limit for each request. The maximum allowed batch_size is 300.
 
-         Yields:
-             UserBonus: The next matching Toloker's reward.
+        Yields:
+            UserBonus: The next matching Toloker's reward.
 
-         Example:
-             >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00'))
-             ...
+        Example:
+            >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00'))
+            ...
         """
         ...
 
@@ -4840,6 +4842,18 @@ class AsyncTolokaClient:
 
         To iterate over all matching projects you may use the [get_app_projects](toloka.client.TolokaClient.get_app_projects.md) method.
 
+        Example:
+            Searching active projects based on the App solution with the specified ID.
+
+            >>> search = toloka_client.find_app_projects(
+            >>>     app_id = '9lZaMl363jahzra1rrYq', status = 'READY')
+            >>> for app_project in search.content:
+            >>>     print(app_project.id, app_project.name)
+            >>>
+            >>> if search.has_more:
+            >>>     print('There are more App projects...')
+            ...
+
         Args:
             request: Search criteria.
             sort: The order and direction of sorting the results.
@@ -4880,6 +4894,18 @@ class AsyncTolokaClient:
 
         To iterate over all matching projects you may use the [get_app_projects](toloka.client.TolokaClient.get_app_projects.md) method.
 
+        Example:
+            Searching active projects based on the App solution with the specified ID.
+
+            >>> search = toloka_client.find_app_projects(
+            >>>     app_id = '9lZaMl363jahzra1rrYq', status = 'READY')
+            >>> for app_project in search.content:
+            >>>     print(app_project.id, app_project.name)
+            >>>
+            >>> if search.has_more:
+            >>>     print('There are more App projects...')
+            ...
+
         Args:
             request: Search criteria.
             sort: The order and direction of sorting the results.
@@ -4901,6 +4927,12 @@ class AsyncTolokaClient:
         `get_app_projects` returns a generator. You can iterate over all found projects using the generator. Several requests to the Toloka server are possible while iterating.
 
         If you need to sort App projects use the [find_app_projects](toloka.client.TolokaClient.find_app_projects.md) method.
+
+        Example:
+            >>> app_projects = toloka_client.get_app_projects(scope='MY')
+            >>> for app_project in app_projects:
+            >>>     print(app_project.id, app_project.status, app_project.name)
+            ...
 
         Args:
             request: Search criteria.
@@ -4940,6 +4972,12 @@ class AsyncTolokaClient:
 
         If you need to sort App projects use the [find_app_projects](toloka.client.TolokaClient.find_app_projects.md) method.
 
+        Example:
+            >>> app_projects = toloka_client.get_app_projects(scope='MY')
+            >>> for app_project in app_projects:
+            >>>     print(app_project.id, app_project.status, app_project.name)
+            ...
+
         Args:
             request: Search criteria.
             batch_size: Returned projects limit for each request. The maximum batch_size is 5000.
@@ -4952,6 +4990,45 @@ class AsyncTolokaClient:
     async def create_app_project(self, app_project: toloka.client.app.AppProject) -> toloka.client.app.AppProject:
         """Creates an App project in Toloka.
 
+        Example:
+            >>> app_project = toloka.AppProject(
+            >>>   app_id='9lZaMl363jahzra1rrYq',
+            >>>   name='Example project (product relevance)',
+            >>>   parameters={
+            >>>     "default_language": "en",
+            >>>     "name": "Product relevance project",
+            >>>     "instruction_classes": [
+            >>>       {
+            >>>         "description": "The product is relevant to the query.",
+            >>>         "label": "Relevant",
+            >>>         "value": "relevant"
+            >>>       },
+            >>>       {
+            >>>         "description": "The product is not completely relevant to the query.",
+            >>>         "label": "Irrelevant",
+            >>>         "value": "irrelevant"
+            >>>       }
+            >>>     ],
+            >>>     "instruction_examples": [
+            >>>       {
+            >>>         "description": "The product exactly matches the query.",
+            >>>         "label": "relevant",
+            >>>         "query": "some search query",
+            >>>         "screenshot_url": "https://example.com/1"
+            >>>       },
+            >>>       {
+            >>>         "description": "The product shape matches but the product color does not.",
+            >>>         "label": "irrelevant",
+            >>>         "query": "other search query",
+            >>>         "screenshot_url": "https://example.com/2"
+            >>>       }
+            >>>     ]
+            >>>   }
+            >>> )
+            >>> app_project = toloka_client.create_app_project(app_project)
+            >>> print(app_project.created, app_project.status)
+            ...
+
         Args:
             app_project: The project with parameters.
 
@@ -4962,6 +5039,11 @@ class AsyncTolokaClient:
 
     async def get_app_project(self, app_project_id: str) -> toloka.client.app.AppProject:
         """Gets information from Toloka about an App project.
+
+        Example:
+            >>> app_project = toloka_client.get_app_project('Q2d15QBjpwWuDz8Z321g')
+            >>> print(app_project.created, app_project.name)
+            ...
 
         Args:
             app_project_id: The ID of the project.
@@ -4976,6 +5058,10 @@ class AsyncTolokaClient:
 
         The project changes its status to `ARCHIVED`.
 
+        Example:
+            >>> toloka_client.archive_app_project('Q2d15QBjpwWuDz8Z321g')
+            ...
+
         Args:
             app_project_id: The ID of the project.
 
@@ -4988,6 +5074,10 @@ class AsyncTolokaClient:
         """Unarchives an App project.
 
         Previous project status, which was before archiving, is restored.
+
+        Example:
+            >>> toloka_client.unarchive_app_project('Q2d15QBjpwWuDz8Z321g')
+            ...
 
         Args:
             app_project_id: The ID of the project.
@@ -5009,6 +5099,15 @@ class AsyncTolokaClient:
         The number of returned solutions is limited. To find remaining solutions call `find_apps` with updated search criteria.
 
         To iterate over all matching solutions you may use the [get_apps](toloka.client.TolokaClient.get_apps.md) method.
+
+        Example:
+            >>> search = toloka_client.find_apps()
+            >>> for app in search.content:
+            >>>     print(app.id, app.name)
+            >>>
+            >>> if search.has_more:
+            >>>     print('There are more App solutions...')
+            ...
 
         Args:
             request: Search criteria.
@@ -5038,6 +5137,15 @@ class AsyncTolokaClient:
 
         To iterate over all matching solutions you may use the [get_apps](toloka.client.TolokaClient.get_apps.md) method.
 
+        Example:
+            >>> search = toloka_client.find_apps()
+            >>> for app in search.content:
+            >>>     print(app.id, app.name)
+            >>>
+            >>> if search.has_more:
+            >>>     print('There are more App solutions...')
+            ...
+
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
@@ -5059,6 +5167,12 @@ class AsyncTolokaClient:
         `get_apps` returns a generator. You can iterate over all found solutions using the generator. Several requests to the Toloka server are possible while iterating.
 
         If you need to sort solutions use the [find_apps](toloka.client.TolokaClient.find_apps.md) method.
+
+        Example:
+            >>> apps = toloka_client.get_apps()
+            >>> for app in apps:
+            >>>     print(app.id, app.name)
+            ...
 
         Args:
             request: Search criteria.
@@ -5085,6 +5199,12 @@ class AsyncTolokaClient:
         `get_apps` returns a generator. You can iterate over all found solutions using the generator. Several requests to the Toloka server are possible while iterating.
 
         If you need to sort solutions use the [find_apps](toloka.client.TolokaClient.find_apps.md) method.
+
+        Example:
+            >>> apps = toloka_client.get_apps()
+            >>> for app in apps:
+            >>>     print(app.id, app.name)
+            ...
 
         Args:
             request: Search criteria.
@@ -5101,6 +5221,12 @@ class AsyncTolokaClient:
         lang: typing.Optional[str] = None
     ) -> toloka.client.app.App:
         """Gets information from Toloka about an App solution.
+
+        Example:
+            >>> app = toloka_client.get_app('2eN4l59qL2xHB5b8Jqp6')
+            >>> print(app.id, app.name)
+            >>> print(app.description)
+            ...
 
         Args:
             app_id: The ID of the solution.
@@ -5125,6 +5251,19 @@ class AsyncTolokaClient:
 
         To iterate over all matching items you may use the [get_app_items](toloka.client.TolokaClient.get_app_items.md) method.
 
+        Example:
+            Finding items in an App project that were created starting some date.
+            >>> search = toloka_client.find_app_items(
+            >>>     app_project_id = 'Q2d15QBjpwWuDz8Z321g',
+            >>>     created_gte = '2022-06-16',
+            >>>     sort = 'created')
+            >>> for app_item in search.content:
+            >>>     print(app_item.id, app_item.created_at)
+            >>>
+            >>> if search.has_more:
+            >>>     print('...')
+            ...
+
         Args:
             app_project_id: The ID of the App project.
             request: Search criteria.
@@ -5164,6 +5303,19 @@ class AsyncTolokaClient:
 
         To iterate over all matching items you may use the [get_app_items](toloka.client.TolokaClient.get_app_items.md) method.
 
+        Example:
+            Finding items in an App project that were created starting some date.
+            >>> search = toloka_client.find_app_items(
+            >>>     app_project_id = 'Q2d15QBjpwWuDz8Z321g',
+            >>>     created_gte = '2022-06-16',
+            >>>     sort = 'created')
+            >>> for app_item in search.content:
+            >>>     print(app_item.id, app_item.created_at)
+            >>>
+            >>> if search.has_more:
+            >>>     print('...')
+            ...
+
         Args:
             app_project_id: The ID of the App project.
             request: Search criteria.
@@ -5187,6 +5339,12 @@ class AsyncTolokaClient:
         `get_app_items` returns a generator. You can iterate over all found items using the generator. Several requests to the Toloka server are possible while iterating.
 
         If you need to sort items use the [find_app_items](toloka.client.TolokaClient.find_app_items.md) method.
+
+        Example:
+            >>> items = toloka_client.get_app_items('Q2d15QBjpwWuDz8Z321g')
+            >>> for item in items:
+            >>>     print(item.id, item.status, item.finished_at)
+            ...
 
         Args:
             app_project_id: The ID of the App project.
@@ -5225,6 +5383,12 @@ class AsyncTolokaClient:
 
         If you need to sort items use the [find_app_items](toloka.client.TolokaClient.find_app_items.md) method.
 
+        Example:
+            >>> items = toloka_client.get_app_items('Q2d15QBjpwWuDz8Z321g')
+            >>> for item in items:
+            >>>     print(item.id, item.status, item.finished_at)
+            ...
+
         Args:
             app_project_id: The ID of the App project.
             request: Search criteria.
@@ -5242,6 +5406,20 @@ class AsyncTolokaClient:
         app_item: toloka.client.app.AppItem
     ) -> toloka.client.app.AppItem:
         """Creates an App task item in Toloka.
+
+        Example:
+            The following example is suitable for a project
+            that requires `query` and `website_url` keys to be present in input data.
+
+            >>> new_item = {
+            >>>     'batch_id' : '4Va2BBWKL88S4QyAgVje',
+            >>>     'input_data' : {
+            >>>         'id':'40', 'query':'toloka kit', 'website_url':'https://toloka.ai/en/docs/toloka-kit'
+            >>>     }
+            >>> }
+            >>> new_item = toloka_client.create_app_item(app_project_id = 'Q2d15QBjpwWuDz8Z321g', app_item = new_item)
+            >>> print(new_item.created_at)
+            ...
 
         Args:
             app_project_id: The ID of the App project to create the item in.
@@ -5262,6 +5440,20 @@ class AsyncTolokaClient:
     ) -> toloka.client.app.AppItem:
         """Creates an App task item in Toloka.
 
+        Example:
+            The following example is suitable for a project
+            that requires `query` and `website_url` keys to be present in input data.
+
+            >>> new_item = {
+            >>>     'batch_id' : '4Va2BBWKL88S4QyAgVje',
+            >>>     'input_data' : {
+            >>>         'id':'40', 'query':'toloka kit', 'website_url':'https://toloka.ai/en/docs/toloka-kit'
+            >>>     }
+            >>> }
+            >>> new_item = toloka_client.create_app_item(app_project_id = 'Q2d15QBjpwWuDz8Z321g', app_item = new_item)
+            >>> print(new_item.created_at)
+            ...
+
         Args:
             app_project_id: The ID of the App project to create the item in.
             app_item: The task item with parameters.
@@ -5279,6 +5471,17 @@ class AsyncTolokaClient:
     ):
         """Creates task items in an App project in Toloka and adds them to an existing batch.
 
+        Example:
+            The following example is suitable for a project
+            that requires `query` and `website_url` keys to be present in input data.
+
+            >>> new_items = [
+            >>>     {'id':'20', 'query':'toloka kit', 'website_url':'https://toloka.ai/en/docs/toloka-kit'},
+            >>>     {'id':'21', 'query':'crowd kit', 'website_url':'https://toloka.ai/en/docs/crowd-kit'}
+            >>> ]
+            >>> toloka_client.create_app_items(app_project_id = 'Q2d15QBjpwWuDz8Z321g', batch_id = '4Va2BBWKL88S4QyAgVje', items = new_items)
+            ...
+
         Args:
             app_project_id: The ID of the App project.
             request: The request parameters.
@@ -5295,6 +5498,17 @@ class AsyncTolokaClient:
     ):
         """Creates task items in an App project in Toloka and adds them to an existing batch.
 
+        Example:
+            The following example is suitable for a project
+            that requires `query` and `website_url` keys to be present in input data.
+
+            >>> new_items = [
+            >>>     {'id':'20', 'query':'toloka kit', 'website_url':'https://toloka.ai/en/docs/toloka-kit'},
+            >>>     {'id':'21', 'query':'crowd kit', 'website_url':'https://toloka.ai/en/docs/crowd-kit'}
+            >>> ]
+            >>> toloka_client.create_app_items(app_project_id = 'Q2d15QBjpwWuDz8Z321g', batch_id = '4Va2BBWKL88S4QyAgVje', items = new_items)
+            ...
+
         Args:
             app_project_id: The ID of the App project.
             request: The request parameters.
@@ -5307,6 +5521,12 @@ class AsyncTolokaClient:
         app_item_id: str
     ) -> toloka.client.app.AppItem:
         """Gets information from Toloka about an App task item.
+
+        Example:
+            >>> item = toloka_client.get_app_item(app_project_id = 'Q2d15QBjpwWuDz8Z321g', app_item_id = 'V40aPPA2j64TORQyY54Z')
+            >>> print(item.input_data)
+            >>> print(item.output_data)
+            ...
 
         Args:
             app_project_id: The ID of the App project.
@@ -5393,6 +5613,12 @@ class AsyncTolokaClient:
 
         If you need to sort batches use the [find_app_batches](toloka.client.TolokaClient.find_app_batches.md) method.
 
+        Example:
+            >>> batches = toloka_client.get_app_batches(app_project_id = 'Q2d15QBjpwWuDz8Z321g', status = 'NEW')
+            >>> for batch in batches:
+            >>>     print(batch.id, batch.status, batch.items_count)
+            ...
+
         Args:
             app_project_id: The ID of the App project.
             request: Search criteria.
@@ -5429,6 +5655,12 @@ class AsyncTolokaClient:
 
         If you need to sort batches use the [find_app_batches](toloka.client.TolokaClient.find_app_batches.md) method.
 
+        Example:
+            >>> batches = toloka_client.get_app_batches(app_project_id = 'Q2d15QBjpwWuDz8Z321g', status = 'NEW')
+            >>> for batch in batches:
+            >>>     print(batch.id, batch.status, batch.items_count)
+            ...
+
         Args:
             app_project_id: The ID of the App project.
             request: Search criteria.
@@ -5446,6 +5678,17 @@ class AsyncTolokaClient:
         request: toloka.client.app.AppBatchCreateRequest
     ) -> toloka.client.app.AppBatch:
         """Creates a batch with task items in an App project in Toloka.
+
+        Example:
+            The following example is suitable for a project
+            that requires `query` and `website_url` keys to be present in input data.
+
+            >>> new_items = [
+            >>>     {'id':'30', 'query':'toloka kit', 'website_url':'https://toloka.ai/en/docs/toloka-kit'},
+            >>>     {'id':'31', 'query':'crowd kit', 'website_url':'https://toloka.ai/en/docs/crowd-kit'}
+            >>> ]
+            >>> toloka_client.create_app_batch(app_project_id = 'Q2d15QBjpwWuDz8Z321g', items = new_items)
+            ...
 
         Args:
             app_project_id: The ID of the project.
@@ -5466,6 +5709,17 @@ class AsyncTolokaClient:
     ) -> toloka.client.app.AppBatch:
         """Creates a batch with task items in an App project in Toloka.
 
+        Example:
+            The following example is suitable for a project
+            that requires `query` and `website_url` keys to be present in input data.
+
+            >>> new_items = [
+            >>>     {'id':'30', 'query':'toloka kit', 'website_url':'https://toloka.ai/en/docs/toloka-kit'},
+            >>>     {'id':'31', 'query':'crowd kit', 'website_url':'https://toloka.ai/en/docs/crowd-kit'}
+            >>> ]
+            >>> toloka_client.create_app_batch(app_project_id = 'Q2d15QBjpwWuDz8Z321g', items = new_items)
+            ...
+
         Args:
             app_project_id: The ID of the project.
             request: The request parameters.
@@ -5481,6 +5735,11 @@ class AsyncTolokaClient:
         batch_id: str
     ) -> toloka.client.app.AppBatch:
         """Gets information from Toloka about a batch in an App project.
+
+        Example:
+            >>> batch = toloka_client.get_app_batch(app_project_id = 'Q2d15QBjpwWuDz8Z321g', app_batch_id = '4Va2BBWKL88S4QyAgVje')
+            >>> print(batch.status, batch.items_count, batch.cost)
+            ...
 
         Args:
             app_project_id: The ID of the project.
@@ -5498,15 +5757,23 @@ class AsyncTolokaClient:
         batch_id: str,
         patch: toloka.client.app.AppBatchPatch
     ) -> toloka.client.app.AppBatch:
-        """Updates an App batch name.
+        """Updates an App batch.
 
         Args:
-            app_project_id: The ID of the project.
+            app_project_id: The ID of the App project containing the batch.
             batch_id: The ID of the batch.
-            patch: New name value.
+            patch: Parameters to update.
+
+        Example:
+            Changing the batch name.
+
+            >>> batch = toloka_client.patch_app_batch(
+            >>>     app_project_id = 'Q2d15QBjpwWuDz8Z321g', batch_id = '4Va2BBWKL88S4QyAgVje',
+            >>>     name = 'Preliminary batch')
+            ...
 
         Returns:
-            AppBatch: The App batch.
+            AppBatch: The updated App batch.
         """
         ...
 
@@ -5518,15 +5785,23 @@ class AsyncTolokaClient:
         *,
         name: typing.Optional[str] = None
     ) -> toloka.client.app.AppBatch:
-        """Updates an App batch name.
+        """Updates an App batch.
 
         Args:
-            app_project_id: The ID of the project.
+            app_project_id: The ID of the App project containing the batch.
             batch_id: The ID of the batch.
-            patch: New name value.
+            patch: Parameters to update.
+
+        Example:
+            Changing the batch name.
+
+            >>> batch = toloka_client.patch_app_batch(
+            >>>     app_project_id = 'Q2d15QBjpwWuDz8Z321g', batch_id = '4Va2BBWKL88S4QyAgVje',
+            >>>     name = 'Preliminary batch')
+            ...
 
         Returns:
-            AppBatch: The App batch.
+            AppBatch: The updated App batch.
         """
         ...
 
@@ -5536,6 +5811,10 @@ class AsyncTolokaClient:
         batch_id: str
     ):
         """Launches annotation of a batch of task items in an App project.
+
+        Example:
+            >>> toloka_client.start_app_batch(app_project_id = 'Q2d15QBjpwWuDz8Z321g', app_batch_id = '4Va2BBWKL88S4QyAgVje')
+            ...
 
         Args:
             app_project_id: The ID of the project.
@@ -5550,7 +5829,11 @@ class AsyncTolokaClient:
     ):
         """Stops annotation of a batch of task items in an App project.
 
-        Processing can be stopped only for the batch with the PROCESSING status.
+        Processing can be stopped only for the batch with the `PROCESSING` status.
+
+        Example:
+            >>> toloka_client.stop_app_batch(app_project_id = 'Q2d15QBjpwWuDz8Z321g', batch_id = '4Va2BBWKL88S4QyAgVje')
+            ...
 
         Args:
             app_project_id: The ID of the project.
@@ -5565,7 +5848,11 @@ class AsyncTolokaClient:
     ):
         """Resumes annotation of a batch of task items in an App project.
 
-        Processing can be resumed only for the batch with the STOPPING or STOPPED status.
+        Processing can be resumed only for the batch with the `STOPPING` or `STOPPED` status.
+
+        Example:
+            >>> toloka_client.resume_app_batch(app_project_id = 'Q2d15QBjpwWuDz8Z321g', batch_id = '4Va2BBWKL88S4QyAgVje')
+            ...
 
         Args:
             app_project_id: The ID of the project.

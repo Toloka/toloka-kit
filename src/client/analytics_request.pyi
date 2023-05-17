@@ -20,12 +20,12 @@ import typing
 
 
 class AnalyticsRequest(toloka.client.primitives.base.BaseTolokaObject):
-    """Base class for all analytics requests in Toloka
+    """A base class for analytics requests.
 
-    How to use this requests and get some useful information see in example in "TolokaClient.get_analytics".
+    Make analytics requests to Toloka with the [get_analytics](toloka.client.TolokaClient.get_analytics.md) method.
 
     Attributes:
-        subject_id: ID of the object you want to get analytics about.
+        subject_id: The ID of an object to get analytics about.
     """
 
     class Subject(toloka.util._extendable_enum.ExtendableStrEnum):
@@ -44,12 +44,10 @@ class AnalyticsRequest(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class PoolAnalyticsRequest(AnalyticsRequest):
-    """Base class for all analytics requests about pools
-
-    Right now you can get analytics only about pool.
+    """A base class for analytics requests about pools.
 
     Attributes:
-        subject_id: ID of the object you want to get analytics about.
+        subject_id: The ID of a pool to get analytics about.
     """
 
     class Subject(toloka.util._extendable_enum.ExtendableStrEnum):
@@ -79,12 +77,12 @@ class PoolAnalyticsRequest(AnalyticsRequest):
 
 
 class RealTasksCountPoolAnalytics(PoolAnalyticsRequest):
-    """The number of tasks in the pool
+    """Counts the number of general tasks in a pool.
 
-    It does not take into account the overlap, how many tasks will be on one page, or the presence of golden tasks.
+    Note, that `RealTasksCountPoolAnalytics` doesn't take into account control and training tasks, and task overlap.
 
     Attributes:
-        subject_id: ID of the object you want to get analytics about.
+        subject_id: The ID of a pool to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -97,12 +95,12 @@ class RealTasksCountPoolAnalytics(PoolAnalyticsRequest):
 
 
 class SubmittedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
-    """The total number of completed assignments in the pool.
+    """Counts the total number of completed assignments in a pool.
 
-    The assignments can have one of the following statuses: "submitted", "approved", or "rejected".
+    It counts assignments with the `SUBMITTED`, `ACCEPTED`, or `REJECTED` status.
 
     Attributes:
-        subject_id: ID of the object you want to get analytics about.
+        subject_id: The ID of a pool to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -115,10 +113,10 @@ class SubmittedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
 
 
 class SkippedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
-    """Number of assignments in the "skipped" status in the pool
+    """Counts the number of assignments with the `SKIPPED` status in a pool.
 
     Attributes:
-        subject_id: ID of the object you want to get analytics about.
+        subject_id: The ID of a pool to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -131,10 +129,10 @@ class SkippedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
 
 
 class RejectedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
-    """Number of assignments in the "rejected" status in the pool
+    """Counts the number of assignments with the `REJECTED` status in a pool.
 
     Attributes:
-        subject_id: ID of the object you want to get analytics about.
+        subject_id: The ID of a pool to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -147,14 +145,14 @@ class RejectedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
 
 
 class ApprovedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
-    """Number of assignments in the "approved" status in the pool
+    """Counts the number of assignments with the `ACCEPTED` status in a pool.
 
-    Do not confuse it with the submitted status.
-    "Submitted" status means that the task was completed by a Toloker and sent for review.
-    "Approved" status means that the task has passed review and money has been paid for it.
+    Do not confuse these task statuses:
+        * `SUBMITTED` tasks are completed by Tolokers and sent for a review.
+        * `ACCEPTED` tasks have passed the review and have been paid for.
 
     Attributes:
-        subject_id: ID of the object you want to get analytics about.
+        subject_id: The ID of a pool to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -167,10 +165,10 @@ class ApprovedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
 
 
 class CompletionPercentagePoolAnalytics(PoolAnalyticsRequest):
-    """Approximate percentage of completed tasks in the pool
+    """Calculates the percentage of completed tasks in a pool.
 
     Attributes:
-        subject_id: ID of the object you want to get analytics about.
+        subject_id: The ID of a pool to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -183,10 +181,10 @@ class CompletionPercentagePoolAnalytics(PoolAnalyticsRequest):
 
 
 class AvgSubmitAssignmentMillisPoolAnalytics(PoolAnalyticsRequest):
-    """Average time to complete one task page in milliseconds
+    """Calculates the average time in milliseconds for completing one task suite.
 
     Attributes:
-        subject_id: ID of the object you want to get analytics about.
+        subject_id: The ID of a pool to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -199,10 +197,10 @@ class AvgSubmitAssignmentMillisPoolAnalytics(PoolAnalyticsRequest):
 
 
 class SpentBudgetPoolAnalytics(PoolAnalyticsRequest):
-    """How much money has already been spent on this pool, excluding fee
+    """Shows money spent on a pool, excluding fees.
 
     Attributes:
-        subject_id: ID of the object you want to get analytics about.
+        subject_id: The ID of a pool to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -215,10 +213,10 @@ class SpentBudgetPoolAnalytics(PoolAnalyticsRequest):
 
 
 class UniqueWorkersCountPoolAnalytics(PoolAnalyticsRequest):
-    """The number of unique Tolokers who took tasks from the pool
+    """Counts the number of Tolokers who took tasks from a pool.
 
     Attributes:
-        subject_id: ID of the object you want to get analytics about.
+        subject_id: The ID of a pool to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -231,10 +229,10 @@ class UniqueWorkersCountPoolAnalytics(PoolAnalyticsRequest):
 
 
 class UniqueSubmittersCountPoolAnalytics(PoolAnalyticsRequest):
-    """The number of unique Tolokers who have submitted to the pool
+    """Counts the number of Tolokers who completed at least one task suite in a pool.
 
     Attributes:
-        subject_id: ID of the object you want to get analytics about.
+        subject_id: The ID of a pool to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -247,11 +245,13 @@ class UniqueSubmittersCountPoolAnalytics(PoolAnalyticsRequest):
 
 
 class ActiveWorkersByFilterCountPoolAnalytics(PoolAnalyticsRequest):
-    """The number of active Tolokers matching the pool filters for the last hours
+    """Counts the number of active Tolokers that match pool filters.
+
+    Active Tolokers are Tolokers who viewed and completed tasks recently.
 
     Attributes:
-        subject_id: ID of the object you want to get analytics about.
-        interval_hours: The number of hours to take into account when collecting statistics.
+        subject_id: The ID of a pool to get analytics about.
+        interval_hours: The interval in hours to take into account.
     """
 
     def __init__(
@@ -273,7 +273,7 @@ class EstimatedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
     """The approximate number of responses to task pages.
 
     Attributes:
-        subject_id: ID of the object you want to get analytics about.
+        subject_id: The ID of a pool to get analytics about.
     """
 
     def __init__(self, *, subject_id: str) -> None:

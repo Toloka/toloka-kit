@@ -23,13 +23,16 @@ class BaseDataMetaclass(toloka.client.project.template_builder.base.BaseTemplate
 
 
 class BaseData(toloka.client.project.template_builder.base.BaseComponent, metaclass=BaseDataMetaclass):
-    """Components used for working with data: input, output, or intermediate.
+    """A base class for data components.
 
-    Attributes:
-       path: Path to the property containing data. Dots are used as separators: path.to.some.element. To specify the
-           path to the array element, specify its sequence number starting from zero, for example: items.0
-       default: The value to be used as the default data. This value will be shown in the interface, so it might hide
-           some placeholders, for example, in the field.text component.
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
+
+     Attributes:
+        path: A path to a data property in a component hierarchy.
+            Dots are used as separators: `path.to.some.element`.
+            For an array element, specify its sequence number after a dot: `items.0`.
+        default: A default data value.
+            Note, that it is shown in the interface, so it might hide placeholders, for example, in text fields.
     """
 
     def __init__(
@@ -47,16 +50,9 @@ class BaseData(toloka.client.project.template_builder.base.BaseComponent, metacl
 
 
 class InputData(BaseData):
-    """The input data.
+    """Input data.
 
-    For example, links to images that will be shown to Tolokers. In the Template Builder sandbox, you can
-    set an example of input data.
-
-    Attributes:
-        path: Path to the property containing data. Dots are used as separators: path.to.some.element. To specify the
-            path to the array element, specify its sequence number starting from zero, for example: items.0
-        default: The value to be used as the default data. This value will be shown in the interface, so it might hide
-            some placeholders, for example, in the field.text component.
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
     """
 
     def __init__(
@@ -74,15 +70,11 @@ class InputData(BaseData):
 
 
 class InternalData(BaseData):
-    """The data available only from within the task.
+    """Internal task data.
 
-    This data is not saved to the results. Use this data to calculate or store intermediate values.
+    Use it to store intermediate values.
 
-    Attributes:
-        path: Path to the property containing data. Dots are used as separators: path.to.some.element. To specify the
-            path to the array element, specify its sequence number starting from zero, for example: items.0
-        default: The value to be used as the default data. This value will be shown in the interface, so it might hide
-            some placeholders, for example, in the field.text component.
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
     """
 
     def __init__(
@@ -100,15 +92,11 @@ class InternalData(BaseData):
 
 
 class LocalData(BaseData):
-    """The local data available only from inside the component.
+    """Component data.
 
-    This data is used in some auxiliary components, such as helper.transform.
+    It is used in some components, like [TransformHelperV1](toloka.client.project.template_builder.helpers.TransformHelperV1.md).
 
-    Attributes:
-        path: Path to the property containing data. Dots are used as separators: path.to.some.element. To specify the
-            path to the array element, specify its sequence number starting from zero, for example: items.0
-        default: The value to be used as the default data. This value will be shown in the interface, so it might hide
-            some placeholders, for example, in the field.text component.
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
     """
 
     def __init__(
@@ -126,9 +114,11 @@ class LocalData(BaseData):
 
 
 class LocationData(toloka.client.project.template_builder.base.BaseComponent):
-    """This component sends the device coordinates
+    """Device coordinates.
 
-    To find out if the transmitted coordinates match the ones that you specified, use the conditions.DistanceConditionV1.
+    Use this component with the [DistanceConditionV1](toloka.client.project.template_builder.conditions.DistanceConditionV1.md) condition.
+
+    For more information, see [data.location](https://toloka.ai/docs/template-builder/reference/data.location/).
     """
 
     def __init__(self) -> None:
@@ -140,15 +130,9 @@ class LocationData(toloka.client.project.template_builder.base.BaseComponent):
 
 
 class OutputData(BaseData):
-    """The output data.
+    """Output data.
 
-    This is what you get when you click the Send button.
-
-    Attributes:
-        path: Path to the property containing data. Dots are used as separators: path.to.some.element. To specify the
-            path to the array element, specify its sequence number starting from zero, for example: items.0
-        default: The value to be used as the default data. This value will be shown in the interface, so it might hide
-            some placeholders, for example, in the field.text component.
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
     """
 
     def __init__(
@@ -166,15 +150,9 @@ class OutputData(BaseData):
 
 
 class RelativeData(BaseData):
-    """A special component for saving data.
+    """A component for saving data in the [ListFieldV1](toloka.client.project.template_builder.fields.ListFieldV1).
 
-    It's only available in the field.list component.
-
-    Attributes:
-        path: Path to the property containing data. Dots are used as separators: path.to.some.element. To specify the
-            path to the array element, specify its sequence number starting from zero, for example: items.0
-        default: The value to be used as the default data. This value will be shown in the interface, so it might hide
-            some placeholders, for example, in the field.text component.
+    For more information, see [Working with data](https://toloka.ai/docs/template-builder/operations/work-with-data).
     """
 
     def __init__(

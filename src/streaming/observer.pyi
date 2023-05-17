@@ -14,6 +14,11 @@ import typing
 
 
 class BaseObserver:
+    def get_unique_key(self) -> typing.Tuple:
+        """This method should return identifier for this observer that is unique in the current pipeline context.
+        """
+        ...
+
     def inject(self, injection: typing.Any) -> None: ...
 
     async def __call__(self) -> None: ...
@@ -51,6 +56,8 @@ class BaseObserver:
 
 
 class BasePoolObserver(BaseObserver):
+    def get_unique_key(self) -> typing.Tuple: ...
+
     async def should_resume(self) -> bool: ...
 
     def __init__(
@@ -105,6 +112,8 @@ class PoolStatusObserver(BasePoolObserver):
         ...
     """
 
+    def get_unique_key(self) -> typing.Tuple: ...
+
     def inject(self, injection: 'PoolStatusObserver') -> None: ...
 
     def register_callback(
@@ -158,6 +167,8 @@ class _CallbacksCursorConsumer:
     Allow to run callbacks at fetched data and move the cursor in case of success.
     """
 
+    def get_unique_key(self) -> typing.Tuple: ...
+
     def inject(self, injection: '_CallbacksCursorConsumer') -> None: ...
 
     def add_callback(self, callback: typing.Union[typing.Callable[[typing.List[toloka.streaming.event.AssignmentEvent]], None], typing.Callable[[typing.List[toloka.streaming.event.AssignmentEvent]], typing.Awaitable[None]]]) -> None: ...
@@ -202,6 +213,8 @@ class AssignmentsObserver(BasePoolObserver):
         >>> observer.on_submitted(handle_submitted)
         ...
     """
+
+    def get_unique_key(self) -> typing.Tuple: ...
 
     def inject(self, injection: 'AssignmentsObserver') -> None: ...
 

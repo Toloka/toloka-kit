@@ -30,12 +30,10 @@ class BaseConditionV1Metaclass(toloka.client.project.template_builder.base.Versi
 
 
 class BaseConditionV1(toloka.client.project.template_builder.base.BaseComponent, metaclass=BaseConditionV1Metaclass):
-    """Check an expression against a condition.
-
-    For example, you can check that a text field is filled in.
+    """A base class for conditions.
 
     Attributes:
-        hint: Validation error message that a Toloker will see.
+        hint: A hint that is shown if the condition is not met.
     """
 
     def __init__(
@@ -54,20 +52,15 @@ class BaseConditionV1(toloka.client.project.template_builder.base.BaseComponent,
 
 
 class AllConditionV1(BaseConditionV1):
-    """Checks that all child conditions are met.
+    """Checks that all nested conditions are met.
 
-    If any of the conditions is not met, the component returns 'false'.
-
-    If you only need one out of several conditions to be met, use the condition.any component. You can also combine
-    these components.
+    For more information, see [condition.all](https://toloka.ai/docs/template-builder/reference/condition.all).
 
     Attributes:
-        conditions: A set of conditions that must be met.
-        hint: Validation error message that a Toloker will see.
+        conditions: A list of conditions.
+        hint: A hint that is shown if the condition is not met.
 
     Examples:
-        How to check several conditions.
-
         >>> coordinates_validation = tb.conditions.AllConditionV1(
         >>>     [
         >>>         tb.conditions.RequiredConditionV1(
@@ -103,15 +96,13 @@ class AllConditionV1(BaseConditionV1):
 
 
 class AnyConditionV1(BaseConditionV1):
-    """Checks that at least one of the child conditions is met.
+    """Checks that at least one nested condition is met.
 
-    If none of the conditions is met, the component returns false.
-
-    If you need all conditions to be met, use the condition.all component. You can also combine these components.
+    For more information, see [condition.any](https://toloka.ai/docs/template-builder/reference/condition.any).
 
     Attributes:
-        conditions: A set of conditions, at least one of which must be met.
-        hint: Validation error message that a Toloker will see.
+        conditions: A list of conditions.
+        hint: A hint that is shown if the condition is not met.
     """
 
     def __init__(
@@ -132,19 +123,19 @@ class AnyConditionV1(BaseConditionV1):
 
 
 class DistanceConditionV1(BaseConditionV1):
-    """This component checks whether the sent coordinates match the ones that you specified
+    """Checks a distance between two coordinates.
 
-    For example, you want a Toloker to take a photo of a specific place. The condition.distance component checks whether
-    the photo was taken at the location that you specified.
+    For more information, see [condition.distance](https://toloka.ai/docs/template-builder/reference/condition.distance).
 
     Attributes:
-        from_: First point.
-        to_: Second point.
-        max: The distance in meters by which the X and Y coordinates may differ.
-        hint: Validation error message that a Toloker will see.
+        from_: The first point.
+        to_: The second point.
+        max: The maximum distance in meters.
+        hint: A hint that is shown if the condition is not met.
 
     Examples:
-        How to check that a Toloker is in the right place.
+        The following condition gets Toloker's [location](toloka.client.project.template_builder.data.LocationData.md)
+        and checks that it is near the task location.
 
         >>> distance_condition = tb.conditions.DistanceConditionV1(
         >>>     tb.data.LocationData(),
@@ -177,17 +168,13 @@ class DistanceConditionV1(BaseConditionV1):
 
 
 class EmptyConditionV1(BaseConditionV1):
-    """Checks that the data is empty (undefined).
+    """Checks that data is empty or undefined.
 
-    Returns false if the data received a value.
-
-    You can check:
-        Template data (data.*).
-        Data for the input field (field.*) that contains condition.empty.
+    For more information, see [condition.empty](https://toloka.ai/docs/template-builder/reference/condition.empty).
 
     Attributes:
-        data: Data to check. If not specified, data is checked in the component that contains condition.empty.
-        hint: Validation error message that a Toloker will see.
+        data: Data to check. If not specified, data of the parent component is checked.
+        hint: A hint that is shown if the condition is not met.
     """
 
     def __init__(
@@ -208,28 +195,14 @@ class EmptyConditionV1(BaseConditionV1):
 
 
 class EqualsConditionV1(BaseConditionV1):
-    """Checks whether the original value is equal to the specified value.
+    """Checks whether two values are equal.
 
-    If it matches, it returns true, otherwise it returns false.
-
-    When substituting values, you can refer to data.* or another element using $ref. You can also use helpers and
-    conditions to get the value.
+    For more information, see [condition.equals](https://toloka.ai/docs/template-builder/reference/condition.equals).
 
     Attributes:
-        to: The value to compare with the original.
-            How to pass a value:
-            * Specify the value itself, like the number 42 or a string.
-            * Get the value from your data.
-            * Refer to another element using $ref.
-            * Use helpers and conditions to get the value.
-        data: Original value. If not specified, it uses the value returned by the parent component (the component that
-            contains condition.equals).
-            How to pass a value:
-                * Specify the value itself, like the number 42 or a string.
-                * Get the value from your data.
-                * Refer to another element using $ref.
-                * Use helpers and conditions to get the value.
-        hint: Validation error message that a Toloker will see.
+        to: The value to compare with.
+        data: The first value. If it is not specified, then the value returned by the parent component is used.
+        hint: A hint that is shown if the condition is not met.
     """
 
     def __init__(
@@ -252,16 +225,13 @@ class EqualsConditionV1(BaseConditionV1):
 
 
 class LinkOpenedConditionV1(BaseConditionV1):
-    """Checks that the Toloker clicked the link.
+    """Checks that a Toloker clicked a link.
 
-    Important: To trigger the condition, the Toloker must follow the link from the Toloka interface — you must give Tolokers
-    this option. The condition will not work if the Toloker opens the link from the browser address bar.
-
-    This condition can be used in the view.link component and also anywhere you can use (conditions).
+    For more information, see [condition.link-opened](https://toloka.ai/docs/template-builder/reference/condition.link-opened).
 
     Attributes:
-        url: The link that must be clicked.
-        hint: Validation error message that a Toloker will see.
+        url: The link URL.
+        hint: A hint that is shown if the condition is not met.
     """
 
     def __init__(
@@ -282,13 +252,13 @@ class LinkOpenedConditionV1(BaseConditionV1):
 
 
 class NotConditionV1(BaseConditionV1):
-    """Returns the inverse of the specified condition.
+    """Inverts a condition.
 
-    For example, if the specified condition is met (returns true), then condition.not will return false.
+    For more information, see [condition.not](https://toloka.ai/docs/template-builder/reference/condition.not).
 
     Attributes:
-        condition: The condition for which the inverse is returned.
-        hint: Validation error message that a Toloker will see.
+        condition: The condition to invert.
+        hint: A hint that is shown if the condition is not met.
     """
 
     def __init__(
@@ -309,13 +279,12 @@ class NotConditionV1(BaseConditionV1):
 
 
 class PlayedConditionV1(BaseConditionV1):
-    """Checks the start of playback.
+    """Checks that playback has started.
 
-    Validation will be passed if playback is started. To play media with the condition.played check, you can use
-    view.audio and view.video. The condition.played check only works in the player's validation property.
+    For more information, see [condition.played](https://toloka.ai/docs/template-builder/reference/condition.played).
 
     Attributes:
-        hint: Validation error message that a Toloker will see.
+        hint: A hint that is shown if the condition is not met.
     """
 
     def __init__(
@@ -334,13 +303,12 @@ class PlayedConditionV1(BaseConditionV1):
 
 
 class PlayedFullyConditionV1(BaseConditionV1):
-    """This component checks for the end of playback.
+    """Checks that playback is complete.
 
-    Validation is passed if playback is finished. To play media with the condition.played-fully check, you can use
-    view.audio and view.video. The condition.played-fully check only works in the player's validation property.
+    For more information, see [condition.played-fully](https://toloka.ai/docs/template-builder/reference/condition.played-fully).
 
     Attributes:
-        hint: Validation error message that a Toloker will see.
+        hint: A hint that is shown if the condition is not met.
     """
 
     def __init__(
@@ -359,15 +327,13 @@ class PlayedFullyConditionV1(BaseConditionV1):
 
 
 class RequiredConditionV1(BaseConditionV1):
-    """Checks that the data is filled in. This way you can get the Toloker to answer all the required questions.
+    """Checks that a data field is present in a response.
 
-    If used inside the validation property, you can omit the data property and the same property will be used from the
-    parent component field (the one that contains the condition.required component).
+    For more information, see [condition.required](https://toloka.ai/docs/template-builder/reference/condition.required).
 
     Attributes:
-        data: Data to be filled in. If the property is not specified, the data of the parent component (the one that
-            contains condition.required) is used.
-        hint: Validation error message that a Toloker will see.
+        data: The data field. If it is not specified, the data of the parent component is used.
+        hint: A hint that is shown if the condition is not met.
 
     Examples:
         How to check that image is uploaded.
@@ -375,7 +341,7 @@ class RequiredConditionV1(BaseConditionV1):
         >>> image = tb.fields.MediaFileFieldV1(
         >>>     tb.data.OutputData('image'),
         >>>     tb.fields.MediaFileFieldV1.Accept(photo=True, gallery=True),
-        >>>     validation=tb.conditions.RequiredConditionV1(hint='Your must upload photo.'),
+        >>>     validation=tb.conditions.RequiredConditionV1(hint='You must upload a photo.'),
         >>> )
         ...
     """
@@ -398,26 +364,14 @@ class RequiredConditionV1(BaseConditionV1):
 
 
 class SameDomainConditionV1(BaseConditionV1):
-    """Checks if the link that you entered belongs to a specific site. If it does, returns true, otherwise, false.
+    """Checks that domains in two URLs are the same.
 
-    Links must be specified in full, including the protocol (http, https, ftp).
-
-    The `www.` subdomain is ignored when checking, meaning that links to `www.example.com`
-    and `example.com` are considered to be the same.
-
-    How to pass a link address:
-
-    * Specify it explicitly as a string.
-    * [Get the value](https://toloka.ai/en/docs/template-builder/operations/work-with-data) from your data.
-    * Refer to another element using `$ref`.
-    * Use [helpers](https://toloka.ai/en/docs/template-builder/reference/helpers) and
-      [conditions](https://toloka.ai/en/docs/template-builder/reference/conditions) to get the value.
+    For more information, see [condition.same-domain](https://toloka.ai/docs/template-builder/reference/condition.same-domain).
 
     Attributes:
-        data: The link address to be checked. If you don't specify it, the value returned by the parent component
-            (the one that contains condition.same-domain) is used.
-        original: The link address that your link is compared to.
-        hint: Validation error message that a Toloker will see.
+        data: The first URL. If it is not specified, then the value returned by the parent component is used.
+        original: The second URL.
+        hint: A hint that is shown if the condition is not met.
     """
 
     def __init__(
@@ -440,19 +394,14 @@ class SameDomainConditionV1(BaseConditionV1):
 
 
 class SchemaConditionV1(BaseConditionV1):
-    """Allows validating data using JSON Schema. This is a special format for describing data in JSON format.
+    """Validates data using the [JSON Schema](https://json-schema.org/learn/getting-started-step-by-step.html).
 
-    For example, you can describe the data type, the minimum and maximum values, and specify that all values must be
-    unique.
-
-    This component is useful in the following cases:
-        * If available components don't provide everything you need to configure validation.
-        * If you already have a prepared JSON Schema configuration for the check and you want to use it.
+    For more information, see [condition.schema](https://toloka.ai/docs/template-builder/reference/condition.schema).
 
     Attributes:
-        data: Data that should be checked.
+        data: Data to be validated.
         schema: The schema for validating data.
-        hint: Validation error message that a Toloker will see.
+        hint: A hint that is shown if the condition is not met.
     """
 
     def __init__(
@@ -475,12 +424,14 @@ class SchemaConditionV1(BaseConditionV1):
 
 
 class SubArrayConditionV1(BaseConditionV1):
-    """Checks that the array in data is a subarray for parent.
+    """Checks that an array is a subarray of another array.
+
+    For more information, see [condition.sub-array](https://toloka.ai/docs/template-builder/reference/condition.sub-array).
 
     Attributes:
-        data: Subarray that is checked for in parent.
-        parent: The array where data is searched for.
-        hint: Validation error message that a Toloker will see.
+        data: The array to check.
+        parent: The array to look in.
+        hint: A hint that is shown if the condition is not met.
     """
 
     def __init__(

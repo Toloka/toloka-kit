@@ -890,7 +890,6 @@ class UserBonusCreateBatchOperation(Operation):
             * `True` — Create rewards using `UserBonus` instances that passed validation. Skip the rest of the `UserBonus` instances.
             * `False` — If at least one of the `UserBonus` instances didn't pass validation, stop the operation and
                 don't create any rewards.
-        details.pool_id: 
         details.total_count: The number of bonuses in the request.
         details.valid_count: The number of JSON objects with bonus information that have passed validation.
         details.not_valid_count: The number of JSON objects with bonus information that failed validation.

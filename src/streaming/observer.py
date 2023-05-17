@@ -29,7 +29,10 @@ class BaseObserver:
     _enabled: bool = attr.ib(default=True, init=False)
     _deleted: bool = attr.ib(default=False, init=False)
 
-    def _get_unique_key(self) -> Tuple:
+    def get_unique_key(self) -> Tuple:
+        """This method should return identifier for this observer that is unique in the current pipeline context.
+        """
+
         return (self.__class__.__name__, self.name or '')
 
     def inject(self, injection: Any) -> None:
@@ -127,8 +130,8 @@ class BasePoolObserver(BaseObserver):
     toloka_client: AsyncInterfaceWrapper[TolokaClientSyncOrAsyncType] = attr.ib(converter=_wrap_client_to_async_converter)
     pool_id: str = attr.ib()
 
-    def _get_unique_key(self) -> Tuple:
-        return super()._get_unique_key() + (self.pool_id,)
+    def get_unique_key(self) -> Tuple:
+        return super().get_unique_key() + (self.pool_id,)
 
     @add_headers('streaming')
     async def should_resume(self) -> bool:
@@ -187,8 +190,8 @@ class PoolStatusObserver(BasePoolObserver):
     _callbacks: Dict[Pool.Status, List[CallbackForPoolAsyncType]] = attr.ib(factory=dict, init=False)
     _previous_status: Optional[Pool.Status] = attr.ib(default=None, init=False)
 
-    def _get_unique_key(self) -> Tuple:
-        return super()._get_unique_key() + tuple(sorted(
+    def get_unique_key(self) -> Tuple:
+        return super().get_unique_key() + tuple(sorted(
             (status.value, _get_callbacks_unique_key(callbacks))
             for status, callbacks in self._callbacks.items()
         ))
@@ -276,7 +279,7 @@ class _CallbacksCursorConsumer:
     cursor: AssignmentCursor = attr.ib()
     callbacks: List[CallbackForAssignmentEventsAsyncType] = attr.ib(factory=list, init=False)
 
-    def _get_unique_key(self) -> Tuple:
+    def get_unique_key(self) -> Tuple:
         return self.cursor._event_type.value, _get_callbacks_unique_key(self.callbacks)
 
     def inject(self, injection: '_CallbacksCursorConsumer') -> None:
@@ -337,19 +340,19 @@ class AssignmentsObserver(BasePoolObserver):
 
     _callbacks: Dict[AssignmentEvent.Type, _CallbacksCursorConsumer] = attr.ib(factory=dict, init=False)
 
-    def _get_unique_key(self) -> Tuple:
-        return super()._get_unique_key() + tuple(sorted(
-            consumer._get_unique_key()
+    def get_unique_key(self) -> Tuple:
+        return super().get_unique_key() + tuple(sorted(
+            consumer.get_unique_key()
             for consumer in self._callbacks.values()
         ))
 
     def inject(self, injection: 'AssignmentsObserver') -> None:
         injection_consumer_by_key = {
-            consumer._get_unique_key(): consumer
+            consumer.get_unique_key(): consumer
             for consumer in injection._callbacks.values()
         }
         for consumer in self._callbacks.values():
-            key = consumer._get_unique_key()
+            key = consumer.get_unique_key()
             consumer.inject(injection_consumer_by_key[key])
 
     # Setup section.

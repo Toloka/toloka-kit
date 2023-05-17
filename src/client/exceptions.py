@@ -27,11 +27,11 @@ from ..util._docstrings import inherit_docstrings
 # Client errors
 @attr.attrs(auto_attribs=True, str=True, kw_only=True)
 class SpecClassIdentificationError(Exception):
-    """Raised when cannot find spec_сlass for spec_field value.
+    """An exception that is raised when a specification сlass can't be find for a field specification name.
 
     Attributes:
-        spec_field: value that defines spec_class type
-        spec_enum: enum class containing spec_class possible types
+        spec_field: The field specification name.
+        spec_enum: An enumeration with all known specification names.
     """
 
     spec_field: Optional[str] = None
@@ -40,12 +40,12 @@ class SpecClassIdentificationError(Exception):
 
 @attr.attrs(auto_attribs=True, str=True, kw_only=True)
 class FailedOperation(Exception):
-    """Raised when an operation failed.
+    """An exception that is raised when an operation fails.
 
-    Could be raised when an inner operation failed.
+    It could be raised when an inner operation fails.
 
     Attributes:
-        operation: Instance of failed operation.
+        operation: The instance of the failed operation.
     """
     operation: Optional[Any] = None
 
@@ -53,14 +53,14 @@ class FailedOperation(Exception):
 # API errors
 @attr.attrs(auto_attribs=True, kw_only=True)
 class ApiError(Exception):
-    """Error returned from the API Call.
+    """A base class for exceptions that are raised when API methods return errors.
 
     Attributes:
-        status_code: response status code.
-        request_id: request ID
-        code: error code string
-        message: error message
-        payload: additional payload
+        status_code: A HTTP response status code.
+        request_id: The ID of the request that returns an error.
+        code: An error code.
+        message: An error description.
+        payload: Additional data describing an error.
     """
 
     status_code: Optional[int] = None
@@ -74,7 +74,11 @@ class ApiError(Exception):
         code = f'Code of error: {self.code}'
         error_details = f'Error details: {self.message}'
         if self.payload:
-            additional_info = 'Additional information about the error:\n' + json.dumps(self.payload, indent=4)
+            try:
+                payload_str = json.dumps(self.payload, indent=4)
+            except TypeError:
+                payload_str = f'failed to parse payload as JSON! Falling back to raw representation:\n{self.payload}'
+            additional_info = 'Additional information about the error:\n' + payload_str
         else:
             additional_info = ''
         request_id = f'request id: {self.request_id}. It needs to be specified when contacting support.'
@@ -85,10 +89,10 @@ class ApiError(Exception):
 
 @inherit_docstrings
 class ValidationApiError(ApiError):
-    """Field validation error returned from the API Call.
+    """An exception for a field validation error returned by an API method.
 
     Attributes:
-        invalid_fields: the list of the invalid fields
+        invalid_fields: A list of invalid fields.
     """
 
     _invalid_fields: Optional[List[str]] = None

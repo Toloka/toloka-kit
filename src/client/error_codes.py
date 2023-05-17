@@ -8,7 +8,7 @@ from enum import Enum, unique
 
 @unique
 class CommonErrorCodes(Enum):
-    """Types of error codes returned by the API
+    """Common error codes returned by Toloka.
     """
 
     ACCESS_DENIED = 'ACCESS_DENIED'
@@ -23,7 +23,7 @@ class CommonErrorCodes(Enum):
 
 @unique
 class InternalErrorCodes(Enum):
-    """Types of internal error codes returned by the API
+    """Internal error codes returned by Toloka.
     """
 
     ACCOUNT_ALREADY_USED = 'ACCOUNT_ALREADY_USED'
@@ -95,7 +95,7 @@ class InternalErrorCodes(Enum):
 
 @unique
 class ValidationErrorCodes(Enum):
-    """Types of validation error codes returned by the API
+    """Validation error codes returned by Toloka.
     """
 
     ARRAY_EXPECTED = 'ARRAY_EXPECTED'

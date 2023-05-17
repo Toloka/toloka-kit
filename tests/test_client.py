@@ -1,19 +1,17 @@
 import copy
-from decimal import Decimal
-
 import pickle
+import ssl
+from decimal import Decimal
 
 import httpx
 import pytest
 import simplejson
-import ssl
-from pytest_lazyfixture import lazy_fixture
-
-from toloka.client import TolokaClient
 import toloka.client as client
+from pytest_lazyfixture import lazy_fixture
+from toloka.client import TolokaClient
 
-from .testutils.util_functions import check_headers
 from .conftest import SyncOverAsyncTolokaClient
+from .testutils.util_functions import check_headers
 
 
 @pytest.fixture
