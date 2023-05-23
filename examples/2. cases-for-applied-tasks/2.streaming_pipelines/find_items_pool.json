@@ -1,0 +1,94 @@
+{
+    "private_name": "Find a similar item in an online store",
+    "may_contain_adult_content": true,
+    "assignment_max_duration_seconds": 300,
+    "defaults": {
+        "default_overlap_for_new_task_suites": 1
+    },
+    "auto_close_after_complete_delay_seconds": 0,
+    "auto_accept_solutions": false,
+    "auto_accept_period_day": 14,
+    "assignments_issuing_config": {
+        "issue_task_suites_in_creation_order": false
+    },
+    "priority": 0,
+    "filter": {
+        "and": [
+            {
+                "or": [
+                    {
+                        "operator": "IN",
+                        "value": "EN",
+                        "key": "languages",
+                        "category": "profile"
+                    }
+                ]
+            }
+        ]
+    },
+    "quality_control": {
+        "configs": [
+            {
+                "rules": [
+                    {
+                        "action": {
+                            "parameters": {
+                                "scope": "PROJECT",
+                                "duration": 3,
+                                "duration_unit": "DAYS",
+                                "private_comment": "fast responses"
+                            },
+                            "type": "RESTRICTION_V2"
+                        },
+                        "conditions": [
+                            {
+                                "operator": "GTE",
+                                "value": 1,
+                                "key": "fast_submitted_count"
+                            }
+                        ]
+                    }
+                ],
+                "collector_config": {
+                    "uuid": "5492a0e3-6007-4895-ab86-78c4ad2e02eb",
+                    "parameters": {
+                        "fast_submit_threshold_seconds": 30
+                    },
+                    "type": "ASSIGNMENT_SUBMIT_TIME"
+                }
+            },
+            {
+                "rules": [
+                    {
+                        "action": {
+                            "parameters": {
+                                "scope": "ALL_PROJECTS",
+                                "duration": 3,
+                                "duration_unit": "DAYS",
+                                "private_comment": "rejected assignments"
+                            },
+                            "type": "RESTRICTION_V2"
+                        },
+                        "conditions": [
+                            {
+                                "operator": "GTE",
+                                "value": 1.0,
+                                "key": "rejected_assignments_rate"
+                            }
+                        ]
+                    }
+                ],
+                "collector_config": {
+                    "uuid": "a89f0a86-c1b8-4c3b-ae6e-0f8f7795a0b7",
+                    "type": "ACCEPTANCE_RATE"
+                }
+            }
+        ]
+    },
+    "mixer_config": {
+        "real_tasks_count": 1,
+        "golden_tasks_count": 0,
+        "training_tasks_count": 0
+    },
+    "type": "REGULAR"
+}

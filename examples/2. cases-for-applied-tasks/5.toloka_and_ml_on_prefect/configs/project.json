@@ -1,0 +1,47 @@
+{
+    "assignments_automerge_enabled": false,
+    "assignments_issuing_type": "AUTOMATED",
+    "created": "2021-10-03T23:01:31.291000",
+    "id": null,
+    "owner": {
+        "company_id": "1",
+        "id": "b39ea2ce2474c437ed0ee0d4aeec630b",
+        "myself": true
+    },
+    "public_description": "Decide whether a review is positive or negative",
+    "public_instructions": "<p>In the task you will have to read customer reviews and define whether they are positive or negative</p>\n<ul><li><b>Positive.</b> Choose this option if the review reflects a customer&#39;s first-hand <b>good</b> experience with the product recommending to purchase it. For your convenience, you can also use the short-cut by pressing &#34;1&#34;</li><li><b>Negative.</b> Choose this option if the review reflects a customer&#39;s first-hand <b>poor</b> experience with the product recommending <b>not</b> to purchase it. For your convenience, you can also use the short-cut by pressing &#34;2&#34;</li></ul>",
+    "public_name": "Classify customer reviews as positive or negative",
+    "status": "ACTIVE",
+    "task_spec": {
+        "input_spec": {
+            "review": {
+                "hidden": false,
+                "required": true,
+                "type": "string"
+            }
+        },
+        "output_spec": {
+            "sentiment": {
+                "hidden": false,
+                "required": true,
+                "type": "string"
+            }
+        },
+        "view_spec": {
+            "config": "{\"plugins\": [{\"layout\": {\"kind\": \"scroll\", \"taskWidth\": 650.0}, \"type\": \"plugin.toloka\"}, {\"1\": {\"data\": {\"path\": \"sentiment\", \"type\": \"data.output\"}, \"payload\": \"pos\", \"type\": \"action.set\"}, \"2\": {\"data\": {\"path\": \"sentiment\", \"type\": \"data.output\"}, \"payload\": \"neg\", \"type\": \"action.set\"}, \"type\": \"plugin.hotkeys\"}], \"view\": {\"items\": [{\"content\": {\"content\": {\"path\": \"review\", \"type\": \"data.input\"}, \"type\": \"view.text\"}, \"type\": \"view.group\"}, {\"data\": {\"path\": \"sentiment\", \"type\": \"data.output\"}, \"label\": \"Is this review positive or negative?\", \"options\": [{\"label\": \"Positive\", \"value\": \"pos\"}, {\"label\": \"Negative\", \"value\": \"neg\"}], \"type\": \"field.button-radio-group\", \"validation\": {\"type\": \"condition.required\"}}], \"type\": \"view.list\"}}",
+            "localizationConfig": null,
+            "lock": {
+                "action.set": "1.0.0",
+                "condition.required": "1.0.0",
+                "core": "1.0.0",
+                "field.button-radio-group": "1.0.0",
+                "plugin.hotkeys": "1.0.0",
+                "plugin.toloka": "1.0.0",
+                "view.group": "1.0.0",
+                "view.list": "1.0.0",
+                "view.text": "1.0.0"
+            },
+            "type": "tb"
+        }
+    }
+}
