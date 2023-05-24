@@ -233,6 +233,21 @@ class AppBatch(BaseTolokaObject):
 
     @unique
     class Status(ExtendableStrEnum):
+        """The status of an App batch.
+
+        Attributes:
+            NEW: The processing of the batch items is not started.
+            PROCESSING: Batch items are being processed by Tolokers.
+            COMPLETED: Annotation of all batch items is completed.
+            ERROR: An error occurred during processing.
+            CANCELLED: Batch processing cancelled.
+            ARCHIVE: The batch is archived.
+            NO_MONEY: There are not enough money for processing.
+            LOADING:
+            STOPPING:
+            STOPPED:
+        """
+
         NEW = 'NEW'
         PROCESSING = 'PROCESSING'
         COMPLETED = 'COMPLETED'

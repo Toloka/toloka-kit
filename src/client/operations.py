@@ -50,31 +50,31 @@ class OperationType(ExtendableStrEnum):
 
 
 class Operation(BaseTolokaObject, spec_enum=OperationType, spec_field='type'):
-    """Tracking Operation
+    """A base class for Toloka operations.
 
-    Some API requests (opening and closing a pool, archiving a pool or a project, loading multiple tasks,
-    awarding bonuses) are processed as asynchronous operations that run in the background.
+    Some API requests start asynchronous operations in Toloka. Classes derived from `Operation` are used to track them.
+    The examples of asynchronous operations are opening a pool, archiving a project, loading multiple tasks.
 
     Attributes:
-        id: Operation ID.
+        id: The ID of the operation.
         status: The status of the operation.
-        submitted: The UTC date and time the request was sent.
-        parameters: Operation parameters (depending on the operation type).
-        started: The UTC date and time the operation started.
-        finished: The UTC date and time the operation finished.
-        progress: The percentage of the operation completed.
-        details: Details of the operation completion.
+        submitted: The UTC date and time when the operations was requested.
+        parameters: Operation parameters.
+        started: The UTC date and time when the operation started.
+        finished: The UTC date and time when the operation finished.
+        progress: The operation progress in percents.
+        details: The details of the operation completion.
     """
 
     @unique
     class Status(ExtendableStrEnum):
-        """The status of the operation:
+        """The status of an operation.
 
         Attributes:
-            PENDING: Not started yet.
-            RUNNING: In progress.
-            SUCCESS: Completed successfully.
-            FAIL: Not completed.
+            PENDING: The operation is not started yet.
+            RUNNING: The operation is in progress.
+            SUCCESS: The operation completed successfully.
+            FAIL: The operation completed with errors.
         """
 
         PENDING = 'PENDING'
@@ -88,8 +88,7 @@ class Operation(BaseTolokaObject, spec_enum=OperationType, spec_field='type'):
     FAIL = Status.FAIL
 
     class Parameters(BaseTolokaObject):
-        """Operation parameters (depending on the operation type).
-
+        """A base class for operation parameters.
         """
 
         pass
@@ -107,11 +106,11 @@ class Operation(BaseTolokaObject, spec_enum=OperationType, spec_field='type'):
     details: Any  # TODO: cannot structure dict.
 
     def is_completed(self):
-        """Returns `True` if the operation is completed. Status equals SUCCESS or FAIL."""
+        """Checks whether the operation is completed either successfully or not."""
         return self.status in [Operation.Status.SUCCESS, Operation.Status.FAIL]
 
     def raise_on_fail(self):
-        """Raises FailedOperation exception if status is FAIL. Otherwise does nothing."""
+        """Raises `FailedOperation` exception if the operation status is `FAIL`. Otherwise does nothing."""
         if self.status == Operation.Status.FAIL:
             raise FailedOperation(operation=self)
 
@@ -121,7 +120,9 @@ class Operation(BaseTolokaObject, spec_enum=OperationType, spec_field='type'):
 
 @inherit_docstrings
 class AnalyticsOperation(Operation, spec_value=OperationType.ANALYTICS):
-    """Operation returned when requesting analytics via TolokaClient.get_analytics()
+    """Requesting analytics operation.
+
+    The operation is returned by the [get_analytics](toloka.client.TolokaClient.get_analytics.md) method.
     """
 
     pass
@@ -132,10 +133,10 @@ class AnalyticsOperation(Operation, spec_value=OperationType.ANALYTICS):
 
 @inherit_docstrings
 class PoolOperation(Operation):
-    """Base class for all operations on pool
+    """A base class for pool operations.
 
     Attributes:
-        parameters.pool_id: On which pool operation is performed.
+        parameters: Parameters containing the ID of the pool.
     """
 
     class Parameters(Operation.Parameters):
@@ -146,7 +147,9 @@ class PoolOperation(Operation):
 
 @inherit_docstrings
 class PoolArchiveOperation(PoolOperation, spec_value=OperationType.POOL_ARCHIVE):
-    """Operation returned by an asynchronous archive pool via TolokaClient.archive_pool_async()
+    """Pool archiving operation.
+
+    The operation is returned by the [archive_pool_async](toloka.client.TolokaClient.archive_pool_async.md) method.
     """
 
     pass
@@ -154,17 +157,22 @@ class PoolArchiveOperation(PoolOperation, spec_value=OperationType.POOL_ARCHIVE)
 
 @inherit_docstrings
 class PoolCloneOperation(PoolOperation, spec_value=OperationType.POOL_CLONE):
-    """Operation returned by an asynchronous cloning pool via TolokaClient.clone_pool_async()
+    """Pool cloning operation.
 
-    As parameters.pool_id contains id of the pool that needs to be cloned.
-    New pool id stored in details.pool_id.
-    Don't be mistaken.
+    The operation is returned by the [clone_pool_async](toloka.client.TolokaClient.clone_pool_async.md) method.
+
+    Note, that `parameters.pool_id` contains the ID of the pool that is cloned.
+    While `details.pool_id` contains the ID of the new pool created after cloning.
 
     Attributes:
-        details.pool_id: New pool id created after cloning.
+        details: The details of the operation.
     """
 
     class Details(PoolOperation.Parameters):
+        """
+        Attributes:
+            pool_id: The ID of the new pool created after cloning.
+        """
         pool_id: str
 
     details: Details
@@ -172,7 +180,9 @@ class PoolCloneOperation(PoolOperation, spec_value=OperationType.POOL_CLONE):
 
 @inherit_docstrings
 class PoolCloseOperation(PoolOperation, spec_value=OperationType.POOL_CLOSE):
-    """Operation returned by an asynchronous closing pool via TolokaClient.close_pool_async()
+    """Pool closing operation.
+
+    The operation is returned by the [close_pool_async](toloka.client.TolokaClient.close_pool_async.md) method.
     """
 
     pass
@@ -180,7 +190,9 @@ class PoolCloseOperation(PoolOperation, spec_value=OperationType.POOL_CLOSE):
 
 @inherit_docstrings
 class PoolOpenOperation(PoolOperation, spec_value=OperationType.POOL_OPEN):
-    """Operation returned by an asynchronous opening pool via TolokaClient.open_pool_async()
+    """Pool opening operation.
+
+    The operation is returned by the [open_pool_async](toloka.client.TolokaClient.open_pool_async.md) method.
     """
 
     pass
@@ -191,13 +203,17 @@ class PoolOpenOperation(PoolOperation, spec_value=OperationType.POOL_OPEN):
 
 @inherit_docstrings
 class TrainingOperation(Operation):
-    """Base class for all operations on training pool
+    """A base class for operations with trainings.
 
     Attributes:
-        parameters.training_id: On which training pool operation is performed.
+        parameters: Parameters containing the ID of the training.
     """
 
     class Parameters(Operation.Parameters):
+        """
+        Attributes:
+            training_id: The ID of the training.
+        """
         training_id: str
 
     parameters: Parameters
@@ -205,7 +221,9 @@ class TrainingOperation(Operation):
 
 @inherit_docstrings
 class TrainingArchiveOperation(TrainingOperation, spec_value=OperationType.TRAINING_ARCHIVE):
-    """Operation returned by an asynchronous archive training pool via TolokaClient.archive_training_async()
+    """Training archiving operation.
+
+    The operation is returned by the [archive_training_async](toloka.client.TolokaClient.archive_training_async.md) method.
     """
 
     pass
@@ -213,14 +231,15 @@ class TrainingArchiveOperation(TrainingOperation, spec_value=OperationType.TRAIN
 
 @inherit_docstrings
 class TrainingCloneOperation(TrainingOperation, spec_value=OperationType.TRAINING_CLONE):
-    """Operation returned by an asynchronous cloning training pool via TolokaClient.clone_training_async()
+    """Training cloning operation.
 
-    As parameters.training_id contains id of the training pool that needs to be cloned.
-    New training pool id stored in details.training_id.
-    Don't be mistaken.
+    The operation is returned by the [clone_training_async](toloka.client.TolokaClient.clone_training_async.md) method.
+
+    Note, that `parameters.training_id` contains the ID of the training that is cloned.
+    While `details.training_id` contains the ID of the new training created after cloning.
 
     Attributes:
-        details.pool_id: New training pool id created after cloning.
+        details: The details of the operation.
     """
 
     class Details(TrainingOperation.Parameters):
@@ -231,7 +250,9 @@ class TrainingCloneOperation(TrainingOperation, spec_value=OperationType.TRAININ
 
 @inherit_docstrings
 class TrainingCloseOperation(TrainingOperation, spec_value=OperationType.TRAINING_CLOSE):
-    """Operation returned by an asynchronous closing training pool via TolokaClient.close_training_async()
+    """Training closing operation.
+
+    The operation is returned by the [close_training_async](toloka.client.TolokaClient.close_training_async.md) method.
     """
 
     pass
@@ -239,7 +260,9 @@ class TrainingCloseOperation(TrainingOperation, spec_value=OperationType.TRAININ
 
 @inherit_docstrings
 class TrainingOpenOperation(TrainingOperation, spec_value=OperationType.TRAINING_OPEN):
-    """Operation returned by an asynchronous opening training pool via TolokaClient.open_training_async()
+    """Training opening operation.
+
+    The operation is returned by the [open_training_async](toloka.client.TolokaClient.open_training_async.md) method.
     """
 
     pass
@@ -250,13 +273,19 @@ class TrainingOpenOperation(TrainingOperation, spec_value=OperationType.TRAINING
 
 @inherit_docstrings
 class ProjectArchiveOperation(Operation, spec_value=OperationType.PROJECT_ARCHIVE):
-    """Operation returned by an asynchronous archive project via TolokaClient.archive_project_async()
+    """Project archiving operation.
+
+    The operation is returned by the [archive_project_async](toloka.client.TolokaClient.archive_project_async.md) method.
 
     Attributes:
-        parameters.project_id: On which project operation is performed.
+        parameters: Parameters with the ID of the project.
     """
 
     class Parameters(Operation.Parameters):
+        """
+        Attributes:
+            project_id: The ID of the project.
+        """
         project_id: str
 
     parameters: Parameters
@@ -267,23 +296,25 @@ class ProjectArchiveOperation(Operation, spec_value=OperationType.PROJECT_ARCHIV
 
 @inherit_docstrings
 class TasksCreateOperation(Operation, spec_value=OperationType.TASK_BATCH_CREATE):
-    """Operation returned by an asynchronous creating tasks via TolokaClient.create_tasks_async()
+    """Task creating operation.
+
+    The operation is returned by the [create_tasks_async](toloka.client.TolokaClient.create_tasks_async.md) method.
 
     All parameters are for reference only and describe the initial parameters of the request that this operation monitors.
 
     Attributes:
-        parameters.skip_invalid_items: Validation parameters for JSON objects:
-            * `True` — Create the tasks that passed validation. Skip the rest of the tasks.
-            * `False` — If at least one of the tasks didn't pass validation, stop the operation and
-                don't create any tasks.
-        parameters.allow_defaults: Overlap settings:
-            * `True` — Use the overlap that is set in the pool parameters
-                (in the defaults.default_overlap_for_new_tasks key).
-            * `False` — Use the overlap that is set in the task parameters (in the overlap field).
-        parameters.open_pool: Open the pool immediately after creating the tasks, if the pool is closed.
+        parameters: Parameters passed to the `create_tasks_async` method.
     """
 
     class Parameters(Operation.Parameters):
+        """Parameters passed to the [create_tasks_async](toloka.client.TolokaClient.create_tasks_async.md) method.
+
+        Attributes:
+            skip_invalid_items: Task validation parameter.
+            allow_defaults: Active overlap parameter.
+            open_pool: Opening the pool immediately.
+        """
+
         skip_invalid_items: bool
         allow_defaults: bool
         open_pool: bool

@@ -8,15 +8,21 @@ from .primitives.base import BaseTolokaObject
 #  Add simple way of getting different objects of interest for every child.
 #  e.g. user_bonus_id for type=USER_BONUS_PERSIST, success=True (https://toloka.ai/docs/api/get-operation-log/)
 class OperationLogItem(BaseTolokaObject):
-    """Objects of which the operation log consists
+    """An operation log item.
 
-    Contains information about the validation errors and what sets of objects were created.
+    If the operation was successful, the log contains the IDs of the created objects, otherwise it contains the details of validation errors.
 
     Attributes:
-        type: Type of action in the operation step.
-        success: Result of the step (true or false).
-        input: Input data at the operation step.
-        output: Operation step output. Depends on the type.
+        type: The type of the operation.
+            * `USER_BONUS_PERSIST` — Successfully issuing a bonus.
+            * `TASK_CREATE` — Successfully creating a task.
+            * `TASK_SUITE_CREATE` — Successfully creating a task suite.
+            * `USER_BONUS_VALIDATE` — Issuing a bonus that failed.
+            * `TASK_VALIDATE` — Creating a task that failed.
+            * `TASK_SUITE_VALIDATE` — Creating a task suite that failed.
+        success: The operation result: success or failure.
+        input: Input operation data.
+        output: Operation output data. The content depends on the `type`.
     """
 
     type: str
