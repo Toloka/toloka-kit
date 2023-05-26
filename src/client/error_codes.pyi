@@ -7,7 +7,7 @@ import enum
 
 
 class CommonErrorCodes(enum.Enum):
-    """Types of error codes returned by the API
+    """Common error codes returned by Toloka.
     """
 
     ACCESS_DENIED = 'ACCESS_DENIED'
@@ -21,7 +21,7 @@ class CommonErrorCodes(enum.Enum):
 
 
 class InternalErrorCodes(enum.Enum):
-    """Types of internal error codes returned by the API
+    """Internal error codes returned by Toloka.
     """
 
     ACCOUNT_ALREADY_USED = 'ACCOUNT_ALREADY_USED'
@@ -91,7 +91,7 @@ class InternalErrorCodes(enum.Enum):
 
 
 class ValidationErrorCodes(enum.Enum):
-    """Types of validation error codes returned by the API
+    """Validation error codes returned by Toloka.
     """
 
     ARRAY_EXPECTED = 'ARRAY_EXPECTED'

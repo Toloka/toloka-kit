@@ -14,12 +14,12 @@ import typing
 
 
 class FieldValidationError(toloka.client.primitives.base.BaseTolokaObject):
-    """Error that contains information about an invalid field.
+    """An error that contains information about an invalid field.
 
     Attributes:
-        code: An error code.
-        message: An error message.
-        params: Additional parameters describing the error.
+        code: The error code.
+        message: The error message.
+        params: A list with additional parameters describing the error.
     """
 
     def __init__(
@@ -40,11 +40,13 @@ class FieldValidationError(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class TaskBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The results of the tasks creation operation.
+    """The result of a task creation.
+
+    `TaskBatchCreateResult` is returned by the [create_tasks](toloka.client.TolokaClient.create_tasks.md) method.
 
     Attributes:
-        items: A list of created tasks.
-        validation_errors: A list with validation errors in input tasks. The list is filled if the request parameter `skip_invalid_items` is `True`.
+        items: A dictionary with created tasks. The indexes of a `create_tasks` input list are used as keys in the dictionary.
+        validation_errors: A dictionary with validation errors in input tasks. It is filled if the request parameter `skip_invalid_items` is `True`.
     """
 
     def __init__(
@@ -63,11 +65,13 @@ class TaskBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class TaskSuiteBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The results of the task suites creation operation.
+    """The result of a task suite creation.
+
+    `TaskSuiteBatchCreateResult` is returned by the [create_task_suites](toloka.client.TolokaClient.create_task_suites.md) method.
 
     Attributes:
-        items: A list of created task suites.
-        validation_errors: A list with validation errors in input task suites. The list is filled if the request parameter `skip_invalid_items` is `True`.
+        items: A dictionary with created task suites. The indexes of a `create_task_suites` input list are used as keys in the dictionary.
+        validation_errors: A dictionary with validation errors in input task suites. It is filled if the request parameter `skip_invalid_items` is `True`.
     """
 
     def __init__(
@@ -86,11 +90,13 @@ class TaskSuiteBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject)
 
 
 class UserBonusBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The results of the creating rewards for Tolokers.
+    """The result of issuing rewards for Tolokers.
+
+    `UserBonusBatchCreateResult` is returned by the [create_user_bonuses](toloka.client.TolokaClient.create_user_bonuses.md) method.
 
     Attributes:
-        items: A list of created rewards.
-        validation_errors: A list with validation errors. The list is filled if the request parameter `skip_invalid_items` is `True`.
+        items: A dictionary with created rewards. The indexes of a `create_user_bonuses` input list are used as keys in the dictionary.
+        validation_errors: A dictionary with validation errors. It is filled if the request parameter `skip_invalid_items` is `True`.
     """
 
     def __init__(
@@ -109,11 +115,13 @@ class UserBonusBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject)
 
 
 class WebhookSubscriptionBatchCreateResult(toloka.client.primitives.base.BaseTolokaObject):
-    """A list with the results of the webhook-subscriptions creation operation.
+    """The result of creating webhook subscriptions.
+
+    `WebhookSubscriptionBatchCreateResult` is returned by the [upsert_webhook_subscriptions](toloka.client.TolokaClient.upsert_webhook_subscriptions.md) method.
 
     Attributes:
-        items: Object with created webhook-subscriptions.
-        validation_errors: Object with validation errors.
+        items: A dictionary with created subscriptions. The indexes of a `upsert_webhook_subscriptions` input list are used as keys in the dictionary.
+        validation_errors: A dictionary with validation errors.
     """
 
     def __init__(
