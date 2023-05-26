@@ -79,7 +79,7 @@ import time
 import attr
 import httpx
 import simplejson
-from httpx import HTTPStatusError, RequestError
+from httpx import HTTPStatusError
 from httpx._types import VerifyTypes
 from toloka.client.batch_create_results import FieldValidationError
 
@@ -255,7 +255,7 @@ class TolokaClient:
                 return 'https://sandbox.toloka.yandex.com'
 
     EXCEPTIONS_TO_RETRY: ClassVar[Tuple[Exception]] = (
-        RequestError, InternalApiError, TooManyRequestsApiError, RemoteServiceUnavailableApiError, HTTPStatusError,
+        InternalApiError, TooManyRequestsApiError, RemoteServiceUnavailableApiError, HTTPStatusError,
     )
 
     token: str
@@ -338,8 +338,8 @@ class TolokaClient:
 
     def _do_request_with_retries(self, method, path, **kwargs):
         @self.retrying.wraps
-        def wrapped(method, path, **kwargs):
-            response = self._session.request(method, path, **kwargs)
+        def wrapped(method, url, **kwargs):
+            response = self._session.request(method, url, **kwargs)
             raise_on_api_error(response)
             return response
 
