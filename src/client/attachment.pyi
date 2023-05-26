@@ -10,16 +10,17 @@ import typing
 
 
 class Attachment(toloka.client.primitives.base.BaseTolokaObject):
-    """Attachment
+    """An attachment.
 
-    Files uploaded by Tolokers are saved in Toloka.
+    Files attached to tasks by Tolokers are uploaded to Toloka.
+
     Attributes:
-        id: File ID.
-        name: File name.
-        details: Information about the pool, the task, and the Toloker who uploaded the file.
-        created: Date the file was uploaded to Toloka.
-        media_type: MIME data type.
-        owner: Owner
+        id: The file ID.
+        name: The file name.
+        details: Attachment details: a pool, task, and Toloker who uploaded the file.
+        created: The date and time when the file was uploaded.
+        media_type: The file [MIME](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) data type.
+        owner: The owner of the attachment.
     """
 
     class Type(toloka.util._extendable_enum.ExtendableStrEnum):
@@ -29,12 +30,12 @@ class Attachment(toloka.client.primitives.base.BaseTolokaObject):
         ASSIGNMENT_ATTACHMENT = 'ASSIGNMENT_ATTACHMENT'
 
     class Details(toloka.client.primitives.base.BaseTolokaObject):
-        """Information about the pool, task, and the Toloker from which the file was received.
+        """Attachment details.
 
         Attributes:
-            user_id: ID of the Toloker from whom the file was received.
-            assignment_id: ID for issuing a set of tasks to the Toloker.
-            pool_id: Pool ID.
+            user_id: The ID of the Toloker who attached the file.
+            assignment_id: The ID of the assignment with the file.
+            pool_id: The ID of the pool.
         """
 
         def __init__(
@@ -77,15 +78,15 @@ class Attachment(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AssignmentAttachment(Attachment):
-    """Assignment Attachment.
+    """An attachment to an assignment.
 
     Attributes:
-        id: File ID.
-        name: File name.
-        details: Information about the pool, the task, and the Toloker who uploaded the file.
-        created: Date the file was uploaded to Toloka.
-        media_type: MIME data type.
-        owner: Owner
+        id: The file ID.
+        name: The file name.
+        details: Attachment details: a pool, task, and Toloker who uploaded the file.
+        created: The date and time when the file was uploaded.
+        media_type: The file [MIME](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) data type.
+        owner: The owner of the attachment.
     """
 
     def __init__(
