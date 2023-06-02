@@ -29,7 +29,18 @@ def get_ipython_with_version():
 
 EXTRAS_REQUIRE = {
     'dev': [
-        'respx', 'aiohttp', 'pytest', 'pytest-lazy-fixture', 'pytest-asyncio', 'pytest-timeout', 'pytest-mock', 'tox'
+        'aiohttp',
+        'data-science-types',
+        'flake8',
+        'mypy',
+        'pytest',
+        'pytest-asyncio',
+        'pytest-lazy-fixture',
+        'pytest-mock',
+        'pytest-timeout',
+        'respx',
+        'tox',
+        'types-urllib3',
     ],
     'pandas': ['pandas'],
     'autoquality': ['crowd-kit >= 1.0.0'],
