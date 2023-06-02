@@ -7,17 +7,17 @@ import logging
 import sys
 from functools import wraps
 from inspect import signature
-from typing_extensions import Protocol
 from typing import Callable, List, Optional, Tuple, Type, Union
 
 import httpx
 import urllib3
 import urllib3.exceptions
-from httpx._types import URLTypes
-from tenacity import AsyncRetrying, BaseRetrying, RetryCallState, Retrying
+from httpx import URL
+from tenacity import AsyncRetrying, BaseRetrying, RetryCallState, Retrying, WrappedFn
 from tenacity.retry import retry_base
 from tenacity.stop import stop_base
 from tenacity.wait import wait_base
+from typing_extensions import Protocol, runtime_checkable
 from urllib3.response import HTTPResponse  # type: ignore
 from urllib3.util.retry import Retry  # type: ignore
 
@@ -100,8 +100,9 @@ class TolokaRetry(Retry):
         return super(TolokaRetry, self).increment(*args, **kwargs)
 
 
+@runtime_checkable
 class HTTPXRequestFn(Protocol):
-    def __call__(self, method: str, url: URLTypes, **kwargs) -> HTTPResponse:
+    def __call__(self, method: str, url: Union[URL, str], **kwargs) -> HTTPResponse:
         ...
 
 
@@ -156,7 +157,11 @@ class RetryingOverURLLibRetry(BaseRetrying):
             **kwargs,
         )
 
-    def wraps(self, f: HTTPXRequestFn) -> HTTPXRequestFn:
+    def wraps(self, f: WrappedFn) -> WrappedFn:
+        # This check contradicts Liskov substitution principle, so it is not enforced by type hints. However, it is
+        # handy to use inheritance here to define SyncRetryingOverURLLibRetry and AsyncRetryingOverURLLibRetry despite
+        # the fact that they are not substitutable for the BaseRetrying.
+        assert isinstance(f, HTTPXRequestFn), 'Wrapped function should be callable with (method, url, **kwargs)'
         return super().wraps(f)
 
     def __getstate__(self):

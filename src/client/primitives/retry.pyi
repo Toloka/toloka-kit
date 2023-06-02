@@ -48,21 +48,6 @@ class TolokaRetry(urllib3.util.retry.Retry):
     _retry_quotas: typing.Union[typing.List[str], str, None]
 
 
-class HTTPXRequestFn(typing_extensions.Protocol):
-    def __call__(
-        self,
-        method: str,
-        url: typing.Union['URL', str],
-        **kwargs
-    ) -> urllib3.response.HTTPResponse: ...
-
-    def __init__(
-        self,
-        *args,
-        **kwargs
-    ): ...
-
-
 class RetryingOverURLLibRetry(tenacity.BaseRetrying, metaclass=abc.ABCMeta):
     """Adapter class that allows usage of the urllib3 Retry class in httpx using the tenacity retrying mechanism.
 
@@ -100,7 +85,7 @@ class RetryingOverURLLibRetry(tenacity.BaseRetrying, metaclass=abc.ABCMeta):
         **kwargs
     ): ...
 
-    def wraps(self, f: HTTPXRequestFn) -> HTTPXRequestFn: ...
+    def wraps(self, f: tenacity.WrappedFn) -> tenacity.WrappedFn: ...
 
     def __getstate__(self): ...
 

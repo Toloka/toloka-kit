@@ -28,7 +28,20 @@ def get_ipython_with_version():
 
 
 EXTRAS_REQUIRE = {
-    'dev': ['respx', 'aiohttp', 'pytest', 'pytest-lazy-fixture', 'pytest-asyncio', 'pytest-timeout', 'pytest-mock'],
+    'dev': [
+        'aiohttp',
+        'data-science-types',
+        'flake8',
+        'mypy',
+        'pytest',
+        'pytest-asyncio',
+        'pytest-lazy-fixture',
+        'pytest-mock',
+        'pytest-timeout',
+        'respx',
+        'tox',
+        'types-urllib3',
+    ],
     'pandas': ['pandas'],
     'autoquality': ['crowd-kit >= 1.0.0'],
     's3': ['boto3 >= 1.4.7'],
@@ -81,6 +94,7 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: Implementation :: CPython',
         'Topic :: Scientific/Engineering',
         'Topic :: Software Development',
