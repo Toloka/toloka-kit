@@ -326,7 +326,6 @@ class TolokaClient:
             backoff_factor=2,  # summary retry time more than 10 seconds
         )
 
-
     def __is_apikey(self) -> bool:
         if self.token.count('.') != 2:
             return False
