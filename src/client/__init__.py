@@ -327,16 +327,16 @@ class TolokaClient:
         )
 
 
-    def __is_apikey(token: str) -> bool:
-        if token.count('.') != 1:
+    def __is_apikey(self) -> bool:
+        if self.token.count('.') != 2:
             return False
-        dot_pos = token.find('.')
+        dot_pos = self.token.find('.')
         return 21 < dot_pos < 25
 
     @property
     def _headers(self):
         headers = {
-            'Authorization': f'ApiKey {self.token}' if self.__is_apikey(self.token) else 'OAuth {self.token}',
+            'Authorization': f'ApiKey {self.token}' if self.__is_apikey() else 'OAuth {self.token}',
             'User-Agent': f'python-toloka-client-{__version__}',
         }
         if self.act_under_account_id:
