@@ -307,6 +307,7 @@ class MockEvent(BaseEvent):
 
 class MockSearchRequest(BaseSearchRequest):
     class CompareFields:
+        id: str
         mock_time_field: datetime
 
 
@@ -337,6 +338,8 @@ class MockCursor(BaseCursor):
                 filtered_items = [
                     item for item in filtered_items if item.mock_time_field <= request.mock_time_field_lte
                 ]
+            if request.id_gt:
+                filtered_items = [item for item in filtered_items if int(item.id) > int(request.id_gt)]
             return MockResponse(
                 items=filtered_items[:self.batch_limit], has_more=len(filtered_items) > self.batch_limit
             )
@@ -360,8 +363,9 @@ class MockCursor(BaseCursor):
         ],
         # time collision
         [
-            [MockItem(id=str(i), mock_time_field=datetime(2020, 1, 1, 0, 0, 0)) for i in range(2)]
-            + [MockItem(id='2', mock_time_field=datetime(2020, 1, 1, 0, 0, 1))],
+            [MockItem(id=str(i), mock_time_field=datetime(2020, 1, 1, 0, 0, 0)) for i in range(3)],
+            [MockItem(id=str(i), mock_time_field=datetime(2020, 1, 1, 0, 0, 0)) for i in range(4, 6)]
+            + [MockItem(id='6', mock_time_field=datetime(2020, 1, 1, 0, 0, 1))],
             [MockItem(id='3', mock_time_field=datetime(2020, 1, 1, 0, 0, 0))]
         ]
     ]
