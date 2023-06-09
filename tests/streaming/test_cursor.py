@@ -2,7 +2,8 @@ import asyncio
 import inspect
 import itertools
 import pickle
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+from time import sleep
 from typing import Callable, List
 
 import attrs
@@ -152,36 +153,40 @@ def test_cursor_iter(
 
     # It should return all existing user bonuses.
     assert [
-        {'user_bonus': item, 'event_time': item['created']}
-        for item in user_bonus_existing
-    ] == fetcher(cursor)
+               {'user_bonus': item, 'event_time': item['created']}
+               for item in user_bonus_existing
+           ] == fetcher(cursor)
     # Check requests sequence.
     assert responses_by_existing_user_bonus == _keep_items_only(mocked_backend_for_user_bonus.responses)
 
     if add_new:
         mocked_backend_for_user_bonus.storage.extend(user_bonus_new)
         assert [
-            {'user_bonus': item, 'event_time': item['created']}
-            for item in user_bonus_new
-        ] == fetcher(cursor)
+                   {'user_bonus': item, 'event_time': item['created']}
+                   for item in user_bonus_new
+               ] == fetcher(cursor)
         assert (
-            responses_by_existing_user_bonus + responses_after_new_user_bonus
-        ) == _keep_items_only(mocked_backend_for_user_bonus.responses)
+                       responses_by_existing_user_bonus + responses_after_new_user_bonus
+               ) == _keep_items_only(mocked_backend_for_user_bonus.responses)
     else:
         assert [] == fetcher(cursor)
         assert responses_by_existing_user_bonus + [[]] == _keep_items_only(mocked_backend_for_user_bonus.responses)
 
 
 @pytest.mark.parametrize('chunk_size', range(1, 9))
-def test_cursor_iter_different_chunk_size(toloka_client, mocked_backend_for_user_bonus, user_bonus_existing, chunk_size):
+def test_cursor_iter_different_chunk_size(
+    toloka_client, mocked_backend_for_user_bonus, user_bonus_existing, chunk_size
+):
     mocked_backend_for_user_bonus.storage.extend(user_bonus_existing)
     mocked_backend_for_user_bonus.limit = chunk_size
     cursor = UserBonusCursor(toloka_client=toloka_client)
     # Sort order may change due to homogenous requests (sorted by id with fixed time).
-    assert sorted([
-        {'user_bonus': item, 'event_time': item['created']}
-        for item in user_bonus_existing
-    ], key=str) == sorted(unstructure(list(cursor)), key=str)
+    assert sorted(
+        [
+            {'user_bonus': item, 'event_time': item['created']}
+            for item in user_bonus_existing
+        ], key=str
+    ) == sorted(unstructure(list(cursor)), key=str)
 
 
 @pytest.mark.parametrize('do_pickle', (False, True))
@@ -201,10 +206,12 @@ def test_cursor_iter_by_one(toloka_client, mocked_backend_for_user_bonus, user_b
         else:
             break
 
-    assert sorted([
-        {'user_bonus': item, 'event_time': item['created']}
-        for item in user_bonus_existing
-    ], key=str) == sorted(unstructure(result), key=str)
+    assert sorted(
+        [
+            {'user_bonus': item, 'event_time': item['created']}
+            for item in user_bonus_existing
+        ], key=str
+    ) == sorted(unstructure(result), key=str)
 
 
 def test_assignment_cursor(respx_mock, toloka_url, toloka_client):
@@ -217,13 +224,15 @@ def test_assignment_cursor(respx_mock, toloka_url, toloka_client):
 
     cursor_submitted = AssignmentCursor(pool_id='100', event_type='SUBMITTED', toloka_client=toloka_client)
     assert [
-        {'assignment': item, 'event_type': 'SUBMITTED', 'event_time': item['submitted']}
-        for item in backend_data
-    ] == unstructure(list(cursor_submitted))
+               {'assignment': item, 'event_type': 'SUBMITTED', 'event_time': item['submitted']}
+               for item in backend_data
+           ] == unstructure(list(cursor_submitted))
 
     cursor_accepted = AssignmentCursor(pool_id='100', event_type='ACCEPTED', toloka_client=toloka_client)
     assert [{
-        'assignment': {'pool_id': '100', 'id': 'B', 'submitted': '2020-01-01T01:01:02', 'accepted': '2020-01-01T01:01:03'},
+        'assignment': {
+            'pool_id': '100', 'id': 'B', 'submitted': '2020-01-01T01:01:02', 'accepted': '2020-01-01T01:01:03'
+        },
         'event_type': 'ACCEPTED',
         'event_time': '2020-01-01T01:01:03',
     }] == unstructure(list(cursor_accepted))
@@ -241,9 +250,9 @@ def test_task_cursor(respx_mock, toloka_url, toloka_client, chunk_size):
 
     cursor = TaskCursor(pool_id='100', toloka_client=toloka_client)
     assert [
-        {'task': item, 'event_time': item['created']}
-        for item in backend_data
-    ] == unstructure(list(cursor))
+               {'task': item, 'event_time': item['created']}
+               for item in backend_data
+           ] == unstructure(list(cursor))
 
 
 @pytest.mark.parametrize(
@@ -261,24 +270,24 @@ def test_user_skill_cursor(respx_mock, toloka_url, toloka_client, chunk_size, ev
 
     cursor = UserSkillCursor(event_type=event_type, toloka_client=toloka_client)
     assert [
-        {'user_skill': item, 'event_type': event_type, 'event_time': item[event_type.lower()]}
-        for item in backend_data
-    ] == unstructure(list(cursor))
+               {'user_skill': item, 'event_type': event_type, 'event_time': item[event_type.lower()]}
+               for item in backend_data
+           ] == unstructure(list(cursor))
 
 
 @pytest.mark.parametrize(
     ['object_class', 'async_to_sync_differencies'],
     [
         (
-            _ByIdCursor,
-            {'await ensure_async(self.fetcher)': 'self.fetcher'}
+                _ByIdCursor,
+                {'await ensure_async(self.fetcher)': 'self.fetcher'}
         ),
         (
-            BaseCursor,
-            {
-                'await ensure_async(fetcher)': 'fetcher',
-                'async for item in _ByIdCursor': 'for item in _ByIdCursor',
-            }
+                BaseCursor,
+                {
+                    'await ensure_async(fetcher)': 'fetcher',
+                    'async for item in _ByIdCursor': 'for item in _ByIdCursor',
+                }
         ),
     ]
 )
@@ -318,8 +327,8 @@ class MockResponse:
 
 
 class MockCursor(BaseCursor):
-    def __init__(self, items_source: List[MockItem], batch_limit: int):
-        super().__init__(toloka_client=None, request=MockSearchRequest())
+    def __init__(self, items_source: List[MockItem], batch_limit: int, time_lag: timedelta):
+        super().__init__(toloka_client=None, request=MockSearchRequest(), time_lag=time_lag)
         self.items_source = items_source
         self.batch_limit = batch_limit
 
@@ -354,29 +363,51 @@ class MockCursor(BaseCursor):
 
 
 @pytest.mark.parametrize(
-    'items_batches', [
-        # no time collision
+    'raw_items', [
+        # no logged time collision
         [
-            [MockItem(id='0', mock_time_field=datetime(2020, 1, 1, 0, 0, 0))],
-            [MockItem(id=str(i), mock_time_field=datetime(2020, 1, 1, 0, 0, i)) for i in [1, 2, 4]],
-            [MockItem(id='3', mock_time_field=datetime(2020, 1, 1, 0, 0, 3))],
+            {'id': '0', 'logged_offset': timedelta(milliseconds=0), 'real_offset': timedelta(milliseconds=0)},
+            {'id': '1', 'logged_offset': timedelta(milliseconds=10), 'real_offset': timedelta(milliseconds=10)},
+            {'id': '2', 'logged_offset': timedelta(milliseconds=20), 'real_offset': timedelta(milliseconds=100)},
+            {'id': '3', 'logged_offset': timedelta(milliseconds=30), 'real_offset': timedelta(milliseconds=50)},
+            {'id': '4', 'logged_offset': timedelta(milliseconds=40), 'real_offset': timedelta(milliseconds=30)},
         ],
-        # time collision
+        # logged time collision
         [
-            [MockItem(id=str(i), mock_time_field=datetime(2020, 1, 1, 0, 0, 0)) for i in range(3)],
-            [MockItem(id=str(i), mock_time_field=datetime(2020, 1, 1, 0, 0, 0)) for i in range(4, 6)]
-            + [MockItem(id='6', mock_time_field=datetime(2020, 1, 1, 0, 0, 1))],
-            [MockItem(id='3', mock_time_field=datetime(2020, 1, 1, 0, 0, 0))]
-        ]
+            {'id': '0', 'logged_offset': timedelta(milliseconds=0), 'real_offset': timedelta(milliseconds=0)},
+            {'id': '1', 'logged_offset': timedelta(milliseconds=0), 'real_offset': timedelta(milliseconds=0)},
+            {'id': '2', 'logged_offset': timedelta(milliseconds=0), 'real_offset': timedelta(milliseconds=0)},
+            {'id': '3', 'logged_offset': timedelta(milliseconds=0), 'real_offset': timedelta(milliseconds=100)},
+            {'id': '4', 'logged_offset': timedelta(milliseconds=40), 'real_offset': timedelta(milliseconds=40)},
+            {'id': '5', 'logged_offset': timedelta(milliseconds=40), 'real_offset': timedelta(milliseconds=40)},
+            {'id': '6', 'logged_offset': timedelta(milliseconds=40), 'real_offset': timedelta(milliseconds=40)},
+        ],
     ]
 )
-def test_time_cursor_handles_eventual_consistency_correctly(items_batches):
+def test_time_cursor_handles_eventual_consistency_correctly(raw_items):
     all_fetched = []
     items_source = []
-    cursor = MockCursor(items_source, RESPONSE_LIMIT)
-    for batch in items_batches:
-        items_source.extend(batch)
+    cursor = MockCursor(items_source, RESPONSE_LIMIT, time_lag=timedelta(seconds=1))
+    start_time = datetime.now(tz=timezone.utc)
+    items = [
+        (item['real_offset'], MockItem(id=item['id'], mock_time_field=start_time + item['logged_offset']))
+        for item in raw_items
+    ]
+    items.sort(key=lambda item: item[0])
+    batches = [(offset, list(batch)) for offset, batch in itertools.groupby(items, key=lambda item: item[0])]
+
+    # first try to fetch items as soon as they are available
+    for i, (real_offset, batch) in enumerate(batches):
+        items_source.extend([item[1] for item in batch])
         with cursor.try_fetch_all() as fetched:
             all_fetched.extend(fetched)
-    assert sorted([event.item for event in all_fetched], key=lambda item: item.id)\
+        if i != len(batches) - 1:
+            sleep(real_offset.total_seconds())
+
+    # then try to fetch items after some time
+    sleep(1)
+    with cursor.try_fetch_all() as fetched:
+        all_fetched.extend(fetched)
+
+    assert sorted([event.item for event in all_fetched], key=lambda item: item.id) \
            == sorted(items_source, key=lambda item: item.id)
