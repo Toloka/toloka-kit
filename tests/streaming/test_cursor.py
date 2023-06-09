@@ -2,17 +2,24 @@ import asyncio
 import inspect
 import itertools
 import pickle
+from datetime import datetime
+from typing import Any, Callable, List, Optional
+
+import attrs
 import pytest
 
 from toloka.client import TolokaClient, unstructure
+from toloka.client.search_requests import BaseSearchRequest
 from toloka.streaming.cursor import (
-    _ByIdCursor,
+    ResponseObjectType, _ByIdCursor,
     AssignmentCursor,
     BaseCursor,
     TaskCursor,
     UserBonusCursor,
     UserSkillCursor,
 )
+from toloka.streaming.event import BaseEvent
+
 from ..testutils.backend_mock import BackendSearchMock
 
 
@@ -291,3 +298,74 @@ def test_exact_iter_and_aiter_code(object_class, async_to_sync_differencies):
         aiter_code = aiter_code.replace(async_version, sync_version)
 
     assert iter_code.split('\n') == aiter_code.split('\n')
+
+
+@attrs.define
+class MockItem:
+    id: str
+    mock_time_field: datetime
+
+
+class MockEvent(BaseEvent):
+    event_time: datetime
+    item: MockItem
+
+
+class MockSearchRequest(BaseSearchRequest):
+    class CompareFields:
+        mock_time_field: datetime
+
+
+@attrs.define
+class MockResponse:
+    items: List[MockItem]
+    has_more: bool
+
+
+class MockCursor(BaseCursor):
+    def __init__(self, items_source: List[MockItem], batch_limit: int):
+        super().__init__(toloka_client=None, request=MockSearchRequest())
+        self.items_source = items_source
+        self.batch_limit = batch_limit
+
+    def _get_fetcher(self) -> Callable[..., ResponseObjectType]:
+        def _fetcher(request: MockSearchRequest, sort: str = None, **kwargs):
+            filtered_items = self.items_source
+            if sort == 'mock_time_field':
+                filtered_items = sorted(filtered_items, key=lambda item: item.mock_time_field)
+            if request.mock_time_field_gte:
+                filtered_items = [
+                    item for item in filtered_items if item.mock_time_field >= request.mock_time_field_gte
+                ]
+            if request.mock_time_field_gt:
+                filtered_items = [item for item in filtered_items if item.mock_time_field > request.mock_time_field_gt]
+            if request.mock_time_field_lte:
+                filtered_items = [
+                    item for item in filtered_items if item.mock_time_field <= request.mock_time_field_lte
+                ]
+            return MockResponse(
+                items=filtered_items[:self.batch_limit], has_more=len(filtered_items) > self.batch_limit
+            )
+
+        return _fetcher
+
+    def _get_time_field(self) -> str:
+        return 'mock_time_field'
+
+    def _construct_event(self, item: MockItem) -> BaseEvent:
+        return MockEvent(event_time=item.mock_time_field, item=item)
+
+
+def test_time_cursor_handles_eventual_consistency_correctly():
+    items_source = [MockItem(id=str(i), mock_time_field=datetime(2020, 1, 1, 0, 0, i)) for i in range(3)]
+    items_source.append(MockItem(id='4', mock_time_field=datetime(2020, 1, 1, 0, 0, 4)))
+    batch_limit = 3
+    cursor = MockCursor(items_source, batch_limit)
+    all_fetched = []
+    with cursor.try_fetch_all() as fetched:
+        all_fetched.extend(fetched)
+    items_source.append(MockItem(id='3', mock_time_field=datetime(2020, 1, 1, 0, 0, 3)))
+    with cursor.try_fetch_all() as fetched:
+        all_fetched.extend(fetched)
+    assert sorted([event.item for event in all_fetched], key=lambda item: item.id)\
+           == sorted(items_source, key=lambda item: item.id)
