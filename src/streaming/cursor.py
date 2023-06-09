@@ -172,6 +172,11 @@ class BaseCursor:
                 if not response.has_more:
                     return
 
+                # Multiple items can have the same time field value. If items with the same time field value are split
+                # between responses due to the fetcher limit they will be fetched twice and filtered by _seen_ids field
+                # afterwards. But there is a corner case when all items in the response have the same time field value.
+                # As the result we will fetch the same items over and over again. To avoid this we need fall back to
+                # iteration over id field.
                 if self._get_time(response.items[0]) == max_time:
                     fixed_time_request = attr.evolve(self._request, **{self._time_field_lte: max_time})
                     for item in _ByIdCursor(fetcher, fixed_time_request):  # Diff between sync and async.
@@ -201,6 +206,11 @@ class BaseCursor:
                 if not response.has_more:
                     return
 
+                # Multiple items can have the same time field value. If items with the same time field value are split
+                # between responses due to the fetcher limit they will be fetched twice and filtered by _seen_ids field
+                # afterwards. But there is a corner case when all items in the response have the same time field value.
+                # As the result we will fetch the same items over and over again. To avoid this we need fall back to
+                # iteration over id field.
                 if self._get_time(response.items[0]) == max_time:
                     fixed_time_request = attr.evolve(self._request, **{self._time_field_lte: max_time})
                     async for item in _ByIdCursor(fetcher, fixed_time_request):  # Diff between sync and async.
