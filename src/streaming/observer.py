@@ -17,7 +17,7 @@ from ..client.assignment import Assignment
 from ..client.pool import Pool
 from ..util.async_utils import AsyncInterfaceWrapper, ComplexException, ensure_async, get_task_traceback
 from ..util._managing_headers import add_headers
-from .cursor import AssignmentCursor, TolokaClientSyncOrAsyncType
+from .cursor import AssignmentCursor, TolokaClientSyncOrAsyncType, DEFAULT_LAG
 from .event import AssignmentEvent
 
 logger = logging.getLogger(__name__)
@@ -325,6 +325,8 @@ class AssignmentsObserver(BasePoolObserver):
     Attributes:
         toloka_client: TolokaClient instance or async wrapper around it.
         pool_id: Pool ID.
+        cursor_time_lag: Time lag for cursor. This controls time lag between assignments being added and them being
+            seen by this observer. See BaseCursor.time_lag for details and reasoning behind this.
 
     Examples:
         Send submitted assignments for verification.
@@ -338,6 +340,7 @@ class AssignmentsObserver(BasePoolObserver):
         ...
     """
 
+    cursor_time_lag: datetime.timedelta = attr.ib(default=DEFAULT_LAG)
     _callbacks: Dict[AssignmentEvent.Type, _CallbacksCursorConsumer] = attr.ib(factory=dict, init=False)
 
     def get_unique_key(self) -> Tuple:
@@ -374,7 +377,12 @@ class AssignmentsObserver(BasePoolObserver):
             The same callable passed as callback.
         """
         if event_type not in self._callbacks:
-            cursor = AssignmentCursor(pool_id=self.pool_id, event_type=event_type, toloka_client=self.toloka_client)
+            cursor = AssignmentCursor(
+                pool_id=self.pool_id,
+                event_type=event_type,
+                toloka_client=self.toloka_client,
+                time_lag=self.cursor_time_lag
+            )
             self._callbacks[event_type] = _CallbacksCursorConsumer(cursor)
         self._callbacks[event_type].add_callback(callback)
         return callback
