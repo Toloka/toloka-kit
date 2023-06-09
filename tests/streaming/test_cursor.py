@@ -3,20 +3,14 @@ import inspect
 import itertools
 import pickle
 from datetime import datetime
-from typing import Any, Callable, List, Optional
+from typing import Callable, List
 
 import attrs
 import pytest
-
 from toloka.client import TolokaClient, unstructure
 from toloka.client.search_requests import BaseSearchRequest
 from toloka.streaming.cursor import (
-    ResponseObjectType, _ByIdCursor,
-    AssignmentCursor,
-    BaseCursor,
-    TaskCursor,
-    UserBonusCursor,
-    UserSkillCursor,
+    AssignmentCursor, BaseCursor, ResponseObjectType, TaskCursor, UserBonusCursor, UserSkillCursor, _ByIdCursor,
 )
 from toloka.streaming.event import BaseEvent
 
@@ -356,16 +350,29 @@ class MockCursor(BaseCursor):
         return MockEvent(event_time=item.mock_time_field, item=item)
 
 
-def test_time_cursor_handles_eventual_consistency_correctly():
-    items_source = [MockItem(id=str(i), mock_time_field=datetime(2020, 1, 1, 0, 0, i)) for i in range(3)]
-    items_source.append(MockItem(id='4', mock_time_field=datetime(2020, 1, 1, 0, 0, 4)))
-    batch_limit = 3
-    cursor = MockCursor(items_source, batch_limit)
+@pytest.mark.parametrize(
+    'items_batches', [
+        # no time collision
+        [
+            [MockItem(id='0', mock_time_field=datetime(2020, 1, 1, 0, 0, 0))],
+            [MockItem(id=str(i), mock_time_field=datetime(2020, 1, 1, 0, 0, i)) for i in [1, 2, 4]],
+            [MockItem(id='3', mock_time_field=datetime(2020, 1, 1, 0, 0, 3))],
+        ],
+        # time collision
+        [
+            [MockItem(id=str(i), mock_time_field=datetime(2020, 1, 1, 0, 0, 0)) for i in range(2)]
+            + [MockItem(id='2', mock_time_field=datetime(2020, 1, 1, 0, 0, 1))],
+            [MockItem(id='3', mock_time_field=datetime(2020, 1, 1, 0, 0, 0))]
+        ]
+    ]
+)
+def test_time_cursor_handles_eventual_consistency_correctly(items_batches):
     all_fetched = []
-    with cursor.try_fetch_all() as fetched:
-        all_fetched.extend(fetched)
-    items_source.append(MockItem(id='3', mock_time_field=datetime(2020, 1, 1, 0, 0, 3)))
-    with cursor.try_fetch_all() as fetched:
-        all_fetched.extend(fetched)
+    items_source = []
+    cursor = MockCursor(items_source, RESPONSE_LIMIT)
+    for batch in items_batches:
+        items_source.extend(batch)
+        with cursor.try_fetch_all() as fetched:
+            all_fetched.extend(fetched)
     assert sorted([event.item for event in all_fetched], key=lambda item: item.id)\
            == sorted(items_source, key=lambda item: item.id)
