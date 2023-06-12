@@ -5,10 +5,10 @@ from toloka.async_client import AsyncTolokaClient
 from urllib3 import Retry
 
 
-def test_async_client_survives_event_loop_change(connection_error_server_url, retries_before_response, fake_requester):
+def test_async_client_survives_event_loop_change(internal_error_server_url, retries_before_response, fake_requester):
     toloka_client = AsyncTolokaClient(
         'fake-token',
-        url=connection_error_server_url,
+        url=internal_error_server_url,
         retryer_factory=lambda: Retry(retries_before_response, status_forcelist={500}, backoff_factor=0),
         retry_quotas=None,
         timeout=0.5,
@@ -25,10 +25,10 @@ def get_requester(result: list, client: AsyncTolokaClient):
     result.append(asyncio.run(client.get_requester()))
 
 
-def test_async_client_can_be_multithreaded(connection_error_server_url, retries_before_response, fake_requester):
+def test_async_client_can_be_multithreaded(internal_error_server_url, retries_before_response, fake_requester):
     toloka_client = AsyncTolokaClient(
         'fake-token',
-        url=connection_error_server_url,
+        url=internal_error_server_url,
         retryer_factory=lambda: Retry(retries_before_response, status_forcelist={500}, backoff_factor=0),
         retry_quotas=None,
         timeout=0.5,

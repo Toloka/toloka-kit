@@ -42,7 +42,7 @@ class AsyncTolokaClient:
     ):
         self._sync_client = TolokaClient(*args, **kwargs)
         self.retrying = AsyncRetryingOverURLLibRetry(
-            base_url=str(self._session.base_url), retry=self._sync_client.retryer_factory(), reraise=True,
+            base_url=str(self._session.base_url), retry=self.retryer_factory(), reraise=True,
             exception_to_retry=self.EXCEPTIONS_TO_RETRY,
         )
 
@@ -84,8 +84,8 @@ class AsyncTolokaClient:
 
     async def _do_request_with_retries(self, method, path, **kwargs):
         @self.retrying.wraps
-        async def wrapped(method, path, **kwargs):
-            response = await self._session.request(method, path, **kwargs)
+        async def wrapped(method, url, **kwargs):
+            response = await self._session.request(method, url, **kwargs)
             raise_on_api_error(response)
             return response
 

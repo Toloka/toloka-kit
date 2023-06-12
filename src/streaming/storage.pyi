@@ -5,6 +5,7 @@ __all__ = [
 ]
 import toloka.streaming.locker
 import typing
+import typing_extensions
 
 
 Pickleable = typing.TypeVar('Pickleable')
@@ -109,7 +110,7 @@ class JSONLocalStorage(BaseExternalLockerStorage):
     dirname: str
 
 
-class ObjectSummaryCollection(typing.Protocol):
+class ObjectSummaryCollection(typing_extensions.Protocol):
     def filter(
         self,
         Prefix,
@@ -118,8 +119,6 @@ class ObjectSummaryCollection(typing.Protocol):
 
     def delete(self, **kwargs): ...
 
-    def __subclasshook__(other): ...
-
     def __init__(
         self,
         *args,
@@ -127,7 +126,7 @@ class ObjectSummaryCollection(typing.Protocol):
     ): ...
 
 
-class BucketType(typing.Protocol):
+class BucketType(typing_extensions.Protocol):
     def upload_fileobj(
         self,
         Fileobj,
@@ -142,8 +141,6 @@ class BucketType(typing.Protocol):
         ExtraArgs=None,
         **kwargs
     ): ...
-
-    def __subclasshook__(other): ...
 
     def __init__(
         self,

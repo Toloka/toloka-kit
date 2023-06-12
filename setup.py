@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf8
 import os
+import sys
 
 from setuptools import setup, find_packages
 
@@ -17,13 +18,35 @@ with open(version_module_path) as f:
 with open('README.md') as f:
     readme = f.read()
 
+
+def get_ipython_with_version():
+    if sys.version_info < (3, 8):
+        return 'ipython < 8'
+    elif sys.version_info < (3, 9):
+        return 'ipython < 8.13'
+    return 'ipython'
+
+
 EXTRAS_REQUIRE = {
-    'dev': ['respx', 'aiohttp', 'pytest', 'pytest-lazy-fixture', 'pytest-asyncio', 'pytest-mock'],
+    'dev': [
+        'aiohttp',
+        'data-science-types',
+        'flake8',
+        'mypy',
+        'pytest',
+        'pytest-asyncio',
+        'pytest-lazy-fixture',
+        'pytest-mock',
+        'pytest-timeout',
+        'respx',
+        'tox',
+        'types-urllib3',
+    ],
     'pandas': ['pandas'],
     'autoquality': ['crowd-kit >= 1.0.0'],
     's3': ['boto3 >= 1.4.7'],
     'zookeeper': ['kazoo >= 2.6.1'],
-    'jupyter-metrics': ['plotly', 'ipyplot', 'jupyter-dash'],
+    'jupyter-metrics': ['plotly', 'ipyplot', 'jupyter-dash', get_ipython_with_version()],
 }
 EXTRAS_REQUIRE['all'] = sum((deps for env, deps in EXTRAS_REQUIRE.items() if env != 'dev'), [])
 
@@ -71,6 +94,7 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: Implementation :: CPython',
         'Topic :: Scientific/Engineering',
         'Topic :: Software Development',

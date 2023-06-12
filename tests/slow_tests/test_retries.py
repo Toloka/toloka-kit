@@ -168,10 +168,10 @@ async def test_read_timeout_when_not_retried_enough_async(
 
     assert requester_socket_timeout_server[1].connections_count == retries_before_response
 
-def test_retries_off(connection_error_server_url, retries_before_response):
+def test_retries_off(internal_error_server_url, retries_before_response):
     toloka_client = TolokaClient(
         'fake-token',
-        url=connection_error_server_url,
+        url=internal_error_server_url,
         retries=0,
         timeout=0.5,
     )
@@ -179,15 +179,15 @@ def test_retries_off(connection_error_server_url, retries_before_response):
     with pytest.raises(httpx.HTTPStatusError):
         toloka_client.get_requester()
 
-    retries_left = int(requests.get(f'{connection_error_server_url}/retries_before_response').text)
+    retries_left = int(requests.get(f'{internal_error_server_url}/retries_before_response').text)
     assert retries_left == retries_before_response - 1
 
 
 @pytest.mark.asyncio
-async def test_retries_off_async(connection_error_server_url, retries_before_response):
+async def test_retries_off_async(internal_error_server_url, retries_before_response):
     toloka_client = AsyncTolokaClient(
         'fake-token',
-        url=connection_error_server_url,
+        url=internal_error_server_url,
         retries=0,
         timeout=0.5,
     )
@@ -195,14 +195,14 @@ async def test_retries_off_async(connection_error_server_url, retries_before_res
     with pytest.raises(httpx.HTTPStatusError):
         await toloka_client.get_requester()
 
-    retries_left = int(requests.get(f'{connection_error_server_url}/retries_before_response').text)
+    retries_left = int(requests.get(f'{internal_error_server_url}/retries_before_response').text)
     assert retries_left == retries_before_response - 1
 
 
-def test_retries_from_int(connection_error_server_url, retries_before_response):
+def test_retries_from_int(internal_error_server_url, retries_before_response):
     toloka_client = TolokaClient(
         'fake-token',
-        url=connection_error_server_url,
+        url=internal_error_server_url,
         retries=retries_before_response - 1,
         timeout=0.5,
     )
@@ -210,15 +210,15 @@ def test_retries_from_int(connection_error_server_url, retries_before_response):
     with pytest.raises(httpx.HTTPStatusError):
         toloka_client.get_requester()
 
-    retries_left = int(requests.get(f'{connection_error_server_url}/retries_before_response').text)
+    retries_left = int(requests.get(f'{internal_error_server_url}/retries_before_response').text)
     assert retries_left == 0
 
 
 @pytest.mark.asyncio
-async def test_retries_from_int_async(connection_error_server_url, retries_before_response):
+async def test_retries_from_int_async(internal_error_server_url, retries_before_response):
     toloka_client = AsyncTolokaClient(
         'fake-token',
-        url=connection_error_server_url,
+        url=internal_error_server_url,
         retries=retries_before_response - 1,
         timeout=0.5,
     )
@@ -226,14 +226,14 @@ async def test_retries_from_int_async(connection_error_server_url, retries_befor
     with pytest.raises(httpx.HTTPStatusError):
         await toloka_client.get_requester()
 
-    retries_left = int(requests.get(f'{connection_error_server_url}/retries_before_response').text)
+    retries_left = int(requests.get(f'{internal_error_server_url}/retries_before_response').text)
     assert retries_left == 0
 
 
-def test_retries_from_class(connection_error_server_url, retries_before_response):
+def test_retries_from_class(internal_error_server_url, retries_before_response):
     toloka_client = TolokaClient(
         'fake-token',
-        url=connection_error_server_url,
+        url=internal_error_server_url,
         retries=Retry(retries_before_response - 1, status_forcelist={500}, backoff_factor=0),
         retry_quotas=None,
         timeout=0.5,
@@ -242,15 +242,15 @@ def test_retries_from_class(connection_error_server_url, retries_before_response
     with pytest.raises(httpx.HTTPStatusError):
         toloka_client.get_requester()
 
-    retries_left = int(requests.get(f'{connection_error_server_url}/retries_before_response').text)
+    retries_left = int(requests.get(f'{internal_error_server_url}/retries_before_response').text)
     assert retries_left == 0
 
 
 @pytest.mark.asyncio
-async def test_retries_from_class_async(connection_error_server_url, retries_before_response):
+async def test_retries_from_class_async(internal_error_server_url, retries_before_response):
     toloka_client = AsyncTolokaClient(
         'fake-token',
-        url=connection_error_server_url,
+        url=internal_error_server_url,
         retries=Retry(retries_before_response - 1, status_forcelist={500}, backoff_factor=0),
         retry_quotas=None,
         timeout=0.5,
@@ -259,5 +259,38 @@ async def test_retries_from_class_async(connection_error_server_url, retries_bef
     with pytest.raises(httpx.HTTPStatusError):
         await toloka_client.get_requester()
 
-    retries_left = int(requests.get(f'{connection_error_server_url}/retries_before_response').text)
+    retries_left = int(requests.get(f'{internal_error_server_url}/retries_before_response').text)
     assert retries_left == 0
+
+
+def test_connect_error_retry(internal_error_server_url):
+    toloka_client = TolokaClient(
+        'fake-token',
+        url=internal_error_server_url,
+        retries=Retry(3, backoff_factor=0),
+        retry_quotas=None,
+        # cause connect error by timeout
+        timeout=0,
+    )
+    with pytest.raises(httpx.ConnectError):
+        toloka_client.get_requester()
+    assert toloka_client.retrying.statistics['attempt_number'] == 4
+
+
+@pytest.mark.asyncio
+@pytest.mark.xfail(
+    reason='Async client fails with httpx.PoolTimeout, which is not retried. Should we retry it or it is the timeout=0 '
+           'edge case?'
+)
+async def test_connect_error_retry_async(internal_error_server_url):
+    toloka_client = AsyncTolokaClient(
+        'fake-token',
+        url=internal_error_server_url,
+        retries=Retry(3, backoff_factor=0),
+        retry_quotas=None,
+        # cause connect error by timeout
+        timeout=0,
+    )
+    with pytest.raises(httpx.ConnectError):
+        await toloka_client.get_requester()
+    assert toloka_client.retrying.statistics['attempt_number'] == 4

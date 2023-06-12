@@ -1064,14 +1064,14 @@ class TolokaClient:
         message_thread_id: str,
         folders: typing.Union[typing.List[typing.Union[toloka.client.message_thread.Folder, str]], toloka.client.message_thread.MessageThreadFolders]
     ) -> toloka.client.message_thread.MessageThread:
-        """Adds a message chain to one or more folders ("unread", "important" etc.)
+        """Adds a message thread to folders.
 
         Args:
-            message_thread_id: ID of message chain.
-            folders: List of folders, where to move chain.
+            message_thread_id: The ID of the message thread.
+            folders: A list of folders where to add the thread.
 
         Returns:
-            MessageThread: Full object by ID with updated folders.
+            MessageThread: The updated message thread.
 
         Example:
             >>> toloka_client.add_message_thread_to_folders(message_thread_id='1', folders=['IMPORTANT'])
@@ -1081,20 +1081,19 @@ class TolokaClient:
 
     @typing.overload
     def compose_message_thread(self, compose: toloka.client.message_thread.MessageThreadCompose) -> toloka.client.message_thread.MessageThread:
-        """Sends a message to a Toloker.
-
-        The sent message is added to a new message thread.
+        """Creates a message thread and sends the first thread message to Tolokers.
 
         Args:
-            compose: Message parameters.
+            compose: Parameters for creating the message thread.
 
         Returns:
-            MessageThread: New created thread.
+            MessageThread: The created message thread.
 
         Example:
-            If you want to thank Tolokers who have tried to complete your tasks, send them a nice message.
+            A message is sent to all Tolokers who have tried to complete your tasks.
+            The message is in english. Tolokers can't reply to your message.
 
-            >>> message_text = "Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!"
+            >>> message_text = "Amazing job! We've just trained our first model with the data you prepared for us. Thank you!"
             >>> toloka_client.compose_message_thread(
             >>>     recipients_select_type='ALL',
             >>>     topic={'EN': 'Thank you!'},
@@ -1116,20 +1115,19 @@ class TolokaClient:
         recipients_ids: typing.Optional[typing.List[str]] = None,
         recipients_filter: typing.Optional[toloka.client.filter.FilterCondition] = None
     ) -> toloka.client.message_thread.MessageThread:
-        """Sends a message to a Toloker.
-
-        The sent message is added to a new message thread.
+        """Creates a message thread and sends the first thread message to Tolokers.
 
         Args:
-            compose: Message parameters.
+            compose: Parameters for creating the message thread.
 
         Returns:
-            MessageThread: New created thread.
+            MessageThread: The created message thread.
 
         Example:
-            If you want to thank Tolokers who have tried to complete your tasks, send them a nice message.
+            A message is sent to all Tolokers who have tried to complete your tasks.
+            The message is in english. Tolokers can't reply to your message.
 
-            >>> message_text = "Amazing job! We've just trained our first model with the data YOU prepared for us. Thank you!"
+            >>> message_text = "Amazing job! We've just trained our first model with the data you prepared for us. Thank you!"
             >>> toloka_client.compose_message_thread(
             >>>     recipients_select_type='ALL',
             >>>     topic={'EN': 'Thank you!'},
@@ -1162,7 +1160,7 @@ class TolokaClient:
             MessageThreadSearchResult: Found message threads and a flag showing whether there are more matching threads.
 
         Example:
-            Find all message threads in the Inbox folder.
+            Finding all message threads in the `INBOX` folder.
 
             >>> toloka_client.find_message_threads(folder='INBOX')
             ...
@@ -1200,7 +1198,7 @@ class TolokaClient:
             MessageThreadSearchResult: Found message threads and a flag showing whether there are more matching threads.
 
         Example:
-            Find all message threads in the Inbox folder.
+            Finding all message threads in the `INBOX` folder.
 
             >>> toloka_client.find_message_threads(folder='INBOX')
             ...
@@ -1212,22 +1210,24 @@ class TolokaClient:
         message_thread_id: str,
         reply: toloka.client.message_thread.MessageThreadReply
     ) -> toloka.client.message_thread.MessageThread:
-        """Replies to a message in thread
+        """Sends a reply message in a thread.
 
         Args:
-            message_thread_id: In which thread to reply.
-            reply: Reply message.
+            message_thread_id: The ID of the thread.
+            reply: The reply message.
 
         Returns:
-            MessageThread: New created message.
+            MessageThread: The updated message thread.
 
         Example:
+            Sending a reply to all unread messages.
+
             >>> message_threads = toloka_client.get_message_threads(folder='UNREAD')
             >>> message_reply = {'EN': 'Thank you for your message! I will get back to you soon.'}
             >>> for thread in message_threads:
             >>>     toloka_client.reply_message_thread(
             >>>         message_thread_id=thread.id,
-            >>>         reply=toloka.message_thread.MessageThreadReply(text=message_reply)
+            >>>         reply=toloka.client.message_thread.MessageThreadReply(text=message_reply)
             >>>     )
             ...
         """
@@ -1301,14 +1301,14 @@ class TolokaClient:
         message_thread_id: str,
         folders: typing.Union[typing.List[typing.Union[toloka.client.message_thread.Folder, str]], toloka.client.message_thread.MessageThreadFolders]
     ) -> toloka.client.message_thread.MessageThread:
-        """Deletes a message chain from one or more folders ("unread", "important" etc.)
+        """Removes a message thread from folders.
 
         Args:
-            message_thread_id: ID of message chain.
-            folders:  List of folders, where from to remove chain.
+            message_thread_id: The ID of the message thread.
+            folders: A list of folders.
 
         Returns:
-            MessageThread: Full object by ID with updated folders.
+            MessageThread: The updated message thread.
 
         Example:
             >>> toloka_client.remove_message_thread_from_folders(message_thread_id='1', folders=['IMPORTANT'])
@@ -4800,17 +4800,16 @@ class TolokaClient:
         ...
 
     def upsert_webhook_subscriptions(self, subscriptions: typing.List[toloka.client.webhook_subscription.WebhookSubscription]) -> toloka.client.batch_create_results.WebhookSubscriptionBatchCreateResult:
-        """Creates (upsert) many webhook-subscriptions.
+        """Creates (upsert) webhook subscriptions.
 
         Args:
-            subscriptions: List of webhook-subscriptions, that will be created.
+            subscriptions: A list of webhook subscriptions to be created.
 
         Returns:
-            batch_create_results.WebhookSubscriptionBatchCreateResult: Result of subscriptions creation.
-                Contains created subscriptions in `items` and problems in "validation_errors".
+            batch_create_results.WebhookSubscriptionBatchCreateResult: The result of the operation.
 
         Raises:
-            ValidationApiError: If no subscriptions were created.
+            ValidationApiError: No subscriptions were created.
 
         Example:
             How to create several subscriptions.

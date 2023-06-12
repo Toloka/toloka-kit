@@ -79,7 +79,7 @@ import time
 import attr
 import httpx
 import simplejson
-from httpx import HTTPStatusError, RequestError
+from httpx import HTTPStatusError
 from httpx._types import VerifyTypes
 from toloka.client.batch_create_results import FieldValidationError
 
@@ -255,7 +255,7 @@ class TolokaClient:
                 return 'https://sandbox.toloka.yandex.com'
 
     EXCEPTIONS_TO_RETRY: ClassVar[Tuple[Exception]] = (
-        RequestError, InternalApiError, TooManyRequestsApiError, RemoteServiceUnavailableApiError, HTTPStatusError,
+        InternalApiError, TooManyRequestsApiError, RemoteServiceUnavailableApiError, HTTPStatusError,
     )
 
     token: str
@@ -326,10 +326,16 @@ class TolokaClient:
             backoff_factor=2,  # summary retry time more than 10 seconds
         )
 
+    def __is_apikey(self) -> bool:
+        if self.token.count('.') != 2:
+            return False
+        dot_pos = self.token.find('.')
+        return 21 < dot_pos < 25
+
     @property
     def _headers(self):
         headers = {
-            'Authorization': f'OAuth {self.token}',
+            'Authorization': f'ApiKey {self.token}' if self.__is_apikey() else 'OAuth {self.token}',
             'User-Agent': f'python-toloka-client-{__version__}',
         }
         if self.act_under_account_id:
@@ -338,8 +344,8 @@ class TolokaClient:
 
     def _do_request_with_retries(self, method, path, **kwargs):
         @self.retrying.wraps
-        def wrapped(method, path, **kwargs):
-            response = self._session.request(method, path, **kwargs)
+        def wrapped(method, url, **kwargs):
+            response = self._session.request(method, url, **kwargs)
             raise_on_api_error(response)
             return response
 
