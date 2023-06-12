@@ -83,14 +83,14 @@ class BaseCursor:
     """Base class for all cursors.
 
     Args:
-        time_lag: Time lag between cursor time field upper bound and real time. Default is 1 minute. This lag is
+        _time_lag: Time lag between cursor time field upper bound and real time. Default is 1 minute. This lag is
             required to keep cursor consistent. Lowering this value will make cursor process events faster, but raises
             probability of missing some events in case of concurrent operations.
     """
 
     toloka_client: TolokaClientSyncOrAsyncType = attr.ib()
     _request: BaseSearchRequest = attr.ib()
-    time_lag: timedelta = attr.ib(default=DEFAULT_LAG)
+    _time_lag: timedelta = attr.ib(default=DEFAULT_LAG)
     _prev_response: Optional[ResponseObjectType] = attr.ib(default=None, init=False)
     _seen_ids: Set[str] = attr.ib(factory=set, init=False)
 
@@ -171,7 +171,7 @@ class BaseCursor:
     def __iter__(self) -> Iterator[BaseEvent]:
         fetcher = self._get_fetcher()
         self._request = attr.evolve(
-            self._request, **{self._time_field_lte: datetime.now(tz=timezone.utc) - self.time_lag}
+            self._request, **{self._time_field_lte: datetime.now(tz=timezone.utc) - self._time_lag}
         )
         while True:
             response = fetcher(self._request, sort=self._get_time_field())  # Diff between sync and async.
@@ -208,7 +208,7 @@ class BaseCursor:
     async def __aiter__(self) -> AsyncIterator[BaseEvent]:
         fetcher = self._get_fetcher()
         self._request = attr.evolve(
-            self._request, **{self._time_field_lte: datetime.now(tz=timezone.utc) - self.time_lag}
+            self._request, **{self._time_field_lte: datetime.now(tz=timezone.utc) - self._time_lag}
         )
         while True:
             response = await ensure_async(fetcher)(self._request, sort=self._get_time_field())  # Diff between sync and async.
@@ -271,7 +271,7 @@ class AssignmentCursor(BaseCursor):
     _request: search_requests.AssignmentSearchRequest = attr.ib(
         factory=search_requests.AssignmentSearchRequest,
     )
-    time_lag: timedelta = attr.ib(default=DEFAULT_LAG)
+    _time_lag: timedelta = attr.ib(default=DEFAULT_LAG)
 
     def _get_fetcher(self) -> Callable[..., search_results.AssignmentSearchResult]:
         async def _async_fetcher(*args, **kwargs):
@@ -387,7 +387,7 @@ class UserSkillCursor(BaseCursor):
     _request: search_requests.UserSkillSearchRequest = attr.ib(
         factory=search_requests.UserSkillSearchRequest,
     )
-    time_lag: timedelta = attr.ib(default=DEFAULT_LAG)
+    _time_lag: timedelta = attr.ib(default=DEFAULT_LAG)
 
     def _get_fetcher(self) -> Callable[..., search_results.UserSkillSearchResult]:
         return self.toloka_client.find_user_skills
