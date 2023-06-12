@@ -17,7 +17,6 @@ import functools
 from datetime import datetime, timedelta, timezone
 from typing import Any, AsyncIterator, Awaitable, Callable, Iterator, List, Optional, Set, Tuple, Union
 
-import attrs
 from toloka.util._docstrings import inherit_docstrings
 from typing_extensions import Protocol
 
@@ -171,7 +170,7 @@ class BaseCursor:
 
     def __iter__(self) -> Iterator[BaseEvent]:
         fetcher = self._get_fetcher()
-        self._request = attrs.evolve(
+        self._request = attr.evolve(
             self._request, **{self._time_field_lte: datetime.now(tz=timezone.utc) - self.time_lag}
         )
         while True:
@@ -208,7 +207,7 @@ class BaseCursor:
 
     async def __aiter__(self) -> AsyncIterator[BaseEvent]:
         fetcher = self._get_fetcher()
-        self._request = attrs.evolve(
+        self._request = attr.evolve(
             self._request, **{self._time_field_lte: datetime.now(tz=timezone.utc) - self.time_lag}
         )
         while True:

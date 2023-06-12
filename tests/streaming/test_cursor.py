@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, timezone
 from time import sleep
 from typing import Callable, List
 
-import attrs
+import attr
 import pytest
 from toloka.client import TolokaClient, unstructure
 from toloka.client.search_requests import BaseSearchRequest
@@ -290,7 +290,7 @@ def test_exact_iter_and_aiter_code(object_class, async_to_sync_differencies):
     assert iter_code.split('\n') == aiter_code.split('\n')
 
 
-@attrs.define
+@attr.s(auto_attribs=True)
 class MockItem:
     id: str
     mock_time_field: datetime
@@ -307,7 +307,7 @@ class MockSearchRequest(BaseSearchRequest):
         mock_time_field: datetime
 
 
-@attrs.define
+@attr.s(auto_attribs=True)
 class MockResponse:
     items: List[MockItem]
     has_more: bool
