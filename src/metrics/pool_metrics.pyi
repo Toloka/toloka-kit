@@ -53,6 +53,8 @@ class AssignmentEventsInPool(BasePoolMetric):
         skipped_name: Metric name for a count of skipped events. Default None.
         expired_name: Metric name for a count of expired events. Default None.
         join_events: Count all events in one point.  Default `False`.
+        cursor_time_lag: Time lag for cursor. This controls time lag between assignments being added and this metric
+            being updated. See BaseCursor.time_lag for details and reasoning behind this.
 
     Raises:
         ValueError: If all metric names are set to None or if there are duplicate metric names.
@@ -88,6 +90,7 @@ class AssignmentEventsInPool(BasePoolMetric):
         rejected_name: typing.Optional[str] = None,
         skipped_name: typing.Optional[str] = None,
         expired_name: typing.Optional[str] = None,
+        cursor_time_lag: datetime.timedelta = ...,
         join_events: bool = False,
         *,
         toloka_client: toloka.client.TolokaClient = None,
@@ -108,6 +111,7 @@ class AssignmentEventsInPool(BasePoolMetric):
     _rejected_name: typing.Optional[str]
     _skipped_name: typing.Optional[str]
     _expired_name: typing.Optional[str]
+    _cursor_time_lag: datetime.timedelta
     _join_events: bool
 
 
@@ -378,6 +382,8 @@ class BansInPool(BasePoolMetric):
         count_name: Metric name for a count of bans.
         filter_by_comment: Allow to split Toloker restriction into several lines based on comment.
             Dictionary where, key - comment string, and value - name for line in which will be aggregated bans with this comments.
+        cursor_time_lag: Time lag for cursor. This controls time lag between user restrictions being added and this
+            metric being updated. See BaseCursor.time_lag for details and reasoning behind this.
         join_events: Count all events in one point. Default `False`.
 
     Example:
@@ -425,6 +431,7 @@ class BansInPool(BasePoolMetric):
         pool_id: str,
         count_name: typing.Optional[str] = None,
         filter_by_comment: typing.Optional[typing.Dict[str, str]] = None,
+        cursor_time_lag: datetime.timedelta = ...,
         join_events: bool = False,
         *,
         toloka_client: toloka.client.TolokaClient = None,
@@ -441,4 +448,5 @@ class BansInPool(BasePoolMetric):
     pool_id: str
     _count_name: typing.Optional[str]
     _filter_by_comment: typing.Optional[typing.Dict[str, str]]
+    _cursor_time_lag: datetime.timedelta
     _join_events: bool
