@@ -71,6 +71,8 @@ class AssignmentEventsInPool(BasePoolMetric):
         skipped_name: Metric name for a count of skipped events. Default None.
         expired_name: Metric name for a count of expired events. Default None.
         join_events: Count all events in one point.  Default `False`.
+        cursor_time_lag: Time lag for cursor. This controls time lag between assignments being added and this metric
+            being updated. See BaseCursor.time_lag for details and reasoning behind this.
 
     Raises:
         ValueError: If all metric names are set to None or if there are duplicate metric names.
@@ -97,6 +99,8 @@ class AssignmentEventsInPool(BasePoolMetric):
     _rejected_name: Optional[str] = None
     _skipped_name: Optional[str] = None
     _expired_name: Optional[str] = None
+
+    _cursor_time_lag: datetime.timedelta = cursor.DEFAULT_LAG
 
     _join_events: bool = False
 
@@ -137,6 +141,7 @@ class AssignmentEventsInPool(BasePoolMetric):
                     pool_id=self.pool_id,
                     event_type=status_value,
                     toloka_client=self.atoloka_client,
+                    time_lag=self._cursor_time_lag,
                     **{f'{status_value.lower()}_gte': start_time},
                 )
         return cursors
@@ -453,6 +458,8 @@ class BansInPool(BasePoolMetric):
         count_name: Metric name for a count of bans.
         filter_by_comment: Allow to split Toloker restriction into several lines based on comment.
             Dictionary where, key - comment string, and value - name for line in which will be aggregated bans with this comments.
+        cursor_time_lag: Time lag for cursor. This controls time lag between user restrictions being added and this
+            metric being updated. See BaseCursor.time_lag for details and reasoning behind this.
         join_events: Count all events in one point. Default `False`.
 
     Example:
@@ -491,6 +498,7 @@ class BansInPool(BasePoolMetric):
     """
     _count_name: Optional[str] = None
     _filter_by_comment: Optional[Dict[str, str]] = None  # {'comment': 'line_name'}
+    _cursor_time_lag: datetime.timedelta = cursor.DEFAULT_LAG
 
     _join_events: bool = False
 
@@ -515,7 +523,8 @@ class BansInPool(BasePoolMetric):
         return cursor.UserRestrictionCursor(
             toloka_client=self.atoloka_client,
             created_gte=datetime.datetime.now(datetime.timezone.utc),
-            pool_id=self.pool_id
+            pool_id=self.pool_id,
+            time_lag=self._cursor_time_lag,
         )
 
     async def _get_lines_impl(self) -> Dict[str, List[Tuple[Any, Any]]]:

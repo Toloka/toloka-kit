@@ -4,6 +4,8 @@ __all__: list = [
     'universal_decorator',
     'expand'
 ]
+
+import datetime
 import functools
 import inspect
 import linecache
@@ -253,7 +255,12 @@ def expand_func_by_argument(func: Callable, arg_name: str, arg_type: Optional[Ty
         func_sig.replace(parameters=new_params),
         function_body,
         inspect.iscoroutinefunction(func),
-        {arg_type.__name__: arg_type, 'func': func, 'NOTHING': attr.NOTHING}
+        {
+            arg_type.__name__: arg_type,
+            'func': func,
+            'NOTHING': attr.NOTHING,
+            'datetime': datetime,
+        }
     )
     expanded_func.__doc__ = func.__doc__
     return expanded_func
