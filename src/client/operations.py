@@ -58,12 +58,12 @@ class Operation(BaseTolokaObject, spec_enum=OperationType, spec_field='type'):
     Attributes:
         id: The ID of the operation.
         status: The status of the operation.
-        submitted: The UTC date and time when the operations was requested.
-        parameters: Operation parameters.
+        submitted: The UTC date and time when the operation was requested.
+        parameters: Parameters of the request that started the operation.
         started: The UTC date and time when the operation started.
         finished: The UTC date and time when the operation finished.
-        progress: The operation progress in percents.
-        details: The details of the operation completion.
+        progress: The operation progress as a percentage.
+        details: Details of the operation completion.
     """
 
     @unique
@@ -120,7 +120,7 @@ class Operation(BaseTolokaObject, spec_enum=OperationType, spec_field='type'):
 
 @inherit_docstrings
 class AnalyticsOperation(Operation, spec_value=OperationType.ANALYTICS):
-    """Requesting analytics operation.
+    """Analytics operation.
 
     The operation is returned by the [get_analytics](toloka.client.TolokaClient.get_analytics.md) method.
     """
@@ -243,6 +243,10 @@ class TrainingCloneOperation(TrainingOperation, spec_value=OperationType.TRAININ
     """
 
     class Details(TrainingOperation.Parameters):
+        """
+        Attributes:
+            training_id: The ID of the new training created after cloning.
+        """
         training_id: str
 
     details: Details
@@ -300,10 +304,11 @@ class TasksCreateOperation(Operation, spec_value=OperationType.TASK_BATCH_CREATE
 
     The operation is returned by the [create_tasks_async](toloka.client.TolokaClient.create_tasks_async.md) method.
 
-    All parameters are for reference only and describe the initial parameters of the request that this operation monitors.
-
     Attributes:
         parameters: Parameters passed to the `create_tasks_async` method.
+        finished: The UTC date and time when the operation was completed.
+        details: Details of the operation completion.
+
     """
 
     class Parameters(Operation.Parameters):
@@ -329,22 +334,24 @@ class TasksCreateOperation(Operation, spec_value=OperationType.TASK_BATCH_CREATE
 
 @inherit_docstrings
 class TaskSuiteCreateBatchOperation(Operation, spec_value=OperationType.TASK_SUITE_BATCH_CREATE):
-    """Operation returned by an asynchronous creating TaskSuite's via TolokaClient.create_task_suites_async()
+    """Task suite creating operation.
 
-    All parameters are for reference only and describe the initial parameters of the request that this operation monitors.
+    The operation is returned by the [create_task_suites_async](toloka.client.TolokaClient.create_task_suites_async.md) method.
 
     Attributes:
-        parameters.skip_invalid_items: Validation parameters for JSON objects:
-            * `True` — Create the task suites that passed validation. Skip the rest of the task suites.
-            * `False` — If at least one of the task suites didn't pass validation, stop the operation and
-                don't create any task suites.
-        parameters.allow_defaults: Overlap settings:
-            * `True` — Use the overlap that is set in the pool parameters.
-            * `False` — Use the overlap that is set in the task parameters (in the overlap field).
-        parameters.open_pool: Open the pool immediately after creating the task suites, if the pool is closed.
+        parameters: Parameters passed to the `create_task_suites_async` method.
+        finished: The UTC date and time when the operation was completed.
+        details: Details of the operation completion.
     """
 
     class Parameters(Operation.Parameters):
+            """Parameters passed to the [create_task_suites_async](toloka.client.TolokaClient.create_task_suites_async.md) method.
+
+            Attributes:
+                skip_invalid_items: Task validation parameter.
+                allow_defaults: Active overlap parameter.
+                open_pool: Opening the pool immediately.
+        """
         skip_invalid_items: bool
         allow_defaults: bool
         open_pool: bool
@@ -359,10 +366,12 @@ class TaskSuiteCreateBatchOperation(Operation, spec_value=OperationType.TASK_SUI
 
 @inherit_docstrings
 class AggregatedSolutionOperation(Operation, spec_value=OperationType.SOLUTION_AGGREGATE):
-    """Operation returned by an asynchronous aggregation responses in pool via TolokaClient.aggregate_solutions_by_pool()
+    """Response aggregation operation.
+
+    The operation is returned by the [aggregate_solutions_by_pool](toloka.client.TolokaClient.aggregate_solutions_by_pool.md) method.
 
     Attributes:
-        parameters.pool_id: In which pool the responses are aggregated.
+        parameters: Parameters containing the ID of the pool.
     """
 
     class Parameters(Operation.Parameters):
@@ -376,26 +385,28 @@ class AggregatedSolutionOperation(Operation, spec_value=OperationType.SOLUTION_A
 
 @inherit_docstrings
 class UserBonusCreateBatchOperation(Operation, spec_value=OperationType.USER_BONUS_BATCH_CREATE):
-    """Operation returned by the `TolokaClient.create_user_bonuses_async()` method.
+    """Issuing payments operation.
 
-    All parameters are for reference only and describe the initial parameters of the request that this operation monitors.
+    The operation is returned by the [create_user_bonuses_async](toloka.client.TolokaClient.create_user_bonuses_async.md) method.
 
     Attributes:
-        parameters.skip_invalid_items: Validation parameters for JSON objects:
-            * `True` — Create rewards using `UserBonus` instances that passed validation. Skip the rest of the `UserBonus` instances.
-            * `False` — If at least one of the `UserBonus` instances didn't pass validation, stop the operation and
-                don't create any rewards.
-        details.total_count: The number of bonuses in the request.
-        details.valid_count: The number of JSON objects with bonus information that have passed validation.
-        details.not_valid_count: The number of JSON objects with bonus information that failed validation.
-        details.success_count: Number of bonuses issued.
-        details.failed_count: The number of bonuses that were not issued.
+        parameters: Parameters of the `create_user_bonuses_async` request that started the operation.
+        details: The details of the operation.
     """
 
     class Parameters(Operation.Parameters):
         skip_invalid_items: bool
 
     class Details(PoolOperation.Parameters):
+        """The details of the `UserBonusCreateBatchOperation` operation.
+
+        Attributes:
+            total_count: The total number of `UserBonus` objects in the request.
+            valid_count: The number of `UserBonus` objects that passed validation.
+            not_valid_count: The number of `UserBonus` objects that didn't pass validation.
+            success_count: The number of `UserBonus` that were issued to Tolokers.
+            failed_count: The number of `UserBonus` that were not issued to Tolokers.
+        """
         total_count: int
         valid_count: int
         not_valid_count: int

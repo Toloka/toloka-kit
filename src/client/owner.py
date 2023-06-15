@@ -3,13 +3,13 @@ from .primitives.base import BaseTolokaObject
 
 
 class Owner(BaseTolokaObject):
-    """Information about a requester who created some object.
+    """Information about a requester who owns some object.
 
     Attributes:
         id: The ID of the requester.
-        myself: Checks the OAuth token that is used in the request:
-                * `True` — An object creator has the same OAuth token.
-                * `False` — An object creator has different OAuth token.
+        myself: A match of the owner OAuth token with the token that is used in the request:
+                * `True` — The tokens are the same.
+                * `False` — The tokens are different.
         company_id: The ID of the requester's company.
     """
 

@@ -10,7 +10,7 @@ from .primitives.base import BaseTolokaObject
 class OperationLogItem(BaseTolokaObject):
     """An operation log item.
 
-    If the operation was successful, the log contains the IDs of the created objects, otherwise it contains the details of validation errors.
+    If the operation was successful, the log contains the IDs of created objects, otherwise it contains validation errors details.
 
     Attributes:
         type: The type of the operation.
@@ -22,7 +22,7 @@ class OperationLogItem(BaseTolokaObject):
             * `TASK_SUITE_VALIDATE` — Creating a task suite that failed.
         success: The operation result: success or failure.
         input: Input operation data.
-        output: Operation output data. The content depends on the `type`.
+        output: Operation output data. The content depends on the log item `type`.
     """
 
     type: str

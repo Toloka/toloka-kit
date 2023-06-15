@@ -100,7 +100,7 @@ class UserBonusCreateRequestParameters(IdempotentOperationParameters):
 class UserBonusesCreateRequestParameters(UserBonusCreateRequestParameters):
     """Parameters for creating bonuses for Tolokers.
 
-    Used in methods 'create_user_bonuses' и 'create_user_bonuses_async' of the class TolokaClient,
+    Used in methods `create_user_bonuses` and `create_user_bonuses_async` of the class TolokaClient,
     to clarify the behavior when creating bonuses.
 
     Attributes:
