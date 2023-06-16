@@ -345,12 +345,12 @@ class TaskSuiteCreateBatchOperation(Operation, spec_value=OperationType.TASK_SUI
     """
 
     class Parameters(Operation.Parameters):
-            """Parameters passed to the [create_task_suites_async](toloka.client.TolokaClient.create_task_suites_async.md) method.
+        """Parameters passed to the [create_task_suites_async](toloka.client.TolokaClient.create_task_suites_async.md) method.
 
-            Attributes:
-                skip_invalid_items: Task validation parameter.
-                allow_defaults: Active overlap parameter.
-                open_pool: Opening the pool immediately.
+        Attributes:
+            skip_invalid_items: Task validation parameter.
+            allow_defaults: Active overlap parameter.
+            open_pool: Opening the pool immediately.
         """
         skip_invalid_items: bool
         allow_defaults: bool
