@@ -47,7 +47,7 @@ class ConditionInterval:
 
 @attr.s
 class BackendSearchMock:
-    """Use in requests mock to imitage Toloka backend search methods.
+    """Use in requests mock to imitate Toloka backend search methods.
 
     Attributes:
         storage: List of items. Imitates DB.

@@ -14,8 +14,10 @@ import asyncio
 import attr
 import copy
 import functools
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from typing import Any, AsyncIterator, Awaitable, Callable, Iterator, List, Optional, Set, Tuple, Union
+
+from toloka.util._docstrings import inherit_docstrings
 from typing_extensions import Protocol
 
 from ..async_client import AsyncTolokaClient
@@ -45,7 +47,8 @@ class ResponseObjectType(Protocol):
 
 TolokaClientSyncOrAsyncType = Union[TolokaClient, AsyncTolokaClient]
 
-DATETIME_MIN = datetime.fromtimestamp(0)
+DATETIME_MIN = datetime.fromtimestamp(0, tz=timezone.utc)
+DEFAULT_LAG = timedelta(minutes=1)
 
 
 @attr.s
@@ -77,8 +80,17 @@ class _ByIdCursor:
 
 @attr.s
 class BaseCursor:
+    """Base class for all cursors.
+
+    Args:
+        _time_lag: Time lag between cursor time field upper bound and real time. Default is 1 minute. This lag is
+            required to keep cursor consistent. Lowering this value will make cursor process events faster, but raises
+            probability of missing some events in case of concurrent operations.
+    """
+
     toloka_client: TolokaClientSyncOrAsyncType = attr.ib()
     _request: BaseSearchRequest = attr.ib()
+    _time_lag: timedelta = attr.ib(default=DEFAULT_LAG)
     _prev_response: Optional[ResponseObjectType] = attr.ib(default=None, init=False)
     _seen_ids: Set[str] = attr.ib(factory=set, init=False)
 
@@ -158,6 +170,9 @@ class BaseCursor:
 
     def __iter__(self) -> Iterator[BaseEvent]:
         fetcher = self._get_fetcher()
+        self._request = attr.evolve(
+            self._request, **{self._time_field_lte: datetime.now(tz=timezone.utc) - self._time_lag}
+        )
         while True:
             response = fetcher(self._request, sort=self._get_time_field())  # Diff between sync and async.
             if response.items:
@@ -172,6 +187,11 @@ class BaseCursor:
                 if not response.has_more:
                     return
 
+                # Multiple items can have the same time field value. If items with the same time field value are split
+                # between responses due to the fetcher limit they will be fetched twice and filtered by _seen_ids field
+                # afterward. But there is a corner case when all items in the response have the same time field value.
+                # As the result we will fetch the same items over and over again. To avoid this we need fallback to
+                # iteration over id field.
                 if self._get_time(response.items[0]) == max_time:
                     fixed_time_request = attr.evolve(self._request, **{self._time_field_lte: max_time})
                     for item in _ByIdCursor(fetcher, fixed_time_request):  # Diff between sync and async.
@@ -187,6 +207,9 @@ class BaseCursor:
 
     async def __aiter__(self) -> AsyncIterator[BaseEvent]:
         fetcher = self._get_fetcher()
+        self._request = attr.evolve(
+            self._request, **{self._time_field_lte: datetime.now(tz=timezone.utc) - self._time_lag}
+        )
         while True:
             response = await ensure_async(fetcher)(self._request, sort=self._get_time_field())  # Diff between sync and async.
             if response.items:
@@ -201,6 +224,11 @@ class BaseCursor:
                 if not response.has_more:
                     return
 
+                # Multiple items can have the same time field value. If items with the same time field value are split
+                # between responses due to the fetcher limit they will be fetched twice and filtered by _seen_ids field
+                # afterward. But there is a corner case when all items in the response have the same time field value.
+                # As the result we will fetch the same items over and over again. To avoid this we need fallback to
+                # iteration over id field.
                 if self._get_time(response.items[0]) == max_time:
                     fixed_time_request = attr.evolve(self._request, **{self._time_field_lte: max_time})
                     async for item in _ByIdCursor(fetcher, fixed_time_request):  # Diff between sync and async.
@@ -217,9 +245,10 @@ class BaseCursor:
 
 @expand('request')
 @fix_attrs_converters
+@inherit_docstrings
 @attr.s
 class AssignmentCursor(BaseCursor):
-    """Iterator over Assignment objects of seleted AssignmentEventType.
+    """Iterator over Assignment objects of selected AssignmentEventType.
 
     Args:
         toloka_client: TolokaClient object that is being used to search assignments.
@@ -242,6 +271,7 @@ class AssignmentCursor(BaseCursor):
     _request: search_requests.AssignmentSearchRequest = attr.ib(
         factory=search_requests.AssignmentSearchRequest,
     )
+    _time_lag: timedelta = attr.ib(default=DEFAULT_LAG)
 
     def _get_fetcher(self) -> Callable[..., search_results.AssignmentSearchResult]:
         async def _async_fetcher(*args, **kwargs):
@@ -263,6 +293,7 @@ class AssignmentCursor(BaseCursor):
 
 @expand('request')
 @fix_attrs_converters
+@inherit_docstrings
 @attr.s
 class TaskCursor(BaseCursor):
     """Iterator over tasks by create time.
@@ -297,6 +328,7 @@ class TaskCursor(BaseCursor):
 
 @expand('request')
 @fix_attrs_converters
+@inherit_docstrings
 @attr.s
 class UserBonusCursor(BaseCursor):
     """Iterator over `UserBonus` instances by create time.
@@ -331,6 +363,7 @@ class UserBonusCursor(BaseCursor):
 
 @expand('request')
 @fix_attrs_converters
+@inherit_docstrings
 @attr.s
 class UserSkillCursor(BaseCursor):
     """Iterator over UserSkillEvent objects of a selected event_type.
@@ -354,6 +387,7 @@ class UserSkillCursor(BaseCursor):
     _request: search_requests.UserSkillSearchRequest = attr.ib(
         factory=search_requests.UserSkillSearchRequest,
     )
+    _time_lag: timedelta = attr.ib(default=DEFAULT_LAG)
 
     def _get_fetcher(self) -> Callable[..., search_results.UserSkillSearchResult]:
         return self.toloka_client.find_user_skills
@@ -369,6 +403,7 @@ class UserSkillCursor(BaseCursor):
 
 @expand('request')
 @fix_attrs_converters
+@inherit_docstrings
 @attr.s
 class UserRestrictionCursor(BaseCursor):
     """Iterator over Toloker restrictions by create time.
@@ -403,6 +438,7 @@ class UserRestrictionCursor(BaseCursor):
 
 @expand('request')
 @fix_attrs_converters
+@inherit_docstrings
 @attr.s
 class MessageThreadCursor(BaseCursor):
     """Iterator over messages by create time.
