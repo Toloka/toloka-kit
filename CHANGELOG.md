@@ -1,3 +1,29 @@
+1.2.0
+-------------------
+Changes:
+* Changed streaming cursors behavior: now events are processed not sooner than `time_lag` seconds after they were 
+  created. This parameter is configurable, but it is not recommended to decrease the default value of 1 minute as this 
+  can lead to some events being skipped. This change affects streaming cursors, cursor-based streaming observers, and 
+  some cursor-based metric collectors. 
+
+Features:
+* Supported SSO authorization tokens.
+* Added Python 3.11 support
+* `TolokaClient.create_task`, `TolokaClient.create_task_suite` and `TolokaClient.create_user_bonus` now support 
+  `operation_id` parameter.
+
+Fixes:
+* `TolokaClient.create_task`, `TolokaClient.create_task_suite`, `TolokaClient.create_user_bonus` and 
+  `TolokaClient.create_user_bonus` can be safely retried now (previously they could create duplicate items in case of 
+  an unstable connection).
+* Previously `AsyncTolokaClient` could not outlive the asyncio event loop which was used during the first API call, 
+  which lead to an inability to pickle `AsyncTolokaClient`. Now `AsyncTolokaClient` survives asyncio event loop change.
+* `TolokaClient` and `AsyncTolokaClient` follows `urllib3` retrying behavior more closely in case of the `Retry` object 
+  being passed to the `retry` or `retryer_factory` parameters.
+* Previously streaming cursors could skip some Toloka events when fetching them from the API concurrently with them 
+  being created. Now streaming cursors utilize time lag to prevent such concurrent reads.
+
+
 1.1.4
 -------------------
 Features:
