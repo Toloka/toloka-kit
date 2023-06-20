@@ -996,7 +996,7 @@ class TolokaClient:
 
         Example:
             A message is sent to all Tolokers who have tried to complete your tasks.
-            The message is in english. Tolokers can't reply to your message.
+            The message is in English. Tolokers can't reply to your message.
 
             >>> message_text = "Amazing job! We've just trained our first model with the data you prepared for us. Thank you!"
             >>> toloka_client.compose_message_thread(
