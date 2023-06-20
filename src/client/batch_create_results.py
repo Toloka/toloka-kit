@@ -69,12 +69,12 @@ TaskSuiteBatchCreateResult = _create_batch_create_result_class_for(
 )
 UserBonusBatchCreateResult = _create_batch_create_result_class_for(
     UserBonus,
-    """The result of issuing rewards for Tolokers.
+    """The result of issuing bonuses for Tolokers.
 
     `UserBonusBatchCreateResult` is returned by the [create_user_bonuses](toloka.client.TolokaClient.create_user_bonuses.md) method.
 
     Attributes:
-        items: A dictionary with created rewards. The indexes of a `create_user_bonuses` input list are used as keys in the dictionary.
+        items: A dictionary with created bonuses. The indexes of a `create_user_bonuses` input list are used as keys in the dictionary.
         validation_errors: A dictionary with validation errors. It is filled if the request parameter `skip_invalid_items` is `True`.
     """
 )
