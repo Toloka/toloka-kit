@@ -64,13 +64,13 @@ from ...util._extendable_enum import ExtendableStrEnum
 class Project(BaseTolokaObject):
     """Top-level object in Toloka that describes one requester's objective.
 
-    If your task is complex, consider to [decompose](https://toloka.ai/en/docs/guide/concepts/solution-architecture) it into several projects.
+    If your task is complex, consider to [decompose](https://toloka.ai/docs/guide/solution-architecture) it into several projects.
     For example, one project finds images with some objects, another project describes image segmentation, and the third project checks this segmentation.
 
     In a project, you set properties for tasks and responses:
     * Input data parameters describe what kind of input data you have: images, text, and other.
     * Output data parameters describe Tolokers' responses. They are used to validate a data type, range of values, string length, and so on.
-    * Task interface. To learn how to define the appearance of tasks, see [Task interface](https://toloka.ai/en/docs/en/guide/concepts/spec) in the guide.
+    * Task interface. To learn how to define the appearance of tasks, see [Task interface](https://toloka.ai/docs/guide/spec) in the guide.
 
     You upload [tasks](toloka.client.task.Task.md) to project [pools](toloka.client.pool.Pool.md) and [training pools](toloka.client.training.Training.md).
     They are grouped into [task suites](toloka.client.task_suite.TaskSuite.md) and assigned to Tolokers.
@@ -81,12 +81,12 @@ class Project(BaseTolokaObject):
         public_instructions: Instructions for Tolokers describe what to do in the tasks. You can use any HTML markup in the instructions.
         private_comment: Comments about the project. Visible only to the requester.
         task_spec: Input and output data specification and the task interface.
-            The interface can be defined with HTML, CSS, and JS or using the [Template Builder](https://toloka.ai/en/docs/template-builder/) components.
+            The interface can be defined with HTML, CSS, and JS or using the [Template Builder](https://toloka.ai/docs/template-builder/) components.
         assignments_issuing_type: Settings for assigning tasks. Default value: `AUTOMATED`.
         assignments_issuing_view_config: The configuration of a task view on a map. Provide it if `assignments_issuing_type=MAP_SELECTOR`.
-        assignments_automerge_enabled: [Merging tasks](https://toloka.ai/en/docs/api/concepts/tasks#task-merge) control.
+        assignments_automerge_enabled: [Merging tasks](https://toloka.ai/docs/api/tasks) control.
         max_active_assignments_count: The number of task suites simultaneously assigned to a Toloker. Note, that Toloka counts assignments having the `ACTIVE` status only.
-        quality_control: [Quality control](https://toloka.ai/en/docs/guide/concepts/project-qa) rules.
+        quality_control: [Quality control](https://toloka.ai/docs/guide/project-qa) rules.
         localization_config: Translations to other languages.
         metadata: Additional information about the project.
         id: The ID of the project. Read-only field.

@@ -13,7 +13,7 @@ __all__ = [
     'UsersAssessment'
 ]
 """
-https://toloka.ai/en/docs/guide/concepts/control
+https://toloka.ai/docs/guide/control
 """
 
 import logging

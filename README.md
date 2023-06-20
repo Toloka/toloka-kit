@@ -8,11 +8,11 @@
 [![Coverage](https://codecov.io/gh/Toloka/toloka-kit/branch/main/graph/badge.svg)](https://codecov.io/gh/Toloka/toloka-kit)
 [![GitHub Tests](https://github.com/Toloka/toloka-kit/workflows/Tests/badge.svg?branch=main)](//github.com/Toloka/toloka-kit/actions?query=workflow:Tests)
 
-[Toloka website](https://toloka.ai/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) | [Documentation](https://toloka.ai/en/docs/toloka-kit/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) | [Issue tracker](https://github.com/Toloka/toloka-kit/issues)
+[Toloka website](https://toloka.ai/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) | [Documentation](https://toloka.ai/docs/toloka-kit/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) | [Issue tracker](https://github.com/Toloka/toloka-kit/issues)
 
 
 
-Toloka-Kit is a Python library for working with [Toloka API](https://toloka.ai/docs/api/?utm_source=github&utm_medium=site&utm_campaign=tolokakit). 
+Toloka-Kit is a Python library for working with [Toloka API](https://toloka.ai/docs/api/api-reference/?utm_source=github&utm_medium=site&utm_campaign=tolokakit).
 
 The API allows you to build scalable and fully automated human-in-the-loop ML pipelines, and integrate them into your processes. The toolkit makes integration easier. You can use it with Jupyter notebooks.
 
@@ -20,16 +20,16 @@ The API allows you to build scalable and fully automated human-in-the-loop ML pi
 * Toloka entities are represented as Python classes. You can use them instead of accessing the API using JSON representations.
 * There’s no need to validate JSON files and work with them directly.
 * Support of both synchronous and asynchronous (via async/await) executions.
-* Streaming support: build complex pipelines which send and receive data in real time. For example, you can [pass data between two related projects](https://github.com/Toloka/toloka-kit/blob/main/examples/6.streaming_pipelines/streaming_pipelines.ipynb): one for data labeling, and another for its validation. 
+* Streaming support: build complex pipelines which send and receive data in real time. For example, you can [pass data between two related projects](https://github.com/Toloka/toloka-kit/blob/main/examples/6.streaming_pipelines/streaming_pipelines.ipynb): one for data labeling, and another for its validation.
 * [AutoQuality](https://medium.com/toloka/automating-crowdsourcing-quality-control-ad057baf00fd) feature which automatically finds the best fitting quality control rules for your project.
 
 ## Prerequisites
 
 Before you begin, make sure that:
 * You are using [Python](https://www.python.org/) v3.7 or higher.
-* You are [registered](https://toloka.ai/docs/guide/concepts/access/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) in Toloka as a requester.
-* You have [topped up](https://toloka.ai/docs/guide/concepts/refill/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) your Toloka account.
-* You have [set up an OAuth token](https://toloka.ai/docs/api/concepts/access/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) to access Toloka API.
+* You are [registered](https://toloka.ai/docs/guide/access/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) in Toloka as a requester.
+* You have [topped up](https://toloka.ai/docs/guide/refill/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) your Toloka account.
+* You have [set up an OAuth token](https://toloka.ai/docs/api/api-reference/?utm_source=github&utm_medium=site&utm_campaign=tolokakit#overview--accessing-the-api) to access Toloka API.
 
 ## Get Started
 1. Install the Toloka-Kit package. Run the following command in the command shell:
@@ -73,9 +73,9 @@ $ pip install toloka-kit[pandas,autoquality,s3,zookeeper,jupyter-metrics] # remo
 [Toloka-kit usage examples](https://github.com/Toloka/toloka-kit/tree/main/examples#toloka-kit-usage-examples) - tutorials for specific data labeling tasks. They demonstrate how to work with Toloka API using Toloka-Kit.
 
 ## Documentation
-* [Toloka-Kit documentation](https://toloka.ai/en/docs/toloka-kit/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
-* [Toloka API reference](https://toloka.ai/docs/api/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
-* [Toloka web interface documentation](https://toloka.ai/docs/guide/concepts/overview/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
+* [Toloka-Kit documentation](https://toloka.ai/docs/toloka-kit/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
+* [Toloka API reference](https://toloka.ai/docs/api/api-reference/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
+* [Toloka web interface documentation](https://toloka.ai/docs/guide/overview/?utm_source=github&utm_medium=site&utm_campaign=tolokakit)
 
 ## Support
 * To suggest a feature or report a bug, go to our [issues page](https://github.com/Toloka/toloka-kit/issues).
