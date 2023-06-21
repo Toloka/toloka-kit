@@ -446,7 +446,7 @@ class City(Profile, toloka.client.primitives.operators.InclusionConditionMixin):
     Attributes:
         operator: An operator used in a condition.
             Allowed set of operators depends on the filter.
-        value: The [ID](https://toloka.ai/en/docs/api/concepts/regions) of the city.
+        value: The [ID](https://toloka.ai/docs/api/regions) of the city.
     """
 
     def __init__(
@@ -501,7 +501,7 @@ class RegionByPhone(Computed, toloka.client.primitives.operators.InclusionCondit
     Attributes:
         operator: An operator used in a condition.
             Allowed set of operators depends on the filter.
-        value: The ID from the [list of regions](https://toloka.ai/en/docs/api/concepts/regions).
+        value: The ID from the [list of regions](https://toloka.ai/docs/api/regions).
     """
 
     def __init__(
@@ -524,7 +524,7 @@ class RegionByIp(Computed, toloka.client.primitives.operators.InclusionCondition
     Attributes:
         operator: An operator used in a condition.
             Allowed set of operators depends on the filter.
-        value: The ID from the [list of regions](https://toloka.ai/en/docs/api/concepts/regions).
+        value: The ID from the [list of regions](https://toloka.ai/docs/api/regions).
     """
 
     def __init__(

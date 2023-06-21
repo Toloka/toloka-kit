@@ -19,7 +19,7 @@ class Training(toloka.client.primitives.base.BaseTolokaObject):
     [Pool](toloka.client.pool.Pool.md).[quality_control](toloka.client.quality_control.QualityControl.md).[training_requirement](toloka.client.quality_control.QualityControl.TrainingRequirement.md)
     parameter.
 
-    For more information, see [Adding a training](https://toloka.ai/en/docs/guide/concepts/train).
+    For more information, see [Adding a training](https://toloka.ai/docs/guide/train).
 
     Attributes:
         project_id: The ID of the project containing the training.
