@@ -290,13 +290,13 @@ class TrainingSearchResult(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class UserBonusSearchResult(toloka.client.primitives.base.BaseTolokaObject):
-    """The result of searching Tolokers' rewards.
+    """The result of searching Tolokers' bonuses.
 
     Attributes:
-        items: A list with found rewards.
-        has_more: A flag showing whether there are more matching rewards.
-            * `True` — There are more matching rewards, not included in `items` due to the limit set in the search request.
-            * `False` — `items` contains all matching rewards.
+        items: A list with found bonuses.
+        has_more: A flag showing whether there are more matching bonuses.
+            * `True` — There are more matching bonuses, not included in `items` due to the limit set in the search request.
+            * `False` — `items` contains all matching bonuses.
     """
 
     def __init__(
