@@ -29,7 +29,7 @@ body:
       label: Documentation links
       description: >-
         Provide links to documentation either in [repository](https://github.com/Toloka/toloka-kit/tree/main/docs)
-        or in [Toloka site](https://toloka.ai/en/docs/toloka-kit/)
+        or in [Toloka site](https://toloka.ai/docs/toloka-kit/)
     validations:
       required: true
   - type: textarea

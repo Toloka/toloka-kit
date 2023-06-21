@@ -170,7 +170,7 @@ logger = logging.getLogger(__name__)
 
 
 class TolokaClient:
-    """Class that implements interaction with [Toloka API](https://toloka.ai/en/docs/api/).
+    """Class that implements interaction with [Toloka API](https://toloka.ai/docs/api/api-reference/).
 
     Objects of other classes are created and modified only in memory of your computer.
     You can transfer information about these objects to Toloka only by calling one of the `TolokaClient` methods.
@@ -182,7 +182,7 @@ class TolokaClient:
     Call `TolokaClient.update_project` and pass the `Project` to apply your changes.
 
     Args:
-        token: Your OAuth token for Toloka. You can learn more about how to get it [here](https://toloka.ai/en/docs/api/concepts/access#token)
+        token: Your OAuth token for Toloka. You can learn more about how to get it [here](https://toloka.ai/docs/api/api-reference/#overview--accessing-the-api)
         environment: There are two environments in Toloka:
             * `SANDBOX` – [Testing environment](https://sandbox.toloka.dev) for Toloka requesters.
             You can test complex projects before assigning tasks to Tolokers. Nobody will see your tasks, and it's free.
@@ -220,7 +220,7 @@ class TolokaClient:
             Fully specified retry policy that will apply to all requests.
             Default value: `None`.
         act_under_account_id: ID of the requester that has been shared access with the current token owner account.
-            All requests will be made using a specified account. See [Shared access to the requester's account](https://toloka.ai/en/docs/guide/concepts/multiple-access)
+            All requests will be made using a specified account. See [Shared access to the requester's account](https://toloka.ai/docs/guide/multiple-access)
             documentation page. ID of the requester can be retrieved using the [get_requester](toloka.client.TolokaClient.get_requester.md)
             method (this method should be called by the account owner using account's token).
         verify: SSL certificates (a.k.a CA bundle) used to
@@ -573,7 +573,7 @@ class TolokaClient:
 
         {% note tip %}
 
-        Try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit). It has many aggregation methods and executes on your computer.
+        Try [crowd-kit library](https://toloka.ai/docs/crowd-kit). It has many aggregation methods and executes on your computer.
 
         {% endnote %}
 
@@ -607,7 +607,7 @@ class TolokaClient:
 
         {% note tip %}
 
-        Try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit). It has many aggregation methods and executes on your computer.
+        Try [crowd-kit library](https://toloka.ai/docs/crowd-kit). It has many aggregation methods and executes on your computer.
 
         {% endnote %}
 
@@ -691,7 +691,7 @@ class TolokaClient:
 
         {% note tip %}
 
-        Try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit). It has many aggregation methods and executes on your computer.
+        Try [crowd-kit library](https://toloka.ai/docs/crowd-kit). It has many aggregation methods and executes on your computer.
 
         {% endnote %}
 
@@ -4028,7 +4028,7 @@ class TolokaClient:
             >>> new_item = {
             >>>     'batch_id' : '4Va2BBWKL88S4QyAgVje',
             >>>     'input_data' : {
-            >>>         'id':'40', 'query':'toloka kit', 'website_url':'https://toloka.ai/en/docs/toloka-kit'
+            >>>         'id':'40', 'query':'toloka kit', 'website_url':'https://toloka.ai/docs/toloka-kit'
             >>>     }
             >>> }
             >>> new_item = toloka_client.create_app_item(app_project_id = 'Q2d15QBjpwWuDz8Z321g', app_item = new_item)
@@ -4059,8 +4059,8 @@ class TolokaClient:
             that requires `query` and `website_url` keys to be present in input data.
 
             >>> new_items = [
-            >>>     {'id':'20', 'query':'toloka kit', 'website_url':'https://toloka.ai/en/docs/toloka-kit'},
-            >>>     {'id':'21', 'query':'crowd kit', 'website_url':'https://toloka.ai/en/docs/crowd-kit'}
+            >>>     {'id':'20', 'query':'toloka kit', 'website_url':'https://toloka.ai/docs/toloka-kit'},
+            >>>     {'id':'21', 'query':'crowd kit', 'website_url':'https://toloka.ai/docs/crowd-kit'}
             >>> ]
             >>> toloka_client.create_app_items(app_project_id = 'Q2d15QBjpwWuDz8Z321g', batch_id = '4Va2BBWKL88S4QyAgVje', items = new_items)
             ...
@@ -4175,8 +4175,8 @@ class TolokaClient:
             that requires `query` and `website_url` keys to be present in input data.
 
             >>> new_items = [
-            >>>     {'id':'30', 'query':'toloka kit', 'website_url':'https://toloka.ai/en/docs/toloka-kit'},
-            >>>     {'id':'31', 'query':'crowd kit', 'website_url':'https://toloka.ai/en/docs/crowd-kit'}
+            >>>     {'id':'30', 'query':'toloka kit', 'website_url':'https://toloka.ai/docs/toloka-kit'},
+            >>>     {'id':'31', 'query':'crowd kit', 'website_url':'https://toloka.ai/docs/crowd-kit'}
             >>> ]
             >>> toloka_client.create_app_batch(app_project_id = 'Q2d15QBjpwWuDz8Z321g', items = new_items)
             ...
