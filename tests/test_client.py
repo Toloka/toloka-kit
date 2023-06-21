@@ -104,7 +104,9 @@ def test_client_act_as(respx_mock, client_act_under_account, shared_account_id, 
 
     def get_requester(request):
         expected_headers = {
-            'X-Caller-Context': 'client' if isinstance(client_act_under_account, client.TolokaClient) else 'async_client',
+            'X-Caller-Context': 'client' if isinstance(
+                client_act_under_account, client.TolokaClient
+            ) else 'async_client',
             'X-Top-Level-Method': 'get_requester',
             'X-Low-Level-Method': 'get_requester',
             'X-Act-Under-Account-ID': shared_account_id
@@ -133,3 +135,31 @@ def test_client_ssl_verify(toloka_client, verify, expected_ssl_context):
     client = copy.deepcopy(toloka_client)
     client.verify = verify
     assert get_verify_mode(client) == expected_ssl_context
+
+
+@pytest.mark.parametrize(
+    'token,is_apikey', [
+        ('fake-token', False),
+        (
+            # api-key like fake token
+            'LrB_oHKYMtXeD-BoVFWTwi.nfNC.vcRjfXLoJtfWAExAizBKrsBlbfLQJFSFDEnoUODffGsyPjpOlfyAIkFlgZBloBQJHxkjMtAohTTCm-sVtAnNueMVEGqiyBPxz-elOp-hEpA',
+            True
+        )
+    ]
+)
+def test_client_auth_headers(respx_mock, token, is_apikey):
+    client = TolokaClient(environment='SANDBOX', token=token)
+
+    def get_requester(request):
+        expected_headers = {
+            'X-Caller-Context': 'client',
+            'X-Top-Level-Method': 'get_requester',
+            'X-Low-Level-Method': 'get_requester',
+            'authorization': f'ApiKey {token}' if is_apikey else f'OAuth {token}',
+        }
+        check_headers(request, expected_headers)
+
+        return httpx.Response(text=simplejson.dumps({}), status_code=200)
+
+    respx_mock.get(f'{client.url}/api/v1/requester').mock(side_effect=get_requester)
+    client.get_requester()

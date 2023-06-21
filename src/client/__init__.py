@@ -335,7 +335,7 @@ class TolokaClient:
     @property
     def _headers(self):
         headers = {
-            'Authorization': f'ApiKey {self.token}' if self.__is_apikey() else 'OAuth {self.token}',
+            'Authorization': f'ApiKey {self.token}' if self.__is_apikey() else f'OAuth {self.token}',
             'User-Agent': f'python-toloka-client-{__version__}',
         }
         if self.act_under_account_id:
