@@ -150,7 +150,7 @@ class Balance(BaseMetric):
 
 
 class NewUserBonuses(BaseMetric):
-    """Tracking rewards for Tolokers: reward count or money amount.
+    """Tracking bonuses for Tolokers: bonus count or money amount.
 
     Args:
         cursor_time_lag: Time lag for cursor. This controls time lag between user bonuses being added and this metric

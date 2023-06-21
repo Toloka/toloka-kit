@@ -887,9 +887,9 @@ class UserBonusCreateBatchOperation(Operation):
         parameters: Operation parameters (depending on the operation type).
         details: Details of the operation completion.
         parameters.skip_invalid_items: Validation parameters for JSON objects:
-            * `True` — Create rewards using `UserBonus` instances that passed validation. Skip the rest of the `UserBonus` instances.
+            * `True` — Create bonuses using `UserBonus` instances that passed validation. Skip the rest of the `UserBonus` instances.
             * `False` — If at least one of the `UserBonus` instances didn't pass validation, stop the operation and
-                don't create any rewards.
+                don't create any bonuses.
         details.total_count: The number of bonuses in the request.
         details.valid_count: The number of JSON objects with bonus information that have passed validation.
         details.not_valid_count: The number of JSON objects with bonus information that failed validation.

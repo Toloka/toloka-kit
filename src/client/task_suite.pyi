@@ -27,7 +27,7 @@ class TaskSuite(toloka.client.primitives.infinite_overlap.InfiniteOverlapParamet
         issuing_order_override: The priority of a task suite.
             It influences the order of assigning task suites to Tolokers in pools with the `issue_task_suites_in_creation_order` parameter set to `True`.
             Allowed range: from -99999.99999 to 99999.99999.
-        mixed: [The way of grouping tasks](https://toloka.ai/en/docs/guide/concepts/distribute-tasks-by-pages) to create the task suite.
+        mixed: [The way of grouping tasks](https://toloka.ai/docs/guide/distribute-tasks-by-pages) to create the task suite.
             * `True` — The tasks are mixed automatically using the smart mixing approach.
             * `False` — The tasks are grouped manually.
 
@@ -40,7 +40,7 @@ class TaskSuite(toloka.client.primitives.infinite_overlap.InfiniteOverlapParamet
         id: The ID of the task suite. Read-only field.
         remaining_overlap: The number of times left for this task suite to be assigned to Tolokers. Read-only field.
         automerged:
-            * `True` — The task suite was created after [merging tasks](https://toloka.ai/en/docs/api/concepts/tasks#task-merge).
+            * `True` — The task suite was created after [merging tasks](https://toloka.ai/docs/api/tasks).
             * `False` — There are no merged tasks in the task suite.
         created: The UTC date and time when the task suite was created. Read-only field.
     """
@@ -107,6 +107,8 @@ class TaskSuiteCreateRequestParameters(toloka.client.primitives.parameter.Idempo
 
     Attributes:
         operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
+            We recommended sending the operation ID in the `POST` requests to avoid accidental errors:
+            when you send several requests with the same `operation_id`, the operation will be performed only once.
         async_mode: Request processing mode:
             * `True` — Asynchronous operation is started internally.
             * `False` — The request is processed synchronously.
@@ -144,6 +146,8 @@ class TaskSuitesCreateRequestParameters(TaskSuiteCreateRequestParameters):
 
     Attributes:
         operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
+            We recommended sending the operation ID in the `POST` requests to avoid accidental errors:
+            when you send several requests with the same `operation_id`, the operation will be performed only once.
         async_mode: Request processing mode:
             * `True` — Asynchronous operation is started internally.
             * `False` — The request is processed synchronously. A maximum of 5000 task suites can be added in a single request in this mode.

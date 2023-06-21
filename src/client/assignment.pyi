@@ -30,7 +30,7 @@ class Assignment(toloka.client.primitives.base.BaseTolokaObject):
             * `SKIPPED` — The task suite is skipped by the Toloker.
             * `EXPIRED` — Time for completing the tasks has expired.
         reward: Payment received by the Toloker.
-        bonus_ids: IDs of rewards issued for the task.
+        bonus_ids: IDs of bonuses issued for the task.
         tasks: Data for the tasks.
         automerged: Flag of the response received as a result of merging identical tasks. Value:
             * `True` — The response was recorded when identical tasks were merged.
