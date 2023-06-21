@@ -32,7 +32,7 @@ class UserBonus(BaseTolokaObject):
             The language can be RU/EN/TR/ID/FR.
         without_message: Do not send a bonus message to the Toloker. To award a bonus without a message, specify null
             for `public_title` and `public_message` and `True` for `without_message`.
-        assignment_id: ID of the Toloker's response to the task a reward is issued for.
+        assignment_id: ID of the Toloker's response to the task a bonus is issued for.
         id: Internal ID of the issued bonus. Read-only field.
         created: Date the bonus was awarded, in UTC. Read-only field.
 
