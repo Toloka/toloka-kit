@@ -103,7 +103,7 @@ TrainingSearchResult = _create_search_result_class_for(
 )
 UserBonusSearchResult = _create_search_result_class_for(
     UserBonus,
-    _create_search_result_docstring("rewards", "Tolokers' rewards")
+    _create_search_result_docstring("bonuses", "Tolokers' bonuses")
 )
 UserRestrictionSearchResult = _create_search_result_class_for(
     UserRestriction,

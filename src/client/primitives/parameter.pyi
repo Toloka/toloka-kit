@@ -25,6 +25,9 @@ class IdempotentOperationParameters(Parameters):
 
     Attributes:
         operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
+
+            We recommended sending the operation ID in the `POST` requests to avoid accidental errors:
+            when you send several requests with the same `operation_id`, the operation will be performed only once.
         async_mode: Request processing mode:
             * `True` — Asynchronous operation is started internally.
             * `False` — The request is processed synchronously.

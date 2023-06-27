@@ -1,3 +1,8 @@
+1.2.0.post1
+-------------------
+Bugfixes:
+* Fixed OAuth authorization header generation.
+
 1.2.0
 -------------------
 Changes:

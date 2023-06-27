@@ -176,6 +176,8 @@ class CreateTaskParameters(toloka.client.primitives.parameter.IdempotentOperatio
 
     Attributes:
         operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
+            We recommended sending the operation ID in the `POST` requests to avoid accidental errors:
+            when you send several requests with the same `operation_id`, the operation will be performed only once.
         async_mode: Request processing mode:
             * `True` — Asynchronous operation is started internally and `create_tasks` waits for the completion of it. It is recommended to create no more than 10,000 tasks per request in this mode.
             * `False` — The request is processed synchronously. A maximum of 5000 tasks can be added in a single request in this mode.
@@ -218,6 +220,8 @@ class CreateTasksParameters(CreateTaskParameters):
 
     Attributes:
         operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
+            We recommended sending the operation ID in the `POST` requests to avoid accidental errors:
+            when you send several requests with the same `operation_id`, the operation will be performed only once.
         async_mode: Request processing mode:
             * `True` — Asynchronous operation is started internally and `create_tasks` waits for the completion of it. It is recommended to create no more than 10,000 tasks per request in this mode.
             * `False` — The request is processed synchronously. A maximum of 5000 tasks can be added in a single request in this mode.

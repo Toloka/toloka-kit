@@ -4,7 +4,7 @@ This module has methods to aggregate answers and to estimate confidence in aggre
 Use it when each task is assigned to several Tolokers.  Note, that aggregation runs on the Toloka server.
 
 If you need advanced aggregation methods or want to run aggregation algorithms locally on your computer,
-try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit).
+try [crowd-kit library](https://toloka.ai/docs/crowd-kit).
 """
 
 __all__ = [
@@ -32,8 +32,8 @@ class PoolAggregatedSolutionRequest(toloka.client.primitives.base.BaseTolokaObje
 
     Attributes:
         type: Aggregation model:
-            * `WEIGHTED_DYNAMIC_OVERLAP` — [Aggregation](https://toloka.ai/en/docs/guide/concepts/result-aggregation#aggr-by-skill) based on Tolokers' skill in a pool with a dynamic overlap.
-            * `DAWID_SKENE` — [Dawid-Skene aggregation model](https://toloka.ai/en/docs/guide/concepts/result-aggregation#dawid-skene). It is used in pools without a dynamic overlap.
+            * `WEIGHTED_DYNAMIC_OVERLAP` — [Aggregation](https://toloka.ai/docs/guide/result-aggregation#aggr-by-skill) based on Tolokers' skill in a pool with a dynamic overlap.
+            * `DAWID_SKENE` — [Dawid-Skene aggregation model](https://toloka.ai/docs/guide/result-aggregation#dawid-skene). It is used in pools without a dynamic overlap.
         pool_id: The ID of the pool.
         answer_weight_skill_id: The ID of the skill that determines the weight of the Toloker's responses.
         fields: Output data fields to aggregate. For the best results, each of these fields should have limited number of response options.
