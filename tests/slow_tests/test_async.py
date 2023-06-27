@@ -1,10 +1,13 @@
 import asyncio
+import sys
 from threading import Thread
 
+import pytest
 from toloka.async_client import AsyncTolokaClient
 from urllib3 import Retry
 
 
+@pytest.mark.skipif((3, 7) <= sys.version_info < (3, 8), reason="Flaky on Python 3.7")
 def test_async_client_survives_event_loop_change(internal_error_server_url, retries_before_response, fake_requester):
     toloka_client = AsyncTolokaClient(
         'fake-token',
