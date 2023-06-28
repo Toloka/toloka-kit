@@ -3475,7 +3475,7 @@ class TolokaClient:
     def delete_user_skill(self, user_skill_id: str) -> None:
         """Removes a skill from a Toloker.
 
-        Skill values assigned to Tolokers are described by the [UserSkill](toloka.client.user_skill.UserSkill.md) class.
+        Tolokers' skill values are described by the [UserSkill](toloka.client.user_skill.UserSkill.md) class.
 
         Args:
             user_skill_id: The ID of the Toloker's skill value.

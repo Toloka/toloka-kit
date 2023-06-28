@@ -12,7 +12,7 @@ LangIso639 = str
 class Skill(BaseTolokaObject):
     """Some characteristic of a Toloker described by a number from 0 to 100.
 
-    `Skill` describes some characteristic, for example the percentage of correct responses.
+    A `Skill` describes some characteristic, for example the percentage of correct responses.
     Skills can be used to filter Tolokers.
 
     Skill values are assigned to Tolokers by quality control rules, or manually. The values are accessed via the [UserSkill](toloka.client.user_skill.UserSkill.md) class.
@@ -48,7 +48,7 @@ class Skill(BaseTolokaObject):
         >>>         name='Road signs detection',
         >>>         public_requester_description={
         >>>             'EN': 'The quality of selecting road signs on images',
-        >>>             'RU': 'Качество выделения на фотографиях дорожных знаков',
+        >>>             'RU': 'Качество выделения дорожных знаков на фотографиях',
         >>>         },
         >>>     )
         >>>     print(f'Skill created. ID: {segmentation_skill.id}')

@@ -31,7 +31,7 @@ class QualityControl(BaseTolokaObject):
 
     Attributes:
         configs: A list of quality control rules configurations.
-        checkpoints_config: Selective majority vote check configuration.
+        checkpoints_config: A selective majority vote check configuration.
         training_requirement: Parameters for linking a training pool to a general task pool.
         captcha_frequency: **Deprecated.** A frequency of showing captchas.
             * `LOW` — Show one for every 20 tasks.
@@ -79,9 +79,9 @@ class QualityControl(BaseTolokaObject):
     class CheckpointsConfig(BaseTolokaObject):
         """A selective majority vote check configuration.
 
-        This quality control method checks some of Toloker's responses against the majority of Tolokers. To do this, it changes the overlap of that tasks.
+        This quality control method checks some of Toloker's responses against the majority of Tolokers. To do this, it changes the overlap of those tasks.
 
-        The example of the configuration:
+        An example of the configuration:
             * For the first 100 tasks completed by a Toloker in the pool, every 5th task is checked. The overlap of these tasks is increased to 5.
             * After completing 100 tasks, every 25th task is checked.
 
@@ -97,8 +97,8 @@ class QualityControl(BaseTolokaObject):
             """Selective majority vote check settings.
 
             Attributes:
-                target_overlap: The overlap value used for tasks that are checked.
-                task_distribution_function: The configuration of selecting tasks to be checked.
+                target_overlap: The overlap value used for selected tasks that are checked.
+                task_distribution_function: The configuration of selecting tasks.
             """
 
             target_overlap: int
@@ -113,7 +113,7 @@ class QualityControl(BaseTolokaObject):
 
         A rule consists of conditions, and an action to perform when the conditions are met. The rule conditions use statistics provided by a connected collector.
 
-        The example of a configuration.
+        An example of the configuration.
         Toloka collects statistics of skipped tasks. If 10 task suites are skipped in a row, then a Toloker can no longer access a project.
 
         To learn more, see:

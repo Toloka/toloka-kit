@@ -8,11 +8,11 @@ from ..util._extendable_enum import ExtendableStrEnum
 
 
 class TaskDistributionFunction(BaseTolokaObject):
-    """The configuration of selecting tasks.
+    """A configuration of selecting tasks.
 
     It is used:
     - To control the selection of tasks for the selective majority vote checks.
-    - To change the frequency of issuing control or training tasks.
+    - To change the frequency of assigning control or training tasks.
 
     Attributes:
         scope: A way of counting tasks completed by a Toloker:
