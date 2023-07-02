@@ -2989,19 +2989,19 @@ class TolokaClient:
         self,
         user_bonus: UserBonus, parameters: Optional[user_bonus.UserBonusCreateRequestParameters] = None
     ) -> UserBonus:
-        """Issues payments directly to a Toloker.
+        """Issues a bonus payment to a Toloker.
 
         You can send a maximum of 10,000 requests of this kind per day.
 
         Args:
-            user_bonus: To whom, how much to pay and for what.
-            parameters: Parameters for UserBonus creation controlling.
+            user_bonus: The bonus.
+            parameters: Parameters of the request.
 
         Returns:
             UserBonus: Created bonus.
 
         Example:
-            Create bonus for specific assignment.
+            Issuing a bonus to a Toloker with a message in 2 languages.
 
             >>> import decimal
             >>> new_bonus = toloka_client.create_user_bonus(
@@ -3037,18 +3037,16 @@ class TolokaClient:
         self,
         user_bonuses: List[UserBonus], parameters: Optional[user_bonus.UserBonusesCreateRequestParameters] = None
     ) -> batch_create_results.UserBonusBatchCreateResult:
-        """Creates bonuses for Tolokers.
+        """Issues bonus payments to Tolokers.
 
-        Right now it's safer to use asynchronous version: "create_user_bonuses_async"
         You can send a maximum of 10,000 requests of this kind per day.
 
         Args:
-            user_bonuses: To whom, how much to pay and for what.
-            parameters: Parameters for UserBonus creation controlling.
+            user_bonuses: A list of bonuses.
+            parameters: Parameters of the request.
 
         Returns:
-            UserBonusBatchCreateResult: Result of creating bonuses. Contains `UserBonus` instances in `items` and
-                problems in `validation_errors`.
+            UserBonusBatchCreateResult: The result of the operation.
 
         Example:
             >>> import decimal
@@ -3098,16 +3096,16 @@ class TolokaClient:
     def create_user_bonuses_async(
         self, user_bonuses: List[UserBonus], parameters: Optional[user_bonus.UserBonusesCreateRequestParameters] = None
     ) -> operations.UserBonusCreateBatchOperation:
-        """Issues payments directly to Tolokers, asynchronously creates many `UserBonus` instances.
+        """Issues bonus payments to Tolokers asynchronously.
 
         You can send a maximum of 10,000 requests of this kind per day.
 
         Args:
-            user_bonuses: To whom, how much to pay and for what.
-            parameters: Parameters for UserBonus creation controlling.
+            user_bonuses: A list of bonuses.
+            parameters: Parameters of the request.
 
         Returns:
-            UserBonusCreateBatchOperation: An operation upon completion of which the bonuses can be considered created.
+            UserBonusCreateBatchOperation: An object to track the progress of the operation.
 
         Example:
             >>> import decimal
@@ -3307,7 +3305,7 @@ class TolokaClient:
             UserRestriction: Updated restriction object.
 
         Example:
-            If a Toloker often makes mistakes, we will restrict access to all our projects.
+            Restricting access to a project.
 
             >>> new_restriction = toloka_client.set_user_restriction(
             >>>     toloka.user_restriction.ProjectUserRestriction(
@@ -3323,10 +3321,10 @@ class TolokaClient:
 
     @add_headers('client')
     def delete_user_restriction(self, user_restriction_id: str) -> None:
-        """Unlocks existing restriction
+        """Removes existing restriction.
 
         Args:
-            user_restriction_id: Restriction that should be removed.
+            user_restriction_id: The ID of the restriction you want to remove.
 
         Example:
             >>> toloka_client.delete_user_restriction(user_restriction_id='1')
