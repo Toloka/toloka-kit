@@ -12,10 +12,10 @@ class User(BaseTolokaObject):
 
     Some information is got from the Toloker's profile, other is obtained from the Toloker's device.
 
-    Country and language parameters use [country codes](https://toloka.ai/docs/api/regions/).
+    Country and language are returned as [country codes](https://toloka.ai/docs/api/regions/).
 
     Attributes:
-        id: Toloker's ID.
+        id: The Toloker's ID.
         country: The country set in the profile.
         languages: A list of languages specified in the profile.
         adult_allowed: Whether or not the Toloker agreed to complete tasks which contain adult content.
@@ -36,12 +36,12 @@ class User(BaseTolokaObject):
                 * `MOBILE_BROWSER` — The mobile browser user agent.
                 * `OTHER` — User agents which could not be identified as either desktop or mobile browsers.
                     Normally, the Toloka mobile application identifies itself as `OTHER`.
-            device_category: The category of the device which the Toloker uses to access the platform.
+            device_category: The category of the device:
                 * `PERSONAL_COMPUTER` — A personal computer.
                 * `SMARTPHONE` — A smartphone.
                 * `TABLET` — A tablet device.
                 * `WEARABLE_COMPUTER` — A wearable device, such as a smart watch.
-            os_family: The operating system family installed on the device.
+            os_family: The operating system family installed on the device:
                 * `ANDROID` — Android mobile operating system based on a modified version of the Linux kernel, designed primarily for touchscreen mobile devices.
                 * `BLACKBERRY` — BlackBerry OS mobile operating system developed by BlackBerry Limited for its BlackBerry smartphone devices.
                 * `BSD` — An operating system based on Research Unix, developed and distributed by the CSRG, and its open-source descendants like FreeBSD, OpenBSD, NetBSD, and DragonFly BSD.

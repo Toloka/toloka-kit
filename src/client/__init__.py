@@ -3003,11 +3003,11 @@ class TolokaClient:
         Example:
             Issuing a bonus to a Toloker with a message in 2 languages.
 
-            >>> import decimal
+            >>> from decimal import Decimal
             >>> new_bonus = toloka_client.create_user_bonus(
-            >>>     UserBonus(
-            >>>         user_id='1',
-            >>>         amount=decimal.Decimal('0.50'),
+            >>>     toloka.client.UserBonus(
+            >>>         user_id='fac97860c7929add8048ed2ef63b66fd',
+            >>>         amount=Decimal('0.50'),
             >>>         public_title={
             >>>             'EN': 'Perfect job!',
             >>>             'RU': 'Прекрасная работа!',
@@ -3016,7 +3016,7 @@ class TolokaClient:
             >>>             'EN': 'You are the best!',
             >>>             'RU': 'Молодец!',
             >>>         },
-            >>>         assignment_id='012345'
+            >>>         assignment_id='00001092da--61ef030400c684132d0da0de'
             >>>     )
             >>> )
             ...
@@ -3037,7 +3037,7 @@ class TolokaClient:
         self,
         user_bonuses: List[UserBonus], parameters: Optional[user_bonus.UserBonusesCreateRequestParameters] = None
     ) -> batch_create_results.UserBonusBatchCreateResult:
-        """Issues bonus payments to Tolokers.
+        """Issues several bonus payments to Tolokers.
 
         You can send a maximum of 10,000 requests of this kind per day.
 
@@ -3049,36 +3049,24 @@ class TolokaClient:
             UserBonusBatchCreateResult: The result of the operation.
 
         Example:
-            >>> import decimal
+            >>> from decimal import Decimal
             >>> new_bonuses=[
-            >>>     UserBonus(
-            >>>         user_id='1',
-            >>>         amount=decimal.Decimal('0.50'),
-            >>>         public_title={
-            >>>             'EN': 'Perfect job!',
-            >>>             'RU': 'Прекрасная работа!',
-            >>>         },
-            >>>         public_message={
-            >>>             'EN': 'You are the best!',
-            >>>             'RU': 'Молодец!',
-            >>>         },
-            >>>         assignment_id='1'
+            >>>     toloka.client.UserBonus(
+            >>>         user_id='fac97860c7929add8048ed2ef63b66fd',
+            >>>         amount=Decimal('1.00'),
+            >>>         public_title={'EN': 'Perfect job!'},
+            >>>         public_message={'EN': 'You are the best!'},
+            >>>         assignment_id='00001092da--61ef030400c684132d0da0de'
             >>>     ),
-            >>>     UserBonus(
-            >>>         user_id='2',
-            >>>         amount=decimal.Decimal('1.0'),
-            >>>         public_title={
-            >>>             'EN': 'Excellent work!',
-            >>>             'RU': 'Отличная работа!',
-            >>>         },
-            >>>         public_message={
-            >>>             'EN': 'You have completed all tasks!',
-            >>>             'RU': 'Сделаны все задания!',
-            >>>         },
-            >>>         assignment_id='2'
+            >>>     toloka.client.UserBonus(
+            >>>         user_id='a1b0b42923c429daa2c764d7ccfc364d',
+            >>>         amount=Decimal('0.80'),
+            >>>         public_title={'EN': 'Excellent work!'},
+            >>>         public_message={'EN': 'You have completed all tasks!'},
+            >>>         assignment_id='000015fccc--63bfc4c358d7a46c32a7b233'
             >>>     )
             >>> ]
-            >>> toloka_client.create_user_bonuses(new_bonuses)
+            >>> result = toloka_client.create_user_bonuses(new_bonuses)
             ...
         """
         return self._sync_via_async(
@@ -3108,37 +3096,25 @@ class TolokaClient:
             UserBonusCreateBatchOperation: An object to track the progress of the operation.
 
         Example:
-            >>> import decimal
+            >>> from decimal import Decimal
             >>> new_bonuses=[
-            >>>     UserBonus(
-            >>>         user_id='1',
-            >>>         amount=decimal.Decimal('0.50'),
-            >>>         public_title={
-            >>>             'EN': 'Perfect job!',
-            >>>             'RU': 'Прекрасная работа!',
-            >>>         },
-            >>>         public_message={
-            >>>             'EN': 'You are the best!',
-            >>>             'RU': 'Молодец!',
-            >>>         },
-            >>>         assignment_id='1'
+            >>>     toloka.client.UserBonus(
+            >>>         user_id='fac97860c7929add8048ed2ef63b66fd',
+            >>>         amount=Decimal('1.00'),
+            >>>         public_title={'EN': 'Perfect job!'},
+            >>>         public_message={'EN': 'You are the best!'},
+            >>>         assignment_id='00001092da--61ef030400c684132d0da0de'
             >>>     ),
-            >>>     UserBonus(
-            >>>         user_id='2',
-            >>>         amount=decimal.Decimal('1.0'),
-            >>>         public_title={
-            >>>             'EN': 'Excellent work!',
-            >>>             'RU': 'Превосходная работа!',
-            >>>         },
-            >>>         public_message={
-            >>>             'EN': 'You have completed all tasks!',
-            >>>             'RU': 'Сделаны все задания!',
-            >>>         },
-            >>>         assignment_id='2'
+            >>>     toloka.client.UserBonus(
+            >>>         user_id='a1b0b42923c429daa2c764d7ccfc364d',
+            >>>         amount=Decimal('0.80'),
+            >>>         public_title={'EN': 'Excellent work!'},
+            >>>         public_message={'EN': 'You have completed all tasks!'},
+            >>>         assignment_id='000015fccc--63bfc4c358d7a46c32a7b233'
             >>>     )
             >>> ]
-            >>> create_bonuses = toloka_client.create_user_bonuses_async(new_bonuses)
-            >>> toloka_client.wait_operation(create_bonuses)
+            >>> bonus_op = toloka_client.create_user_bonuses_async(new_bonuses)
+            >>> toloka_client.wait_operation(bonus_op)
             ...
         """
         if not parameters.async_mode:
