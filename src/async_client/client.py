@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 @generate_async_methods_from(TolokaClient)
 class AsyncTolokaClient:
-    """Class that implements interaction with [Toloka API](https://toloka.ai/en/docs/api/), in an asynchronous way.
+    """Class that implements interaction with [Toloka API](https://toloka.ai/docs/api/api-reference/), in an asynchronous way.
 
     All methods are wrapped as async. So all methods calls must be awaited.
     All arguments, same as in TolokaClient.

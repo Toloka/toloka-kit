@@ -28,7 +28,7 @@ class UserBonus(toloka.client.primitives.base.BaseTolokaObject):
             The language can be RU/EN/TR/ID/FR.
         without_message: Do not send a bonus message to the Toloker. To award a bonus without a message, specify null
             for `public_title` and `public_message` and `True` for `without_message`.
-        assignment_id: ID of the Toloker's response to the task a reward is issued for.
+        assignment_id: ID of the Toloker's response to the task a bonus is issued for.
         id: Internal ID of the issued bonus. Read-only field.
         created: Date the bonus was awarded, in UTC. Read-only field.
 
@@ -105,6 +105,8 @@ class UserBonusCreateRequestParameters(toloka.client.primitives.parameter.Idempo
 
     Attributes:
         operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
+            We recommended sending the operation ID in the `POST` requests to avoid accidental errors:
+            when you send several requests with the same `operation_id`, the operation will be performed only once.
         async_mode: Request processing mode:
             * `True` — Asynchronous operation is started internally.
             * `False` — The request is processed synchronously.
@@ -135,6 +137,8 @@ class UserBonusesCreateRequestParameters(UserBonusCreateRequestParameters):
 
     Attributes:
         operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
+            We recommended sending the operation ID in the `POST` requests to avoid accidental errors:
+            when you send several requests with the same `operation_id`, the operation will be performed only once.
         async_mode: Request processing mode:
             * `True` — Asynchronous operation is started internally.
             * `False` — The request is processed synchronously.

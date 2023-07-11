@@ -749,20 +749,20 @@ UserRestrictionSortItems = BaseSortItems.for_fields(
 
 
 class UserBonusSearchRequest(BaseSearchRequest):
-    """Parameters for searching Tolokers' rewards.
+    """Parameters for searching Tolokers' bonuses.
 
     Attributes:
         user_id: The ID of a Toloker.
-        assignment_id: The ID of an assignment a reward was granted for.
-        private_comment: Rewards with specified comment.
-        id_lt: Rewards with IDs less than the specified value.
-        id_lte: Rewards with IDs less than or equal to the specified value.
-        id_gt: Rewards with IDs greater than the specified value.
-        id_gte: Rewards with IDs greater than or equal to the specified value.
-        created_lt: Rewards given before the specified date.
-        created_lte: Rewards given before or on the specified date.
-        created_gt: Rewards given after the specified date.
-        created_gte: Rewards given after or on the specified date.
+        assignment_id: The ID of an assignment a bonus was granted for.
+        private_comment: Bonuses with specified comment.
+        id_lt: Bonuses with IDs less than the specified value.
+        id_lte: Bonuses with IDs less than or equal to the specified value.
+        id_gt: Bonuses with IDs greater than the specified value.
+        id_gte: Bonuses with IDs greater than or equal to the specified value.
+        created_lt: Bonuses given before the specified date.
+        created_lte: Bonuses given before or on the specified date.
+        created_gt: Bonuses given after the specified date.
+        created_gte: Bonuses given after or on the specified date.
     """
 
     class CompareFields:
@@ -777,15 +777,15 @@ class UserBonusSearchRequest(BaseSearchRequest):
 UserBonusSortItems = BaseSortItems.for_fields(
     'UserBonusSortItems', ['id', 'created'],
     # docstring
-    """Keys for sorting rewards in search results.
+    """Keys for sorting bonuses in search results.
 
     Attributes:
         items: A list of sorting keys. Supported values:
-            * `'id'` — The ID of a reward.
-            * `'created'` — The date of granting a reward.
+            * `'id'` — The ID of a bonus.
+            * `'created'` — The date of granting a bonus.
 
     Example:
-        The example shows how to find rewards sorted by granting date in descending order. Rewards with equal granting dates are sorted by IDs in ascending order.
+        The example shows how to find bonuses sorted by granting date in descending order. Bonuses with equal granting dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.UserBonusSortItems(['-created', 'id'])
         >>> result = toloka_client.find_user_bonuses(user_id=best_toloker_id, sort=sort, limit=10)

@@ -359,7 +359,7 @@ class City(Profile, InclusionConditionMixin, spec_value=Profile.Key.CITY):
     """Filtering Tolokers by a city specified in their profiles.
 
     Attributes:
-        value: The [ID](https://toloka.ai/en/docs/api/concepts/regions) of the city.
+        value: The [ID](https://toloka.ai/docs/api/regions) of the city.
     """
 
     value: int = attribute(required=True)
@@ -489,7 +489,7 @@ class RegionByPhone(Computed, InclusionConditionMixin, spec_value=Computed.Key.R
     """Filtering Tolokers by a region which is determined by their mobile phone number.
 
     Attributes:
-        value: The ID from the [list of regions](https://toloka.ai/en/docs/api/concepts/regions).
+        value: The ID from the [list of regions](https://toloka.ai/docs/api/regions).
     """
 
     value: int = attribute(required=True)
@@ -500,7 +500,7 @@ class RegionByIp(Computed, InclusionConditionMixin, spec_value=Computed.Key.REGI
     """Filtering Tolokers by a region which is determined by their IP address.
 
     Attributes:
-        value: The ID from the [list of regions](https://toloka.ai/en/docs/api/concepts/regions).
+        value: The ID from the [list of regions](https://toloka.ai/docs/api/regions).
     """
 
     value: int = attribute(required=True)

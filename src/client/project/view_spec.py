@@ -73,7 +73,7 @@ class ViewSpec(BaseTolokaObject, spec_enum='Type', spec_field='type'):
 class ClassicViewSpec(ViewSpec, spec_value=ViewSpec.CLASSIC):
     """A task interface defined with HTML, CSS and JS.
 
-    For more information, see the [guide](https://toloka.ai/en/docs/guide/concepts/spec).
+    For more information, see the [guide](https://toloka.ai/docs/guide/spec).
 
     Attributes:
         markup: HTML markup of the task interface.
@@ -91,7 +91,7 @@ class ClassicViewSpec(ViewSpec, spec_value=ViewSpec.CLASSIC):
             * Toloka assets — libraries that can be linked using the `$TOLOKA_ASSETS` path:
                 * `$TOLOKA_ASSETS/js/toloka-handlebars-templates.js` — [Handlebars template engine](http://handlebarsjs.com/).
                 * `$TOLOKA_ASSETS/js/image-annotation.js` — Image labeling interface. Note, that this library requires Handlebars and must be linked after it.
-                    For more information, see [Image with area selection](https://toloka.ai/en/docs/guide/concepts/t-components/image-annotation).
+                    For more information, see [Image with area selection](https://toloka.ai/docs/guide/t-components/image-annotation).
 
             Add items in the order they should be linked.
 
@@ -123,7 +123,7 @@ class ClassicViewSpec(ViewSpec, spec_value=ViewSpec.CLASSIC):
 class TemplateBuilderViewSpec(ViewSpec, spec_value=ViewSpec.TEMPLATE_BUILDER):
     """A task interface defined with the [TemplateBuilder](toloka.client.project.template_builder.TemplateBuilder.md).
 
-    See also [Template Builder](https://toloka.ai/en/docs/template-builder/) in the guide.
+    See also [Template Builder](https://toloka.ai/docs/template-builder/) in the guide.
 
     Attributes:
         view: A top level component like [SideBySideLayoutV1](toloka.client.project.template_builder.layouts.SideBySideLayoutV1.md).

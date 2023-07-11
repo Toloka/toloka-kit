@@ -201,6 +201,8 @@ class AssignmentsObserver(BasePoolObserver):
     Attributes:
         toloka_client: TolokaClient instance or async wrapper around it.
         pool_id: Pool ID.
+        cursor_time_lag: Time lag for cursor. This controls time lag between assignments being added and them being
+            seen by this observer. See BaseCursor.time_lag for details and reasoning behind this.
 
     Examples:
         Send submitted assignments for verification.
@@ -253,6 +255,7 @@ class AssignmentsObserver(BasePoolObserver):
         self,
         toloka_client: typing.Union[toloka.client.TolokaClient, toloka.async_client.client.AsyncTolokaClient],
         pool_id: str,
+        cursor_time_lag: datetime.timedelta = ...,
         *,
         name: typing.Optional[str] = None
     ) -> None:
@@ -265,4 +268,5 @@ class AssignmentsObserver(BasePoolObserver):
     _deleted: bool
     toloka_client: toloka.util.async_utils.AsyncInterfaceWrapper[typing.Union[toloka.client.TolokaClient, toloka.async_client.client.AsyncTolokaClient]]
     pool_id: str
+    cursor_time_lag: datetime.timedelta
     _callbacks: typing.Dict[toloka.streaming.event.AssignmentEvent.Type, _CallbacksCursorConsumer]

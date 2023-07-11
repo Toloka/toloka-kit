@@ -150,9 +150,11 @@ class Balance(BaseMetric):
 
 
 class NewUserBonuses(BaseMetric):
-    """Tracking rewards for Tolokers: reward count or money amount.
+    """Tracking bonuses for Tolokers: bonus count or money amount.
 
     Args:
+        cursor_time_lag: Time lag for cursor. This controls time lag between user bonuses being added and this metric
+            being updated. See BaseCursor.time_lag for details and reasoning behind this.
         count_name: Metric name for a count of new bonuses.
         money_name: Metric name for amount of money in new bonuses.
         join_events: Count all events in one point.  Default `False`.
@@ -180,6 +182,7 @@ class NewUserBonuses(BaseMetric):
 
     def __init__(
         self,
+        cursor_time_lag: datetime.timedelta = ...,
         count_name: typing.Optional[str] = None,
         money_name: typing.Optional[str] = None,
         join_events: bool = False,
@@ -195,6 +198,7 @@ class NewUserBonuses(BaseMetric):
     toloka_client: toloka.client.TolokaClient
     atoloka_client: toloka.async_client.client.AsyncTolokaClient
     timeout: datetime.timedelta
+    _cursor_time_lag: datetime.timedelta
     _count_name: typing.Optional[str]
     _money_name: typing.Optional[str]
     _join_events: bool
@@ -205,6 +209,8 @@ class NewUserSkills(BaseMetric):
 
     Args:
         skill_id: Which skill we will be tracking.
+        cursor_time_lag: Time lag for cursor. This controls time lag between user skills being updated and this metric
+            being updated. See BaseCursor.time_lag for details and reasoning behind this.
         count_name: Metric name for a count of new skill assignments. When skill changes it counts to.
         value_name: Metric name for exact values of new skill level for each skill assignment. It could be useful to track mean value or some medians.
         join_events: Count all events in one point.  Default `False`. "Values" never join.
@@ -243,6 +249,7 @@ class NewUserSkills(BaseMetric):
     def __init__(
         self,
         skill_id: str,
+        cursor_time_lag: datetime.timedelta = ...,
         count_name: typing.Optional[str] = None,
         value_name: typing.Optional[str] = None,
         join_events: bool = False,
@@ -259,6 +266,7 @@ class NewUserSkills(BaseMetric):
     atoloka_client: toloka.async_client.client.AsyncTolokaClient
     timeout: datetime.timedelta
     _skill_id: str
+    _cursor_time_lag: datetime.timedelta
     _count_name: typing.Optional[str]
     _value_name: typing.Optional[str]
     _join_events: bool
@@ -271,6 +279,8 @@ class NewMessageThreads(BaseMetric):
     NewMessageThreads instance. You can gather all in one instance.
 
     Args:
+        cursor_time_lag: Time lag for cursor. This controls time lag between message threads being created and this
+            metric being updated. See BaseCursor.time_lag for details and reasoning behind this.
         count_name: Metric name for a count of new messages.
         projects_name: Dictionary that allows count messages on exact projects. {project_id: line_name}
         pools_name: Dictionary that allows count messages on exact pools. {pool_id: line_name}
@@ -318,6 +328,7 @@ class NewMessageThreads(BaseMetric):
 
     def __init__(
         self,
+        cursor_time_lag: datetime.timedelta = ...,
         count_name: typing.Optional[str] = None,
         projects_name: typing.Dict[str, str] = ...,
         pools_name: typing.Dict[str, str] = ...,
@@ -334,6 +345,7 @@ class NewMessageThreads(BaseMetric):
     toloka_client: toloka.client.TolokaClient
     atoloka_client: toloka.async_client.client.AsyncTolokaClient
     timeout: datetime.timedelta
+    _cursor_time_lag: datetime.timedelta
     _count_name: typing.Optional[str]
     _projects_name: typing.Dict[str, str]
     _pools_name: typing.Dict[str, str]

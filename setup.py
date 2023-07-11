@@ -61,7 +61,7 @@ setup(
     license=about['__license__'],
     author='Vladimir Losev',
     author_email='losev@yandex-team.ru',
-    python_requires='>=3.7.0',
+    python_requires='>=3.8.0',
     install_requires=[
         'attrs >= 20.3.0',
         'cattrs >= 1.9',
@@ -79,7 +79,7 @@ setup(
     extras_require=EXTRAS_REQUIRE,
     include_package_data=True,
     project_urls={
-        'Documentation': 'https://toloka.ai/en/docs/toloka-kit',
+        'Documentation': 'https://toloka.ai/docs/toloka-kit',
         'Source': 'https://github.com/Toloka/toloka-kit',
     },
     classifiers=[
@@ -90,7 +90,6 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
