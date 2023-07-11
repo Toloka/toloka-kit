@@ -24,42 +24,44 @@ class DurationUnit(enum.Enum):
 
 
 class UserRestriction(toloka.client.primitives.base.BaseTolokaObject):
-    """Controls access to projects and pools.
+    """A base class for access restrictions.
 
-    You can restrict access to any project for a Toloker. Then he can't do tasks in the project. You may set the duration of restriction or apply permanent restriction.
-    To unlock access pass the restriction ID to the `delete_user_restriction`.
+    Toloker's access to projects or pools can be restricted.
+    You can set the duration of the ban or apply an unlimited restriction.
+
+    Use the [set_user_restriction](toloka.client.TolokaClient.set_user_restriction.md) method to apply a restriction
+    and the [delete_user_restriction](toloka.client.TolokaClient.delete_user_restriction.md) method to remove it.
 
     Attributes:
+        id: The ID of the restriction.
         user_id: The ID of the Toloker.
-        private_comment: A comment for you why access to this Toloker was restricted.
-        will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
-        id: The identifier of a specific fact of access restriction. Read-only field.
-        created: Date and time when the fact of access restriction was created. Read-only field.
+        private_comment: A comment visible to the requester only.
+        will_expire: The UTC date and time when the access will be restored by Toloka.
+            If the parameter isn't set, then the restriction is active until you remove it calling the `delete_user_restriction` method.
+        created: The UTC date and time when the restriction was applied. Read-only field.
 
     Example:
-        How you can lock access for one Toloker on one project.
+        Restricting access to a project and removing the restriction.
 
-        >>> new_restrict = toloka_client.set_user_restriction(
-        >>>     ProjectUserRestriction(
-        >>>         user_id='1',
-        >>>         private_comment='I dont like you',
+        >>> new_restriction = toloka_client.set_user_restriction(
+        >>>     toloka.client.user_restriction.ProjectUserRestriction(
+        >>>         user_id='1ad097faba0eff85a04fe30bc04d53db',
+        >>>         private_comment='Low response quality',
         >>>         project_id='5'
         >>>     )
         >>> )
-        ...
-
-        And how you can unlock it.
-
-        >>> toloka_client.delete_user_restriction(new_restrict.id)
+        >>> toloka_client.delete_user_restriction(new_restriction.id)
         ...
     """
 
     class Scope(toloka.util._extendable_enum.ExtendableStrEnum):
-        """Restriction scope
+        """A restriction scope.
 
-        * ALL_PROJECTS - All the requester's projects.
-        * PROJECT - A single project (specify the project_id).
-        * POOL - A pool (specify the pool_id).
+        Attributes:
+            ALL_PROJECTS: Access to all requester's projects is blocked.
+            PROJECT: A single project is blocked.
+            POOL: A pool is blocked.
+            SYSTEM: A system-wide [ban](https://toloka.ai/docs/guide/ban/?form-source=api-ban#ban-platform).
         """
 
         SYSTEM = 'SYSTEM'
@@ -89,14 +91,17 @@ class UserRestriction(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AllProjectsUserRestriction(UserRestriction):
-    """Forbid the Toloker to complete tasks from all your projects
+    """All projects restriction.
+
+    A Toloker doesn't have access to any of requester's projects.
 
     Attributes:
         user_id: The ID of the Toloker.
-        private_comment: A comment for you why access to this Toloker was restricted.
-        will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
-        id: The identifier of a specific fact of access restriction. Read-only field.
-        created: Date and time when the fact of access restriction was created. Read-only field.
+        private_comment: A comment visible to the requester only.
+        will_expire: The UTC date and time when the access will be restored by Toloka.
+            If the parameter isn't set, then the restriction is active until you remove it calling the `delete_user_restriction` method.
+        id: The ID of the restriction.
+        created: The UTC date and time when the restriction was applied. Read-only field.
     """
 
     def __init__(
@@ -121,15 +126,18 @@ class AllProjectsUserRestriction(UserRestriction):
 
 
 class PoolUserRestriction(UserRestriction):
-    """Forbid the Toloker to complete tasks from a specific pool
+    """A pool restriction.
+
+    A Toloker doesn't have access to the pool.
 
     Attributes:
         user_id: The ID of the Toloker.
-        private_comment: A comment for you why access to this Toloker was restricted.
-        will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
-        id: The identifier of a specific fact of access restriction. Read-only field.
-        created: Date and time when the fact of access restriction was created. Read-only field.
-        pool_id: Pool identifier to which access will be denied.
+        private_comment: A comment visible to the requester only.
+        will_expire: The UTC date and time when the access will be restored by Toloka.
+            If the parameter isn't set, then the restriction is active until you remove it calling the `delete_user_restriction` method.
+        id: The ID of the restriction.
+        created: The UTC date and time when the restriction was applied. Read-only field.
+        pool_id: The ID of the pool that is blocked.
     """
 
     def __init__(
@@ -156,15 +164,18 @@ class PoolUserRestriction(UserRestriction):
 
 
 class ProjectUserRestriction(UserRestriction):
-    """Forbid the Toloker to complete tasks from a specific project
+    """A project restriction.
+
+    A Toloker doesn't have access to the project.
 
     Attributes:
         user_id: The ID of the Toloker.
-        private_comment: A comment for you why access to this Toloker was restricted.
-        will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
-        id: The identifier of a specific fact of access restriction. Read-only field.
-        created: Date and time when the fact of access restriction was created. Read-only field.
-        project_id: Project identifier to which access will be denied.
+        private_comment: A comment visible to the requester only.
+        will_expire: The UTC date and time when the access will be restored by Toloka.
+            If the parameter isn't set, then the restriction is active until you remove it calling the `delete_user_restriction` method.
+        id: The ID of the restriction.
+        created: The UTC date and time when the restriction was applied. Read-only field.
+        project_id: The ID of the project that is blocked.
     """
 
     def __init__(
@@ -191,14 +202,15 @@ class ProjectUserRestriction(UserRestriction):
 
 
 class SystemUserRestriction(UserRestriction):
-    """DEPRECATED
+    """A system-wide restriction.
 
     Attributes:
         user_id: The ID of the Toloker.
-        private_comment: A comment for you why access to this Toloker was restricted.
-        will_expire: When access is restored. If you do not set the parameter, then the access restriction is permanent.
-        id: The identifier of a specific fact of access restriction. Read-only field.
-        created: Date and time when the fact of access restriction was created. Read-only field.
+        private_comment: A comment visible to the requester only.
+        will_expire: The UTC date and time when the access will be restored by Toloka.
+            If the parameter isn't set, then the restriction is active until you remove it calling the `delete_user_restriction` method.
+        id: The ID of the restriction.
+        created: The UTC date and time when the restriction was applied. Read-only field.
     """
 
     def __init__(

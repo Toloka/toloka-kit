@@ -12,50 +12,33 @@ import uuid
 
 
 class UserBonus(toloka.client.primitives.base.BaseTolokaObject):
-    """Issuing a bonus to a specific Toloker.
+    """A bonus payment to a Toloker.
 
-    It's addition to payment for completed tasks.
+    Learn more about [Bonuses](https://toloka.ai/docs/guide/bonus/).
 
     Attributes:
-        user_id: Toloker's ID to whom the bonus will be issued.
-        amount: The bonus amount in dollars. Can be from 0.01 to 100 dollars per Toloker per time.
-        private_comment: Comments that are only visible to the requester.
-        public_title: Message header for the Toloker. You can provide a title in several languages
-            (the message will come in the Toloker's language). Format {'language': 'title', ... }.
-            The language can be RU/EN/TR/ID/FR.
-        public_message: Message text for the Toloker. You can provide text in several languages
-            (the message will come in the Toloker's language). Format {'language': 'message', ... }.
-            The language can be RU/EN/TR/ID/FR.
-        without_message: Do not send a bonus message to the Toloker. To award a bonus without a message, specify null
-            for `public_title` and `public_message` and `True` for `without_message`.
-        assignment_id: ID of the Toloker's response to the task a bonus is issued for.
-        id: Internal ID of the issued bonus. Read-only field.
-        created: Date the bonus was awarded, in UTC. Read-only field.
+        id: The ID of the bonus.
+        user_id: The ID of the Toloker.
+        amount: The amount of the bonus in US dollars.
+        assignment_id: The ID of the assignment the bonus is issued for.
+        private_comment: A comment visible to the requester only.
+        without_message:
+            * `False` — A message is sent to the Toloker when the bonus is issued.
+            * `True` — There is no message sent to the Toloker.
+
+            Default value: `False`.
+        public_title: A message title. The title can be provided in several languages.
+        public_message: A message text. It can be provided in several languages.
+        created: The UTC date and time when the bonus was issued. Read-only field.
 
     Example:
-        How to create bonus with message for specific assignment.
+        An example of issuing a bonus. A message to a Toloker is prepared in two languages.
 
+        >>> from decimal import Decimal
         >>> new_bonus = toloka_client.create_user_bonus(
-        >>>     UserBonus(
-        >>>         user_id='1',
-        >>>         amount='0.50',
-        >>>         public_title={
-        >>>             'EN': 'Perfect job!',
-        >>>         },
-        >>>         public_message={
-        >>>             'EN': 'You are the best Toloker',
-        >>>         },
-        >>>         assignment_id='012345'
-        >>>     )
-        >>> )
-        ...
-
-        How to create bonus with message in several languages.
-
-        >>> new_bonus = toloka_client.create_user_bonus(
-        >>>     UserBonus(
-        >>>         user_id='1',
-        >>>         amount='0.10',
+        >>>     toloka.client.UserBonus(
+        >>>         user_id='a1b0b42923c429daa2c764d7ccfc364d',
+        >>>         amount=Decimal('0.50'),
         >>>         public_title={
         >>>             'EN': 'Good Job!',
         >>>             'RU': 'Молодец!',
@@ -63,7 +46,8 @@ class UserBonus(toloka.client.primitives.base.BaseTolokaObject):
         >>>         public_message={
         >>>             'EN': 'Ten tasks completed',
         >>>             'RU': 'Выполнено 10 заданий',
-        >>>         }
+        >>>         },
+        >>>         assignment_id='000015fccc--63bfc4c358d7a46c32a7b233'
         >>>     )
         >>> )
         ...
@@ -99,9 +83,9 @@ class UserBonus(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class UserBonusCreateRequestParameters(toloka.client.primitives.parameter.IdempotentOperationParameters):
-    """Parameters for creating bonus for Toloker.
+    """Parameters for issuing a bonus payment to a Toloker.
 
-    Used in methods 'create_user_bonus' of the class TolokaClient.
+    The [create_user_bonus](toloka.client.TolokaClient.create_user_bonus.md) method uses these parameters.
 
     Attributes:
         operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
@@ -130,10 +114,9 @@ class UserBonusCreateRequestParameters(toloka.client.primitives.parameter.Idempo
 
 
 class UserBonusesCreateRequestParameters(UserBonusCreateRequestParameters):
-    """Parameters for creating bonuses for Tolokers.
+    """Parameters for issuing bonus payments to Tolokers.
 
-    Used in methods 'create_user_bonuses' и 'create_user_bonuses_async' of the class TolokaClient,
-    to clarify the behavior when creating bonuses.
+    The [create_user_bonuses](toloka.client.TolokaClient.create_user_bonuses.md) and [create_user_bonuses_async](toloka.client.TolokaClient.create_user_bonuses_async.md) methods use these parameters.
 
     Attributes:
         operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
@@ -144,9 +127,11 @@ class UserBonusesCreateRequestParameters(UserBonusCreateRequestParameters):
             * `False` — The request is processed synchronously.
 
             Default value: `True`.
-        skip_invalid_items: Validation parameters of objects:
-            * `True` — Award a bonus if the object with bonus information passed validation. Otherwise, skip the bonus.
-            * `False` — Default behavior. Stop the operation and don't award bonuses if at least one object didn't pass validation.
+        skip_invalid_items: Bonus validation option:
+            * `True` — All valid bonuses are issued. If a bonus doesn't pass validation, then it isn't issued to a Toloker. All such bonuses are listed in the response.
+            * `False` — If any bonus doesn't pass validation, then the operation is cancelled and no bonuses are issued to Tolokers.
+
+            Default value: `False`.
     """
 
     def __init__(
