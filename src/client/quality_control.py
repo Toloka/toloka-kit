@@ -25,23 +25,24 @@ def _captcha_deprecation_warning_setter(obj, name, value):
 
 
 class QualityControl(BaseTolokaObject):
-    """Quality control unit settings and pool ID with training tasks
+    """Quality control settings.
 
-    Quality control lets you get more accurate responses and restrict access to tasks for cheating users.
-    Quality control consists of rules. All rules work independently.
+    Quality control lets you get more accurate responses, restrict access to tasks for Tolokers who give responses of low quality, and filter out robots.
 
     Attributes:
-        training_requirement: Parameters of the training pool that is linked to the pool with the main tasks.
-        captcha_frequency: Deprecated. Frequency of captcha display (By default, captcha is not shown):
-            LOW - show every 20 tasks.
-            MEDIUM, HIGH - show every 10 tasks.
-        configs: List of quality control units. See QualityControl.QualityControlConfig
-        checkpoints_config: Random check majority opinion. Detailed description in QualityControl.CheckpointsConfig.
+        configs: A list of quality control rules configurations.
+        checkpoints_config: A selective majority vote check configuration.
+        training_requirement: Parameters for linking a training pool to a general task pool.
+        captcha_frequency: **Deprecated.** A frequency of showing captchas.
+            * `LOW` — Show one for every 20 tasks.
+            * `MEDIUM`, `HIGH` — Show one for every 10 tasks.
+
+            By default, captchas aren't displayed.
 
     Example:
-        How to set up quality control on new pool.
+        A quality control rule that restricts access if a Toloker responds too fast.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> # new_pool = toloka.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
         >>>     collector=toloka.collectors.AssignmentSubmitTime(history_size=5, fast_submit_threshold_seconds=20),
         >>>     conditions=[toloka.conditions.FastSubmittedCount > 1],
@@ -49,19 +50,21 @@ class QualityControl(BaseTolokaObject):
         >>>         scope=toloka.user_restriction.UserRestriction.ALL_PROJECTS,
         >>>         duration=10,
         >>>         duration_unit='DAYS',
-        >>>         private_comment='Fast responses',  # Only you will see this comment
+        >>>         private_comment='Fast responses',
         >>>     )
         >>> )
         ...
     """
 
     class TrainingRequirement(BaseTolokaObject):
-        """Parameters of the training pool that is linked to the pool with the main tasks
+        """Parameters for linking a training pool to a general task pool.
 
         Attributes:
-            training_pool_id: ID of the training pool that is linked to the pool with the main tasks.
-            training_passing_skill_value: The percentage of correct answers in training tasks (from 0 to 100) required
-                for admission to the main tasks. The Toloker's first responses in tasks are used for counting.
+            training_pool_id: The ID of the training pool.
+            training_passing_skill_value: The percentage of correct answers in training tasks required in order to access the general tasks.
+                Only the first answer of the Toloker in each task is taken into account.
+
+                Allowed values: from 0 to 100.
         """
 
         training_pool_id: str
@@ -74,29 +77,28 @@ class QualityControl(BaseTolokaObject):
         HIGH = 'HIGH'
 
     class CheckpointsConfig(BaseTolokaObject):
-        """Random check majority opinion.
+        """A selective majority vote check configuration.
 
-        Only some tasks are issued with a high overlap (for example, "5") and are being tested.
-        Other tasks are issued with the overlap set in the pool settings (for example, "1") and remain without verification.
-        Spot check saves money and speeds up pool execution.
+        This quality control method checks some of Toloker's responses against the majority of Tolokers. To do this, it changes the overlap of those tasks.
 
-        You can reduce the frequency of checks over time.
+        An example of the configuration:
+            * For the first 100 tasks completed by a Toloker in the pool, every 5th task is checked. The overlap of these tasks is increased to 5.
+            * After completing 100 tasks, every 25th task is checked.
 
-        Example settings: in the first 25 tasks completed by the Toloker in the pool, issue every fifth task with an overlap "5"
-        to check the answers. In subsequent tasks issue each 25 task with an overlap "5".
+        Learn more about the [Selective majority vote check](https://toloka.ai/docs/guide/selective-mvote/).
 
         Attributes:
-            real_settings: Checkpoints settings for main tasks.
-            golden_settings: Checkpoints settings for golden tasks.
-            training_settings: Checkpoints settings for train tasks.
+            real_settings: Selective majority vote settings for general tasks.
+            golden_settings: Selective majority vote settings for control tasks.
+            training_settings: Selective majority vote settings for training tasks.
         """
 
         class Settings(BaseTolokaObject):
-            """Setting for checkpoints
+            """Selective majority vote check settings.
 
             Attributes:
-                target_overlap: Overlap in tasks with majority opinion verification.
-                task_distribution_function: Distribution of tasks with majority opinion verification.
+                target_overlap: The overlap value used for selected tasks that are checked.
+                task_distribution_function: The configuration of selecting tasks.
             """
 
             target_overlap: int
@@ -107,27 +109,30 @@ class QualityControl(BaseTolokaObject):
         training_settings: Settings
 
     class QualityControlConfig(BaseTolokaObject):
-        """Quality control block
+        """A quality control rules configuration.
 
-        Quality control blocks help regulate access to a project or pool: you can filter out Tolokers who give incorrect answers
-        in control tasks, skip many tasks in a row, and so on.
+        A rule consists of conditions, and an action to perform when the conditions are met. The rule conditions use statistics provided by a connected collector.
 
-        The block consists of two parts: condition and the action to be performed when the condition is met.
-        There may be several conditions, then they are combined using logical And.
+        An example of the configuration.
+        Toloka collects statistics of skipped tasks. If 10 task suites are skipped in a row, then a Toloker can no longer access a project.
+
+        To learn more, see:
+        * [Quality control rules](https://toloka.ai/docs/api/quality_control/) in the API.
+        * [Quality control rules](https://toloka.ai/docs/guide/control/) in the guide.
 
         Attributes:
-            rules: Conditions and action if conditions are met.
-            collector_config: Parameters for collecting statistics (for example, the number of task skips in the pool).
+            rules: The conditions and the action.
+            collector_config: The configuration of the collector.
         """
 
         class RuleConfig(BaseTolokaObject):
-            """Conditions and action if conditions are met
+            """Rule conditions and an action.
 
-            The values for the conditions are taken from the collector.
+            The action is performed if conditions are met. Multiple conditions are combined with the AND operator.
 
             Attributes:
-                action: Action if conditions are met (for example, close access to the project).
-                conditions: Conditions (for example, skipping 10 sets of tasks in a row).
+                action: The action.
+                conditions: A list of conditions.
             """
 
             action: RuleAction
@@ -142,14 +147,14 @@ class QualityControl(BaseTolokaObject):
     checkpoints_config: CheckpointsConfig
 
     def add_action(self, collector: CollectorConfig, action: RuleAction, conditions: List[RuleCondition]):
-        """Adds new QualityControlConfig to QualityControl object. Usually in pool.
+        """Adds a quality control rule configuration.
 
-        See example in QualityControl class.
+        See an example in the description of the [QualityControl](toloka.client.quality_control.QualityControl.md) class.
 
         Args:
-            collector: Parameters for collecting statistics (for example, the number of task skips in the pool).
-            action: Action if conditions are met (for example, close access to the project).
-            conditions: Conditions (for example, skipping 10 sets of tasks in a row).
+            collector: A collector that provides statistics.
+            conditions: Conditions based on statistics.
+            action: An action performed if all conditions are met.
         """
 
         # Checking that conditions are compatible with our collector

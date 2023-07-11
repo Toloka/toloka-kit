@@ -3447,12 +3447,12 @@ class TolokaClient:
 
     @add_headers('client')
     def delete_user_skill(self, user_skill_id: str) -> None:
-        """Drop specific UserSkill
+        """Removes a skill from a Toloker.
 
-        `UserSkill` describes the skill value for a specific Toloker.
+        Tolokers' skill values are described by the [UserSkill](toloka.client.user_skill.UserSkill.md) class.
 
         Args:
-            user_skill_id: ID of the fact that the Toloker has a skill to delete.
+            user_skill_id: The ID of the Toloker's skill value.
 
         Example:
             >>> toloka_client.delete_user_skill(user_skill_id='1')
