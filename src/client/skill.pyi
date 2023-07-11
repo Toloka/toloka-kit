@@ -8,50 +8,48 @@ import typing
 
 
 class Skill(toloka.client.primitives.base.BaseTolokaObject):
-    """A skill is an assessment of some aspect of a Toloker's responses (a number from 0 to 100)
+    """Some characteristic of a Toloker described by a number from 0 to 100.
 
-    Skill is a general grouping entity, for example "image annotation", which is created once and then used.
-    To set the Skill value for a specific Toloker, use UserSkill.
-    You can set up skill calculation in a quality control rule, or manually set the skill level for a Toloker.
-    You can use skills to select Tolokers which are allowed to complete your tasks.
+    A `Skill` describes some characteristic, for example the percentage of correct responses.
+    Skills can be used to filter Tolokers.
+
+    Skill values are assigned to Tolokers by quality control rules, or manually. The values are accessed via the [UserSkill](toloka.client.user_skill.UserSkill.md) class.
+
+    Learn more about the [Toloker skills](https://toloka.ai/docs/guide/nav/).
 
     Attributes:
-        name: Skill name.
-        private_comment: Comments on the skill (only visible to the requester).
-        hidden: Access to information about the skill (the name and value) for Tolokers:
-            * `True` — Closed. Default behavior.
-            * `False` — Opened.
-        skill_ttl_hours: The skill's "time to live" after the last update (in hours). The skill is removed from
-            the Toloker's profile if the skill level hasn't been updated for the specified length of time.
+        name: The skill name.
+        public_name: The skill name visible to Tolokers. The name can be provided in several languages.
+        public_requester_description: The skill description visible to Tolokers. The description can be provided in several languages.
+        private_comment: Comments visible to a requester.
+        hidden: Visibility of the skill values to Tolokers:
+            * `True` — Tolokers don't see the information about the skill.
+            * `False` — Tolokers see the name and the value of the assigned skill.
+
+            Default value: `True`.
+        skill_ttl_hours: A lifetime in hours. If the skill value assigned to a Toloker is not updated for `skill_ttl_hours`, the skill is removed from a Toloker's profile.
         training: Whether the skill is related to a training pool:
-            * `True` — The skill level is calculated from training pool tasks.
+            * `True` — The skill value is set after completing a training pool.
             * `False` — The skill isn't related to a training pool.
-        public_name: Skill name for other Tolokers. You can provide a name in several languages (the message will come in the Toloker's language).
-        public_requester_description: Skill description text for other Tolokers. You can provide text in several languages (the message will come in the Toloker's language).
-        owner: Skill owner.
-        id: Skill ID. Read-only field.
+        owner: The skill owner.
+        id: The skill ID. Read-only field.
         created: The UTC date and time when the skill was created. Read-only field.
 
     Example:
-        How to create new skill.
+        Creating a new skill if it doesn't exist.
 
-        >>> segmentation_skill = toloka_client.create_skill(
-        >>>     name='Area selection of road signs',
-        >>>     public_requester_description={
-        >>>         'EN': 'Toloker annotates road signs',
-        >>>         'RU': 'Как исполнитель размечает дорожные знаки',
-        >>>     },
-        >>> )
-        >>> print(segmentation_skill.id)
-        ...
-
-        How to find skill.
-
-        >>> segmentation_skill = next(toloka_client.get_skills(name='Area selection of road signs'), None)
+        >>> segmentation_skill = next(toloka_client.get_skills(name='Road signs detection'), None)
         >>> if segmentation_skill:
-        >>>     print(f'Segmentation skill already exists, with id {segmentation_skill.id}')
+        >>>     print(f'Skill exists. ID: {segmentation_skill.id}')
         >>> else:
-        >>>     print('Create new segmentation skill here')
+        >>>     segmentation_skill = toloka_client.create_skill(
+        >>>         name='Road signs detection',
+        >>>         public_requester_description={
+        >>>             'EN': 'The quality of selecting road signs on images',
+        >>>             'RU': 'Качество выделения дорожных знаков на фотографиях',
+        >>>         },
+        >>>     )
+        >>>     print(f'Skill created. ID: {segmentation_skill.id}')
         ...
     """
 
