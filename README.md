@@ -26,7 +26,7 @@ The API allows you to build scalable and fully automated human-in-the-loop ML pi
 ## Prerequisites
 
 Before you begin, make sure that:
-* You are using [Python](https://www.python.org/) v3.7 or higher.
+* You are using [Python](https://www.python.org/) v3.8 or higher.
 * You are [registered](https://toloka.ai/docs/guide/access/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) in Toloka as a requester.
 * You have [topped up](https://toloka.ai/docs/guide/refill/?utm_source=github&utm_medium=site&utm_campaign=tolokakit) your Toloka account.
 * You have [set up an OAuth token](https://toloka.ai/docs/api/api-reference/?utm_source=github&utm_medium=site&utm_campaign=tolokakit#overview--accessing-the-api) to access Toloka API.
