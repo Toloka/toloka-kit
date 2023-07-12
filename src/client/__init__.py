@@ -170,7 +170,7 @@ logger = logging.getLogger(__name__)
 
 
 class TolokaClient:
-    """Class that implements interaction with [Toloka API](https://toloka.ai/en/docs/api/).
+    """Class that implements interaction with [Toloka API](https://toloka.ai/docs/api/api-reference/).
 
     Objects of other classes are created and modified only in memory of your computer.
     You can transfer information about these objects to Toloka only by calling one of the `TolokaClient` methods.
@@ -182,7 +182,7 @@ class TolokaClient:
     Call `TolokaClient.update_project` and pass the `Project` to apply your changes.
 
     Args:
-        token: Your OAuth token for Toloka. You can learn more about how to get it [here](https://toloka.ai/en/docs/api/concepts/access#token)
+        token: Your OAuth token for Toloka. You can learn more about how to get it [here](https://toloka.ai/docs/api/api-reference/#overview--accessing-the-api)
         environment: There are two environments in Toloka:
             * `SANDBOX` – [Testing environment](https://sandbox.toloka.dev) for Toloka requesters.
             You can test complex projects before assigning tasks to Tolokers. Nobody will see your tasks, and it's free.
@@ -220,7 +220,7 @@ class TolokaClient:
             Fully specified retry policy that will apply to all requests.
             Default value: `None`.
         act_under_account_id: ID of the requester that has been shared access with the current token owner account.
-            All requests will be made using a specified account. See [Shared access to the requester's account](https://toloka.ai/en/docs/guide/concepts/multiple-access)
+            All requests will be made using a specified account. See [Shared access to the requester's account](https://toloka.ai/docs/guide/multiple-access)
             documentation page. ID of the requester can be retrieved using the [get_requester](toloka.client.TolokaClient.get_requester.md)
             method (this method should be called by the account owner using account's token).
         verify: SSL certificates (a.k.a CA bundle) used to
@@ -335,7 +335,7 @@ class TolokaClient:
     @property
     def _headers(self):
         headers = {
-            'Authorization': f'ApiKey {self.token}' if self.__is_apikey() else 'OAuth {self.token}',
+            'Authorization': f'ApiKey {self.token}' if self.__is_apikey() else f'OAuth {self.token}',
             'User-Agent': f'python-toloka-client-{__version__}',
         }
         if self.act_under_account_id:
@@ -573,7 +573,7 @@ class TolokaClient:
 
         {% note tip %}
 
-        Try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit). It has many aggregation methods and executes on your computer.
+        Try [crowd-kit library](https://toloka.ai/docs/crowd-kit). It has many aggregation methods and executes on your computer.
 
         {% endnote %}
 
@@ -607,7 +607,7 @@ class TolokaClient:
 
         {% note tip %}
 
-        Try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit). It has many aggregation methods and executes on your computer.
+        Try [crowd-kit library](https://toloka.ai/docs/crowd-kit). It has many aggregation methods and executes on your computer.
 
         {% endnote %}
 
@@ -691,7 +691,7 @@ class TolokaClient:
 
         {% note tip %}
 
-        Try [crowd-kit library](https://toloka.ai/en/docs/crowd-kit). It has many aggregation methods and executes on your computer.
+        Try [crowd-kit library](https://toloka.ai/docs/crowd-kit). It has many aggregation methods and executes on your computer.
 
         {% endnote %}
 
@@ -2991,25 +2991,25 @@ class TolokaClient:
         self,
         user_bonus: UserBonus, parameters: Optional[user_bonus.UserBonusCreateRequestParameters] = None
     ) -> UserBonus:
-        """Issues payments directly to a Toloker.
+        """Issues a bonus payment to a Toloker.
 
         You can send a maximum of 10,000 requests of this kind per day.
 
         Args:
-            user_bonus: To whom, how much to pay and for what.
-            parameters: Parameters for UserBonus creation controlling.
+            user_bonus: The bonus.
+            parameters: Parameters of the request.
 
         Returns:
             UserBonus: Created bonus.
 
         Example:
-            Create bonus for specific assignment.
+            Issuing a bonus to a Toloker with a message in 2 languages.
 
-            >>> import decimal
+            >>> from decimal import Decimal
             >>> new_bonus = toloka_client.create_user_bonus(
-            >>>     UserBonus(
-            >>>         user_id='1',
-            >>>         amount=decimal.Decimal('0.50'),
+            >>>     toloka.client.UserBonus(
+            >>>         user_id='fac97860c7929add8048ed2ef63b66fd',
+            >>>         amount=Decimal('0.50'),
             >>>         public_title={
             >>>             'EN': 'Perfect job!',
             >>>             'RU': 'Прекрасная работа!',
@@ -3018,7 +3018,7 @@ class TolokaClient:
             >>>             'EN': 'You are the best!',
             >>>             'RU': 'Молодец!',
             >>>         },
-            >>>         assignment_id='012345'
+            >>>         assignment_id='00001092da--61ef030400c684132d0da0de'
             >>>     )
             >>> )
             ...
@@ -3039,50 +3039,36 @@ class TolokaClient:
         self,
         user_bonuses: List[UserBonus], parameters: Optional[user_bonus.UserBonusesCreateRequestParameters] = None
     ) -> batch_create_results.UserBonusBatchCreateResult:
-        """Creates rewards for Tolokers.
+        """Issues several bonus payments to Tolokers.
 
-        Right now it's safer to use asynchronous version: "create_user_bonuses_async"
         You can send a maximum of 10,000 requests of this kind per day.
 
         Args:
-            user_bonuses: To whom, how much to pay and for what.
-            parameters: Parameters for UserBonus creation controlling.
+            user_bonuses: A list of bonuses.
+            parameters: Parameters of the request.
 
         Returns:
-            UserBonusBatchCreateResult: Result of creating rewards. Contains `UserBonus` instances in `items` and
-                problems in `validation_errors`.
+            UserBonusBatchCreateResult: The result of the operation.
 
         Example:
-            >>> import decimal
+            >>> from decimal import Decimal
             >>> new_bonuses=[
-            >>>     UserBonus(
-            >>>         user_id='1',
-            >>>         amount=decimal.Decimal('0.50'),
-            >>>         public_title={
-            >>>             'EN': 'Perfect job!',
-            >>>             'RU': 'Прекрасная работа!',
-            >>>         },
-            >>>         public_message={
-            >>>             'EN': 'You are the best!',
-            >>>             'RU': 'Молодец!',
-            >>>         },
-            >>>         assignment_id='1'
+            >>>     toloka.client.UserBonus(
+            >>>         user_id='fac97860c7929add8048ed2ef63b66fd',
+            >>>         amount=Decimal('1.00'),
+            >>>         public_title={'EN': 'Perfect job!'},
+            >>>         public_message={'EN': 'You are the best!'},
+            >>>         assignment_id='00001092da--61ef030400c684132d0da0de'
             >>>     ),
-            >>>     UserBonus(
-            >>>         user_id='2',
-            >>>         amount=decimal.Decimal('1.0'),
-            >>>         public_title={
-            >>>             'EN': 'Excellent work!',
-            >>>             'RU': 'Отличная работа!',
-            >>>         },
-            >>>         public_message={
-            >>>             'EN': 'You have completed all tasks!',
-            >>>             'RU': 'Сделаны все задания!',
-            >>>         },
-            >>>         assignment_id='2'
+            >>>     toloka.client.UserBonus(
+            >>>         user_id='a1b0b42923c429daa2c764d7ccfc364d',
+            >>>         amount=Decimal('0.80'),
+            >>>         public_title={'EN': 'Excellent work!'},
+            >>>         public_message={'EN': 'You have completed all tasks!'},
+            >>>         assignment_id='000015fccc--63bfc4c358d7a46c32a7b233'
             >>>     )
             >>> ]
-            >>> toloka_client.create_user_bonuses(new_bonuses)
+            >>> result = toloka_client.create_user_bonuses(new_bonuses)
             ...
         """
         return self._sync_via_async(
@@ -3100,49 +3086,37 @@ class TolokaClient:
     def create_user_bonuses_async(
         self, user_bonuses: List[UserBonus], parameters: Optional[user_bonus.UserBonusesCreateRequestParameters] = None
     ) -> operations.UserBonusCreateBatchOperation:
-        """Issues payments directly to Tolokers, asynchronously creates many `UserBonus` instances.
+        """Issues bonus payments to Tolokers asynchronously.
 
         You can send a maximum of 10,000 requests of this kind per day.
 
         Args:
-            user_bonuses: To whom, how much to pay and for what.
-            parameters: Parameters for UserBonus creation controlling.
+            user_bonuses: A list of bonuses.
+            parameters: Parameters of the request.
 
         Returns:
-            UserBonusCreateBatchOperation: An operation upon completion of which the bonuses can be considered created.
+            UserBonusCreateBatchOperation: An object to track the progress of the operation.
 
         Example:
-            >>> import decimal
+            >>> from decimal import Decimal
             >>> new_bonuses=[
-            >>>     UserBonus(
-            >>>         user_id='1',
-            >>>         amount=decimal.Decimal('0.50'),
-            >>>         public_title={
-            >>>             'EN': 'Perfect job!',
-            >>>             'RU': 'Прекрасная работа!',
-            >>>         },
-            >>>         public_message={
-            >>>             'EN': 'You are the best!',
-            >>>             'RU': 'Молодец!',
-            >>>         },
-            >>>         assignment_id='1'
+            >>>     toloka.client.UserBonus(
+            >>>         user_id='fac97860c7929add8048ed2ef63b66fd',
+            >>>         amount=Decimal('1.00'),
+            >>>         public_title={'EN': 'Perfect job!'},
+            >>>         public_message={'EN': 'You are the best!'},
+            >>>         assignment_id='00001092da--61ef030400c684132d0da0de'
             >>>     ),
-            >>>     UserBonus(
-            >>>         user_id='2',
-            >>>         amount=decimal.Decimal('1.0'),
-            >>>         public_title={
-            >>>             'EN': 'Excellent work!',
-            >>>             'RU': 'Превосходная работа!',
-            >>>         },
-            >>>         public_message={
-            >>>             'EN': 'You have completed all tasks!',
-            >>>             'RU': 'Сделаны все задания!',
-            >>>         },
-            >>>         assignment_id='2'
+            >>>     toloka.client.UserBonus(
+            >>>         user_id='a1b0b42923c429daa2c764d7ccfc364d',
+            >>>         amount=Decimal('0.80'),
+            >>>         public_title={'EN': 'Excellent work!'},
+            >>>         public_message={'EN': 'You have completed all tasks!'},
+            >>>         assignment_id='000015fccc--63bfc4c358d7a46c32a7b233'
             >>>     )
             >>> ]
-            >>> create_bonuses = toloka_client.create_user_bonuses_async(new_bonuses)
-            >>> toloka_client.wait_operation(create_bonuses)
+            >>> bonus_op = toloka_client.create_user_bonuses_async(new_bonuses)
+            >>> toloka_client.wait_operation(bonus_op)
             ...
         """
         if not parameters.async_mode:
@@ -3157,19 +3131,19 @@ class TolokaClient:
     def find_user_bonuses(self, request: search_requests.UserBonusSearchRequest,
                           sort: Union[List[str], search_requests.UserBonusSortItems, None] = None,
                           limit: Optional[int] = None) -> search_results.UserBonusSearchResult:
-        """Finds Tolokers' rewards that match certain criteria.
+        """Finds Tolokers' bonuses that match certain criteria.
 
-        The number of returned rewards is limited. To find remaining rewards call `find_user_bonuses` with updated search criteria.
+        The number of returned bonuses is limited. To find remaining bonuses call `find_user_bonuses` with updated search criteria.
 
-        To iterate over all matching Tolokers' rewards you may use the [get_user_bonuses](toloka.client.TolokaClient.get_user_bonuses.md) method.
+        To iterate over all matching Tolokers' bonuses you may use the [get_user_bonuses](toloka.client.TolokaClient.get_user_bonuses.md) method.
 
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned Tolokers' rewards limit. The maximum allowed limit is 300.
+            limit: Returned Tolokers' bonuses limit. The maximum allowed limit is 300.
 
         Returns:
-            UserBonusSearchResult: Found Tolokers' rewards and a flag showing whether there are more matching rewards exceeding the limit.
+            UserBonusSearchResult: Found Tolokers' bonuses and a flag showing whether there are more matching bonuses exceeding the limit.
 
         Example:
             >>> toloka_client.find_user_bonuses(user_id='1', sort=['-created', '-id'], limit=3)
@@ -3181,13 +3155,13 @@ class TolokaClient:
 
     @add_headers('client')
     def get_user_bonus(self, user_bonus_id: str) -> UserBonus:
-        """Gets information about a Toloker's reward.
+        """Gets information about a Toloker's bonus.
 
         Args:
-            user_bonus_id: The ID of the reward.
+            user_bonus_id: The ID of the bonus.
 
         Returns:
-            UserBonus: The information about the reward.
+            UserBonus: The information about the bonus.
 
         Example:
             >>> toloka_client.get_user_bonus(user_bonus_id='1')
@@ -3203,18 +3177,18 @@ class TolokaClient:
         request: search_requests.UserBonusSearchRequest,
         batch_size: Optional[int] = None
     ) -> Generator[UserBonus, None, None]:
-        """Finds all Tolokers' rewards that match certain rules and returns them in an iterable object
+        """Finds all Tolokers' bonuses that match certain rules and returns them in an iterable object
 
-        `get_user_bonuses` returns a generator. You can iterate over all found Tolokers' rewards using the generator. Several requests to the Toloka server are possible while iterating.
+        `get_user_bonuses` returns a generator. You can iterate over all found Tolokers' bonuses using the generator. Several requests to the Toloka server are possible while iterating.
 
-        If you need to sort rewards use the [find_user_bonuses](toloka.client.TolokaClient.find_user_bonuses.md) method.
+        If you need to sort bonuses use the [find_user_bonuses](toloka.client.TolokaClient.find_user_bonuses.md) method.
 
         Args:
             request: Search criteria.
-            batch_size: Returned Tolokers' rewards limit for each request. The maximum allowed batch_size is 300.
+            batch_size: Returned Tolokers' bonuses limit for each request. The maximum allowed `batch_size` is 300.
 
         Yields:
-            UserBonus: The next matching Toloker's reward.
+            UserBonus: The next matching Toloker's bonus.
 
         Example:
             >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00'))
@@ -3309,7 +3283,7 @@ class TolokaClient:
             UserRestriction: Updated restriction object.
 
         Example:
-            If a Toloker often makes mistakes, we will restrict access to all our projects.
+            Restricting access to a project.
 
             >>> new_restriction = toloka_client.set_user_restriction(
             >>>     toloka.user_restriction.ProjectUserRestriction(
@@ -3325,10 +3299,10 @@ class TolokaClient:
 
     @add_headers('client')
     def delete_user_restriction(self, user_restriction_id: str) -> None:
-        """Unlocks existing restriction
+        """Removes existing restriction.
 
         Args:
-            user_restriction_id: Restriction that should be removed.
+            user_restriction_id: The ID of the restriction you want to remove.
 
         Example:
             >>> toloka_client.delete_user_restriction(user_restriction_id='1')
@@ -3475,12 +3449,12 @@ class TolokaClient:
 
     @add_headers('client')
     def delete_user_skill(self, user_skill_id: str) -> None:
-        """Drop specific UserSkill
+        """Removes a skill from a Toloker.
 
-        `UserSkill` describes the skill value for a specific Toloker.
+        Tolokers' skill values are described by the [UserSkill](toloka.client.user_skill.UserSkill.md) class.
 
         Args:
-            user_skill_id: ID of the fact that the Toloker has a skill to delete.
+            user_skill_id: The ID of the Toloker's skill value.
 
         Example:
             >>> toloka_client.delete_user_skill(user_skill_id='1')
@@ -4030,7 +4004,7 @@ class TolokaClient:
             >>> new_item = {
             >>>     'batch_id' : '4Va2BBWKL88S4QyAgVje',
             >>>     'input_data' : {
-            >>>         'id':'40', 'query':'toloka kit', 'website_url':'https://toloka.ai/en/docs/toloka-kit'
+            >>>         'id':'40', 'query':'toloka kit', 'website_url':'https://toloka.ai/docs/toloka-kit'
             >>>     }
             >>> }
             >>> new_item = toloka_client.create_app_item(app_project_id = 'Q2d15QBjpwWuDz8Z321g', app_item = new_item)
@@ -4061,8 +4035,8 @@ class TolokaClient:
             that requires `query` and `website_url` keys to be present in input data.
 
             >>> new_items = [
-            >>>     {'id':'20', 'query':'toloka kit', 'website_url':'https://toloka.ai/en/docs/toloka-kit'},
-            >>>     {'id':'21', 'query':'crowd kit', 'website_url':'https://toloka.ai/en/docs/crowd-kit'}
+            >>>     {'id':'20', 'query':'toloka kit', 'website_url':'https://toloka.ai/docs/toloka-kit'},
+            >>>     {'id':'21', 'query':'crowd kit', 'website_url':'https://toloka.ai/docs/crowd-kit'}
             >>> ]
             >>> toloka_client.create_app_items(app_project_id = 'Q2d15QBjpwWuDz8Z321g', batch_id = '4Va2BBWKL88S4QyAgVje', items = new_items)
             ...
@@ -4177,8 +4151,8 @@ class TolokaClient:
             that requires `query` and `website_url` keys to be present in input data.
 
             >>> new_items = [
-            >>>     {'id':'30', 'query':'toloka kit', 'website_url':'https://toloka.ai/en/docs/toloka-kit'},
-            >>>     {'id':'31', 'query':'crowd kit', 'website_url':'https://toloka.ai/en/docs/crowd-kit'}
+            >>>     {'id':'30', 'query':'toloka kit', 'website_url':'https://toloka.ai/docs/toloka-kit'},
+            >>>     {'id':'31', 'query':'crowd kit', 'website_url':'https://toloka.ai/docs/crowd-kit'}
             >>> ]
             >>> toloka_client.create_app_batch(app_project_id = 'Q2d15QBjpwWuDz8Z321g', items = new_items)
             ...

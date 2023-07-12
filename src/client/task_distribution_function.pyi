@@ -7,21 +7,22 @@ import typing
 
 
 class TaskDistributionFunction(toloka.client.primitives.base.BaseTolokaObject):
-    """Issue of tasks with uneven frequency
+    """A configuration of selecting tasks.
 
-    Can be used for:
-    - Distribution of tasks with majority opinion verification.
-    - Issuing control tasks with uneven frequency. Allows you to change the frequency of verification as the Toloker completes tasks.
-    - Issuing training tasks with uneven frequency. Allows you to change the frequency of training tasks as the Toloker completes tasks.
+    It is used:
+    - To control the selection of tasks for the selective majority vote checks.
+    - To change the frequency of assigning control or training tasks.
 
     Attributes:
-        scope: How to count tasks completed by the Toloker:
-            * POOL - Count completed pool tasks.
-            * PROJECT - Count completed project tasks.
-        distribution: Distribution of tasks within an interval. Parameter has only one possible:
-            value - UNIFORM.
-        window_days: Period in which completed tasks are counted (number of days).
-        intervals: Interval borders and number of tasks in an interval.
+        scope: A way of counting tasks completed by a Toloker:
+            * `POOL` — Completed pool tasks are counted.
+            * `PROJECT` — All completed project tasks are counted.
+        distribution: The distribution of selected tasks within an interval.
+            Allowed values: `UNIFORM`.
+        window_days: The number of days in which completed tasks are counted.
+            Allowed values: from 1 to 365.
+        intervals: A list of count intervals with frequency values.
+            The maximum number of list items is 10,000.
     """
 
     class Scope(toloka.util._extendable_enum.ExtendableStrEnum):
@@ -38,13 +39,20 @@ class TaskDistributionFunction(toloka.client.primitives.base.BaseTolokaObject):
         UNIFORM = 'UNIFORM'
 
     class Interval(toloka.client.primitives.base.BaseTolokaObject):
-        """Interval borders and number of tasks in an interval
+        """A count interval with associated frequency value.
+
+        If the number of tasks is in the interval then the task distribution uses the interval frequency.
+
+        The value of the `frequency` parameter encodes a period in a task sequence.
+        For example, if `frequency` is 3, then the 1st, 4th, 7th tasks are selected. And so on.
 
         Attributes:
-            from_: Start of the interval (number of task completed by the Toloker in the project or in the pool).
-            to: End of the interval (number of task completed by the Toloker in the project or in the pool).
-            frequency: Frequency of tasks in an interval. The first task in an interval is a distributed task.
-                For example, if you set frequency: 3 tasks number 1, 4, 7 and so on will be distributed tasks.
+            from_: The lower bound of the interval.
+                Allowed values: up to 1,000,000.
+            to: The upper bound of the interval.
+                Allowed values: up to 1,000,000.
+            frequency: The frequency of tasks within an interval.
+                Allowed values: from 1 to 10,000,000.
         """
 
         def __init__(

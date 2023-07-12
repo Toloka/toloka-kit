@@ -41,8 +41,8 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
     Pool tasks are grouped into [task suites](toloka.client.task_suite.TaskSuite.md). Whole task suites are assigned to Tolokers.
 
     Learn more about:
-    * [Pools](https://toloka.ai/en/docs/guide/concepts/pool-main)
-    * [Pricing](https://toloka.ai/en/docs/guide/concepts/dynamic-pricing)
+    * [Pools](https://toloka.ai/docs/guide/pool-main)
+    * [Pricing](https://toloka.ai/docs/guide/dynamic-pricing)
 
     Attributes:
         project_id: The ID of the project containing the pool.
@@ -70,7 +70,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
         auto_accept_solutions:
             * `True` — Responses from Tolokers are accepted or rejected automatically based on some rules.
             * `False` — Responses are checked manually. Time reserved for checking is limited by the `auto_accept_period_day` parameter.
-                Learn more about [non-automatic acceptance](https://toloka.ai/en/docs/guide/concepts/offline-accept).
+                Learn more about [non-automatic acceptance](https://toloka.ai/docs/guide/offline-accept).
         auto_accept_period_day: The number of days reserved for checking responses if the `auto_accept_solutions` parameter is set to `False`.
         assignments_issuing_config: Settings for assigning tasks in the pool.
         priority: The priority of the pool in relation to other pools in the project with the same task price and set of filters.
@@ -119,7 +119,7 @@ class Pool(toloka.client.primitives.base.BaseTolokaObject):
             issue_task_suites_in_creation_order:
                 Task suites are assigned in the order in which they were created.
 
-                This parameter is used when tasks are [grouped into suites](https://toloka.ai/en/docs/guide/concepts/distribute-tasks-by-pages)
+                This parameter is used when tasks are [grouped into suites](https://toloka.ai/docs/guide/distribute-tasks-by-pages)
                 manually and the `assignments_issuing_type` project parameter is set to `AUTOMATED`.
         """
 

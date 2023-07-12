@@ -6,7 +6,7 @@ from .primitives.base import BaseTolokaObject
 
 # TODO: Add children through spec_field type and success.
 #  Add simple way of getting different objects of interest for every child.
-#  e.g. user_bonus_id for type=USER_BONUS_PERSIST, success=True (https://toloka.ai/docs/api/get-operation-log/)
+#  e.g. user_bonus_id for type=USER_BONUS_PERSIST, success=True (https://toloka.ai/docs/api/api-reference/#get-/operations/-id-/log)
 class OperationLogItem(BaseTolokaObject):
     """An operation log item.
 
