@@ -151,6 +151,7 @@ class TaskSuitesCreateRequestParameters(TaskSuiteCreateRequestParameters):
         async_mode: Request processing mode:
             * `True` — Asynchronous operation is started internally.
             * `False` — The request is processed synchronously. A maximum of 5000 task suites can be added in a single request in this mode.
+
             Default value: `True`.
         allow_defaults: Active overlap setting:
             * `True` — Use the overlap that is set in the `defaults.default_overlap_for_new_task_suites` pool parameter.

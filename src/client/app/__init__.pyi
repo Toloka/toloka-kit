@@ -315,14 +315,7 @@ class AppBatch(toloka.client.primitives.base.BaseTolokaObject):
         id: The ID of the batch.
         app_project_id: The ID of the project containing the batch.
         name: The batch name.
-        status: The batch status:
-            * `NEW` — The processing of the batch items is not started.
-            * `PROCESSING` — Batch items are being processed by Tolokers.
-            * `COMPLETED` — Annotation of all batch items is completed.
-            * `ERROR` — An error occurred during processing.
-            * `CANCELLED` — Batch processing cancelled.
-            * `ARCHIVE` — The batch is archived.
-            * `NO_MONEY` — There are not enough money for processing.
+        status: The batch [status](toloka.client.app.AppBatch.Status.md).
         items_count: The number of items in the batch.
         item_price: The cost of processing a single item in the batch.
         cost: The cost of processing the batch.
@@ -339,7 +332,19 @@ class AppBatch(toloka.client.primitives.base.BaseTolokaObject):
     """
 
     class Status(toloka.util._extendable_enum.ExtendableStrEnum):
-        """An enumeration.
+        """The status of an App batch.
+
+        Attributes:
+            NEW: The processing of the batch items is not started.
+            PROCESSING: Batch items are being processed by Tolokers.
+            COMPLETED: Annotation of all batch items is completed.
+            ERROR: An error occurred during processing.
+            CANCELLED: Batch processing cancelled.
+            ARCHIVE: The batch is archived.
+            NO_MONEY: There is not enough money for processing.
+            LOADING: Tasks are loading to the batch.
+            STOPPING: The batch is stopping.
+            STOPPED: The batch has stopped.
         """
 
         NEW = 'NEW'

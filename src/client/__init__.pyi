@@ -1091,7 +1091,7 @@ class TolokaClient:
 
         Example:
             A message is sent to all Tolokers who have tried to complete your tasks.
-            The message is in english. Tolokers can't reply to your message.
+            The message is in English. Tolokers can't reply to your message.
 
             >>> message_text = "Amazing job! We've just trained our first model with the data you prepared for us. Thank you!"
             >>> toloka_client.compose_message_thread(
@@ -1125,7 +1125,7 @@ class TolokaClient:
 
         Example:
             A message is sent to all Tolokers who have tried to complete your tasks.
-            The message is in english. Tolokers can't reply to your message.
+            The message is in English. Tolokers can't reply to your message.
 
             >>> message_text = "Amazing job! We've just trained our first model with the data you prepared for us. Thank you!"
             >>> toloka_client.compose_message_thread(
@@ -3921,17 +3921,19 @@ class TolokaClient:
         ...
 
     def get_operation_log(self, operation_id: str) -> typing.List[toloka.client.operation_log.OperationLogItem]:
-        """Reads information about validation errors and which task (or task suites) were created
+        """Gets an operation log.
 
-        You don't need to call this method if you use "create_tasks" for creating tasks ("create_task_suites" for task suites).
-        By asynchronous creating multiple tasks (or task sets) you can get the operation log.
-        Logs are only available for the last month.
+        You can get the log for operations: creating one or multiple tasks or task suites, or issuing bonuses to Tolokers.
+
+        If the operation was successful, the log contains the IDs of the created objects, otherwise it contains the details of validation errors.
+
+        Logs are available only for the last month.
 
         Args:
-            operation_id: ID of the operation.
+            operation_id: The ID of the operation.
 
         Returns:
-            List[OperationLogItem]: Logs for the operation.
+            List[OperationLogItem]: A list with log items.
 
         Example:
             >>> op = toloka_client.get_operation_log(operation_id='1')
