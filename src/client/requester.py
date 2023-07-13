@@ -8,16 +8,22 @@ from ..util._codegen import attribute
 
 
 class Requester(BaseTolokaObject):
-    """Contains information about the customer and the account balance
+    """Information about a requester.
 
     Attributes:
-        id: Requester ID.
+        id: The requester's ID.
         balance: Account balance in dollars.
         public_name: The requester's name in Toloka.
-        company:
+        company: Information about a requester's company.
     """
 
     class Company(BaseTolokaObject):
+        """Information about a requester's company.
+
+            Attributes:
+                id: The ID of the company.
+                superintendent_id: The ID of the client who owns the company account.
+        """
         id: str
         superintendent_id: str
 
