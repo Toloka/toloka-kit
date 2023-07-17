@@ -78,7 +78,7 @@ class TaskSuite(InfiniteOverlapParametersMixin, BaseTolokaObject):
 
 @inherit_docstrings
 class TaskSuiteCreateRequestParameters(IdempotentOperationParameters):
-    """Parameters for creating task suite.
+    """Parameters for creating a task suite.
 
     Attributes:
         allow_defaults: Active overlap setting:
@@ -98,15 +98,10 @@ class TaskSuitesCreateRequestParameters(TaskSuiteCreateRequestParameters):
 
     Attributes:
         skip_invalid_items: Task suite validation option:
-            * `True` — All valid task suites are added. If a task suite does not pass validation, then it is not added to Toloka.
-            * `False` — If any task suite does not pass validation, then operation is cancelled and no task suites are added to Toloka.
+            * `True` — All valid task suites are added. If a task suite doesn't pass validation, then it is not added to Toloka.
+            * `False` — If any task suite doesn't pass validation, then operation is cancelled and no task suites are added to Toloka.
 
             Default value: `False`.
-        async_mode: Request processing mode:
-            * `True` — Asynchronous operation is started internally.
-            * `False` — The request is processed synchronously. A maximum of 5000 task suites can be added in a single request in this mode.
-
-            Default value: `True`.
     """
     skip_invalid_items: bool
 
