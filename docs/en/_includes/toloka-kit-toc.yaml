@@ -45,6 +45,8 @@ items:
             href: ../toloka-kit/recipes/set-overlap.md
           - name: Filter Tolokers
             href: ../toloka-kit/recipes/filter-tolokers.md
+          - name: Filter Tolokers with confirmed language knowledge
+            href: ../toloka-kit/recipes/filter-tolokers-languages.md
           - name: Use quality control rules
             href: ../toloka-kit/recipes/use-quality-control-rules.md
       - name: Skills
@@ -95,6 +97,14 @@ items:
           href: ../toloka-kit/recipes/get-rewards.md
         - name: Get bonus details
           href: ../toloka-kit/recipes/get-reward-by-id.md
+      - name: Banning Tolokers
+        items:
+        - name: Ban Tolokers
+          href: ../toloka-kit/recipes/ban-tolokers.md
+        - name: Get list of bans
+          href: ../toloka-kit/recipes/get-restrictions.md
+        - name: Remove ban from Toloker
+          href: ../toloka-kit/recipes/delete-restriction.md
       - name: Messages
         items:
         - name: Send messages
