@@ -29,11 +29,11 @@ class WebhookSubscription(BaseTolokaObject):
 
         Attributes:
             POOL_CLOSED: A pool is closed.
-            DYNAMIC_OVERLAP_COMPLETED: An aggregated result appeared after dynamic overlap.
+            DYNAMIC_OVERLAP_COMPLETED: An aggregated result is ready for a task with a dynamic overlap.
             ASSIGNMENT_CREATED: A task is created.
             ASSIGNMENT_SUBMITTED: A task is completed and waiting for acceptance by a requester.
             ASSIGNMENT_SKIPPED: A task was taken by a Toloker who skipped it and didn't return to it.
-            ASSIGNMENT_EXPIRED: A task was taken by a Toloker who didn't complete it within the time allowed or rejected it before it expired.
+            ASSIGNMENT_EXPIRED: A task was taken by a Toloker who didn't complete it within the time limit or rejected it before it expired.
             ASSIGNMENT_APPROVED: A task was completed by a Toloker and approved by a requester.
             ASSIGNMENT_REJECTED: A task was completed by a Toloker but rejected by a requester.
         """

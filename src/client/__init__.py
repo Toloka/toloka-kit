@@ -3260,7 +3260,7 @@ class TolokaClient:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
             limit: Returned Toloker restrictions limit.
-                The maximum allowed value: 500. The default value: 50.
+                The maximum allowed value: 500.
 
         Returns:
             UserRestrictionSearchResult: Found Toloker restrictions and a flag showing whether there are more matching restrictions exceeding the limit.

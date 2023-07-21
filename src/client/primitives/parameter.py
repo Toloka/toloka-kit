@@ -23,7 +23,7 @@ class IdempotentOperationParameters(Parameters):
         operation_id: The UUID of the operation that conforms to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
             The UUID is used if `async_mode` is `True`.
 
-            Specify UUID to avoid accidental errors like operation duplication caused by network problems.
+            Specify UUID to avoid accidental errors like Toloka operation duplication caused by network problems.
             If you send several requests with the same `operation_id`, Toloka performs the operation only once.
         async_mode: Request processing mode:
             * `True` — Asynchronous operation is started internally.
