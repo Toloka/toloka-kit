@@ -374,6 +374,18 @@ class Languages(Profile, InclusionConditionMixin, spec_value=Profile.Key.LANGUAG
         verified: If set to `True`, only Tolokers who have passed a language test are selected.
             Tests are available for languages: `AR`, `DE`, `EN`, `ES`, `FR`,
             `HE`, `ID`, `JA`, `PT`, `RU`, `SV`, `ZH-HANS`.
+
+    Example:
+
+        >>> from toloka.client.primitives.operators import InclusionOperator
+        >>>
+        >>> updated_pool = toloka_client.get_pool('38955320')
+        >>> updated_pool.filter=(
+        >>>     (toloka.filter.Languages(operator=InclusionOperator.IN, value=['EN', 'DE'], verified=True)) &
+        >>>     (toloka.filter.Languages(operator=InclusionOperator.IN, value=['FR'], verified=True))
+        >>> )
+        >>> toloka_client.update_pool(pool_id=updated_pool.id, pool=updated_pool)
+        ...
     """
 
     VERIFIED_LANGUAGES_TO_SKILLS: ClassVar[Dict[str, str]] = {
