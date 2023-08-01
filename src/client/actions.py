@@ -48,6 +48,18 @@ class Restriction(RuleAction, spec_value=RuleType.RESTRICTION):
             * `ALL_PROJECTS` — A Toloker can't access any requester's project.
         parameters.duration_days: A blocking period in days. If the `duration_days` is omitted, then the block is permanent.
         parameters.private_comment: A private comment. It is visible only to the requester.
+
+    Example:
+        >>> new_pool = toloka.client.pool.Pool()    # pool creation is simplified
+        >>> new_pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AssignmentSubmitTime(history_size=5, fast_submit_threshold_seconds=20),
+        >>>     conditions=[toloka.client.conditions.FastSubmittedCount > 1],
+        >>>     action=toloka.client.actions.Restriction(
+        >>>         scope='PROJECT',
+        >>>         duration_days=10,
+        >>>     )
+        >>> )
+        ...
     """
 
     class Parameters(RuleAction.Parameters):
@@ -75,11 +87,11 @@ class RestrictionV2(RuleAction, spec_value=RuleType.RESTRICTION_V2):
     Example:
         The following quality control rule blocks access to the project for 10 days, if a Toloker answers too fast.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.AssignmentSubmitTime(history_size=5, fast_submit_threshold_seconds=20),
-        >>>     conditions=[toloka.conditions.FastSubmittedCount > 1],
-        >>>     action=toloka.actions.RestrictionV2(
+        >>>     collector=toloka.client.collectors.AssignmentSubmitTime(history_size=5, fast_submit_threshold_seconds=20),
+        >>>     conditions=[toloka.client.conditions.FastSubmittedCount > 1],
+        >>>     action=toloka.client.actions.RestrictionV2(
         >>>         scope='PROJECT',
         >>>         duration=10,
         >>>         duration_unit='DAYS',
@@ -110,13 +122,13 @@ class SetSkillFromOutputField(RuleAction, spec_value=RuleType.SET_SKILL_FROM_OUT
     Example:
         In the following example, a `MajorityVote` collector is used to update a skill value.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.MajorityVote(answer_threshold=2, history_size=10),
+        >>>     collector=toloka.client.collectors.MajorityVote(answer_threshold=2, history_size=10),
         >>>     conditions=[
-        >>>         toloka.conditions.TotalAnswersCount > 2,
+        >>>         toloka.client.conditions.TotalAnswersCount > 2,
         >>>     ],
-        >>>     action=toloka.actions.SetSkillFromOutputField(
+        >>>     action=toloka.client.actions.SetSkillFromOutputField(
         >>>         skill_id=some_skill_id,
         >>>         from_field='correct_answers_rate',
         >>>     ),
@@ -143,11 +155,11 @@ class ChangeOverlap(RuleAction, spec_value=RuleType.CHANGE_OVERLAP):
     Example:
         The example shows how to increase task overlap when you reject assignments.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.AssignmentsAssessment(),
-        >>>     conditions=[toloka.conditions.AssessmentEvent == toloka.conditions.AssessmentEvent.REJECT],
-        >>>     action=toloka.actions.ChangeOverlap(delta=1, open_pool=True),
+        >>>     collector=toloka.client.collectors.AssignmentsAssessment(),
+        >>>     conditions=[toloka.client.conditions.AssessmentEvent == toloka.client.conditions.AssessmentEvent.REJECT],
+        >>>     action=toloka.client.actions.ChangeOverlap(delta=1, open_pool=True),
         >>> )
         ...
     """
@@ -167,11 +179,11 @@ class SetSkill(RuleAction, spec_value=RuleType.SET_SKILL):
     Example:
         When an answer is accepted, the Toloker gets a skill. Later you can filter Tolokers by that skill.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.AnswerCount(),
-        >>>     conditions=[toloka.conditions.AssignmentsAcceptedCount > 0],
-        >>>     action=toloka.actions.SetSkill(skill_id=some_skill_id, skill_value=1),
+        >>>     collector=toloka.client.collectors.AnswerCount(),
+        >>>     conditions=[toloka.client.conditions.AssignmentsAcceptedCount > 0],
+        >>>     action=toloka.client.actions.SetSkill(skill_id=some_skill_id, skill_value=1),
         >>> )
         ...
     """
@@ -190,11 +202,11 @@ class RejectAllAssignments(RuleAction, spec_value=RuleType.REJECT_ALL_ASSIGNMENT
     Example:
         Reject all assignments if a Toloker sends responses too fast. Note, that the pool must be configured with non-automatic response acceptance.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.AssignmentSubmitTime(history_size=5, fast_submit_threshold_seconds=20),
-        >>>     conditions=[toloka.conditions.FastSubmittedCount > 3],
-        >>>     action=toloka.actions.RejectAllAssignments(public_comment='Too fast responses.')
+        >>>     collector=toloka.client.collectors.AssignmentSubmitTime(history_size=5, fast_submit_threshold_seconds=20),
+        >>>     conditions=[toloka.client.conditions.FastSubmittedCount > 3],
+        >>>     action=toloka.client.actions.RejectAllAssignments(public_comment='Too fast responses.')
         >>> )
         ...
     """
@@ -209,11 +221,11 @@ class ApproveAllAssignments(RuleAction, spec_value=RuleType.APPROVE_ALL_ASSIGNME
     Example:
         Accept all assignments if a Toloker gives correct responses for control tasks. Note, that the pool must be configured with non-automatic response acceptance.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool(....)
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.GoldenSet(history_size=5),
-        >>>     conditions=[toloka.conditions.GoldenSetCorrectAnswersRate > 90],
-        >>>     action=toloka.actions.ApproveAllAssignments()
+        >>>     collector=toloka.client.collectors.GoldenSet(history_size=5),
+        >>>     conditions=[toloka.client.conditions.GoldenSetCorrectAnswersRate > 90],
+        >>>     action=toloka.client.actions.ApproveAllAssignments()
         >>> )
         ...
     """

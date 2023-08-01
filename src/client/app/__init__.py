@@ -68,6 +68,47 @@ class AppProject(BaseTolokaObject):
             * `True` — The project is read-only.
             * `False` — The project can be modified.
         app: Brief information about the project template.
+
+    Example:
+        Creating an App project.
+
+        >>> app_project = toloka.client.AppProject(
+        >>>   app_id='9lZaMl363jahzra1rrYq',
+        >>>   name='Example project (product relevance)',
+        >>>   parameters={
+        >>>     "default_language": "en",
+        >>>     "name": "Product relevance project",
+        >>>     "instruction_classes": [
+        >>>       {
+        >>>         "description": "The product is relevant to the query.",
+        >>>         "label": "Relevant",
+        >>>         "value": "relevant"
+        >>>       },
+        >>>       {
+        >>>         "description": "The product is not completely relevant to the query.",
+        >>>         "label": "Irrelevant",
+        >>>         "value": "irrelevant"
+        >>>       }
+        >>>     ],
+        >>>     "instruction_examples": [
+        >>>       {
+        >>>         "description": "The product exactly matches the query.",
+        >>>         "label": "relevant",
+        >>>         "query": "some search query",
+        >>>         "screenshot_url": "https://example.com/1"
+        >>>       },
+        >>>       {
+        >>>         "description": "The product shape matches but the product color does not.",
+        >>>         "label": "irrelevant",
+        >>>         "query": "other search query",
+        >>>         "screenshot_url": "https://example.com/2"
+        >>>       }
+        >>>     ]
+        >>>   }
+        >>> )
+        >>> app_project = toloka_client.create_app_project(app_project)
+        >>> print(app_project.id, app_project.status)
+        ...
     """
 
     @unique
@@ -108,6 +149,14 @@ class App(BaseTolokaObject):
         output_spec: The schema of solution output data.
         examples: Example description of tasks which can be solved with this solution.
         input_format_info: Information about the input data format.
+
+    Example:
+        Listing all App solutions.
+
+        >>> apps = toloka_client.get_apps()
+        >>> for app in apps:
+        >>>   print(app.id, app.name)
+        ...
     """
 
     id: str
@@ -146,6 +195,12 @@ class AppItem(BaseTolokaObject):
         created_at: The date and time when the item was created.
         started_at: The date and time when the item processing started.
         finished_at: The date and time when the item processing was completed.
+
+    Example:
+        >>> item = toloka_client.get_app_item(app_project_id='Q2d15QBjpwWuDz8Z321g', app_item_id='V40aPPA2j64TORQyY54Z')
+        >>> print(item.input_data)
+        >>> print(item.output_data)
+        ...
     """
 
     @unique
@@ -222,6 +277,12 @@ class AppBatch(BaseTolokaObject):
         items_processed_count: The number of labeled items.
         eta: Expected date and time when batch processing will be completed.
         items_per_state: Statistics on the number of items in each state.
+
+    Example:
+        >>> batches = toloka_client.get_app_batches(app_project_id='Q2d15QBjpwWuDz8Z321g', status='NEW')
+        >>> for batch in batches:
+        >>>   print(batch.id, batch.status, batch.items_count)
+        ...
     """
 
     @unique
