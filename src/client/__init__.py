@@ -4118,6 +4118,7 @@ class TolokaClient:
             >>> batches = result.content
             >>> if result.has_more:
             >>>     print('There are more NEW batches...')
+            ...
         """
 
         if self.url != self.Environment.PRODUCTION.value:
