@@ -101,15 +101,15 @@ class AcceptanceRate(CollectorConfig, spec_value=CollectorConfig.Type.ACCEPTANCE
         If more than 35% of responses are rejected, then the Toloker is restricted to access the project.
         The rule is applied after collecting 3 or more responses.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool()
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.AcceptanceRate(),
+        >>>     collector=toloka.client.collectors.AcceptanceRate(),
         >>>     conditions=[
-        >>>         toloka.conditions.TotalAssignmentsCount > 2,
-        >>>         toloka.conditions.RejectedAssignmentsRate > 35,
+        >>>         toloka.client.conditions.TotalAssignmentsCount > 2,
+        >>>         toloka.client.conditions.RejectedAssignmentsRate > 35,
         >>>     ],
-        >>>     action=toloka.actions.RestrictionV2(
-        >>>         scope=toloka.user_restriction.UserRestriction.PROJECT,
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope=toloka.client.user_restriction.UserRestriction.PROJECT,
         >>>         duration=15,
         >>>         duration_unit='DAYS',
         >>>         private_comment='The Toloker often makes mistakes',
@@ -149,11 +149,11 @@ class AnswerCount(CollectorConfig, spec_value=CollectorConfig.Type.ANSWER_COUNT)
     Example:
         The example shows how to mark Tolokers completing any task in the pool so that you can filter them later in the checking project.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool()
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.AnswerCount(),
-        >>>     conditions=[toloka.conditions.AssignmentsAcceptedCount > 0],
-        >>>     action=toloka.actions.SetSkill(skill_id=some_skill_id, skill_value=1),
+        >>>     collector=toloka.client.collectors.AnswerCount(),
+        >>>     conditions=[toloka.client.conditions.AssignmentsAcceptedCount > 0],
+        >>>     action=toloka.client.actions.SetSkill(skill_id='11294', skill_value=1),
         >>> )
         ...
     """
@@ -184,11 +184,11 @@ class AssignmentsAssessment(CollectorConfig, spec_value=CollectorConfig.Type.ASS
     Example:
         The example shows how to reassign rejected task suites to other Tolokers.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool()
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.AssignmentsAssessment(),
-        >>>     conditions=[toloka.conditions.AssessmentEvent == toloka.conditions.AssessmentEvent.REJECT],
-        >>>     action=toloka.actions.ChangeOverlap(delta=1, open_pool=True),
+        >>>     collector=toloka.client.collectors.AssignmentsAssessment(),
+        >>>     conditions=[toloka.client.conditions.AssessmentEvent == toloka.client.conditions.AssessmentEvent.REJECT],
+        >>>     action=toloka.client.actions.ChangeOverlap(delta=1, open_pool=True),
         >>> )
         ...
     """
@@ -228,11 +228,11 @@ class AssignmentSubmitTime(CollectorConfig, spec_value=CollectorConfig.Type.ASSI
     Example:
         The example shows how to reject all assignments if a Toloker sent at least 4 responses during 20 seconds after getting every task suite.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool()
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.AssignmentSubmitTime(history_size=5, fast_submit_threshold_seconds=20),
-        >>>     conditions=[toloka.conditions.FastSubmittedCount > 3],
-        >>>     action=toloka.actions.RejectAllAssignments(public_comment='Too fast responses.')
+        >>>     collector=toloka.client.collectors.AssignmentSubmitTime(history_size=5, fast_submit_threshold_seconds=20),
+        >>>     conditions=[toloka.client.conditions.FastSubmittedCount > 3],
+        >>>     action=toloka.client.actions.RejectAllAssignments(public_comment='Too fast responses.')
         >>> )
         ...
     """
@@ -271,16 +271,16 @@ class Captcha(CollectorConfig, spec_value=CollectorConfig.Type.CAPTCHA):
         The example shows how to block Toloker's access to the project for 15 days if they solve 60% of captchas or less.
         The rule is applied after entering at least 3 captchas.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool()
         >>> new_pool.set_captcha_frequency('MEDIUM')
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.Captcha(history_size=5),
+        >>>     collector=toloka.client.collectors.Captcha(history_size=5),
         >>>     conditions=[
-        >>>         toloka.conditions.SuccessRate < 60,
-        >>>         toloka.conditions.StoredResultsCount >= 3,
+        >>>         toloka.client.conditions.SuccessRate < 60,
+        >>>         toloka.client.conditions.StoredResultsCount >= 3,
         >>>     ],
-        >>>     action=toloka.actions.RestrictionV2(
-        >>>         scope=toloka.user_restriction.UserRestriction.PROJECT,
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope=toloka.client.user_restriction.UserRestriction.PROJECT,
         >>>         duration=15,
         >>>         duration_unit='DAYS',
         >>>         private_comment='Toloker often makes mistakes in captcha',
@@ -336,14 +336,14 @@ class GoldenSet(CollectorConfig, spec_value=CollectorConfig.Type.GOLDEN_SET):
     Example:
         The example shows how to accept all assignments if more than 80% of responses to control tasks are correct.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool()
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.GoldenSet(history_size=5),
+        >>>     collector=toloka.client.collectors.GoldenSet(history_size=5),
         >>>     conditions=[
-        >>>         toloka.conditions.GoldenSetCorrectAnswersRate > 80,
-        >>>         toloka.conditions.GoldenSetAnswersCount >= 5,
+        >>>         toloka.client.conditions.GoldenSetCorrectAnswersRate > 80,
+        >>>         toloka.client.conditions.GoldenSetAnswersCount >= 5,
         >>>     ],
-        >>>     action=toloka.actions.ApproveAllAssignments()
+        >>>     action=toloka.client.actions.ApproveAllAssignments()
         >>> )
         ...
     """
@@ -380,12 +380,12 @@ class Income(CollectorConfig, spec_value=CollectorConfig.Type.INCOME):
     Example:
         The example shows how to block Toloker's access to the project for 1 day if their earnings reach 1 dollar.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool()
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.Income(),
-        >>>     conditions=[toloka.conditions.IncomeSumForLast24Hours > 1],
-        >>>     action=toloka.actions.RestrictionV2(
-        >>>         scope=toloka.user_restriction.UserRestriction.PROJECT,
+        >>>     collector=toloka.client.collectors.Income(),
+        >>>     conditions=[toloka.client.conditions.IncomeSumForLast24Hours > 1],
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope=toloka.client.user_restriction.UserRestriction.PROJECT,
         >>>         duration=1,
         >>>         duration_unit='DAYS',
         >>>         private_comment='Earnings limit is reached',
@@ -425,14 +425,14 @@ class MajorityVote(CollectorConfig, spec_value=CollectorConfig.Type.MAJORITY_VOT
     Example:
         The example shows how to reject all Toloker's responses if they significantly differ from the majority. The rule is applied after collecting at least 10 responses.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool()
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.MajorityVote(answer_threshold=2),
+        >>>     collector=toloka.client.collectors.MajorityVote(answer_threshold=2),
         >>>     conditions=[
-        >>>         toloka.conditions.TotalAnswersCount > 9,
-        >>>         toloka.conditions.CorrectAnswersRate < 60,
+        >>>         toloka.client.conditions.TotalAnswersCount > 9,
+        >>>         toloka.client.conditions.CorrectAnswersRate < 60,
         >>>     ],
-        >>>     action=toloka.actions.RejectAllAssignments(public_comment='Too low quality')
+        >>>     action=toloka.client.actions.RejectAllAssignments(public_comment='Too low quality')
         >>> )
         ...
     """
@@ -468,12 +468,12 @@ class SkippedInRowAssignments(CollectorConfig, spec_value=CollectorConfig.Type.S
     Example:
         The example shows how to block Toloker's access to the project for 15 days if he skipped more than 3 task suites in a row.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool()
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.SkippedInRowAssignments(),
-        >>>     conditions=[toloka.conditions.SkippedInRowCount > 3],
-        >>>     action=toloka.actions.RestrictionV2(
-        >>>         scope=toloka.user_restriction.UserRestriction.PROJECT,
+        >>>     collector=toloka.client.collectors.SkippedInRowAssignments(),
+        >>>     conditions=[toloka.client.conditions.SkippedInRowCount > 3],
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope=toloka.client.user_restriction.UserRestriction.PROJECT,
         >>>         duration=15,
         >>>         duration_unit='DAYS',
         >>>         private_comment='Skips too many task suites in a row',
@@ -513,11 +513,11 @@ class UsersAssessment(CollectorConfig, spec_value=CollectorConfig.Type.USERS_ASS
     Example:
         The example shows how to reassign rejected assignments to other Tolokers.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool()
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.UsersAssessment(),
-        >>>     conditions=[toloka.conditions.PoolAccessRevokedReason == toloka.conditions.PoolAccessRevokedReason.RESTRICTION],
-        >>>     action=toloka.actions.ChangeOverlap(delta=1, open_pool=True),
+        >>>     collector=toloka.client.collectors.UsersAssessment(),
+        >>>     conditions=[toloka.client.conditions.PoolAccessRevokedReason == toloka.client.conditions.PoolAccessRevokedReason.RESTRICTION],
+        >>>     action=toloka.client.actions.ChangeOverlap(delta=1, open_pool=True),
         >>> )
         ...
     """

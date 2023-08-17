@@ -42,12 +42,12 @@ class QualityControl(BaseTolokaObject):
     Example:
         A quality control rule that restricts access if a Toloker responds too fast.
 
-        >>> # new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool()
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.AssignmentSubmitTime(history_size=5, fast_submit_threshold_seconds=20),
-        >>>     conditions=[toloka.conditions.FastSubmittedCount > 1],
-        >>>     action=toloka.actions.RestrictionV2(
-        >>>         scope=toloka.user_restriction.UserRestriction.ALL_PROJECTS,
+        >>>     collector=toloka.client.collectors.AssignmentSubmitTime(history_size=5, fast_submit_threshold_seconds=20),
+        >>>     conditions=[toloka.client.conditions.FastSubmittedCount > 1],
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope=toloka.client.user_restriction.UserRestriction.ALL_PROJECTS,
         >>>         duration=10,
         >>>         duration_unit='DAYS',
         >>>         private_comment='Fast responses',

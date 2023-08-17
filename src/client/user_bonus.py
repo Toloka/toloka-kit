@@ -48,7 +48,7 @@ class UserBonus(BaseTolokaObject):
         >>>             'RU': 'Молодец!',
         >>>         },
         >>>         public_message={
-        >>>             'EN': 'Ten tasks completed',
+        >>>             'EN': 'Ten tasks were completed',
         >>>             'RU': 'Выполнено 10 заданий',
         >>>         },
         >>>         assignment_id='000015fccc--63bfc4c358d7a46c32a7b233'

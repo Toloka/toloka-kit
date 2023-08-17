@@ -126,6 +126,8 @@ class ButtonRadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_BUTTON
         options: A list of options.
 
     Example:
+
+        >>> import toloka.client.project.template_builder as tb
         >>> classification_buttons = tb.fields.ButtonRadioGroupFieldV1(
         >>>     data=tb.data.OutputData(path='class'),
         >>>     options=[
@@ -347,6 +349,7 @@ class MediaFileFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_MEDIA_FILE):
     Example:
         A component for uploading an image or taking a photo.
 
+        >>> import toloka.client.project.template_builder as tb
         >>> image_loader = tb.fields.MediaFileFieldV1(
         >>>     label='Upload a photo',
         >>>     data=tb.data.OutputData(path='image'),
@@ -421,6 +424,7 @@ class RadioGroupFieldV1(BaseFieldV1, spec_value=ComponentType.FIELD_RADIO_GROUP)
             Default value: `False`.
 
     Example:
+        >>> import toloka.client.project.template_builder as tb
         >>> radio_group_field = tb.fields.RadioGroupFieldV1(
         >>>     data=tb.data.OutputData(path='result'),
         >>>     options=[

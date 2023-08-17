@@ -325,6 +325,7 @@ class LinkGroupViewV1(BaseViewV1, spec_value=ComponentType.VIEW_LINK_GROUP):
         links: A list of links.
 
     Example:
+        >>> import toloka.client.project.template_builder as tb
         >>> links = tb.view.LinkGroupViewV1(
         >>>     [
         >>>         tb.view.LinkGroupViewV1.Link(
@@ -396,6 +397,7 @@ class MarkdownViewV1(BaseViewV1, spec_value=ComponentType.VIEW_MARKDOWN):
     Example:
         Adding a title and description using Markdown.
 
+        >>> import toloka.client.project.template_builder as tb
         >>> header = tb.view.MarkdownViewV1('# Some Header:\n---\nSome detailed description')
         ...
     """
@@ -413,6 +415,7 @@ class TextViewV1(BaseViewV1, spec_value=ComponentType.VIEW_TEXT):
         content: The text. To insert a new line, use `\n`.
 
     Example:
+        >>> import toloka.client.project.template_builder as tb
         >>> text_view = tb.view.TextViewV1(tb.data.InputData('input_field_name'), label='My label:')
         ...
     """

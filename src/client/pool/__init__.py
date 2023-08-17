@@ -98,7 +98,7 @@ class Pool(BaseTolokaObject):
         Creating a new pool.
 
         >>> new_pool = toloka.client.Pool(
-        >>>     project_id='1',
+        >>>     project_id='92694',
         >>>     private_name='Experimental pool',
         >>>     may_contain_adult_content=False,
         >>>     will_expire=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=365),
