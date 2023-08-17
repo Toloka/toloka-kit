@@ -54,6 +54,12 @@ TaskBatchCreateResult = _create_batch_create_result_class_for(
     Attributes:
         items: A dictionary with created tasks. The indexes of a `create_tasks` input list are used as keys in the dictionary.
         validation_errors: A dictionary with validation errors in input tasks. It is filled if the request parameter `skip_invalid_items` is `True`.
+
+    Example:
+        >>> tasks = [ toloka.client.task.Task(input_values = {'image': 'https://example.com/image0.png'}, pool_id='1240045') ]
+        >>> result = toloka_client.create_tasks(tasks, allow_defaults=True, skip_invalid_items=True)
+        >>> print(result.items['0'].created)
+        ...
     """
 )
 TaskSuiteBatchCreateResult = _create_batch_create_result_class_for(
@@ -65,6 +71,19 @@ TaskSuiteBatchCreateResult = _create_batch_create_result_class_for(
     Attributes:
         items: A dictionary with created task suites. The indexes of a `create_task_suites` input list are used as keys in the dictionary.
         validation_errors: A dictionary with validation errors in input task suites. It is filled if the request parameter `skip_invalid_items` is `True`.
+
+    Example:
+        >>> task_suites = [
+        >>>     toloka.client.TaskSuite(
+        >>>         pool_id=1240045,
+        >>>         overlap=1,
+        >>>         tasks=[ toloka.client.Task(input_values={'question': 'Choose a random number'}) ]
+        >>>     )
+        >>> ]
+        >>> result = toloka_client.create_task_suites(task_suites=task_suites, skip_invalid_items=True)
+        >>> for k, error in result.validation_errors.items():
+        >>>     print(k, error.message)
+        ...
     """
 )
 UserBonusBatchCreateResult = _create_batch_create_result_class_for(
@@ -76,6 +95,21 @@ UserBonusBatchCreateResult = _create_batch_create_result_class_for(
     Attributes:
         items: A dictionary with created bonuses. The indexes of a `create_user_bonuses` input list are used as keys in the dictionary.
         validation_errors: A dictionary with validation errors. It is filled if the request parameter `skip_invalid_items` is `True`.
+
+    Example:
+        >>> import decimal
+        >>> bonuses=[
+        >>>     toloka.client.user_bonus.UserBonus(
+        >>>         user_id='fac97860c7929add8048ed2ef63b66fd',
+        >>>         amount=decimal.Decimal('0.50'),
+        >>>         public_title={'EN': 'Perfect job!'},
+        >>>         public_message={'EN': 'You are the best!'},
+        >>>         assignment_id='00001092da--61ef030400c684132d0da0de'
+        >>>     ),
+        >>> ]
+        >>> result = toloka_client.create_user_bonuses(user_bonuses=bonuses, skip_invalid_items=True)
+        >>> print(result.items['0'].created)
+        ...
     """
 )
 WebhookSubscriptionBatchCreateResult = _create_batch_create_result_class_for(
@@ -87,5 +121,16 @@ WebhookSubscriptionBatchCreateResult = _create_batch_create_result_class_for(
     Attributes:
         items: A dictionary with created subscriptions. The indexes of a `upsert_webhook_subscriptions` input list are used as keys in the dictionary.
         validation_errors: A dictionary with validation errors.
+
+    Example:
+        >>> result = toloka_client.upsert_webhook_subscriptions([
+        >>>     {
+        >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
+        >>>         'event_type': toloka.client.webhook_subscription.WebhookSubscription.EventType.ASSIGNMENT_CREATED,
+        >>>         'pool_id': '1240045'
+        >>>     }
+        >>> ])
+        >>> print(result.items['0'].created)
+        ...
     """
 )

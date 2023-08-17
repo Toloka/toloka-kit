@@ -87,7 +87,16 @@ class AcceptedAssignmentsCount(ComparableRuleCondition, spec_value=RuleCondition
     - [AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment.md)
 
     See also:
-    - AssignmentsAcceptedCount(toloka.client.conditions.AssignmentsAcceptedCount.md) — The number of assignments accepted from a Toloker.
+    - [AssignmentsAcceptedCount](toloka.client.conditions.AssignmentsAcceptedCount.md) — The number of assignments accepted from a Toloker.
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AssignmentsAssessment(),
+        >>>     conditions=[toloka.client.conditions.AcceptedAssignmentsCount < toloka.client.conditions.RejectedAssignmentsCount],
+        >>>     action=toloka.client.actions.ChangeOverlap(delta=1, open_pool=True),
+        >>> )
+        ...
     """
 
     value: int
@@ -98,6 +107,18 @@ class AcceptedAssignmentsRate(ComparableRuleCondition, spec_value=RuleConditionK
 
     `AcceptedAssignmentsRate` is used with collectors:
     - [AcceptanceRate](toloka.client.collectors.AcceptanceRate.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AcceptanceRate(),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.TotalAssignmentsCount > 10,
+        >>>         toloka.client.conditions.AcceptedAssignmentsRate > 90,
+        >>>     ],
+        >>>     action=toloka.client.actions.SetSkill(skill_id='11294', skill_value=1)
+        >>> )
+        ...
     """
 
     value: float
@@ -148,7 +169,16 @@ class AssignmentsAcceptedCount(ComparableRuleCondition, spec_value=RuleCondition
     - [AnswerCount](toloka.client.collectors.AnswerCount.md)
 
     See also:
-    - AcceptedAssignmentsCount(toloka.client.conditions.AcceptedAssignmentsCount.md) — The number of accepted assignments of a task suite.
+    - [AcceptedAssignmentsCount](toloka.client.conditions.AcceptedAssignmentsCount.md) — The number of accepted assignments of a task suite.
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AnswerCount(),
+        >>>     conditions=[toloka.client.conditions.AssignmentsAcceptedCount > 0],
+        >>>     action=toloka.client.actions.SetSkill(skill_id='11294', skill_value=1),
+        >>> )
+        ...
     """
 
     value: int
@@ -160,6 +190,18 @@ class CorrectAnswersRate(ComparableRuleCondition, spec_value=RuleConditionKey.CO
     `CorrectAnswersRate` is used with collectors:
     - [GoldenSet](toloka.client.collectors.GoldenSet.md)
     - [MajorityVote](toloka.client.collectors.MajorityVote.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.MajorityVote(answer_threshold=2),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.TotalAnswersCount > 9,
+        >>>         toloka.client.conditions.CorrectAnswersRate < 60,
+        >>>     ],
+        >>>     action=toloka.client.actions.RejectAllAssignments(public_comment='Too low quality')
+        >>> )
+        ...
     """
 
     value: float
@@ -170,6 +212,21 @@ class FailRate(ComparableRuleCondition, spec_value=RuleConditionKey.FAIL_RATE):
 
     `FailRate` is used with collectors:
     - [Captcha](toloka.client.collectors.Captcha.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.set_captcha_frequency('MEDIUM')
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.Captcha(history_size=5),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.FailRate > 40,
+        >>>         toloka.client.conditions.StoredResultsCount >= 3
+        >>>     ],
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope='PROJECT', duration=15, duration_unit='DAYS'
+        >>>     )
+        >>> )
+        ...
     """
 
     value: float
@@ -180,6 +237,17 @@ class FastSubmittedCount(ComparableRuleCondition, spec_value=RuleConditionKey.FA
 
     `FastSubmittedCount` is used with collectors:
     - [AssignmentSubmitTime](toloka.client.collectors.AssignmentSubmitTime.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AssignmentSubmitTime(
+        >>>         history_size=5, fast_submit_threshold_seconds=20
+        >>>     ),
+        >>>     conditions=[toloka.client.conditions.FastSubmittedCount > 3],
+        >>>     action=toloka.client.actions.RejectAllAssignments(public_comment='Too fast responses.')
+        >>> )
+        ...
     """
 
     value: int
@@ -190,6 +258,18 @@ class GoldenSetAnswersCount(ComparableRuleCondition, spec_value=RuleConditionKey
 
     `GoldenSetAnswersCount` is used with collectors:
     - [GoldenSet](toloka.client.collectors.GoldenSet.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.GoldenSet(history_size=5),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.GoldenSetCorrectAnswersRate > 80,
+        >>>         toloka.client.conditions.GoldenSetAnswersCount >= 5,
+        >>>     ],
+        >>>     action=toloka.client.actions.ApproveAllAssignments()
+        >>> )
+        ...
     """
 
     value: int
@@ -200,6 +280,18 @@ class GoldenSetCorrectAnswersRate(ComparableRuleCondition, spec_value=RuleCondit
 
     `GoldenSetCorrectAnswersRate` is used with collectors:
     - [GoldenSet](toloka.client.collectors.GoldenSet.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.GoldenSet(history_size=5),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.GoldenSetCorrectAnswersRate > 80,
+        >>>         toloka.client.conditions.GoldenSetAnswersCount >= 5,
+        >>>     ],
+        >>>     action=toloka.client.actions.ApproveAllAssignments()
+        >>> )
+        ...
     """
 
     value: float
@@ -210,6 +302,18 @@ class GoldenSetIncorrectAnswersRate(ComparableRuleCondition, spec_value=RuleCond
 
     `GoldenSetIncorrectAnswersRate` is used with collectors:
     - [GoldenSet](toloka.client.collectors.GoldenSet.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.GoldenSet(history_size=5),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.GoldenSetIncorrectAnswersRate >= 40,
+        >>>         toloka.client.conditions.GoldenSetAnswersCount >= 5,
+        >>>     ],
+        >>>     action=toloka.client.actions.RejectAllAssignments()
+        >>> )
+        ...
     """
 
     value: float
@@ -220,6 +324,18 @@ class IncomeSumForLast24Hours(ComparableRuleCondition, spec_value=RuleConditionK
 
     `IncomeSumForLast24Hours` is used with collectors:
     - [Income](toloka.client.collectors.Income.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.Income(),
+        >>>     conditions=[toloka.client.conditions.IncomeSumForLast24Hours > 0.8],
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope='PROJECT', duration=1, duration_unit='DAYS',
+        >>>         private_comment='Earnings limit is reached',
+        >>>     )
+        >>> )
+        ...
     """
 
     value: float
@@ -231,6 +347,18 @@ class IncorrectAnswersRate(ComparableRuleCondition, spec_value=RuleConditionKey.
     `IncorrectAnswersRate` is used with collectors:
     - [MajorityVote](toloka.client.collectors.MajorityVote.md)
     - [GoldenSet](toloka.client.collectors.GoldenSet.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.MajorityVote(answer_threshold=2),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.TotalAnswersCount > 9,
+        >>>         toloka.client.conditions.IncorrectAnswersRate > 60,
+        >>>     ],
+        >>>     action=toloka.client.actions.RejectAllAssignments(public_comment='Too low quality')
+        >>> )
+        ...
     """
 
     value: float
@@ -245,6 +373,15 @@ class PendingAssignmentsCount(ComparableRuleCondition, spec_value=RuleConditionK
 
     `PendingAssignmentsCount` is used with collectors:
     - [AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AssignmentsAssessment(),
+        >>>     conditions=[toloka.client.conditions.PendingAssignmentsCount < 5],
+        >>>     action=toloka.client.actions.ChangeOverlap(delta=1, open_pool=True),
+        >>> )
+        ...
     """
 
     value: int
@@ -259,6 +396,16 @@ class PoolAccessRevokedReason(IdentityRuleCondition, spec_value=RuleConditionKey
 
     `PoolAccessRevokedReason` is used with collectors:
     - [UsersAssessment](toloka.client.collectors.UsersAssessment.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.UsersAssessment(),
+        >>>     conditions=[toloka.client.conditions.PoolAccessRevokedReason ==
+        >>>         toloka.client.conditions.PoolAccessRevokedReason.RESTRICTION],
+        >>>     action=toloka.client.actions.ChangeOverlap(delta=1, open_pool=True),
+        >>> )
+        ...
     """
 
     @unique
@@ -277,6 +424,15 @@ class RejectedAssignmentsCount(ComparableRuleCondition, spec_value=RuleCondition
 
     `RejectedAssignmentsCount` is used with collectors:
     - [AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AssignmentsAssessment(),
+        >>>     conditions=[toloka.client.conditions.AcceptedAssignmentsCount < toloka.client.conditions.RejectedAssignmentsCount],
+        >>>     action=toloka.client.actions.ChangeOverlap(delta=1, open_pool=True),
+        >>> )
+        ...
     """
 
     value: int
@@ -290,6 +446,20 @@ class RejectedAssignmentsRate(ComparableRuleCondition, spec_value=RuleConditionK
 
     See also:
     - [RejectedAssignmentsCount](toloka.client.conditions.RejectedAssignmentsCount.md) — The number of rejected assignments of a task suite.
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AcceptanceRate(),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.TotalAssignmentsCount > 2,
+        >>>         toloka.client.conditions.RejectedAssignmentsRate > 40,
+        >>>     ],
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope='PROJECT', duration=15, duration_unit='DAYS'
+        >>>     )
+        >>> )
+        ...
     """
 
     value: float
@@ -302,6 +472,18 @@ class SkillId(IdentityRuleCondition, spec_value=RuleConditionKey.SKILL_ID):
 
     `SkillId` is used with collectors:
     - [UsersAssessment](toloka.client.collectors.UsersAssessment.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.UsersAssessment(),
+        >>>     conditions=[toloka.client.conditions.PoolAccessRevokedReason ==
+        >>>         toloka.client.conditions.PoolAccessRevokedReason.SKILL_CHANGE,
+        >>>         toloka.client.conditions.SkillId == '11294'
+        >>>     ],
+        >>>     action=toloka.client.actions.ChangeOverlap(delta=1, open_pool=True),
+        >>> )
+        ...
     """
 
     value: str
@@ -312,6 +494,17 @@ class SkippedInRowCount(ComparableRuleCondition, spec_value=RuleConditionKey.SKI
 
     `SkippedInRowCount` is used with collectors:
     - [SkippedInRowAssignments](toloka.client.collectors.SkippedInRowAssignments.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.SkippedInRowAssignments(),
+        >>>     conditions=[toloka.client.conditions.SkippedInRowCount > 3],
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope='PROJECT', duration=15, duration_unit='DAYS'
+        >>>     )
+        >>> )
+        ...
     """
 
     value: int
@@ -322,6 +515,21 @@ class StoredResultsCount(ComparableRuleCondition, spec_value=RuleConditionKey.ST
 
     `StoredResultsCount` is used with collectors:
     - [Captcha](toloka.client.collectors.Captcha.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.set_captcha_frequency('MEDIUM')
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.Captcha(history_size=5),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.FailRate > 40,
+        >>>         toloka.client.conditions.StoredResultsCount >= 3
+        >>>     ],
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope='PROJECT', duration=15, duration_unit='DAYS'
+        >>>     )
+        >>> )
+        ...
     """
 
     value: int
@@ -336,6 +544,21 @@ class SuccessRate(ComparableRuleCondition, spec_value=RuleConditionKey.SUCCESS_R
 
     `SuccessRate` is used with collectors:
     - [Captcha](toloka.client.collectors.Captcha.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.set_captcha_frequency('MEDIUM')
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.Captcha(history_size=5),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.SuccessRate < 40,
+        >>>         toloka.client.conditions.StoredResultsCount >= 3
+        >>>     ],
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope='PROJECT', duration=15, duration_unit='DAYS'
+        >>>     )
+        >>> )
+        ...
     """
 
     value: float
@@ -347,6 +570,18 @@ class TotalAnswersCount(ComparableRuleCondition, spec_value=RuleConditionKey.TOT
     `TotalAnswersCount` is used with collectors:
     - [GoldenSet](toloka.client.collectors.GoldenSet.md)
     - [MajorityVote](toloka.client.collectors.MajorityVote.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.MajorityVote(answer_threshold=2),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.TotalAnswersCount > 9,
+        >>>         toloka.client.conditions.IncorrectAnswersRate > 60,
+        >>>     ],
+        >>>     action=toloka.client.actions.RejectAllAssignments()
+        >>> )
+        ...
     """
 
     value: int
@@ -357,6 +592,18 @@ class TotalAssignmentsCount(ComparableRuleCondition, spec_value=RuleConditionKey
 
     `TotalAssignmentsCount` is used with collectors:
     - [AcceptanceRate](toloka.client.collectors.AcceptanceRate.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AcceptanceRate(),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.TotalAssignmentsCount > 10,
+        >>>         toloka.client.conditions.AcceptedAssignmentsRate > 90,
+        >>>     ],
+        >>>     action=toloka.client.actions.SetSkill(skill_id='11294', skill_value=1)
+        >>> )
+        ...
     """
 
     value: int
@@ -367,6 +614,18 @@ class TotalSubmittedCount(ComparableRuleCondition, spec_value=RuleConditionKey.T
 
     `TotalSubmittedCount` is used with collectors:
     - [AssignmentSubmitTime](toloka.client.collectors.AssignmentSubmitTime.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AssignmentSubmitTime(
+        >>>         fast_submit_threshold_seconds=20
+        >>>     ),
+        >>>     conditions=[toloka.client.conditions.FastSubmittedCount > 3,
+        >>>         toloka.client.conditions.TotalSubmittedCount <= 5],
+        >>>     action=toloka.client.actions.RejectAllAssignments()
+        >>> )
+        ...
     """
 
     value: int
