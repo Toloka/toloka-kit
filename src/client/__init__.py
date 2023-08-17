@@ -649,7 +649,8 @@ class TolokaClient:
             operation_id: The ID of the aggregation operation.
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned aggregated responses limit. The default limit is 50. The maximum allowed limit is 100,000.
+            limit: Returned aggregated responses limit.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Returns:
             AggregatedSolutionSearchResult: Found responses and a flag showing whether there are more matching responses exceeding the limit.
@@ -698,7 +699,8 @@ class TolokaClient:
         Args:
             operation_id: The ID of the aggregation operation.
             request: Search criteria.
-            batch_size: Returned aggregated responses limit for each request. The default batch_size is 50. The maximum allowed limit is 100,000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Yields:
             AggregatedSolution: The next matching aggregated response.
@@ -755,7 +757,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned assignments limit. The default limit is 50. The maximum allowed limit is 100,000.
+            limit: Returned assignments limit.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Returns:
             AssignmentSearchResult: Found assignments and a flag showing whether there are more matching assignments.
@@ -802,7 +805,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned assignments limit for each request. The default batch_size  is 50. The maximum allowed batch_size  is 100,000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Yields:
             Assignment: The next matching assignment.
@@ -872,7 +876,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned attachments limit. The maximum allowed limit is 100.
+            limit: Returned attachments limit.
+                The maximum allowed value: 100.
 
         Returns:
             AttachmentSearchResult: Found attachments and a flag showing whether there are more matching attachments exceeding the limit.
@@ -891,15 +896,15 @@ class TolokaClient:
 
     @add_headers('client')
     def get_attachment(self, attachment_id: str) -> Attachment:
-        """Gets attachment metadata without downloading it
+        """Gets attachment metadata without downloading it.
 
-        To download attachments as a file use "TolokaClient.download_attachment" method.
+        To download an attachment use the [download_attachment](toloka.client.TolokaClient.download_attachment.md) method.
 
         Args:
-            attachment_id: ID of attachment.
+            attachment_id: The ID of the attachment.
 
         Returns:
-            Attachment: The attachment metadata read as a result.
+            Attachment: The attachment metadata.
 
         Example:
             Specify an `attachment_id` to get the information about any attachment object.
@@ -925,7 +930,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned attachments limit for each request. The maximum allowed batch_size is 100.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 100.
 
         Yields:
             Attachment: The next matching attachment.
@@ -941,11 +947,11 @@ class TolokaClient:
 
     @add_headers('client')
     def download_attachment(self, attachment_id: str, out: BinaryIO) -> None:
-        """Downloads specific attachment
+        """Downloads an attachment.
 
         Args:
-            attachment_id: ID of attachment.
-            out: File object where to put downloaded file.
+            attachment_id: The ID of the attachment.
+            out: A file object used to save the downloaded file.
 
         Example:
             How to download an attachment.
@@ -1024,7 +1030,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned message threads limit. The default limit is 50. The maximum allowed limit is 300.
+            limit: Returned message threads limit.
+                The maximum allowed value: 300. The default value: 50.
 
         Returns:
             MessageThreadSearchResult: Found message threads and a flag showing whether there are more matching threads.
@@ -1080,7 +1087,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned message threads limit for each request. The default batch_size is 50. The maximum allowed batch_size is 300.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 300. The default value: 50.
 
         Yields:
             MessageThread: The next matching message thread.
@@ -1211,7 +1219,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned projects limit. The default limit is 20. The maximum allowed limit is 300.
+            limit: Returned projects limit.
+                The maximum allowed value: 300. The default value: 20.
 
         Returns:
             ProjectSearchResult: Found projects and a flag showing whether there are more matching projects exceeding the limit.
@@ -1260,7 +1269,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned projects limit for each request. The default batch_size is 20. The maximum allowed batch_size is 300.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 300. The default value: 20.
 
         Yields:
             Project: The next matching project.
@@ -1625,7 +1635,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned pools limit. The default limit is 20. The maximum allowed limit is 300.
+            limit: Returned pools limit.
+                The maximum allowed value: 300. The default value: 20.
 
         Returns:
            PoolSearchResult: Found pools and a flag showing whether there are more matching pools exceeding the limit.
@@ -1684,7 +1695,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned pools limit for each request. The default batch_size is 20. The maximum allowed batch_size is 300.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 300. The default value: 20.
 
         Yields:
             Pool: The next matching pool.
@@ -1997,7 +2009,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned trainings limit. The maximum allowed limit is 300.
+            limit: Returned trainings limit.
+                The maximum allowed value: 300.
 
         Returns:
            TrainingSearchResult: Found trainings and a flag showing whether there are more matching trainings exceeding the limit.
@@ -2056,7 +2069,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned trainings limit for each request. The maximum allowed batch_size is 300.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 300.
 
         Yields:
             Training: The next matching training.
@@ -2192,7 +2206,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned skills limit. The maximum allowed limit is 100.
+            limit: Returned skills limit.
+                The maximum allowed value: 100.
 
         Returns:
            SkillSearchResult: Found skills and a flag showing whether there are more matching skills exceeding the limit.
@@ -2239,7 +2254,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned skills limit for each request. The maximum allowed batch_size is 100.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 100.
 
         Yields:
             Skill: The next matching skill.
@@ -2295,10 +2311,26 @@ class TolokaClient:
             The example shows how get the percentage of completed tasks in the pool.
 
             >>> from toloka.client.analytics_request import CompletionPercentagePoolAnalytics
+            >>>
             >>> operation = toloka_client.get_analytics([CompletionPercentagePoolAnalytics(subject_id='1080020')])
             >>> operation = toloka_client.wait_operation(operation)
             >>> print(operation.details['value'][0])
             >>> completed_task_percentage = operation.details['value'][0]['result']['value']
+            ...
+
+            The example monitors the percentage of completed tasks in the pool every minute until the pool is closed.
+
+            >>> from toloka.client.analytics_request import CompletionPercentagePoolAnalytics
+            >>>
+            >>> pool = toloka_client.get_pool('1080020')
+            >>> while not pool.is_closed():
+            >>>     op = toloka_client.get_analytics( [CompletionPercentagePoolAnalytics(subject_id=pool.id)] )
+            >>>     op = toloka_client.wait_operation(op)
+            >>>     percentage = op.details['value'][0]['result']['value']
+            >>>     print(f'{percentage}%')
+            >>>     time.sleep(60)
+            >>>     pool = toloka_client.get_pool(pool.id)
+            >>> print('The pool is closed.')
             ...
         """
         response = self._request('post', '/staging/analytics-2', json=unstructure(stats))
@@ -2310,6 +2342,8 @@ class TolokaClient:
     @add_headers('client')
     def create_task(self, task: Task, parameters: Optional[task.CreateTaskParameters] = None) -> Task:
         """Creates a new task in Toloka.
+
+        If `async_mode` is `True` then an asynchronous operation is started internally and `create_task` waits for the completion of it.
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
 
@@ -2349,14 +2383,16 @@ class TolokaClient:
     ) -> batch_create_results.TaskBatchCreateResult:
         """Creates several tasks in Toloka.
 
-        You can add together general and control tasks.
-        Tasks can be added to different pools.
+        You can create general and control tasks together. Tasks can be added to different pools.
         Note that pools must be configured before accepting new tasks. For example, [mixer configuration](toloka.client.pool.mixer_config.MixerConfig.md) must be set.
 
-        You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
+        If `async_mode` is `True`, `create_tasks` starts asynchronous operation internally and waits for the completion of it.
+        It is recommended to create no more than 10,000 tasks per request in this mode.
 
-        By default, `create_tasks` starts asynchronous operation internally and waits for the completion of it. Do not
-        change `async_mode` to `False`, if you do not understand clearly why you need it.
+        If `async_mode` is `False`, no more than 5000 tasks can be created in a single request.
+        Do not change `async_mode` to `False`, if you don't understand clearly why you need it.
+
+        You can send no more than 100,000 requests per minute and no more than 2,000,000 requests per day.
 
         Args:
             tasks: A list of tasks to be created.
@@ -2453,7 +2489,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned tasks limit. The default limit is 50. The maximum allowed limit is 100,000.
+            limit: Returned tasks limit.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Returns:
             TaskSearchResult: Found tasks and a flag showing whether there are more matching tasks exceeding the limit.
@@ -2500,7 +2537,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned tasks limit for each request. The default batch_size is 50. The maximum allowed batch_size is 100,000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Yields:
             Task: The next matching task.
@@ -2607,12 +2645,14 @@ class TolokaClient:
     ) -> batch_create_results.TaskSuiteBatchCreateResult:
         """Creates several task suites in Toloka.
 
-        Usually, you don't need to create a task suite manually, because Toloka can group tasks into suites automatically.
+        Usually, you don't need to create task suites manually, because Toloka can group tasks into suites automatically.
 
         Use this method if you need to group specific tasks together or to set different parameters in different task suites.
-        Task suites can be created in different pools. You can create general and control tasks or task suites in different pools with a single method call.
+        You can create general and control tasks or task suites in different pools with a single method call.
 
-        By default, `create_task_suites` starts asynchronous operation internally and waits for the completion of it. Do not
+        If `async_mode` is `True`, `create_task_suites` starts asynchronous operation internally and waits for the completion of it.
+
+        If `async_mode` is `False`, no more than 5000 tasks can be created in a single request. Don't
         change `async_mode` to `False`, if you do not understand clearly why you need it.
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
@@ -2713,7 +2753,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned task suites limit. The default limit is 50. The maximum allowed limit is 100,000.
+            limit: Returned task suites limit.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Returns:
             TaskSuiteSearchResult: Found task suites and a flag showing whether there are more matching task suites exceeding the limit.
@@ -2760,7 +2801,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned task suites limit for each request. The default batch_size is 50. The maximum allowed batch_size is 100,000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Yields:
             TaskSuite: The next matching task suite.
@@ -2822,13 +2864,13 @@ class TolokaClient:
 
     @add_headers('client')
     def get_operation(self, operation_id: str) -> operations.Operation:
-        """Reads information about operation
+        """Gets information about an operation from Toloka.
 
-        All asynchronous actions in Toloka works via operations. If you have some "Operation" usually you need to use
-        "wait_operation" method.
+        Some API requests, for example uploading tasks or opening a pool, are processed as asynchronous operations that run in the background.
+        You can track their progress or wait for them to complete by calling the [wait_operation](toloka.client.TolokaClient.wait_operation.md) method.
 
         Args:
-            operation_id: ID of the operation.
+            operation_id: The ID of the operation.
 
         Returns:
             Operation: The operation.
@@ -2846,36 +2888,36 @@ class TolokaClient:
         op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10),
         disable_progress: bool = False
     ) -> operations.Operation:
-        """Waits for the operation to complete, and return it
+        """Waits for a Toloka operation to complete.
+
+        To get information about the operation, call the [get_operation](toloka.client.TolokaClient.get_operation.md) method.
 
         Args:
-            op: ID of the operation.
-            timeout: How long to wait. Defaults to 10 minutes.
-            disable_progress: Whether disable progress bar or enable. Defaults to `False` (meaning progress bar is shown).
+            op: The ID of the operation.
+            timeout: The wait timeout. Default value: 10 minutes.
+            disable_progress:
+                * `False` — A progress bar is shown.
+                * `True` — A progress bar is hidden.
+
+                Default value: `False`.
 
         Raises:
-            TimeoutError: Raises it if the timeout has expired and the operation is still not completed.
+            TimeoutError: Raised when the timeout has expired and the operation is still in progress.
 
         Returns:
-            Operation: Completed operation.
+            Operation: The completed operation.
 
         Example:
-            Waiting for the pool to close can be running in the background.
+            The example starts aggregation and waits for it.
 
-            >>> pool = toloka_client.get_pool(pool_id)
-            >>> while not pool.is_closed():
-            >>>     op = toloka_client.get_analytics(
-            >>>         [toloka.analytics_request.CompletionPercentagePoolAnalytics(subject_id=pool.id)]
+            >>> aggregation_operation = toloka_client.aggregate_solutions_by_pool(
+            >>>         type=toloka.client.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
+            >>>         pool_id=some_existing_pool_id,
+            >>>         answer_weight_skill_id=some_skill_id,
+            >>>         fields=[toloka.client.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
             >>>     )
-            >>>     op = toloka_client.wait_operation(op)
-            >>>     percentage = op.details['value'][0]['result']['value']
-            >>>     print(
-            >>>         f'{datetime.datetime.now().strftime("%H:%M:%S")}'
-            >>>         f'Pool {pool.id} - {percentage}%'
-            >>>     )
-            >>>     time.sleep(60 * minutes_to_wait)
-            >>>     pool = toloka_client.get_pool(pool.id)
-            >>> print('Pool was closed.')
+            >>> aggregation_operation = toloka_client.wait_operation(aggregation_operation)
+            >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
             ...
         """
         default_time_to_wait = datetime.timedelta(seconds=1)
@@ -2920,10 +2962,11 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned operations limit. The default limit is 50. The maximum allowed limit is 500.
+            limit: Returned operations limit.
+                The maximum allowed value: 500. The default value: 50.
 
         Returns:
-            OperationSearchResult: Found operations and a flag showing whether there are more matching task suites exceeding the limit.
+            OperationSearchResult: Found operations and a flag showing whether there are more matching operations exceeding the limit.
 
         Example:
             >>> toloka_client.find_operations(type='POOL_OPEN', status='SUCCESS', sort=['-finished'], limit=3)
@@ -2940,7 +2983,7 @@ class TolokaClient:
         request: search_requests.OperationSearchRequest,
         batch_size: Optional[int] = None
     ) -> Generator[operations.Operation, None, None]:
-        """Finds all operations that match certain rules and returns them in an iterable object
+        """Finds all operations that match certain criteria.
 
         `get_operations` returns a generator. You can iterate over all found operations using the generator. Several requests to the Toloka server are possible while iterating.
 
@@ -2948,13 +2991,14 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned operations limit for each request. The default batch_size is 50. The maximum allowed batch_size is 500.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 500. The default value: 50.
 
         Yields:
             Operation: The next matching operations.
 
         Example:
-            >>> bonuses = list(toloka_client.get_operations(submitted_lt='2021-06-01T00:00:00'))
+            >>> some_operations = list(toloka_client.get_operations(submitted_lt='2021-06-01T00:00:00'))
             ...
         """
         generator = self._find_all(self.find_operations, request, batch_size=batch_size)
@@ -3140,7 +3184,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned Tolokers' bonuses limit. The maximum allowed limit is 300.
+            limit: Returned Tolokers' bonuses limit.
+                The maximum allowed value: 300.
 
         Returns:
             UserBonusSearchResult: Found Tolokers' bonuses and a flag showing whether there are more matching bonuses exceeding the limit.
@@ -3185,7 +3230,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned Tolokers' bonuses limit for each request. The maximum allowed `batch_size` is 300.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 300.
 
         Yields:
             UserBonus: The next matching Toloker's bonus.
@@ -3213,7 +3259,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned Toloker restrictions limit. The maximum allowed limit is 500.
+            limit: Returned Toloker restrictions limit.
+                The maximum allowed value: 500.
 
         Returns:
             UserRestrictionSearchResult: Found Toloker restrictions and a flag showing whether there are more matching restrictions exceeding the limit.
@@ -3260,7 +3307,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned Toloker restrictions limit for each request. The maximum allowed batch_size is 500.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 500.
 
         Yields:
             UserRestriction: The next matching Toloker restriction.
@@ -3353,7 +3401,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned skills limit. The maximum allowed limit is 1000.
+            limit: Returned skills limit.
+                The maximum allowed value: 1000.
 
         Returns:
             UserSkillSearchResult: Found Toloker's skills and a flag showing whether there are more matching skills exceeding the limit.
@@ -3402,7 +3451,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned skills limit for each request. The maximum allowed batch_size is 1000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 1000.
 
         Yields:
             UserSkill: The next matching Toloker's skill.
@@ -3467,10 +3517,13 @@ class TolokaClient:
         self,
         subscriptions: List[WebhookSubscription]
     ) -> batch_create_results.WebhookSubscriptionBatchCreateResult:
-        """Creates (upsert) webhook subscriptions.
+        """Creates subscriptions.
+
+        You can create a subscription and receive notifications about events.
+        For example, when a pool is closed or a task's status changes, Toloka can send you a notification.
 
         Args:
-            subscriptions: A list of webhook subscriptions to be created.
+            subscriptions: A list of subscriptions to be created.
 
         Returns:
             batch_create_results.WebhookSubscriptionBatchCreateResult: The result of the operation.
@@ -3479,21 +3532,20 @@ class TolokaClient:
             ValidationApiError: No subscriptions were created.
 
         Example:
-            How to create several subscriptions.
 
-            >>> created_result = toloka_client.upsert_webhook_subscriptions([
+            >>> result = toloka_client.upsert_webhook_subscriptions([
             >>>     {
             >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
-            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.ASSIGNMENT_CREATED,
+            >>>         'event_type': toloka.client.webhook_subscription.WebhookSubscription.EventType.ASSIGNMENT_CREATED,
             >>>         'pool_id': '121212'
             >>>     },
             >>>     {
             >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
-            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.POOL_CLOSED,
-            >>>         'pool_id': '121212',
+            >>>         'event_type': toloka.client.webhook_subscription.WebhookSubscription.EventType.POOL_CLOSED,
+            >>>         'pool_id': '121212'
             >>>     }
             >>> ])
-            >>> print(len(created_result.items))
+            >>> print(len(result.items))
             ...
         """
         response = self._request('put', '/v1/webhook-subscriptions', json=unstructure(subscriptions))
@@ -3501,10 +3553,10 @@ class TolokaClient:
 
     @add_headers('client')
     def get_webhook_subscription(self, webhook_subscription_id: str) -> WebhookSubscription:
-        """Get one specific webhook-subscription
+        """Gets the properties of a subscription from Toloka.
 
         Args:
-            webhook_subscription_id: ID of the subscription.
+            webhook_subscription_id: The ID of the subscription.
 
         Returns:
             WebhookSubscription: The subscription.
@@ -3526,7 +3578,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned webhook subscriptions limit. The maximum allowed limit is 300.
+            limit: Returned webhook subscriptions limit.
+                The maximum allowed value: 300.
 
         Returns:
             WebhookSubscriptionSearchResult: Found webhook subscriptions and a flag showing whether there are more matching webhook subscriptions exceeding the limit.
@@ -3550,7 +3603,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned webhook subscriptions limit for each request. The maximum allowed batch_size is 300.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 300.
 
         Yields:
             WebhookSubscription: The next matching webhook subscription.
@@ -3560,10 +3614,10 @@ class TolokaClient:
 
     @add_headers('client')
     def delete_webhook_subscription(self, webhook_subscription_id: str) -> None:
-        """Drop specific webhook-subscription
+        """Deletes a subscription.
 
         Args:
-            webhook_subscription_id: ID of the webhook-subscription to delete.
+            webhook_subscription_id: The ID of the subscription.
         """
         self._raw_request('delete', f'/v1/webhook-subscriptions/{webhook_subscription_id}')
 
@@ -3649,7 +3703,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: The order and direction of sorting the results.
-            limit: Returned projects limit. The maximum limit is 5000.
+            limit: Returned projects limit.
+                The maximum allowed value: 5000.
 
         Returns:
             AppProjectSearchResult: Found projects and a flag showing whether there are more matching projects exceeding the limit.
@@ -3683,7 +3738,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned projects limit for each request. The maximum batch_size is 5000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 5000.
 
         Yields:
             AppProject: The next matching App project.
@@ -3844,7 +3900,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned solutions limit. The maximum allowed limit is 1000.
+            limit: Returned solutions limit.
+                The maximum allowed value: 1000.
 
         Returns:
             AppSearchResult: Found solutions and a flag showing whether there are more matching solutions exceeding the limit.
@@ -3878,7 +3935,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned solutions limit for each request. The maximum allowed batch_size is 1000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 1000.
 
         Yields:
             App: The next matching solution.
@@ -3944,7 +4002,8 @@ class TolokaClient:
             app_project_id: The ID of the App project.
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned items limit. The maximum allowed limit is 1000.
+            limit: Returned items limit.
+                The maximum allowed value: 1000.
 
         Returns:
             AppItemSearchResult: Found task items and a flag showing whether there are more matching items exceeding the limit.
@@ -3979,7 +4038,8 @@ class TolokaClient:
         Args:
             app_project_id: The ID of the App project.
             request: Search criteria.
-            batch_size: Returned items limit for each request. The maximum allowed batch_size is 1000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 1000.
 
         Yields:
             AppItem: The next matching item.
@@ -4092,7 +4152,8 @@ class TolokaClient:
             app_project_id: The ID of the App project.
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned batches limit. The maximum allowed limit is 1000.
+            limit: Returned batches limit.
+                The maximum allowed value: 1000.
 
         Returns:
             AppBatchSearchResult: Found batches and a flag showing whether there are more matching batches exceeding the limit.
@@ -4128,7 +4189,8 @@ class TolokaClient:
         Args:
             app_project_id: The ID of the App project.
             request: Search criteria.
-            batch_size: Returned app batches limit for each request. The maximum allowed batch_size is 1000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 1000.
 
         Yields:
             AppBatch: The next matching batch.
