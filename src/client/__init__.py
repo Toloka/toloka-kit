@@ -2525,6 +2525,10 @@ class TolokaClient:
 
         Returns:
             Task: The task with updated fields.
+
+        Example:
+            >>> toloka_client.patch_task(task_id='000012bb84--62d80429f20bf20e50f36a27', overlap=5)
+            ...
         """
         response = self._request('patch', f'/v1/tasks/{task_id}', json=unstructure(patch))
         return structure(response, Task)
@@ -3530,6 +3534,13 @@ class TolokaClient:
 
         Returns:
             WebhookSubscriptionSearchResult: Found webhook subscriptions and a flag showing whether there are more matching webhook subscriptions exceeding the limit.
+
+        Example:
+            >>> result = toloka_client.find_webhook_subscriptions(event_type='POOL_CLOSED', pool_id='1080020')
+            >>> if result.items:
+            >>>     subscription = result.items[0]
+            >>>     print(subscription.id, subscription.webhook_url)
+            ...
         """
         sort = None if sort is None else structure(sort, search_requests.WebhookSubscriptionSortItems)
         response = self._search_request('get', '/v1/webhook-subscriptions', request, sort, limit)
@@ -3554,6 +3565,11 @@ class TolokaClient:
 
         Yields:
             WebhookSubscription: The next matching webhook subscription.
+
+        Example:
+            >>> for subscription in toloka_client.get_webhook_subscriptions(pool_id='1080020'):
+            >>>     print(subscription.id, subscription.event_type)
+            ...
         """
         generator = self._find_all(self.find_webhook_subscriptions, request, sort_field='created', batch_size=batch_size)
         yield from generator
@@ -4096,6 +4112,13 @@ class TolokaClient:
 
         Returns:
             AppBatchSearchResult: Found batches and a flag showing whether there are more matching batches exceeding the limit.
+
+        Example:
+            >>> result = toloka_client.find_app_batches(app_project_id='Q2d15QBjpwWuDz8Z321g', status='NEW', sort='id')
+            >>> batches = result.content
+            >>> if result.has_more:
+            >>>     print('There are more NEW batches...')
+            ...
         """
 
         if self.url != self.Environment.PRODUCTION.value:

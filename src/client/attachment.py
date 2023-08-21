@@ -57,6 +57,11 @@ class Attachment(BaseTolokaObject, spec_enum='Type', spec_field='attachment_type
 @inherit_docstrings
 class AssignmentAttachment(Attachment, spec_value=Attachment.Type.ASSIGNMENT_ATTACHMENT):
     """An attachment to an assignment.
+
+    Example:
+        >>> attachment = toloka_client.get_attachment(attachment_id='0983459b-e26f-42f3-a5fd-6e3feee913e7')
+        >>> print(attachment.id, attachment.name)
+        ...
     """
 
     pass
