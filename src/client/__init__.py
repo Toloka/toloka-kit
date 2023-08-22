@@ -1570,13 +1570,14 @@ class TolokaClient:
         return structure(response, operations.PoolCloneOperation)
 
     @add_headers('client')
-    def create_pool(self, pool: Pool) -> Pool:
+    def create_pool(self, pool: Pool, tier: str = None) -> Pool:
         """Creates a new pool in Toloka.
 
         You can send a maximum of 20 requests of this kind per minute and 100 requests per day.
 
         Args:
             pool: The pool to be created.
+            tier: Identificator of the pool tier. If not specified, the general tier is used.
 
         Returns:
             Pool: The pool with updated read-only fields.
@@ -1602,8 +1603,10 @@ class TolokaClient:
         """
         if pool.type == Pool.Type.TRAINING:
             raise ValueError('Training pools are not supported')
-
-        response = self._request('post', '/v1/pools', json=unstructure(pool))
+        params = {}
+        if tier is not None:
+            params['tier'] = tier
+        response = self._request('post', '/v1/pools', json=unstructure(pool), params=params)
         result = structure(response, Pool)
         logger.info(
             f'A new pool with ID "{result.id}" has been created. Link to open in web interface: '
