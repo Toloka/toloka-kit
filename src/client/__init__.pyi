@@ -1750,13 +1750,18 @@ class TolokaClient:
         """
         ...
 
-    def create_pool(self, pool: toloka.client.pool.Pool) -> toloka.client.pool.Pool:
+    def create_pool(
+        self,
+        pool: toloka.client.pool.Pool,
+        tier: str = None
+    ) -> toloka.client.pool.Pool:
         """Creates a new pool in Toloka.
 
         You can send a maximum of 20 requests of this kind per minute and 100 requests per day.
 
         Args:
             pool: The pool to be created.
+            tier: Identificator of the pool tier. If not specified, the general tier is used.
 
         Returns:
             Pool: The pool with updated read-only fields.
@@ -3147,6 +3152,10 @@ class TolokaClient:
 
         Returns:
             Task: The task with updated fields.
+
+        Example:
+            >>> toloka_client.patch_task(task_id='000012bb84--62d80429f20bf20e50f36a27', overlap=5)
+            ...
         """
         ...
 
@@ -3169,6 +3178,10 @@ class TolokaClient:
 
         Returns:
             Task: The task with updated fields.
+
+        Example:
+            >>> toloka_client.patch_task(task_id='000012bb84--62d80429f20bf20e50f36a27', overlap=5)
+            ...
         """
         ...
 
@@ -4812,6 +4825,13 @@ class TolokaClient:
 
         Returns:
             WebhookSubscriptionSearchResult: Found webhook subscriptions and a flag showing whether there are more matching webhook subscriptions exceeding the limit.
+
+        Example:
+            >>> result = toloka_client.find_webhook_subscriptions(event_type='POOL_CLOSED', pool_id='1080020')
+            >>> if result.items:
+            >>>     subscription = result.items[0]
+            >>>     print(subscription.id, subscription.webhook_url)
+            ...
         """
         ...
 
@@ -4844,6 +4864,13 @@ class TolokaClient:
 
         Returns:
             WebhookSubscriptionSearchResult: Found webhook subscriptions and a flag showing whether there are more matching webhook subscriptions exceeding the limit.
+
+        Example:
+            >>> result = toloka_client.find_webhook_subscriptions(event_type='POOL_CLOSED', pool_id='1080020')
+            >>> if result.items:
+            >>>     subscription = result.items[0]
+            >>>     print(subscription.id, subscription.webhook_url)
+            ...
         """
         ...
 
@@ -4865,6 +4892,11 @@ class TolokaClient:
 
         Yields:
             WebhookSubscription: The next matching webhook subscription.
+
+        Example:
+            >>> for subscription in toloka_client.get_webhook_subscriptions(pool_id='1080020'):
+            >>>     print(subscription.id, subscription.event_type)
+            ...
         """
         ...
 
@@ -4895,6 +4927,11 @@ class TolokaClient:
 
         Yields:
             WebhookSubscription: The next matching webhook subscription.
+
+        Example:
+            >>> for subscription in toloka_client.get_webhook_subscriptions(pool_id='1080020'):
+            >>>     print(subscription.id, subscription.event_type)
+            ...
         """
         ...
 
@@ -5737,6 +5774,13 @@ class TolokaClient:
 
         Returns:
             AppBatchSearchResult: Found batches and a flag showing whether there are more matching batches exceeding the limit.
+
+        Example:
+            >>> result = toloka_client.find_app_batches(app_project_id='Q2d15QBjpwWuDz8Z321g', status='NEW', sort='id')
+            >>> batches = result.content
+            >>> if result.has_more:
+            >>>     print('There are more NEW batches...')
+            ...
         """
         ...
 
@@ -5775,6 +5819,13 @@ class TolokaClient:
 
         Returns:
             AppBatchSearchResult: Found batches and a flag showing whether there are more matching batches exceeding the limit.
+
+        Example:
+            >>> result = toloka_client.find_app_batches(app_project_id='Q2d15QBjpwWuDz8Z321g', status='NEW', sort='id')
+            >>> batches = result.content
+            >>> if result.has_more:
+            >>>     print('There are more NEW batches...')
+            ...
         """
         ...
 
