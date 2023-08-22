@@ -1577,7 +1577,8 @@ class TolokaClient:
 
         Args:
             pool: The pool to be created.
-            tier: Identificator of the pool tier. If not specified, the general tier is used.
+            tier: Identificator of the pool data storage tier. By default, only 'default' tier is available. If no tier
+                is specified, the pool is created in the 'default' tier.
 
         Returns:
             Pool: The pool with updated read-only fields.
