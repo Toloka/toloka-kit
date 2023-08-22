@@ -1107,7 +1107,7 @@ items:
       href: ../toloka-kit/reference/toloka.client.project.ProjectCheckResponse.md
       hidden: true
     - name: ProjectUpdateDifferenceLevel
-      href: ../toloka-kit/reference/toloka.client.project.ProjectCheckResponse.md
+      href: ../toloka-kit/reference/toloka.client.project.ProjectUpdateDifferenceLevel.md
       hidden: true
     - name: localization
       items:
