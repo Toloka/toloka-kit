@@ -133,7 +133,12 @@ from ._converter import structure, unstructure
 from .aggregation import AggregatedSolution
 from .analytics_request import AnalyticsRequest
 from .app import (
-    App, AppItem, AppProject, AppBatch, AppBatchPatch, AppBatchCreateRequest,
+    App,
+    AppItem,
+    AppProject,
+    AppBatch,
+    AppBatchPatch,
+    AppBatchCreateRequest,
     AppItemsCreateRequest,
 )
 from .assignment import Assignment, AssignmentPatch, GetAssignmentsTsvParameters
@@ -151,7 +156,7 @@ from .pool import Pool, PoolPatchRequest
 from .primitives.retry import TolokaRetry, SyncRetryingOverURLLibRetry, STATUSES_TO_RETRY
 from .primitives.base import autocast_to_enum
 from .primitives.parameter import IdempotentOperationParameters
-from .project import Project
+from .project import Project, ProjectCheckResponse, ProjectUpdateDifferenceLevel
 from .training import Training
 from .requester import Requester
 from .skill import Skill
@@ -1297,6 +1302,15 @@ class TolokaClient:
         """
         response = self._request('put', f'/v1/projects/{project_id}', json=unstructure(project))
         return structure(response, Project)
+
+    @add_headers('client')
+    def check_update_project_for_major_version_change(
+        self,
+        project_id: str,
+        project: Project
+    ) -> ProjectUpdateDifferenceLevel:
+        response = self._request('post', f'/v1/projects/{project_id}/check', json=unstructure(project))
+        return ProjectCheckResponse.structure(response).difference_level
 
     @add_headers('client')
     def clone_project(self, project_id: str, reuse_controllers: bool = True) -> CloneResults:

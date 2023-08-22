@@ -12,7 +12,10 @@ import pandas as pd
 import pytest
 import toloka.client as client
 from httpx import QueryParams
+from pytest_lazyfixture import lazy_fixture
 from toloka.client.exceptions import InternalApiError, ValidationApiError, IncorrectActionsApiError
+from toloka.client.project import Project, ProjectUpdateDifferenceLevel
+
 from .template_builder.test_template_builder import view_spec_map, view_spec_map_with_empty_lock  # noqa: F401
 
 from .testutils.util_functions import check_headers
@@ -853,3 +856,35 @@ def test_localization_funcs(project_map):
     project5.add_requester_translation(language='EN', public_description='Translated description')
     project5.add_requester_translation(language='EN', public_instructions='Translated instruction')
     assert client.unstructure(project1) == client.unstructure(project5)
+
+
+@pytest.fixture
+def project_check_map_breaking_change():
+    return {
+        'differenceLevel': 'BREAKING_CHANGE'
+    }
+
+
+@pytest.fixture
+def project_check_map_non_breaking_change():
+    return {
+        'differenceLevel': 'NON_BREAKING_CHANGE'
+    }
+
+
+@pytest.mark.parametrize(
+    'project_check_map,difference_level',
+    [
+        (lazy_fixture('project_check_map_breaking_change'), ProjectUpdateDifferenceLevel.BREAKING_CHANGE),
+        (lazy_fixture('project_check_map_non_breaking_change'), ProjectUpdateDifferenceLevel.NON_BREAKING_CHANGE),
+    ]
+)
+def test_check_update_project_for_major_version_change(
+    respx_mock, toloka_client, toloka_url, project_check_map, difference_level
+):
+    respx_mock.post(
+        f'{toloka_url}/projects/10/check').mock(return_value=httpx.Response(json=project_check_map, status_code=200)
+    )
+    assert toloka_client.check_update_project_for_major_version_change(
+        project_id='10', project=Project()
+    ) == difference_level
