@@ -138,6 +138,8 @@ items:
         href: ../toloka-kit/reference/toloka.client.TolokaClient.close_pool_for_update.md
       - name: close_pool_for_update_async
         href: ../toloka-kit/reference/toloka.client.TolokaClient.close_pool_for_update_async.md
+      - name: check_update_project_for_major_version_change
+        href: ../toloka-kit/reference/toloka.client.TolokaClient.check_update_project_for_major_version_change.md
       - name: create_pool
         href: ../toloka-kit/reference/toloka.client.TolokaClient.create_pool.md
       - name: find_pools
@@ -1100,6 +1102,12 @@ items:
       hidden: true
     - name: Project.set_default_language
       href: ../toloka-kit/reference/toloka.client.project.Project.set_default_language.md
+      hidden: true
+    - name: ProjectCheckResponse
+      href: ../toloka-kit/reference/toloka.client.project.ProjectCheckResponse.md
+      hidden: true
+    - name: ProjectUpdateDifferenceLevel
+      href: ../toloka-kit/reference/toloka.client.project.ProjectCheckResponse.md
       hidden: true
     - name: localization
       items:
@@ -2103,6 +2111,8 @@ items:
         href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.close_pool_for_update.md
       - name: close_pool_for_update_async
         href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.close_pool_for_update_async.md
+      - name: check_update_project_for_major_version_change
+        href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.check_update_project_for_major_version_change.md
       - name: create_pool
         href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.create_pool.md
       - name: find_pools

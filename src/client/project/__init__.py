@@ -260,9 +260,21 @@ class Project(BaseTolokaObject):
 
 
 class ProjectUpdateDifferenceLevel(ExtendableStrEnum):
+    """The level of a project update difference.
+
+    Attributes:
+        BREAKING_CHANGE: The update is a breaking change.
+        NON_BREAKING_CHANGE: The update is not a breaking change.
+    """
+
     BREAKING_CHANGE = 'BREAKING_CHANGE'
     NON_BREAKING_CHANGE = 'NON_BREAKING_CHANGE'
 
 
 class ProjectCheckResponse(BaseTolokaObject):
+    """The result of a check whether a project update is a breaking change.
+
+    Attributes:
+        difference_level: The level of a project update difference.
+    """
     difference_level: ProjectUpdateDifferenceLevel = attribute(origin='differenceLevel')
