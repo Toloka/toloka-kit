@@ -298,7 +298,7 @@ def test_create_pool_with_tier(respx_mock, toloka_client, toloka_url, pool_map, 
         }
         check_headers(request, expected_headers)
 
-        assert request.url.params == (QueryParams(tier=tier) if tier is not None else QueryParams())
+        assert request.url.params == (QueryParams(storage_key=tier) if tier is not None else QueryParams())
         assert pool_map == simplejson.loads(request.content)
         return httpx.Response(json=pool_map_with_readonly, status_code=201)
 
