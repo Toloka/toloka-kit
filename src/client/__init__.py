@@ -1605,7 +1605,7 @@ class TolokaClient:
             raise ValueError('Training pools are not supported')
         params = {}
         if tier is not None:
-            params['tier'] = tier
+            params['storage_key'] = tier
         response = self._request('post', '/v1/pools', json=unstructure(pool), params=params)
         result = structure(response, Pool)
         logger.info(
