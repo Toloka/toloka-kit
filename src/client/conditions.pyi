@@ -121,7 +121,16 @@ class AcceptedAssignmentsCount(ComparableRuleCondition):
     - [AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment.md)
 
     See also:
-    - AssignmentsAcceptedCount(toloka.client.conditions.AssignmentsAcceptedCount.md) — The number of assignments accepted from a Toloker.
+    - [AssignmentsAcceptedCount](toloka.client.conditions.AssignmentsAcceptedCount.md) — The number of assignments accepted from a Toloker.
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AssignmentsAssessment(),
+        >>>     conditions=[toloka.client.conditions.AcceptedAssignmentsCount < toloka.client.conditions.RejectedAssignmentsCount],
+        >>>     action=toloka.client.actions.ChangeOverlap(delta=1, open_pool=True),
+        >>> )
+        ...
     """
 
     def __init__(
@@ -143,6 +152,18 @@ class AcceptedAssignmentsRate(ComparableRuleCondition):
 
     `AcceptedAssignmentsRate` is used with collectors:
     - [AcceptanceRate](toloka.client.collectors.AcceptanceRate.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AcceptanceRate(),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.TotalAssignmentsCount > 10,
+        >>>         toloka.client.conditions.AcceptedAssignmentsRate > 90,
+        >>>     ],
+        >>>     action=toloka.client.actions.SetSkill(skill_id='11294', skill_value=1)
+        >>> )
+        ...
     """
 
     def __init__(
@@ -213,7 +234,16 @@ class AssignmentsAcceptedCount(ComparableRuleCondition):
     - [AnswerCount](toloka.client.collectors.AnswerCount.md)
 
     See also:
-    - AcceptedAssignmentsCount(toloka.client.conditions.AcceptedAssignmentsCount.md) — The number of accepted assignments of a task suite.
+    - [AcceptedAssignmentsCount](toloka.client.conditions.AcceptedAssignmentsCount.md) — The number of accepted assignments of a task suite.
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AnswerCount(),
+        >>>     conditions=[toloka.client.conditions.AssignmentsAcceptedCount > 0],
+        >>>     action=toloka.client.actions.SetSkill(skill_id='11294', skill_value=1),
+        >>> )
+        ...
     """
 
     def __init__(
@@ -236,6 +266,18 @@ class CorrectAnswersRate(ComparableRuleCondition):
     `CorrectAnswersRate` is used with collectors:
     - [GoldenSet](toloka.client.collectors.GoldenSet.md)
     - [MajorityVote](toloka.client.collectors.MajorityVote.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.MajorityVote(answer_threshold=2),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.TotalAnswersCount > 9,
+        >>>         toloka.client.conditions.CorrectAnswersRate < 60,
+        >>>     ],
+        >>>     action=toloka.client.actions.RejectAllAssignments(public_comment='Too low quality')
+        >>> )
+        ...
     """
 
     def __init__(
@@ -257,6 +299,21 @@ class FailRate(ComparableRuleCondition):
 
     `FailRate` is used with collectors:
     - [Captcha](toloka.client.collectors.Captcha.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.set_captcha_frequency('MEDIUM')
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.Captcha(history_size=5),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.FailRate > 40,
+        >>>         toloka.client.conditions.StoredResultsCount >= 3
+        >>>     ],
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope='PROJECT', duration=15, duration_unit='DAYS'
+        >>>     )
+        >>> )
+        ...
     """
 
     def __init__(
@@ -278,6 +335,17 @@ class FastSubmittedCount(ComparableRuleCondition):
 
     `FastSubmittedCount` is used with collectors:
     - [AssignmentSubmitTime](toloka.client.collectors.AssignmentSubmitTime.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AssignmentSubmitTime(
+        >>>         history_size=5, fast_submit_threshold_seconds=20
+        >>>     ),
+        >>>     conditions=[toloka.client.conditions.FastSubmittedCount > 3],
+        >>>     action=toloka.client.actions.RejectAllAssignments(public_comment='Too fast responses.')
+        >>> )
+        ...
     """
 
     def __init__(
@@ -299,6 +367,18 @@ class GoldenSetAnswersCount(ComparableRuleCondition):
 
     `GoldenSetAnswersCount` is used with collectors:
     - [GoldenSet](toloka.client.collectors.GoldenSet.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.GoldenSet(history_size=5),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.GoldenSetCorrectAnswersRate > 80,
+        >>>         toloka.client.conditions.GoldenSetAnswersCount >= 5,
+        >>>     ],
+        >>>     action=toloka.client.actions.ApproveAllAssignments()
+        >>> )
+        ...
     """
 
     def __init__(
@@ -320,6 +400,18 @@ class GoldenSetCorrectAnswersRate(ComparableRuleCondition):
 
     `GoldenSetCorrectAnswersRate` is used with collectors:
     - [GoldenSet](toloka.client.collectors.GoldenSet.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.GoldenSet(history_size=5),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.GoldenSetCorrectAnswersRate > 80,
+        >>>         toloka.client.conditions.GoldenSetAnswersCount >= 5,
+        >>>     ],
+        >>>     action=toloka.client.actions.ApproveAllAssignments()
+        >>> )
+        ...
     """
 
     def __init__(
@@ -341,6 +433,18 @@ class GoldenSetIncorrectAnswersRate(ComparableRuleCondition):
 
     `GoldenSetIncorrectAnswersRate` is used with collectors:
     - [GoldenSet](toloka.client.collectors.GoldenSet.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.GoldenSet(history_size=5),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.GoldenSetIncorrectAnswersRate >= 40,
+        >>>         toloka.client.conditions.GoldenSetAnswersCount >= 5,
+        >>>     ],
+        >>>     action=toloka.client.actions.RejectAllAssignments()
+        >>> )
+        ...
     """
 
     def __init__(
@@ -362,6 +466,18 @@ class IncomeSumForLast24Hours(ComparableRuleCondition):
 
     `IncomeSumForLast24Hours` is used with collectors:
     - [Income](toloka.client.collectors.Income.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.Income(),
+        >>>     conditions=[toloka.client.conditions.IncomeSumForLast24Hours > 0.8],
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope='PROJECT', duration=1, duration_unit='DAYS',
+        >>>         private_comment='Earnings limit is reached',
+        >>>     )
+        >>> )
+        ...
     """
 
     def __init__(
@@ -384,6 +500,18 @@ class IncorrectAnswersRate(ComparableRuleCondition):
     `IncorrectAnswersRate` is used with collectors:
     - [MajorityVote](toloka.client.collectors.MajorityVote.md)
     - [GoldenSet](toloka.client.collectors.GoldenSet.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.MajorityVote(answer_threshold=2),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.TotalAnswersCount > 9,
+        >>>         toloka.client.conditions.IncorrectAnswersRate > 60,
+        >>>     ],
+        >>>     action=toloka.client.actions.RejectAllAssignments(public_comment='Too low quality')
+        >>> )
+        ...
     """
 
     def __init__(
@@ -420,6 +548,15 @@ class PendingAssignmentsCount(ComparableRuleCondition):
 
     `PendingAssignmentsCount` is used with collectors:
     - [AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AssignmentsAssessment(),
+        >>>     conditions=[toloka.client.conditions.PendingAssignmentsCount < 5],
+        >>>     action=toloka.client.actions.ChangeOverlap(delta=1, open_pool=True),
+        >>> )
+        ...
     """
 
     def __init__(
@@ -445,6 +582,16 @@ class PoolAccessRevokedReason(IdentityRuleCondition):
 
     `PoolAccessRevokedReason` is used with collectors:
     - [UsersAssessment](toloka.client.collectors.UsersAssessment.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.UsersAssessment(),
+        >>>     conditions=[toloka.client.conditions.PoolAccessRevokedReason ==
+        >>>         toloka.client.conditions.PoolAccessRevokedReason.RESTRICTION],
+        >>>     action=toloka.client.actions.ChangeOverlap(delta=1, open_pool=True),
+        >>> )
+        ...
     """
 
     class Type(toloka.util._extendable_enum.ExtendableStrEnum):
@@ -473,6 +620,15 @@ class RejectedAssignmentsCount(ComparableRuleCondition):
 
     `RejectedAssignmentsCount` is used with collectors:
     - [AssignmentsAssessment](toloka.client.collectors.AssignmentsAssessment.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AssignmentsAssessment(),
+        >>>     conditions=[toloka.client.conditions.AcceptedAssignmentsCount < toloka.client.conditions.RejectedAssignmentsCount],
+        >>>     action=toloka.client.actions.ChangeOverlap(delta=1, open_pool=True),
+        >>> )
+        ...
     """
 
     def __init__(
@@ -497,6 +653,20 @@ class RejectedAssignmentsRate(ComparableRuleCondition):
 
     See also:
     - [RejectedAssignmentsCount](toloka.client.conditions.RejectedAssignmentsCount.md) — The number of rejected assignments of a task suite.
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AcceptanceRate(),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.TotalAssignmentsCount > 2,
+        >>>         toloka.client.conditions.RejectedAssignmentsRate > 40,
+        >>>     ],
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope='PROJECT', duration=15, duration_unit='DAYS'
+        >>>     )
+        >>> )
+        ...
     """
 
     def __init__(
@@ -520,6 +690,18 @@ class SkillId(IdentityRuleCondition):
 
     `SkillId` is used with collectors:
     - [UsersAssessment](toloka.client.collectors.UsersAssessment.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.UsersAssessment(),
+        >>>     conditions=[toloka.client.conditions.PoolAccessRevokedReason ==
+        >>>         toloka.client.conditions.PoolAccessRevokedReason.SKILL_CHANGE,
+        >>>         toloka.client.conditions.SkillId == '11294'
+        >>>     ],
+        >>>     action=toloka.client.actions.ChangeOverlap(delta=1, open_pool=True),
+        >>> )
+        ...
     """
 
     def __init__(
@@ -541,6 +723,17 @@ class SkippedInRowCount(ComparableRuleCondition):
 
     `SkippedInRowCount` is used with collectors:
     - [SkippedInRowAssignments](toloka.client.collectors.SkippedInRowAssignments.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.SkippedInRowAssignments(),
+        >>>     conditions=[toloka.client.conditions.SkippedInRowCount > 3],
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope='PROJECT', duration=15, duration_unit='DAYS'
+        >>>     )
+        >>> )
+        ...
     """
 
     def __init__(
@@ -562,6 +755,21 @@ class StoredResultsCount(ComparableRuleCondition):
 
     `StoredResultsCount` is used with collectors:
     - [Captcha](toloka.client.collectors.Captcha.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.set_captcha_frequency('MEDIUM')
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.Captcha(history_size=5),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.FailRate > 40,
+        >>>         toloka.client.conditions.StoredResultsCount >= 3
+        >>>     ],
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope='PROJECT', duration=15, duration_unit='DAYS'
+        >>>     )
+        >>> )
+        ...
     """
 
     def __init__(
@@ -598,6 +806,21 @@ class SuccessRate(ComparableRuleCondition):
 
     `SuccessRate` is used with collectors:
     - [Captcha](toloka.client.collectors.Captcha.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.set_captcha_frequency('MEDIUM')
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.Captcha(history_size=5),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.SuccessRate < 40,
+        >>>         toloka.client.conditions.StoredResultsCount >= 3
+        >>>     ],
+        >>>     action=toloka.client.actions.RestrictionV2(
+        >>>         scope='PROJECT', duration=15, duration_unit='DAYS'
+        >>>     )
+        >>> )
+        ...
     """
 
     def __init__(
@@ -620,6 +843,18 @@ class TotalAnswersCount(ComparableRuleCondition):
     `TotalAnswersCount` is used with collectors:
     - [GoldenSet](toloka.client.collectors.GoldenSet.md)
     - [MajorityVote](toloka.client.collectors.MajorityVote.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.MajorityVote(answer_threshold=2),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.TotalAnswersCount > 9,
+        >>>         toloka.client.conditions.IncorrectAnswersRate > 60,
+        >>>     ],
+        >>>     action=toloka.client.actions.RejectAllAssignments()
+        >>> )
+        ...
     """
 
     def __init__(
@@ -641,6 +876,18 @@ class TotalAssignmentsCount(ComparableRuleCondition):
 
     `TotalAssignmentsCount` is used with collectors:
     - [AcceptanceRate](toloka.client.collectors.AcceptanceRate.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AcceptanceRate(),
+        >>>     conditions=[
+        >>>         toloka.client.conditions.TotalAssignmentsCount > 10,
+        >>>         toloka.client.conditions.AcceptedAssignmentsRate > 90,
+        >>>     ],
+        >>>     action=toloka.client.actions.SetSkill(skill_id='11294', skill_value=1)
+        >>> )
+        ...
     """
 
     def __init__(
@@ -662,6 +909,18 @@ class TotalSubmittedCount(ComparableRuleCondition):
 
     `TotalSubmittedCount` is used with collectors:
     - [AssignmentSubmitTime](toloka.client.collectors.AssignmentSubmitTime.md)
+
+    Example:
+        >>> pool = toloka.client.pool.Pool()
+        >>> pool.quality_control.add_action(
+        >>>     collector=toloka.client.collectors.AssignmentSubmitTime(
+        >>>         fast_submit_threshold_seconds=20
+        >>>     ),
+        >>>     conditions=[toloka.client.conditions.FastSubmittedCount > 3,
+        >>>         toloka.client.conditions.TotalSubmittedCount <= 5],
+        >>>     action=toloka.client.actions.RejectAllAssignments()
+        >>> )
+        ...
     """
 
     def __init__(
