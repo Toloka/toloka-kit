@@ -1325,7 +1325,7 @@ class TolokaClient:
                 and the project that would be created if the update is applied.
         """
 
-        response = self._request('post', f'/v1/projects/{project_id}/check', json=unstructure(project))
+        response = self._request('post', f'/staging/projects/{project_id}/check', json=unstructure(project))
         return ProjectCheckResponse.structure(response).difference_level
 
     @add_headers('client')

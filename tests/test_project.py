@@ -64,16 +64,18 @@ def project_map():
                     'unexpected_setting': 1024,
                 },
                 'type': 'classic',
-                'markup': dedent('''
-                <div class="grid">
-                \t{{#each image}}
-                \t\t{{#task class="grid_item"}}
-                \t\t\t{{img src=../this width=300 height=300}}
-                \t\t\t{{field type="checkbox" name="red" label="Red" hotkey="1"}}
-                \t\t{{/task}}
-                \t{{/each}}
-                </div>
-                '''),
+                'markup': dedent(
+                    '''
+                                    <div class="grid">
+                                    \t{{#each image}}
+                                    \t\t{{#task class="grid_item"}}
+                                    \t\t\t{{img src=../this width=300 height=300}}
+                                    \t\t\t{{field type="checkbox" name="red" label="Red" hotkey="1"}}
+                                    \t\t{{/task}}
+                                    \t{{/each}}
+                                    </div>
+                                    '''
+                ),
             }
         },
         'assignments_issuing_type': 'AUTOMATED',
@@ -597,8 +599,10 @@ def test_archive_project_async(respx_mock, toloka_client, toloka_url, complete_a
     assert complete_archive_operation_map == client.unstructure(result)
 
 
-def test_archive_project(respx_mock, toloka_client, toloka_url,
-                         archive_operation_map, complete_archive_operation_map, project_map):
+def test_archive_project(
+    respx_mock, toloka_client, toloka_url,
+    archive_operation_map, complete_archive_operation_map, project_map
+):
 
     def archive(request):
         expected_headers = {
@@ -632,7 +636,8 @@ def test_archive_project(respx_mock, toloka_client, toloka_url,
 
     respx_mock.post(f'{toloka_url}/projects/10/archive').mock(side_effect=archive)
     respx_mock.get(
-        f'{toloka_url}/operations/{archive_operation_map["id"]}').mock(side_effect=complete_archive)
+        f'{toloka_url}/operations/{archive_operation_map["id"]}'
+    ).mock(side_effect=complete_archive)
     respx_mock.get(f'{toloka_url}/projects/10').mock(side_effect=project)
 
     result = toloka_client.archive_project('10')
@@ -663,10 +668,12 @@ def test_get_template_builder_project(respx_mock, toloka_client, toloka_url, tb_
 
 def test_get_assignments_df(respx_mock, toloka_client, toloka_api_url):
     # urllib.parse.parse_qs format
-    expected_df = pd.DataFrame(data={
-        'a': [1, 2, 3],
-        'b': [4, 5, 6]
-    })
+    expected_df = pd.DataFrame(
+        data={
+            'a': [1, 2, 3],
+            'b': [4, 5, 6]
+        }
+    )
     buf = io.StringIO()
     expected_df.to_csv(buf, sep='\t', index=False, columns=['a', 'b'])
 
@@ -715,26 +722,26 @@ def simple_localization_config_map():
     return {
         'default_language': 'RU',
         'additional_languages':
-        [
-            {
-                'language': 'EN',
-                'public_name':
+            [
                 {
-                    'value': 'English Project Name',
-                    'source': 'REQUESTER',
+                    'language': 'EN',
+                    'public_name':
+                        {
+                            'value': 'English Project Name',
+                            'source': 'REQUESTER',
+                        },
+                    'public_description':
+                        {
+                            'value': 'Project Description',
+                            'source': 'REQUESTER',
+                        },
+                    'public_instructions':
+                        {
+                            'value': 'Project Instructions',
+                            'source': 'REQUESTER',
+                        },
                 },
-                'public_description':
-                {
-                    'value': 'Project Description',
-                    'source': 'REQUESTER',
-                },
-                'public_instructions':
-                {
-                    'value': 'Project Instructions',
-                    'source': 'REQUESTER',
-                },
-            },
-        ],
+            ],
     }
 
 
@@ -880,10 +887,15 @@ def project_check_map_non_breaking_change():
     ]
 )
 def test_check_update_project_for_major_version_change(
-    respx_mock, toloka_client, toloka_url, project_check_map, difference_level
+    respx_mock, toloka_client, toloka_api_url, project_check_map, difference_level
 ):
+
     respx_mock.post(
-        f'{toloka_url}/projects/10/check').mock(return_value=httpx.Response(json=project_check_map, status_code=200)
+        f'{toloka_api_url}/staging/projects/10/check'
+    ).mock(
+        return_value=httpx.Response(
+            json=project_check_map, status_code=200
+        )
     )
     assert toloka_client.check_update_project_for_major_version_change(
         project_id='10', project=Project()
