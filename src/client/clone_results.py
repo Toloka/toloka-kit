@@ -15,6 +15,13 @@ class CloneResults(NamedTuple):
         project: The cloned project.
         pools: A list of cloned pools.
         trainings: A list of cloned trainings.
+
+    Example:
+        >>> result = toloka_client.clone_project(project_id='92694')
+        >>> print('Project ID:', result.project.id)
+        >>> print('Pools:', len(result.pools))
+        >>> print('Trainings:', len(result.trainings))
+        ...
     """
 
     project: Project

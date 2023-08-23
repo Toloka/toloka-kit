@@ -287,6 +287,27 @@ def test_create_pool_time_format(expire_time):
     assert expire_time.astimezone(datetime.timezone.utc) == pool.will_expire
 
 
+@pytest.mark.parametrize('tier', ['eu', None])
+def test_create_pool_with_tier(respx_mock, toloka_client, toloka_url, pool_map, pool_map_with_readonly, caplog, tier):
+
+    def pools(request):
+        expected_headers = {
+            'X-Caller-Context': 'client' if isinstance(toloka_client, client.TolokaClient) else 'async_client',
+            'X-Top-Level-Method': 'create_pool',
+            'X-Low-Level-Method': 'create_pool',
+        }
+        check_headers(request, expected_headers)
+
+        assert request.url.params == (QueryParams(storage_key=tier) if tier is not None else QueryParams())
+        assert pool_map == simplejson.loads(request.content)
+        return httpx.Response(json=pool_map_with_readonly, status_code=201)
+
+    respx_mock.post(f'{toloka_url}/pools').mock(side_effect=pools)
+    pool = client.structure(pool_map, client.pool.Pool)
+    result = toloka_client.create_pool(pool, tier=tier)
+    assert pool_map_with_readonly == client.unstructure(result)
+
+
 @pytest.fixture
 def pool_map_without_filter(pool_map_with_readonly):
     pool_map_without_filter = pool_map_with_readonly.copy()

@@ -83,6 +83,15 @@ class RealTasksCountPoolAnalytics(PoolAnalyticsRequest):
 
     Attributes:
         subject_id: The ID of a pool to get analytics about.
+
+    Examples:
+        >>> operation = toloka_client.get_analytics(
+        >>>     [toloka.client.analytics_request.RealTasksCountPoolAnalytics(subject_id='1084779')]
+        >>> )
+        >>> operation = toloka_client.wait_operation(operation)
+        >>> count = operation.details['value'][0]['result']
+        >>> print(count)
+        ...
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -101,6 +110,15 @@ class SubmittedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
 
     Attributes:
         subject_id: The ID of a pool to get analytics about.
+
+    Examples:
+        >>> operation = toloka_client.get_analytics(
+        >>>     [toloka.client.analytics_request.SubmittedAssignmentsCountPoolAnalytics(subject_id='1084779')]
+        >>> )
+        >>> operation = toloka_client.wait_operation(operation)
+        >>> count = operation.details['value'][0]['result']
+        >>> print(count)
+        ...
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -117,6 +135,15 @@ class SkippedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
 
     Attributes:
         subject_id: The ID of a pool to get analytics about.
+
+    Examples:
+        >>> operation = toloka_client.get_analytics(
+        >>>     [toloka.client.analytics_request.SkippedAssignmentsCountPoolAnalytics(subject_id='1084779')]
+        >>> )
+        >>> operation = toloka_client.wait_operation(operation)
+        >>> count = operation.details['value'][0]['result']
+        >>> print(count)
+        ...
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -133,6 +160,15 @@ class RejectedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
 
     Attributes:
         subject_id: The ID of a pool to get analytics about.
+
+    Examples:
+        >>> operation = toloka_client.get_analytics(
+        >>>     [toloka.client.analytics_request.RejectedAssignmentsCountPoolAnalytics(subject_id='1084779')]
+        >>> )
+        >>> operation = toloka_client.wait_operation(operation)
+        >>> count = operation.details['value'][0]['result']
+        >>> print(count)
+        ...
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -153,6 +189,15 @@ class ApprovedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
 
     Attributes:
         subject_id: The ID of a pool to get analytics about.
+
+    Examples:
+        >>> operation = toloka_client.get_analytics(
+        >>>     [toloka.client.analytics_request.ApprovedAssignmentsCountPoolAnalytics(subject_id='1084779')]
+        >>> )
+        >>> operation = toloka_client.wait_operation(operation)
+        >>> count = operation.details['value'][0]['result']
+        >>> print(count)
+        ...
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -169,6 +214,15 @@ class CompletionPercentagePoolAnalytics(PoolAnalyticsRequest):
 
     Attributes:
         subject_id: The ID of a pool to get analytics about.
+
+    Examples:
+        >>> operation = toloka_client.get_analytics(
+        >>>     [toloka.client.analytics_request.CompletionPercentagePoolAnalytics(subject_id='1084779')]
+        >>> )
+        >>> operation = toloka_client.wait_operation(operation)
+        >>> percentage = operation.details['value'][0]['result']['value']
+        >>> print(percentage)
+        ...
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -185,6 +239,15 @@ class AvgSubmitAssignmentMillisPoolAnalytics(PoolAnalyticsRequest):
 
     Attributes:
         subject_id: The ID of a pool to get analytics about.
+
+    Examples:
+        >>> operation = toloka_client.get_analytics(
+        >>>     [toloka.client.analytics_request.AvgSubmitAssignmentMillisPoolAnalytics(subject_id='1084779')]
+        >>> )
+        >>> operation = toloka_client.wait_operation(operation)
+        >>> ms = operation.details['value'][0]['result']
+        >>> print(ms)
+        ...
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -201,6 +264,15 @@ class SpentBudgetPoolAnalytics(PoolAnalyticsRequest):
 
     Attributes:
         subject_id: The ID of a pool to get analytics about.
+
+    Examples:
+        >>> operation = toloka_client.get_analytics(
+        >>>     [toloka.client.analytics_request.SpentBudgetPoolAnalytics(subject_id='1084779')]
+        >>> )
+        >>> operation = toloka_client.wait_operation(operation)
+        >>> spent = operation.details['value'][0]['result']
+        >>> print(spent)
+        ...
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -217,6 +289,15 @@ class UniqueWorkersCountPoolAnalytics(PoolAnalyticsRequest):
 
     Attributes:
         subject_id: The ID of a pool to get analytics about.
+
+    Examples:
+        >>> operation = toloka_client.get_analytics(
+        >>>     [toloka.client.analytics_request.UniqueWorkersCountPoolAnalytics(subject_id='1084779')]
+        >>> )
+        >>> operation = toloka_client.wait_operation(operation)
+        >>> count = operation.details['value'][0]['result']
+        >>> print(count)
+        ...
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -233,6 +314,15 @@ class UniqueSubmittersCountPoolAnalytics(PoolAnalyticsRequest):
 
     Attributes:
         subject_id: The ID of a pool to get analytics about.
+
+    Examples:
+        >>> operation = toloka_client.get_analytics(
+        >>>     [toloka.client.analytics_request.UniqueSubmittersCountPoolAnalytics(subject_id='1084779')]
+        >>> )
+        >>> operation = toloka_client.wait_operation(operation)
+        >>> count = operation.details['value'][0]['result']
+        >>> print(count)
+        ...
     """
 
     def __init__(self, *, subject_id: str) -> None:
@@ -252,6 +342,15 @@ class ActiveWorkersByFilterCountPoolAnalytics(PoolAnalyticsRequest):
     Attributes:
         subject_id: The ID of a pool to get analytics about.
         interval_hours: The interval in hours to take into account.
+
+    Examples:
+        >>> operation = toloka_client.get_analytics(
+        >>>     [toloka.client.analytics_request.ActiveWorkersByFilterCountPoolAnalytics(subject_id='1084779', interval_hours=3)]
+        >>> )
+        >>> operation = toloka_client.wait_operation(operation)
+        >>> count = operation.details['value'][0]['result']
+        >>> print(count)
+        ...
     """
 
     def __init__(
@@ -274,6 +373,15 @@ class EstimatedAssignmentsCountPoolAnalytics(PoolAnalyticsRequest):
 
     Attributes:
         subject_id: The ID of a pool to get analytics about.
+
+    Examples:
+        >>> operation = toloka_client.get_analytics(
+        >>>     [toloka.client.analytics_request.EstimatedAssignmentsCountPoolAnalytics(subject_id='1084779')]
+        >>> )
+        >>> operation = toloka_client.wait_operation(operation)
+        >>> count = operation.details['value'][0]['result']['value']
+        >>> print(count)
+        ...
     """
 
     def __init__(self, *, subject_id: str) -> None:

@@ -87,6 +87,11 @@ class AssignmentAttachment(Attachment):
         created: The date and time when the file was uploaded.
         media_type: The file [MIME](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) data type.
         owner: The owner of the attachment.
+
+    Examples:
+        >>> attachment = toloka_client.get_attachment(attachment_id='0983459b-e26f-42f3-a5fd-6e3feee913e7')
+        >>> print(attachment.id, attachment.name)
+        ...
     """
 
     def __init__(

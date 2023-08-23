@@ -51,6 +51,13 @@ class Assignment(toloka.client.primitives.base.BaseTolokaObject):
             * `False` — The tasks were grouped manually, smart mixing was not used.
         owner: Properties of Requester.
         public_comment: A public comment that is set when accepting or rejecting the assignment.
+
+    Example:
+        >>> for assignment in toloka_client.get_assignments(pool_id='1240045', status='SUBMITTED'):
+        >>>     print(assignment.id)
+        >>>     for solution in assignment.solutions:
+        >>>         print(solution)
+        ...
     """
 
     class Status(toloka.util._extendable_enum.ExtendableStrEnum):

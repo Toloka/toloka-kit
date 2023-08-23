@@ -89,6 +89,47 @@ class AppProject(toloka.client.primitives.base.BaseTolokaObject):
             * `True` — The project is read-only.
             * `False` — The project can be modified.
         app: Brief information about the project template.
+
+    Example:
+        Creating an App project.
+
+        >>> app_project = toloka.client.AppProject(
+        >>>     app_id='9lZaMl363jahzra1rrYq',
+        >>>     name='Example project (product relevance)',
+        >>>     parameters={
+        >>>         'default_language': 'en',
+        >>>         'name': 'Product relevance project',
+        >>>         'instruction_classes': [
+        >>>             {
+        >>>                 'description': 'The product is relevant to the query.',
+        >>>                 'label': 'Relevant',
+        >>>                 'value': 'relevant'
+        >>>             },
+        >>>             {
+        >>>                 'description': 'The product is not completely relevant to the query.',
+        >>>                 'label': 'Irrelevant',
+        >>>                 'value': 'irrelevant'
+        >>>             }
+        >>>         ],
+        >>>         'instruction_examples': [
+        >>>             {
+        >>>                 'description': 'The product exactly matches the query.',
+        >>>                 'label': 'relevant',
+        >>>                 'query': 'some search query',
+        >>>                 'screenshot_url': 'https://example.com/1'
+        >>>             },
+        >>>             {
+        >>>                 'description': 'The product shape matches but the product color does not.',
+        >>>                 'label': 'irrelevant',
+        >>>                 'query': 'other search query',
+        >>>                 'screenshot_url': 'https://example.com/2'
+        >>>             }
+        >>>         ]
+        >>>     }
+        >>> )
+        >>> app_project = toloka_client.create_app_project(app_project)
+        >>> print(app_project.id, app_project.status)
+        ...
     """
 
     class Status(toloka.util._extendable_enum.ExtendableStrEnum):
@@ -150,6 +191,14 @@ class App(toloka.client.primitives.base.BaseTolokaObject):
         output_spec: The schema of solution output data.
         examples: Example description of tasks which can be solved with this solution.
         input_format_info: Information about the input data format.
+
+    Example:
+        Showing all available App solutions.
+
+        >>> apps = toloka_client.get_apps()
+        >>> for app in apps:
+        >>>     print(app.id, app.name)
+        ...
     """
 
     def __init__(
@@ -188,7 +237,8 @@ class App(toloka.client.primitives.base.BaseTolokaObject):
 class AppItem(toloka.client.primitives.base.BaseTolokaObject):
     """A task item.
 
-    Items are uploaded to Toloka and are grouped in batches. After uploading the status of items is set to `NEW`. Items with that status can be edited. Then entire batches are sent for labeling.
+    Items are uploaded to Toloka and are grouped in batches. After uploading the status of items is set to `NEW`.
+    Items with that status can be edited. Then entire batches are sent for labeling.
 
     Attributes:
         id: The ID of the item.
@@ -208,6 +258,12 @@ class AppItem(toloka.client.primitives.base.BaseTolokaObject):
         created_at: The date and time when the item was created.
         started_at: The date and time when the item processing started.
         finished_at: The date and time when the item processing was completed.
+
+    Example:
+        >>> item = toloka_client.get_app_item(app_project_id='Q2d15QBjpwWuDz8Z321g', app_item_id='V40aPPA2j64TORQyY54Z')
+        >>> print(item.input_data)
+        >>> print(item.output_data)
+        ...
     """
 
     class Status(toloka.util._extendable_enum.ExtendableStrEnum):
@@ -278,13 +334,13 @@ class AppItemsCreateRequest(toloka.client.primitives.base.BaseTolokaObject):
 
 
 class AppItemImport(toloka.client.primitives.base.BaseTolokaObject):
-    """Meta-information on asynchronous loading operation (possible via UI).
+    """Information about an operation that adds items.
 
     Attributes:
-        id:
-        records_count: The number of items in the loading operation.
-        records_processed: The number of successfully loaded items in the loading operation.
-        errors: Errors during the loading operation.
+        id: The ID.
+        records_count: The total number of items sent by a client.
+        records_processed: The number of items processed during the operation.
+        errors: Information about items with incorrect parameters which were not added.
     """
 
     def __init__(
@@ -323,12 +379,18 @@ class AppBatch(toloka.client.primitives.base.BaseTolokaObject):
         created_at: The date and time when the batch was created.
         started_at: The date and time when batch processing started.
         finished_at: The date and time when batch processing was completed.
-        read_only:
-        last_items_import: Meta-information on asynchronous loading operation (possible via UI).
+        read_only: Whether the batch can be updated or not.
+        last_items_import: Information about the last operation that added items.
         confidence_avg: Average labeling quality.
         items_processed_count: The number of labeled items.
         eta: Expected date and time when batch processing will be completed.
         items_per_state: Statistics on the number of items in each state.
+
+    Example:
+        >>> batches = toloka_client.get_app_batches(app_project_id='Q2d15QBjpwWuDz8Z321g', status='NEW')
+        >>> for batch in batches:
+        >>>     print(batch.id, batch.status, batch.items_count)
+        ...
     """
 
     class Status(toloka.util._extendable_enum.ExtendableStrEnum):

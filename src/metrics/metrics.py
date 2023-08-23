@@ -77,7 +77,7 @@ class BaseMetric:
     timeout: datetime.timedelta = attr.ib(kw_only=True, factory=lambda: datetime.timedelta(seconds=10))
 
     def __attrs_post_init__(self):
-        assert not (self.toloka_client and self.atoloka_client),\
+        assert not (self.toloka_client and self.atoloka_client), \
             f"TolokaClient and AsyncTolokaClient can't be provided to {type(self)} at the same time. " \
             f"Please provide either TolokaClient or AsyncTolokaClient (the other client will be implicitly created)."
         if self.toloka_client or self.atoloka_client:
