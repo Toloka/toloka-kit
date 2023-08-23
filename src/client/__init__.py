@@ -1208,7 +1208,7 @@ class TolokaClient:
 
             >>> new_project = toloka.client.project.Project(
             >>>     assignments_issuing_type=toloka.client.project.Project.AssignmentsIssuingType.AUTOMATED,
-            >>>     public_name=''Describe the image',
+            >>>     public_name='Describe the image',
             >>>     public_description='Describe the image',
             >>>     public_instructions='Describe in a few words what is happening in the image.',
             >>>     task_spec=toloka.client.project.task_spec.TaskSpec(
@@ -3045,7 +3045,7 @@ class TolokaClient:
                 The maximum allowed value: 500. The default value: 50.
 
         Yields:
-            Operation: The next matching operations.
+            Operation: The next matching operation.
 
         Example:
             >>> some_operations = list(toloka_client.get_operations(submitted_lt='2023-06-01T00:00:00'))
