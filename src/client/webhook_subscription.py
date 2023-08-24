@@ -10,29 +10,32 @@ from ..util._extendable_enum import ExtendableStrEnum
 
 
 class WebhookSubscription(BaseTolokaObject):
-    """Webhook subscription to make a callback to the given address when some event happen.
+    """A subscription to an event in Toloka.
+
+    For examples, you can receive notifications when a pool is closed or a task's status changes.
+    Learn more about [notifications](https://toloka.ai/docs/api/using-webhook-subscriptions/).
 
     Attributes:
-        webhook_url: The URL to which notifications will be sent.
-        event_type: Event type.
-        pool_id: ID of the pool for which the subscription was created.
-        id: Pool ID. Read-only field.
-        created: When this pool was created. Read-only field.
+        id: The ID of the subscription. Read-only field.
+        webhook_url: The URL to which notifications are sent.
+        event_type: The event type.
+        pool_id: The ID of the pool that the subscription was created for.
+        created: The UTC date and time when the subscription was created. Read-only field.
     """
 
     @unique
     class EventType(ExtendableStrEnum):
-        """Webhook subscription event type:
+        """An event type.
 
         Attributes:
-            POOL_CLOSED: The pool is closed.
-            DYNAMIC_OVERLAP_COMPLETED: There is an aggregated estimate for dynamic overlap.
-            ASSIGNMENT_CREATED: Task created.
-            ASSIGNMENT_SUBMITTED: The task has been completed and is waiting for acceptance by the customer.
-            ASSIGNMENT_SKIPPED: The task was taken to work, but the Toloker skipped it and did not return to it.
-            ASSIGNMENT_EXPIRED: The task was taken to work, but the Toloker did not have time to complete it in the allotted time or refused it before the end of the term.
-            ASSIGNMENT_APPROVED: The task was performed by the Toloker and confirmed by the customer.
-            ASSIGNMENT_REJECTED: The task was completed by the Toloker, but rejected by the customer.
+            POOL_CLOSED: A pool is closed.
+            DYNAMIC_OVERLAP_COMPLETED: An aggregated result is ready for a task with a dynamic overlap.
+            ASSIGNMENT_CREATED: A task is created.
+            ASSIGNMENT_SUBMITTED: A task is completed and waiting for acceptance by a requester.
+            ASSIGNMENT_SKIPPED: A task was taken by a Toloker who skipped it and didn't return to it.
+            ASSIGNMENT_EXPIRED: A task was taken by a Toloker who didn't complete it within the time limit or rejected it before it expired.
+            ASSIGNMENT_APPROVED: A task was completed by a Toloker and approved by a requester.
+            ASSIGNMENT_REJECTED: A task was completed by a Toloker but rejected by a requester.
         """
 
         POOL_CLOSED = 'POOL_CLOSED'

@@ -74,7 +74,7 @@ class Task(InfiniteOverlapParametersMixin, BaseTask):
 
         >>> task = toloka.client.Task(
         >>>     input_values={'image': 'https://some.url/img0.png'},
-        >>>     pool_id='1'
+        >>>     pool_id='1086170'
         >>> )
         ...
 
@@ -105,9 +105,6 @@ class Task(InfiniteOverlapParametersMixin, BaseTask):
 class CreateTaskParameters(IdempotentOperationParameters):
     """Parameters used with the [create_task](toloka.client.TolokaClient.create_task.md) method.
 
-    If the operation is started in an asynchronous mode,
-    we recommend that you send the `operation_id` to avoid creating the same tasks multiple times. You can use this ID later to get information about the operation.
-
     Attributes:
         allow_defaults: Active overlap setting:
             * `True` — Use the overlap that is set in the `defaults.default_overlap_for_new_tasks` pool parameter.
@@ -116,11 +113,6 @@ class CreateTaskParameters(IdempotentOperationParameters):
             Default value: `False`.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
             Default value: `False`.
-        async_mode: Request processing mode:
-            * `True` — Asynchronous operation is started internally and `create_tasks` waits for the completion of it. It is recommended to create no more than 10,000 tasks per request in this mode.
-            * `False` — The request is processed synchronously. A maximum of 5000 tasks can be added in a single request in this mode.
-
-            Default value: `True`.
     """
     allow_defaults: bool
     open_pool: bool
@@ -130,9 +122,6 @@ class CreateTaskParameters(IdempotentOperationParameters):
 class CreateTasksParameters(CreateTaskParameters):
     """Parameters used with the [create_tasks](toloka.client.TolokaClient.create_tasks.md)
     and [create_tasks_async](toloka.client.TolokaClient.create_tasks_async.md) methods.
-
-    If the operation is started in an asynchronous mode,
-    we recommend that you send the `operation_id` to avoid creating the same tasks multiple times. You can use this ID later to get information about the operation.
 
     Attributes:
         skip_invalid_items: Task validation option:

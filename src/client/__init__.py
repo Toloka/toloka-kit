@@ -170,7 +170,7 @@ logger = logging.getLogger(__name__)
 
 
 class TolokaClient:
-    """Class that implements interaction with [Toloka API](https://toloka.ai/docs/api/api-reference/).
+    """A class that implements interaction with [Toloka API](https://toloka.ai/docs/api/api-reference/).
 
     Objects of other classes are created and modified only in memory of your computer.
     You can transfer information about these objects to Toloka only by calling one of the `TolokaClient` methods.
@@ -226,13 +226,14 @@ class TolokaClient:
         verify: SSL certificates (a.k.a CA bundle) used to
             verify the identity of requested hosts. Either `True` (default CA bundle),
             a path to an SSL certificate file, an `ssl.SSLContext`, or `False`
-            (which will disable verification)
+            (which will disable verification).
 
     Example:
         How to create `TolokaClient` instance and make your first request to Toloka.
 
+        >>> import toloka
         >>> your_oauth_token = input('Enter your token:')
-        >>> toloka_client = toloka.TolokaClient(your_oauth_token, 'PRODUCTION')  # Or switch to 'SANDBOX' environment
+        >>> toloka_client = toloka.client.TolokaClient(your_oauth_token, 'PRODUCTION')  # Or switch to 'SANDBOX' environment
         ...
 
         {% note info %}
@@ -588,8 +589,8 @@ class TolokaClient:
 
             >>> aggregation_operation = toloka_client.aggregate_solutions_by_pool(
             >>>         type=toloka.client.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
-            >>>         pool_id=some_existing_pool_id,
-            >>>         answer_weight_skill_id=some_skill_id,
+            >>>         pool_id='36502086',
+            >>>         answer_weight_skill_id='11294',
             >>>         fields=[toloka.client.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
             >>>     )
             >>> aggregation_operation = toloka_client.wait_operation(aggregation_operation)
@@ -621,9 +622,9 @@ class TolokaClient:
             The example shows how to aggregate responses to a single task.
 
             >>> aggregated_response = toloka_client.aggregate_solutions_by_task(
-            >>>     pool_id=some_existing_pool_id,
-            >>>     task_id=some_existing_task_id,
-            >>>     answer_weight_skill_id=some_skill_id,
+            >>>     pool_id='36502086',
+            >>>     task_id='000012bb84--62d80429f20bf20e50f36a27',
+            >>>     answer_weight_skill_id='11294',
             >>>     fields=[toloka.client.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
             >>> )
             >>> print(aggregated_response.output_values['result'])
@@ -649,18 +650,20 @@ class TolokaClient:
             operation_id: The ID of the aggregation operation.
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned aggregated responses limit. The default limit is 50. The maximum allowed limit is 100,000.
+            limit: Returned aggregated responses limit.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Returns:
             AggregatedSolutionSearchResult: Found responses and a flag showing whether there are more matching responses exceeding the limit.
 
         Example:
             The example shows how to get all aggregated responses using the `find_aggregated_solutions` method.
+            First, run the [aggregate_solutions_by_pool](toloka.client.TolokaClient.aggregate_solutions_by_pool.md) method and wait for the operation to complete.
+            The ID of the operation is used to get aggregated results.
 
-            >>> # run toloka_client.aggregate_solutions_by_pool and wait for the operation to complete.
             >>> current_result = toloka_client.find_aggregated_solutions(aggregation_operation.id)
             >>> aggregation_results = current_result.items
-            >>> # If we have more results, let's get them
+            >>>
             >>> while current_result.has_more:
             >>>     current_result = toloka_client.find_aggregated_solutions(
             >>>         aggregation_operation.id,
@@ -698,7 +701,8 @@ class TolokaClient:
         Args:
             operation_id: The ID of the aggregation operation.
             request: Search criteria.
-            batch_size: Returned aggregated responses limit for each request. The default batch_size is 50. The maximum allowed limit is 100,000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Yields:
             AggregatedSolution: The next matching aggregated response.
@@ -707,10 +711,10 @@ class TolokaClient:
             The example shows how to aggregate responses in a pool.
 
             >>> aggregation_operation = toloka_client.aggregate_solutions_by_pool(
-            >>>     type=toloka.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
+            >>>     type=toloka.client.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
             >>>     pool_id=some_existing_pool_id,
             >>>     answer_weight_skill_id=some_skill_id,
-            >>>     fields=[toloka.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
+            >>>     fields=[toloka.client.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
             >>> )
             >>> aggregation_operation = toloka_client.wait_operation(aggregation_operation)
             >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
@@ -734,9 +738,10 @@ class TolokaClient:
             Assignment: The assignment object with the updated status field.
 
         Example:
-            Accepting an assignment.
-
-            >>> toloka_client.accept_assignment(assignment_id, 'Well done!')
+            >>> toloka_client.accept_assignment(
+            >>>     assignment_id='00001092da--61ef030400c684132d0da0de',
+            >>>     public_comment='Well done!'
+            >>> )
             ...
         """
         return self.patch_assignment(assignment_id, public_comment=public_comment, status=Assignment.ACCEPTED)
@@ -755,7 +760,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned assignments limit. The default limit is 50. The maximum allowed limit is 100,000.
+            limit: Returned assignments limit.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Returns:
             AssignmentSearchResult: Found assignments and a flag showing whether there are more matching assignments.
@@ -763,7 +769,11 @@ class TolokaClient:
         Example:
             Search for `SKIPPED` or `EXPIRED` assignments in the specified pool.
 
-            >>> toloka_client.find_assignments(pool_id='1', status = ['SKIPPED', 'EXPIRED'])
+            >>> find_result = toloka_client.find_assignments(
+            >>>     pool_id='1080020',
+            >>>     status=['SKIPPED', 'EXPIRED']
+            >>> )
+            >>> assignments = find_result.items
             ...
         """
         sort = None if sort is None else structure(sort, search_requests.AssignmentSortItems)
@@ -781,7 +791,9 @@ class TolokaClient:
             Assignment: The assignment.
 
         Example:
-            >>> toloka_client.get_assignment(assignment_id='1')
+            >>> assignment = toloka_client.get_assignment(
+            >>>     assignment_id='00001092da--61ef030400c684132d0da0de'
+            >>> )
             ...
         """
         response = self._request('get', f'/v1/assignments/{assignment_id}')
@@ -802,17 +814,18 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned assignments limit for each request. The default batch_size  is 50. The maximum allowed batch_size  is 100,000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Yields:
             Assignment: The next matching assignment.
 
         Example:
-            The following example creates the list with IDs of `SUBMITTED` assignments in the specified pool.
+            The following example creates a list with IDs of `SUBMITTED` assignments in the specified pool.
 
             >>> from toloka.client import Assignment
-            >>> assignments = toloka_client.get_assignments(pool_id='1', status=Assignment.SUBMITTED)
-            >>> result_list = [assignment.id for assignment in assignments]
+            >>> assignments = toloka_client.get_assignments(pool_id='1080020', status=Assignment.SUBMITTED)
+            >>> assignment_ids = [assignment.id for assignment in assignments]
             ...
         """
         generator = self._find_all(self.find_assignments, request, batch_size=batch_size)
@@ -833,7 +846,10 @@ class TolokaClient:
             Assignment: Assignment object with updated fields.
 
         Example:
-            >>> toloka_client.patch_assignment(assignment_id='1', public_comment='Accepted. Good job.', status='ACCEPTED')
+            >>> toloka_client.patch_assignment(assignment_id='00001092da--61ef030400c684132d0da0de',
+            >>>     public_comment='Accepted. Good job.',
+            >>>     status='ACCEPTED'
+            >>> )
             ...
         """
         response = self._request('patch', f'/v1/assignments/{assignment_id}', json=unstructure(patch))
@@ -851,7 +867,10 @@ class TolokaClient:
             Assignment: Assignment object with updated fields.
 
         Example:
-            >>> toloka_client.reject_assignment(assignment_id='1', 'Some questions skipped')
+            >>> toloka_client.reject_assignment(
+            >>>     assignment_id='00001092da--61ef030400c684132d0da0de',
+            >>>     public_comment='Some questions skipped'
+            >>> )
             ...
         """
         return self.patch_assignment(assignment_id, public_comment=public_comment, status=Assignment.REJECTED)
@@ -872,7 +891,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned attachments limit. The maximum allowed limit is 100.
+            limit: Returned attachments limit.
+                The maximum allowed value: 100.
 
         Returns:
             AttachmentSearchResult: Found attachments and a flag showing whether there are more matching attachments exceeding the limit.
@@ -880,7 +900,7 @@ class TolokaClient:
         Example:
             Let's find attachments in the pool and sort them by the ID and the date of creation in descending order.
 
-            >>> attachments = toloka_client.find_attachments(pool_id='1', sort=['-created', '-id'], limit=10)
+            >>> attachments = toloka_client.find_attachments(pool_id='1080020', sort=['-created', '-id'], limit=10)
             ...
 
             If there are attachments exceeding the `limit`, then `attachments.has_more` is set to `True`.
@@ -891,20 +911,18 @@ class TolokaClient:
 
     @add_headers('client')
     def get_attachment(self, attachment_id: str) -> Attachment:
-        """Gets attachment metadata without downloading it
+        """Gets attachment metadata without downloading it.
 
-        To download attachments as a file use "TolokaClient.download_attachment" method.
+        To download an attachment use the [download_attachment](toloka.client.TolokaClient.download_attachment.md) method.
 
         Args:
-            attachment_id: ID of attachment.
+            attachment_id: The ID of the attachment.
 
         Returns:
-            Attachment: The attachment metadata read as a result.
+            Attachment: The attachment metadata.
 
         Example:
-            Specify an `attachment_id` to get the information about any attachment object.
-
-            >>> toloka_client.get_attachment(attachment_id='1')
+            >>> attachment = toloka_client.get_attachment(attachment_id='0983459b-e26f-42f3-a5fd-6e3feee913e7')
             ...
         """
         response = self._request('get', f'/v1/attachments/{attachment_id}')
@@ -925,15 +943,16 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned attachments limit for each request. The maximum allowed batch_size is 100.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 100.
 
         Yields:
             Attachment: The next matching attachment.
 
         Example:
-            Make a list of all received attachments in the specified pool.
+            Making a list of all received attachments in a pool.
 
-            >>> results_list = list(toloka_client.get_attachments(pool_id='1'))
+            >>> attachments = list(toloka_client.get_attachments(pool_id='1080020'))
             ...
         """
         generator = self._find_all(self.find_attachments, request, batch_size=batch_size)
@@ -941,17 +960,17 @@ class TolokaClient:
 
     @add_headers('client')
     def download_attachment(self, attachment_id: str, out: BinaryIO) -> None:
-        """Downloads specific attachment
+        """Downloads an attachment.
 
         Args:
-            attachment_id: ID of attachment.
-            out: File object where to put downloaded file.
+            attachment_id: The ID of the attachment.
+            out: A file object used to save the downloaded file.
 
         Example:
             How to download an attachment.
 
             >>> with open('my_new_file.txt', 'wb') as out_f:
-            >>>     toloka_client.download_attachment(attachment_id='1', out=out_f)
+            >>>     toloka_client.download_attachment(attachment_id='0983459b-e26f-42f3-a5fd-6e3feee913e7', out=out_f)
             ...
         """
         response = self._raw_request('get', f'/v1/attachments/{attachment_id}/download')
@@ -975,7 +994,10 @@ class TolokaClient:
             MessageThread: The updated message thread.
 
         Example:
-            >>> toloka_client.add_message_thread_to_folders(message_thread_id='1', folders=['IMPORTANT'])
+            >>> toloka_client.add_message_thread_to_folders(
+            >>>     message_thread_id='62e2e2d68664736ed5df8488',
+            >>>     folders=['IMPORTANT']
+            >>> )
             ...
         """
         if not isinstance(folders, MessageThreadFolders):
@@ -1024,7 +1046,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned message threads limit. The default limit is 50. The maximum allowed limit is 300.
+            limit: Returned message threads limit.
+                The maximum allowed value: 300. The default value: 50.
 
         Returns:
             MessageThreadSearchResult: Found message threads and a flag showing whether there are more matching threads.
@@ -1032,7 +1055,9 @@ class TolokaClient:
         Example:
             Finding all message threads in the `INBOX` folder.
 
-            >>> toloka_client.find_message_threads(folder='INBOX')
+            >>> result = toloka_client.find_message_threads(folder='INBOX')
+            >>> message_threads = result.items
+            >>> print(len(message_threads), '+' if result.has_more else '')
             ...
         """
         sort = None if sort is None else structure(sort, search_requests.MessageThreadSortItems)
@@ -1080,7 +1105,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned message threads limit for each request. The default batch_size is 50. The maximum allowed batch_size is 300.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 300. The default value: 50.
 
         Yields:
             MessageThread: The next matching message thread.
@@ -1108,7 +1134,10 @@ class TolokaClient:
             MessageThread: The updated message thread.
 
         Example:
-            >>> toloka_client.remove_message_thread_from_folders(message_thread_id='1', folders=['IMPORTANT'])
+            >>> toloka_client.remove_message_thread_from_folders(
+            >>>     message_thread_id='62e2e2d68664736ed5df8488',
+            >>>     folders=['IMPORTANT']
+            >>> )
             ...
         """
         if not isinstance(folders, MessageThreadFolders):
@@ -1133,7 +1162,7 @@ class TolokaClient:
             Project: The project with the updated status.
 
         Example:
-            >>> toloka_client.archive_project(project_id='1')
+            >>> archived_project = toloka_client.archive_project('117493')
             ...
         """
         operation = self.archive_project_async(project_id)
@@ -1155,7 +1184,7 @@ class TolokaClient:
             ProjectArchiveOperation: An object to track the progress of the operation.
 
         Example:
-            >>> archive_op = toloka_client.archive_project_async(project_id='1')
+            >>> archive_op = toloka_client.archive_project_async(project_id='117493')
             >>> toloka_client.wait_operation(archive_op)
             ...
         """
@@ -1179,8 +1208,8 @@ class TolokaClient:
 
             >>> new_project = toloka.client.project.Project(
             >>>     assignments_issuing_type=toloka.client.project.Project.AssignmentsIssuingType.AUTOMATED,
-            >>>     public_name='My best project',
-            >>>     public_description='Describe the picture',
+            >>>     public_name='Describe the image',
+            >>>     public_description='Describe the image',
             >>>     public_instructions='Describe in a few words what is happening in the image.',
             >>>     task_spec=toloka.client.project.task_spec.TaskSpec(
             >>>         input_spec={'image': toloka.client.project.field_spec.UrlSpec()},
@@ -1211,7 +1240,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned projects limit. The default limit is 20. The maximum allowed limit is 300.
+            limit: Returned projects limit.
+                The maximum allowed value: 300. The default value: 20.
 
         Returns:
             ProjectSearchResult: Found projects and a flag showing whether there are more matching projects exceeding the limit.
@@ -1219,10 +1249,11 @@ class TolokaClient:
         Example:
             The example shows how to find projects created before a specific date.
 
-            >>> projects = toloka_client.find_projects(created_lt='2021-06-01T00:00:00')
+            >>> find_result = toloka_client.find_projects(created_lt='2021-06-01T00:00:00')
+            >>> projects = find_result.items
             ...
 
-            If there are projects exceeding the `limit`, then `projects.has_more` is set to `True`.
+            If there are projects exceeding the `limit`, then `find_result.has_more` is set to `True`.
         """
         sort = None if sort is None else structure(sort, search_requests.ProjectSortItems)
         response = self._search_request('get', '/v1/projects', request, sort, limit)
@@ -1239,7 +1270,7 @@ class TolokaClient:
             Project: The project.
 
         Example:
-            >>> toloka_client.get_project(project_id='1')
+            >>> project = toloka_client.get_project(project_id='92694')
             ...
         """
         response = self._request('get', f'/v1/projects/{project_id}')
@@ -1260,7 +1291,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned projects limit for each request. The default batch_size is 20. The maximum allowed batch_size is 300.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 300. The default value: 20.
 
         Yields:
             Project: The next matching project.
@@ -1290,7 +1322,7 @@ class TolokaClient:
             Project: The project with updated parameters.
 
         Example:
-            >>> updated_project = toloka_client.get_project(project_id='1')
+            >>> updated_project = toloka_client.get_project(project_id='92694')
             >>> updated_project.private_comment = 'example project'
             >>> updated_project = toloka_client.update_project(project_id=updated_project.id, project=updated_project)
             ...
@@ -1324,7 +1356,10 @@ class TolokaClient:
 
         Example:
 
-            >>> project, pools, trainings = toloka_client.clone_project('123')
+            >>> project, pools, trainings = toloka_client.clone_project(
+            >>>     project_id='92694',
+            >>>     reuse_controllers=False
+            >>> )
             >>> # add tasks in pools and trainings
             ...
         """
@@ -1489,7 +1524,7 @@ class TolokaClient:
             Pool: The pool with updated status.
 
         Example:
-            >>> toloka_client.close_pool_for_update(pool_id='1')
+            >>> toloka_client.close_pool_for_update(pool_id='1080020')
             ...
         """
         operation = self.close_pool_for_update_async(pool_id)
@@ -1512,7 +1547,7 @@ class TolokaClient:
             PoolCloseOperation: An object to track the progress of the operation. If the pool is already closed then `None` is returned.
 
         Example:
-            >>> close_op = toloka_client.close_pool_for_update_async(pool_id='1')
+            >>> close_op = toloka_client.close_pool_for_update_async(pool_id='1080020')
             >>> toloka_client.wait_operation(close_op)
             ...
         """
@@ -1536,7 +1571,7 @@ class TolokaClient:
             Pool: The new pool.
 
         Example:
-            >>> toloka_client.clone_pool(pool_id='1')
+            >>> new_pool = toloka_client.clone_pool(pool_id='1080020')
             ...
         """
         operation = self.clone_pool_async(pool_id)
@@ -1562,7 +1597,7 @@ class TolokaClient:
             PoolCloneOperation: An object to track the progress of the operation.
 
         Example:
-            >>> clone_op = toloka_client.clone_pool_async(pool_id='1')
+            >>> clone_op = toloka_client.clone_pool_async(pool_id='1080020')
             >>> toloka_client.wait_operation(clone_op)
             ...
         """
@@ -1586,8 +1621,9 @@ class TolokaClient:
         Example:
             Creating a new pool.
 
+            >>> import datetime
             >>> new_pool = toloka.client.Pool(
-            >>>     project_id='1',
+            >>>     project_id='92694',
             >>>     private_name='Pool 1',
             >>>     may_contain_adult_content=False,
             >>>     will_expire=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=365),
@@ -1597,7 +1633,7 @@ class TolokaClient:
             >>>     filter=toloka.client.filter.Languages.in_('EN'),
             >>> )
             >>> new_pool.set_mixer_config(real_tasks_count=10, golden_tasks_count=0, training_tasks_count=0)
-            >>> new_pool.quality_control.add_action(...)
+            >>> # To configure quality control rules call new_pool.quality_control.add_action()
             >>> new_pool = toloka_client.create_pool(new_pool)
             >>> print(new_pool.id)
             ...
@@ -1629,7 +1665,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned pools limit. The default limit is 20. The maximum allowed limit is 300.
+            limit: Returned pools limit.
+                The maximum allowed value: 300. The default value: 20.
 
         Returns:
            PoolSearchResult: Found pools and a flag showing whether there are more matching pools exceeding the limit.
@@ -1637,20 +1674,23 @@ class TolokaClient:
         Examples:
             Finding all pools in all projects.
 
-            >>> pools = toloka_client.find_pools()
+            >>> find_result = toloka_client.find_pools()
+            >>> pools = find_result.items
             ...
 
             Finding all open pools in all projects.
 
-            >>> pools = toloka_client.find_pools(status='OPEN')
+            >>> find_result = toloka_client.find_pools(status='OPEN')
+            >>> pools = find_result.items
             ...
 
             Finding open pools in a specific project.
 
-            >>> pools = toloka_client.find_pools(status='OPEN', project_id='1')
+            >>> find_result = toloka_client.find_pools(status='OPEN', project_id='92694')
+            >>> pools = find_result.items
             ...
 
-            If there are pools exceeding the `limit`, then `pools.has_more` is set to `True`.
+            If there are pools exceeding the `limit`, then `find_result.has_more` is set to `True`.
         """
         sort = None if sort is None else structure(sort, search_requests.PoolSortItems)
         response = self._search_request('get', '/v1/pools', request, sort, limit)
@@ -1667,7 +1707,8 @@ class TolokaClient:
             Pool: The pool.
 
         Example:
-            >>> toloka_client.get_pool(pool_id='1')
+            >>> pool = toloka_client.get_pool(pool_id='1080020')
+            >>> print(pool.private_name, pool.status)
             ...
         """
         response = self._request('get', f'/v1/pools/{pool_id}')
@@ -1688,21 +1729,18 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned pools limit for each request. The default batch_size is 20. The maximum allowed batch_size is 300.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 300. The default value: 20.
 
         Yields:
             Pool: The next matching pool.
 
         Example:
-            How to get all open pools from a project.
+            Getting all open pools from a project.
 
-            >>> open_pools = toloka_client.get_pools(project_id='1', status='OPEN')
+            >>> open_pools = toloka_client.get_pools(project_id='92694', status='OPEN')
             ...
 
-            How to get all pools from a project.
-
-            >>> all_pools = toloka_client.get_pools(project_id='1')
-            ...
         """
         generator = self._find_all(self.find_pools, request, batch_size=batch_size)
         yield from generator
@@ -1722,7 +1760,7 @@ class TolokaClient:
         Example:
             Opening a pool.
 
-            >>> toloka_client.open_pool(pool_id='1')
+            >>> toloka_client.open_pool(pool_id='1080020')
             ...
         """
         operation = self.open_pool_async(pool_id)
@@ -1747,7 +1785,7 @@ class TolokaClient:
         Example:
             Opening a pool.
 
-            >>> open_op = toloka_client.open_pool(pool_id='1')
+            >>> open_op = toloka_client.open_pool(pool_id='1080020')
             >>> toloka_client.wait_operation(open_op)
             ...
         """
@@ -1774,7 +1812,7 @@ class TolokaClient:
         Example:
             Changing priority of a pool.
 
-            >>> toloka_client.patch_pool(pool_id='1', priority=100)
+            >>> pool = toloka_client.patch_pool(pool_id='1080020', priority=100)
             ...
         """
         response = self._request('patch', f'/v1/pools/{pool_id}', json=unstructure(request))
@@ -1792,7 +1830,7 @@ class TolokaClient:
             Pool: The pool with updated parameters.
 
         Example:
-            >>> updated_pool = toloka_client.get_pool(pool_id='1')
+            >>> updated_pool = toloka_client.get_pool(pool_id='1544394')
             >>> updated_pool.will_expire = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=30)
             >>> toloka_client.update_pool(pool_id=updated_pool.id, pool=updated_pool)
             ...
@@ -1916,7 +1954,7 @@ class TolokaClient:
             Training: The new training.
 
         Example:
-            >>> toloka_client.clone_training(training_id='1')
+            >>> new_training = toloka_client.clone_training(training_id='1239110')
             ...
         """
         operation = self.clone_training_async(training_id)
@@ -1942,7 +1980,7 @@ class TolokaClient:
             TrainingCloneOperation: An object to track the progress of the operation.
 
         Example:
-            >>> clone_op = toloka_client.clone_training_async(training_id='1')
+            >>> clone_op = toloka_client.clone_training_async(training_id='1239110')
             >>> toloka_client.wait_operation(clone_op)
             ...
         """
@@ -1963,7 +2001,7 @@ class TolokaClient:
             Creating a new training.
 
             >>> new_training = toloka.client.Training(
-            >>>     project_id='1',
+            >>>     project_id='118252',
             >>>     private_name='Some training in my project',
             >>>     may_contain_adult_content=True,
             >>>     assignment_max_duration_seconds=60*5,
@@ -2001,7 +2039,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned trainings limit. The maximum allowed limit is 300.
+            limit: Returned trainings limit.
+                The maximum allowed value: 300.
 
         Returns:
            TrainingSearchResult: Found trainings and a flag showing whether there are more matching trainings exceeding the limit.
@@ -2009,20 +2048,23 @@ class TolokaClient:
         Examples:
             Finding all trainings in all projects.
 
-            >>> trainings = toloka_client.find_trainings()
+            >>> find_result = toloka_client.find_trainings()
+            >>> trainings = find_result.items
             ...
 
             Finding all opened trainings in all projects.
 
-            >>> trainings = toloka_client.find_trainings(status='OPEN')
+            >>> find_result = toloka_client.find_trainings(status='OPEN')
+            >>> trainings = find_result.items
             ...
 
             Finding all opened trainings in a specific project.
 
-            >>> trainings = toloka_client.find_trainings(status='OPEN', project_id='1')
+            >>> find_result = toloka_client.find_trainings(status='OPEN', project_id='92694')
+            >>> trainings = find_result.items
             ...
 
-            If there are trainings exceeding the `limit`, then `trainings.has_more` is set to `True`.
+            If there are trainings exceeding the `limit`, then `find_result.has_more` is set to `True`.
         """
         sort = None if sort is None else structure(sort, search_requests.TrainingSortItems)
         response = self._search_request('get', '/v1/trainings', request, sort, limit)
@@ -2039,7 +2081,7 @@ class TolokaClient:
             Training: The training.
 
         Example:
-            >>> t = toloka_client.get_training(training_id='1')
+            >>> training = toloka_client.get_training(training_id='1239110')
             ...
         """
         response = self._request('get', f'/v1/trainings/{training_id}')
@@ -2060,7 +2102,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned trainings limit for each request. The maximum allowed batch_size is 300.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 300.
 
         Yields:
             Training: The next matching training.
@@ -2068,7 +2111,7 @@ class TolokaClient:
         Example:
             Getting all trainings in a project.
 
-            >>> trainings = toloka_client.get_trainings(project_id='1')
+            >>> trainings = toloka_client.get_trainings(project_id='92694')
             ...
         """
         generator = self._find_all(self.find_trainings, request, batch_size=batch_size)
@@ -2089,7 +2132,7 @@ class TolokaClient:
         Example:
             Opening a training.
 
-            >>> toloka_client.open_training(training_id='1')
+            >>> toloka_client.open_training(training_id='1239110')
             ...
         """
         operation = self.open_training_async(training_id)
@@ -2114,7 +2157,7 @@ class TolokaClient:
         Example:
             Opening a training.
 
-            >>> open_op = toloka_client.open_training_async(training_id='1')
+            >>> open_op = toloka_client.open_training_async(training_id='1239110')
             >>> toloka_client.wait_operation(open_op)
             ...
         """
@@ -2138,7 +2181,7 @@ class TolokaClient:
         Example:
             The example shows how to set new time limit in a training.
 
-            >>> updated_training = toloka_client.get_training(training_id='1')
+            >>> updated_training = toloka_client.get_training(training_id='1239110')
             >>> updated_training.assignment_max_duration_seconds = 600
             >>> toloka_client.update_training(training_id=updated_training.id, training=updated_training)
             ...
@@ -2151,19 +2194,17 @@ class TolokaClient:
     @expand('skill')
     @add_headers('client')
     def create_skill(self, skill: Skill) -> Skill:
-        """Creates a new Skill
+        """Creates a new skill.
 
         You can send a maximum of 10 requests of this kind per minute and 100 requests per day.
 
         Args:
-            skill: New Skill with set parameters.
+            skill: The skill to be created.
 
         Returns:
-            Skill: Created skill. With read-only fields.
+            Skill: The skill with updated read-only fields.
 
         Example:
-            How to create a new skill.
-
             >>> new_skill = toloka_client.create_skill(
             >>>     name='Area selection of road signs',
             >>>     public_requester_description={
@@ -2196,7 +2237,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned skills limit. The maximum allowed limit is 100.
+            limit: Returned skills limit.
+                The maximum allowed value: 100.
 
         Returns:
            SkillSearchResult: Found skills and a flag showing whether there are more matching skills exceeding the limit.
@@ -2204,7 +2246,8 @@ class TolokaClient:
         Example:
             The example shows how to find ten most recently created skills.
 
-            >>> toloka_client.find_skills(sort=['-created', '-id'], limit=10)
+            >>> find_result = toloka_client.find_skills(sort=['-created', '-id'], limit=10)
+            >>> skills = find_result.items
             ...
         """
         sort = None if sort is None else structure(sort, search_requests.SkillSortItems)
@@ -2213,16 +2256,16 @@ class TolokaClient:
 
     @add_headers('client')
     def get_skill(self, skill_id: str) -> Skill:
-        """Reads one specific skill
+        """Gets skill information from Toloka.
 
         Args:
-            skill_id: ID of the skill.
+            skill_id: The ID of the skill.
 
         Returns:
             Skill: The skill.
 
         Example:
-            >>> toloka_client.get_skill(skill_id='1')
+            >>> skill = toloka_client.get_skill(skill_id='14486')
             ...
         """
         response = self._request('get', f'/v1/skills/{skill_id}')
@@ -2243,7 +2286,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned skills limit for each request. The maximum allowed batch_size is 100.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 100.
 
         Yields:
             Skill: The next matching skill.
@@ -2263,17 +2307,19 @@ class TolokaClient:
 
     @add_headers('client')
     def update_skill(self, skill_id: str, skill: Skill) -> Skill:
-        """Makes changes to the skill
+        """Updates all skill parameters in Toloka.
 
         Args:
-            skill_id: ID of the training that will be changed.
-            skill: A skill object with all the fields: those that will be updated and those that will not.
+            skill_id: The ID of the skill to be updated.
+            skill: The skill with new parameters.
 
         Returns:
-            Skill: Modified skill object with all fields.
+            Skill: The skill with updated parameters.
 
         Example:
-            >>> toloka_client.update_skill(skill_id=old_skill_id, skill=new_skill_object)
+            >>> updated_skill = toloka_client.get_skill(skill_id='14486')
+            >>> updated_skill.hidden = False
+            >>> toloka_client.update_skill(skill_id=updated_skill.id, skill=updated_skill)
             ...
         """
         response = self._request('put', f'/v1/skills/{skill_id}', json=unstructure(skill))
@@ -2299,10 +2345,26 @@ class TolokaClient:
             The example shows how get the percentage of completed tasks in the pool.
 
             >>> from toloka.client.analytics_request import CompletionPercentagePoolAnalytics
+            >>>
             >>> operation = toloka_client.get_analytics([CompletionPercentagePoolAnalytics(subject_id='1080020')])
             >>> operation = toloka_client.wait_operation(operation)
             >>> print(operation.details['value'][0])
             >>> completed_task_percentage = operation.details['value'][0]['result']['value']
+            ...
+
+            The example monitors the percentage of completed tasks in the pool every minute until the pool is closed.
+
+            >>> from toloka.client.analytics_request import CompletionPercentagePoolAnalytics
+            >>>
+            >>> pool = toloka_client.get_pool('1080020')
+            >>> while not pool.is_closed():
+            >>>     op = toloka_client.get_analytics( [CompletionPercentagePoolAnalytics(subject_id=pool.id)] )
+            >>>     op = toloka_client.wait_operation(op)
+            >>>     percentage = op.details['value'][0]['result']['value']
+            >>>     print(f'{percentage}%')
+            >>>     time.sleep(60)
+            >>>     pool = toloka_client.get_pool(pool.id)
+            >>> print('The pool is closed.')
             ...
         """
         response = self._request('post', '/staging/analytics-2', json=unstructure(stats))
@@ -2314,6 +2376,8 @@ class TolokaClient:
     @add_headers('client')
     def create_task(self, task: Task, parameters: Optional[task.CreateTaskParameters] = None) -> Task:
         """Creates a new task in Toloka.
+
+        If `async_mode` is `True` then an asynchronous operation is started internally and `create_task` waits for the completion of it.
 
         You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
 
@@ -2330,7 +2394,7 @@ class TolokaClient:
         Example:
             >>> task = toloka.client.Task(
             >>>     input_values={'image': 'https://tlk.s3.yandex.net/dataset/cats_vs_dogs/dogs/048e5760fc5a46faa434922b2447a527.jpg'},
-            >>>     pool_id='1'
+            >>>     pool_id='1080020'
             >>> )
             >>> toloka_client.create_task(task=task, allow_defaults=True)
             ...
@@ -2353,14 +2417,16 @@ class TolokaClient:
     ) -> batch_create_results.TaskBatchCreateResult:
         """Creates several tasks in Toloka.
 
-        You can add together general and control tasks.
-        Tasks can be added to different pools.
+        You can create general and control tasks together. Tasks can be added to different pools.
         Note that pools must be configured before accepting new tasks. For example, [mixer configuration](toloka.client.pool.mixer_config.MixerConfig.md) must be set.
 
-        You can send a maximum of 100,000 requests of this kind per minute and a maximum of 2,000,000 requests per day.
+        If `async_mode` is `True`, `create_tasks` starts asynchronous operation internally and waits for the completion of it.
+        It is recommended to create no more than 10,000 tasks per request in this mode.
 
-        By default, `create_tasks` starts asynchronous operation internally and waits for the completion of it. Do not
-        change `async_mode` to `False`, if you do not understand clearly why you need it.
+        If `async_mode` is `False`, no more than 5000 tasks can be created in a single request.
+        Do not change `async_mode` to `False`, if you don't understand clearly why you need it.
+
+        You can send no more than 100,000 requests per minute and no more than 2,000,000 requests per day.
 
         Args:
             tasks: A list of tasks to be created.
@@ -2377,9 +2443,10 @@ class TolokaClient:
         Example:
             The first example shows how to create tasks using a TSV file.
 
+            >>> import pandas
             >>> dataset = pandas.read_csv('dataset.tsv', sep=';')
             >>> tasks = [
-            >>>     toloka.client.Task(input_values={'image': url}, pool_id=existing_pool_id)
+            >>>     toloka.client.Task(input_values={'image': url}, pool_id='1080020')
             >>>     for url in dataset['image'].values[:50]
             >>> ]
             >>> result = toloka_client.create_tasks(tasks, allow_defaults=True)
@@ -2388,14 +2455,17 @@ class TolokaClient:
 
             The second example shows how to add control tasks.
 
+            >>> import pandas
             >>> dataset = pandas.read_csv('labeled_dataset.tsv', sep=';')
             >>> golden_tasks = []
             >>> for _, row in dataset.iterrows():
             >>>     golden_tasks.append(
             >>>         toloka.client.Task(
             >>>             input_values={'image': row['image']},
-            >>>             known_solutions = [toloka.client.BaseTask.KnownSolution(output_values={'animal': row['label']})],
-            >>>             pool_id = existing_pool_id,
+            >>>             known_solutions=[
+            >>>                 toloka.client.BaseTask.KnownSolution(output_values={'animal': row['label']})
+            >>>             ],
+            >>>             pool_id='1080020',
             >>>         )
             >>>     )
             >>> result = toloka_client.create_tasks(golden_tasks, allow_defaults=True)
@@ -2430,11 +2500,11 @@ class TolokaClient:
             TasksCreateOperation: An object to track the progress of the operation.
 
         Example:
-            >>> training_tasks = [
-            >>>     toloka.client.Task(input_values={'image': 'https://some.url/img0.png'}, pool_id='1'),
-            >>>     toloka.client.Task(input_values={'image': 'https://some.url/img1.png'}, pool_id='1')
+            >>> tasks = [
+            >>>     toloka.client.Task(input_values={'image': 'https://some.url/img0.png'}, pool_id='1080020'),
+            >>>     toloka.client.Task(input_values={'image': 'https://some.url/img1.png'}, pool_id='1080020')
             >>> ]
-            >>> tasks_op = toloka_client.create_tasks_async(training_tasks)
+            >>> tasks_op = toloka_client.create_tasks_async(tasks)
             >>> toloka_client.wait_operation(tasks_op)
             ...
         """
@@ -2457,7 +2527,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned tasks limit. The default limit is 50. The maximum allowed limit is 100,000.
+            limit: Returned tasks limit.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Returns:
             TaskSearchResult: Found tasks and a flag showing whether there are more matching tasks exceeding the limit.
@@ -2465,7 +2536,8 @@ class TolokaClient:
         Example:
             To find three most recently created tasks in a pool, call the method with the following parameters:
 
-            >>> toloka_client.find_tasks(pool_id='1', sort=['-created', '-id'], limit=3)
+            >>> find_result = toloka_client.find_tasks(pool_id='1086170', sort=['-created', '-id'], limit=3)
+            >>> tasks = find_result.items
             ...
         """
         sort = None if sort is None else structure(sort, search_requests.TaskSortItems)
@@ -2483,7 +2555,8 @@ class TolokaClient:
             Task: The task with the ID specified in the request.
 
         Example:
-            >>> toloka_client.get_task(task_id='1')
+            >>> task = toloka_client.get_task(task_id='00001092da--61ef01d5825234636bb088eb')
+            >>> print(task.input_values)
             ...
         """
         response = self._request('get', f'/v1/tasks/{task_id}')
@@ -2504,7 +2577,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned tasks limit for each request. The default batch_size is 50. The maximum allowed batch_size is 100,000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Yields:
             Task: The next matching task.
@@ -2512,7 +2586,7 @@ class TolokaClient:
         Example:
             Getting all tasks from a single pool.
 
-            >>> results_list = list(toloka_client.get_tasks(pool_id='1'))
+            >>> tasks = list(toloka_client.get_tasks(pool_id='1086170'))
             ...
         """
         generator = self._find_all(self.find_tasks, request, batch_size=batch_size)
@@ -2552,14 +2626,10 @@ class TolokaClient:
         Example:
             Setting an infinite overlap for a training task.
 
-            >>> toloka_client.patch_task_overlap_or_min(task_id='1', infinite_overlap=True)
+            >>> toloka_client.patch_task_overlap_or_min(task_id='00001092da--61ef01d5825234636bb088eb',
+            >>>     overlap=0, infinite_overlap=False
+            >>> )
             ...
-
-            {% note info %}
-
-            You can't set infinite overlap in a regular pool.
-
-            {% endnote %}
         """
         response = self._request('patch', f'/v1/tasks/{task_id}/set-overlap-or-min', json=unstructure(patch))
         return structure(response, Task)
@@ -2590,7 +2660,7 @@ class TolokaClient:
 
         Example:
             >>> new_task_suite = toloka.client.TaskSuite(
-            >>>     pool_id='1',
+            >>>     pool_id='1086170',
             >>>     tasks=[toloka.client.Task(input_values={'label': 'Cats vs Dogs'})],
             >>>     overlap=2
             >>> )
@@ -2615,12 +2685,14 @@ class TolokaClient:
     ) -> batch_create_results.TaskSuiteBatchCreateResult:
         """Creates several task suites in Toloka.
 
-        Usually, you don't need to create a task suite manually, because Toloka can group tasks into suites automatically.
+        Usually, you don't need to create task suites manually, because Toloka can group tasks into suites automatically.
 
         Use this method if you need to group specific tasks together or to set different parameters in different task suites.
-        Task suites can be created in different pools. You can create general and control tasks or task suites in different pools with a single method call.
+        You can create general and control tasks or task suites in different pools with a single method call.
 
-        By default, `create_task_suites` starts asynchronous operation internally and waits for the completion of it. Do not
+        If `async_mode` is `True`, `create_task_suites` starts asynchronous operation internally and waits for the completion of it.
+
+        If `async_mode` is `False`, no more than 5000 tasks can be created in a single request. Don't
         change `async_mode` to `False`, if you do not understand clearly why you need it.
 
         You can send a maximum of 100,000 requests of this kind per minute and 2,000,000 requests per day.
@@ -2641,7 +2713,7 @@ class TolokaClient:
         Example:
             >>> task_suites = [
             >>>     toloka.client.TaskSuite(
-            >>>         pool_id=1,
+            >>>         pool_id='1086170',
             >>>         overlap=1,
             >>>         tasks=[
             >>>             toloka.client.Task(input_values={
@@ -2686,7 +2758,7 @@ class TolokaClient:
         Example:
             >>> task_suites = [
             >>>     toloka.client.TaskSuite(
-            >>>         pool_id='1',
+            >>>         pool_id='1086170',
             >>>         overlap=1,
             >>>         tasks=[
             >>>             toloka.client.Task(input_values={
@@ -2721,7 +2793,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned task suites limit. The default limit is 50. The maximum allowed limit is 100,000.
+            limit: Returned task suites limit.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Returns:
             TaskSuiteSearchResult: Found task suites and a flag showing whether there are more matching task suites exceeding the limit.
@@ -2729,7 +2802,8 @@ class TolokaClient:
         Example:
             Find three most recently created task suites in a specified pool.
 
-            >>> toloka_client.find_task_suites(pool_id='1', sort=['-created', '-id'], limit=3)
+            >>> find_result = toloka_client.find_task_suites(pool_id='1086170', sort=['-created', '-id'], limit=3)
+            >>> task_suites = find_result.items
             ...
         """
         sort = None if sort is None else structure(sort, search_requests.TaskSuiteSortItems)
@@ -2738,16 +2812,17 @@ class TolokaClient:
 
     @add_headers('client')
     def get_task_suite(self, task_suite_id: str) -> TaskSuite:
-        """Reads one task suite.
+        """Gets task suite data from Toloka.
 
         Args:
-            task_suite_id: ID of the task suite.
+            task_suite_id: The ID of the task suite.
 
         Returns:
             TaskSuite: The task suite.
 
         Example:
-            >>> toloka_client.get_task_suite(task_suite_id='1')
+            >>> task_suite = toloka_client.get_task_suite(task_suite_id='00001092da--61ef030400c684132d0da0dc')
+            >>> print(len(task_suite.tasks))
             ...
         """
         response = self._request('get', f'/v1/task-suites/{task_suite_id}')
@@ -2768,15 +2843,14 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned task suites limit for each request. The default batch_size is 50. The maximum allowed batch_size is 100,000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 100,000. The default value: 50.
 
         Yields:
             TaskSuite: The next matching task suite.
 
         Example:
-            Get task suites from a specific pool.
-
-            >>> results_list = list(toloka_client.get_task_suites(pool_id='1'))
+            >>> task_suites = list(toloka_client.get_task_suites(pool_id='1086170'))
             ...
         """
         generator = self._find_all(self.find_task_suites, request, batch_size=batch_size)
@@ -2795,9 +2869,12 @@ class TolokaClient:
             TaskSuite: The task suite with updated fields.
 
         Example:
-            Change the task suite's priority.
+            Changing the task suite's priority.
 
-            >>> toloka_client.patch_task_suite(task_suite_id='1', issuing_order_override=100)
+            >>> toloka_client.patch_task_suite(
+            >>>     task_suite_id='00001092da--61ef030400c684132d0da0dc',
+            >>>     issuing_order_override=100
+            >>> )
             ...
         """
         body = unstructure(patch)
@@ -2808,17 +2885,20 @@ class TolokaClient:
     @expand('patch')
     @add_headers('client')
     def patch_task_suite_overlap_or_min(self, task_suite_id: str, patch: task_suite.TaskSuiteOverlapPatch) -> TaskSuite:
-        """Stops issuing the task suites
+        """Stops assigning a task suite to Tolokers.
 
         Args:
-            task_suite_id: ID of the task suite.
+            task_suite_id: The ID of the task suite.
             patch: New overlap value.
 
         Returns:
             TaskSuite: Task suite with updated fields.
 
         Example:
-            >>> toloka_client.patch_task_suite_overlap_or_min(task_suite_id='1', overlap=100)
+            >>> toloka_client.patch_task_suite_overlap_or_min(
+            >>>     task_suite_id='00001092da--61ef030400c684132d0da0dc',
+            >>>     overlap=0
+            >>> )
             ...
         """
         body = unstructure(patch)
@@ -2830,19 +2910,20 @@ class TolokaClient:
 
     @add_headers('client')
     def get_operation(self, operation_id: str) -> operations.Operation:
-        """Reads information about operation
+        """Gets information about an operation from Toloka.
 
-        All asynchronous actions in Toloka works via operations. If you have some "Operation" usually you need to use
-        "wait_operation" method.
+        Some API requests, for example uploading tasks or opening a pool, are processed as asynchronous operations that run in the background.
+        You can track their progress or wait for them to complete by calling the [wait_operation](toloka.client.TolokaClient.wait_operation.md) method.
 
         Args:
-            operation_id: ID of the operation.
+            operation_id: The ID of the operation.
 
         Returns:
             Operation: The operation.
 
         Example:
-            >>> op = toloka_client.get_operation(operation_id='1')
+            >>> operation = toloka_client.get_operation(operation_id='6d84114f-fcfc-473d-8249-1a4f3ea550eb')
+            >>> print(operation.status, operation.finished)
             ...
         """
         response = self._request('get', f'/v1/operations/{operation_id}')
@@ -2854,36 +2935,36 @@ class TolokaClient:
         op: operations.Operation, timeout: datetime.timedelta = datetime.timedelta(minutes=10),
         disable_progress: bool = False
     ) -> operations.Operation:
-        """Waits for the operation to complete, and return it
+        """Waits for a Toloka operation to complete.
+
+        To get information about the operation, call the [get_operation](toloka.client.TolokaClient.get_operation.md) method.
 
         Args:
-            op: ID of the operation.
-            timeout: How long to wait. Defaults to 10 minutes.
-            disable_progress: Whether disable progress bar or enable. Defaults to `False` (meaning progress bar is shown).
+            op: The ID of the operation.
+            timeout: The wait timeout. Default value: 10 minutes.
+            disable_progress:
+                * `False` — A progress bar is shown.
+                * `True` — A progress bar is hidden.
+
+                Default value: `False`.
 
         Raises:
-            TimeoutError: Raises it if the timeout has expired and the operation is still not completed.
+            TimeoutError: Raised when the timeout has expired and the operation is still in progress.
 
         Returns:
-            Operation: Completed operation.
+            Operation: The completed operation.
 
         Example:
-            Waiting for the pool to close can be running in the background.
+            The example starts aggregation and waits for it.
 
-            >>> pool = toloka_client.get_pool(pool_id)
-            >>> while not pool.is_closed():
-            >>>     op = toloka_client.get_analytics(
-            >>>         [toloka.analytics_request.CompletionPercentagePoolAnalytics(subject_id=pool.id)]
+            >>> aggregation_operation = toloka_client.aggregate_solutions_by_pool(
+            >>>         type=toloka.client.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
+            >>>         pool_id='1086170',
+            >>>         answer_weight_skill_id='11294',
+            >>>         fields=[toloka.client.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
             >>>     )
-            >>>     op = toloka_client.wait_operation(op)
-            >>>     percentage = op.details['value'][0]['result']['value']
-            >>>     print(
-            >>>         f'{datetime.datetime.now().strftime("%H:%M:%S")}'
-            >>>         f'Pool {pool.id} - {percentage}%'
-            >>>     )
-            >>>     time.sleep(60 * minutes_to_wait)
-            >>>     pool = toloka_client.get_pool(pool.id)
-            >>> print('Pool was closed.')
+            >>> aggregation_operation = toloka_client.wait_operation(aggregation_operation)
+            >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
             ...
         """
         default_time_to_wait = datetime.timedelta(seconds=1)
@@ -2928,13 +3009,17 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned operations limit. The default limit is 50. The maximum allowed limit is 500.
+            limit: Returned operations limit.
+                The maximum allowed value: 500. The default value: 50.
 
         Returns:
-            OperationSearchResult: Found operations and a flag showing whether there are more matching task suites exceeding the limit.
+            OperationSearchResult: Found operations and a flag showing whether there are more matching operations exceeding the limit.
 
         Example:
-            >>> toloka_client.find_operations(type='POOL_OPEN', status='SUCCESS', sort=['-finished'], limit=3)
+            >>> find_result = toloka_client.find_operations(
+            >>>     type='POOL.OPEN', status='SUCCESS', sort=['-finished'], limit=3
+            >>> )
+            >>> operations = find_result.items
             ...
         """
         sort = None if sort is None else structure(sort, search_requests.OperationSortItems)
@@ -2948,7 +3033,7 @@ class TolokaClient:
         request: search_requests.OperationSearchRequest,
         batch_size: Optional[int] = None
     ) -> Generator[operations.Operation, None, None]:
-        """Finds all operations that match certain rules and returns them in an iterable object
+        """Finds all operations that match certain criteria.
 
         `get_operations` returns a generator. You can iterate over all found operations using the generator. Several requests to the Toloka server are possible while iterating.
 
@@ -2956,13 +3041,14 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned operations limit for each request. The default batch_size is 50. The maximum allowed batch_size is 500.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 500. The default value: 50.
 
         Yields:
-            Operation: The next matching operations.
+            Operation: The next matching operation.
 
         Example:
-            >>> bonuses = list(toloka_client.get_operations(submitted_lt='2021-06-01T00:00:00'))
+            >>> some_operations = list(toloka_client.get_operations(submitted_lt='2023-06-01T00:00:00'))
             ...
         """
         generator = self._find_all(self.find_operations, request, batch_size=batch_size)
@@ -2985,7 +3071,7 @@ class TolokaClient:
             List[OperationLogItem]: A list with log items.
 
         Example:
-            >>> op = toloka_client.get_operation_log(operation_id='1')
+            >>> operation_log = toloka_client.get_operation_log(operation_id='6d84114f-fcfc-473d-8249-1a4f3ea550eb')
             ...
         """
         response = self._request('get', f'/v1/operations/{operation_id}/log')
@@ -3148,13 +3234,17 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned Tolokers' bonuses limit. The maximum allowed limit is 300.
+            limit: Returned Tolokers' bonuses limit.
+                The maximum allowed value: 300.
 
         Returns:
             UserBonusSearchResult: Found Tolokers' bonuses and a flag showing whether there are more matching bonuses exceeding the limit.
 
         Example:
-            >>> toloka_client.find_user_bonuses(user_id='1', sort=['-created', '-id'], limit=3)
+            >>> find_result = toloka_client.find_user_bonuses(
+            >>>     user_id='fac97860c7929add8048ed2ef63b66fd', sort=['-created', '-id'], limit=3
+            >>> )
+            >>> bonuses = find_result.items
             ...
         """
         sort = None if sort is None else structure(sort, search_requests.UserBonusSortItems)
@@ -3172,7 +3262,8 @@ class TolokaClient:
             UserBonus: The information about the bonus.
 
         Example:
-            >>> toloka_client.get_user_bonus(user_bonus_id='1')
+            >>> bonus = toloka_client.get_user_bonus(user_bonus_id='3295')
+            >>> print(bonus.amount)
             ...
         """
         response = self._request('get', f'/v1/user-bonuses/{user_bonus_id}')
@@ -3193,13 +3284,14 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned Tolokers' bonuses limit for each request. The maximum allowed `batch_size` is 300.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 300.
 
         Yields:
             UserBonus: The next matching Toloker's bonus.
 
         Example:
-            >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2021-06-01T00:00:00'))
+            >>> bonuses = list(toloka_client.get_user_bonuses(created_lt='2023-06-01T00:00:00'))
             ...
         """
         generator = self._find_all(self.find_user_bonuses, request, batch_size=batch_size)
@@ -3221,16 +3313,18 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned Toloker restrictions limit. The maximum allowed limit is 500.
+            limit: Returned Toloker restrictions limit.
+                The maximum allowed value: 500.
 
         Returns:
             UserRestrictionSearchResult: Found Toloker restrictions and a flag showing whether there are more matching restrictions exceeding the limit.
 
         Example:
-            >>> restrictions = toloka_client.find_user_restrictions(sort=['-created', '-id'], limit=10)
+            >>> find_result = toloka_client.find_user_restrictions(sort=['-created', '-id'], limit=10)
+            >>> restrictions = find_result.items
             ...
 
-            If there are restrictions exceeding the `limit`, then `restrictions.has_more` is set to `True`.
+            If there are restrictions exceeding the `limit`, then `find_result.has_more` is set to `True`.
         """
         sort = None if sort is None else structure(sort, search_requests.UserRestrictionSortItems)
         response = self._search_request('get', '/v1/user-restrictions', request, sort, limit)
@@ -3241,13 +3335,14 @@ class TolokaClient:
         """Gets information about a Toloker restriction.
 
         Args:
-            user_restriction_id: ID of the Toloker restriction.
+            user_restriction_id: The ID of the Toloker restriction.
 
         Returns:
             UserRestriction: The Toloker restriction.
 
         Example:
-            >>> toloka_client.get_user_restriction(user_restriction_id='1')
+            >>> restriction = toloka_client.get_user_restriction(user_restriction_id='19124')
+            >>> print(restriction.will_expire)
             ...
         """
         response = self._request('get', f'/v1/user-restrictions/{user_restriction_id}')
@@ -3268,13 +3363,14 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned Toloker restrictions limit for each request. The maximum allowed batch_size is 500.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 500.
 
         Yields:
             UserRestriction: The next matching Toloker restriction.
 
         Example:
-            >>> results_list = list(toloka_client.get_user_restrictions(scope='ALL_PROJECTS'))
+            >>> restrictions = list(toloka_client.get_user_restrictions(scope='ALL_PROJECTS'))
             ...
         """
         generator = self._find_all(self.find_user_restrictions, request, batch_size=batch_size)
@@ -3294,10 +3390,10 @@ class TolokaClient:
             Restricting access to a project.
 
             >>> new_restriction = toloka_client.set_user_restriction(
-            >>>     toloka.user_restriction.ProjectUserRestriction(
-            >>>         user_id='1',
+            >>>     toloka.client.user_restriction.ProjectUserRestriction(
+            >>>         user_id='fac97860c7929add8048ed2ef63b66fd',
             >>>         private_comment='The Toloker often makes mistakes',
-            >>>         project_id='5'
+            >>>         project_id='92694'
             >>>     )
             >>> )
             ...
@@ -3313,7 +3409,7 @@ class TolokaClient:
             user_restriction_id: The ID of the restriction you want to remove.
 
         Example:
-            >>> toloka_client.delete_user_restriction(user_restriction_id='1')
+            >>> toloka_client.delete_user_restriction(user_restriction_id='20974')
             ...
         """
         self._raw_request('delete', f'/v1/user-restrictions/{user_restriction_id}')
@@ -3322,24 +3418,14 @@ class TolokaClient:
 
     @add_headers('client')
     def get_requester(self) -> Requester:
-        """Reads information about the customer and the account balance
+        """Gets information about the requester and the account balance.
 
         Returns:
-            Requester: Object that contains all information about customer.
+            Requester: Information about the requester's account.
 
         Examples:
-            Make sure that you've entered a valid OAuth token.
-
-            >>> toloka_client.get_requester()
-            ...
-
-            You can also estimate approximate pipeline costs and check if there is enough money on your account.
-
             >>> requester = toloka_client.get_requester()
-            >>> if requester.balance >= approx_pipeline_price:
-            >>>     print('You have enough money on your account!')
-            >>> else:
-            >>>     print("You haven't got enough money on your account!")
+            >>> print(requester.public_name, requester.balance)
             ...
         """
         response = self._request('get', '/v1/requester')
@@ -3361,16 +3447,26 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned skills limit. The maximum allowed limit is 1000.
+            limit: Returned skills limit.
+                The maximum allowed value: 1000.
 
         Returns:
             UserSkillSearchResult: Found Toloker's skills and a flag showing whether there are more matching skills exceeding the limit.
 
         Example:
-            >>> skills = toloka_client.find_user_skills(limit=10)
+            Getting a list of skills that a Toloker has.
+
+            >>> find_result = toloka_client.find_user_skills(user_id='fac97860c7929add8048ed2ef63b66fd')
+            >>> skills = find_result.items
             ...
 
-            If there are skills exceeding the `limit`, then `skills.has_more` is set to `True`.
+            Getting a list of Tolokers who have a certain skill.
+
+            >>> find_result = toloka_client.find_user_skills(skill_id='11294')
+            >>> skills = find_result.items
+            ...
+
+            If there are skills exceeding the `limit`, then `find_result.has_more` is set to `True`.
         """
         sort = None if sort is None else structure(sort, search_requests.UserSkillSortItems)
         response = self._search_request('get', '/v1/user-skills', request, sort, limit)
@@ -3378,7 +3474,7 @@ class TolokaClient:
 
     @add_headers('client')
     def get_user_skill(self, user_skill_id: str) -> UserSkill:
-        """Gets the value of a Toloker's skill
+        """Gets the value of a Toloker's skill.
 
         `UserSkill` describes the skill value for a specific Toloker.
 
@@ -3389,7 +3485,8 @@ class TolokaClient:
             UserSkill: The skill value.
 
         Example:
-            >>> toloka_client.get_user_skill(user_skill_id='1')
+            >>> user_skill = toloka_client.get_user_skill(user_skill_id='54118009')
+            >>> print(user_skill.value)
             ...
         """
         response = self._request('get', f'/v1/user-skills/{user_skill_id}')
@@ -3410,13 +3507,14 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned skills limit for each request. The maximum allowed batch_size is 1000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 1000.
 
         Yields:
             UserSkill: The next matching Toloker's skill.
 
         Example:
-            >>> results_list = list(toloka_client.get_user_skills())
+            >>> user_skills = list(toloka_client.get_user_skills(skill_id='11294'))
             ...
         """
         generator = self._find_all(self.find_user_skills, request, batch_size=batch_size)
@@ -3424,13 +3522,18 @@ class TolokaClient:
 
     @add_headers('client')
     def get_user(self, user_id: str) -> User:
-        """Gets Toloker metadata by `user_id`.
+        """Gets information about a Toloker.
 
         Args:
-            user_id: Toloker ID.
+            user_id: The Toloker ID.
 
         Returns:
-            User: Contains Toloker metadata.
+            User: Information about the Toloker.
+
+        Example:
+            >>> toloker_info = toloka_client.get_user(user_id='fac97860c7929add8048ed2ef63b66fd')
+            >>> print(toloker_info.country)
+            ...
         """
 
         response = self._request('get', f'/v1/user-metadata/{user_id}')
@@ -3449,7 +3552,9 @@ class TolokaClient:
 
         Example:
             >>> from decimal import Decimal
-            >>> toloka_client.set_user_skill(skill_id='1', user_id='1', value=Decimal(100))
+            >>> toloka_client.set_user_skill(
+            >>>     skill_id='11294', user_id='fac97860c7929add8048ed2ef63b66fd', value=Decimal(100)
+            >>> )
             ...
         """
         response = self._request('put', '/v1/user-skills', json=unstructure(request))
@@ -3465,7 +3570,7 @@ class TolokaClient:
             user_skill_id: The ID of the Toloker's skill value.
 
         Example:
-            >>> toloka_client.delete_user_skill(user_skill_id='1')
+            >>> toloka_client.delete_user_skill(user_skill_id='54118009')
             ...
         """
         self._raw_request('delete', f'/v1/user-skills/{user_skill_id}')
@@ -3475,10 +3580,13 @@ class TolokaClient:
         self,
         subscriptions: List[WebhookSubscription]
     ) -> batch_create_results.WebhookSubscriptionBatchCreateResult:
-        """Creates (upsert) webhook subscriptions.
+        """Creates subscriptions.
+
+        You can create a subscription and receive notifications about events.
+        For example, when a pool is closed or a task's status changes, Toloka can send you a notification.
 
         Args:
-            subscriptions: A list of webhook subscriptions to be created.
+            subscriptions: A list of subscriptions to be created.
 
         Returns:
             batch_create_results.WebhookSubscriptionBatchCreateResult: The result of the operation.
@@ -3487,21 +3595,20 @@ class TolokaClient:
             ValidationApiError: No subscriptions were created.
 
         Example:
-            How to create several subscriptions.
 
-            >>> created_result = toloka_client.upsert_webhook_subscriptions([
+            >>> result = toloka_client.upsert_webhook_subscriptions([
             >>>     {
             >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
-            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.ASSIGNMENT_CREATED,
+            >>>         'event_type': toloka.client.webhook_subscription.WebhookSubscription.EventType.ASSIGNMENT_CREATED,
             >>>         'pool_id': '121212'
             >>>     },
             >>>     {
             >>>         'webhook_url': 'https://awesome-requester.com/toloka-webhook',
-            >>>         'event_type': toloka.webhook_subscription.WebhookSubscription.EventType.POOL_CLOSED,
-            >>>         'pool_id': '121212',
+            >>>         'event_type': toloka.client.webhook_subscription.WebhookSubscription.EventType.POOL_CLOSED,
+            >>>         'pool_id': '121212'
             >>>     }
             >>> ])
-            >>> print(len(created_result.items))
+            >>> print(len(result.items))
             ...
         """
         response = self._request('put', '/v1/webhook-subscriptions', json=unstructure(subscriptions))
@@ -3509,13 +3616,18 @@ class TolokaClient:
 
     @add_headers('client')
     def get_webhook_subscription(self, webhook_subscription_id: str) -> WebhookSubscription:
-        """Get one specific webhook-subscription
+        """Gets the properties of a subscription from Toloka.
 
         Args:
-            webhook_subscription_id: ID of the subscription.
+            webhook_subscription_id: The ID of the subscription.
 
         Returns:
             WebhookSubscription: The subscription.
+
+        Example:
+            >>> subscription = toloka_client.get_webhook_subscription('62f29db0a451956b21e13ff2')
+            >>> print(subscription.event_type, subscription.webhook_url)
+            ...
         """
         response = self._request('get', f'/v1/webhook-subscriptions/{webhook_subscription_id}')
         return structure(response, WebhookSubscription)
@@ -3534,16 +3646,15 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned webhook subscriptions limit. The maximum allowed limit is 300.
+            limit: Returned webhook subscriptions limit.
+                The maximum allowed value: 300.
 
         Returns:
             WebhookSubscriptionSearchResult: Found webhook subscriptions and a flag showing whether there are more matching webhook subscriptions exceeding the limit.
 
         Example:
-            >>> result = toloka_client.find_webhook_subscriptions(event_type='POOL_CLOSED', pool_id='1080020')
-            >>> if result.items:
-            >>>     subscription = result.items[0]
-            >>>     print(subscription.id, subscription.webhook_url)
+            >>> find_result = toloka_client.find_webhook_subscriptions(pool_id='1080020')
+            >>> subscriptions = find_result.items
             ...
         """
         sort = None if sort is None else structure(sort, search_requests.WebhookSubscriptionSortItems)
@@ -3565,7 +3676,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned webhook subscriptions limit for each request. The maximum allowed batch_size is 300.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 300.
 
         Yields:
             WebhookSubscription: The next matching webhook subscription.
@@ -3580,10 +3692,14 @@ class TolokaClient:
 
     @add_headers('client')
     def delete_webhook_subscription(self, webhook_subscription_id: str) -> None:
-        """Drop specific webhook-subscription
+        """Deletes a subscription.
 
         Args:
-            webhook_subscription_id: ID of the webhook-subscription to delete.
+            webhook_subscription_id: The ID of the subscription.
+
+        Example:
+            >>> subscription = toloka_client.delete_webhook_subscription('62f29db0a451956b21e13ff2')
+            ...
         """
         self._raw_request('delete', f'/v1/webhook-subscriptions/{webhook_subscription_id}')
 
@@ -3658,7 +3774,7 @@ class TolokaClient:
             Searching active projects based on the App solution with the specified ID.
 
             >>> search = toloka_client.find_app_projects(
-            >>>     app_id = '9lZaMl363jahzra1rrYq', status = 'READY')
+            >>>     app_id='9lZaMl363jahzra1rrYq', status='READY')
             >>> for app_project in search.content:
             >>>     print(app_project.id, app_project.name)
             >>>
@@ -3669,7 +3785,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: The order and direction of sorting the results.
-            limit: Returned projects limit. The maximum limit is 5000.
+            limit: Returned projects limit.
+                The maximum allowed value: 5000.
 
         Returns:
             AppProjectSearchResult: Found projects and a flag showing whether there are more matching projects exceeding the limit.
@@ -3703,7 +3820,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned projects limit for each request. The maximum batch_size is 5000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 5000.
 
         Yields:
             AppProject: The next matching App project.
@@ -3720,39 +3838,39 @@ class TolokaClient:
         """Creates an App project in Toloka.
 
         Example:
-            >>> app_project = toloka.AppProject(
-            >>>   app_id='9lZaMl363jahzra1rrYq',
-            >>>   name='Example project (product relevance)',
-            >>>   parameters={
-            >>>     "default_language": "en",
-            >>>     "name": "Product relevance project",
-            >>>     "instruction_classes": [
-            >>>       {
-            >>>         "description": "The product is relevant to the query.",
-            >>>         "label": "Relevant",
-            >>>         "value": "relevant"
-            >>>       },
-            >>>       {
-            >>>         "description": "The product is not completely relevant to the query.",
-            >>>         "label": "Irrelevant",
-            >>>         "value": "irrelevant"
-            >>>       }
-            >>>     ],
-            >>>     "instruction_examples": [
-            >>>       {
-            >>>         "description": "The product exactly matches the query.",
-            >>>         "label": "relevant",
-            >>>         "query": "some search query",
-            >>>         "screenshot_url": "https://example.com/1"
-            >>>       },
-            >>>       {
-            >>>         "description": "The product shape matches but the product color does not.",
-            >>>         "label": "irrelevant",
-            >>>         "query": "other search query",
-            >>>         "screenshot_url": "https://example.com/2"
-            >>>       }
-            >>>     ]
-            >>>   }
+            >>> app_project = toloka.client.AppProject(
+            >>>     app_id='9lZaMl363jahzra1rrYq',
+            >>>     name='Example project (product relevance)',
+            >>>     parameters={
+            >>>         "default_language": "en",
+            >>>         "name": "Product relevance project",
+            >>>         "instruction_classes": [
+            >>>             {
+            >>>                 "description": "The product is relevant to the query.",
+            >>>                 "label": "Relevant",
+            >>>                 "value": "relevant"
+            >>>             },
+            >>>             {
+            >>>                 "description": "The product is not completely relevant to the query.",
+            >>>                 "label": "Irrelevant",
+            >>>                 "value": "irrelevant"
+            >>>             }
+            >>>         ],
+            >>>         "instruction_examples": [
+            >>>             {
+            >>>                 "description": "The product exactly matches the query.",
+            >>>                 "label": "relevant",
+            >>>                 "query": "some search query",
+            >>>                 "screenshot_url": "https://example.com/1"
+            >>>             },
+            >>>             {
+            >>>                 "description": "The product shape matches but the product color does not.",
+            >>>                 "label": "irrelevant",
+            >>>                 "query": "other search query",
+            >>>                 "screenshot_url": "https://example.com/2"
+            >>>             }
+            >>>         ]
+            >>>     }
             >>> )
             >>> app_project = toloka_client.create_app_project(app_project)
             >>> print(app_project.created, app_project.status)
@@ -3864,7 +3982,8 @@ class TolokaClient:
         Args:
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned solutions limit. The maximum allowed limit is 1000.
+            limit: Returned solutions limit.
+                The maximum allowed value: 1000.
 
         Returns:
             AppSearchResult: Found solutions and a flag showing whether there are more matching solutions exceeding the limit.
@@ -3898,7 +4017,8 @@ class TolokaClient:
 
         Args:
             request: Search criteria.
-            batch_size: Returned solutions limit for each request. The maximum allowed batch_size is 1000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 1000.
 
         Yields:
             App: The next matching solution.
@@ -3950,9 +4070,9 @@ class TolokaClient:
         Example:
             Finding items in an App project that were created starting some date.
             >>> search = toloka_client.find_app_items(
-            >>>     app_project_id = 'Q2d15QBjpwWuDz8Z321g',
-            >>>     created_gte = '2022-06-16',
-            >>>     sort = 'created')
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g',
+            >>>     created_gte='2022-06-16',
+            >>>     sort='created')
             >>> for app_item in search.content:
             >>>     print(app_item.id, app_item.created_at)
             >>>
@@ -3964,7 +4084,8 @@ class TolokaClient:
             app_project_id: The ID of the App project.
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned items limit. The maximum allowed limit is 1000.
+            limit: Returned items limit.
+                The maximum allowed value: 1000.
 
         Returns:
             AppItemSearchResult: Found task items and a flag showing whether there are more matching items exceeding the limit.
@@ -3991,7 +4112,7 @@ class TolokaClient:
         If you need to sort items use the [find_app_items](toloka.client.TolokaClient.find_app_items.md) method.
 
         Example:
-            >>> items = toloka_client.get_app_items('Q2d15QBjpwWuDz8Z321g')
+            >>> items = toloka_client.get_app_items(app_project_id='Q2d15QBjpwWuDz8Z321g')
             >>> for item in items:
             >>>     print(item.id, item.status, item.finished_at)
             ...
@@ -3999,7 +4120,8 @@ class TolokaClient:
         Args:
             app_project_id: The ID of the App project.
             request: Search criteria.
-            batch_size: Returned items limit for each request. The maximum allowed batch_size is 1000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 1000.
 
         Yields:
             AppItem: The next matching item.
@@ -4027,7 +4149,9 @@ class TolokaClient:
             >>>         'id':'40', 'query':'toloka kit', 'website_url':'https://toloka.ai/docs/toloka-kit'
             >>>     }
             >>> }
-            >>> new_item = toloka_client.create_app_item(app_project_id = 'Q2d15QBjpwWuDz8Z321g', app_item = new_item)
+            >>> new_item = toloka_client.create_app_item(
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g', app_item=new_item
+            >>> )
             >>> print(new_item.created_at)
             ...
 
@@ -4058,7 +4182,10 @@ class TolokaClient:
             >>>     {'id':'20', 'query':'toloka kit', 'website_url':'https://toloka.ai/docs/toloka-kit'},
             >>>     {'id':'21', 'query':'crowd kit', 'website_url':'https://toloka.ai/docs/crowd-kit'}
             >>> ]
-            >>> toloka_client.create_app_items(app_project_id = 'Q2d15QBjpwWuDz8Z321g', batch_id = '4Va2BBWKL88S4QyAgVje', items = new_items)
+            >>> toloka_client.create_app_items(
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g', batch_id='4Va2BBWKL88S4QyAgVje',
+            >>>     items=new_items
+            >>> )
             ...
 
         Args:
@@ -4077,7 +4204,10 @@ class TolokaClient:
         """Gets information from Toloka about an App task item.
 
         Example:
-            >>> item = toloka_client.get_app_item(app_project_id = 'Q2d15QBjpwWuDz8Z321g', app_item_id = 'V40aPPA2j64TORQyY54Z')
+            >>> item = toloka_client.get_app_item(
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g',
+            >>>     app_item_id='V40aPPA2j64TORQyY54Z'
+            >>> )
             >>> print(item.input_data)
             >>> print(item.output_data)
             ...
@@ -4112,13 +4242,16 @@ class TolokaClient:
             app_project_id: The ID of the App project.
             request: Search criteria.
             sort: Sorting options. Default: `None`.
-            limit: Returned batches limit. The maximum allowed limit is 1000.
+            limit: Returned batches limit.
+                The maximum allowed value: 1000.
 
         Returns:
             AppBatchSearchResult: Found batches and a flag showing whether there are more matching batches exceeding the limit.
 
         Example:
-            >>> result = toloka_client.find_app_batches(app_project_id='Q2d15QBjpwWuDz8Z321g', status='NEW', sort='id')
+            >>> result = toloka_client.find_app_batches(
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g', status='NEW', sort='id'
+            >>> )
             >>> batches = result.content
             >>> if result.has_more:
             >>>     print('There are more NEW batches...')
@@ -4147,7 +4280,9 @@ class TolokaClient:
         If you need to sort batches use the [find_app_batches](toloka.client.TolokaClient.find_app_batches.md) method.
 
         Example:
-            >>> batches = toloka_client.get_app_batches(app_project_id = 'Q2d15QBjpwWuDz8Z321g', status = 'NEW')
+            >>> batches = toloka_client.get_app_batches(
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g', status='NEW'
+            >>> )
             >>> for batch in batches:
             >>>     print(batch.id, batch.status, batch.items_count)
             ...
@@ -4155,7 +4290,8 @@ class TolokaClient:
         Args:
             app_project_id: The ID of the App project.
             request: Search criteria.
-            batch_size: Returned app batches limit for each request. The maximum allowed batch_size is 1000.
+            batch_size: A limit of items returned by each request to Toloka.
+                The maximum allowed value: 1000.
 
         Yields:
             AppBatch: The next matching batch.
@@ -4181,7 +4317,10 @@ class TolokaClient:
             >>>     {'id':'30', 'query':'toloka kit', 'website_url':'https://toloka.ai/docs/toloka-kit'},
             >>>     {'id':'31', 'query':'crowd kit', 'website_url':'https://toloka.ai/docs/crowd-kit'}
             >>> ]
-            >>> toloka_client.create_app_batch(app_project_id = 'Q2d15QBjpwWuDz8Z321g', items = new_items)
+            >>> toloka_client.create_app_batch(
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g',
+            >>>     items=new_items
+            >>> )
             ...
 
         Args:
@@ -4203,7 +4342,10 @@ class TolokaClient:
         """Gets information from Toloka about a batch in an App project.
 
         Example:
-            >>> batch = toloka_client.get_app_batch(app_project_id = 'Q2d15QBjpwWuDz8Z321g', app_batch_id = '4Va2BBWKL88S4QyAgVje')
+            >>> batch = toloka_client.get_app_batch(
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g',
+            >>>     app_batch_id='4Va2BBWKL88S4QyAgVje'
+            >>> )
             >>> print(batch.status, batch.items_count, batch.cost)
             ...
 
@@ -4235,8 +4377,10 @@ class TolokaClient:
             Changing the batch name.
 
             >>> batch = toloka_client.patch_app_batch(
-            >>>     app_project_id = 'Q2d15QBjpwWuDz8Z321g', batch_id = '4Va2BBWKL88S4QyAgVje',
-            >>>     name = 'Preliminary batch')
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g',
+            >>>     batch_id='4Va2BBWKL88S4QyAgVje',
+            >>>     name = 'Preliminary batch'
+            >>> )
             ...
 
         Returns:
@@ -4256,7 +4400,10 @@ class TolokaClient:
         """Launches annotation of a batch of task items in an App project.
 
         Example:
-            >>> toloka_client.start_app_batch(app_project_id = 'Q2d15QBjpwWuDz8Z321g', app_batch_id = '4Va2BBWKL88S4QyAgVje')
+            >>> toloka_client.start_app_batch(
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g',
+            >>>     app_batch_id='4Va2BBWKL88S4QyAgVje'
+            >>> )
             ...
 
         Args:
@@ -4277,7 +4424,10 @@ class TolokaClient:
         Processing can be stopped only for the batch with the `PROCESSING` status.
 
         Example:
-            >>> toloka_client.stop_app_batch(app_project_id = 'Q2d15QBjpwWuDz8Z321g', batch_id = '4Va2BBWKL88S4QyAgVje')
+            >>> toloka_client.stop_app_batch(
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g',
+            >>>     batch_id='4Va2BBWKL88S4QyAgVje'
+            >>> )
             ...
 
         Args:
@@ -4298,7 +4448,10 @@ class TolokaClient:
         Processing can be resumed only for the batch with the `STOPPING` or `STOPPED` status.
 
         Example:
-            >>> toloka_client.resume_app_batch(app_project_id = 'Q2d15QBjpwWuDz8Z321g', batch_id = '4Va2BBWKL88S4QyAgVje')
+            >>> toloka_client.resume_app_batch(
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g',
+            >>>     batch_id='4Va2BBWKL88S4QyAgVje'
+            >>> )
             ...
 
         Args:

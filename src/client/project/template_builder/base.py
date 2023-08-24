@@ -198,7 +198,6 @@ class RefComponent(BaseTemplate):
 
     Example:
         >>> from toloka.client.project.template_builder import *
-        >>> from toloka.client.project.template_builder.base import RefComponent
         >>>
         >>> tb_config = TemplateBuilder(
         >>>     vars = {
