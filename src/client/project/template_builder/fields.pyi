@@ -183,6 +183,7 @@ class ButtonRadioGroupFieldV1(BaseFieldV1):
         validation: Validation rules.
 
     Examples:
+        >>> import toloka.client.project.template_builder as tb
         >>> classification_buttons = tb.fields.ButtonRadioGroupFieldV1(
         >>>     data=tb.data.OutputData(path='class'),
         >>>     options=[
@@ -610,6 +611,7 @@ class MediaFileFieldV1(BaseFieldV1):
     Examples:
         A component for uploading an image or taking a photo.
 
+        >>> import toloka.client.project.template_builder as tb
         >>> image_loader = tb.fields.MediaFileFieldV1(
         >>>     label='Upload a photo',
         >>>     data=tb.data.OutputData(path='image'),
@@ -769,6 +771,7 @@ class RadioGroupFieldV1(BaseFieldV1):
         validation: Validation rules.
 
     Examples:
+        >>> import toloka.client.project.template_builder as tb
         >>> radio_group_field = tb.fields.RadioGroupFieldV1(
         >>>     data=tb.data.OutputData(path='result'),
         >>>     options=[

@@ -21,13 +21,14 @@ class Parameters(toloka.client.primitives.base.BaseTolokaObject):
 class IdempotentOperationParameters(Parameters):
     """Parameters for idempotent operations such as tasks, task suites and user bonuses creation.
 
-    Works only with async_mode = True
+    Works only with `async_mode = True`.
 
     Attributes:
-        operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
+        operation_id: The UUID of the operation that conforms to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
+            The UUID is used if `async_mode` is `True`.
 
-            We recommended sending the operation ID in the `POST` requests to avoid accidental errors:
-            when you send several requests with the same `operation_id`, the operation will be performed only once.
+            Specify UUID to avoid accidental errors like Toloka operation duplication caused by network problems.
+            If you send several requests with the same `operation_id`, Toloka performs the operation only once.
         async_mode: Request processing mode:
             * `True` — Asynchronous operation is started internally.
             * `False` — The request is processed synchronously.

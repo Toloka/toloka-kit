@@ -577,6 +577,7 @@ class LinkGroupViewV1(BaseViewV1):
         validation: Validation rules.
 
     Examples:
+        >>> import toloka.client.project.template_builder as tb
         >>> links = tb.view.LinkGroupViewV1(
         >>>     [
         >>>         tb.view.LinkGroupViewV1.Link(
@@ -700,6 +701,7 @@ class MarkdownViewV1(BaseViewV1):
         Example:
             Adding a title and description using Markdown.
 
+            >>> import toloka.client.project.template_builder as tb
             >>> header = tb.view.MarkdownViewV1('# Some Header:
     ---
     Some detailed description')
@@ -742,6 +744,7 @@ class TextViewV1(BaseViewV1):
     `.
 
         Example:
+            >>> import toloka.client.project.template_builder as tb
             >>> text_view = tb.view.TextViewV1(tb.data.InputData('input_field_name'), label='My label:')
             ...
 

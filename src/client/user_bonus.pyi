@@ -44,7 +44,7 @@ class UserBonus(toloka.client.primitives.base.BaseTolokaObject):
         >>>             'RU': 'Молодец!',
         >>>         },
         >>>         public_message={
-        >>>             'EN': 'Ten tasks completed',
+        >>>             'EN': 'Ten tasks were completed',
         >>>             'RU': 'Выполнено 10 заданий',
         >>>         },
         >>>         assignment_id='000015fccc--63bfc4c358d7a46c32a7b233'
@@ -88,9 +88,11 @@ class UserBonusCreateRequestParameters(toloka.client.primitives.parameter.Idempo
     The [create_user_bonus](toloka.client.TolokaClient.create_user_bonus.md) method uses these parameters.
 
     Attributes:
-        operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
-            We recommended sending the operation ID in the `POST` requests to avoid accidental errors:
-            when you send several requests with the same `operation_id`, the operation will be performed only once.
+        operation_id: The UUID of the operation that conforms to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
+            The UUID is used if `async_mode` is `True`.
+
+            Specify UUID to avoid accidental errors like Toloka operation duplication caused by network problems.
+            If you send several requests with the same `operation_id`, Toloka performs the operation only once.
         async_mode: Request processing mode:
             * `True` — Asynchronous operation is started internally.
             * `False` — The request is processed synchronously.
@@ -119,9 +121,11 @@ class UserBonusesCreateRequestParameters(UserBonusCreateRequestParameters):
     The [create_user_bonuses](toloka.client.TolokaClient.create_user_bonuses.md) and [create_user_bonuses_async](toloka.client.TolokaClient.create_user_bonuses_async.md) methods use these parameters.
 
     Attributes:
-        operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
-            We recommended sending the operation ID in the `POST` requests to avoid accidental errors:
-            when you send several requests with the same `operation_id`, the operation will be performed only once.
+        operation_id: The UUID of the operation that conforms to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
+            The UUID is used if `async_mode` is `True`.
+
+            Specify UUID to avoid accidental errors like Toloka operation duplication caused by network problems.
+            If you send several requests with the same `operation_id`, Toloka performs the operation only once.
         async_mode: Request processing mode:
             * `True` — Asynchronous operation is started internally.
             * `False` — The request is processed synchronously.
