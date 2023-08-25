@@ -238,7 +238,6 @@ class SetActionV1(BaseActionV1):
         The [RefComponent](toloka.client.project.template_builder.base.RefComponent.md) is used to reference the output data field.
 
         >>> from toloka.client.project.template_builder import *
-        >>> from toloka.client.project.template_builder.base import RefComponent
         >>>
         >>> tb_config = TemplateBuilder(
         >>>     vars={'0': OutputData('result')},

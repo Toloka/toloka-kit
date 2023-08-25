@@ -143,6 +143,7 @@ class HotkeysPluginV1(BasePluginV1):
     Example:
         Creating hotkeys for classification buttons.
 
+        >>> import toloka.client.project.template_builder as tb
         >>> hot_keys_plugin = tb.HotkeysPluginV1(
         >>>     key_1=tb.SetActionV1(tb.OutputData('result'), 'cat'),
         >>>     key_2=tb.SetActionV1(tb.OutputData('result'), 'dog'),
@@ -254,6 +255,7 @@ class TriggerPluginV1(BasePluginV1):
     Example:
         How to save Toloker's coordinates.
 
+        >>> import toloka.client.project.template_builder as tb
         >>> coordinates_save_plugin = tb.plugins.TriggerPluginV1(
         >>>     fire_immediately=True,
         >>>     action=tb.actions.SetActionV1(
@@ -297,6 +299,7 @@ class TolokaPluginV1(BasePluginV1):
     Example:
         Setting the width of the task block on a page.
 
+        >>> import toloka.client.project.template_builder as tb
         >>> task_width_plugin = tb.plugins.TolokaPluginV1(
         >>>     kind='scroll',
         >>>     task_width=400,

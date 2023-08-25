@@ -319,7 +319,7 @@ class SetSkill(RuleAction):
         >>> new_pool.quality_control.add_action(
         >>>     collector=toloka.client.collectors.AnswerCount(),
         >>>     conditions=[toloka.client.conditions.AssignmentsAcceptedCount > 0],
-        >>>     action=toloka.client.actions.SetSkill(skill_id=some_skill_id, skill_value=1),
+        >>>     action=toloka.client.actions.SetSkill(skill_id='11294', skill_value=1),
         >>> )
         ...
     """

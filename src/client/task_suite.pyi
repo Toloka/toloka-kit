@@ -103,12 +103,14 @@ class TaskSuite(toloka.client.primitives.infinite_overlap.InfiniteOverlapParamet
 
 
 class TaskSuiteCreateRequestParameters(toloka.client.primitives.parameter.IdempotentOperationParameters):
-    """Parameters for creating task suite.
+    """Parameters for creating a task suite.
 
     Attributes:
-        operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
-            We recommended sending the operation ID in the `POST` requests to avoid accidental errors:
-            when you send several requests with the same `operation_id`, the operation will be performed only once.
+        operation_id: The UUID of the operation that conforms to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
+            The UUID is used if `async_mode` is `True`.
+
+            Specify UUID to avoid accidental errors like Toloka operation duplication caused by network problems.
+            If you send several requests with the same `operation_id`, Toloka performs the operation only once.
         async_mode: Request processing mode:
             * `True` — Asynchronous operation is started internally.
             * `False` — The request is processed synchronously.
@@ -145,12 +147,14 @@ class TaskSuitesCreateRequestParameters(TaskSuiteCreateRequestParameters):
     """Parameters for creating task suites.
 
     Attributes:
-        operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
-            We recommended sending the operation ID in the `POST` requests to avoid accidental errors:
-            when you send several requests with the same `operation_id`, the operation will be performed only once.
+        operation_id: The UUID of the operation that conforms to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
+            The UUID is used if `async_mode` is `True`.
+
+            Specify UUID to avoid accidental errors like Toloka operation duplication caused by network problems.
+            If you send several requests with the same `operation_id`, Toloka performs the operation only once.
         async_mode: Request processing mode:
             * `True` — Asynchronous operation is started internally.
-            * `False` — The request is processed synchronously. A maximum of 5000 task suites can be added in a single request in this mode.
+            * `False` — The request is processed synchronously.
 
             Default value: `True`.
         allow_defaults: Active overlap setting:
@@ -160,8 +164,8 @@ class TaskSuitesCreateRequestParameters(TaskSuiteCreateRequestParameters):
             Default value: `False`.
         open_pool: Open the pool immediately after creating a task suite, if the pool is closed.
         skip_invalid_items: Task suite validation option:
-            * `True` — All valid task suites are added. If a task suite does not pass validation, then it is not added to Toloka.
-            * `False` — If any task suite does not pass validation, then operation is cancelled and no task suites are added to Toloka.
+            * `True` — All valid task suites are added. If a task suite doesn't pass validation, then it is not added to Toloka.
+            * `False` — If any task suite doesn't pass validation, then operation is cancelled and no task suites are added to Toloka.
 
             Default value: `False`.
     """
