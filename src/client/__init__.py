@@ -4171,7 +4171,7 @@ class TolokaClient:
 
     @expand('request')
     @add_headers('client')
-    def create_app_items(self, app_project_id: str, request: AppItemsCreateRequest):
+    def create_app_items(self, app_project_id: str, request: AppItemsCreateRequest) -> List[str]:
         """Creates task items in an App project in Toloka and adds them to an existing batch.
 
         Example:
@@ -4191,13 +4191,15 @@ class TolokaClient:
         Args:
             app_project_id: The ID of the App project.
             request: The request parameters.
+        Returns:
+            List[str]: The IDs of created app items.
         """
 
         if self.url != self.Environment.PRODUCTION.value:
             raise RuntimeError('this method supports only production environment')
 
-        self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/items/bulk', json=unstructure(request))
-        return
+        response = self._request('post', f'/app/v0/app-projects/{app_project_id}/items/bulk', json=unstructure(request))
+        return structure(response, List[str])
 
     @add_headers('client')
     def get_app_item(self, app_project_id: str, app_item_id: str) -> AppItem:
