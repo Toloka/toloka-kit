@@ -41,16 +41,16 @@ class PoolAggregatedSolutionRequest(BaseTolokaObject):
         fields: Output data fields to aggregate. For the best results, each of these fields should have limited number of response options.
             If the `DAWID_SKENE` aggregation type is selected, you can only specify one value.
 
-        Example:
-            >>> aggregation_operation = toloka_client.aggregate_solutions_by_pool(
-            >>>     type=toloka.client.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
-            >>>     pool_id='1080020',
-            >>>     answer_weight_skill_id='11294',
-            >>>     fields=[toloka.client.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
-            >>> )
-            >>> aggregation_operation = toloka_client.wait_operation(aggregation_operation)
-            >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
-            ...
+    Example:
+        >>> aggregation_operation = toloka_client.aggregate_solutions_by_pool(
+        >>>     type=toloka.client.aggregation.AggregatedSolutionType.WEIGHTED_DYNAMIC_OVERLAP,
+        >>>     pool_id='1080020',
+        >>>     answer_weight_skill_id='11294',
+        >>>     fields=[toloka.client.aggregation.PoolAggregatedSolutionRequest.Field(name='result')]
+        >>> )
+        >>> aggregation_operation = toloka_client.wait_operation(aggregation_operation)
+        >>> aggregation_results = list(toloka_client.get_aggregated_solutions(aggregation_operation.id))
+        ...
     """
 
     class Field(BaseTolokaObject):
