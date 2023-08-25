@@ -1,3 +1,13 @@
+1.2.1
+-------------------
+Python versions support:
+* Python 3.7 support dropped
+
+Changes:
+* Updated `TolokaClient.create_app_items` and `AsyncTolokaClient.create_app_items` to return the list of created app 
+items ids.
+* Added `tier` parameter to `TolokaClient.create_pool` and `AsyncTolokaClient.create_pool` methods.
+
 1.2.0.post1
 -------------------
 Bugfixes:
