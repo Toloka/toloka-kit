@@ -110,6 +110,7 @@ class IfHelperV1(BaseHelperV1):
     Example:
         How to conditionally show a part of the interface.
 
+        >>> import toloka.client.project.template_builder as tb
         >>> hidden_ui = tb.helpers.IfHelperV1(
         >>>     condition=tb.conditions.EqualsConditionV1(tb.data.OutputData('show_me'), 'show'),
         >>>     then=tb.view.ListViewV1([header, buttons, images]),

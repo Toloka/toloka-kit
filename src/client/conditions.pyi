@@ -196,11 +196,11 @@ class AssessmentEvent(IdentityRuleCondition):
     Example:
         The example shows how to automatically increase the overlap of a task suite when an assignment was rejected.
 
-        >>> new_pool = toloka.pool.Pool(....)
+        >>> new_pool = toloka.client.pool.Pool()
         >>> new_pool.quality_control.add_action(
-        >>>     collector=toloka.collectors.AssignmentsAssessment(),
-        >>>     conditions=[toloka.conditions.AssessmentEvent == toloka.conditions.AssessmentEvent.REJECT],
-        >>>     action=toloka.actions.ChangeOverlap(delta=1, open_pool=True),
+        >>>     collector=toloka.client.collectors.AssignmentsAssessment(),
+        >>>     conditions=[toloka.client.conditions.AssessmentEvent == toloka.client.conditions.AssessmentEvent.REJECT],
+        >>>     action=toloka.client.actions.ChangeOverlap(delta=1, open_pool=True),
         >>> )
         ...
     """

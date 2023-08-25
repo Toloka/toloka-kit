@@ -61,6 +61,7 @@ class AllConditionV1(BaseConditionV1):
         hint: A hint that is shown if the condition is not met.
 
     Examples:
+        >>> import toloka.client.project.template_builder as tb
         >>> coordinates_validation = tb.conditions.AllConditionV1(
         >>>     [
         >>>         tb.conditions.RequiredConditionV1(
@@ -137,12 +138,13 @@ class DistanceConditionV1(BaseConditionV1):
         The following condition gets Toloker's [location](toloka.client.project.template_builder.data.LocationData.md)
         and checks that it is near the task location.
 
+        >>> import toloka.client.project.template_builder as tb
         >>> distance_condition = tb.conditions.DistanceConditionV1(
         >>>     tb.data.LocationData(),
         >>>     tb.data.InputData('coordinates'),
         >>>     500,
         >>>     hint='You are too far from the destination coordinates.',
-        >>> ),
+        >>> )
         ...
     """
 
@@ -338,6 +340,7 @@ class RequiredConditionV1(BaseConditionV1):
     Examples:
         How to check that image is uploaded.
 
+        >>> import toloka.client.project.template_builder as tb
         >>> image = tb.fields.MediaFileFieldV1(
         >>>     tb.data.OutputData('image'),
         >>>     tb.fields.MediaFileFieldV1.Accept(photo=True, gallery=True),

@@ -100,7 +100,7 @@ class Task(toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMi
 
         >>> task = toloka.client.Task(
         >>>     input_values={'image': 'https://some.url/img0.png'},
-        >>>     pool_id='1'
+        >>>     pool_id='1086170'
         >>> )
         ...
 
@@ -171,16 +171,15 @@ class Task(toloka.client.primitives.infinite_overlap.InfiniteOverlapParametersMi
 class CreateTaskParameters(toloka.client.primitives.parameter.IdempotentOperationParameters):
     """Parameters used with the [create_task](toloka.client.TolokaClient.create_task.md) method.
 
-    If the operation is started in an asynchronous mode,
-    we recommend that you send the `operation_id` to avoid creating the same tasks multiple times. You can use this ID later to get information about the operation.
-
     Attributes:
-        operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
-            We recommended sending the operation ID in the `POST` requests to avoid accidental errors:
-            when you send several requests with the same `operation_id`, the operation will be performed only once.
+        operation_id: The UUID of the operation that conforms to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
+            The UUID is used if `async_mode` is `True`.
+
+            Specify UUID to avoid accidental errors like Toloka operation duplication caused by network problems.
+            If you send several requests with the same `operation_id`, Toloka performs the operation only once.
         async_mode: Request processing mode:
-            * `True` — Asynchronous operation is started internally and `create_tasks` waits for the completion of it. It is recommended to create no more than 10,000 tasks per request in this mode.
-            * `False` — The request is processed synchronously. A maximum of 5000 tasks can be added in a single request in this mode.
+            * `True` — Asynchronous operation is started internally.
+            * `False` — The request is processed synchronously.
 
             Default value: `True`.
         allow_defaults: Active overlap setting:
@@ -216,16 +215,15 @@ class CreateTasksParameters(CreateTaskParameters):
 
     and [create_tasks_async](toloka.client.TolokaClient.create_tasks_async.md) methods.
 
-    If the operation is started in an asynchronous mode,
-    we recommend that you send the `operation_id` to avoid creating the same tasks multiple times. You can use this ID later to get information about the operation.
-
     Attributes:
-        operation_id: The ID of the operation conforming to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
-            We recommended sending the operation ID in the `POST` requests to avoid accidental errors:
-            when you send several requests with the same `operation_id`, the operation will be performed only once.
+        operation_id: The UUID of the operation that conforms to the [RFC4122 standard](https://tools.ietf.org/html/rfc4122).
+            The UUID is used if `async_mode` is `True`.
+
+            Specify UUID to avoid accidental errors like Toloka operation duplication caused by network problems.
+            If you send several requests with the same `operation_id`, Toloka performs the operation only once.
         async_mode: Request processing mode:
-            * `True` — Asynchronous operation is started internally and `create_tasks` waits for the completion of it. It is recommended to create no more than 10,000 tasks per request in this mode.
-            * `False` — The request is processed synchronously. A maximum of 5000 tasks can be added in a single request in this mode.
+            * `True` — Asynchronous operation is started internally.
+            * `False` — The request is processed synchronously.
 
             Default value: `True`.
         allow_defaults: Active overlap setting:

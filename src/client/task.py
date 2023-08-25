@@ -74,7 +74,7 @@ class Task(InfiniteOverlapParametersMixin, BaseTask):
 
         >>> task = toloka.client.Task(
         >>>     input_values={'image': 'https://some.url/img0.png'},
-        >>>     pool_id='1'
+        >>>     pool_id='1086170'
         >>> )
         ...
 

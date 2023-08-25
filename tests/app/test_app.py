@@ -468,7 +468,7 @@ def test_create_app_item(respx_mock, toloka_client_prod, toloka_app_url, app_ite
 
 
 def test_create_app_items(respx_mock, toloka_client_prod, toloka_app_url, app_item_map, app_item_map_with_readonly):
-
+    expected_app_item_ids = ['created-app-item-id']
     app_items_create_request = {
         'batch_id': app_item_map['batch_id'],
         'items': [app_item_map['input_data']]
@@ -483,11 +483,12 @@ def test_create_app_items(respx_mock, toloka_client_prod, toloka_app_url, app_it
         check_headers(request, expected_headers)
 
         assert app_items_create_request == simplejson.loads(request.content)
-        return httpx.Response(status_code=201)
+        return httpx.Response(status_code=201, json=expected_app_item_ids)
 
     respx_mock.post(f'{toloka_app_url}/app-projects/123/items/bulk').mock(side_effect=app_items)
     app_item = client.structure(app_items_create_request, client.app.AppItemsCreateRequest)
-    toloka_client_prod.create_app_items('123', app_item)
+    app_item_ids = toloka_client_prod.create_app_items('123', app_item)
+    assert app_item_ids == app_item_ids
 
 
 def test_find_app_batches(respx_mock, toloka_client_prod, toloka_app_url, app_batch_map):

@@ -129,7 +129,7 @@ class SearchRequestMetaclass(toloka.client.primitives.base.BaseTolokaObjectMetac
 
 
 class BaseSearchRequest(toloka.client.primitives.base.BaseTolokaObject, metaclass=SearchRequestMetaclass):
-    """Base class for all search request classes
+    """A base class for all search request classes.
     """
 
     class CompareFields:
@@ -699,10 +699,10 @@ class AssignmentSortItems(BaseSortItems):
             * `'expired'` — The expiration date of a task suite.
 
     Example:
-        The example shows how to find assignments sorted by the completion date in descending order. Assignments with equal completion dates are sorted by IDs in ascending order.
+        The example shows how to find assignments sorted by the completion date in descending order. Assignments with equal completion dates are sorted by IDs in descending order.
 
-        >>> sort = toloka.client.search_requests.AssignmentSortItems(['-submitted', 'id'])
-        >>> result = toloka_client.find_assignments(status='SUBMITTED', sort=sort, limit=10)
+        >>> sort = toloka.client.search_requests.AssignmentSortItems(['-submitted', '-id'])
+        >>> result = toloka_client.find_assignments(pool_id='1080020', status='SUBMITTED', sort=sort, limit=10)
         ...
     """
 
@@ -881,10 +881,10 @@ class TaskSortItems(BaseSortItems):
             * `'created'` — The creation date of a task.
 
     Example:
-        The example shows how to find tasks sorted by creation dates in descending order. Tasks with equal creation dates are sorted by IDs in ascending order.
+        The example shows how to find tasks sorted by creation dates in descending order. Tasks with equal creation dates are sorted by IDs in descending order.
 
-        >>> sort = toloka.client.search_requests.TaskSortItems(['-created', 'id'])
-        >>> result = toloka_client.find_tasks(pool_id=my_pool_id, sort=sort, limit=10)
+        >>> sort = toloka.client.search_requests.TaskSortItems(['-created', '-id'])
+        >>> result = toloka_client.find_tasks(pool_id='1086170', sort=sort, limit=10)
         ...
     """
 
@@ -993,10 +993,10 @@ class TaskSuiteSortItems(BaseSortItems):
             * `'created'` — The creation date of a task suite.
 
     Example:
-        The example shows how to find task suites sorted by the creation date in descending order. Task suites with equal creation dates are sorted by IDs in ascending order.
+        The example shows how to find task suites sorted by the creation date in descending order. Task suites with equal creation dates are sorted by IDs in descending order.
 
-        >>> sort = toloka.client.search_requests.TaskSuiteSortItems(['-created', 'id'])
-        >>> result = toloka_client.find_task_suites(pool_id=my_pool_id, sort=sort, limit=10)
+        >>> sort = toloka.client.search_requests.TaskSuiteSortItems(['-created', '-id'])
+        >>> result = toloka_client.find_task_suites(pool_id='1086170', sort=sort, limit=10)
         ...
     """
 
@@ -1103,10 +1103,10 @@ class AttachmentSortItems(BaseSortItems):
             * `'created'` — The date of uploading an attachment.
 
     Example:
-        The example shows how to find attachments sorted by uploading date in descending order. Attachments with equal uploading dates are sorted by IDs in ascending order.
+        The example shows how to find attachments sorted by uploading date in descending order. Attachments with equal uploading dates are sorted by IDs in descending order.
 
-        >>> sort = toloka.client.search_requests.AttachmentSortItems(['-created', 'id'])
-        >>> result = toloka_client.find_attachments(pool_id=my_pool_id, sort=sort, limit=10)
+        >>> sort = toloka.client.search_requests.AttachmentSortItems(['-created', '-id'])
+        >>> result = toloka_client.find_attachments(pool_id='1086170', sort=sort, limit=10)
         ...
     """
 
@@ -1216,7 +1216,7 @@ class UserSkillSortItems(BaseSortItems):
         The example shows how to find Tolokers' skills sorted by creation date in descending order. Skills with equal creation dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.UserSkillSortItems(['-created', 'id'])
-        >>> result = toloka_client.find_user_skills(skill_id=my_useful_skill_id, sort=sort, limit=10)
+        >>> result = toloka_client.find_user_skills(skill_id='11294', sort=sort, limit=10)
         ...
     """
 
@@ -1321,7 +1321,7 @@ class UserRestrictionSortItems(BaseSortItems):
         The example shows how to find Toloker restrictions sorted by creation date in descending order. Restrictions with equal creation dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.UserRestrictionSortItems(['-created', 'id'])
-        >>> result = toloka_client.find_user_restrictions(pool_id=my_pretty_pool_id, sort=sort, limit=10)
+        >>> result = toloka_client.find_user_restrictions(pool_id='1086170', sort=sort, limit=10)
         ...
     """
 
@@ -1420,7 +1420,7 @@ class UserBonusSortItems(BaseSortItems):
         The example shows how to find bonuses sorted by granting date in descending order. Bonuses with equal granting dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.UserBonusSortItems(['-created', 'id'])
-        >>> result = toloka_client.find_user_bonuses(user_id=best_toloker_id, sort=sort, limit=10)
+        >>> result = toloka_client.find_user_bonuses(user_id='fac97860c7929add8048ed2ef63b66fd', sort=sort, limit=10)
         ...
     """
 
@@ -1610,7 +1610,7 @@ class WebhookSubscriptionSortItems(BaseSortItems):
         The example shows how to find event subscriptions sorted by creation date in descending order. Subscriptions with equal creation dates are sorted by IDs in ascending order.
 
         >>> sort = toloka.client.search_requests.WebhookSubscriptionSortItems(['-created', 'id'])
-        >>> result = toloka_client.find_webhook_subscriptions(event_type=some_event_type, pool_id=my_pretty_pool_id, sort=sort, limit=10)
+        >>> result = toloka_client.find_webhook_subscriptions(event_type='ASSIGNMENT_CREATED', pool_id='1086170', sort=sort, limit=10)
         ...
     """
 
@@ -1721,8 +1721,8 @@ class OperationSortItems(BaseSortItems):
     Example:
         The example shows how to find operations sorted by finish date in descending order. Operations with equal finish dates are sorted by IDs in ascending order.
 
-        >>> sort = toloka.client.search_requests.OperationsSearchRequest(['-finished', 'id'])
-        >>> result = toloka_client.find_operations(type='POOL_OPEN', status='SUCCESS', sort=sort, limit=10)
+        >>> sort = toloka.client.search_requests.OperationSortItems(['-finished', 'id'])
+        >>> result = toloka_client.find_operations(type='POOL.OPEN', status='SUCCESS', sort=sort, limit=10)
         ...
     """
 
