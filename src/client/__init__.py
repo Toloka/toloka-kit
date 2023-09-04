@@ -3791,10 +3791,6 @@ class TolokaClient:
         Returns:
             AppProjectSearchResult: Found projects and a flag showing whether there are more matching projects exceeding the limit.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         sort = None if sort is None else structure(sort, search_requests.AppProjectSortItems)
         response = self._search_request('get', '/app/v0/app-projects', request, sort, limit)
         return structure(response, search_results.AppProjectSearchResult)
@@ -3826,10 +3822,6 @@ class TolokaClient:
         Yields:
             AppProject: The next matching App project.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         generator = self._find_all(self.find_app_projects, request, items_field='content', batch_size=batch_size)
         yield from generator
 
@@ -3882,10 +3874,6 @@ class TolokaClient:
         Returns:
             AppProject: Created App project with updated parameters.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         response = self._request('post', '/app/v0/app-projects', json=unstructure(app_project))
         return structure(response, AppProject)
 
@@ -3904,10 +3892,6 @@ class TolokaClient:
         Returns:
             AppProject: The App project.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         response = self._request('get', f'/app/v0/app-projects/{app_project_id}')
         return structure(response, AppProject)
 
@@ -3927,10 +3911,6 @@ class TolokaClient:
         Returns:
             AppProject: The App project with updated status.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/archive')
         return self.get_app_project(app_project_id)
 
@@ -3950,10 +3930,6 @@ class TolokaClient:
         Returns:
             AppProject: The App project with updated status.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/unarchive')
         return self.get_app_project(app_project_id)
 
@@ -3988,10 +3964,6 @@ class TolokaClient:
         Returns:
             AppSearchResult: Found solutions and a flag showing whether there are more matching solutions exceeding the limit.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         sort = None if sort is None else structure(sort, search_requests.AppSortItems)
         response = self._search_request('get', '/app/v0/apps', request, sort, limit)
         return structure(response, search_results.AppSearchResult)
@@ -4023,10 +3995,6 @@ class TolokaClient:
         Yields:
             App: The next matching solution.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         generator = self._find_all(self.find_apps, request, items_field='content', batch_size=batch_size)
         yield from generator
 
@@ -4047,10 +4015,6 @@ class TolokaClient:
         Returns:
             App: The App solution.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         response = self._request('get', f'/app/v0/apps/{app_id}', params={'lang': lang})
         return structure(response, App)
 
@@ -4090,10 +4054,6 @@ class TolokaClient:
         Returns:
             AppItemSearchResult: Found task items and a flag showing whether there are more matching items exceeding the limit.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         sort = None if sort is None else structure(sort, search_requests.AppItemSortItems)
         response = self._search_request('get', f'/app/v0/app-projects/{app_project_id}/items', request, sort, limit)
         return structure(response, search_results.AppItemSearchResult)
@@ -4126,10 +4086,6 @@ class TolokaClient:
         Yields:
             AppItem: The next matching item.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         find_function = functools.partial(self.find_app_items, app_project_id)
         generator = self._find_all(find_function, request, items_field='content', batch_size=batch_size)
         yield from generator
@@ -4162,10 +4118,6 @@ class TolokaClient:
         Returns:
             AppItem: Created App task item with updated parameters.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         response = self._request('post', f'/app/v0/app-projects/{app_project_id}/items', json=unstructure(app_item))
         return structure(response, AppItem)
 
@@ -4194,10 +4146,6 @@ class TolokaClient:
         Returns:
             List[str]: The IDs of created app items.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         response = self._request('post', f'/app/v0/app-projects/{app_project_id}/items/bulk', json=unstructure(request))
         return structure(response, List[str])
 
@@ -4221,10 +4169,6 @@ class TolokaClient:
         Returns:
             AppItem: The App task item.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         response = self._request('get', f'/app/v0/app-projects/{app_project_id}/items/{app_item_id}')
         return structure(response, AppItem)
 
@@ -4259,10 +4203,6 @@ class TolokaClient:
             >>>     print('There are more NEW batches...')
             ...
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         sort = None if sort is None else structure(sort, search_requests.AppBatchSortItems)
         response = self._search_request('get', f'/app/v0/app-projects/{app_project_id}/batches', request, sort, limit)
         return structure(response, search_results.AppBatchSearchResult)
@@ -4298,10 +4238,6 @@ class TolokaClient:
         Yields:
             AppBatch: The next matching batch.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         find_function = functools.partial(self.find_app_batches, app_project_id)
         generator = self._find_all(find_function, request, items_field='content', batch_size=batch_size)
         yield from generator
@@ -4332,10 +4268,6 @@ class TolokaClient:
         Returns:
             AppBatch: Created batch with updated parameters.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         response = self._request('post', f'/app/v0/app-projects/{app_project_id}/batches', json=unstructure(request))
         return structure(response, AppBatch)
 
@@ -4358,10 +4290,6 @@ class TolokaClient:
         Returns:
             AppBatch: The App batch.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         response = self._request('get', f'/app/v0/app-projects/{app_project_id}/batches/{batch_id}')
         return structure(response, AppBatch)
 
@@ -4388,10 +4316,6 @@ class TolokaClient:
         Returns:
             AppBatch: The updated App batch.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         response = self._request(
             'patch', f'/app/v0/app-projects/{app_project_id}/batches/{batch_id}', json=unstructure(patch)
         )
@@ -4412,10 +4336,6 @@ class TolokaClient:
             app_project_id: The ID of the project.
             batch_id: The ID of the batch.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/batches/{batch_id}/start')
         return
 
@@ -4436,10 +4356,6 @@ class TolokaClient:
             app_project_id: The ID of the project.
             batch_id: The ID of the batch.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/batches/{batch_id}/stop')
         return
 
@@ -4460,9 +4376,5 @@ class TolokaClient:
             app_project_id: The ID of the project.
             batch_id: The ID of the batch.
         """
-
-        if self.url != self.Environment.PRODUCTION.value:
-            raise RuntimeError('this method supports only production environment')
-
         self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/batches/{batch_id}/resume')
         return
