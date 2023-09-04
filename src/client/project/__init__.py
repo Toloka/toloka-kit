@@ -4,26 +4,28 @@ __all__ = [
     'template_builder',
     'view_spec',
 
-    'Project',
-    'ClassicViewSpec',
-    'TemplateBuilderViewSpec',
-    'BooleanSpec',
-    'StringSpec',
-    'IntegerSpec',
-    'FloatSpec',
-    'UrlSpec',
-    'FileSpec',
-    'CoordinatesSpec',
-    'JsonSpec',
-    'ArrayBooleanSpec',
-    'ArrayStringSpec',
-    'ArrayIntegerSpec',
-    'ArrayFloatSpec',
-    'ArrayUrlSpec',
-    'ArrayFileSpec',
-    'ArrayCoordinatesSpec',
-    'LocalizationConfig',
     'AdditionalLanguage',
+    'ArrayBooleanSpec',
+    'ArrayCoordinatesSpec',
+    'ArrayFileSpec',
+    'ArrayFloatSpec',
+    'ArrayIntegerSpec',
+    'ArrayStringSpec',
+    'ArrayUrlSpec',
+    'BooleanSpec',
+    'ClassicViewSpec',
+    'CoordinatesSpec',
+    'FileSpec',
+    'FloatSpec',
+    'IntegerSpec',
+    'JsonSpec',
+    'LocalizationConfig',
+    'Project',
+    'ProjectCheckResponse',
+    'ProjectUpdateDifferenceLevel',
+    'StringSpec',
+    'TemplateBuilderViewSpec',
+    'UrlSpec',
 ]
 
 import datetime
@@ -255,3 +257,24 @@ class Project(BaseTolokaObject):
             current_translation.public_description = AdditionalLanguage.FieldTranslation(value=public_description)
         if public_instructions is not None:
             current_translation.public_instructions = AdditionalLanguage.FieldTranslation(value=public_instructions)
+
+
+class ProjectUpdateDifferenceLevel(ExtendableStrEnum):
+    """The level of a project update difference.
+
+    Attributes:
+        BREAKING_CHANGE: The update is a breaking change.
+        NON_BREAKING_CHANGE: The update is not a breaking change.
+    """
+
+    BREAKING_CHANGE = 'BREAKING_CHANGE'
+    NON_BREAKING_CHANGE = 'NON_BREAKING_CHANGE'
+
+
+class ProjectCheckResponse(BaseTolokaObject):
+    """The result of a check whether a project update is a breaking change.
+
+    Attributes:
+        difference_level: The level of a project update difference.
+    """
+    difference_level: ProjectUpdateDifferenceLevel = attribute(origin='differenceLevel')
