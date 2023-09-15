@@ -83,7 +83,8 @@ class BaseSortItem(toloka.client.primitives.base.BaseTolokaObject):
     def for_fields(
         cls,
         qualname: str,
-        sort_fields: typing.List[str]
+        sort_fields: typing.List[str],
+        module_name: str = 'toloka.client.search_requests'
     ): ...
 
     def __init__(self) -> None:
@@ -105,7 +106,8 @@ class BaseSortItems(toloka.client.primitives.base.BaseTolokaObject):
         cls,
         qualname: str,
         sort_fields: typing.List[str],
-        docstring: typing.Optional[str] = None
+        docstring: typing.Optional[str] = None,
+        module_name: str = 'toloka.client.search_requests'
     ): ...
 
     def __init__(self) -> None:

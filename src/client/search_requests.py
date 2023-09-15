@@ -98,8 +98,9 @@ class BaseSortItem(BaseTolokaObject):
         return unique(Enum(qualname.split('.')[-1], namespace))  # type: ignore
 
     @classmethod
-    def for_fields(cls, qualname: str, sort_fields: List[str]):
+    def for_fields(cls, qualname: str, sort_fields: List[str], module_name: str = __name__):
         sort_field_enum = cls._create_sort_field_enum(f'{qualname}.SortField', sort_fields)
+        sort_field_enum.__module__ = module_name
         namespace = {
             'SortField': sort_field_enum,
             'order': SortOrder.ASCENDING,
@@ -111,7 +112,7 @@ class BaseSortItem(BaseTolokaObject):
         }
 
         subclass = BaseTolokaObjectMetaclass(qualname.split('.')[-1], (cls,), namespace, kw_only=False)
-        subclass.__module__ = __name__
+        subclass.__module__ = module_name
         return subclass
 
 
@@ -127,8 +128,8 @@ class BaseSortItems(BaseTolokaObject):
         return cls(items=items)
 
     @classmethod
-    def for_fields(cls, qualname: str, sort_fields: List[str], docstring: Optional[str] = None):
-        sort_item_class: Type = BaseSortItem.for_fields(f'{qualname}.SortItem', sort_fields)
+    def for_fields(cls, qualname: str, sort_fields: List[str], docstring: Optional[str] = None, module_name: str = __name__):
+        sort_item_class: Type = BaseSortItem.for_fields(f'{qualname}.SortItem', sort_fields, module_name=module_name)
 
         def items_converter(items):
             if isinstance(items, sort_items_class):
@@ -144,7 +145,7 @@ class BaseSortItems(BaseTolokaObject):
             '__qualname__': qualname,
         }
         sort_items_class = BaseTolokaObjectMetaclass(qualname.split('.')[-1], (BaseSortItems,), namespace, kw_only=False)
-        sort_items_class.__module__ = __name__
+        sort_items_class.__module__ = module_name
         sort_items_class.__doc__ = docstring
         return sort_items_class
 
@@ -164,7 +165,6 @@ class SearchRequestMetaclass(BaseTolokaObjectMetaclass):
 
         # Building class
         subclass = super().__new__(mcs, name, bases, namespace, kw_only=kw_only, **kwargs)
-        subclass.__module__ = __name__
         return subclass
 
 
