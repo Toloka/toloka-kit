@@ -162,7 +162,6 @@ def app_item_map():
             'id': '124',
             'text': 'I smell bad after the last night.'
         },
-        'errors': [],
     }
 
 
@@ -190,6 +189,7 @@ def app_item_import_map():
         'id': '123',
         'records_count': 1000,
         'records_processed': 10,
+        'records_skipped': 20,
         'errors': {}
     }
 

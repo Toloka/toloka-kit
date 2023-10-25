@@ -4123,7 +4123,7 @@ class TolokaClient:
 
     @expand('app_item')
     @add_headers('client')
-    def create_app_item(self, app_project_id: str, app_item: AppItemCreateRequest) -> AppItem:
+    def create_app_item(self, app_project_id: str, app_item: Union[AppItemCreateRequest, AppItem]) -> AppItem:
         """Creates an App task item in Toloka.
 
         Example:
@@ -4149,6 +4149,11 @@ class TolokaClient:
         Returns:
             AppItem: Created App task item with updated parameters.
         """
+        if isinstance(app_item, AppItem):
+            app_item = AppItemCreateRequest(
+                batch_id=app_item.batch_id,
+                input_data=app_item.input_data,
+            )
         response = self._request('post', f'/app/v0/app-projects/{app_project_id}/items', json=unstructure(app_item))
         return structure(response, AppItem)
 
