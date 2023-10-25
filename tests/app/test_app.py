@@ -467,6 +467,25 @@ def test_create_app_item(respx_mock, toloka_client_prod, toloka_app_url, app_ite
     assert app_item_map_with_readonly == client.unstructure(result)
 
 
+def test_create_app_item_expanded(
+    respx_mock, toloka_client_prod, toloka_app_url, app_item_map, app_item_map_with_readonly,
+):
+    def app_items(request):
+        expected_headers = {
+            'X-Caller-Context': 'client' if isinstance(toloka_client_prod, client.TolokaClient) else 'async_client',
+            'X-Top-Level-Method': 'create_app_item',
+            'X-Low-Level-Method': 'create_app_item',
+        }
+        check_headers(request, expected_headers)
+
+        assert app_item_map == simplejson.loads(request.content)
+        return httpx.Response(text=simplejson.dumps(app_item_map_with_readonly), status_code=201)
+
+    respx_mock.post(f'{toloka_app_url}/app-projects/123/items').mock(side_effect=app_items)
+    result = toloka_client_prod.create_app_item('123', **app_item_map)
+    assert app_item_map_with_readonly == client.unstructure(result)
+
+
 def test_create_app_items(respx_mock, toloka_client_prod, toloka_app_url, app_item_map, app_item_map_with_readonly):
     expected_app_item_ids = ['created-app-item-id']
     app_items_create_request = {

@@ -226,17 +226,16 @@ class AppItem(BaseTolokaObject):
         NO_MONEY = 'NO_MONEY'
         STOPPED = 'STOPPED'
 
+    id: str
+    app_project_id: str
     batch_id: str
     input_data: Dict[str, Any]
-
-    id: str = attribute(readonly=True)
-    app_project_id: str = attribute(readonly=True)
-    status: Status = attribute(readonly=True, autocast=True)
-    output_data: Dict[str, Any] = attribute(readonly=True)
-    errors: List[_AppError] = attribute(readonly=True)
-    created_at: datetime.datetime = attribute(readonly=True)
-    started_at: datetime.datetime = attribute(readonly=True)
-    finished_at: datetime.datetime = attribute(readonly=True)
+    status: Status = attribute(autocast=True)
+    output_data: Dict[str, Any]
+    errors: List[_AppError]
+    created_at: datetime.datetime
+    started_at: datetime.datetime
+    finished_at: datetime.datetime
 
 
 class AppItemCreateRequest(BaseTolokaObject):
