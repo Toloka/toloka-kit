@@ -1,11 +1,13 @@
 __all__ = [
-    'AppProject',
     'App',
-    'AppItem',
-    'AppItemsCreateRequest',
     'AppBatch',
     'AppBatchCreateRequest',
     'AppBatchPatch',
+    'AppItem',
+    'AppItemCreateRequest',
+    'AppItemsCreateRequest',
+    'AppProject',
+    'SyncBatchCreateRequest',
 ]
 import datetime
 import decimal
