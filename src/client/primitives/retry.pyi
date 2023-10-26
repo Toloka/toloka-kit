@@ -45,6 +45,7 @@ class TolokaRetry(urllib3.util.retry.Retry):
         **kwargs
     ) -> urllib3.util.retry.Retry: ...
 
+    DEFAULT: typing.Any
     _retry_quotas: typing.Union[typing.List[str], str, None]
 
 
