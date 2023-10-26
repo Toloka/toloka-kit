@@ -142,6 +142,7 @@ from .app import (
     AppBatchCreateRequest,
     AppItemsCreateRequest,
     BaseApp,
+    SyncBatchCreateRequest,
 )
 from .assignment import Assignment, AssignmentPatch, GetAssignmentsTsvParameters
 from .attachment import Attachment
@@ -4124,7 +4125,13 @@ class TolokaClient:
 
     @expand('app_item')
     @add_headers('client')
-    def create_app_item(self, app_project_id: str, app_item: AppItemCreateRequest) -> AppItem:
+    def create_app_item(
+        self,
+        app_project_id: str,
+        app_item: AppItem,
+        *,
+        force_new_original: Optional[bool] = None,
+    ) -> AppItem:
         """Creates an App task item in Toloka.
 
         Example:
@@ -4146,11 +4153,17 @@ class TolokaClient:
         Args:
             app_project_id: The ID of the App project to create the item in.
             app_item: The task item with parameters.
+            force_new_original: Whether to enable or disable the deduplication for the item in the request. When set to true, the item will be re-labeled regardless of whether pre-labeled duplicates exist. Default is `False`.
 
         Returns:
             AppItem: Created App task item with updated parameters.
         """
-        response = self._request('post', f'/app/v0/app-projects/{app_project_id}/items', json=unstructure(app_item))
+        request = AppItemCreateRequest(
+            batch_id=app_item.batch_id,
+            input_data=app_item.input_data,
+            force_new_original=force_new_original
+        )
+        response = self._request('post', f'/app/v0/app-projects/{app_project_id}/items', json=unstructure(request))
         return structure(response, AppItem)
 
     @expand('request')
@@ -4372,7 +4385,7 @@ class TolokaClient:
             batch_id: The ID of the batch you want to archive.
         """
         self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/batches/{batch_id}/archive')
-        return self.get_app_batch(app_project_id, batch_id)
+        return
 
     @add_headers('client')
     def unarchive_app_batch(self, app_project_id: str, batch_id: str) -> None:
@@ -4412,7 +4425,7 @@ class TolokaClient:
         return
 
     @add_headers('client')
-    def start_sync_batch_processing(self, app_project_id: str) -> AppBatch:
+    def start_sync_batch_processing(self, app_project_id: str, request: SyncBatchCreateRequest) -> AppBatch:
         """Starts processing the batch with the ID specified in the request.
 
         This batch processing is applicable for solutions which use synchronous protocols only.
@@ -4424,7 +4437,11 @@ class TolokaClient:
             AppBatch: The response to the request to start sync batch processing.
         """
 
-        response = self._request('post', f'/app/v0/app-projects/{app_project_id}/batches/sync')
+        response = self._request(
+            'post',
+            f'/app/v0/app-projects/{app_project_id}/batches/sync',
+            json=unstructure(request),
+        )
         return AppBatch.structure(response)
 
     @add_headers('client')

@@ -8,6 +8,7 @@ import pytest
 import simplejson
 import toloka.client as client
 from httpx import QueryParams
+from toloka.client.app import AppItemCreateRequest, SyncBatchCreateRequest
 
 from ..testutils.util_functions import check_headers
 
@@ -458,12 +459,17 @@ def test_create_app_item(respx_mock, toloka_client_prod, toloka_app_url, app_ite
         }
         check_headers(request, expected_headers)
 
-        assert app_item_map == simplejson.loads(request.content)
+        expected_request = AppItemCreateRequest(
+            batch_id=app_item_map['batch_id'],
+            input_data=app_item_map['input_data'],
+            force_new_original=True,
+        )
+        assert expected_request.unstructure() == simplejson.loads(request.content)
         return httpx.Response(text=simplejson.dumps(app_item_map_with_readonly), status_code=201)
 
     respx_mock.post(f'{toloka_app_url}/app-projects/123/items').mock(side_effect=app_items)
     app_item = client.structure(app_item_map, client.app.AppItem)
-    result = toloka_client_prod.create_app_item('123', app_item)
+    result = toloka_client_prod.create_app_item('123', app_item, force_new_original=True)
     assert app_item_map_with_readonly == client.unstructure(result)
 
 
@@ -638,7 +644,10 @@ def test_get_app_batch(respx_mock, toloka_client_prod, toloka_app_url, app_batch
 def test_create_app_batch(respx_mock, toloka_client_prod, toloka_app_url, app_item_map, app_batch_map):
 
     app_batch_create_request = {
-        'items': [app_item_map['input_data']]
+        'items': [app_item_map['input_data']],
+        'priority_order': app_batch_map['priority_order'],
+        'force_new_original': True,
+        'ignore_errors': False,
     }
 
     def app_batch(request):
@@ -655,6 +664,30 @@ def test_create_app_batch(respx_mock, toloka_client_prod, toloka_app_url, app_it
     respx_mock.post(f'{toloka_app_url}/app-projects/123/batches').mock(side_effect=app_batch)
     app_batch_create_request_obj = client.structure(app_batch_create_request, client.app.AppBatchCreateRequest)
     result = toloka_client_prod.create_app_batch('123', app_batch_create_request_obj)
+    assert app_batch_map == client.unstructure(result)
+
+
+def test_start_sync_batch_processing(respx_mock, toloka_client_prod, toloka_app_url, app_item_map, app_batch_map):
+
+    app_batch_create_request = {
+        'items': [app_item_map['input_data']],
+        'name': 'name',
+    }
+
+    def app_batch(request):
+        expected_headers = {
+            'X-Caller-Context': 'client' if isinstance(toloka_client_prod, client.TolokaClient) else 'async_client',
+            'X-Top-Level-Method': 'start_sync_batch_processing',
+            'X-Low-Level-Method': 'start_sync_batch_processing',
+        }
+        check_headers(request, expected_headers)
+
+        assert app_batch_create_request == simplejson.loads(request.content)
+        return httpx.Response(text=simplejson.dumps(app_batch_map), status_code=201)
+
+    respx_mock.post(f'{toloka_app_url}/app-projects/123/batches/sync').mock(side_effect=app_batch)
+    sync_batch_create_request_obj = SyncBatchCreateRequest.structure(app_batch_create_request)
+    result = toloka_client_prod.start_sync_batch_processing(app_project_id='123', request=sync_batch_create_request_obj)
     assert app_batch_map == client.unstructure(result)
 
 
@@ -686,7 +719,7 @@ def test_patch_app_batch(respx_mock, toloka_client_prod, toloka_app_url, app_bat
 
 
 @pytest.mark.parametrize(
-    'method_name', ('start_app_batch', 'stop_app_batch', 'resume_app_batch')
+    'method_name', ('start_app_batch', 'stop_app_batch', 'resume_app_batch', 'archive_app_batch', 'unarchive_app_batch')
 )
 def test_change_app_batch_status(respx_mock, toloka_client_prod, toloka_app_url, method_name):
 

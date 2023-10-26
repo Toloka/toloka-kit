@@ -209,9 +209,13 @@ def app_batch_map(app_item_import_map):
         'confidence_avg': 50.,
         'items_processed_count': 10,
         'eta': '2021-09-28T16:07:13.400000',
+        'etd': '2021-09-28T16:07:13.400000',
+        'app_project_eta': '2021-09-28T16:07:13.400000',
+        'current_time': '2021-09-28T16:07:13.400000',
         'items_per_state': {},
         'created_at': '2021-09-28T15:56:25.193000',
         'started_at': '2021-09-28T15:56:30.201000',
         'finished_at': '2021-09-28T16:07:13.400000',
         'read_only': False,
+        'priority_order': 'THREE',
     }
