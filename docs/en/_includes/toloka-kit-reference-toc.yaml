@@ -71,7 +71,7 @@ items:
       - name: archive_app_batch
         href: ../toloka-kit/reference/toloka.client.TolokaClient.archive_app_batch.md
       - name: unarchive_app_batch
-        href: ../toloka-kit/reference/toloka.client.TolokaClient.archive_app_batch.md
+        href: ../toloka-kit/reference/toloka.client.TolokaClient.unarchive_app_batch.md
       - name: start_sync_batch_processing
         href: ../toloka-kit/reference/toloka.client.TolokaClient.start_sync_batch_processing.md
     - name: assignments
@@ -2059,7 +2059,7 @@ items:
       - name: archive_app_batch
         href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.archive_app_batch.md
       - name: unarchive_app_batch
-        href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.archive_app_batch.md
+        href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.unarchive_app_batch.md
       - name: start_sync_batch_processing
         href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.start_sync_batch_processing.md
     - name: assignments
