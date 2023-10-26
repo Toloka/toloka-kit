@@ -1,6 +1,8 @@
 __all__ = [
     'TolokaKitStubViewer',
 ]
+
+from stubmaker.builder.literals import TypeHintLiteral
 from stubmaker.viewers.common import add_inherited_singledispatchmethod
 from stubmaker.viewers.stub_viewer import StubViewer
 from stubmaker.viewers.util import indent

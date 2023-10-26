@@ -866,6 +866,13 @@ def test_localization_funcs(project_map):
 
 
 @pytest.fixture
+def project_check_map_equal():
+    return {
+        'differenceLevel': 'EQUAL'
+    }
+
+
+@pytest.fixture
 def project_check_map_breaking_change():
     return {
         'differenceLevel': 'BREAKING_CHANGE'
@@ -882,6 +889,7 @@ def project_check_map_non_breaking_change():
 @pytest.mark.parametrize(
     'project_check_map,difference_level',
     [
+        (lazy_fixture('project_check_map_equal'), ProjectUpdateDifferenceLevel.EQUAL),
         (lazy_fixture('project_check_map_breaking_change'), ProjectUpdateDifferenceLevel.BREAKING_CHANGE),
         (lazy_fixture('project_check_map_non_breaking_change'), ProjectUpdateDifferenceLevel.NON_BREAKING_CHANGE),
     ]

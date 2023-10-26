@@ -5589,7 +5589,7 @@ class TolokaClient:
         self,
         request: toloka.client.search_requests.AppSearchRequest,
         batch_size: typing.Optional[int] = None
-    ) -> typing.Generator[toloka.client.app.App, None, None]:
+    ) -> typing.Generator[toloka.client.app.BaseApp, None, None]:
         """Finds all App solutions that match certain criteria.
 
         `get_apps` returns a generator. You can iterate over all found solutions using the generator. Several requests to the Toloka server are possible while iterating.
@@ -5622,7 +5622,7 @@ class TolokaClient:
         id_gt: typing.Optional[str] = None,
         id_gte: typing.Optional[str] = None,
         batch_size: typing.Optional[int] = None
-    ) -> typing.Generator[toloka.client.app.App, None, None]:
+    ) -> typing.Generator[toloka.client.app.BaseApp, None, None]:
         """Finds all App solutions that match certain criteria.
 
         `get_apps` returns a generator. You can iterate over all found solutions using the generator. Several requests to the Toloka server are possible while iterating.
@@ -5837,7 +5837,9 @@ class TolokaClient:
     def create_app_item(
         self,
         app_project_id: str,
-        app_item: toloka.client.app.AppItem
+        app_item: toloka.client.app.AppItem,
+        *,
+        force_new_original: typing.Optional[bool] = None
     ) -> toloka.client.app.AppItem:
         """Creates an App task item in Toloka.
 
@@ -5860,6 +5862,8 @@ class TolokaClient:
         Args:
             app_project_id: The ID of the App project to create the item in.
             app_item: The task item with parameters.
+            force_new_original: Whether to enable or disable the deduplication for the item in the request.
+                When set to true, the item will be re-labeled regardless of whether pre-labeled duplicates exist. Default is `False`.
 
         Returns:
             AppItem: Created App task item with updated parameters.
@@ -5872,7 +5876,8 @@ class TolokaClient:
         app_project_id: str,
         *,
         batch_id: typing.Optional[str] = None,
-        input_data: typing.Optional[typing.Dict[str, typing.Any]] = None
+        input_data: typing.Optional[typing.Dict[str, typing.Any]] = None,
+        force_new_original: typing.Optional[bool] = None
     ) -> toloka.client.app.AppItem:
         """Creates an App task item in Toloka.
 
@@ -5895,6 +5900,8 @@ class TolokaClient:
         Args:
             app_project_id: The ID of the App project to create the item in.
             app_item: The task item with parameters.
+            force_new_original: Whether to enable or disable the deduplication for the item in the request.
+                When set to true, the item will be re-labeled regardless of whether pre-labeled duplicates exist. Default is `False`.
 
         Returns:
             AppItem: Created App task item with updated parameters.
@@ -5937,7 +5944,9 @@ class TolokaClient:
         app_project_id: str,
         *,
         batch_id: typing.Optional[str] = None,
-        items: typing.Optional[typing.List[typing.Dict[str, typing.Any]]] = None
+        items: typing.List[typing.Dict[str, typing.Any]],
+        force_new_original: typing.Optional[bool] = None,
+        ignore_errors: typing.Optional[bool] = None
     ) -> typing.List[str]:
         """Creates task items in an App project in Toloka and adds them to an existing batch.
 
@@ -6185,7 +6194,10 @@ class TolokaClient:
         app_project_id: str,
         *,
         name: typing.Optional[str] = None,
-        items: typing.Optional[typing.List[typing.Dict[str, typing.Any]]] = None
+        items: typing.Optional[typing.List[typing.Dict[str, typing.Any]]] = None,
+        priority_order: typing.Optional[toloka.client.app.AppBatch.PriorityOrder] = None,
+        force_new_original: typing.Optional[bool] = None,
+        ignore_errors: typing.Optional[bool] = None
     ) -> toloka.client.app.AppBatch:
         """Creates a batch with task items in an App project in Toloka.
 
@@ -6271,7 +6283,8 @@ class TolokaClient:
         app_project_id: str,
         batch_id: str,
         *,
-        name: typing.Optional[str] = None
+        name: typing.Optional[str] = None,
+        priority_order: typing.Optional[toloka.client.app.AppBatch.PriorityOrder] = None
     ) -> toloka.client.app.AppBatch:
         """Updates an App batch.
 
@@ -6295,11 +6308,55 @@ class TolokaClient:
         """
         ...
 
+    def archive_app_batch(
+        self,
+        app_project_id: str,
+        batch_id: str
+    ) -> None:
+        """Archives the batch with the ID specified in the request to hide its data.
+
+        You can archive the batches which are not currently being processed (are not in the `PROCESSING` status). You
+        must stop the batches before archiving them. The batch gets the `ARCHIVE` status.
+
+        Example:
+            >>> toloka_client.archive_app_batch(
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g',
+            >>>     batch_id='4Va2BBWKL88S4QyAgVje'
+            >>> )
+            ...
+
+        Args:
+            app_project_id: The ID of the project with which the batch is associated.
+            batch_id: The ID of the batch you want to archive.
+        """
+        ...
+
+    def unarchive_app_batch(
+        self,
+        app_project_id: str,
+        batch_id: str
+    ) -> None:
+        """Changes the batch status to the last one it had before archiving. After the operation, you can process the
+        batch again.
+
+        Example:
+            >>> toloka_client.unarchive_app_batch(
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g',
+            >>>     batch_id='4Va2BBWKL88S4QyAgVje'
+            >>> )
+            ...
+
+        Args:
+            app_project_id: The ID of the project with which the batch is associated.
+            batch_id: The ID of the batch you want to unarchive.
+        """
+        ...
+
     def start_app_batch(
         self,
         app_project_id: str,
         batch_id: str
-    ):
+    ) -> None:
         """Launches annotation of a batch of task items in an App project.
 
         Example:
@@ -6315,11 +6372,28 @@ class TolokaClient:
         """
         ...
 
+    def start_sync_batch_processing(
+        self,
+        app_project_id: str,
+        request: toloka.client.app.SyncBatchCreateRequest
+    ) -> toloka.client.app.AppBatch:
+        """Starts processing the batch with the ID specified in the request.
+
+        This batch processing is applicable for solutions which use synchronous protocols only.
+
+        Args:
+            app_project_id: The ID of the project with which the batch is associated.
+
+        Returns:
+            AppBatch: The response to the request to start sync batch processing.
+        """
+        ...
+
     def stop_app_batch(
         self,
         app_project_id: str,
         batch_id: str
-    ):
+    ) -> None:
         """Stops annotation of a batch of task items in an App project.
 
         Processing can be stopped only for the batch with the `PROCESSING` status.
@@ -6341,7 +6415,7 @@ class TolokaClient:
         self,
         app_project_id: str,
         batch_id: str
-    ):
+    ) -> None:
         """Resumes annotation of a batch of task items in an App project.
 
         Processing can be resumed only for the batch with the `STOPPING` or `STOPPED` status.

@@ -135,11 +135,14 @@ from .analytics_request import AnalyticsRequest
 from .app import (
     App,
     AppItem,
+    AppItemCreateRequest,
     AppProject,
     AppBatch,
     AppBatchPatch,
     AppBatchCreateRequest,
     AppItemsCreateRequest,
+    BaseApp,
+    SyncBatchCreateRequest,
 )
 from .assignment import Assignment, AssignmentPatch, GetAssignmentsTsvParameters
 from .attachment import Attachment
@@ -4004,7 +4007,7 @@ class TolokaClient:
         self,
         request: search_requests.AppSearchRequest,
         batch_size: Optional[int] = None
-    ) -> Generator[App, None, None]:
+    ) -> Generator[BaseApp, None, None]:
         """Finds all App solutions that match certain criteria.
 
         `get_apps` returns a generator. You can iterate over all found solutions using the generator. Several requests to the Toloka server are possible while iterating.
@@ -4122,7 +4125,13 @@ class TolokaClient:
 
     @expand('app_item')
     @add_headers('client')
-    def create_app_item(self, app_project_id: str, app_item: AppItem) -> AppItem:
+    def create_app_item(
+        self,
+        app_project_id: str,
+        app_item: AppItem,
+        *,
+        force_new_original: Optional[bool] = None,
+    ) -> AppItem:
         """Creates an App task item in Toloka.
 
         Example:
@@ -4144,11 +4153,18 @@ class TolokaClient:
         Args:
             app_project_id: The ID of the App project to create the item in.
             app_item: The task item with parameters.
+            force_new_original: Whether to enable or disable the deduplication for the item in the request.
+                When set to true, the item will be re-labeled regardless of whether pre-labeled duplicates exist. Default is `False`.
 
         Returns:
             AppItem: Created App task item with updated parameters.
         """
-        response = self._request('post', f'/app/v0/app-projects/{app_project_id}/items', json=unstructure(app_item))
+        request = AppItemCreateRequest(
+            batch_id=app_item.batch_id,
+            input_data=app_item.input_data,
+            force_new_original=force_new_original
+        )
+        response = self._request('post', f'/app/v0/app-projects/{app_project_id}/items', json=unstructure(request))
         return structure(response, AppItem)
 
     @expand('request')
@@ -4352,7 +4368,47 @@ class TolokaClient:
         return structure(response, AppBatch)
 
     @add_headers('client')
-    def start_app_batch(self, app_project_id: str, batch_id: str):
+    def archive_app_batch(self, app_project_id: str, batch_id: str) -> None:
+        """Archives the batch with the ID specified in the request to hide its data.
+
+        You can archive the batches which are not currently being processed (are not in the `PROCESSING` status). You
+        must stop the batches before archiving them. The batch gets the `ARCHIVE` status.
+
+        Example:
+            >>> toloka_client.archive_app_batch(
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g',
+            >>>     batch_id='4Va2BBWKL88S4QyAgVje'
+            >>> )
+            ...
+
+        Args:
+            app_project_id: The ID of the project with which the batch is associated.
+            batch_id: The ID of the batch you want to archive.
+        """
+        self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/batches/{batch_id}/archive')
+        return
+
+    @add_headers('client')
+    def unarchive_app_batch(self, app_project_id: str, batch_id: str) -> None:
+        """Changes the batch status to the last one it had before archiving. After the operation, you can process the
+        batch again.
+
+        Example:
+            >>> toloka_client.unarchive_app_batch(
+            >>>     app_project_id='Q2d15QBjpwWuDz8Z321g',
+            >>>     batch_id='4Va2BBWKL88S4QyAgVje'
+            >>> )
+            ...
+
+        Args:
+            app_project_id: The ID of the project with which the batch is associated.
+            batch_id: The ID of the batch you want to unarchive.
+        """
+        self._raw_request('post', f'/app/v0/app-projects/{app_project_id}/batches/{batch_id}/unarchive')
+        return
+
+    @add_headers('client')
+    def start_app_batch(self, app_project_id: str, batch_id: str) -> None:
         """Launches annotation of a batch of task items in an App project.
 
         Example:
@@ -4370,7 +4426,27 @@ class TolokaClient:
         return
 
     @add_headers('client')
-    def stop_app_batch(self, app_project_id: str, batch_id: str):
+    def start_sync_batch_processing(self, app_project_id: str, request: SyncBatchCreateRequest) -> AppBatch:
+        """Starts processing the batch with the ID specified in the request.
+
+        This batch processing is applicable for solutions which use synchronous protocols only.
+
+        Args:
+            app_project_id: The ID of the project with which the batch is associated.
+
+        Returns:
+            AppBatch: The response to the request to start sync batch processing.
+        """
+
+        response = self._request(
+            'post',
+            f'/app/v0/app-projects/{app_project_id}/batches/sync',
+            json=unstructure(request),
+        )
+        return AppBatch.structure(response)
+
+    @add_headers('client')
+    def stop_app_batch(self, app_project_id: str, batch_id: str) -> None:
         """Stops annotation of a batch of task items in an App project.
 
         Processing can be stopped only for the batch with the `PROCESSING` status.
@@ -4390,7 +4466,7 @@ class TolokaClient:
         return
 
     @add_headers('client')
-    def resume_app_batch(self, app_project_id: str, batch_id: str):
+    def resume_app_batch(self, app_project_id: str, batch_id: str) -> None:
         """Resumes annotation of a batch of task items in an App project.
 
         Processing can be resumed only for the batch with the `STOPPING` or `STOPPED` status.
