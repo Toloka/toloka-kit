@@ -1,3 +1,8 @@
+1.2.2
+-------------------
+Changes:
+* Updated Apps API-related `TolokaClient` and `AsyncTolokaClient` methods to support new features.
+
 1.2.1
 -------------------
 Python versions support:
