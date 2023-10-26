@@ -273,10 +273,12 @@ class ProjectUpdateDifferenceLevel(toloka.util._extendable_enum.ExtendableStrEnu
     """The level of a project update difference.
 
     Attributes:
+        EQUAL: The update does not change the project.
         BREAKING_CHANGE: The update is a breaking change.
         NON_BREAKING_CHANGE: The update is not a breaking change.
     """
 
+    EQUAL = 'EQUAL'
     BREAKING_CHANGE = 'BREAKING_CHANGE'
     NON_BREAKING_CHANGE = 'NON_BREAKING_CHANGE'
 

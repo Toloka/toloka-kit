@@ -1,20 +1,23 @@
 __all__ = [
-    'AppProject',
     'App',
-    'AppItem',
-    'AppItemsCreateRequest',
     'AppBatch',
     'AppBatchCreateRequest',
     'AppBatchPatch',
+    'AppItem',
+    'AppItemCreateRequest',
+    'AppItemsCreateRequest',
+    'AppProject',
+    'SyncBatchCreateRequest',
 ]
 import datetime
 import decimal
 from enum import unique
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 
 from ..primitives.base import BaseTolokaObject
 from ..project.field_spec import FieldSpec
 from ...util._codegen import attribute
+from ...util._docstrings import inherit_docstrings
 from ...util._extendable_enum import ExtendableStrEnum
 
 
@@ -132,22 +135,38 @@ class AppProject(BaseTolokaObject):
     app: AppLightestResult = attribute(readonly=True)
 
 
-class App(BaseTolokaObject):
-    """An [App](https://toloka.ai/docs/api/apps-reference/#tag--app) solution.
-
-    Each App solution targets specific type of tasks which can be solved using Toloka.
+class BaseApp(BaseTolokaObject):
+    """A lightweight representation of an [App](https://toloka.ai/docs/api/apps-reference/#tag--app) solution.
 
     Attributes:
         id: The ID of the App solution.
         name: The solution name.
         image: A link to the solution interface preview image.
         description: The solution description.
-        constraints_description: The description of limitations.
         default_item_price: The default cost of one annotated item.
+        examples: Example description of tasks which can be solved with this solution.
+    """
+
+    id: str
+    name: str
+    image: str
+    description: str
+    default_item_price: decimal.Decimal
+    examples: Any
+
+
+@inherit_docstrings
+class App(BaseApp):
+    """An [App](https://toloka.ai/docs/api/apps-reference/#tag--app) solution.
+
+    Each App solution targets specific type of tasks which can be solved using Toloka.
+
+    Attributes:
+        constraints_description: The description of limitations.
         param_spec: The specification of parameters used to create a project.
         input_spec: The schema of solution input data.
         output_spec: The schema of solution output data.
-        examples: Example description of tasks which can be solved with this solution.
+
         input_format_info: Information about the input data format.
 
     Example:
@@ -159,16 +178,10 @@ class App(BaseTolokaObject):
         ...
     """
 
-    id: str
-    name: str
-    image: str
-    description: str
     constraints_description: str
-    default_item_price: decimal.Decimal
     param_spec: Dict
     input_spec: Dict[str, FieldSpec]
     output_spec: Dict[str, FieldSpec]
-    examples: Any
     input_format_info: Dict
 
 
@@ -228,16 +241,39 @@ class AppItem(BaseTolokaObject):
     finished_at: datetime.datetime = attribute(readonly=True)
 
 
+class AppItemCreateRequest(BaseTolokaObject):
+    """Parameters of a request for creating single item.
+
+    Attributes:
+        batch_id: The ID of the batch that contains the item.
+        input_data: Input data. It must follow the solution schema described in `App.input_spec`.
+        force_new_original: Whether to enable or disable the deduplication for the item in the request.
+            When set to true, the item will be re-labeled regardless of whether pre-labeled duplicates exist. Default is `False`.
+    """
+
+    batch_id: str
+    input_data: Dict[str, Any]
+    force_new_original: Optional[bool] = None
+
+
 class AppItemsCreateRequest(BaseTolokaObject):
     """Parameters of a request for creating multiple items.
 
     Attributes:
         batch_id: The ID of the batch to place items to.
         items: A list with items. The items must follow the solution schema described in `App.input_spec`.
+        force_new_original: Whether to enable or disable the deduplication for all the items in the request.
+            When set to true, all the items will be re-labeled regardless of whether pre-labeled duplicates exist. Default is `False`.
+        ignore_errors: Whether the data with incorrect items can be uploaded. Default is `False`.
+            * `True` — If incorrect task items are present, they will be skipped and the response will contain the information about errors.
+            * `False` — If incorrect task items are present, the data will not be uploaded and the response will contain the information about the errors.
+            You can only use this parameter if batch_id is specified in the request.
     """
 
     batch_id: str
-    items: List[Dict[str, Any]]
+    items: List[Dict[str, Any]] = attribute(required=True)
+    force_new_original: bool
+    ignore_errors: bool
 
 
 class AppItemImport(BaseTolokaObject):
@@ -247,11 +283,13 @@ class AppItemImport(BaseTolokaObject):
         id: The ID.
         records_count: The total number of items sent by a client.
         records_processed: The number of items processed during the operation.
+        records_skipped: The number of items which had incorrect parameters and were not uploaded during the operation. The detailed information about the error is returned in the `errors` field.
         errors: Information about items with incorrect parameters which were not added.
     """
     id: str
     records_count: int
     records_processed: int
+    records_skipped: int
     errors: Dict
 
 
@@ -273,11 +311,16 @@ class AppBatch(BaseTolokaObject):
         started_at: The date and time when batch processing started.
         finished_at: The date and time when batch processing was completed.
         read_only: Whether the batch can be updated or not.
+        priority_order: The batch priority. See [PriorityOrder](toloka.client.app.AppBatch.PriorityOrder.md) for details. Default is `FIVE`.
         last_items_import: Information about the last operation that added items.
         confidence_avg: Average labeling quality.
         items_processed_count: The number of labeled items.
         eta: Expected date and time when batch processing will be completed.
+        etd: The expected date and time when processing of the queued batch will be started. The parameter is present in the response when the batch status is equal to `QUEUED`, otherwise it's `None`.
+        app_project_eta: The expected date and time when processing of all the batches associated with the project will be completed.
+            The parameter is present in the response when the project contains batches in the status equal to `QUEUED` or `PROCESSING`, otherwise it's `None`.
         items_per_state: Statistics on the number of items in each state.
+        current_time: The server-side date and time when the response was formed.
 
     Example:
         >>> batches = toloka_client.get_app_batches(app_project_id='Q2d15QBjpwWuDz8Z321g', status='NEW')
@@ -292,6 +335,8 @@ class AppBatch(BaseTolokaObject):
 
         Attributes:
             NEW: The processing of the batch items is not started.
+            QUEUED: The batch is ready for labeling but is currently queued because other batches with higher priority are being labeled.
+                Labeling of these batches will automatically start once the labeling of the batches with higher priority finishes.
             PROCESSING: Batch items are being processed by Tolokers.
             COMPLETED: Annotation of all batch items is completed.
             ERROR: An error occurred during processing.
@@ -304,6 +349,7 @@ class AppBatch(BaseTolokaObject):
         """
 
         NEW = 'NEW'
+        QUEUED = 'QUEUED'
         PROCESSING = 'PROCESSING'
         COMPLETED = 'COMPLETED'
         ERROR = 'ERROR'
@@ -313,6 +359,18 @@ class AppBatch(BaseTolokaObject):
         LOADING = 'LOADING'
         STOPPING = 'STOPPING'
         STOPPED = 'STOPPED'
+
+    @unique
+    class PriorityOrder(ExtendableStrEnum):
+        """The batch priority. ONE is the highest value. The batch items with this priority_order value will be sent
+        for labeling first in the queue.
+        """
+
+        ONE = 'ONE'
+        TWO = 'TWO'
+        THREE = 'THREE'
+        FOUR = 'FOUR'
+        FIVE = 'FIVE'
 
     id: str
     app_project_id: str
@@ -326,15 +384,38 @@ class AppBatch(BaseTolokaObject):
     started_at: datetime.datetime
     finished_at: datetime.datetime
     read_only: bool
+    priority_order: PriorityOrder
     last_items_import: AppItemImport
     confidence_avg: float
     items_processed_count: int
     eta: datetime.datetime
+    etd: datetime.datetime
+    app_project_eta: datetime.datetime
     items_per_state: Dict
+    current_time: datetime.datetime
 
 
 class AppBatchCreateRequest(BaseTolokaObject):
     """Parameters of a request for creating multiple App task items in a batch.
+
+    Attributes:
+        name: The batch name.
+        items: A list with task items. The items must follow the solution schema described in the `App.input_spec`.
+        priority_order: The batch priority. See [PriorityOrder](toloka.client.app.AppBatch.PriorityOrder.md) for details. Default is `FIVE`.
+        force_new_original: Whether to enable or disable the deduplication for all the items in the request.
+            When set to true, all the items will be re-labeled regardless of whether pre-labeled duplicates exist. Default is `False`.
+        ignore_errors: Whether the data with incorrect items can be uploaded. Default is `False`.
+    """
+
+    name: str
+    items: List[Dict[str, Any]]
+    priority_order: AppBatch.PriorityOrder
+    force_new_original: bool
+    ignore_errors: bool
+
+
+class SyncBatchCreateRequest(BaseTolokaObject):
+    """The batch to be created with the list of the task items.
 
     Attributes:
         name: The batch name.
@@ -350,5 +431,7 @@ class AppBatchPatch(BaseTolokaObject):
 
     Attributes:
         name: The new batch name.
+        priority_order: The batch priority. See [PriorityOrder](toloka.client.app.AppBatch.PriorityOrder.md) for details.
     """
     name: str
+    priority_order: AppBatch.PriorityOrder

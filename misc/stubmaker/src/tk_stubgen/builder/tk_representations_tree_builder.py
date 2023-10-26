@@ -1,4 +1,5 @@
 import inspect
+from typing import Any
 
 import attr
 from stubmaker.builder.common import BaseDefinition, Node
@@ -28,5 +29,9 @@ class TolokaKitRepresentationTreeBuilder(RepresentationsTreeBuilder):
         # correctly using current fullpath syntax
         if node.obj is attr.NOTHING:
             node.obj = ...
+
+        # stubmaker does not support forward references properly
+        if isinstance(node.obj, str) and node.obj == 'typing.ClassVar[Retry]':
+            node.obj = Any
 
         return super().get_literal(node)
