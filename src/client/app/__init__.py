@@ -247,7 +247,8 @@ class AppItemCreateRequest(BaseTolokaObject):
     Attributes:
         batch_id: The ID of the batch that contains the item.
         input_data: Input data. It must follow the solution schema described in `App.input_spec`.
-        force_new_original: Whether to enable or disable the deduplication for the item in the request. When set to true, the item will be re-labeled regardless of whether pre-labeled duplicates exist. Default is `False`.
+        force_new_original: Whether to enable or disable the deduplication for the item in the request.
+            When set to true, the item will be re-labeled regardless of whether pre-labeled duplicates exist. Default is `False`.
     """
 
     batch_id: str
@@ -261,7 +262,8 @@ class AppItemsCreateRequest(BaseTolokaObject):
     Attributes:
         batch_id: The ID of the batch to place items to.
         items: A list with items. The items must follow the solution schema described in `App.input_spec`.
-        force_new_original: Whether to enable or disable the deduplication for all the items in the request. When set to true, all the items will be re-labeled regardless of whether pre-labeled duplicates exist. Default is `False`.
+        force_new_original: Whether to enable or disable the deduplication for all the items in the request.
+            When set to true, all the items will be re-labeled regardless of whether pre-labeled duplicates exist. Default is `False`.
         ignore_errors: Whether the data with incorrect items can be uploaded. Default is `False`.
             * `True` — If incorrect task items are present, they will be skipped and the response will contain the information about errors.
             * `False` — If incorrect task items are present, the data will not be uploaded and the response will contain the information about the errors.
@@ -315,7 +317,8 @@ class AppBatch(BaseTolokaObject):
         items_processed_count: The number of labeled items.
         eta: Expected date and time when batch processing will be completed.
         etd: The expected date and time when processing of the queued batch will be started. The parameter is present in the response when the batch status is equal to `QUEUED`, otherwise it's `None`.
-        app_project_eta: The expected date and time when processing of all the batches associated with the project will be completed. The parameter is present in the response when the project contains batches in the status equal to `QUEUED` or `PROCESSING`, otherwise it's `None`.
+        app_project_eta: The expected date and time when processing of all the batches associated with the project will be completed.
+            The parameter is present in the response when the project contains batches in the status equal to `QUEUED` or `PROCESSING`, otherwise it's `None`.
         items_per_state: Statistics on the number of items in each state.
         current_time: The server-side date and time when the response was formed.
 
@@ -332,7 +335,8 @@ class AppBatch(BaseTolokaObject):
 
         Attributes:
             NEW: The processing of the batch items is not started.
-            QUEUED: The batch is ready for labeling but is currently queued because other batches with higher priority are being labeled. Labeling of these batches will automatically start once the labeling of the batches with higher priority finishes.
+            QUEUED: The batch is ready for labeling but is currently queued because other batches with higher priority are being labeled.
+                Labeling of these batches will automatically start once the labeling of the batches with higher priority finishes.
             PROCESSING: Batch items are being processed by Tolokers.
             COMPLETED: Annotation of all batch items is completed.
             ERROR: An error occurred during processing.
@@ -398,7 +402,8 @@ class AppBatchCreateRequest(BaseTolokaObject):
         name: The batch name.
         items: A list with task items. The items must follow the solution schema described in the `App.input_spec`.
         priority_order: The batch priority. See [PriorityOrder](toloka.client.app.AppBatch.PriorityOrder.md) for details. Default is `FIVE`.
-        force_new_original: Whether to enable or disable the deduplication for all the items in the request. When set to true, all the items will be re-labeled regardless of whether pre-labeled duplicates exist. Default is `False`.
+        force_new_original: Whether to enable or disable the deduplication for all the items in the request.
+            When set to true, all the items will be re-labeled regardless of whether pre-labeled duplicates exist. Default is `False`.
         ignore_errors: Whether the data with incorrect items can be uploaded. Default is `False`.
     """
 

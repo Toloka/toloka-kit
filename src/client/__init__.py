@@ -4153,7 +4153,8 @@ class TolokaClient:
         Args:
             app_project_id: The ID of the App project to create the item in.
             app_item: The task item with parameters.
-            force_new_original: Whether to enable or disable the deduplication for the item in the request. When set to true, the item will be re-labeled regardless of whether pre-labeled duplicates exist. Default is `False`.
+            force_new_original: Whether to enable or disable the deduplication for the item in the request.
+                When set to true, the item will be re-labeled regardless of whether pre-labeled duplicates exist. Default is `False`.
 
         Returns:
             AppItem: Created App task item with updated parameters.
