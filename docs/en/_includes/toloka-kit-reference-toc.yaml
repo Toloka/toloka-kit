@@ -26,6 +26,8 @@ items:
       items:
       - name: archive_app_project
         href: ../toloka-kit/reference/toloka.client.TolokaClient.archive_app_project.md
+      - name: unarchive_app_project
+        href: ../toloka-kit/reference/toloka.client.TolokaClient.unarchive_app_project.md
       - name: create_app_batch
         href: ../toloka-kit/reference/toloka.client.TolokaClient.create_app_batch.md
       - name: patch_app_batch
@@ -66,8 +68,12 @@ items:
         href: ../toloka-kit/reference/toloka.client.TolokaClient.stop_app_batch.md
       - name: resume_app_batch
         href: ../toloka-kit/reference/toloka.client.TolokaClient.resume_app_batch.md
-      - name: unarchive_app_project
-        href: ../toloka-kit/reference/toloka.client.TolokaClient.unarchive_app_project.md
+      - name: archive_app_batch
+        href: ../toloka-kit/reference/toloka.client.TolokaClient.archive_app_batch.md
+      - name: unarchive_app_batch
+        href: ../toloka-kit/reference/toloka.client.TolokaClient.archive_app_batch.md
+      - name: start_sync_batch_processing
+        href: ../toloka-kit/reference/toloka.client.TolokaClient.start_sync_batch_processing.md
     - name: assignments
       items:
       - name: accept_assignment
@@ -408,6 +414,8 @@ items:
     - name: _AppError
       href: ../toloka-kit/reference/toloka.client.app._AppError.md
       hidden: true
+    - name: BaseApp
+      href: ../toloka-kit/reference/toloka.client.app.BaseApp.md
     - name: App
       href: ../toloka-kit/reference/toloka.client.app.App.md
     - name: AppLightestResult
@@ -418,8 +426,13 @@ items:
     - name: AppBatch.Status
       href: ../toloka-kit/reference/toloka.client.app.AppBatch.Status.md
       hidden: true
+    - name: AppBatch.PriorityOrder
+      href: ../toloka-kit/reference/toloka.client.app.AppBatch.PriorityOrder.md
+      hidden: true
     - name: AppBatchCreateRequest
       href: ../toloka-kit/reference/toloka.client.app.AppBatchCreateRequest.md
+    - name: SyncBatchCreateRequest
+      href: ../toloka-kit/reference/toloka.client.app.SyncBatchCreateRequest.md
     - name: AppItemImport
       href: ../toloka-kit/reference/toloka.client.app.AppItemImport.md
       hidden: true
@@ -428,6 +441,8 @@ items:
     - name: AppItem.Status
       href: ../toloka-kit/reference/toloka.client.app.AppItem.Status.md
       hidden: true
+    - name: AppItemCreateRequest
+      href: ../toloka-kit/reference/toloka.client.app.AppItemCreateRequest.md
     - name: AppItemsCreateRequest
       href: ../toloka-kit/reference/toloka.client.app.AppItemsCreateRequest.md
     - name: AppProject
@@ -1999,6 +2014,8 @@ items:
       items:
       - name: archive_app_project
         href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.archive_app_project.md
+      - name: unarchive_app_project
+        href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.unarchive_app_project.md
       - name: create_app_batch
         href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.create_app_batch.md
       - name: patch_app_batch
@@ -2039,8 +2056,12 @@ items:
         href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.stop_app_batch.md
       - name: resume_app_batch
         href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.resume_app_batch.md
-      - name: unarchive_app_project
-        href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.unarchive_app_project.md
+      - name: archive_app_batch
+        href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.archive_app_batch.md
+      - name: unarchive_app_batch
+        href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.archive_app_batch.md
+      - name: start_sync_batch_processing
+        href: ../toloka-kit/reference/toloka.async_client.client.AsyncTolokaClient.start_sync_batch_processing.md
     - name: assignments
       items:
       - name: accept_assignment
