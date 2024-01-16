@@ -10,7 +10,7 @@ __all__ = [
 import inspect
 import logging
 import typing
-from copy import copy
+from copy import copy, deepcopy
 from enum import Enum
 from functools import update_wrapper, partial
 from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar, Union, Tuple
@@ -268,7 +268,7 @@ class BaseTolokaObject(metaclass=BaseTolokaObjectMetaclass):
     # Conversions related functions
 
     def unstructure(self) -> Optional[dict]:
-        data = dict(self._unexpected)
+        data = deepcopy(self._unexpected)
         obj_class = type(self)
 
         for field in attr.fields(obj_class):

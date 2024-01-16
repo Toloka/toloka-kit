@@ -283,3 +283,17 @@ def test_extendable_enum_union_autocast(test_extendable_enum, non_attr_class):  
     assert func(['a', 'b', 'field_2']) == [test_extendable_enum.A, test_extendable_enum.B, test_extendable_enum.field_2]
     non_attr_class_instance = non_attr_class(1)
     assert func(non_attr_class_instance) == non_attr_class_instance
+
+
+class _TestClassModifyingUnexpected(BaseTolokaObject):
+    def unstructure(self):
+        data = super().unstructure()
+        assert data['nested']['key'] == 'old-value'
+        data['nested']['key'] = 'new-value'
+        return data
+
+
+def test_unexpected_nested_unstructure():
+    obj = _TestClassModifyingUnexpected.structure({'nested': {'key': 'old-value'}})
+    assert obj.unstructure() == {'nested': {'key': 'new-value'}}
+    assert obj.unstructure() == {'nested': {'key': 'new-value'}}
