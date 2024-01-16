@@ -1,4 +1,3 @@
-import re
 from uuid import UUID
 
 import httpx
@@ -8,8 +7,7 @@ import toloka.client as client
 from httpx import QueryParams
 from toloka.client import Task
 from toloka.client.batch_create_results import TaskBatchCreateResult
-from toloka.client.exceptions import FailedOperation, IncorrectActionsApiError
-from toloka.client.operations import Operation, TasksCreateOperation
+from toloka.client.operations import Operation
 
 from ..testutils.util_functions import (
     assert_async_object_creation_is_successful, assert_retried_async_object_creation_returns_existing_operation,
