@@ -1,0 +1,65 @@
+{
+    "private_name": "Which suits best?",
+    "may_contain_adult_content": true,
+    "assignment_max_duration_seconds": 60,
+    "defaults": {
+        "default_overlap_for_new_task_suites": 3
+    },
+    "auto_close_after_complete_delay_seconds": 0,
+    "auto_accept_solutions": true,
+    "auto_accept_period_day": 14,
+    "assignments_issuing_config": {
+        "issue_task_suites_in_creation_order": false
+    },
+    "priority": 0,
+    "filter": {
+        "and": [
+            {
+                "operator": "IN",
+                "value": "EN",
+                "key": "languages",
+                "category": "profile"
+            }
+        ]
+    },
+    "quality_control": {
+        "captcha_frequency": "HIGH",
+        "configs": [
+            {
+                "rules": [
+                    {
+                        "action": {
+                            "parameters": {
+                                "scope": "ALL_PROJECTS",
+                                "duration": 3,
+                                "duration_unit": "DAYS",
+                                "private_comment": "Captcha"
+                            },
+                            "type": "RESTRICTION_V2"
+                        },
+                        "conditions": [
+                            {
+                                "operator": "GTE",
+                                "value": 20.0,
+                                "key": "fail_rate"
+                            }
+                        ]
+                    }
+                ],
+                "collector_config": {
+                    "uuid": "7a023230-1304-47d7-b785-fc7e160bf247",
+                    "parameters": {
+                        "history_size": 5
+                    },
+                    "type": "CAPTCHA"
+                }
+            }
+        ]
+    },
+    "mixer_config": {
+        "real_tasks_count": 1,
+        "golden_tasks_count": 0,
+        "training_tasks_count": 0
+    },
+    "type": "REGULAR"
+}

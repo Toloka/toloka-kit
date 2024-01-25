@@ -1,0 +1,201 @@
+<style>
+
+	ul, ol, li {
+	padding: 0;
+	margin: 5px 0 5px 10px;
+	}
+
+    .hide {
+    display: none
+    }
+    .hide+label~div {
+    display: none
+    }
+    .hide+label~p {
+    display: none
+    }
+    .hide+label {
+    border-bottom: 1px dotted green;
+    padding: 0;
+    cursor: pointer;
+    display: inline-block;
+	color: #3333ff;
+
+    }
+    .hide:checked+label {
+    border-bottom: 0;
+	color: red;
+
+    }
+    .hide:checked+label+div {
+    display: block;
+
+    }
+    .hide:checked+label+span {
+    display: block;
+
+    }
+    .hide:checked+label+p {
+    display: block;
+	}
+
+	.css-adaptive {
+	width: 450px;
+	max-width: 100%;
+	height: auto;
+	}
+
+</style>
+
+
+<p>Your task is to find the specified entrance to the metro and take a picture of it from both sides.</p>
+<h3>Phone and app settings</h3>
+	<ol><li>Grant access to your device's camera, location, and memory.
+			<div>
+				<input id="hd-1" class="hide" type="checkbox">
+				<label for="hd-1"><strong>Android</strong></label>
+				<div>
+					Open <strong>Applications</strong>, find the <u>Toloka</u> app in the list, go to <strong>Permissions</strong> and slide the access switches for the camera, location, and memory to the active position.
+						<div>
+							<input id="hd-2" class="hide" type="checkbox">
+							<label for="hd-2">Screenshot</label>
+							<div>
+								<p><img alt="Example" class="css-adaptive" src="https://tolokaadmin.s3.yandex.net/tmp_dir/a8a19e3f-9730-4d26-aa78-13f803332d17"></p>
+							</div>
+						</div>
+				</div>
+			</div>
+			<div>
+				<input id="hd-3" class="hide" type="checkbox">
+				<label for="hd-3"><strong>iOS (iPhone or iPad)</strong></label>
+				<div>
+					Open <strong>Settings</strong> and find the <u>Toloka</u> app in the list. Allow access to the camera by sliding the switch to the active position. Also, allow access to detect your location, and to read and write photos in the gallery.
+						<div>
+							<input id="hd-4" class="hide" type="checkbox">
+							<label for="hd-4">Screenshot</label>
+							<div>
+								<p><img alt="Example" class="css-adaptive" src="https://tolokaadmin.s3.yandex.net/tmp_dir/0e2f7ea7-0e10-42e9-91e5-39c2c202edc8"></p>
+							</div>
+						</div>
+				</div>
+			</div>
+		</li><li>Set up geodata transfer.
+
+			<div>
+				<input id="hd-5" class="hide" type="checkbox">
+				<label for="hd-5"><strong>Android</strong></label>
+				<div>
+						• On the phone. Go to the location settings and enable <strong>High accuracy</strong> detection.
+							<div>
+								<input id="hd-6" class="hide" type="checkbox">
+								<label for="hd-6">Screenshot</label>
+								<div>
+									<p><img alt="Example" class="css-adaptive" src="https://tolokaadmin.s3.yandex.net/tmp_dir/52ca1c7a-8a3c-4133-8d03-e15ab2f8fb39"></p>
+								</div>
+							</div>
+						• In the camera app. Open the camera on your device, go to settings and enable the geotag option.
+				</div>
+			</div>
+			<div>
+				<input id="hd-7" class="hide" type="checkbox">
+				<label for="hd-7"><strong>iOS (iPhone or iPad)</strong></label>
+				<div>
+						• Open <strong>Settings → Privacy → Location Services</strong>. Set the switch to the active position.
+							<div>
+								<input id="hd-8" class="hide" type="checkbox">
+								<label for="hd-8">Screenshot</label>
+								<div>
+									<p><img alt="Example" class="css-adaptive" src="https://tolokaadmin.s3.yandex.net/tmp_dir/894c4f20-2514-44db-895d-dcfa9358c7ad"></p>
+								</div>
+							</div>
+						• Find the <u>Camera</u> app in the list below, click on it and enable the option <strong>While Using the App.</strong>
+							<div>
+								<input id="hd-9" class="hide" type="checkbox">
+								<label for="hd-9">Screenshot</label>
+								<div>
+									<p><img alt="Example" class="css-adaptive" src="https://tolokaadmin.s3.yandex.net/tmp_dir/2bff0cb1-ac60-44ab-bced-537b901c2a62"></p>
+								</div>
+							</div>
+		</div></div></li><li>Make sure that the date and time setting matches the time zone of your region.</li><li>In the Toloka app settings, select a method to submit tasks: <strong>Over Wi-Fi</strong> or <strong>Mobile data</strong>.
+		<br><br>
+		<font color="red"><strong>Important.</strong></font> We recommend choosing <strong>Mobile data</strong> method – tasks will be sent immediately after clicking <strong>Submit</strong> button. For <strong>Over Wi-Fi</strong> method: if the phone does not connect to Wi-Fi before the task is completed, the app will not send the data, and the task will be considered uncompleted.
+		</li></ol>
+<h3>Steps to follow</h3>
+	<ol>
+            <li>Open the map to see all available tasks. Select the task you want and click <strong>Reserve task</strong> or <strong>Start task.</strong></li>
+            <li>Go to the point listed in the task.</li>
+            <li>Find the specified metro entrance.</li>
+            <li>Take two photos of the entrance on the right and left. The photo should show the entire entrance and the floor. So that you can properly assess the cleanliness around the metro.</li>
+            <li>If the specified entrance does not exist, take four photos in all directions around you. So that we can understand where you are and that there is no entrance to the metro there.</li>
+            <li>Tap <strong>Submit</strong>.</li></ol>
+<p><font color="red"><strong>Important</strong></font>. If you try to complete a task too far from the point indicated on the map, or if the app cannot access your location, an error message will appear, and it will not be possible to submit the task.</p>
+
+<div>
+	<input id="ru-1" class="hide" type="checkbox">
+	<label for="ru-1">[RU] Описание на русском</label>
+	<div>
+             <h3>Шаги, которые нужно выполнить</h3>
+             	<ol>
+                   <li>Откройте карту, чтобы увидеть все доступные задачи. Выберите нужную задачу и нажмите кнопку <strong>Зарезервировать задачу</strong> или <strong>Начать задачу.</strong></li>
+                   <li>Перейдите к точке, указанной в задании.</li>
+                   <li>Найдите указанный вход в метро.</li>
+                   <li>Сделайте две фотографии входа справа и слева. На фото должны быть видны все входы и пол. Убедитесь, что на фото можно оценить чистоту вокруг входа в метро.</li>
+                   <li>Если указанный вход не существует, сделайте 4 фотографии во все стороны, чтобы по ним можно было понять, где вы находитесь и что входа в метро тут нет.</li>
+                   <li>Нажмите <strong>Отправить</strong>.</li></ol>
+             <p><font color="red"><strong>Важно</strong></font>. Если вы попытаетесь выполнить задачу на слишком большом расстоянии от точки, указанной на карте, или приложение не сможет получить доступ к вашему местоположению, то появится сообщение об ошибке, и отправить задачу будет невозможно.</p>
+	</div>
+</div>
+
+<h3>Photo requirements</h3>
+	<ol>
+            <li>Use only those photos that you have taken while completing the task. Do not attach images from the internet, screenshots, or pictures taken on other days.</li>
+            <li>Photos must be sharp. We won't accept dark, overexposed, or blurred pictures.</li></ol>
+<h3>Examples of photos</h3>
+<p><font color="green"><strong>Correct</strong>.</font> The photo is sharp and the ground is completely visible. If this is not a metro entrance, the panorama from the back is photographed to determine what kind of place it is.</p>
+	<div>
+		<input id="hd-10" class="hide" type="checkbox">
+		<label for="hd-10">Example 1</label>
+		<div>
+			<p><img alt="Example" class="css-adaptive" src="https://tlk.s3.yandex.net/toloka-kit/images_for_instructions/0spatial_good1.png"></p>
+		</div>
+	</div>
+	<div>
+		<input id="hd-11" class="hide" type="checkbox">
+		<label for="hd-11">Example 2</label>
+		<div>
+			<p><img alt="Example" class="css-adaptive" src="https://tlk.s3.yandex.net/toloka-kit/images_for_instructions/0spatial_good2.png"></p>
+		</div>
+	</div>
+	<div>
+		<input id="hd-12" class="hide" type="checkbox">
+		<label for="hd-12">Example 3</label>
+		<div>
+			<p><img alt="Example" class="css-adaptive" src="https://tlk.s3.yandex.net/toloka-kit/images_for_instructions/0spatial_good3.png"></p>
+		</div>
+	</div>
+
+<p><font color="red"><strong>Incorrect</strong>.</font> The building entrance and the ground around the entrance are not visible. It's impossible to determine which metro entrance is in the photo.</p>
+	<div>
+		<input id="hd-13" class="hide" type="checkbox">
+		<label for="hd-13">Example 4</label>
+		<div>
+			<p><img alt="Example" class="css-adaptive" src="https://tlk.s3.yandex.net/toloka-kit/images_for_instructions/0spatial_bad1.png"></p>
+		</div>
+	</div>
+	<div>
+		<input id="hd-14" class="hide" type="checkbox">
+		<label for="hd-14">Example 5</label>
+		<div>
+			<p><img alt="Example" class="css-adaptive" src="https://tlk.s3.yandex.net/toloka-kit/images_for_instructions/0spatial_bad2.png"></p>
+		</div>
+	</div>
+	<div>
+		<input id="hd-15" class="hide" type="checkbox">
+		<label for="hd-15">Example 6</label>
+		<div>
+			<p><img alt="Example" class="css-adaptive" src="https://tlk.s3.yandex.net/toloka-kit/images_for_instructions/0spatial_bad3.png"></p>
+		</div>
+	</div>
+
+<h3>Checking completed tasks</h3>
+<p>We usually check tasks within a few days. The maximum time for checking a task is <strong>5 days</strong>.</p>
