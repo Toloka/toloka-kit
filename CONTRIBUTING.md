@@ -29,4 +29,4 @@ It is enough to provide this notification only once.
 
 ## Other questions
 
-If you have any questions, please mail us at opensource@yandex-team.ru.
+If you have any questions, please mail us at github@toloka.ai.
