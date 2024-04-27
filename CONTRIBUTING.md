@@ -3,9 +3,9 @@
 
 ## General info
 
-Hello! In order for us (YANDEX LLC) to accept patches and other contributions from you, you will have to adopt our Yandex Contributor License Agreement (the “**CLA**”). The current version of the CLA can be found here:
-1) https://yandex.ru/legal/cla/?lang=en (in English) and 
-2) https://yandex.ru/legal/cla/?lang=ru (in Russian).
+Hello! In order for us to accept patches and other contributions from you, you will have to adopt our Toloka Contributor License Agreement (the “**CLA**”). The current version of the CLA can be found here:
+1) https://toloka.ai/legal/cla_individual (for individuals) and 
+2) https://toloka.ai/legal/cla_corporate (for corporate contributors).
 
 By adopting the CLA, you state the following:
 
@@ -22,14 +22,11 @@ If you agree with these principles, please read and adopt our CLA. By providing 
 If you have already adopted terms and conditions of the CLA, you are able to provide your contributions. When you submit your first pull request, please add the following information into it:
 
 ```
-I hereby agree to the terms of the CLA available at: [link].
+I hereby agree to the terms of either individual CLA available at: https://toloka.ai/legal/cla_individual or corporate CLA available at: https://toloka.ai/legal/cla_corporate, whichever is applicable to me, as it pertains to direct contributions to toloka-kit only.
 ```
-
-Replace the bracketed text as follows:
-* [link] is the link to the current version of the CLA: https://yandex.ru/legal/cla/?lang=en (in English) or https://yandex.ru/legal/cla/?lang=ru (in Russian).
 
 It is enough to provide this notification only once.
 
 ## Other questions
 
-If you have any questions, please mail us at opensource@yandex-team.ru.
+If you have any questions, please mail us at github@toloka.ai.
