@@ -30,6 +30,7 @@ def test_verified_language():
     assert Languages.in_('EN', verified=True) == FilterOr([
         Languages.in_('EN') & Skill('26366').eq(100)
     ])
+    assert Languages.in_('EN', verified=False) == Languages.in_('EN')
 
 
 def test_verified_language_multiple():
