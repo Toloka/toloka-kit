@@ -1,3 +1,8 @@
+1.2.3
+-------------------
+Changes:
+* Introduced upper bound on `tenacity` version to avoid breaking retrying mechanism.
+
 1.2.2
 -------------------
 Changes:
