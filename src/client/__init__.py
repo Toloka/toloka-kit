@@ -291,7 +291,12 @@ class TolokaClient:
             raise ValueError('You can only pass one parameter: environment or url. Both are now set.')
         if url is not None:
             self.url = url[:-1] if url.endswith('/') else url
-            self._platform_url = self.url
+            for env in TolokaClient.Environment:
+                if self.url == env.value:
+                    self._platform_url = env.platform_url
+                    break
+            else:
+                self._platform_url = self.url
         else:
             if not isinstance(environment, TolokaClient.Environment):
                 environment = TolokaClient.Environment[environment.upper()]
