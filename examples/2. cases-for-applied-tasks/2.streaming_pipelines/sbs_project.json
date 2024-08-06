@@ -1,0 +1,53 @@
+{
+    "public_name": "Which item is more similar? ",
+    "public_description": "Decide which pair of shoes look more similar to the initial pair. ",
+    "task_spec": {
+        "input_spec": {
+            "image": {
+                "required": true,
+                "hidden": false,
+                "type": "url"
+            },
+            "left_link": {
+                "required": true,
+                "hidden": false,
+                "type": "url"
+            },
+            "right_link": {
+                "required": true,
+                "hidden": false,
+                "type": "url"
+            }
+        },
+        "output_spec": {
+            "result": {
+                "required": true,
+                "hidden": false,
+                "type": "url"
+            }
+        },
+        "view_spec": {
+            "localizationConfig": null,
+            "config": "{\n    \"view\": {\n        \"items\": [\n            {\n                \"url\": {\n                    \"path\": \"image\",\n                    \"type\": \"data.input\"\n                },\n                \"fullHeight\": true,\n                \"type\": \"view.image\"\n            },\n            {\n                \"items\": [\n                    {\n                        \"items\": [\n                            {\n                                \"content\": {\n                                    \"path\": \"left_link\",\n                                    \"type\": \"data.input\"\n                                },\n                                \"type\": \"view.text\"\n                            },\n                            {\n                                \"action\": {\n                                    \"payload\": {\n                                        \"path\": \"left_link\",\n                                        \"type\": \"data.input\"\n                                    },\n                                    \"type\": \"action.open-link\"\n                                },\n                                \"label\": \"Go to site\",\n                                \"type\": \"view.action-button\"\n                            },\n                            {\n                                \"url\": {\n                                    \"path\": \"left_link\",\n                                    \"type\": \"data.input\"\n                                },\n                                \"fullHeight\": true,\n                                \"type\": \"view.iframe\"\n                            }\n                        ],\n                        \"type\": \"view.list\"\n                    },\n                    {\n                        \"items\": [\n                            {\n                                \"content\": {\n                                    \"path\": \"right_link\",\n                                    \"type\": \"data.input\"\n                                },\n                                \"type\": \"view.text\"\n                            },\n                            {\n                                \"action\": {\n                                    \"payload\": {\n                                        \"path\": \"right_link\",\n                                        \"type\": \"data.input\"\n                                    },\n                                    \"type\": \"action.open-link\"\n                                },\n                                \"label\": \"Go to site\",\n                                \"type\": \"view.action-button\"\n                            },\n                            {\n                                \"url\": {\n                                    \"path\": \"right_link\",\n                                    \"type\": \"data.input\"\n                                },\n                                \"fullHeight\": true,\n                                \"type\": \"view.iframe\"\n                            }\n                        ],\n                        \"type\": \"view.list\"\n                    }\n                ],\n                \"type\": \"layout.side-by-side\"\n            },\n            {\n                \"content\": \"Which photo is the most similar to the original one?\",\n                \"type\": \"view.text\"\n            },\n            {\n                \"data\": {\n                    \"path\": \"result\",\n                    \"type\": \"data.output\"\n                },\n                \"options\": [\n                    {\n                        \"value\": {\n                            \"path\": \"left_link\",\n                            \"type\": \"data.input\"\n                        },\n                        \"label\": \"The left one is better\"\n                    },\n                    {\n                        \"value\": {\n                            \"path\": \"right_link\",\n                            \"type\": \"data.input\"\n                        },\n                        \"label\": \"The right one is better\"\n                    }\n                ],\n                \"validation\": {\n                    \"type\": \"condition.required\"\n                },\n                \"type\": \"field.radio-group\"\n            }\n        ],\n        \"type\": \"view.list\"\n    },\n    \"plugins\": [\n        {\n            \"1\": {\n                \"data\": {\n                    \"path\": \"result\",\n                    \"type\": \"data.output\"\n                },\n                \"payload\": {\n                    \"path\": \"left_link\",\n                    \"type\": \"data.input\"\n                },\n                \"type\": \"action.set\"\n            },\n            \"2\": {\n                \"data\": {\n                    \"path\": \"result\",\n                    \"type\": \"data.output\"\n                },\n                \"payload\": {\n                    \"path\": \"right_link\",\n                    \"type\": \"data.input\"\n                },\n                \"type\": \"action.set\"\n            },\n            \"type\": \"plugin.hotkeys\"\n        }\n    ]\n}",
+            "type": "tb",
+            "lock": {
+                "core": "1.0.0",
+                "view.image": "1.0.0",
+                "view.text": "1.0.0",
+                "action.open-link": "1.0.0",
+                "view.action-button": "1.0.0",
+                "view.iframe": "1.0.0",
+                "view.list": "1.0.0",
+                "layout.side-by-side": "1.0.0",
+                "condition.required": "1.0.0",
+                "field.radio-group": "1.0.0",
+                "action.set": "1.0.0",
+                "plugin.hotkeys": "1.0.0"
+            }
+        }
+    },
+    "assignments_issuing_type": "AUTOMATED",
+    "assignments_automerge_enabled": false,
+    "public_instructions": "Look at the pictures and decide which pair of shoes are more similar to the initial pair of shoes above. Use your own sense of style, but also remember that they will look alike if they are similar color, form, fabric and style. <div><br /></div><div>Good luck!</div>",
+    "private_comment": "streaming_piplines example sbs_project"
+}
