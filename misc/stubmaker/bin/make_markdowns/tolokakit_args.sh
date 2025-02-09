@@ -1,4 +1,4 @@
-cat << EOF
+pwd && cat << EOF
 --module-root toloka \
 --src-root $(dirname $0)/../../../../src/ \
 --output-dir $(dirname $0)/../../../../docs/en/toloka-kit/reference/
